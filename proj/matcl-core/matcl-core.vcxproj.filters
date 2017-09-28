@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details">
+      <UniqueIdentifier>{279ce685-f182-480f-807f-c1b86d7afb20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\general">
+      <UniqueIdentifier>{f3dab767-548f-4ee9-9851-3bd13e604793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\IO">
+      <UniqueIdentifier>{4b167905-f63e-43da-af42-d8ed97e1316f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\lib_functions">
+      <UniqueIdentifier>{db71444f-3a15-4b5b-aa61-54766d0a63a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matrix">
+      <UniqueIdentifier>{12dceb91-e402-465c-bcf7-d00bd54bb86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\base">
+      <UniqueIdentifier>{fa4c7f27-9686-44e0-88e9-34bc5f220b56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\exception">
+      <UniqueIdentifier>{1fee21ca-fe89-42ab-beca-33ead4bda978}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lib_functions">
+      <UniqueIdentifier>{3478eccb-0788-4965-83e3-19538c2f37f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\matrix">
+      <UniqueIdentifier>{75f0b966-7a50-48b7-bbbe-2c606e826d1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\hash_table">
+      <UniqueIdentifier>{aa8e8b58-7e31-44a7-abb8-186d2ea31a5b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\exception_details.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\isa.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\mpl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\portable_archive_exception.hpp">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\portable_iarchive.hpp">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\portable_oarchive.hpp">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\result_of_impl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_complex.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_real.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\type_codes.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\utils.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\val_struct_codes.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\exception.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\exception_message.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\memory.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\result_of.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\safe_string_message.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\thread.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\type_traits.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\archive.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\output_stream.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\lib_functions\constants.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\matrix\complex_type.h">
+      <Filter>Source Files\include\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\matrix\enums.h">
+      <Filter>Source Files\include\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\matrix\matrix_traits.h">
+      <Filter>Source Files\include\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\matrix\scalar_types.h">
+      <Filter>Source Files\include\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\config.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.h">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table.h">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table_details.h">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\object_table.h">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\stack_array.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\include\matcl-core\details\constants.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\thread.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\hash_table\hash_table.inl">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\hash_table\object_table.inl">
+      <Filter>Source Files\include\details\hash_table</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-core\base\archive.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\memory.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\output_stream.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\thread.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\exception\exception.cpp">
+      <Filter>Source Files\src\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\exception\exception_message.cpp">
+      <Filter>Source Files\src\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\exception\safe_string_message.cpp">
+      <Filter>Source Files\src\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp">
+      <Filter>Source Files\src\lib_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp">
+      <Filter>Source Files\src\lib_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp">
+      <Filter>Source Files\src\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp">
+      <Filter>Source Files\src\matrix</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

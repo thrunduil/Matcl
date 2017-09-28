@@ -1,0 +1,17 @@
+syntax: regexp
+^msvs
+syntax: glob
+src/mmlib/blas/bin/x86/Debug/blas-d.exp
+src/mmlib/blas/bin/x86/Debug/blas-d.ilk
+src/mmlib/blas/bin/x86/Debug/blas_gcc-debug.exp
+src/mmlib/blas/bin/x86/Debug/blas_gcc-debug.ilk
+src/slicot/src/*
+src/slicot/src_aux/*
+ibs-sconscript.py.orig
+ibs-sconscript.py.bak
+*.orig
+src_quadprog/*
+*.exp
+*.db
+*.opendb
+*.tlog
