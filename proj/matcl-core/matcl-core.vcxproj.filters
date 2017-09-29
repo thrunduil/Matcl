@@ -40,6 +40,9 @@
     <Filter Include="Source Files\include\details\hash_table">
       <UniqueIdentifier>{aa8e8b58-7e31-44a7-abb8-186d2ea31a5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\base">
+      <UniqueIdentifier>{02914513-08a0-47cf-a7a4-77dd9eecf26c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h">
@@ -147,6 +150,12 @@
     <ClInclude Include="..\..\src\include\matcl-core\details\stack_array.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\matcl-core\base\malloc.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\general\alloc.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\constants.inl">
@@ -198,6 +207,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp">
       <Filter>Source Files\src\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\alloc.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\malloc.cpp">
+      <Filter>Source Files\src\base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

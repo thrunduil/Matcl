@@ -37,7 +37,7 @@ class MATCL_CORE_EXPORT safe_string_message
 {
     private:
         class safe_string_message_impl;
-        matcl::shared_ptr<safe_string_message_impl> impl;
+        std::shared_ptr<safe_string_message_impl> impl;
 
     public:
         // create empty string

@@ -38,6 +38,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\details\type_codes.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\val_struct_codes.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\general\alloc.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\exception.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\exception_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\matrix\enums.h" />
     <ClInclude Include="..\..\src\include\matcl-core\matrix\matrix_traits.h" />
     <ClInclude Include="..\..\src\include\matcl-core\matrix\scalar_types.h" />
+    <ClInclude Include="..\..\src\matcl-core\base\malloc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\constants.inl" />
@@ -63,7 +65,9 @@
     <None Include="..\..\src\include\matcl-core\details\thread.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-core\base\alloc.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\archive.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\malloc.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\memory.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\output_stream.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\thread.cpp" />

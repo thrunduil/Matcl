@@ -32,6 +32,17 @@ namespace eos
     class portable_oarchive;
 };
 
+namespace matcl { namespace dynamic
+{
+
+template<class T>
+class object_type;
+
+class object;
+
+}};
+
+
 namespace boost { namespace serialization
 {
     class access;
@@ -39,35 +50,25 @@ namespace boost { namespace serialization
 
 namespace matcl
 {
-    template<class T>
-    using shared_ptr = std::shared_ptr<T>;
-
     using iarchive_impl     = eos::portable_iarchive;
     using oarchive_impl     = eos::portable_oarchive;
 
     class Matrix;
-    class Object;
     class struct_flag;
 
     struct struct_dense;
     struct struct_sparse;
     struct struct_banded;
+
+    using Object    = dynamic::object;
 }
-
-namespace matcl { namespace dynamic
-{
-
-template<class T>
-class object_type;
-
-}};
 
 namespace matcl { namespace error
 {
 
 class exception_message;
 
-using exception_message_ptr = matcl::shared_ptr<exception_message>;
+using exception_message_ptr = std::shared_ptr<exception_message>;
 
 }};
 

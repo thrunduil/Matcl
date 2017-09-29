@@ -29,4 +29,5 @@
 
 #ifdef __unix__
     #undef  MATCL_MP_OBJ_EXPORT
+    #define MATCL_MP_OBJ_EXPORT
 #endif

@@ -22,23 +22,42 @@
 
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/general/fwd_decls.h"
-#include "matcl-dynamic/details/utils.h"
 
 #include <type_traits>
 
 namespace matcl { namespace details
 {
 
-template<class T> struct is_object
-{   
-    static const bool value = matcl::dynamic::details::is_object<T>::value
-                            || std::is_base_of<Object, T>::value; 
+template<class T>
+struct is_object                            
+{ 
+    static const bool value = std::is_base_of<dynamic::object,T>::value; 
 };
 
-template<class T> struct is_typed_object
-{   
-    static const bool value = matcl::dynamic::details::is_typed_object<T>::value;
+template<>
+struct is_object<dynamic::object>
+{ 
+    static const bool value = true; 
 };
+
+template<class T>
+struct is_object<dynamic::object_type<T>>
+{ 
+    static const bool value = true; 
+};
+
+template<class T>
+struct is_typed_object
+{ 
+    static const bool value = false; 
+};
+
+template<class T>
+struct is_typed_object<dynamic::object_type<T>>
+{ 
+    static const bool value = true; 
+};
+
 
 template<bool val>
             struct promote_object                       {};
@@ -79,5 +98,12 @@ struct dependent_false_var      { static const bool value = false; };
 
 template<class T, T Val>
 struct dependent_value_false    { static const bool value = false; };
+
+// enablers
+template<bool cond,class T> 
+struct enable_if                { using type = T; };
+
+template<class T>
+struct enable_if<false,T>       {};
 
 };};

@@ -23,6 +23,13 @@
 #include "matcl-dynamic/config.h"
 #include "matcl-core/config.h"
 
+namespace matcl { namespace impl
+{
+
+struct false_type{};
+
+}};
+
 namespace matcl { namespace dynamic
 {
 

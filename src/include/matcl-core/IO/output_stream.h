@@ -86,7 +86,7 @@ class MATCL_CORE_EXPORT output_stream_from_ostream_synchronized : public output_
         this_type& operator=(const this_type&) = delete;
 };
 
-using output_stream_ptr = matcl::shared_ptr<output_stream>;
+using output_stream_ptr = std::shared_ptr<output_stream>;
 
 // global output stream, which points to current output stream
 // if set_current_output_stream() is called, then global output stream
