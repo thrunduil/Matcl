@@ -43,7 +43,7 @@ class MATCL_DYN_EXPORT unit_type
 
         // assignment from other types
         template<class T>
-        unit_type& operator=(T&& other) & { return *this; };
+        unit_type& operator=(T&& other) & { (void)other; return *this; };
 };
 
 // save and load of unit_type to stream

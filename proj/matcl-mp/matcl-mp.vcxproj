@@ -19,64 +19,62 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-core\config.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\exception_details.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table_details.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\object_table.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\isa.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\mpl.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\portable_archive_exception.hpp" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\portable_iarchive.hpp" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\portable_oarchive.hpp" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\result_of_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_real.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\stack_array.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\type_codes.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\utils.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\val_struct_codes.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\exception.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\exception_message.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\memory.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\result_of.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\safe_string_message.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\thread.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\type_traits.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\IO\archive.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\IO\output_stream.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\lib_functions\constants.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\matrix\complex_type.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\matrix\enums.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\matrix\matrix_traits.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\matrix\scalar_types.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\cache.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\config.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\constants.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\details\arithmetic.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\details\comparison.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\details\enablers.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\details\fwd_decls.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\details\prec_utils.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\details\utils.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\error_flags.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\func_binary.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\func_unary.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\matcl_mp.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\mp_complex.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\mp_float.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\mp_int.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\mp_rational.h" />
+    <ClInclude Include="..\..\src\include\matcl-mp\utils.h" />
+    <ClInclude Include="..\..\src\matcl-mp\allocator.h" />
+    <ClInclude Include="..\..\src\matcl-mp\error.h" />
+    <ClInclude Include="..\..\src\matcl-mp\impl_functions.h" />
+    <ClInclude Include="..\..\src\matcl-mp\utils\extend_precision.h" />
+    <ClInclude Include="..\..\src\matcl-mp\utils\impl_types.h" />
+    <ClInclude Include="..\..\src\matcl-mp\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-core\details\constants.inl" />
-    <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl" />
-    <None Include="..\..\src\include\matcl-core\details\hash_table\hash_table.inl" />
-    <None Include="..\..\src\include\matcl-core\details\hash_table\object_table.inl" />
-    <None Include="..\..\src\include\matcl-core\details\thread.inl" />
+    <ProjectReference Include="..\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\matcl-core\base\archive.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\base\memory.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\base\output_stream.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\base\thread.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\exception\exception.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\exception\exception_message.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\exception\safe_string_message.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />
-    <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp" />
+    <None Include="..\..\src\include\matcl-mp\details\func_binary.inl" />
+    <None Include="..\..\src\include\matcl-mp\details\func_unary.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-mp\allocator.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\arithmetic.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\cache.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\comparison.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\constants.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\error_flags.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_binary.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_unary.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_unary_acos.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_unary_asin.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_unary_atanh.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_unary_exp.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\func_unary_log.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\mp_complex.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\mp_float.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\mp_int.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\mp_rational.cpp" />
+    <ClCompile Include="..\..\src\matcl-mp\utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4BE517FA-056D-4070-91EC-C33F3274AE38}</ProjectGuid>
+    <ProjectGuid>{72527908-9492-4017-AB00-F4B9C91565AC}</ProjectGuid>
     <RootNamespace>symbolic</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <SccProjectName>
@@ -150,8 +148,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_CORE_EXPORTS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_MP_EXPORTS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -165,14 +163,14 @@
       <SubSystem>Windows</SubSystem>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gmp-$(Platform)-release.lib;mpfr-$(Platform)-release.lib;libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_CORE_EXPORTS;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_MP_EXPORTS;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -186,14 +184,14 @@
       <SubSystem>Windows</SubSystem>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gmp-$(Platform)-release.lib;mpfr-$(Platform)-release.lib;libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_CORE_EXPORTS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_MP_EXPORTS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -212,14 +210,14 @@
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gmp-$(Platform)-release.lib;mpfr-$(Platform)-release.lib;libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_CORE_EXPORTS;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_MP_EXPORTS;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -236,8 +234,8 @@
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gmp-$(Platform)-release.lib;mpfr-$(Platform)-release.lib;libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\src\extern\gmp\msvs\$(Platform);..\..\src\extern\mpfr\msvs\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

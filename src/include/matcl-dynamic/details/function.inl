@@ -100,7 +100,7 @@ inline object eval_function_template::eval(const function_name& func)
 {
     Type* types             = nullptr;
     int n_args              = 0;
-    int n_types             = m_types.size();
+    int n_types             = (int)m_types.size();
     function f              = operations::get_template_overload(func, n_types, m_types.data(), 
                                     n_args, types);
     const object** args     = nullptr;
