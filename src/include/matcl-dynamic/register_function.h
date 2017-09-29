@@ -205,7 +205,7 @@ struct register_function_template
 //                   Derived class must implement a function
 //                     static [Ret] eval(OType ti, ..., [Type_1] arg1, ...);
 //                   with one or more input types Type_1, ...; return type may have 
-///                  Template type; and a function
+//                  Template type; and a function
 //                     static Type eval_return(int n_template, const Type templates[], 
 //                                     int n_arg, const Type args[]);
 //                   where n_template is number of template arguments with types

@@ -26,29 +26,6 @@
 namespace matcl { namespace details
 {
 
-//TODO
-/*
-template<class Archive>
-void serialize_save(Archive&, ti::ti_empty, const unsigned int)
-{};
-
-template<class Archive>
-void serialize_load(Archive&, ti::ti_empty&, const unsigned int)
-{};
-
-template<class Archive>
-void serialize_save(Archive& ar, ti::ti_object ti, const unsigned int)
-{
-   ar << ti;
-};
-
-template<class Archive>
-void serialize_load(Archive& ar, ti::ti_object& ret_ti, const unsigned int)
-{
-    ar >> ret_ti;
-};
-*/
-
 template<class Archive>
 void serialize_save(Archive& ar, const struct_flag& sf, const unsigned int ver)
 {

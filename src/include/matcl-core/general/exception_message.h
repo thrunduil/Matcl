@@ -34,7 +34,7 @@ namespace matcl { namespace error
 {
 
 // shared pointer to exception message class
-using exception_message_ptr = matcl::shared_ptr<exception_message>;
+using exception_message_ptr = std::shared_ptr<exception_message>;
 
 // set global exception message
 MATCL_CORE_EXPORT 

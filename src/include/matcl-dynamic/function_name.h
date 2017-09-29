@@ -22,7 +22,6 @@
 #include "matcl-dynamic/config.h"
 #include "matcl-core/config.h"
 #include "matcl-dynamic/details/fwd_decls.h"
-//#include "matcl-core/general/fwd_decls.h"
 
 #include <string>
 

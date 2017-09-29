@@ -29,6 +29,7 @@
 
 #ifdef __unix__
     #undef  MATCL_MP_EXPORT
+    #define MATCL_MP_EXPORT
 #endif
 
 // if this macro is 1, then mp_float class contains a string member

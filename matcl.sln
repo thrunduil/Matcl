@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_dynamic", "proj\test_d
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-mp-obj", "proj\matcl-mp-obj\matcl-mp-obj.vcxproj", "{DF128A26-E5F3-4E1B-83D7-B5212B094830}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-scalar", "proj\matcl-scalar\matcl-scalar.vcxproj", "{16DBDFFF-845B-4087-B27B-B39631D7F63E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{DF128A26-E5F3-4E1B-83D7-B5212B094830}.Release|x64.Build.0 = Release|x64
 		{DF128A26-E5F3-4E1B-83D7-B5212B094830}.Release|x86.ActiveCfg = Release|Win32
 		{DF128A26-E5F3-4E1B-83D7-B5212B094830}.Release|x86.Build.0 = Release|Win32
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Debug|x64.ActiveCfg = Debug|x64
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Debug|x64.Build.0 = Debug|x64
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Debug|x86.ActiveCfg = Debug|Win32
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Debug|x86.Build.0 = Debug|Win32
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x64.ActiveCfg = Release|x64
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x64.Build.0 = Release|x64
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x86.ActiveCfg = Release|Win32
+		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

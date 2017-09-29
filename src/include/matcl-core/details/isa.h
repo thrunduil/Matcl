@@ -45,4 +45,59 @@ template<>  struct is_scalar<Complex>           {	static const bool value = true
 template<>  struct is_scalar<Float_complex>     {	static const bool value = true;	 };
 template<>  struct is_scalar<Object>            {	static const bool value = true;	 };
 
+template<class T>	
+            struct is_matcl_scalar              {	static const bool value = false; };
+template<>	struct is_matcl_scalar<Integer>     {   static const bool value = true;	 };
+template<>	struct is_matcl_scalar<Float>       {   static const bool value = true;	 };
+template<>	struct is_matcl_scalar<Real>        {   static const bool value = true;	 };
+template<>	struct is_matcl_scalar<Complex>     {   static const bool value = true;	 };
+template<>	struct is_matcl_scalar<Float_complex>{  static const bool value = true;	 };
+template<>	struct is_matcl_scalar<Object>      {   static const bool value = true;	 };
+
+template<class T> 
+struct is_any_scalar
+{	
+    static const bool value = (is_external_scalar<T>::value || is_scalar<T>::value)
+                            && is_object<T>::value == false; 
+};
+
+template<class T>
+            struct is_float_scalar              {	static const bool value = false; };
+template<>	struct is_float_scalar<float>		{	static const bool value = true;	 };
+template<>	struct is_float_scalar<double>		{	static const bool value = true;	 };
+template<>	struct is_float_scalar<long double>	{	static const bool value = true;	 };
+template<>	struct is_float_scalar<Complex>     {	static const bool value = true;	 };
+template<>	struct is_float_scalar<Float_complex>{	static const bool value = true;	 };
+
+template<class T>
+            struct is_float_real_scalar                 {	static const bool value = false; };
+template<>	struct is_float_real_scalar<float>          {	static const bool value = true;	 };
+template<>	struct is_float_real_scalar<double>         {	static const bool value = true;	 };
+template<>	struct is_float_real_scalar<long double>    {	static const bool value = true;	 };
+
+template<class T>
+            struct is_real_scalar                       {	static const bool value = false; };
+template<>	struct is_real_scalar<Integer>              {	static const bool value = true;	 };
+template<>	struct is_real_scalar<float>                {	static const bool value = true;	 };
+template<>	struct is_real_scalar<double>               {	static const bool value = true;	 };
+template<>	struct is_real_scalar<long double>          {	static const bool value = true;	 };
+
+template<class T>
+            struct is_single_precision				    {	static const bool value = false; };
+template<>	struct is_single_precision<Integer>         {   static const bool value = false; };
+template<>	struct is_single_precision<Float>           {   static const bool value = true;	 };
+template<>	struct is_single_precision<Real>            {   static const bool value = false; };
+template<>	struct is_single_precision<Complex>         {   static const bool value = false; };
+template<>	struct is_single_precision<Float_complex>   {   static const bool value = true;  };
+template<>	struct is_single_precision<Object>          {   static const bool value = false; };
+
+template<class T>
+            struct is_double_precision				    {	static const bool value = false; };
+template<>	struct is_double_precision<Integer>         {   static const bool value = false; };
+template<>	struct is_double_precision<Float>           {   static const bool value = false; };
+template<>	struct is_double_precision<Real>            {   static const bool value = true;  };
+template<>	struct is_double_precision<Complex>         {   static const bool value = true;  };
+template<>	struct is_double_precision<Float_complex>   {   static const bool value = false; };
+template<>	struct is_double_precision<Object>          {   static const bool value = false; };
+
 };};

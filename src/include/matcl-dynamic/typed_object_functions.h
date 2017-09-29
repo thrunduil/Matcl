@@ -19,10 +19,11 @@
  */
 #pragma once
 
-#include "matcl-dynamic/function_name.h"
-#include "matcl-dynamic/predefined_functions_names.h"
 #include "matcl-core/matrix/enums.h"
 #include "matcl-core/general/result_of.h"
+
+#include "matcl-dynamic/function_name.h"
+#include "matcl-dynamic/predefined_functions_names.h"
 #include "matcl-dynamic/details/result_of_cast.h"
 
 namespace matcl { namespace dynamic

@@ -23,13 +23,6 @@
 #include "matcl-dynamic/object_type.h"
 #include "matcl-dynamic/details/utils.h"
 
-namespace matcl { namespace impl
-{
-
-struct false_type{};
-
-}};
-
 #define matcl_FUN_FUNCTOR(fun)                          \
 namespace matcl { namespace impl                        \
 {                                                       \

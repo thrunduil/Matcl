@@ -22,7 +22,7 @@
 #include "matcl-dynamic/details/register_function_macro.h"
 #include "matcl-mp/func_binary.h"
 #include "matcl-dynamic/matcl_function_names.h"
-#include "mmlib_basic/lib_functions/func_forwarding.h"
+#include "matcl-scalar/lib_functions/func_forwarding.h"
 
 namespace matcl
 {
