@@ -61,7 +61,7 @@ void converter_set::check_converter(function fun_evl, error_handler& eh)
 
 Integer converter_set::size() const
 {
-    return m_overloads_vec.size();
+    return (Integer)m_overloads_vec.size();
 };
 
 void converter_set::clear()
@@ -94,7 +94,7 @@ conversion_match converter_candidate_set::get_match() const
 
 Integer converter_candidate_set::size() const
 {
-    return m_overloads_vec.size();
+    return (Integer)m_overloads_vec.size();
 };
 
 void converter_candidate_set::clear()
@@ -157,7 +157,7 @@ void converter_candidate_set::set(function fun_evl, conversion_match match, func
 function_name_templ::function_name_templ(function_name name, const std::vector<Type>& targs)
     :m_name(name), m_owns_array(true)
 {
-    n_templates = targs.size();
+    n_templates = (Integer)targs.size();
     m_templates = new Type[targs.size()];
 
     Type* type_ptr  = const_cast<Type*>(m_templates);
@@ -564,9 +564,9 @@ void function_table::get_converter(Type to, Type from, converter_type c_type,
         return;
     };
 
-    size_t size = m_converters.size();	
+    int size    = (int)m_converters.size();	
 
-	for(size_t i = 0; i < size; ++i)
+	for(int i = 0; i < size; ++i)
 	{
         e_match_type l_match_1;
         e_match_type l_match_2;
@@ -808,9 +808,9 @@ void function_table::get_assigner(Type to, Type from, assigner_candidate_set& as
         return;
     };
 
-    size_t size = m_assigners.size();
+    int size    = (int)m_assigners.size();
 
-	for(size_t i = 0; i < size; ++i)
+	for(int i = 0; i < size; ++i)
 	{
         //assigners cannot have make_return function
 		function tmp_evl = m_assigners.get_function(i).first;
@@ -938,7 +938,7 @@ void function_table::make_exact(candidate_set& candidates, e_match_type match, i
         return;
 
     const func_templ& ft    = candidates.get_function(0);
-    int n_deduced           = ft.deduced().size();
+    int n_deduced           = (int)ft.deduced().size();
     bool deduced_ret        = ft.has_deduced_return();
     function f              = ft.function();
     function f_exact;

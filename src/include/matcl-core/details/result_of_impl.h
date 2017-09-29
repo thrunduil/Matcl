@@ -115,7 +115,7 @@ struct fun##_functor                                    \
 };                                                      \
 }}                                                      \
 
-#define matcl_RESULT_OF_UNARY_FUN_IMPL(fun)                                                     \
+#define MATCL_RESULT_OF_UNARY_FUN_IMPL(fun)                                                     \
 namespace matcl { namespace result_of {                                                         \
 template<class T>                                                                               \
 struct has_##fun                                                                                \
@@ -135,7 +135,7 @@ struct result_of_##fun<T,false>                                                 
 {};                                                                                             \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_BINARY_FUN_IMPL(fun)                                                    \
+#define MATCL_RESULT_OF_BINARY_FUN_IMPL(fun)                                                    \
 namespace matcl { namespace result_of {                                                         \
 template<class T, class S>                                                                      \
 struct has_##fun                                                                                \
@@ -156,7 +156,7 @@ struct result_of_##fun<T,S,false>                                               
 {};                                                                                             \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_BINARY_FUN_ADD_INT(fun)                                                 \
+#define MATCL_RESULT_OF_BINARY_FUN_ADD_INT(fun)                                                 \
 namespace matcl { namespace result_of {                                                         \
 template<>                                                                                      \
 struct result_of_##fun<Integer,Float, true>                                                     \
@@ -172,8 +172,8 @@ struct result_of_##fun<Float, Integer,true>                                     
 };                                                                                              \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_BINARY_FUN_ADD_INT2(fun)                                                \
-matcl_RESULT_OF_BINARY_FUN_ADD_INT(fun)                                                         \
+#define MATCL_RESULT_OF_BINARY_FUN_ADD_INT2(fun)                                                \
+MATCL_RESULT_OF_BINARY_FUN_ADD_INT(fun)                                                         \
 namespace matcl { namespace result_of {                                                         \
 template<>                                                                                      \
 struct result_of_##fun<Integer, Integer,true>                                                   \
@@ -183,7 +183,7 @@ struct result_of_##fun<Integer, Integer,true>                                   
 };                                                                                              \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_TEMPL_1_1_FUN_IMPL(fun)                                                 \
+#define MATCL_RESULT_OF_TEMPL_1_1_FUN_IMPL(fun)                                                 \
 namespace matcl { namespace result_of {                                                         \
 template<class T, class S>                                                                      \
 struct has_##fun                                                                                \
@@ -204,7 +204,7 @@ struct result_of_##fun<T,S,false>                                               
 {};                                                                                             \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_TEMPL_1_2_FUN_IMPL(fun)                                                 \
+#define MATCL_RESULT_OF_TEMPL_1_2_FUN_IMPL(fun)                                                 \
 namespace matcl { namespace result_of {                                                         \
 template<class T, class S1, class S2>                                                           \
 struct has_##fun                                                                                \
@@ -226,7 +226,7 @@ struct result_of_##fun<T,S1,S2,false>                                           
 {};                                                                                             \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_TEMPL_1_0_FUN_IMPL(fun)                                                 \
+#define MATCL_RESULT_OF_TEMPL_1_0_FUN_IMPL(fun)                                                 \
 namespace matcl { namespace result_of {                                                         \
 template<class T>                                                                               \
 struct has_##fun                                                                                \
@@ -246,31 +246,31 @@ struct result_of_##fun<T,false>                                                 
 {};                                                                                             \
 }}                                                                                              \
 
-#define matcl_RESULT_OF_UNARY(fun)          \
+#define MATCL_RESULT_OF_UNARY(fun)          \
 matcl_FUN_FUNCTOR(fun)                      \
-matcl_RESULT_OF_UNARY_FUN_IMPL(fun)         \
+MATCL_RESULT_OF_UNARY_FUN_IMPL(fun)         \
 
-#define matcl_RESULT_OF_BINARY(fun)         \
+#define MATCL_RESULT_OF_BINARY(fun)         \
 matcl_BIN_FUN_FUNCTOR(fun)                  \
-matcl_RESULT_OF_BINARY_FUN_IMPL(fun)        \
+MATCL_RESULT_OF_BINARY_FUN_IMPL(fun)        \
 
-#define matcl_RESULT_OF_UNARY_OP(fun,op)    \
+#define MATCL_RESULT_OF_UNARY_OP(fun,op)    \
 matcl_OP_FUN_FUNCTOR(fun, op)               \
-matcl_RESULT_OF_UNARY_FUN_IMPL(fun)         \
+MATCL_RESULT_OF_UNARY_FUN_IMPL(fun)         \
 
-#define matcl_RESULT_OF_BINARY_OP(fun,op)   \
+#define MATCL_RESULT_OF_BINARY_OP(fun,op)   \
 matcl_BINOP_FUN_FUNCTOR(fun,op)             \
-matcl_RESULT_OF_BINARY_FUN_IMPL(fun)        \
+MATCL_RESULT_OF_BINARY_FUN_IMPL(fun)        \
 
-#define matcl_RESULT_OF_TEMPL_1_0(fun)      \
+#define MATCL_RESULT_OF_TEMPL_1_0(fun)      \
 matcl_TEMPL_1_0_FUN_FUNCTOR(fun)            \
-matcl_RESULT_OF_TEMPL_1_0_FUN_IMPL(fun)     \
+MATCL_RESULT_OF_TEMPL_1_0_FUN_IMPL(fun)     \
 
-#define matcl_RESULT_OF_TEMPL_1_1(fun)      \
+#define MATCL_RESULT_OF_TEMPL_1_1(fun)      \
 matcl_TEMPL_1_1_FUN_FUNCTOR(fun)            \
-matcl_RESULT_OF_TEMPL_1_1_FUN_IMPL(fun)     \
+MATCL_RESULT_OF_TEMPL_1_1_FUN_IMPL(fun)     \
 
-#define matcl_RESULT_OF_TEMPL_1_2(fun)      \
+#define MATCL_RESULT_OF_TEMPL_1_2(fun)      \
 matcl_TEMPL_1_2_FUN_FUNCTOR(fun)            \
-matcl_RESULT_OF_TEMPL_1_2_FUN_IMPL(fun)     \
+MATCL_RESULT_OF_TEMPL_1_2_FUN_IMPL(fun)     \
 

@@ -77,8 +77,8 @@ bool fun_evaler_conv::make_eval(const object** _args, object& return_obj) const
     using stack_array_ptr   = matcl::details::stack_array<const object*,10>;
     using stack_array_obj   = matcl::details::stack_array<obj_pod,10>;
 
-    Integer n_arg           = m_converters.size();
-    Integer n_deduced       = m_deduced.size();
+    Integer n_arg           = (Integer)m_converters.size();
+    Integer n_deduced       = (Integer)m_deduced.size();
 
     Integer size_counter    = 0;
 

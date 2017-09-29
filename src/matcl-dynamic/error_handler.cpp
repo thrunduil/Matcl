@@ -375,7 +375,7 @@ void error_handler::disp_function_declaration(std::ostringstream& os,
     disp_function_name(os, f, str);
 
     function f0     = f.function();
-    int n_deduced   = f.deduced().size() + (f.has_deduced_return() ? 1 : 0);
+    int n_deduced   = (int)f.deduced().size() + (f.has_deduced_return() ? 1 : 0);
 
     disp_function_arguments(os, f0, n_deduced);
 };

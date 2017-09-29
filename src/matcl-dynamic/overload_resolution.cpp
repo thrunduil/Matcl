@@ -228,7 +228,7 @@ void overload_set::push_back(function fun_evl, make_return_fptr ret)
 
 Integer overload_set::size() const
 {
-    return m_overloads_vec.size();
+    return (Integer)m_overloads_vec.size();
 };
 
 void overload_set::clear()
@@ -276,7 +276,7 @@ void candidate_set::push_back(const func_templ& ft)
 
 Integer candidate_set::size() const
 {
-    return m_overloads_vec.size();
+    return (Integer)m_overloads_vec.size();
 };
 
 void candidate_set::clear()
@@ -308,7 +308,7 @@ conversion_match candidate_type_set::get_match() const
 
 Integer candidate_type_set::size() const
 {
-    return m_overloads_vec.size();
+    return (Integer)m_overloads_vec.size();
 };
 
 void candidate_type_set::clear()
@@ -359,18 +359,18 @@ void overload_resolution::find_best_match(const overload_set& set)
 void overload_resolution::find_best_match_templ(const overload_set& set, 
                  const function_name_templ* ft, const type_vec& deduced)
 {
-	size_t ov_set_size = set.size();
+	int ov_set_size             = (int)set.size();
 
     conversion_sequence conv_seq(n_args);    
 
     using conv_cmp_res          = conversion_sequence::compare_result;
     using fun_ret               = overload_set::fun_ret;
 
-	for(size_t i = 0; i < ov_set_size; ++i)
+	for(int i = 0; i < ov_set_size; ++i)
 	{
 		fun_ret tmp_evaler      = set.get_function(i);
         bool ded_ret            = check_deduce_return(tmp_evaler);
-		e_match_type tmp_match  = mach_types_list(m_ft, deduced.size(), ded_ret, 
+		e_match_type tmp_match  = mach_types_list(m_ft, (int)deduced.size(), ded_ret, 
                                     n_args, m_types, tmp_evaler.first, conv_seq);
 
 		if (tmp_match < m_match_type)
@@ -440,7 +440,7 @@ Type overload_resolution::eval_return(function f, make_return_fptr ret,
         return Type();    
     
     int n_template  = ft ? ft->n_templates : 0;
-    int n_deduced   = deduced.size();
+    int n_deduced   = (int)deduced.size();
     bool deduce_ret = f.return_type() == Template::get_static_type();
 
     std::vector<Type>   all_types(n_template + n_args);
@@ -629,8 +629,8 @@ spec_type overload_resolution::is_more_specialized(const function_table* ft,
     Integer n_args_2        = f2.number_arguments();
     bool ded_ret_1          = func_1.has_deduced_return();
     bool ded_ret_2          = func_2.has_deduced_return();
-    Integer n_ded_1         = func_1.deduced().size();
-    Integer n_ded_2         = func_2.deduced().size();
+    Integer n_ded_1         = (Integer)func_1.deduced().size();
+    Integer n_ded_2         = (Integer)func_2.deduced().size();
 
     int n_ded_total_1       = n_ded_1;
     int n_ded_total_2       = n_ded_2;
