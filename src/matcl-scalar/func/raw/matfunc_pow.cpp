@@ -20,7 +20,7 @@
 
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
-#include "mmlib_internals/func/converter.h"
+#include "matcl-scalar/lib_functions/manip.h"
 
 #include <cfloat>
 
@@ -160,11 +160,11 @@ struct pow_complex_helper<Ret,T1,Integer,true,false>
                 if (arg2 < 0)
                 {
                     auto tmp2 = matcl::details::div_c(Ret_R(1),value);
-                    return mr::converter<Ret, decltype(tmp)>::eval(tmp2);
+                    return matcl::convert_scalar<Ret, decltype(tmp)>(tmp2);
                 }
                 else
                 {
-                    return mr::converter<Ret, decltype(value)>::eval(value);
+                    return matcl::convert_scalar<Ret, decltype(value)>(value);
                 }
             };
         };

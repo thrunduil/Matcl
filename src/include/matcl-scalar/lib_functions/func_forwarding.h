@@ -23,7 +23,7 @@
 #include "matcl-scalar/object.h"
 #include "matcl-scalar/lib_functions/func_unary.h"
 #include "matcl-scalar/lib_functions/func_binary.h"
-#include "matcl-core/general/result_of.h"
+#include "matcl-dynamic/result_of.h"
 #include "matcl-dynamic/object_type_traits.h"
 
 // different functions defined for scalar types that should be forwarded
@@ -459,8 +459,6 @@ pow_c(const S1& x, const S2& y, Args...)
     return pow(typename make_complex_type<S1>::type(x), y); 
 };
 
-//TODO
-/*
 //--------------------------------------------------------------
 //                  IO FUNCTIONS
 //--------------------------------------------------------------
@@ -488,6 +486,5 @@ std::string to_string(const S1& x, Args...)
 { 
     return matcl::to_string(object_type<S1>(x));
 };
-*/
 
 };

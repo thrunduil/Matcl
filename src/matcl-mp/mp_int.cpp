@@ -36,6 +36,7 @@ mp_int::mp_int()
     using impl_type = mmd::impl_int;
     new (mmd::get_ptr<mp_int>::eval(m_data)) impl_type();
 };
+
 template<class T>
 mp_int::mp_int(impl_tag, const T& val)
 {
@@ -44,7 +45,8 @@ mp_int::mp_int(impl_tag, const T& val)
 };
 
 mp_int::mp_int(impl_tag)
-{};
+{
+};
 
 mp_int::mp_int(Integer val)
 {

@@ -349,24 +349,26 @@ mp_int mp_float::cast_mp_int(round_mode rm) const
     const impl_float& v = *mmd::get_ptr<mp_float>::eval(this->m_data);
 
     mp_int ret(mp_int::impl_tag{});
-    impl_type& iv       = *mmd::get_ptr<mp_int>::eval(ret.m_data);
 
-    mpz_init(iv.backend().data());
+    impl_type* iv       = mmd::get_ptr<mp_int>::eval(ret.m_data);    
+
+    // call mpz_init
+    new (iv) impl_type();
 
     switch (rm)
     {
         case round_mode::floor:
-            mpfr_get_z(iv.backend().data(), v, MPFR_RNDD);
+            mpfr_get_z(iv->backend().data(), v, MPFR_RNDD);
             break;
         case round_mode::ceil:
-            mpfr_get_z(iv.backend().data(), v, MPFR_RNDU);
+            mpfr_get_z(iv->backend().data(), v, MPFR_RNDU);
             break;
         case round_mode::trunc:
-            mpfr_get_z(iv.backend().data(), v, MPFR_RNDZ);
+            mpfr_get_z(iv->backend().data(), v, MPFR_RNDZ);
             break;
         case round_mode::round:
         default:
-            mpfr_get_z(iv.backend().data(), v, MPFR_RNDNA);
+            mpfr_get_z(iv->backend().data(), v, MPFR_RNDNA);
             break;
     };
     return ret;

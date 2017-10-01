@@ -48,6 +48,7 @@ class MATCL_MP_EXPORT mp_int
         template<class T>
         mp_int(impl_tag, const T&);
 
+        // construct uninitialized object
         mp_int(impl_tag);
 
     public:

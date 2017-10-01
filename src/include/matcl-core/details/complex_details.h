@@ -22,6 +22,9 @@
 #include "matcl-core/matrix/complex_type.h"
 #include "matcl-core/details/scalfunc_real.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4723) //potential divide by 0
+
 namespace matcl { namespace details
 {
 
@@ -1326,3 +1329,5 @@ matcl::complex<T> matcl::operator-(const complex<T>& arg1)
     using type = complex<T>;
     return details::uminus_c<type>(arg1);
 }
+
+#pragma warning(pop)

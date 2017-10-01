@@ -533,15 +533,15 @@ bool gmp_tester_prec::test_complex_bin_special(std::ostream& os_res, Integer N, 
 
 mp_float gmp_tester_prec::rand_scalar(precision prec, const max_vec& max)
 {
-    Integer n   = max.size();
+    Integer n   = (Integer)max.size();
     Integer ver = matcl::abs(matcl::irand()) % n;
     return mp_float(matcl::randn() * max[ver], precision(prec + 4));
 };
 
 mp_float gmp_tester_prec::rand_scalar(const prec_vec& prec, const max_vec& max)
 {
-    Integer nm  = max.size();
-    Integer np  = prec.size();
+    Integer nm  = (Integer)max.size();
+    Integer np  = (Integer)prec.size();
     Integer vm  = matcl::abs(matcl::irand()) % nm;
     Integer vp  = matcl::abs(matcl::irand()) % np;
     return mp_float(matcl::randn() * max[vm], prec[vp]);
@@ -651,7 +651,7 @@ void gmp_tester_prec::rand_scalar_c_pow_cr(const prec_vec& prec, const max_vec& 
 
 mp_complex gmp_tester_prec::rand_scalar_c(const prec_vec& prec, const max_vec& max)
 {
-    Integer np  = prec.size();
+    Integer np  = (Integer)prec.size();
     Integer vp  = matcl::abs(matcl::irand()) % np;
     return mp_complex(rand_scalar(prec[vp], max), rand_scalar(prec[vp], max));
 };

@@ -43,6 +43,12 @@
     <Filter Include="Source Files\src\objects\predefined">
       <UniqueIdentifier>{ba5967a4-b700-476f-bf83-5d9088c17904}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\IO">
+      <UniqueIdentifier>{fadfaf3f-7e8e-4626-95ae-3c38da98b072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\IO">
+      <UniqueIdentifier>{97c5054d-208f-4b6e-b96e-2e0e17b672bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-scalar\objects\object_functions.h">
@@ -123,14 +129,20 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_forwarding.h">
       <Filter>Source Files\include\lib_functions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-scalar\scalars.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\manip.h">
       <Filter>Source Files\include\lib_functions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-scalar\object.h">
       <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_matrix.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\IO\scalar_io.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\io_impl.h">
+      <Filter>Source Files\include\details</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +200,12 @@
     <ClCompile Include="..\..\src\matcl-scalar\objects\predefined\object_real.cpp">
       <Filter>Source Files\src\objects\predefined</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-scalar\IO\io_impl.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-scalar\details\typed_object_functions.inl">
@@ -203,6 +221,12 @@
       <Filter>Source Files\include\details</Filter>
     </None>
     <None Include="..\..\src\include\matcl-scalar\details\manip.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\func_matrix.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\scalar_io.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
   </ItemGroup>

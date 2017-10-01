@@ -26,7 +26,7 @@
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 
 #include "matcl-scalar/lib_functions/func_binary.h"
-//#include "mmlib_basic/lib_functions/func_matrix.h"
+#include "matcl-scalar/lib_functions/func_matrix.h"
 #include "matcl-scalar/lib_functions/func_forwarding.h"
 
 #include "rand_scalars.h"
@@ -2158,14 +2158,11 @@ double gmp_tester_bin::test_mul_obj(const Scalar_ext& s1, const Scalar_ext& s2, 
     return test.make(s1, s2);
 };
 
-//TODO
-/*
 double gmp_tester_bin::test_mmul_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code)
 {
     eval_mmul_obj test(code);
     return test.make(s1, s2);
 };
-*/
 
 double gmp_tester_bin::test_div_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code)
 {
@@ -2558,14 +2555,11 @@ double gmp_tester_bin::test_mul(const Scalar& s1, const Scalar& s2, Integer code
     return test.make(s1, s2);
 };
 
-//TODO
-/*
 double gmp_tester_bin::test_mmul(const Scalar& s1, const Scalar& s2, Integer code)
 {
     eval_mmul test(code);
     return test.make(s1, s2);
 };
-*/
 
 double gmp_tester_bin::test_div(const Scalar& s1, const Scalar& s2, Integer code)
 {
