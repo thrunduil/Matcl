@@ -20,16 +20,14 @@
 
 #pragma once
 
-#include "matcl-scalar/config.h"
+#include "matcl-core/config.h"
 #include "matcl-core/matrix/scalar_types.h"
-#include "matcl-dynamic/type.h"
+#include "matcl-core/general/fwd_decls.h"
 
 #include <iostream>
 
 namespace matcl { namespace raw
 {
-
-namespace md = matcl::details;
 
 //precision required to represent given type; 
 //return nonzero value for floating points only
@@ -42,7 +40,7 @@ struct get_stream_precision<Integer>
     static Integer eval()   { return 0; };
 };
 template<>
-struct get_stream_precision<Object>
+struct get_stream_precision<dynamic::object>
 {
     static Integer eval()   { return 0; };
 };
@@ -67,7 +65,7 @@ struct get_stream_precision<Float_complex>
     static Integer eval()   { return std::numeric_limits<Float>::max_digits10; };
 };
 
-struct MATCL_SCALAR_EXPORT stream_helpers
+struct MATCL_CORE_EXPORT stream_helpers
 {
     static void     save_comments(std::ostream& os, const std::string& comments);
     static void     load_comments(std::istream& is, std::string& comments);
@@ -95,7 +93,8 @@ struct MATCL_SCALAR_EXPORT stream_helpers
     //otherwise nothing is added to comment and no characters are consumed and
     //add_newline is not changed
     //function return true if line is a comment line
-    static bool    read_comment_line(std::istream&, char comment_char, std::ostringstream& comment, bool& add_newline);
+    static bool    read_comment_line(std::istream&, char comment_char,
+                        std::ostringstream& comment, bool& add_newline);
 
     //consume all characted up to end of line and put them to line stream
     //(except end of line)
@@ -110,8 +109,5 @@ struct MATCL_SCALAR_EXPORT stream_helpers
 	template<class value_type>
 	static void    write(std::ostream&, const value_type& val);
 };
-
-std::ostream& save(std::ostream&, const dynamic::Type& ti);
-std::istream& load(std::istream&, dynamic::Type& ti);
 
 };};

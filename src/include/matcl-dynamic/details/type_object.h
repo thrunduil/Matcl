@@ -38,8 +38,8 @@ class type_object : public type_impl
         virtual data_type*          copy(const data_type*) const override;
         virtual bool                is_zero(const data_type* d) const override;
         virtual bool				is_one(const data_type* d) const  override;
-        virtual std::string         to_string(const data_type*, printer& pr) const override;
-        virtual void				disp(const data_type*, printer& pr, Integer elem_width, 
+        virtual std::string         to_string(const data_type*, matcl::details::printer& pr) const override;
+        virtual void				disp(const data_type*, matcl::details::printer& pr, Integer elem_width, 
                                          align_type at, Integer value_pos) const override;
         virtual data_type*          create() const override;
         virtual bool                has_one() const override;

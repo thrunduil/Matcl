@@ -22,7 +22,6 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
-//#include "matcl-core/matrix/struct_flag.h"
 #include "matcl-core/IO/output_stream.h"
 #include "matcl-core/IO/disp_stream.h"
 
@@ -57,19 +56,6 @@ class bufor_info
         void                new_line();
 };
 
-class printer;
-
-class object_disp_handle
-{
-    public:
-        // return true if stored object is equal to zero
-        virtual bool        is_zero() const = 0;
-
-        // print object using printer p; see also printer::disp_elem
-        virtual void        disp_elem(printer& p, Integer w, align_type at, 
-                                Integer value_pos) const = 0;
-};
-
 class MATCL_CORE_EXPORT printer
 {
     private:
@@ -89,14 +75,20 @@ class MATCL_CORE_EXPORT printer
                             //if elem_width > 0, then width is fixed; 
                             //if elem_width < 0, then width is not fixed, and width gives maximal width
                             //if elem_width == 0, then width is not specified
-        void                disp_elem(Integer elem_width, const std::string& s, align_type at, Integer value_pos);
-        void                disp_elem(Integer elem_width, Integer r, align_type at, Integer value_pos);
-        void                disp_elem(Integer elem_width, Real r, align_type at, Integer value_pos);
-        void                disp_elem(Integer elem_width, Float r, align_type at,Integer value_pos);
-        void                disp_elem(Integer elem_width, const Complex& r, align_type at, Integer value_pos);
-        void                disp_elem(Integer elem_width, const Float_complex& r, align_type at, Integer value_pos);
-        void                disp_elem(Integer elem_width, const object_disp_handle& r, align_type at, 
+        void                disp_elem(Integer elem_width, const std::string& s, 
+                                align_type at, Integer value_pos);
+        void                disp_elem(Integer elem_width, Integer r, align_type at, 
                                 Integer value_pos);
+        void                disp_elem(Integer elem_width, Real r, align_type at, 
+                                Integer value_pos);
+        void                disp_elem(Integer elem_width, Float r, align_type at,
+                                Integer value_pos);
+        void                disp_elem(Integer elem_width, const Complex& r, align_type at,
+                                Integer value_pos);
+        void                disp_elem(Integer elem_width, const Float_complex& r, 
+                                align_type at, Integer value_pos);
+        void                disp_elem(Integer elem_width, const dynamic::object& r, 
+                                align_type at, Integer value_pos);
         
         static Integer      get_min_width(Real r, Integer precision);
         static std::string  disp_string(Integer elem_width, const std::string& s, align_type at);

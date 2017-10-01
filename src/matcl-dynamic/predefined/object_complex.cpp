@@ -30,7 +30,8 @@ namespace matcl
 static Real real(const Complex& v)  { return real(v.value); };
 static Real imag(const Complex& v)  { return imag(v.value); };
 
-static Complex idiv(const Complex& v1, const Complex& v2)
+template<class T1, class T2>
+static Complex idiv(const T1& v1, const T2& v2)
 { 
     return v1 / v2; 
 };

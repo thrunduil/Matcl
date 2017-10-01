@@ -30,9 +30,11 @@
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table_details.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\object_table.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\integer.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\io_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\isa.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\matcl_options_details.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\mpl.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\object_interface.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\portable_archive_exception.hpp" />
     <ClInclude Include="..\..\src\include\matcl-core\details\portable_iarchive.hpp" />
     <ClInclude Include="..\..\src\include\matcl-core\details\portable_oarchive.hpp" />
@@ -56,6 +58,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\IO\disp_data_provider.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\disp_stream.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\output_stream.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\IO\scalar_io.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h" />
     <ClInclude Include="..\..\src\include\matcl-core\lib_functions\constants.h" />
     <ClInclude Include="..\..\src\include\matcl-core\matrix\complex_type.h" />
@@ -67,6 +70,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\options\options_disp.h" />
     <ClInclude Include="..\..\src\include\matcl-core\options\option_validators.h" />
     <ClInclude Include="..\..\src\matcl-core\base\malloc.h" />
+    <ClInclude Include="..\..\src\matcl-core\base\object_interface.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\constants.inl" />
@@ -88,6 +92,7 @@
     <ClCompile Include="..\..\src\matcl-core\base\memory.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\matcl_options.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\matcl_options_details.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\object_interface.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\output_stream.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\printer.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\thread.cpp" />
@@ -100,6 +105,8 @@
     <ClCompile Include="..\..\src\matcl-core\IO\disp_stream.cpp" />
     <ClCompile Include="..\..\src\matcl-core\IO\disp_stream_impl.cpp" />
     <ClCompile Include="..\..\src\matcl-core\IO\disp_stream_options.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\io_impl.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\scalar_io.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />

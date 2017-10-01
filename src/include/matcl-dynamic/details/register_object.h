@@ -64,7 +64,7 @@ template<class T>
 struct register_object
 {
     private:
-        static details::register_object_helper  m_hook;
+        static details::register_object_helper  g_hook;
         friend mark_type<T>;
 };
 

@@ -26,10 +26,75 @@
 #include "matcl-dynamic/details/type_impl.h"
 #include "matcl-dynamic/predefined_type_traits.h"
 #include "type_table.h"
+#include "matcl-core/details/object_interface.h"
 
 namespace matcl { namespace dynamic
 {
 
+//------------------------------------------------------------
+//                      object_initializer
+//------------------------------------------------------------
+
+struct object_interface : matcl::details::object_interface_impl
+{
+    bool is_zero(const dynamic::object& v) const override
+    {
+        return v.is_zero();
+    };
+
+    void disp_elem(const dynamic::object& v, matcl::details::printer& p, Integer w, 
+                        align_type at, Integer value_pos) const override
+    {
+        return v.disp(p, w, at, value_pos);
+    };
+
+    void read(dynamic::object& v, std::istream& is) const
+    {
+        is >> v;
+    }
+
+    void read_type(dynamic::Type& ty, std::istream& is) const
+    {
+        is >> ty;
+    }
+    void write_type(const dynamic::Type& ty, std::ostream& os) const
+    {
+        os << ty;
+    }
+};
+
+// nifty counter
+static int g_counter = 0;
+
+static void open()
+{
+    static object_interface oi; 
+    set_object_intrface(&oi);
+};
+
+static void close()
+{
+};
+
+object_initializer::object_initializer()
+{
+    if (g_counter == 0)
+        open();
+
+    ++g_counter;
+}
+
+object_initializer::~object_initializer()
+{
+    --g_counter;
+
+    if (g_counter == 0)   
+        close();
+};
+
+//------------------------------------------------------------
+//                      object
+//------------------------------------------------------------
 object::object()
     :m_data(nullptr)
 {};
@@ -277,12 +342,13 @@ bool object::is_one() const
     return details::type_impl::get(m_type)->is_one(m_data);
 };
 
-void object::disp(printer& pr, Integer elem_width, matcl::align_type at, Integer value_pos) const
+void object::disp(matcl::details::printer& pr, Integer elem_width, 
+                  matcl::align_type at, Integer value_pos) const
 {
     return details::type_impl::get(m_type)->disp(m_data,pr,elem_width,at,value_pos);
 };
 
-std::string object::to_string(printer& pr) const
+std::string object::to_string(matcl::details::printer& pr) const
 {
     return details::type_impl::get(m_type)->to_string(m_data,pr);
 };

@@ -18,41 +18,30 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-dynamic/utils.h"
-#include "matcl-core/general/memory.h"
-#include "type_table.h"
+#pragma once
 
-namespace matcl { namespace dynamic
+#include "matcl-scalar/IO/scalar_io.h"
+#include "matcl-core/options/options_disp.h"
+#include "matcl-core/IO/archive.h"
+
+namespace matcl { namespace details
 {
 
-// registerer of caches in matcl::dynamic
-class dyn_chache_registerer : public matcl::cache_registerer
+template<class T>
+struct MATCL_CORE_EXPORT saveload_scalar_helper
 {
-    virtual void release_cache() override
-    {
-        free_cache();
-    }
+    static std::ostream&    eval_save(std::ostream& os, const T& A);
+    static std::istream&    eval_load(std::istream& is, T& A);
 };
 
-// explicitly release all memory stored in caches
-void dynamic::free_cache()
+struct MATCL_CORE_EXPORT to_string_scalar_helper
 {
-    details::type_table::get()->free_cache();
-}
-
-struct register_cache_dynamic
-{
-    std::shared_ptr<cache_registerer> reg;
-
-    register_cache_dynamic()
-    {
-        reg = std::shared_ptr<cache_registerer>(new dyn_chache_registerer());
-
-        matcl::register_cache(reg);
-    };
+    static std::string eval(Integer v);
+    static std::string eval(Float v);
+    static std::string eval(Real v);
+    static std::string eval(const Complex& v);
+    static std::string eval(const Float_complex& v);
+    static std::string eval(const Object& v);
 };
 
-static register_cache_dynamic g_reg_cache;
-
-};};
-
+}}

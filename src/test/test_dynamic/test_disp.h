@@ -18,41 +18,21 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-dynamic/utils.h"
-#include "matcl-core/general/memory.h"
-#include "type_table.h"
+#include "matcl-core/IO/disp_data_provider.h"
+#include "matcl-core/IO/base_io.h"
+#include "matcl-scalar/object.h"
 
-namespace matcl { namespace dynamic
+#include <map>
+
+namespace matcl { namespace test
 {
 
-// registerer of caches in matcl::dynamic
-class dyn_chache_registerer : public matcl::cache_registerer
+void test_disp();
+
+class disp_tester
 {
-    virtual void release_cache() override
-    {
-        free_cache();
-    }
+    public:
+        void    make();
 };
 
-// explicitly release all memory stored in caches
-void dynamic::free_cache()
-{
-    details::type_table::get()->free_cache();
-}
-
-struct register_cache_dynamic
-{
-    std::shared_ptr<cache_registerer> reg;
-
-    register_cache_dynamic()
-    {
-        reg = std::shared_ptr<cache_registerer>(new dyn_chache_registerer());
-
-        matcl::register_cache(reg);
-    };
-};
-
-static register_cache_dynamic g_reg_cache;
-
-};};
-
+}};

@@ -25,6 +25,8 @@
 namespace matcl { namespace dynamic { namespace details 
 {
 
+namespace md = matcl::details;
+
 // reference type for internal use onlu
 class reference_type : type_impl
 {
@@ -45,8 +47,8 @@ class reference_type : type_impl
         virtual data_type*          copy(const object_data_base*) const override;
         virtual bool                is_zero(const data_type* d) const override;
         virtual bool				is_one(const data_type* d) const  override;
-        virtual std::string         to_string(const data_type*, printer& pr) const override;
-        virtual void				disp(const data_type*, printer& pr, Integer elem_width, 
+        virtual std::string         to_string(const data_type*, md::printer& pr) const override;
+        virtual void				disp(const data_type*, md::printer& pr, Integer elem_width, 
                                          align_type at, Integer value_pos) const override;
         virtual data_type*          create() const override;
         virtual bool                has_one() const override;

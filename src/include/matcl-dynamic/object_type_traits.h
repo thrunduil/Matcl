@@ -61,7 +61,8 @@ struct object_type_traits_default
     // convert to string; predefined scalar types should be 
     // converted to string using functions from printer pr
     template<class T>
-    static std::string  to_string(const T& t, printer& pr)  { return t.to_string(pr); };
+    static std::string  to_string(const T& t, matcl::details::printer& pr)  
+                                                            { return t.to_string(pr); };
 
     // display element
     // if elem_width > 0, then width is fixed to elem_width characters; 
@@ -71,7 +72,7 @@ struct object_type_traits_default
     // value_pos is an index of subvalue (used only if given object is a composition
     // of many subobjects; value_pos subobject should be displayed
     template<class T>
-    static void         disp(const T& t, printer& pr, Integer elem_width,
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width,
                              align_type at, Integer value_pos);
 
     // save and load to stream

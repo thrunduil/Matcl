@@ -30,7 +30,8 @@ namespace matcl
 static Float real(const Float_complex& v)  { return real(v.value); };
 static Float imag(const Float_complex& v)  { return imag(v.value); };
 
-static Float_complex idiv(const Float_complex& v1, const Float_complex& v2)
+template<class T1, class T2>
+static Float_complex idiv(const T1& v1, const T2& v2)
 { 
     return v1 / v2; 
 };

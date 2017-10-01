@@ -38,9 +38,7 @@ void disp_elem_helper<V,S>::eval(md::disp_stream_impl& os, const disp_stream* us
     {                
         Integer w	= widths[v];
 
-        handle_type xh(elem);
-
-        os.get_printer().disp_elem(w, xh, at, v);
+        os.get_printer().disp_elem(w, elem, at, v);
 
         if(v < n_subv - 1)
             os.do_disp_col_values_separator(user,cvs,v);
@@ -165,9 +163,7 @@ void disp_matrix<V,struct_dense>::eval_matrix_body(md::disp_stream_impl& os,
 
                 for(Integer v = 0; v < n_sub; ++v)
                 {
-                    handle_type xh(elem);
-
-                    Integer vw			= os.do_get_value_min_width(user, xh, v);
+                    Integer vw			= os.do_get_value_min_width(user, elem, v);
                     vw					= std::min(vw,os.do_get_max_value_width(user,v));
                     min_value_width[v]	= std::max(min_value_width[v],vw);
                 }

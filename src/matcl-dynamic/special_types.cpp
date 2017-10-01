@@ -22,6 +22,7 @@
 #include "matcl-core/IO/archive.h"
 #include "matcl-dynamic/details/object_data.h"
 #include "matcl-dynamic/object_type.h"
+#include "matcl-core/details/printer.h"
 
 namespace matcl { namespace dynamic
 {
@@ -161,7 +162,7 @@ any_type any_type::clone() const
     return any_type(m_stored.clone());
 };
 
-std::string any_type::to_string(printer& pr) const
+std::string any_type::to_string(matcl::details::printer& pr) const
 {
     if (m_stored.is_null() == true)
         return "null";
@@ -169,7 +170,8 @@ std::string any_type::to_string(printer& pr) const
     return m_stored.to_string(pr);
 };
 
-void any_type::disp(printer& pr, Integer elem_width, align_type at, Integer value_pos) const
+void any_type::disp(matcl::details::printer& pr, Integer elem_width, 
+                    align_type at, Integer value_pos) const
 {
     if (m_stored.is_null() == true)
     {

@@ -192,6 +192,18 @@
     <ClInclude Include="..\..\src\include\matcl-core\details\disp_impl.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\matcl-core\base\object_interface.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\scalar_io.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\io_impl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\object_interface.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\constants.inl">
@@ -293,6 +305,15 @@
       <Filter>Source Files\src\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\IO\disp_impl.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\object_interface.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\IO\scalar_io.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\IO\io_impl.cpp">
       <Filter>Source Files\src\IO</Filter>
     </ClCompile>
   </ItemGroup>

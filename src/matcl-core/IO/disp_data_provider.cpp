@@ -108,6 +108,7 @@ std::string disp_data_provider::to_string(const disp_stream* user, Integer w, Re
 
     return buf.get_stream().str();
 };
+
 std::string disp_data_provider::to_string(const disp_stream* user, Integer w, const Complex& val, 
                                           align_type at) const
 {
@@ -121,6 +122,7 @@ std::string disp_data_provider::to_string(const disp_stream* user, Integer w, co
 
     return buf.get_stream().str();
 };
+
 std::string disp_data_provider::to_string(const disp_stream* user, Integer w, const std::string& val,
                                 align_type at) const
 {
@@ -131,6 +133,20 @@ std::string disp_data_provider::to_string(const disp_stream* user, Integer w, co
     p.set_precision(user->get_precision());
 
     p.disp_elem(w, val,at,0);
+
+    return buf.get_stream().str();
+};
+
+std::string disp_data_provider::to_string(const disp_stream* user, Integer w, const dynamic::object& val,
+                                align_type at) const
+{
+    matcl::details::bufor_info buf;
+    details::printer p(&buf);
+
+    p.set_disp_zero(user->display_zero());
+    p.set_precision(user->get_precision());
+
+    p.disp_elem(w, val, at, 0);
 
     return buf.get_stream().str();
 };

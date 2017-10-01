@@ -132,23 +132,24 @@ std::string class_name_parser::make(const std::string& s, bool& simpl, bool igno
 };
 
 std::string class_name_parser::convert_known_types(const std::string& s, bool& simpl)
-{         
-    static string_map table = init_table();
+{   
+    static string_map g_table = init_table();
     static bool initialized = false;
 
     if (initialized == false)
     {
         initialized = true;
-        normalize(table);
+        normalize(g_table);
     };
 
     using iterator = string_map::const_iterator;
-    iterator pos = table.find(s);
-    if (pos != table.end())
+    iterator pos = g_table.find(s);
+    if (pos != g_table.end())
     {
         simpl = true;
         return pos->second;
     };
+
     return s;
 };
 

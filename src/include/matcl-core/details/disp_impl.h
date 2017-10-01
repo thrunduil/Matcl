@@ -62,20 +62,11 @@ struct matrix_provider_base : matcl::details::label_iterators
     virtual bool        is_symher() const = 0;
 };
 
-// this class can be specialized for T = Object
-template<class T>
-struct elem_handle_type
-{
-    using type = T;
-};
-
 // make call to printer::disp_elem for a printer stored in 
 // given disp stream
 template<class V, class S>
 struct disp_elem_helper
 {
-    using handle_type = typename elem_handle_type<V>::type;
-
     static void eval(md::disp_stream_impl& os, const disp_stream* user, 
                     const V& elem, const std::vector<Integer>& widths, 
                      Integer col);
@@ -97,8 +88,6 @@ template<class V>
 class disp_matrix<V,struct_dense>
 {   
     private:
-        using handle_type = typename elem_handle_type<V>::type;
-
         struct measures
         {
             Integer chw;    //column header width;

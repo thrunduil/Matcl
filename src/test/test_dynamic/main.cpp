@@ -23,7 +23,9 @@
 #include "test_gmp_prec.h"
 #include "test_gmp_object.h"
 #include "test_performance.h"
+#include "test_disp.h"
 #include "matcl-mp/matcl_mp.h"
+#include "matcl-core/options/matcl_options.h"
 
 #include <iostream>
 
@@ -34,6 +36,11 @@ int main(int argc, const char* argv[])
 {
     try
     { 
+        options opts;
+        opts.help();
+
+        matcl::test::test_disp();
+
         matcl::test::test_gmp();
         matcl::test::test_gmp_bin();        
         matcl::test::test_gmp_object();                     

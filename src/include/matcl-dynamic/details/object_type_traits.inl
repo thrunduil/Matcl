@@ -26,8 +26,8 @@ namespace matcl { namespace dynamic
 {
 
 template<class T>
-void object_type_traits_default::disp(const T& t, printer& pr, Integer elem_width,
-                                        align_type at, Integer value_pos)
+void object_type_traits_default::disp(const T& t, matcl::details::printer& pr,
+                    Integer elem_width, align_type at, Integer value_pos)
 { 
     return t.disp(pr,elem_width,at,value_pos); 
 };

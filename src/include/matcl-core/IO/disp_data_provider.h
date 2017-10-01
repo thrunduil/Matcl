@@ -133,6 +133,8 @@ class MATCL_CORE_EXPORT disp_data_provider
                                       align_type at) const;
         std::string         to_string(const disp_stream* user, Integer width, const Complex& val,
                                       align_type at) const;        
+        std::string         to_string(const disp_stream* user, Integer width, const dynamic::object& val,
+                                      align_type at) const;        
         std::string         to_string(const disp_stream* user, Integer width, const std::string& val,
                                       align_type at) const;        
 };
