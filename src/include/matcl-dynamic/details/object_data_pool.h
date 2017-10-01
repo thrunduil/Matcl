@@ -103,8 +103,8 @@ struct object_data_pool_impl : protected object_data_pool_base
 
         static object_data_pool_impl* get()
         {
-            static object_data_pool_impl* instance = new object_data_pool_impl<T>();
-            return instance;
+            static object_data_pool_impl* g_instance = new object_data_pool_impl<T>();
+            return g_instance;
         }
 
     public:

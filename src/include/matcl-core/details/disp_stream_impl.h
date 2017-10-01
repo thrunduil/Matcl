@@ -146,14 +146,20 @@ class MATCL_CORE_EXPORT disp_stream_impl
         Integer             do_get_max_matrix_position(const disp_stream* user) const;
 
         //general config
-        Integer             do_get_value_min_width(const disp_stream* user, Integer v, Integer value_pos) const;
-        Integer             do_get_value_min_width(const disp_stream* user, const Complex& v, Integer value_pos) const;
-        Integer             do_get_value_min_width(const disp_stream* user, const Float_complex& v, Integer value_pos) const;
-        Integer             do_get_value_min_width(const disp_stream* user, const Real& v, Integer value_pos) const;
-        Integer             do_get_value_min_width(const disp_stream* user, const Float& v, Integer value_pos) const;
-        Integer             do_get_value_min_width(const disp_stream* user, const object_disp_handle& v, 
+        Integer             do_get_value_min_width(const disp_stream* user, Integer v,
                                 Integer value_pos) const;
-        Integer             do_get_value_min_width(const disp_stream* user, const std::string& v, Integer value_pos) const;
+        Integer             do_get_value_min_width(const disp_stream* user, const Complex& v,
+                                Integer value_pos) const;
+        Integer             do_get_value_min_width(const disp_stream* user, const Float_complex& v,
+                                Integer value_pos) const;
+        Integer             do_get_value_min_width(const disp_stream* user, const Real& v, 
+                                Integer value_pos) const;
+        Integer             do_get_value_min_width(const disp_stream* user, const Float& v,
+                                Integer value_pos) const;
+        Integer             do_get_value_min_width(const disp_stream* user, const dynamic::object& v, 
+                                Integer value_pos) const;
+        Integer             do_get_value_min_width(const disp_stream* user, const std::string& v,
+                                Integer value_pos) const;
 
         //access to global options
         //user must be queried only once at the beginning of display

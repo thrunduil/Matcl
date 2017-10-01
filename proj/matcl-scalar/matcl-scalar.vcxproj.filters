@@ -203,9 +203,6 @@
     <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp">
       <Filter>Source Files\src\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-scalar\IO\io_impl.cpp">
-      <Filter>Source Files\src\IO</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-scalar\details\typed_object_functions.inl">

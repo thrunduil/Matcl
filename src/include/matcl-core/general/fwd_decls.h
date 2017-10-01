@@ -76,6 +76,7 @@ namespace matcl { namespace details
 {
 
 class disp_stream_impl;
+class printer;
 
 }};
 

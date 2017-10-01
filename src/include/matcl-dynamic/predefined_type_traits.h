@@ -36,8 +36,8 @@ struct MATCL_DYN_EXPORT object_type_traits<bool> : object_type_traits_default
 
     static bool         is_one(bool)    { return false;};
 
-    static std::string  to_string(bool t, printer& pr);
-    static void         disp(bool t, printer& pr, Integer elem_width,
+    static std::string  to_string(bool t, matcl::details::printer& pr);
+    static void         disp(bool t, matcl::details::printer& pr, Integer elem_width,
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, 
@@ -56,8 +56,8 @@ struct MATCL_DYN_EXPORT object_type_traits<Integer> : object_type_traits_default
     static bool         is_one(const Integer& t)    { return t == 1;};
     static T            make_one(const T*)          { return T(1); };
 
-    static std::string  to_string(const Integer& t, printer& pr);
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static std::string  to_string(const Integer& t, matcl::details::printer& pr);
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, 
@@ -75,8 +75,8 @@ struct MATCL_DYN_EXPORT object_type_traits<Real> : object_type_traits_default
     static bool         is_one(const T& t)      { return t == 1.;};
     static T            make_one(const T*)      { return T(1); };
 
-    static std::string  to_string(const Real& t, printer& pr);
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static std::string  to_string(const Real& t, matcl::details::printer& pr);
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, 
@@ -94,8 +94,8 @@ struct MATCL_DYN_EXPORT object_type_traits<Float> : object_type_traits_default
     static bool         is_one(const T& t)      { return t == 1.;};
     static T            make_one(const T*)      { return T(1); };
 
-    static std::string  to_string(const Float& t, printer& pr);
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static std::string  to_string(const Float& t, matcl::details::printer& pr);
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, 
@@ -113,8 +113,8 @@ struct MATCL_DYN_EXPORT object_type_traits<Complex> : object_type_traits_default
     static bool         is_one(const T& t)      { return t == Complex(1.);};
     static T            make_one(const T*)      { return T(1); };
 
-    static std::string  to_string(const Complex& t, printer& pr);
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static std::string  to_string(const Complex& t, matcl::details::printer& pr);
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static bool         read(std::istream&, T& t);
@@ -135,8 +135,8 @@ struct MATCL_DYN_EXPORT object_type_traits<Float_complex> : object_type_traits_d
     static bool         is_one(const T& t)      { return t == Float_complex(1.f);};
     static T            make_one(const T*)      { return T(1); };
 
-    static std::string  to_string(const Float_complex& t, printer& pr);
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static std::string  to_string(const Float_complex& t, matcl::details::printer& pr);
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static bool         read(std::istream&, T& t);
@@ -155,8 +155,9 @@ struct MATCL_DYN_EXPORT object_type_traits<std::string> : object_type_traits_def
 
     static bool         is_one(const std::string&)  { return false;};
 
-    static std::string  to_string(const std::string& t, printer&)   { return t;};
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static std::string  to_string(const std::string& t, matcl::details::printer&)
+                                { return t;};
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val,
@@ -172,9 +173,10 @@ struct MATCL_DYN_EXPORT object_type_traits<unit_type> : object_type_traits_defau
 
     static bool         is_one(const T&)                { return false;};
     static bool         is_zero(const T&)               { return true; };
-    static std::string  to_string(const T&, printer&)   { return "unit";};
+    static std::string  to_string(const T&, matcl::details::printer&)
+                                                        { return "unit";};
 
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, unsigned int version);
@@ -189,9 +191,10 @@ struct MATCL_DYN_EXPORT object_type_traits<null_type> : object_type_traits_defau
 
     static bool         is_one(const T&)                { return false;};
     static bool         is_zero(const T&)               { return true; };
-    static std::string  to_string(const T&, printer&)   { return "null";};
+    static std::string  to_string(const T&, matcl::details::printer&)
+                                                        { return "null";};
 
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, 
@@ -219,9 +222,9 @@ struct MATCL_DYN_EXPORT object_type_traits<Type> : object_type_traits_default
     static bool         is_one(const T&)    { return false;};
     static bool         is_zero(const T& t) { return t == Type(); };
 
-    static std::string  to_string(const T&, printer&);
+    static std::string  to_string(const T&, matcl::details::printer&);
 
-    static void         disp(const T& t, printer& pr, Integer elem_width, 
+    static void         disp(const T& t, matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer);
 
     static void         load_data(iarchive_impl& ar, T& val, 

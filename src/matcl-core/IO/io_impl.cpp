@@ -18,13 +18,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-scalar/details/io_impl.h"
+#include "matcl-core/details/io_impl.h"
 #include <vector>
 #include "matcl-core/general/exception.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-core/details/integer.h"
-#include "matcl-scalar/IO/scalar_io.h"
-#include "matcl-scalar/lib_functions/func_unary.h"
+#include "matcl-core/IO/scalar_io.h"
+#include "matcl-core/details/object_interface.h"
 
 #include <iomanip>
 #include "boost/io/ios_state.hpp"
@@ -459,21 +459,21 @@ static bool Cread(std::istream &is, Complex &cm)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<Integer>(std::istream& is,Integer& x)
 {
     return Iread(is,x);
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<Real>(std::istream& is,Real& x)
 {
     return Rread(is,x);
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<Float>(std::istream& is,Float& x)
 {
     Real tmp;
@@ -483,10 +483,12 @@ bool stream_helpers::read<Float>(std::istream& is,Float& x)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
-bool stream_helpers::read<Object>(std::istream& is,Object& x)
+MATCL_CORE_EXPORT
+bool stream_helpers::read<dynamic::object>(std::istream& is, dynamic::object& x)
 {
-    is >> x;
+    md::nonconst_object_interface oi(&x);
+    oi.read(is);
+
     if (is.fail() || is.bad())
         return false;
     else
@@ -494,10 +496,12 @@ bool stream_helpers::read<Object>(std::istream& is,Object& x)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<dynamic::Type>(std::istream& is, dynamic::Type& x)
 {
-    is >> x;
+    md::nonconst_type_interface ti(&x);
+    ti.read(is);
+
     if (is.fail() || is.bad())
         return false;
     else
@@ -505,14 +509,14 @@ bool stream_helpers::read<dynamic::Type>(std::istream& is, dynamic::Type& x)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<Complex>(std::istream& is,Complex& x)
 {
     return Cread(is,x);
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<Float_complex>(std::istream& is,Float_complex& x)
 {
     Complex tmp;
@@ -522,7 +526,7 @@ bool stream_helpers::read<Float_complex>(std::istream& is,Float_complex& x)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 bool stream_helpers::read<std::string>(std::istream& is,std::string& str)
 {
     is >> str;
@@ -533,19 +537,19 @@ bool stream_helpers::read<std::string>(std::istream& is,std::string& str)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<Integer>(std::ostream& os,const Integer& x)
 {
     os << x;
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<Real>(std::ostream& os,const Real& val)
 {
-    if (details::isfinite_helper<Real>::eval(val) == false)
+    if (std::isfinite(val) == false)
     {
-        if (details::isinf_helper<Real>::eval(val))
+        if (std::isinf(val))
         {
             if (val < 0)
                 os << "-Inf";
@@ -564,12 +568,12 @@ void stream_helpers::write<Real>(std::ostream& os,const Real& val)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<Float>(std::ostream& os,const Float& val)
 {
-    if (details::isfinite_helper<Float>::eval(val) == false)
+    if (std::isfinite(val) == false)
     {
-        if (details::isinf_helper<Float>::eval(val))
+        if (std::isinf(val))
         {
             if (val < 0)
                 os << "-Inf";
@@ -587,21 +591,23 @@ void stream_helpers::write<Float>(std::ostream& os,const Float& val)
 };
 
 template<>
-MATCL_SCALAR_EXPORT
-void stream_helpers::write<Object>(std::ostream& os,const Object& x)
+MATCL_CORE_EXPORT
+void stream_helpers::write<dynamic::object>(std::ostream& os,const dynamic::object& x)
 {
+    //TODO?
     os << x;
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<dynamic::Type>(std::ostream& os, const dynamic::Type& x)
 {
-    os << x;
+    md::const_type_interface ti(&x);
+    ti.write(os);
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<Complex>(std::ostream& os,const Complex& x)
 {
     write(os,matcl::real(x));
@@ -610,7 +616,7 @@ void stream_helpers::write<Complex>(std::ostream& os,const Complex& x)
 }
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<Float_complex>(std::ostream& os,const Float_complex& x)
 {
     write(os,matcl::real(x));
@@ -619,21 +625,10 @@ void stream_helpers::write<Float_complex>(std::ostream& os,const Float_complex& 
 };
 
 template<>
-MATCL_SCALAR_EXPORT
+MATCL_CORE_EXPORT
 void stream_helpers::write<std::string>(std::ostream& os,const std::string& str)
 {
     os << str;
 }
-
-std::ostream& save(std::ostream& os, const dynamic::Type& ti)
-{
-    os << ti;
-    return os;
-};
-std::istream& load(std::istream& is, dynamic::Type& ti)
-{
-    is >> ti;
-    return is;
-};
 
 };};

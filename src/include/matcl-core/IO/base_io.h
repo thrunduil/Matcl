@@ -36,14 +36,16 @@ namespace md = matcl::details;
 // data using global disp stream or local disp stream. Data are represented by
 // abstract class disp_data_provider defined elsewhere. Options controls how printing
 // is performed, see options_disp for details
-MATCL_CORE_EXPORT void          disp(disp_data_provider& data, const disp_stream_ptr& os = default_disp_stream(),
-                                    const options& opts = options());
+MATCL_CORE_EXPORT 
+void            disp(disp_data_provider& data, const disp_stream_ptr& os 
+                    = default_disp_stream(), const options& opts = options());
 
 // Display heder of any data using the same formatting rules as for matrices. Display
 // data using global disp stream or local disp stream. Data are represented by
 // abstract class disp_data_provider defined elsewhere. Options controls how printing
 // is performed, see options_disp for details
-MATCL_CORE_EXPORT void          disp_header(disp_data_provider& data, const disp_stream_ptr& os 
-                                    = default_disp_stream(), const options& opts = options());
+MATCL_CORE_EXPORT
+void            disp_header(disp_data_provider& data, const disp_stream_ptr& os 
+                    = default_disp_stream(), const options& opts = options());
 
 };

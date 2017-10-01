@@ -23,28 +23,7 @@
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-core/options/options_disp.h"
 #include "matcl-core/IO/archive.h"
-
-namespace matcl { namespace details
-{
-
-template<class T>
-struct MATCL_SCALAR_EXPORT saveload_scalar_helper
-{
-    static std::ostream&    eval_save(std::ostream& os, const T& A);
-    static std::istream&    eval_load(std::istream& is, T& A);
-};
-
-struct MATCL_SCALAR_EXPORT to_string_scalar_helper
-{
-    static std::string eval(Integer v);
-    static std::string eval(Float v);
-    static std::string eval(Real v);
-    static std::string eval(const Complex& v);
-    static std::string eval(const Float_complex& v);
-    static std::string eval(const Object& v);
-};
-
-}}
+#include "matcl-core/IO/scalar_io.h"
 
 namespace matcl
 {

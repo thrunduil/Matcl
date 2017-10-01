@@ -42,10 +42,10 @@ struct object_type_traits<mp_int> : object_type_traits_default
     static T    make_one(const T*)          { return T(1); };
 
     MATCL_MP_OBJ_EXPORT
-    static std::string  to_string(const mp_int& t, printer& pr);
+    static std::string  to_string(const mp_int& t, md::printer& pr);
 
     MATCL_MP_OBJ_EXPORT
-    static void         disp(const mp_int& t, printer& pr, Integer elem_width,
+    static void         disp(const mp_int& t, md::printer& pr, Integer elem_width,
                              align_type at, Integer value_pos);
 
 };
@@ -61,10 +61,10 @@ struct object_type_traits<mp_float> : object_type_traits_default
     static T    make_one(const T*)          { return T(1); };
 
     MATCL_MP_OBJ_EXPORT
-    static std::string  to_string(const mp_float& t, printer& pr);
+    static std::string  to_string(const mp_float& t, md::printer& pr);
 
     MATCL_MP_OBJ_EXPORT
-    static void         disp(const mp_float& t, printer& pr, Integer elem_width,
+    static void         disp(const mp_float& t, md::printer& pr, Integer elem_width,
                              align_type at, Integer value_pos);
 };
 
@@ -79,10 +79,10 @@ struct object_type_traits<mp_complex> : object_type_traits_default
     static T    make_one(const T*)          { return T(1); };
 
     MATCL_MP_OBJ_EXPORT
-    static std::string  to_string(const mp_complex& t, printer& pr);
+    static std::string  to_string(const mp_complex& t, md::printer& pr);
 
     MATCL_MP_OBJ_EXPORT
-    static void         disp(const mp_complex& t, printer& pr, Integer elem_width,
+    static void         disp(const mp_complex& t, md::printer& pr, Integer elem_width,
                              align_type at, Integer value_pos);
 };
 
@@ -97,10 +97,10 @@ struct object_type_traits<mp_rational> : object_type_traits_default
     static T    make_one(const T*)              { return T(1); };
 
     MATCL_MP_OBJ_EXPORT
-    static std::string  to_string(const mp_rational& t, printer& pr);
+    static std::string  to_string(const mp_rational& t, md::printer& pr);
 
     MATCL_MP_OBJ_EXPORT
-    static void         disp(const mp_rational& t, printer& pr, Integer elem_width,
+    static void         disp(const mp_rational& t, md::printer& pr, Integer elem_width,
                              align_type at, Integer value_pos);
 };
 

@@ -30,41 +30,6 @@
 namespace matcl { namespace dynamic
 {
 
-// a helper class, that display and convert to string predefined 
-// scalar types
-class MATCL_DYN_EXPORT printer
-{
-    public:
-        virtual ~printer(){};
-
-        // if elem_width > 0, then width is fixed; 
-        // if elem_width < 0, then width is not fixed, and width gives maximal width
-        // if elem_width == 0, then width is not specified
-        virtual void        disp_elem(Integer elem_width, const std::string& s, 
-                                align_type at, Integer value_pos) = 0;
-        virtual void        disp_elem(Integer elem_width, Integer r, align_type at, 
-                                Integer value_pos) = 0;
-        virtual void        disp_elem(Integer elem_width, Real r, align_type at, 
-                                Integer value_pos) = 0;
-        virtual void        disp_elem(Integer elem_width, Float r, align_type at,
-                                Integer value_pos) = 0;
-        virtual void        disp_elem(Integer elem_width, const Complex& r, 
-                                align_type at, Integer value_pos) = 0;
-        virtual void        disp_elem(Integer elem_width, const Float_complex& r, 
-                                align_type at, Integer value_pos) = 0;
-
-        // convert to string predefined scalar types
-        virtual std::string to_string(Integer v) = 0;
-        virtual std::string to_string(Real v) = 0;
-        virtual std::string to_string(Float v) = 0;
-        virtual std::string to_string(const Complex& v) = 0;
-        virtual std::string to_string(const Float_complex& v) = 0;
-
-        // return expected number of significant digits to be printed
-        // for floating point values (i.e. 0.00123 is displayed with precision 3)
-        virtual Integer     get_precision() const = 0;
-};
-
 // class storing elements of any type with runtime type
 // information; this type is reference counted
 class MATCL_DYN_EXPORT object
@@ -183,9 +148,9 @@ class MATCL_DYN_EXPORT object
 
     //internal use
     public:
-        void				    disp(printer& pr, Integer elem_width, 
+        void				    disp(matcl::details::printer& pr, Integer elem_width, 
                                      matcl::align_type at, Integer value_pos) const; 
-        std::string             to_string(printer& pr) const;        
+        std::string             to_string(matcl::details::printer& pr) const;        
 
         const data_type*        get_data() const        { return m_data; };		
         data_type*              get_data_unique()       { make_unique(); return m_data; };	
@@ -196,5 +161,14 @@ class MATCL_DYN_EXPORT object
         template<class T>
         friend class object_type;
 };
+
+// matcl-dynamic library initializer
+struct MATCL_DYN_EXPORT object_initializer
+{
+    object_initializer();
+    ~object_initializer();
+};
+
+static object_initializer g_object_initializer;
 
 };};

@@ -47,9 +47,6 @@ namespace matcl
 using iarchive_impl = eos::portable_iarchive;
 using oarchive_impl = eos::portable_oarchive;
 
-// current archive version
-static const unsigned int archive_version = 1;
-
 // input archive
 class MATCL_CORE_EXPORT iarchive
 {
@@ -64,7 +61,7 @@ class MATCL_CORE_EXPORT iarchive
 
     public:
         // create input archive from input stream
-        iarchive(std::istream& is, unsigned int v = archive_version);
+        iarchive(std::istream& is);
 
         // construct iarchive from an existing archive; this
         // object cannot be used, when ar is destroyed
@@ -106,7 +103,7 @@ class MATCL_CORE_EXPORT oarchive
 
     public:
         // create output archive from output stream
-        oarchive(std::ostream& os, unsigned int v = archive_version);
+        oarchive(std::ostream& os);
 
         // construct iarchive from an existing archive; this
         // object cannot be used, when ar is destroyed

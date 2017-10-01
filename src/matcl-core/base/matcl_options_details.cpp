@@ -308,43 +308,52 @@ class disp_map : public disp_data_provider
             };
         };
 };
+
 void disp_map::begin()
 {
     m_pos   = m_option_map.begin();
     m_col   = 0;
 };
+
 void disp_map::hold()
 {
     m_col_V1    = m_col;
     m_V1        = m_pos;
 };
+
 void disp_map::hold_column()
 {
     m_col_V2    = m_col;
     m_V2        = m_pos;
 };
+
 void disp_map::next_row()
 {
     ++m_pos;
 };
+
 void disp_map::next_column()
 {
     ++m_col;
 };
+
 void disp_map::restore()
 {
     m_col       = m_col_V1;
     m_pos       = m_V1;
 };
+
 void disp_map::restore_column()
 {
     m_col       = m_col_V2;
     m_pos       = m_V2;
 };
+
 void disp_map::begin_row_headers()
 {
     m_pos_row_header = m_option_map.begin();
 }
+
 void disp_map::next_row_header()
 {
     ++m_pos_row_header;
@@ -354,10 +363,12 @@ std::string option_disp::string() const
 {
     return m_string;
 };
+
 void option_disp::set(const std::string& val)
 {
     m_string = val;
 };
+
 void option_disp::set_unregistered()
 {
     m_string = "unregistered option";
@@ -649,6 +660,7 @@ class disp_map_option_help : public disp_data_provider
             }
         };
 };
+
 void option_impl::help(const disp_stream_ptr& ds, const option& opt, const options& disp_options_0) const
 {
     disp_map_option_help dm(this, opt);
@@ -662,6 +674,5 @@ void option_impl::help(const disp_stream_ptr& ds, const option& opt, const optio
 
     return matcl::disp(dm, ds, disp_opt);
 };
-
 
 }};

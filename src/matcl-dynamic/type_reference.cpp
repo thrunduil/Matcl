@@ -54,12 +54,12 @@ bool reference_type::is_one(const data_type*) const
     throw std::runtime_error("data operation on reference type, this type"
                              " should not have any instances");
 }
-std::string reference_type::to_string(const data_type*, printer&) const
+std::string reference_type::to_string(const data_type*, md::printer&) const
 {
     throw std::runtime_error("data operation on reference type, this type"
                              " should not have any instances");
 }
-void reference_type::disp(const data_type*, printer&, Integer, 
+void reference_type::disp(const data_type*, md::printer&, Integer, 
                             align_type, Integer) const
 {
     throw std::runtime_error("data operation on reference type, this type"

@@ -34,12 +34,12 @@ std::string mark_type<T>::name() const
 
 template<class T>
 details::register_object_helper 
-register_object<T>::m_hook(typeid(T).name(),details::register_object_helper::create_object<T>);
+register_object<T>::g_hook(typeid(T).name(),details::register_object_helper::create_object<T>);
 
 template<class T> 
 Type mark_type<T>::get() const
 {    
-    static Type ti( register_object<T>::m_hook.get_object(typeid(T).name()) );
+    static Type ti( register_object<T>::g_hook.get_object(typeid(T).name()) );
     return ti;
 };
 
@@ -63,8 +63,8 @@ inline std::string mark_type<null_type>::name() const
 template<class T> 
 Type mark_reference_type<T>::get() const
 {
-    static Type ti = operations::make_reference_type(T::get_static_type());
-    return ti;
+    static Type g_ti = operations::make_reference_type(T::get_static_type());
+    return g_ti;
 };
 
 };};};

@@ -22,6 +22,7 @@
 #include "matcl-core/IO/disp_stream.h"
 #include "matcl-core/general/exception.h"
 #include "matcl-core/details/integer.h"
+#include "matcl-core/details/object_interface.h"
 
 #include <algorithm>
 
@@ -387,19 +388,23 @@ void printer::disp_elem(Integer w, Float v, align_type at, Integer vp)
     disp_elem(w, Real(v), at, vp);
 };
 
-void printer::disp_elem(Integer w, const object_disp_handle& v, align_type at, Integer value_pos)
+void printer::disp_elem(Integer w, const dynamic::object& v, align_type at, 
+                        Integer value_pos)
 {
     bool display = true;
+
+    const_object_interface oi = const_object_interface(&v);
+
     if (m_disp_zero == false)
     {
-        if (v.is_zero() == true)
+        if (oi.is_zero() == true)
             display = false;
     };
 
     if (display == false)
         this->disp_elem(w, " ", at, value_pos);
     else
-        v.disp_elem(*this, w, at, value_pos);
+        oi.disp_elem(*this, w, at, value_pos);
 };
 
 void printer::disp_elem(Integer w, const Float_complex& v, align_type at, Integer vp)

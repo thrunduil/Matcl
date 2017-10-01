@@ -108,13 +108,4 @@ Object                  convert_to_object(const dynamic::Type& ty, const Float_c
 MATCL_SCALAR_EXPORT
 Object                  convert_to_object(const dynamic::Type& ty, const Object& v);
 
-// implement disp function for objects; internal use only
-MATCL_SCALAR_EXPORT
-void                    disp_object(const Object& obj, details::printer& pr, Integer elem_width, 
-                            matcl::align_type at, Integer value_pos);
-
-// get string representation of object v
-MATCL_SCALAR_EXPORT
-std::string             to_string(const Object& v);
-
 };

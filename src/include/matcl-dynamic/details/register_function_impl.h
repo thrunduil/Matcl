@@ -159,19 +159,19 @@ struct make_function_type
         using function_type = Function_Type;
 
     private:
-        static this_type    m_instance;
+        static this_type    g_instance;
         fun_register_helper m_register;
 
         make_function_type();
 
     public:
-        static this_type&   get()           { return m_instance; };
+        static this_type&   get()           { return g_instance; };
         void                initialize()    { return m_register.initialize(); };
 };
 
 template<class Derived, class Name, class Function_Type, Function_Type F>
 make_function_type<Derived, Name, Function_Type,F> 
-make_function_type<Derived, Name, Function_Type,F>::m_instance;
+make_function_type<Derived, Name, Function_Type,F>::g_instance;
 
 template<class Derived, class Name, class Function_type, Function_type F>
 make_function_type<Derived, Name, Function_type,F>::make_function_type()
@@ -189,20 +189,20 @@ struct make_function_template_type
         using registerer    = fun_templ_register_helper;
 
     private:
-        static this_type    m_instance;
+        static this_type    g_instance;
         registerer          m_register;
 
         make_function_template_type();
 
     public:
-        static this_type&   get()           { return m_instance; };
+        static this_type&   get()           { return g_instance; };
         void                initialize()    { return m_register.initialize(); };
 };
 
 template<class Derived, class Name, class Function_Type, Function_Type F, 
     make_return_fptr Ret, class ... Templ>
 make_function_template_type<Derived, Name, Function_Type,F, Ret, Templ...> 
-make_function_template_type<Derived, Name, Function_Type,F, Ret, Templ ...>::m_instance;
+make_function_template_type<Derived, Name, Function_Type,F, Ret, Templ ...>::g_instance;
 
 template<class Derived, class Name, class Function_type, Function_type F, 
     make_return_fptr Ret, class ... Templ>

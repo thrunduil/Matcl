@@ -165,7 +165,7 @@ identifier_ptr identifier_table::get(const std::string& val)
     return m_table.get(val); 
 };
 
-static identifier_table m_id_table;
+static identifier_table g_id_table;
 
 };
 
@@ -174,7 +174,7 @@ static identifier_table m_id_table;
 //---------------------------------------------------------------
 identifier::identifier(const std::string& name)
 {
-    details::identifier_ptr ptr = details::m_id_table.get(name);
+    details::identifier_ptr ptr = details::g_id_table.get(name);
     m_impl  = ptr.m_ptr;
     m_hash  = ptr.m_ptr->hash_value();
 };

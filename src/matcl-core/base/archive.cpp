@@ -24,9 +24,9 @@
 namespace matcl 
 {
 
-iarchive::iarchive(std::istream& is, unsigned int v)
+iarchive::iarchive(std::istream& is)
 {
-    m_impl          = new archive_type(is,v);
+    m_impl          = new archive_type(is);
     m_need_delete   = true;
 };
 
@@ -75,9 +75,9 @@ iarchive& iarchive::operator>>(Float_complex& v)
     return *this;
 };
 
-oarchive::oarchive(std::ostream& os, unsigned int v)
+oarchive::oarchive(std::ostream& os)
 {
-    m_impl          = new archive_type(os,v);
+    m_impl          = new archive_type(os);
     m_need_delete   = true;
 };
 oarchive::oarchive(archive_type& ar)

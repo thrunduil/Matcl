@@ -65,7 +65,6 @@
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\matfunc_pow.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\rand.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\timer.cpp" />
-    <ClCompile Include="..\..\src\matcl-scalar\IO\io_impl.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\scalar_gen.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\utils.cpp" />

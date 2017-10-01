@@ -108,8 +108,8 @@ type_table::type_table()
 
 type_table* type_table::get()
 {
-    static type_table* instance = new type_table();
-    return instance;
+    static type_table* g_instance = new type_table();
+    return g_instance;
 };
 
 Type type_table::get_type(const char* name)
@@ -179,9 +179,9 @@ Type type_table::make_reference_type(Type t)
 inline type_table_cache* type_table::get_cache()
 {
     MATCL_THREAD_LOCAL static 
-    type_table_cache* inst = new type_table_cache();
+    type_table_cache* g_inst = new type_table_cache();
 
-    return inst;
+    return g_inst;
 };
 
 void type_table::free_cache()
@@ -391,12 +391,15 @@ function type_table::get_assigner(Type to, Type from)
 void type_table::initialize()
 {
     static bool fun_table_initialized = false;
+    
     if(!fun_table_initialized)
     {
         error_handler eh;
         fun_table_initialized = process_functions(eh);
         eh.report();
     };
+
+    fun_table_initialized = true;
 };
 
 void type_table::finish_initialization()
@@ -404,42 +407,48 @@ void type_table::finish_initialization()
     m_fun_tab.finish_initialization();
 };
 
-static bool is_initialized = false;
-static std::vector<delayed_function_register*>* reg_int_vec = nullptr;
-static std::vector<delayed_function_template_register*>* reg_templ_int_vec = nullptr;
+static bool g_is_initialized = false;
+static std::vector<delayed_function_register*>* g_reg_int_vec = nullptr;
+static std::vector<delayed_function_template_register*>* g_reg_templ_int_vec = nullptr;
 
 bool type_table::process_functions(error_handler& eh)
 {
     std::unique_lock<matcl::default_mutex> lock(m_mutex_reg_functions);
 
-    if (is_initialized)
+    if (g_is_initialized == true)
         return true;
 
-    for(int i = (int)reg_int_vec->size() - 1; i >= 0 ; --i)
+    if (g_reg_int_vec != nullptr)
     {
-        function fun_evl = (*reg_int_vec)[i]->execute_registration();
-        register_function((*reg_int_vec)[i]->get_fun_name(), fun_evl, eh);
+        for(int i = (int)g_reg_int_vec->size() - 1; i >= 0 ; --i)
+        {
+            function fun_evl = (*g_reg_int_vec)[i]->execute_registration();
+            register_function((*g_reg_int_vec)[i]->get_fun_name(), fun_evl, eh);
 
-        delete (*reg_int_vec)[i];
-        reg_int_vec->pop_back();
-    }
+            delete (*g_reg_int_vec)[i];
+            g_reg_int_vec->pop_back();
+        }
+    };
 
     std::vector<Type> types;
 
-    for(int i = (int)reg_templ_int_vec->size() - 1; i >= 0 ; --i)
+    if (g_reg_templ_int_vec != nullptr)
     {
-        make_return_fptr ret;
-        function fun_evl = (*reg_templ_int_vec)[i]->execute_registration(types, ret);
+        for(int i = (int)g_reg_templ_int_vec->size() - 1; i >= 0 ; --i)
+        {
+            make_return_fptr ret;
+            function fun_evl = (*g_reg_templ_int_vec)[i]->execute_registration(types, ret);
 
-        register_function_template((*reg_templ_int_vec)[i]->get_fun_name(), 
-                                   fun_evl, types, ret, eh);
+            register_function_template((*g_reg_templ_int_vec)[i]->get_fun_name(), 
+                                       fun_evl, types, ret, eh);
 
-        delete (*reg_templ_int_vec)[i];
-        reg_templ_int_vec->pop_back();
-    }
+            delete (*g_reg_templ_int_vec)[i];
+            g_reg_templ_int_vec->pop_back();
+        }
+    };
 
     finish_initialization();
-    is_initialized = true;
+    g_is_initialized = true;
     return true;
 };
 
@@ -457,18 +466,18 @@ void type_table::register_function_template(const function_name& fn, function fu
 
 void type_table::initial_register_function(delayed_function_register* fun)
 {
-    if (!reg_int_vec)
-        reg_int_vec = new std::vector<delayed_function_register*>();
+    if (!g_reg_int_vec)
+        g_reg_int_vec = new std::vector<delayed_function_register*>();
 
-    reg_int_vec->push_back(fun);
+    g_reg_int_vec->push_back(fun);
 };
 
 void type_table::initial_register_function_template(delayed_function_template_register* fun)
 {
-    if (!reg_templ_int_vec)
-        reg_templ_int_vec = new std::vector<delayed_function_template_register*>();
+    if (!g_reg_templ_int_vec)
+        g_reg_templ_int_vec = new std::vector<delayed_function_template_register*>();
 
-    reg_templ_int_vec->push_back(fun);
+    g_reg_templ_int_vec->push_back(fun);
 };
 
 };};};

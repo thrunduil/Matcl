@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\src\test\test_dynamic\rand_scalars.h" />
     <ClInclude Include="..\..\src\test\test_dynamic\scalar.h" />
     <ClInclude Include="..\..\src\test\test_dynamic\scalar_ext.h" />
+    <ClInclude Include="..\..\src\test\test_dynamic\test_disp.h" />
     <ClInclude Include="..\..\src\test\test_dynamic\test_dynamic.h" />
     <ClInclude Include="..\..\src\test\test_dynamic\test_gmp.h" />
     <ClInclude Include="..\..\src\test\test_dynamic\test_gmp_object.h" />
@@ -33,6 +34,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\test\test_dynamic\main.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\rand_scalars.cpp" />
+    <ClCompile Include="..\..\src\test\test_dynamic\test_disp.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_dynamic.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_bin.cpp">
@@ -41,6 +43,12 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_bin_1.cpp" />
+    <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_bin_2.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_bin_3.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_object.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_prec.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_performance.cpp" />
@@ -178,7 +186,6 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -227,7 +234,6 @@
       <OmitFramePointers>false</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -235,7 +241,6 @@
       <Profile>false</Profile>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

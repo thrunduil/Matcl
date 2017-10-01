@@ -30,6 +30,13 @@ struct false_type{};
 
 }};
 
+namespace matcl { namespace details
+{
+
+class printer;
+
+}};
+
 namespace matcl { namespace dynamic
 {
 
@@ -58,7 +65,6 @@ namespace details
 
 class object;
 class Type;
-class printer;
 class function;
 class null_type;
 

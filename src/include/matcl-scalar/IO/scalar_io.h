@@ -22,6 +22,7 @@
 
 #include "matcl-scalar/config.h"
 #include "matcl-core/IO/disp_stream.h"
+#include "matcl-core/IO/scalar_io.h"
 #include "matcl-core/IO/disp_data_provider.h"
 #include "matcl-core/options/matcl_options.h"
 #include "matcl-scalar/details/enablers.h"

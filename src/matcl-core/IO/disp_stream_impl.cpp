@@ -1148,11 +1148,11 @@ bool disp_stream_impl::do_restrict_sparse_matrix(const disp_stream* user) const
 };
 
 Integer disp_stream_impl::do_get_value_min_width(const disp_stream* user, 
-                    const object_disp_handle& v, Integer value_pos) const
+                    const dynamic::object& v, Integer value_pos) const
 {
     (void)user;
     bufor_info os;
-    printer(&os).disp_elem(0,v,align_type::left,value_pos);
+    printer(&os).disp_elem(0, v, align_type::left, value_pos);
     return cast_int64(os.get_stream().tellp());
 };
 

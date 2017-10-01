@@ -158,10 +158,11 @@ class MATCL_DYN_EXPORT any_type
     //internal use
     public:
         // convert to string
-        std::string     to_string(printer& pr) const;
+        std::string     to_string(matcl::details::printer& pr) const;
 
         // display helper
-        void            disp(printer& pr, Integer elem_width, align_type at, Integer value_pos) const;
+        void            disp(matcl::details::printer& pr, Integer elem_width, 
+                            align_type at, Integer value_pos) const;
 
     private:
         void            remove_indirections();
