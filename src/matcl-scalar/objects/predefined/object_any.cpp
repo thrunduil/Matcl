@@ -21,10 +21,8 @@
 #include "matcl-dynamic/register_function.h"
 #include "matcl-dynamic/object_type.h"
 #include "matcl-dynamic/details/register_function_macro.h"
-
 #include "matcl-scalar/matcl_scalar.h"
-
-//#include "mmlib_basic/IO/matrix_io.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 namespace matcl { namespace dynamic
 {

@@ -3232,13 +3232,10 @@ void test_dynamic::test_compile_func_binary_notcompl()
 template<class T1, class T2>
 void test_dynamic::test_compile_func_binary_notmp()
 {
-    //TODO
-/*
     T1 x;
     T2 y;
 
     powm1(x,y);
-*/
 };
 
 template<class T1, class T2>

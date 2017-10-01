@@ -294,6 +294,12 @@ mp_complex matcl::expm1(const mp_complex& x, precision req_prec)
 
         r_im                = mult_zero(exp_re, sin_im, req_prec);  //1.5 ulp
 
+        if (is_finite(r_im) == false)
+        {
+            mp_float nan    = constants::mp_nan(req_prec);
+            return mp_complex(nan, nan);
+        };
+
         for (int iter = 0; ; ++iter)
         {
             mp_float exp1   = expm1(xre, int_prec); // 0.5 ulp
@@ -323,9 +329,16 @@ mp_complex matcl::expm1(const mp_complex& x, precision req_prec)
             if (np <= int_prec)
                 break;
 
+            if (iter == 0 && is_finite(r_im) == false || is_finite(r_re) == false)
+            {
+                r_re.set_precision(req_prec);
+                return mp_complex(r_re, r_im);
+            };
+
             if (iter > mmd::get_max_precision_iters())
             {
                 mp::error::warn_possibly_inaccurate_result("expm1");
+                std::cout << "x: " << x << "; re: " << r_re << "; im: " << r_im << "\n";
                 break;
             };
 
@@ -375,6 +388,12 @@ mp_complex matcl::expm1(const mp_complex& x, precision req_prec)
             if (np <= int_prec)
                 break;
 
+            if (iter == 0 && is_finite(r_im) == false || is_finite(r_re) == false)
+            {
+                r_re.set_precision(req_prec);
+                return mp_complex(r_re, r_im);
+            };
+
             if (iter > mmd::get_max_precision_iters())
             {
                 mp::error::warn_possibly_inaccurate_result("expm1");
@@ -391,7 +410,6 @@ mp_complex matcl::expm1(const mp_complex& x, precision req_prec)
         };
     
         r_re.set_precision(req_prec);   //0.5 ulp + M * 1.5 ulp + 0.5 ulp
-
         return mp_complex(r_re, r_im);
     };
 }

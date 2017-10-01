@@ -26,7 +26,7 @@ namespace matcl
 {
 
 // convert a scalar of type From to a scalar of type To;
-// this function is enabled if To and From are mmlib scalars
+// this function is enabled if To and From are matcl scalars
 // warnings are not printed if this conversion leads to precision lost
 template<class To, class From, 
     class Enable = typename details::enable_if_matcl_scalars2<To,From,void>::type>

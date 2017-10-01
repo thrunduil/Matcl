@@ -23,10 +23,9 @@
 #include "matcl-scalar/objects/object_functions.h"
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-dynamic/object_type.h"
-//#include "mmlib_basic/details/printer.h"
-//#include "mmlib_basic/base/disp_stream_impl.h"
-//#include "mmlib_basic/options/options_disp.h"
-//#include "mmlib_basic/IO/matrix_io.h"
+#include "matcl-core/details/printer.h"
+#include "matcl-core/options/options_disp.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 namespace matcl 
 {
@@ -93,7 +92,6 @@ Object matcl::convert_to_object(const dynamic::Type& ty, const Object& v)
     return Object(matcl::dynamic::convert(ty, v));
 }
 
-/*
 struct printer_impl : public dynamic::printer
 {
     details::printer* pr;
@@ -176,6 +174,5 @@ std::string matcl::to_string(const Object& v)
     printer_impl pi(nullptr);
     return v.to_string(pi);
 };
-*/
 
 };

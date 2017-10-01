@@ -39,6 +39,7 @@ template<class T>
 class object_type;
 
 class object;
+class Type;
 
 }};
 
@@ -55,13 +56,28 @@ namespace matcl
 
     class Matrix;
     class struct_flag;
+    class disp_stream;
+    class options;
+    class options_notifier;
+    class disp_data_provider;
+
+    class iarchive;
+    class oarchive;
 
     struct struct_dense;
     struct struct_sparse;
     struct struct_banded;
 
-    using Object    = dynamic::object;
+    using Object            = dynamic::object;
+    using disp_stream_ptr   = std::shared_ptr<disp_stream>;
 }
+
+namespace matcl { namespace details
+{
+
+class disp_stream_impl;
+
+}};
 
 namespace matcl { namespace error
 {
@@ -74,6 +90,9 @@ using exception_message_ptr = std::shared_ptr<exception_message>;
 
 namespace matcl { namespace raw
 {
+
+namespace details
+{};
 
 template<class val_type,class struct_type> 
 class MATCL_CORE_EXTERN Matrix;

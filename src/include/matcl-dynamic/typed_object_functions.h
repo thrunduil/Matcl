@@ -20,7 +20,7 @@
 #pragma once
 
 #include "matcl-core/matrix/enums.h"
-#include "matcl-core/general/result_of.h"
+#include "matcl-dynamic/result_of.h"
 
 #include "matcl-dynamic/function_name.h"
 #include "matcl-dynamic/predefined_functions_names.h"

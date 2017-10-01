@@ -30,6 +30,8 @@
 #include "matcl-scalar/lib_functions/manip.h"
 #include "matcl-scalar/lib_functions/func_forwarding.h"
 
+#include "matcl-scalar/matcl_scalar.h"
+
 #include <iostream>
 
 namespace matcl

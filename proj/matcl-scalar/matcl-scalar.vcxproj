@@ -21,12 +21,15 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-scalar\config.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\enablers.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\io_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\matfunc_helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalar_gen_details.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalfunc_helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\utils.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\IO\scalar_io.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_binary.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_forwarding.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_matrix.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_unary.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\manip.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\utils.h" />
@@ -36,7 +39,6 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\object.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\objects\object_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\objects\typed_object_functions.h" />
-    <ClInclude Include="..\..\src\include\matcl-scalar\scalars.h" />
     <ClInclude Include="..\..\src\matcl-scalar\extern\dsfmt\dSFMT-common.h" />
     <ClInclude Include="..\..\src\matcl-scalar\extern\dsfmt\dSFMT-params.h" />
     <ClInclude Include="..\..\src\matcl-scalar\extern\dsfmt\dSFMT-params19937.h" />
@@ -63,6 +65,8 @@
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\matfunc_pow.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\rand.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\timer.cpp" />
+    <ClCompile Include="..\..\src\matcl-scalar\IO\io_impl.cpp" />
+    <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\scalar_gen.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\utils.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\object.cpp" />
@@ -85,8 +89,10 @@
   <ItemGroup>
     <None Include="..\..\src\include\matcl-scalar\details\combinatorics.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\func_binary.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\func_matrix.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\func_unary.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\manip.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\scalar_io.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\typed_object_functions.inl" />
   </ItemGroup>
   <ItemGroup>

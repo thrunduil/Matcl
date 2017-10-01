@@ -25,17 +25,14 @@
 
 #include <algorithm>
 
-//TODO: move to config
-//#define USE_DLMALLOC
-
-#ifdef USE_DLMALLOC
+#if MATCL_USE_DLMALLOC
     #include "matcl-core/base/malloc.h"
 #endif
 
 namespace matcl { namespace details
 {
 
-#ifdef USE_DLMALLOC
+#if MATCL_USE_DLMALLOC
    
     matcl::default_spinlock_mutex m_mutex;
 

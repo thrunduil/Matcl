@@ -25,7 +25,7 @@
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-scalar/objects/typed_object_functions.h"
 #include "matcl-scalar/lib_functions/manip.h"
-#include "matcl-core/general/result_of.h"
+#include "matcl-dynamic/result_of.h"
 
 #pragma warning(push)
 #pragma warning(disable:4800) // forcing value to bool 'true' or 'false' (performance warning)

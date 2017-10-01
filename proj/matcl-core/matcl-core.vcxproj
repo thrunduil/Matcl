@@ -21,17 +21,22 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-core\config.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\disp_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\disp_stream_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\disp_stream_options.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\exception_details.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table_details.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\object_table.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\integer.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\isa.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\matcl_options_details.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\mpl.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\portable_archive_exception.hpp" />
     <ClInclude Include="..\..\src\include\matcl-core\details\portable_iarchive.hpp" />
     <ClInclude Include="..\..\src\include\matcl-core\details\portable_oarchive.hpp" />
-    <ClInclude Include="..\..\src\include\matcl-core\details\result_of_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\printer.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_real.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\stack_array.h" />
@@ -43,11 +48,13 @@
     <ClInclude Include="..\..\src\include\matcl-core\general\exception_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\memory.h" />
-    <ClInclude Include="..\..\src\include\matcl-core\general\result_of.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\safe_string_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\thread.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\type_traits.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\archive.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\IO\base_io.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\IO\disp_data_provider.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\IO\disp_stream.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\output_stream.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h" />
     <ClInclude Include="..\..\src\include\matcl-core\lib_functions\constants.h" />
@@ -55,25 +62,44 @@
     <ClInclude Include="..\..\src\include\matcl-core\matrix\enums.h" />
     <ClInclude Include="..\..\src\include\matcl-core\matrix\matrix_traits.h" />
     <ClInclude Include="..\..\src\include\matcl-core\matrix\scalar_types.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\options\matcl_options.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\options\optional.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\options\options_disp.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\options\option_validators.h" />
     <ClInclude Include="..\..\src\matcl-core\base\malloc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\constants.inl" />
+    <None Include="..\..\src\include\matcl-core\details\disp_impl.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_table.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\object_table.inl" />
+    <None Include="..\..\src\include\matcl-core\details\matcl_options_impl.inl" />
+    <None Include="..\..\src\include\matcl-core\details\matrix_io.inl" />
+    <None Include="..\..\src\include\matcl-core\details\optional.inl" />
+    <None Include="..\..\src\include\matcl-core\details\option_validators.inl" />
     <None Include="..\..\src\include\matcl-core\details\thread.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-core\base\alloc.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\archive.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\integer.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\malloc.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\memory.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\matcl_options.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\matcl_options_details.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\output_stream.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\printer.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\thread.cpp" />
     <ClCompile Include="..\..\src\matcl-core\exception\exception.cpp" />
     <ClCompile Include="..\..\src\matcl-core\exception\exception_message.cpp" />
     <ClCompile Include="..\..\src\matcl-core\exception\safe_string_message.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\base_io.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\disp_data_provider.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\disp_impl.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\disp_stream.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\disp_stream_impl.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\IO\disp_stream_options.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />
@@ -236,6 +262,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>

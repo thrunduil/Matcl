@@ -88,7 +88,7 @@ inline object eval_function_template::eval(const function_name& func, Object&& .
 {
     Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
     int n_args              = sizeof...(Object);
-    int n_types             = m_types.size();
+    int n_types             = (int)m_types.size();
     function f              = operations::get_template_overload(func, n_types, m_types.data(), 
                                     n_args, types);
     const object* args[]    = {(const object*)&args...};

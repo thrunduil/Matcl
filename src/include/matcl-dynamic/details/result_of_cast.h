@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-core/details/result_of_impl.h"
+#include "matcl-dynamic/details/result_of_impl.h"
 
 //result of cast
 namespace matcl { namespace impl
