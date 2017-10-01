@@ -59,13 +59,13 @@ namespace matcl { namespace details
                 os << std::setprecision(precision) << std::scientific;
 
             os << " ";
-            mr::stream_helpers::write<T>(os, A);
+            mr::stream_helpers::write(os, A);
             os << " ";
             return os;
         }
         static std::istream& eval_load(std::istream& is, T& A)
         {
-            mr::stream_helpers::read<T>(is, A);
+            mr::stream_helpers::read(is, A);
             return is;
         }
     };
@@ -84,44 +84,89 @@ namespace matcl { namespace details
                 os << std::setprecision(precision) << std::scientific;
 
             os << " ";
-            mr::stream_helpers::write<T>(os, A);
+            mr::stream_helpers::write(os, A);
             os << " ";
             return os;
         }
         static std::istream& eval_load(std::istream& is, T& A)
         {
-            mr::stream_helpers::read<T>(is, A);
+            mr::stream_helpers::read(is, A);
             return is;
         }
     };
 
+    /*
     template<class T>
     struct saveload_scalar_helper_impl<T, false, true>
     {
         static std::ostream& eval_save(std::ostream& os, const T& A)
         {
             os << " ";
-            mr::stream_helpers::write<T>(os, A);
+            mr::stream_helpers::write(os, A);
             os << " ";
             return os;
         }
         static std::istream& eval_load(std::istream& is, T& A)
         {
-            mr::stream_helpers::read<T>(is, A);
+            mr::stream_helpers::read(is, A);
             return is;
         }
     };
+    */
 
-    template<class T>
-    std::ostream& saveload_scalar_helper<T>::eval_save(std::ostream& os, const T& A)
+    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Integer A)
     {
-        return saveload_scalar_helper_impl<T>::eval_save(os, A);
+        return saveload_scalar_helper_impl<Integer>::eval_save(os, A);
     };
-    template<class T>
-    std::istream& saveload_scalar_helper<T>::eval_load(std::istream& is, T& A)
+    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Float A)
     {
-        return saveload_scalar_helper_impl<T>::eval_load(is, A);
+        return saveload_scalar_helper_impl<Float>::eval_save(os, A);
+    };
+    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Real A)
+    {
+        return saveload_scalar_helper_impl<Real>::eval_save(os, A);
+    };
+    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, const Complex& A)
+    {
+        return saveload_scalar_helper_impl<Complex>::eval_save(os, A);
+    };
+    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, const Float_complex& A)
+    {
+        return saveload_scalar_helper_impl<Float_complex>::eval_save(os, A);
+    };
+    /*
+    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, const Object& A)
+    {
+        return saveload_scalar_helper_impl<Object>::eval_save(os, A);
+    };
+    */
+
+    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Integer& A)
+    {
+        return saveload_scalar_helper_impl<Integer>::eval_load(is, A);
     }
+    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Real& A)
+    {
+        return saveload_scalar_helper_impl<Real>::eval_load(is, A);
+    }
+    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Float& A)
+    {
+        return saveload_scalar_helper_impl<Float>::eval_load(is, A);
+    }
+    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Complex& A)
+    {
+        return saveload_scalar_helper_impl<Complex>::eval_load(is, A);
+    }
+    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Float_complex& A)
+    {
+        return saveload_scalar_helper_impl<Float_complex>::eval_load(is, A);
+    }
+    /*
+    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Object& A)
+    {
+        return saveload_scalar_helper_impl<Object>::eval_load(is, A);
+    }
+    */
 
     std::string details::to_string_scalar_helper::eval(Integer v)
     {
@@ -149,15 +194,3 @@ namespace matcl { namespace details
     };
 
 }};
-
-namespace matcl
-{
-
-template struct details::saveload_scalar_helper<Integer>;
-template struct details::saveload_scalar_helper<Real>;
-template struct details::saveload_scalar_helper<Float>;
-template struct details::saveload_scalar_helper<Complex>;
-template struct details::saveload_scalar_helper<Float_complex>;
-template struct details::saveload_scalar_helper<Object>;
-
-};

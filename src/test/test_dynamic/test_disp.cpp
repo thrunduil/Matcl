@@ -23,6 +23,7 @@
 #include "matcl-core/IO/disp_data_provider.h"
 #include "matcl-core/IO/base_io.h"
 #include "matcl-scalar/object.h"
+#include "matcl-dynamic/object_type.h"
 #include "matcl-scalar/IO/scalar_io.h"
 
 #include <map>
@@ -326,15 +327,22 @@ void disp_tester::make()
 {
     Real v = 1.0/13;
     Object obj(v);
+    object_type<Real> obj2(v);
 
+    std::cout << "\n" << "disp" << "\n";
     disp(v);
-    disp(obj);    
+    disp(obj);
+    disp(obj2);
 
+    std::cout << "\n" << "ostream" << "\n";
     std::cout << v << "\n";
     std::cout << obj << "\n";
+    std::cout << obj2 << "\n";
 
+    std::cout << "\n" << "to_string" << "\n";
     std::cout << to_string(v) << "\n";        
     std::cout << to_string(obj) << "\n";
+    std::cout << to_string(obj2) << "\n";
 
     formatted_disp dm;
 
