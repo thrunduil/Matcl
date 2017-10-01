@@ -85,7 +85,7 @@ struct MATCL_CORE_EXPORT stream_helpers
     static bool     check_nl(std::istream &is);
 
     //consume all white spaces and lines beginning with % #
-	static void    skip_all_blank(std::istream&);
+	static void     skip_all_blank(std::istream&);
 
     //if line begins with comment_char than all characters up to end of line are 
     //appended to comment argument; if add_newline is true then newline charater 
@@ -93,21 +93,29 @@ struct MATCL_CORE_EXPORT stream_helpers
     //otherwise nothing is added to comment and no characters are consumed and
     //add_newline is not changed
     //function return true if line is a comment line
-    static bool    read_comment_line(std::istream&, char comment_char,
+    static bool     read_comment_line(std::istream&, char comment_char,
                         std::ostringstream& comment, bool& add_newline);
 
     //consume all characted up to end of line and put them to line stream
     //(except end of line)
     static void     read_toeol(std::istream&, std::ostringstream& line);
 
-	static Integer maxwidth(const integer_dense &);
+	static Integer  maxwidth(const integer_dense &);
 
-	template<class value_type>
-	static bool    read(std::istream&, value_type& val);
+	static bool     read(std::istream&, Integer& val);
+    static bool     read(std::istream&, Float& val);
+    static bool     read(std::istream&, Real& val);
+    static bool     read(std::istream&, Complex& val);
+    static bool     read(std::istream&, Float_complex& val);
+    static bool     read(std::istream&, std::string& val);
 
-    //correct precision must already be set
-	template<class value_type>
-	static void    write(std::ostream&, const value_type& val);
+    //correct precision must be already set in the stream os
+	static void     write(std::ostream& os, Integer val);
+    static void     write(std::ostream& os, Float val);
+    static void     write(std::ostream& os, Real val);
+    static void     write(std::ostream& os, const Complex& val);
+    static void     write(std::ostream& os, const Float_complex& val);
+    static void     write(std::ostream& os, const std::string& val);
 };
 
 };};

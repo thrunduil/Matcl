@@ -458,23 +458,17 @@ static bool Cread(std::istream &is, Complex &cm)
     return true;
 }
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<Integer>(std::istream& is,Integer& x)
+bool stream_helpers::read(std::istream& is,Integer& x)
 {
     return Iread(is,x);
 }
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<Real>(std::istream& is,Real& x)
+bool stream_helpers::read(std::istream& is,Real& x)
 {
     return Rread(is,x);
 }
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<Float>(std::istream& is,Float& x)
+bool stream_helpers::read(std::istream& is,Float& x)
 {
     Real tmp;
     bool ret = Rread(is,tmp);
@@ -482,9 +476,8 @@ bool stream_helpers::read<Float>(std::istream& is,Float& x)
     return ret;
 }
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<dynamic::object>(std::istream& is, dynamic::object& x)
+/*
+bool stream_helpers::read(std::istream& is, dynamic::object& x)
 {
     md::nonconst_object_interface oi(&x);
     oi.read(is);
@@ -507,17 +500,14 @@ bool stream_helpers::read<dynamic::Type>(std::istream& is, dynamic::Type& x)
     else
         return true;
 }
+*/
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<Complex>(std::istream& is,Complex& x)
+bool stream_helpers::read(std::istream& is,Complex& x)
 {
     return Cread(is,x);
 }
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<Float_complex>(std::istream& is,Float_complex& x)
+bool stream_helpers::read(std::istream& is,Float_complex& x)
 {
     Complex tmp;
     bool ret = Cread(is,tmp);
@@ -525,9 +515,7 @@ bool stream_helpers::read<Float_complex>(std::istream& is,Float_complex& x)
     return ret;
 }
 
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<std::string>(std::istream& is,std::string& str)
+bool stream_helpers::read(std::istream& is,std::string& str)
 {
     is >> str;
     if (is.fail() || is.bad())
@@ -536,16 +524,12 @@ bool stream_helpers::read<std::string>(std::istream& is,std::string& str)
         return true;
 }
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<Integer>(std::ostream& os,const Integer& x)
+void stream_helpers::write(std::ostream& os, Integer x)
 {
     os << x;
 }
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<Real>(std::ostream& os,const Real& val)
+void stream_helpers::write(std::ostream& os, Real val)
 {
     if (std::isfinite(val) == false)
     {
@@ -567,9 +551,7 @@ void stream_helpers::write<Real>(std::ostream& os,const Real& val)
     };
 }
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<Float>(std::ostream& os,const Float& val)
+void stream_helpers::write(std::ostream& os, Float val)
 {
     if (std::isfinite(val) == false)
     {
@@ -590,43 +572,35 @@ void stream_helpers::write<Float>(std::ostream& os,const Float& val)
     };
 };
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<dynamic::object>(std::ostream& os,const dynamic::object& x)
+/*
+void stream_helpers::write(std::ostream& os,const dynamic::object& x)
 {
     //TODO?
     os << x;
 }
 
-template<>
-MATCL_CORE_EXPORT
 void stream_helpers::write<dynamic::Type>(std::ostream& os, const dynamic::Type& x)
 {
     md::const_type_interface ti(&x);
     ti.write(os);
 }
+*/
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<Complex>(std::ostream& os,const Complex& x)
+void stream_helpers::write(std::ostream& os,const Complex& x)
 {
     write(os,matcl::real(x));
     os << ' ';
     write(os,matcl::imag(x));
 }
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<Float_complex>(std::ostream& os,const Float_complex& x)
+void stream_helpers::write(std::ostream& os,const Float_complex& x)
 {
     write(os,matcl::real(x));
     os << ' ';
     write(os,matcl::imag(x));
 };
 
-template<>
-MATCL_CORE_EXPORT
-void stream_helpers::write<std::string>(std::ostream& os,const std::string& str)
+void stream_helpers::write(std::ostream& os,const std::string& str)
 {
     os << str;
 }
