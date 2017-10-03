@@ -18,31 +18,21 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-dynamic/details/object_data_pool.h"
-#include <boost/pool/pool.hpp>
+#pragma once
 
-namespace matcl { namespace dynamic
+#include "matcl-core/config.h"
+
+namespace matcl { namespace simd
 {
 
-MATCL_DYN_EXPORT 
-details::item_counter::ATOMIC_LONG details::item_counter::n_item(long(0));
+// return x * y + z; 
+inline double fma(const double& x, const double& y, const double& z);
+inline float  fma(const float& x, const float& y, const float& z);
 
-details::object_data_pool_base::object_data_pool_base(size_t size)
-{
-    m_pool = new pool_type(size);
-};
+// return x * y - z; 
+inline double fms(const double& x, const double& y, const double& z);
+inline float  fms(const float& x, const float& y, const float& z);
 
-void details::object_data_pool_base::free(void* ptr)
-{
-    m_pool->free(ptr);
-};
+}}
 
-void* details::object_data_pool_base::malloc()
-{
-    return m_pool->malloc();
-};
-
-details::object_data_pool_base::~object_data_pool_base()
-{};
-
-};};
+#include "matcl-core/details/simd/simd.inl"

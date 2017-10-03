@@ -31,16 +31,16 @@ namespace matcl { namespace dynamic { namespace functions
 //---------------------------------------------------------------
 struct validators
 {
-    static bool is_ret_bool(function f)
+    static bool is_ret_bool(const function& f)
     {
         return f.return_type() == predefined::type_bool();
     };
-    static bool is_ret_int(function f)
+    static bool is_ret_int(const function& f)
     {
         return f.return_type() == predefined::type_int();
     };
 
-    static bool check_2args_ret_bool(function f)
+    static bool check_2args_ret_bool(const function& f)
     {
         return check_2args(f) && is_ret_bool(f);
     };
@@ -51,7 +51,7 @@ struct validators
            << predefined::type_bool().to_string();
     };
 
-    static bool check_2args(function f)
+    static bool check_2args(const function& f)
     {
         return f.number_arguments() == 2;
     };
@@ -61,7 +61,7 @@ struct validators
         os << "function takes two arguments";
     };
 
-    static bool check_1args_ret_bool(function f)
+    static bool check_1args_ret_bool(const function& f)
     {
         return check_1args(f) && is_ret_bool(f);
     };
@@ -78,7 +78,7 @@ struct validators
             << predefined::type_bool().to_string();;
     };
 
-    static bool check_ret_int(function f)
+    static bool check_ret_int(const function& f)
     {
         return is_ret_int(f);
     };
@@ -89,7 +89,7 @@ struct validators
             << predefined::type_int().to_string();;
     };
 
-    static bool check_1args(function f)
+    static bool check_1args(const function& f)
     {
         return f.number_arguments() == 1;
     };
@@ -99,7 +99,7 @@ struct validators
         os << "function takes one argument";
     };
 
-    static bool check_2args_sec_ref(function f)
+    static bool check_2args_sec_ref(const function& f)
     {
         if (f.number_arguments() != 2)
             return false;

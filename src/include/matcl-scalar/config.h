@@ -38,4 +38,3 @@
     #undef  MATCL_SCALAR_EXPORT
     #define MATCL_SCALAR_EXPORT
 #endif
-

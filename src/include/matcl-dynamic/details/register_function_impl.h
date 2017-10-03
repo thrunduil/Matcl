@@ -302,6 +302,9 @@ class matcl_dynamic_function : public dynamic_function<Fun,base>
         using base_type         = typename dynamic_function<Fun,base>;
         using function_traits   = typename matcl::dynamic::details::function_traits<Fun>;
 
+        matcl_dynamic_function(const matcl_dynamic_function&) = delete;
+        matcl_dynamic_function& operator=(const matcl_dynamic_function&) = delete;
+
     public:
         matcl_dynamic_function(Fun f) : base_type(f)
         {
@@ -321,11 +324,17 @@ class matcl_dynamic_function : public dynamic_function<Fun,base>
             init_ret<return_type>::init(base_type::m_ret_ti);
         };
 
+        ~matcl_dynamic_function() override
+        {
+            delete[] base_type::m_arg_ti;
+        };
+
         virtual dynamic::function make_converter(int n_deduced, const Type deduced[], Type ded_ret,
                                     const std::vector<dynamic::function>& conv_vec) const override
         {
             static const int N = function_traits::n_inputs;
-            return new details::fun_evaler_conv(this, n_deduced, deduced, ded_ret, conv_vec);
+            evaler* ptr = new details::fun_evaler_conv(this, n_deduced, deduced, ded_ret, conv_vec);
+            return dynamic::function(ptr);
         };
 
         virtual bool make_eval(const dynamic::object** args, object& ret) const override

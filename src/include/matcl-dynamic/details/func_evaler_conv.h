@@ -21,7 +21,7 @@
 #pragma once
 
 #include "matcl-dynamic/function.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 
 #include <cassert>
 
@@ -43,9 +43,14 @@ class MATCL_DYN_EXPORT fun_evaler_conv : public evaler
         std::vector<object>         m_deduced;
         Type                        m_deduced_ret;
 
+        fun_evaler_conv(const fun_evaler_conv&) = delete;
+        fun_evaler_conv& operator=(const fun_evaler_conv&) = delete;
+
     public:
         fun_evaler_conv(const evaler* fun, int n_deduced, const Type deduced[],
                         Type deduced_ret, const std::vector<function>& convs);
+
+        ~fun_evaler_conv() override;
 
         bool make_eval(const object** _args, object& ret) const override;
 

@@ -23,7 +23,7 @@
 #include "matcl-core/config.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
-#include "matcl-core/details/matcl_options_details.h"
+#include "matcl-core/details/options/matcl_options_details.h"
 
 #include <functional>
 
@@ -72,4 +72,4 @@ auto validator_enum(Integer size)   -> std::function<optional<Integer> (optional
 
 };}
 
-#include "matcl-core/details/option_validators.inl"
+#include "matcl-core/details/options/option_validators.inl"

@@ -46,57 +46,24 @@
     <Filter Include="Source Files\src\IO">
       <UniqueIdentifier>{58b45827-6611-4e3c-a891-db216d3ac39a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\details\simd">
+      <UniqueIdentifier>{ddf13da8-5536-4bbd-9c52-f734abdb9d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\error">
+      <UniqueIdentifier>{37423a83-0dda-4b5a-9ec7-8510b77f9b07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\memory">
+      <UniqueIdentifier>{372360a8-e86f-4a15-ad04-e7684ced8aa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\IO">
+      <UniqueIdentifier>{2ec0f0d5-1f9b-402a-9ddf-936ec2f42173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\options">
+      <UniqueIdentifier>{7420eb63-f091-4049-ac26-4163269153ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\exception_details.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\isa.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\mpl.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\portable_archive_exception.hpp">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\portable_iarchive.hpp">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\portable_oarchive.hpp">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_complex.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_real.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\type_codes.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\utils.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\val_struct_codes.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\general\exception.h">
-      <Filter>Source Files\include\general</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\general\exception_message.h">
-      <Filter>Source Files\include\general</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h">
-      <Filter>Source Files\include\general</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\general\memory.h">
-      <Filter>Source Files\include\general</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\general\safe_string_message.h">
       <Filter>Source Files\include\general</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\general\thread.h">
@@ -144,23 +111,14 @@
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\object_table.h">
       <Filter>Source Files\include\details\hash_table</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\stack_array.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\matcl-core\base\malloc.h">
       <Filter>Source Files\src\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\general\alloc.h">
-      <Filter>Source Files\include\general</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\options\option_validators.h">
       <Filter>Source Files\include\options</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\options\optional.h">
       <Filter>Source Files\include\options</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\matcl_options_details.h">
-      <Filter>Source Files\include\details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\IO\disp_data_provider.h">
       <Filter>Source Files\include\IO</Filter>
@@ -174,44 +132,104 @@
     <ClInclude Include="..\..\src\include\matcl-core\options\matcl_options.h">
       <Filter>Source Files\include\options</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\printer.h">
+    <ClInclude Include="..\..\src\include\matcl-core\IO\base_io.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\scalar_io.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\simd\simd.h">
+      <Filter>Source Files\include\details\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\error\exception.h">
+      <Filter>Source Files\include\error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\error\exception_message.h">
+      <Filter>Source Files\include\error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\error\safe_string_message.h">
+      <Filter>Source Files\include\error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\error\exception_classes.h">
+      <Filter>Source Files\include\error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\memory\alloc.h">
+      <Filter>Source Files\include\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\memory\memory.h">
+      <Filter>Source Files\include\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\memory\refptr.h">
+      <Filter>Source Files\include\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\disp_impl.h">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\disp_stream_impl.h">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\disp_stream_options.h">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\io_impl.h">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\portable_archive_exception.hpp">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\portable_iarchive.hpp">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\portable_oarchive.hpp">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\IO\printer.h">
+      <Filter>Source Files\include\details\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\options\matcl_options_details.h">
+      <Filter>Source Files\include\details\options</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\exception_details.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\details\integer.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\disp_stream_options.h">
+    <ClInclude Include="..\..\src\include\matcl-core\details\isa.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\disp_stream_impl.h">
+    <ClInclude Include="..\..\src\include\matcl-core\details\leak_detector.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\IO\base_io.h">
-      <Filter>Source Files\include\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\disp_impl.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-core\base\object_interface.h">
-      <Filter>Source Files\src\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\IO\scalar_io.h">
-      <Filter>Source Files\include\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\details\io_impl.h">
+    <ClInclude Include="..\..\src\include\matcl-core\details\mpl.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\details\object_interface.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_complex.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\scalfunc_real.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\stack_array.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\type_codes.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\utils.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\val_struct_codes.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-core\details\constants.inl">
-      <Filter>Source Files\include\details</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-core\details\thread.inl">
-      <Filter>Source Files\include\details</Filter>
-    </None>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
       <Filter>Source Files\include\details\hash_table</Filter>
     </None>
@@ -221,19 +239,28 @@
     <None Include="..\..\src\include\matcl-core\details\hash_table\object_table.inl">
       <Filter>Source Files\include\details\hash_table</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-core\details\matcl_options_impl.inl">
+    <None Include="..\..\src\include\matcl-core\details\simd\simd.inl">
+      <Filter>Source Files\include\details\simd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\IO\disp_impl.inl">
+      <Filter>Source Files\include\details\IO</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\options\matcl_options_impl.inl">
+      <Filter>Source Files\include\details\options</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\options\option_validators.inl">
+      <Filter>Source Files\include\details\options</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\options\optional.inl">
+      <Filter>Source Files\include\details\options</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\constants.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-core\details\option_validators.inl">
+    <None Include="..\..\src\include\matcl-core\details\refptr.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-core\details\optional.inl">
-      <Filter>Source Files\include\details</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-core\details\matrix_io.inl">
-      <Filter>Source Files\include\details</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-core\details\disp_impl.inl">
+    <None Include="..\..\src\include\matcl-core\details\thread.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
   </ItemGroup>
@@ -315,6 +342,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\IO\io_impl.cpp">
       <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\leak_detector.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\exception\exception_classes.cpp">
+      <Filter>Source Files\src\exception</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -22,17 +22,11 @@
 #include "matcl-dynamic/object.h"
 #include "matcl-core/IO/archive.h"
 #include "matcl-core/details/complex_details.h"
-#include "matcl-core/details/printer.h"
+#include "matcl-core/details/IO/printer.h"
 #include "matcl-core/IO/scalar_io.h"
 
 namespace matcl { namespace dynamic
 {
-
-std::string object_type_traits<bool>::to_string(bool t, matcl::details::printer& pr)
-{
-    (void)pr;
-    return t? "true" : "false";
-};
 
 void object_type_traits<bool>::disp(bool t, matcl::details::printer& pr, Integer elem_width, 
                                     align_type at, Integer)
@@ -50,12 +44,6 @@ void object_type_traits<bool>::save_data(oarchive_impl& ar, const T& val, unsign
     ar << val;
 }
 
-std::string object_type_traits<Integer>::to_string(const Integer& t, matcl::details::printer& pr)
-{
-    (void)pr;
-    return matcl::details::to_string_scalar_helper::eval(t);
-};
-
 void object_type_traits<Integer>::disp(const Integer& t, matcl::details::printer& pr, 
                                         Integer elem_width, align_type at, Integer)
 {
@@ -71,12 +59,6 @@ void object_type_traits<Integer>::save_data(oarchive_impl& ar, const T& val, uns
 {
     ar << val;
 }
-
-std::string object_type_traits<Real>::to_string(const Real& t, matcl::details::printer& pr)
-{
-    (void)pr;
-    return matcl::details::to_string_scalar_helper::eval(t);
-};
 
 void object_type_traits<Real>::disp(const Real& t, matcl::details::printer& pr, Integer elem_width, 
                                            align_type at, Integer)
@@ -94,12 +76,6 @@ void object_type_traits<Real>::save_data(oarchive_impl& ar, const T& val, unsign
     ar << val;
 }
 
-std::string object_type_traits<Float>::to_string(const Float& t, matcl::details::printer& pr)
-{
-    (void)pr;
-    return matcl::details::to_string_scalar_helper::eval(t);
-};
-
 void object_type_traits<Float>::disp(const Float& t, matcl::details::printer& pr, Integer elem_width, 
                                            align_type at, Integer)
 {
@@ -115,12 +91,6 @@ void object_type_traits<Float>::save_data(oarchive_impl& ar, const T& val, unsig
 {
     ar << val;
 }
-
-std::string object_type_traits<Complex>::to_string(const Complex& t, matcl::details::printer& pr)
-{
-    (void)pr;
-    return matcl::details::to_string_scalar_helper::eval(t);
-};
 
 void object_type_traits<Complex>::disp(const Complex& t, matcl::details::printer& pr, Integer elem_width, 
                                               align_type at, Integer)
@@ -163,13 +133,6 @@ void object_type_traits<Complex>::write(std::ostream& os, const T& t)
     os << ' ';
     os << imag(t);
 }
-
-std::string 
-object_type_traits<Float_complex>::to_string(const Float_complex& t, matcl::details::printer& pr)
-{
-    (void)pr;
-    return matcl::details::to_string_scalar_helper::eval(t);
-};
 
 void object_type_traits<Float_complex>::disp(const Float_complex& t, matcl::details::printer& pr, 
                                         Integer elem_width, align_type at, Integer)
@@ -280,11 +243,6 @@ bool object_type_traits<any_type>::is_zero(const T& val)
 //--------------------------------------------------------------------------
 //                      Type
 //--------------------------------------------------------------------------
-std::string object_type_traits<Type>::to_string(const T& t, matcl::details::printer&)
-{
-    return t.to_string();
-};
-
 void object_type_traits<Type>::disp(const T& t, matcl::details::printer& pr, Integer elem_width,
                                     align_type at, Integer)
 {

@@ -39,7 +39,7 @@ class null_conversion
     public:
         null_conversion(Type to);
 
-        function        get_function() const    { return m_func; };
+        const function& get_function() const    { return m_func; };
         std::size_t     hash_value() const      { return m_to.hash_value(); };
 
         static size_t   eval_hash(Type to)      { return to.hash_value(); };
@@ -72,8 +72,9 @@ class null_conversions_table
     private:        
         using string_hash   = matcl::details::obj_hasher<null_conversion>;
         using string_equal  = matcl::details::obj_equaler<null_conversion>;
+        using allocator     = matcl::details::default_allocator_simple<true, true, char>;
         using conv_table    = matcl::details::object_table<null_conversion_ptr,
-                                string_hash,string_equal, matcl::details::default_allocator>;
+                                string_hash,string_equal, allocator>;
         using mutex         = matcl::default_spinlock_mutex;
 
     private:
@@ -81,8 +82,14 @@ class null_conversions_table
         mutable mutex       m_mutex;
 
     public:
+        null_conversions_table();
+
         function            get(Type to) const;
 };
+
+inline null_conversions_table::null_conversions_table()
+    :m_table(true)
+{};
 
 inline function null_conversions_table::get(Type to) const
 {

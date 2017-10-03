@@ -24,7 +24,7 @@
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
 #include "matcl-core/matrix/enums.h"
-#include "matcl-core/general/safe_string_message.h"
+#include "matcl-core/error/safe_string_message.h"
 
 #include <string>
 #pragma warning(push)
@@ -57,6 +57,7 @@ class MATCL_CORE_EXPORT exception_message
         virtual ~exception_message(){};
 
     public:
+        virtual void        warning(const std::string& msg) = 0;
         virtual void        warning_precision_lost_real_to_int(Real val) = 0;
         virtual void        warning_precision_lost_real_to_float(Real val) = 0;
         virtual void        warning_precision_lost_float_compl_to_float
@@ -64,6 +65,7 @@ class MATCL_CORE_EXPORT exception_message
         virtual void        warning_precision_lost_float_to_int(Float val) = 0;        
         virtual void        warning_precision_lost_compl_to_real(Complex val) = 0;
         virtual void        warning_precision_lost_int_to_float(Integer val) = 0;
+        virtual void        possibly_inaccurate_result(const std::string& func_name) = 0;
 
         virtual const char* error_general(const std::string& msg) = 0;
         virtual const char* overflow_int_mult(Integer r, Integer c) = 0;
@@ -87,7 +89,7 @@ class MATCL_CORE_EXPORT exception_message
         virtual const char* invalid_vectors_spmat(Integer sr, Integer sc, Integer sx)= 0;
         virtual const char* unable_to_convert_invalid_code()= 0;
         virtual const char* invalid_struct(const std::string& struct_flag_string) = 0;        
-        virtual const char* alloc(Integer size) = 0;
+        virtual const char* alloc(size_t size) = 0;
         virtual const char* invalid_size(Integer r, Integer c) = 0;
         virtual const char* invalid_size2(Integer r, Integer c, Integer exp_r, 
                                 Integer exp_c) = 0;
@@ -127,6 +129,19 @@ class MATCL_CORE_EXPORT exception_message
         virtual const char* invalid_extract_from_unique_matrix() = 0;
         virtual const char* square_matrix_required(Integer rows, Integer cols) = 0;
 
+        virtual const char* option_validator_error(const std::string& reason) = 0;
+        virtual const char* invalid_option_type(const std::string& opt_name, const std::string& req_type,
+                                const std::string& opt_type) = 0;
+        virtual const char* optional_value_not_set() = 0;
+        virtual const char* option_unregistered(const std::string& opt_name) = 0;
+        virtual const char* uninitialized_disp_stream() = 0;
+        virtual const char* uninitialized_output_stream() = 0;
+
+        virtual const char* formatted_disp_invalid_column(Integer col, Integer num_cols) = 0;
+        virtual const char* formatted_disp_invalid_row_size(Integer size, Integer req_size) = 0;
+        virtual const char* value_not_in_cache(const std::string& name, Integer prec, 
+                                Integer cache_prec) = 0;
+
         virtual const char* object_value_type_not_allowed(const std::string& func) = 0;
         virtual const char* integer_value_type_not_allowed(const std::string& func) = 0;
         virtual const char* function_not_defined_for_complex(const std::string& name) = 0;
@@ -143,14 +158,15 @@ class MATCL_CORE_EXPORT default_exception_message : public exception_message
         static std::string  struct_to_string(matcl::struct_code st);
 
     public:
-        virtual void        warning(const std::string& msg);
+        virtual void        warning(const std::string& msg) override;
         virtual void        warning_precision_lost_float_to_int(Float val) override;  
         virtual void        warning_precision_lost_real_to_int(Real val) override;
         virtual void        warning_precision_lost_real_to_float(Real val) override;
         virtual void        warning_precision_lost_compl_to_real(Complex val) override;
         virtual void        warning_precision_lost_float_compl_to_float(const 
                                 Float_complex& val) override;
-        virtual void        warning_precision_lost_int_to_float(Integer val)  override;
+        virtual void        warning_precision_lost_int_to_float(Integer val) override;
+        virtual void        possibly_inaccurate_result(const std::string& func_name) override;
 
         virtual const char* error_general(const std::string& msg) override;
         virtual const char* overflow_int_mult(Integer r, Integer c) override;
@@ -174,7 +190,7 @@ class MATCL_CORE_EXPORT default_exception_message : public exception_message
         virtual const char* unable_to_convert_invalid_code() override;
         virtual const char* invalid_struct(const std::string& struct_flag_string) override;
         virtual const char* invalid_permvec_composition(Integer l1, Integer l2) override;
-        virtual const char* alloc(Integer size) override;
+        virtual const char* alloc(size_t size) override;
         virtual const char* invalid_size(Integer r, Integer c) override;
         virtual const char* invalid_size2(Integer r, Integer c, Integer exp_r, 
                                 Integer exp_c) override;
@@ -211,6 +227,19 @@ class MATCL_CORE_EXPORT default_exception_message : public exception_message
         virtual const char* dense_matrix_required(struct_code s) override;
         virtual const char* invalid_extract_from_unique_matrix() override;
         virtual const char* square_matrix_required(Integer rows, Integer cols) override;
+
+        virtual const char* option_validator_error(const std::string& reason) override;
+        virtual const char* invalid_option_type(const std::string& opt_name, const std::string& req_type,
+                                const std::string& opt_type) override;
+        virtual const char* optional_value_not_set() override;
+        virtual const char* option_unregistered(const std::string& opt_name) override;
+        virtual const char* uninitialized_disp_stream() override;
+        virtual const char* uninitialized_output_stream() override;
+
+        virtual const char* formatted_disp_invalid_column(Integer col, Integer num_cols) override;
+        virtual const char* formatted_disp_invalid_row_size(Integer size, Integer req_size) override;
+        virtual const char* value_not_in_cache(const std::string& name, Integer prec, 
+                                Integer cache_prec) override;
 
         virtual const char* object_value_type_not_allowed(const std::string& func) override;
         virtual const char* integer_value_type_not_allowed(const std::string& func) override;

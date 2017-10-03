@@ -24,6 +24,7 @@
 
 #include "matcl-core/details/hash_table/object_table.inl"
 #include "matcl-core/details/hash_table/hash_equal.inl"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -32,7 +33,7 @@ namespace matcl { namespace dynamic { namespace details
 class type_table_cache
 {
     private:
-        using alloc             = matcl::details::default_allocator;
+        using alloc             = matcl::details::default_allocator_simple<true, true, char>;
         using unifier_h         = matcl::details::obj_hasher<unifier_impl>;
         using unifier_e         = matcl::details::obj_equaler<unifier_impl>;
         using unifier_ptr       = simple_ptr<unifier_impl>;
@@ -77,11 +78,11 @@ class type_table_cache
 
         Type            set_unifier(Type t1, Type t2, Type t);
         function        set_overload(const function_name& func, int n_args, const Type t[],
-                                function f);
+                                const function& f);
         function        set_template_overload(const function_name& func, int n_templ, 
-                            const Type templates[], int n_args, const Type t[], function f);
-        function        set_converter(Type to, Type from, converter_type type, function f);
-        function        set_assigner(Type to, Type from, function f);
+                            const Type templates[], int n_args, const Type t[], const function& f);
+        function        set_converter(Type to, Type from, converter_type type, const function& f);
+        function        set_assigner(Type to, Type from, const function& f);
 
         void            clear();
 

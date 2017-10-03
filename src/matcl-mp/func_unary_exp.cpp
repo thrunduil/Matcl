@@ -25,6 +25,7 @@
 #include "matcl-mp/constants.h"
 #include "matcl-mp/func_binary.h"
 #include "matcl-core/details/scalfunc_real.h"
+#include "matcl-core/general/exception.h"
 #include "error.h"
 #include "impl_functions.h"
 
@@ -559,8 +560,10 @@ mp_complex pow_compl_real_reg(const mp_complex& a, const mp_float& b, precision 
                 case 1: return mp_complex(0.0, res, p);             //0.5 ulp
                 case 2: return mp_complex(-res, p);                 //0.5 ulp
                 case 3: return mp_complex(0.0, -res, p);            //0.5 ulp
+
                 default:
-                    throw std::runtime_error("invalid case");
+                    matcl_assert(0, "invalid case");
+                    throw;
             };
         }
         else if (abs(real(a)) == abs(imag(a)))
@@ -592,8 +595,10 @@ mp_complex pow_compl_real_reg(const mp_complex& a, const mp_float& b, precision 
                     case -1: return mp_complex(0, sign_eq ? -res : res, p);
                     case -2: return mp_complex(-res, 0, p);
                     case -3: return mp_complex(0, sign_eq? res : -res, p);
+
                     default:
-                        throw std::runtime_error("invalid case");
+                        matcl_assert(0, "invalid case");
+                        throw;
                 }
             };
         };
@@ -615,8 +620,10 @@ mp_complex pow_compl_real_reg(const mp_complex& a, const mp_float& b, precision 
                 case 1: return mp_complex(0.0, res, p);
                 case 2: return mp_complex(-res,0.0, p);
                 case 3: return mp_complex(0.0, -res, p);
+
                 default:
-                    throw std::runtime_error("invalid case");
+                    matcl_assert(0, "invalid case");
+                    throw;
             };
         };
     }

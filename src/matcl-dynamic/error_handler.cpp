@@ -34,7 +34,7 @@
 namespace matcl { namespace dynamic { namespace details
 {
 
-void error_handler::error_function_constraints_not_satisfied(function_name func, function f)
+void error_handler::error_function_constraints_not_satisfied(function_name func, const function& f)
 {
     std::ostringstream msg;
     msg << "function does not satisfy constraints";
@@ -60,7 +60,7 @@ void error_handler::error_function_defined_with_different_validator
     add_error(msg);
 };
 
-void error_handler::error_function_must_return_template(function_name func, function f, 
+void error_handler::error_function_must_return_template(function_name func, const function& f, 
             int n_templ, const Type templ[])
 {
     std::ostringstream msg;
@@ -89,7 +89,7 @@ void error_handler::error_template_function_not_found(function_name func,
     add_error(msg);
 };
 
-void error_handler::error_invalid_converter_number_args(function conv)
+void error_handler::error_invalid_converter_number_args(const function& conv)
 {
     std::ostringstream msg;
     msg << "invalid converter; expecting function with one argument, function has "
@@ -97,7 +97,7 @@ void error_handler::error_invalid_converter_number_args(function conv)
     add_error(msg);
 };
 
-void error_handler::error_invalid_unifier_number_args(function conv)
+void error_handler::error_invalid_unifier_number_args(const function& conv)
 {
     std::ostringstream msg;
     msg << "invalid unifier; expecting function with zero arguments, function has "
@@ -105,7 +105,7 @@ void error_handler::error_invalid_unifier_number_args(function conv)
     add_error(msg);
 };
 
-void error_handler::error_invalid_assigner_number_args(function fun)
+void error_handler::error_invalid_assigner_number_args(const function& fun)
 {
     std::ostringstream msg;
     msg << "invalid asigner; expecting function with zero arguments, function has "
@@ -113,7 +113,7 @@ void error_handler::error_invalid_assigner_number_args(function fun)
     add_error(msg);
 };
 
-void error_handler::error_invalid_assigner_return_type(function fun)
+void error_handler::error_invalid_assigner_return_type(const function& fun)
 {
     Type ret = fun.return_type();
 
@@ -190,6 +190,15 @@ void error_handler::error_unifiers_ambiguity(Type t1, Type t2,
         << " and " << t2.to_string()
         << "; ambiguity between unifiers: \n";
     disp_candidates(msg, ts);
+    add_error(msg);
+};
+
+void error_handler::data_operation_on_reference_type()
+{
+    std::ostringstream msg;
+    msg << "data operation on reference type, this type"
+        << " should not have any instances";
+
     add_error(msg);
 };
 
@@ -363,7 +372,7 @@ void error_handler::disp_candidates(std::ostringstream& os,
 };
 
 void error_handler::disp_function_declaration(std::ostringstream& os, 
-                                   function f, const std::string& str)
+                                   const function& f, const std::string& str)
 {
     disp_function_name(os, f, Type(), str);
     disp_function_arguments(os, f, 0);
@@ -394,7 +403,7 @@ void error_handler::disp_function_declaration(std::ostringstream& os,
 };
 
 void error_handler::disp_function_arguments(std::ostringstream& os, 
-                                      function f, int n_deduced)
+                                      const function& f, int n_deduced)
 {
     //do not print first n_deduced arguments; these are purely technical
     //parameters used only to pass deduced templated to rgistered function
@@ -416,7 +425,7 @@ void error_handler::disp_function_arguments(std::ostringstream& os,
     os << ")";
 };
 void error_handler::disp_function_name(std::ostringstream& os, 
-            function f, Type deduced_ret, const std::string& name)
+            const function& f, Type deduced_ret, const std::string& name)
 {
     if (deduced_ret != Type())
     {
@@ -468,7 +477,7 @@ void error_handler::disp_function_name(std::ostringstream& os,
 };
 
 void error_handler::disp_function_name(std::ostringstream& os, 
-            function f, Type deduced_return, int n_templ, const Type templ[],
+            const function& f, Type deduced_return, int n_templ, const Type templ[],
             int& n_ded, const std::string& name)
 {
     n_ded = 0;

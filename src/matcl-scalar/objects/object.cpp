@@ -19,11 +19,10 @@
  */
 
 #include "matcl-scalar/object.h"
-#include "matcl-core/general/exception.h"
 #include "matcl-scalar/objects/object_functions.h"
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-dynamic/object_type.h"
-#include "matcl-core/details/printer.h"
+#include "matcl-core/details/IO/printer.h"
 #include "matcl-core/options/options_disp.h"
 #include "matcl-scalar/IO/scalar_io.h"
 

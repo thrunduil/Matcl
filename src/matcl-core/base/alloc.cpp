@@ -18,16 +18,23 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/general/alloc.h"
+#include "matcl-core/memory/alloc.h"
 #include "matcl-core/general/thread.h"
-#include "matcl-core/general/exception.h"
-#include "matcl-core/general/memory.h"
+#include "matcl-core/error/exception_classes.h"
+#include "matcl-core/memory/memory.h"
+
+#if MATCL_DEBUG_MEMORY
+    #include "matcl-core/details/leak_detector.h"
+#endif
 
 #include <algorithm>
 
 #if MATCL_USE_DLMALLOC
     #include "matcl-core/base/malloc.h"
 #endif
+
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
 
 namespace matcl { namespace details
 {
@@ -143,7 +150,28 @@ static void check_magic_number(void* ptr0, size_t bytes)
         error::memory_corrupted();
 };
 
-void* default_allocator::malloc(size_t n)
+template<bool Throw>
+struct check_ptr;
+
+template<>
+struct check_ptr<false>
+{
+    static void eval(void*, size_t)
+    {};
+};
+
+template<>
+struct check_ptr<true>
+{
+    static void eval(void* ptr, size_t size)
+    {
+        if (!ptr && size > 0)
+            throw error::alloc(size);
+    }
+};
+
+template<bool Throw_bad_alloc, bool Is_global>
+void* default_allocator<Throw_bad_alloc, Is_global>::malloc(size_t n)
 {
     void* ptr = allocator_impl::malloc(n + sizeof(Integer));
 
@@ -154,11 +182,21 @@ void* default_allocator::malloc(size_t n)
     }
         
     if (ptr)
+    {
         set_magic_number(ptr, n);
 
+        #if MATCL_DEBUG_MEMORY
+            if (Is_global == false)
+                leak_detector::report_malloc(ptr);
+        #endif
+    }
+
+    check_ptr<Throw_bad_alloc>::eval(ptr, n);
     return ptr;
 };
-void* default_allocator::aligned_malloc(size_t n)
+
+template<bool Throw_bad_alloc, bool Is_global>
+void* default_allocator<Throw_bad_alloc, Is_global>::aligned_malloc(size_t n)
 {
     void* ptr   = allocator_impl::aligned_malloc(n + sizeof(Integer), MATCL_CACHE_LINE_SIZE);
 
@@ -169,19 +207,51 @@ void* default_allocator::aligned_malloc(size_t n)
     }
 
     if (ptr)
+    {
         set_magic_number(ptr, n);
 
+        #if MATCL_DEBUG_MEMORY
+            if (Is_global == false)
+                leak_detector::report_malloc(ptr);
+        #endif
+    }
+
+    check_ptr<Throw_bad_alloc>::eval(ptr, n);
     return ptr;
 };
 
-void* default_allocator::realloc(void* ptr, size_t old_size, size_t n)
+template<bool Throw_bad_alloc, bool Is_global>
+void* default_allocator<Throw_bad_alloc, Is_global>::simple_malloc(size_t n)
+{
+    void* ptr = allocator_impl::malloc(n);
+
+    if (!ptr)
+    {
+        matcl::free_caches();
+        ptr = allocator_impl::malloc(n);
+    }
+    
+    #if MATCL_DEBUG_MEMORY
+        if (ptr && Is_global == false)
+            leak_detector::report_malloc(ptr);
+    #endif
+
+    check_ptr<Throw_bad_alloc>::eval(ptr, n);
+    return ptr;
+};
+
+template<bool Throw_bad_alloc, bool Is_global>
+void* default_allocator<Throw_bad_alloc, Is_global>
+            ::realloc(void* ptr, size_t old_size, size_t n)
 {
     if (ptr)
         check_magic_number(ptr, old_size);
 
+    void* new_ptr;
+
     if (n > 0)
     {
-        void* new_ptr = allocator_impl::realloc(ptr,n + sizeof(Integer));
+        new_ptr = allocator_impl::realloc(ptr, n + sizeof(Integer));
 
         if (!new_ptr)
         {
@@ -191,25 +261,62 @@ void* default_allocator::realloc(void* ptr, size_t old_size, size_t n)
 
         if (new_ptr)
             set_magic_number(new_ptr, n);
-
-        return new_ptr;
     }
     else
     {
-        void* new_ptr = allocator_impl::realloc(ptr,n);
-        return new_ptr;
+        new_ptr = allocator_impl::realloc(ptr,n);        
     };
+
+    #if MATCL_DEBUG_MEMORY
+        if (new_ptr != ptr && Is_global == false)
+        {
+            if (ptr)
+                leak_detector::report_free(ptr);
+
+            if (new_ptr)
+                leak_detector::report_malloc(ptr);
+        }
+    #endif
+
+    check_ptr<Throw_bad_alloc>::eval(new_ptr, n);
+    return new_ptr;
 }
-void* default_allocator::aligned_realloc(void* ptr, size_t old_size, size_t n)
+
+template<bool Throw_bad_alloc, bool Is_global>
+void* default_allocator<Throw_bad_alloc, Is_global>
+                ::simple_realloc(void* ptr, size_t n)
+{
+    void* new_ptr = allocator_impl::realloc(ptr,n);
+
+    #if MATCL_DEBUG_MEMORY
+        if (new_ptr != ptr && Is_global == false)
+        {
+            if (ptr)
+                leak_detector::report_free(ptr);
+
+            if (new_ptr)
+                leak_detector::report_malloc(ptr);
+        }
+    #endif
+
+    check_ptr<Throw_bad_alloc>::eval(new_ptr, n);
+    return new_ptr;
+}
+
+template<bool Throw_bad_alloc, bool Is_global>
+void* default_allocator<Throw_bad_alloc, Is_global>
+                ::aligned_realloc(void* ptr, size_t old_size, size_t n)
 {
     if (ptr)
         check_magic_number(ptr, old_size);
 
     old_size    += sizeof(Integer);
 
+    void* new_ptr;
+
     if (n > 0)
     {
-        void* new_ptr = allocator_impl::aligned_realloc(ptr, old_size,
+        new_ptr = allocator_impl::aligned_realloc(ptr, old_size,
                                  n + sizeof(Integer), MATCL_CACHE_LINE_SIZE);
 
         if (!new_ptr)
@@ -221,30 +328,77 @@ void* default_allocator::aligned_realloc(void* ptr, size_t old_size, size_t n)
 
         if (new_ptr)
             set_magic_number(new_ptr, n);
-
-        return new_ptr;
     }
     else
     {
-        return allocator_impl::aligned_realloc(ptr, old_size, n, 
+        new_ptr = allocator_impl::aligned_realloc(ptr, old_size, n, 
                                             MATCL_CACHE_LINE_SIZE);
     };
+
+    #if MATCL_DEBUG_MEMORY
+        if (new_ptr != ptr && Is_global == false)
+        {
+            if (ptr)
+                leak_detector::report_free(ptr);
+
+            if (new_ptr)
+                leak_detector::report_malloc(ptr);
+        }
+    #endif
+
+    check_ptr<Throw_bad_alloc>::eval(new_ptr, n);
+    return new_ptr;
 }
 
-void default_allocator::free(void* ptr, size_t bytes)
+template<bool Throw_bad_alloc, bool Is_global>
+void 
+default_allocator<Throw_bad_alloc, Is_global>::free(void* ptr, size_t bytes)
 {
     if (ptr)
+    {
         check_magic_number(ptr, bytes);
+
+        #if MATCL_DEBUG_MEMORY
+            if (Is_global == false)
+                leak_detector::report_malloc(ptr);
+        #endif
+    }
 
     return allocator_impl::free(ptr);
 }
 
-void default_allocator::aligned_free(void* ptr, size_t bytes)
+template<bool Throw_bad_alloc, bool Is_global>
+void default_allocator<Throw_bad_alloc, Is_global>::simple_free(void* ptr)
+{
+    #if MATCL_DEBUG_MEMORY
+        if (ptr && Is_global == false)
+            leak_detector::report_malloc(ptr);
+    #endif
+
+    return allocator_impl::free(ptr);
+}
+
+template<bool Throw_bad_alloc, bool Is_global>
+void default_allocator<Throw_bad_alloc, Is_global>::aligned_free(void* ptr, size_t bytes)
 {
     if (ptr)
+    {
         check_magic_number(ptr, bytes);
+
+        #if MATCL_DEBUG_MEMORY
+            if (Is_global == false)
+                leak_detector::report_malloc(ptr);
+        #endif
+    };
 
     return allocator_impl::aligned_free(ptr);
 }
 
+template struct default_allocator<false, false>;
+template struct default_allocator<false, true>;
+template struct default_allocator<true, false>;
+template struct default_allocator<true, true>;
+
 };};
+
+#pragma warning(pop)

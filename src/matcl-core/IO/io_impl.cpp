@@ -18,9 +18,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/details/io_impl.h"
+#include "matcl-core/details/IO/io_impl.h"
 #include <vector>
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-core/details/integer.h"
 #include "matcl-core/IO/scalar_io.h"
@@ -476,32 +476,6 @@ bool stream_helpers::read(std::istream& is,Float& x)
     return ret;
 }
 
-/*
-bool stream_helpers::read(std::istream& is, dynamic::object& x)
-{
-    md::nonconst_object_interface oi(&x);
-    oi.read(is);
-
-    if (is.fail() || is.bad())
-        return false;
-    else
-        return true;
-}
-
-template<>
-MATCL_CORE_EXPORT
-bool stream_helpers::read<dynamic::Type>(std::istream& is, dynamic::Type& x)
-{
-    md::nonconst_type_interface ti(&x);
-    ti.read(is);
-
-    if (is.fail() || is.bad())
-        return false;
-    else
-        return true;
-}
-*/
-
 bool stream_helpers::read(std::istream& is,Complex& x)
 {
     return Cread(is,x);
@@ -518,6 +492,17 @@ bool stream_helpers::read(std::istream& is,Float_complex& x)
 bool stream_helpers::read(std::istream& is,std::string& str)
 {
     is >> str;
+    if (is.fail() || is.bad())
+        return false;
+    else
+        return true;
+}
+
+bool stream_helpers::read(std::istream& is, dynamic::object& x)
+{
+    md::nonconst_object_interface oi(&x);
+    oi.read(is);
+
     if (is.fail() || is.bad())
         return false;
     else
@@ -572,20 +557,6 @@ void stream_helpers::write(std::ostream& os, Float val)
     };
 };
 
-/*
-void stream_helpers::write(std::ostream& os,const dynamic::object& x)
-{
-    //TODO?
-    os << x;
-}
-
-void stream_helpers::write<dynamic::Type>(std::ostream& os, const dynamic::Type& x)
-{
-    md::const_type_interface ti(&x);
-    ti.write(os);
-}
-*/
-
 void stream_helpers::write(std::ostream& os,const Complex& x)
 {
     write(os,matcl::real(x));
@@ -603,6 +574,12 @@ void stream_helpers::write(std::ostream& os,const Float_complex& x)
 void stream_helpers::write(std::ostream& os,const std::string& str)
 {
     os << str;
+}
+
+void stream_helpers::write(std::ostream& os,const dynamic::object& x)
+{
+    md::const_object_interface oi(&x);
+    oi.write(os);
 }
 
 };};

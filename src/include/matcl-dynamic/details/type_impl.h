@@ -57,7 +57,6 @@ class type_impl
         virtual data_type*          copy(const object_data_base*) const = 0;
         virtual bool                is_zero(const data_type* d) const = 0;
         virtual bool				is_one(const data_type* d) const  = 0;
-        virtual std::string         to_string(const data_type*, matcl::details::printer& pr) const = 0;
         virtual void				disp(const data_type*, matcl::details::printer& pr, Integer elem_width, 
                                          align_type at, Integer value_pos) const = 0;
         virtual data_type*          create() const = 0;

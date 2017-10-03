@@ -18,21 +18,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/IO/disp_data_provider.h"
-#include "matcl-core/IO/base_io.h"
-#include "matcl-scalar/object.h"
+#pragma once
 
-#include <map>
+#include "matcl-scalar/config.h"
+#include "matcl-core/general/fwd_decls.h"
 
-namespace matcl { namespace test
+
+namespace matcl { namespace details
 {
-
-void test_disp();
-
-class disp_tester
-{
-    public:
-        void    make();
-};
-
+    class formatted_disp_stream;
 }};

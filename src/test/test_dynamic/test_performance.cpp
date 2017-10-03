@@ -26,6 +26,7 @@
 #include "rand_scalars.h"
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 #include "matcl-scalar/lib_functions/utils.h"
+#include "matcl-scalar/IO/formatted_disp.h"
 
 #pragma warning(pop)
 
@@ -217,18 +218,35 @@ void performance_tester::make()
 {
     Integer M       = 100;
     Integer K       = 100;
-    Integer N       = 100;
-    Integer prec    = 53;
+    Integer N       = 100;    
 
     bool int_only   = false;
+
+    formatted_disp dm;
+
+    dm.set_row_label("type", align_type::right, 14);
+    dm.add_column("T", align_type::left, 7);
+    dm.add_column("obj<T>", align_type::left, 7);
+    dm.add_column("obj", align_type::left, 7);
+    dm.add_column("obj<T>/T", align_type::left, 6);
+    dm.add_column("obj/obj<T>", align_type::left, 6);
+    dm.add_column("obj/T", align_type::left, 6);
+
+    dm.disp_header();
 
     {
         Integer res;
         OInteger ores;
-        double time_int     = test_mult<Integer>(res, M, K, N, prec);
-        double otime_int    = test_mult<OInteger>(ores, M, K, N, prec);
-        double otime_int2   = test_mult_obj<OInteger>(ores, M, K, N, prec);
-        disp_res("Integer", time_int, otime_int, otime_int2);
+        Integer prec        = 53;
+
+        double time         = test_mult<Integer>(res, M, K, N, prec);
+        double otime        = test_mult<OInteger>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<OInteger>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("Integer", time, otime, otime2, rel1, rel2, rel3);
     };
 
     if (int_only == true)
@@ -237,115 +255,194 @@ void performance_tester::make()
     {
         Float res;
         OFloat ores;
-        double time_float   = test_mult<Float>(res, M, K, N, prec);
-        double otime_float  = test_mult<OFloat>(ores, M, K, N, prec);
-        double otime_float2 = test_mult_obj<OFloat>(ores, M, K, N, prec);
-        disp_res("Float", time_float, otime_float, otime_float2);
+        Integer prec        = 53;
+
+        double time         = test_mult<Float>(res, M, K, N, prec);
+        double otime        = test_mult<OFloat>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<OFloat>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("Float", time, otime, otime2, rel1, rel2, rel3);
     }
 
     {
         Real res;
         OReal ores;
-        double time_real    = test_mult<Real>(res, M, K, N, prec);
-        double otime_real   = test_mult<OReal>(ores, M, K, N, prec);
-        double otime_real2  = test_mult_obj<OReal>(ores, M, K, N, prec);
-        disp_res("Real", time_real, otime_real, otime_real2);
+        Integer prec        = 53;
+
+        double time         = test_mult<Real>(res, M, K, N, prec);
+        double otime        = test_mult<OReal>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<OReal>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("Real", time, otime, otime2, rel1, rel2, rel3);
     }
 
     {
         Float_complex res;
         OFloat_complex ores;
-        double time_fcompl  = test_mult<Float_complex>(res, M, K, N, prec);
-        double otime_fcompl = test_mult<OFloat_complex>(ores, M, K, N, prec);
-        double otime_fcompl2= test_mult_obj<OFloat_complex>(ores, M, K, N, prec);
-        disp_res("Float_complex", time_fcompl, otime_fcompl, otime_fcompl2);
+        Integer prec        = 53;
+
+        double time         = test_mult<Float_complex>(res, M, K, N, prec);
+        double otime        = test_mult<OFloat_complex>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<OFloat_complex>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("Float_complex", time, otime, otime2, rel1, rel2, rel3);
     }
 
     {
         Complex res;
         OComplex ores;
-        double time_compl   = test_mult<Complex>(res, M, K, N, prec);
-        double otime_compl  = test_mult<OComplex>(ores, M, K, N, prec);
-        double otime_compl2 = test_mult_obj<OComplex>(ores, M, K, N, prec);
-        disp_res("Complex", time_compl, otime_compl, otime_compl2);
+        Integer prec        = 53;
+
+        double time         = test_mult<Complex>(res, M, K, N, prec);
+        double otime        = test_mult<OComplex>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<OComplex>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("Complex", time, otime, otime2, rel1, rel2, rel3);
     };
 
     {
         mp_int res;
         MP_int ores;
-        double time_mpi     = test_mult<mp_int>(res, M, K, N, prec);
-        double otime_mpi    = test_mult<MP_int>(ores, M, K, N, prec);
-        double otime_mpi2   = test_mult_obj<MP_int>(ores, M, K, N, prec);
-        disp_res("mp_int", time_mpi, otime_mpi, otime_mpi2);
+        Integer prec        = 53;
+
+        double time         = test_mult<mp_int>(res, M, K, N, prec);
+        double otime        = test_mult<MP_int>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<MP_int>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("mp_int", time, otime, otime2, rel1, rel2, rel3);
     };
 
     {
         mp_rational res;
         MP_rational ores;
-        double time_mpq     = test_mult<mp_rational>(res, M, K, N, prec);
-        double otime_mpq    = test_mult<MP_rational>(ores, M, K, N, prec);
-        double otime_mpq2   = test_mult_obj<MP_rational>(ores, M, K, N, prec);
-        disp_res("mp_rational", time_mpq, otime_mpq, otime_mpq2);
+        Integer prec        = 53;
+
+        double time         = test_mult<mp_rational>(res, M, K, N, prec);
+        double otime        = test_mult<MP_rational>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<MP_rational>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("mp_rational", time, otime, otime2, rel1, rel2, rel3);
     };
 
     {
         mp_float res;
         MP_float ores;
-        double time_mpf     = test_mult<mp_float>(res, M, K, N, prec);
-        double otime_mpf    = test_mult<MP_float>(ores, M, K, N, prec);    
-        double otime_mpf2   = test_mult_obj<MP_float>(ores, M, K, N, prec);    
-        disp_res("mp_float 1", time_mpf, otime_mpf, otime_mpf2);
-        std::cout << "precision: " << res.get_precision() << "\n";
+        Integer prec        = 53;
+
+        double time         = test_mult<mp_float>(res, M, K, N, prec);
+        double otime        = test_mult<MP_float>(ores, M, K, N, prec);    
+        double otime2       = test_mult_obj<MP_float>(ores, M, K, N, prec);    
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+
+        std::ostringstream type;
+        type << "mp_float (" << res.get_precision() << ")";
+        dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     };
     {
         mp_float res;
         MP_float ores;
-        double time_mpf     = test_mult<mp_float>(res, M, K, N, prec*10);
-        double otime_mpf    = test_mult<MP_float>(ores, M, K, N, prec*10);    
-        double otime_mpf2   = test_mult_obj<MP_float>(ores, M, K, N, prec);    
+        Integer prec        = 530;
 
-        disp_res("mp_float 2", time_mpf, otime_mpf, otime_mpf2);
-        std::cout << "precision: " << res.get_precision() << "\n";
+        double time         = test_mult<mp_float>(res, M, K, N, prec);
+        double otime        = test_mult<MP_float>(ores, M, K, N, prec);    
+        double otime2       = test_mult_obj<MP_float>(ores, M, K, N, prec);    
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+
+        std::ostringstream type;
+        type << "mp_float (" << res.get_precision() << ")";
+        dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     };
     {
         mp_float res;
         MP_float ores;
-        double time_mpf     = test_mult<mp_float>(res, M, K, N, prec*100);
-        double otime_mpf    = test_mult<MP_float>(ores, M, K, N, prec*100);    
-        double otime_mpf2   = test_mult_obj<MP_float>(ores, M, K, N, prec);    
+        Integer prec        = 5300;
 
-        disp_res("mp_float 3", time_mpf, otime_mpf, otime_mpf2);
-        std::cout << "precision: " << res.get_precision() << "\n";
+        double time         = test_mult<mp_float>(res, M, K, N, prec);
+        double otime        = test_mult<MP_float>(ores, M, K, N, prec);    
+        double otime2       = test_mult_obj<MP_float>(ores, M, K, N, prec);    
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+
+        std::ostringstream type;
+        type << "mp_float (" << res.get_precision() << ")";
+        dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     };
     {
         mp_complex res;
         MP_complex ores;
-        double time_mpc     = test_mult<mp_complex>(res, M, K, N, prec);            
-        double otime_mpc    = test_mult<MP_complex>(ores, M, K, N, prec);
-        double otime_mpc2   = test_mult_obj<MP_complex>(ores, M, K, N, prec);
+        Integer prec        = 53;
 
-        disp_res("mp_complex 1", time_mpc, otime_mpc, otime_mpc2);
-        std::cout << "precision: " << res.get_precision() << "\n";
+        double time         = test_mult<mp_complex>(res, M, K, N, prec);            
+        double otime        = test_mult<MP_complex>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<MP_complex>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+
+        std::ostringstream type;
+        type << "mp_compl (" << res.get_precision() << ")";
+        dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     }
     {
         mp_complex res;
         MP_complex ores;
-        double time_mpc     = test_mult<mp_complex>(res, M, K, N, prec * 10);
-        double otime_mpc    = test_mult<MP_complex>(ores, M, K, N, prec * 10);
-        double otime_mpc2   = test_mult_obj<MP_complex>(ores, M, K, N, prec);
+        Integer prec        = 530;
 
-        disp_res("mp_complex 2", time_mpc, otime_mpc, otime_mpc2);
-        std::cout << "precision: " << res.get_precision() << "\n";
+        double time         = test_mult<mp_complex>(res, M, K, N, prec);
+        double otime        = test_mult<MP_complex>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<MP_complex>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+
+        std::ostringstream type;
+        type << "mp_compl (" << res.get_precision() << ")";
+        dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     }
     {
         mp_complex res;
         MP_complex ores;
-        double time_mpc     = test_mult<mp_complex>(res, M, K, N, prec * 100);
-        double otime_mpc    = test_mult<MP_complex>(ores, M, K, N, prec * 100);
-        double otime_mpc2   = test_mult_obj<MP_complex>(ores, M, K, N, prec);
+        Integer prec        = 5300;
 
-        disp_res("mp_complex 3", time_mpc, otime_mpc, otime_mpc2);
-        std::cout << "precision: " << res.get_precision() << "\n";
+        double time         = test_mult<mp_complex>(res, M, K, N, prec);
+        double otime        = test_mult<MP_complex>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<MP_complex>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+
+        std::ostringstream type;
+        type << "mp_compl (" << res.get_precision() << ")";
+        dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     }
 };
 

@@ -106,10 +106,11 @@ class type_table
         void				    initialize();
         void                    finish_initialization();
         bool				    process_functions(error_handler& eh);
-        void				    register_function(const function_name& func, function fun_evl, 
-                                        error_handler& eh);
-        void				    register_function_template(const function_name& func, function fun_evl, 
-                                        const type_vec& types, make_return_fptr ret, error_handler& eh);
+        void				    register_function(const function_name& func, const function& fun_evl, 
+                                    error_handler& eh);
+        void				    register_function_template(const function_name& func, 
+                                    const function& fun_evl, const type_vec& types, 
+                                    make_return_fptr ret, error_handler& eh);
         void                    add_predefined_functions(const std::string& type_name);
 };
 

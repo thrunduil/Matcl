@@ -47,13 +47,14 @@ class converter_set
         converter_set(Integer over_num);
         ~converter_set();
 
-        void				push_back(function fun_evl, e_match_type match, error_handler& eh);
+        void				push_back(const function& fun_evl, e_match_type match, 
+                                error_handler& eh);
         Integer             size() const;
         void                clear();
         function            get_function(Integer pos, e_match_type& match) const;
 
     private:
-        void                check_converter(function fun_evl, error_handler& eh);
+        void                check_converter(const function& fun_evl, error_handler& eh);
 };
 
 class converter_candidate_set
@@ -71,8 +72,10 @@ class converter_candidate_set
         converter_candidate_set(Integer over_num);
         ~converter_candidate_set();
 
-        void				add(function fun_evl, conversion_match match, function main_fun_evl);
-        void				set(function fun_evl, conversion_match match, function main_fun_evl);
+        void				add(const function& fun_evl, conversion_match match, 
+                                const function& main_fun_evl);
+        void				set(const function& fun_evl, conversion_match match, 
+                                const function& main_fun_evl);
         void                join(const converter_candidate_set& other);
         conversion_match    get_match() const;
         Integer             size() const;
@@ -156,27 +159,27 @@ class function_table
                                 candidate_set& func_set, error_handler& eh);
         void                get_registered_unifier(Type t1, Type t2, candidate_type_set& types) const;
 
-        void                insert(const function_name& func, function fun_evl, make_return_fptr ret,
-                                error_handler& eh);
-        void                insert_template(const function_name& func, function fun_evl, 
+        void                insert(const function_name& func, const function& fun_evl, 
+                                make_return_fptr ret, error_handler& eh);
+        void                insert_template(const function_name& func, const function& fun_evl, 
                                 const type_vec& templates, make_return_fptr ret, error_handler& eh);
         void                finish_initialization();
 
-        function            make_exact(function fun_evl, int n_deduced, const Type deduced[], 
+        function            make_exact(const function& fun_evl, int n_deduced, const Type deduced[], 
                                 Type deduced_ret, int n_args, const Type t[], error_handler& er) const;
 
     private:        
         void                get_unifier_type(Type t1, Type t2, Type unif, candidate_type_set& types) const;
         void                find_best_match(const overload_set& overloads, int n_args, 
                                 const Type t[], candidate_set& func_set, error_handler& eh) const;
-        void                insert_special(const function_name& func, function fun_evl, 
+        void                insert_special(const function_name& func, const function& fun_evl, 
                                 error_handler& eh);
-        void                insert_assigner(function fun_evl, error_handler& eh);
-        void                insert_conv_numeric(function fun_evl, e_match_type match);
-        void                insert_unifier(function fun_evl, error_handler& eh);
+        void                insert_assigner(const function& fun_evl, error_handler& eh);
+        void                insert_conv_numeric(const function& fun_evl, e_match_type match);
+        void                insert_unifier(const function& fun_evl, error_handler& eh);
 
-        void                check_unifier(function fun, error_handler& eh) const;
-        void                check_assigner(function fun, error_handler& eh) const;
+        void                check_unifier(const function& fun, error_handler& eh) const;
+        void                check_assigner(const function& fun, error_handler& eh) const;
         bool                contain_template(const type_vec& types) const;
         bool                match_templates(const function_name_templ& fn, int n_templ, 
                                 const Type templ[], type_vec& deduced) const;
@@ -186,11 +189,13 @@ class function_table
     private:        
         function            get_converter_standard(Type to, Type from, e_match_type& match) const;
         function            get_converter_numeric(Type to, Type from, e_match_type& match) const;
-        function            link_converters(function ev_1, function ev_2, function ev_3, 
-                                e_match_type m1, e_match_type m2, e_match_type m3) const;
-        function            link_converters(function ev_1, function ev_2, e_match_type m1, 
-                                e_match_type m2) const;
-        function            link_assign_convert(function assign, function conv, e_match_type conv_match) const;
+        function            link_converters(const function& ev_1, const function& ev_2, 
+                                const function& ev_3, e_match_type m1, e_match_type m2, 
+                                e_match_type m3) const;
+        function            link_converters(const function& ev_1, const function& ev_2, 
+                                e_match_type m1, e_match_type m2) const;
+        function            link_assign_convert(const function& assign, const function& conv, 
+                                e_match_type conv_match) const;
 
         bool                is_numeric(Type  t) const;
 };

@@ -21,15 +21,21 @@
 #pragma once
 
 #include "null_conversions_table.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
 
 class fun_conv_null : public evaler
 {
+    private:
+        fun_conv_null(const fun_conv_null&) = delete;
+        fun_conv_null& operator=(const fun_conv_null&) = delete;
+
     public:
         fun_conv_null(Type to);
+
+        ~fun_conv_null() override;
 
         bool        make_eval(const object** _args, object& ret) const override;
         function    make_converter(int n_deduced, const Type deduced[], Type deduced_ret, 
@@ -42,6 +48,11 @@ fun_conv_null::fun_conv_null(Type to)
     m_ret_ti    = to;
     m_arg_ti    = new Type();
     m_arg_ti[0] = Type();
+}
+
+fun_conv_null::~fun_conv_null()
+{
+    delete m_arg_ti;
 }
 
 bool fun_conv_null::make_eval(const object** _args, object& ret) const

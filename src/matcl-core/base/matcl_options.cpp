@@ -102,11 +102,7 @@ std::string option::make_name(const std::string& type_name)
 
 void option::error_invalid_option_type(const std::string& get_type) const
 {
-    std::ostringstream os;
-    os << "invalid option type " << get_type
-       << ", option " << name() << " has type " << this->get_option_type();
-
-    throw std::runtime_error(os.str());
+    throw error::invalid_option_type(name(), get_type, this->get_option_type());
 };
 
 //-----------------------------------------------------------------------------------

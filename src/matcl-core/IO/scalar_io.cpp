@@ -19,9 +19,9 @@
  */
 
 #include "matcl-core/IO/scalar_io.h"
-#include "matcl-core/details/printer.h"
-#include "matcl-core/details/disp_stream_impl.h"
-#include "matcl-core/details/io_impl.h"
+#include "matcl-core/details/IO/printer.h"
+#include "matcl-core/details/IO/disp_stream_impl.h"
+#include "matcl-core/details/IO/io_impl.h"
 
 #include <iomanip>
 #include "boost/io/ios_state.hpp"
@@ -45,7 +45,7 @@ namespace matcl { namespace details
         };
     };
 
-    template<class T, bool Is_compl = is_complex<T>::value, bool Is_obj = is_object<T>::value>
+    template<class T, bool Is_compl = is_complex<T>::value>
     struct saveload_scalar_helper_impl
     {
         static std::ostream& eval_save(std::ostream& os, const T& A)
@@ -71,7 +71,7 @@ namespace matcl { namespace details
     };
 
     template<class T>
-    struct saveload_scalar_helper_impl<T, true, false>
+    struct saveload_scalar_helper_impl<T, true>
     {
         static std::ostream& eval_save(std::ostream& os, const T& A)
         {
@@ -94,25 +94,6 @@ namespace matcl { namespace details
             return is;
         }
     };
-
-    /*
-    template<class T>
-    struct saveload_scalar_helper_impl<T, false, true>
-    {
-        static std::ostream& eval_save(std::ostream& os, const T& A)
-        {
-            os << " ";
-            mr::stream_helpers::write(os, A);
-            os << " ";
-            return os;
-        }
-        static std::istream& eval_load(std::istream& is, T& A)
-        {
-            mr::stream_helpers::read(is, A);
-            return is;
-        }
-    };
-    */
 
     std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Integer A)
     {

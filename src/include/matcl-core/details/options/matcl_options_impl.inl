@@ -19,6 +19,9 @@
  */
 #pragma once
 
+#pragma warning(push)
+#pragma warning(disable : 4702) //unreachable code
+
 namespace matcl 
 {
 
@@ -261,3 +264,5 @@ static T details::options_impl::get_predefined(const option& option_value)
 };
 
 };
+
+#pragma warning(pop)

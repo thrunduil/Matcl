@@ -44,13 +44,13 @@ converter_set::converter_set(Integer over_num)
 converter_set::~converter_set()
 {};
 
-void converter_set::push_back(function fun_evl, e_match_type match, error_handler& eh)
+void converter_set::push_back(const function& fun_evl, e_match_type match, error_handler& eh)
 {
     check_converter(fun_evl,eh);
     m_overloads_vec.push_back(func_match(fun_evl,match));
 }
 
-void converter_set::check_converter(function fun_evl, error_handler& eh)
+void converter_set::check_converter(const function& fun_evl, error_handler& eh)
 {
     if (fun_evl.number_arguments() != 1)
         eh.error_invalid_converter_number_args(fun_evl);
@@ -112,7 +112,8 @@ function converter_candidate_set::get_main_function(Integer pos) const
     return m_overloads_vec[pos].second;
 };
 
-void converter_candidate_set::add(function fun_evl, conversion_match match, function main_fun_evl)
+void converter_candidate_set::add(const function& fun_evl, conversion_match match, 
+                                  const function& main_fun_evl)
 {
     if (match < get_match())
     {
@@ -144,7 +145,8 @@ void converter_candidate_set::join(const converter_candidate_set& other)
     return;
 }
 
-void converter_candidate_set::set(function fun_evl, conversion_match match, function main_fun_evl)
+void converter_candidate_set::set(const function& fun_evl, conversion_match match, 
+                                  const function& main_fun_evl)
 {
     this->clear();
     this->m_match = match;
@@ -228,19 +230,19 @@ function_table::~function_table()
 void function_table::finish_initialization()
 {};
 
-void function_table::insert_conv_numeric(function fun_evl, e_match_type match)
+void function_table::insert_conv_numeric(const function& fun_evl, e_match_type match)
 {
     m_num_convert_table.insert(fun_evl, match);
 };
 
-void function_table::insert_unifier(function fun_evl, error_handler& eh)
+void function_table::insert_unifier(const function& fun_evl, error_handler& eh)
 {
     check_unifier(fun_evl,eh);
     Type unif_type = fun_evl.return_type();
     m_unifiers.insert(unif_type);
 };
 
-void function_table::insert_assigner(function fun_evl, error_handler& eh)
+void function_table::insert_assigner(const function& fun_evl, error_handler& eh)
 {
     check_assigner(fun_evl, eh);
 
@@ -254,7 +256,8 @@ void function_table::insert_assigner(function fun_evl, error_handler& eh)
     return;
 };
 
-void function_table::insert_special(const function_name& func, function fun_evl, error_handler& eh)
+void function_table::insert_special(const function_name& func, const function& fun_evl, 
+                                    error_handler& eh)
 {
     if (func == special_functions::assign())
     {
@@ -365,8 +368,8 @@ void function_table::insert_special(const function_name& func, function fun_evl,
     };
 };
 
-void function_table::insert(const function_name& func, function fun_evl, make_return_fptr ret,
-                            error_handler& eh)
+void function_table::insert(const function_name& func, const function& fun_evl,
+                            make_return_fptr ret, error_handler& eh)
 {
     if (special_functions::is_special(func) == true)
     {
@@ -393,7 +396,7 @@ void function_table::insert(const function_name& func, function fun_evl, make_re
         eh.error_function_constraints_not_satisfied(func, fun_evl);
 };
 
-void function_table::insert_template(const function_name& func, function fun_evl, 
+void function_table::insert_template(const function_name& func, const function& fun_evl, 
                     const type_vec& types, make_return_fptr ret, error_handler& eh)
 {
     using iterator_1    = function_templ_map::iterator;
@@ -762,8 +765,8 @@ bool function_table::is_numeric(Type  t) const
     return false;
 };
 
-function function_table::link_converters(function ev_1, function ev_2, function ev_3, 
-                                    e_match_type m1, e_match_type m2, e_match_type m3) const
+function function_table::link_converters(const function& ev_1, const function& ev_2, 
+                const function& ev_3, e_match_type m1, e_match_type m2, e_match_type m3) const
 {
     if (m1 < e_match_type::standard_conversions)
         return link_converters(ev_2,ev_3, m2, m3);
@@ -777,10 +780,10 @@ function function_table::link_converters(function ev_1, function ev_2, function 
     conv_vec[1] = ev_2;
     conv_vec[2] = ev_3;
 
-    return new details::fun_conv_link(conv_vec);
+    return function(new details::fun_conv_link(conv_vec));
 };
 
-function function_table::link_converters(function ev_1, function ev_2,
+function function_table::link_converters(const function& ev_1, const function& ev_2,
                                     e_match_type m1, e_match_type m2) const
 {
     if (m1 < e_match_type::standard_conversions)
@@ -792,7 +795,7 @@ function function_table::link_converters(function ev_1, function ev_2,
     conv_vec[0] = ev_1;
     conv_vec[1] = ev_2;
 
-    return new details::fun_conv_link(conv_vec);
+    return function(new details::fun_conv_link(conv_vec));
 };
 
 void function_table::get_assigner(Type to, Type from, assigner_candidate_set& as,
@@ -889,7 +892,7 @@ void function_table::get_assigner(Type to, Type from, assigner_candidate_set& as
     return;
 };
 
-function function_table::make_exact(function fun_evl, int n_deduced, const Type deduced[], 
+function function_table::make_exact(const function& fun_evl, int n_deduced, const Type deduced[], 
                                     Type deduced_ret, int n_args, const Type t[], error_handler& eh) const
 {
 	std::vector<function> conv_vec(n_args);
@@ -954,7 +957,8 @@ void function_table::make_exact(candidate_set& candidates, e_match_type match, i
     };
 }
 
-function function_table::link_assign_convert(function assign, function conv, e_match_type conv_match) const
+function function_table::link_assign_convert(const function& assign, const function& conv, 
+                                             e_match_type conv_match) const
 {
     if (conv_match < e_match_type::standard_conversions)
         return assign;
@@ -967,13 +971,13 @@ function function_table::link_assign_convert(function assign, function conv, e_m
 	return fun;
 };
 
-void function_table::check_unifier(function fun, error_handler& eh) const
+void function_table::check_unifier(const function& fun, error_handler& eh) const
 {
     if (fun.number_arguments() != 0)
         eh.error_invalid_unifier_number_args(fun);
 };
 
-void function_table::check_assigner(function fun, error_handler& eh) const
+void function_table::check_assigner(const function& fun, error_handler& eh) const
 {
     if (fun.number_arguments() != 2)
         eh.error_invalid_assigner_number_args(fun);

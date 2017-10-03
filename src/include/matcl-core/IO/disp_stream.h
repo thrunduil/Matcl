@@ -106,6 +106,7 @@ class MATCL_CORE_EXPORT disp_stream
                                     matcl::value_code vt, const std::string& struct_name) const = 0;
         virtual void        display_empty_matrix(line_printer& p, Integer r, Integer c) const = 0;     
         virtual void        display_matrix_name(line_printer& p) const = 0;
+        virtual bool        short_print_empty_matrix() const = 0;
 
         // a new block of dense matrix will be displayed for columns [first_col, last_col].
         virtual void        start_display_matrix_block(line_printer& p, Integer block_width, Integer first_col,
@@ -123,9 +124,21 @@ class MATCL_CORE_EXPORT disp_stream
         //-------------------------------------------------------------------
         //                  printing options
         //-------------------------------------------------------------------
+        // show matrix header (for example matrix name)?
         virtual bool        show_matrix_header()  const = 0;
-        virtual bool        show_column_header() const = 0;
-        virtual bool        show_row_headers()  const = 0;
+
+        // show row and column destriptions?
+        virtual bool        show_column_header_line() const = 0;
+        
+        // show row destription? called when show_column_header_line() = true
+        virtual bool        show_column_header_row() const = 0;
+        
+        // show columns destription? called when show_column_header_line() = true
+        virtual bool        show_column_header_columns() const = 0;
+
+        // if true, then matrix can be split on blocks, when required
+        virtual bool        can_split() const = 0;
+
         virtual bool        show_values_labels() const = 0;
         virtual bool        show_first_row_separator() const = 0;        
         virtual bool        show_final_continuation() const = 0;
@@ -187,6 +200,13 @@ class MATCL_CORE_EXPORT disp_stream
 
         // Label of the row names column
         virtual string      get_rows_label() const = 0;
+
+        // get minimum and maximum width of column with row labels
+        virtual void        get_column_width_row(Integer& w_min, Integer& w_max) const = 0;
+
+        // get minimum and maximum width of i-th column
+        virtual void        get_column_width(Integer c, Integer& w_min, 
+                                Integer& w_max) const = 0;
 
         //-------------------------------------------------------------------
         //                 general matrix properties
@@ -269,10 +289,13 @@ class MATCL_CORE_EXPORT forwarding_disp_stream : public disp_stream
         virtual void        general_info_sparse_matrix(line_printer& p, Integer r, Integer c, Integer nz,
                                     matcl::value_code vt, const std::string& struct_name) const override;
         virtual void        display_empty_matrix(line_printer& p, Integer r, Integer c) const override;
+        virtual bool        short_print_empty_matrix() const override;
         virtual bool        show_matrix_header()  const override;
-        virtual bool        show_column_header() const override;        
+        virtual bool        show_column_header_line() const override;
+        virtual bool        show_column_header_row()  const override;
+        virtual bool        show_column_header_columns()  const override;
+        virtual bool        can_split() const override;
         virtual string      get_col_separator() const override;
-        virtual bool        show_row_headers()  const override;
         virtual string      get_first_col_separator() const override;                
         virtual bool        show_values_labels() const override;
         virtual bool        show_first_row_separator() const override;
@@ -316,6 +339,8 @@ class MATCL_CORE_EXPORT forwarding_disp_stream : public disp_stream
         virtual string      get_row_name(Integer r) const override;
         virtual string      get_col_name(Integer c) const override;
         virtual string      get_rows_label() const override;
+        virtual void        get_column_width_row(Integer& w_min, Integer& w_max) const override;
+        virtual void        get_column_width(Integer c, Integer& w_min, Integer& w_max) const override;
         virtual align_type  get_align_row_header() const override;
         virtual align_type  get_align_col(Integer c) const override;
 

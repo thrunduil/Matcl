@@ -21,6 +21,8 @@
 #pragma once
 
 #include "matcl-mp/config.h"
+#include "matcl-core/error/exception_message.h"
+
 #include <iostream>
 
 namespace matcl { namespace mp { namespace error
@@ -28,7 +30,7 @@ namespace matcl { namespace mp { namespace error
 
 inline void warn_possibly_inaccurate_result(const std::string& func)
 {
-    std::cerr << "possibly inaccurate result from " << func << "\n";
+    matcl::error::get_global_messanger()->possibly_inaccurate_result(func);
 };
 
 };}}

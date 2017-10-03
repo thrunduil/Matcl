@@ -36,13 +36,12 @@ namespace matcl  { namespace dynamic { namespace details
 class MATCL_DYN_EXPORT object_data_base
 {
     private:
-        using along         = matcl::atomic<long>;
+        using asize_t       = matcl::atomic<size_t>;
 
     private:
-        mutable along	    m_refcount;
+        mutable asize_t	    m_refcount;
 
     public:     
-
         virtual ~object_data_base();
 
         void                increase_refcount() const;

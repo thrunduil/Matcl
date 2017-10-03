@@ -36,6 +36,7 @@ class MATCL_CORE_EXPORT const_object_interface
 
         void        disp_elem(printer& p, Integer w, align_type at, 
                         Integer value_pos) const;
+        void        write(std::ostream& os);
 };
 
 class MATCL_CORE_EXPORT nonconst_object_interface
@@ -78,6 +79,7 @@ class object_interface_impl
         virtual void    disp_elem(const dynamic::object& v, printer& p, Integer w, 
                             align_type at, Integer value_pos) const = 0;
         virtual void    read(dynamic::object& v, std::istream& is) const = 0;
+        virtual void    write(const dynamic::object& v, std::ostream& is) const = 0;
 
         virtual void    read_type(dynamic::Type& ty, std::istream& is) const = 0;
         virtual void    write_type(const dynamic::Type& ty, std::ostream& os) const = 0;

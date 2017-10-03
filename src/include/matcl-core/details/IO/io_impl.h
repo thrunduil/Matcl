@@ -108,6 +108,7 @@ struct MATCL_CORE_EXPORT stream_helpers
     static bool     read(std::istream&, Complex& val);
     static bool     read(std::istream&, Float_complex& val);
     static bool     read(std::istream&, std::string& val);
+    static bool     read(std::istream&, Object& val);
 
     //correct precision must be already set in the stream os
 	static void     write(std::ostream& os, Integer val);
@@ -116,6 +117,7 @@ struct MATCL_CORE_EXPORT stream_helpers
     static void     write(std::ostream& os, const Complex& val);
     static void     write(std::ostream& os, const Float_complex& val);
     static void     write(std::ostream& os, const std::string& val);
+    static void     write(std::ostream& os, const Object& val);
 };
 
 };};

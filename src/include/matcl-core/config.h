@@ -63,3 +63,15 @@
 // when this macro is set to 1, then dllmalloc memory manager is used
 // instead of the default one
 #define MATCL_USE_DLMALLOC      1
+
+// when this macro is set to 1, then memory debugging and leak detection
+// is enabled
+#ifdef _DEBUG
+    #define MATCL_DEBUG_MEMORY  1
+#else
+    #define MATCL_DEBUG_MEMORY  0
+#endif
+
+// set this macro to 1 if fma instruction is available (AVX2 instruction
+// set is required)
+#define MATCL_HAS_FMA           1

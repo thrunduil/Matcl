@@ -21,7 +21,7 @@
 #include "overload_resolution.h"
 #include "matcl-dynamic/function.h"
 #include "matcl-core/details/stack_array.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 #include "function_table.h"
 #include "type_table_cache_data.h"
 #include "matcl-dynamic/object_type.h"
@@ -221,7 +221,7 @@ overload_set::overload_set(Integer over_num)
 overload_set::~overload_set()
 {};
 
-void overload_set::push_back(function fun_evl, make_return_fptr ret)
+void overload_set::push_back(const function& fun_evl, make_return_fptr ret)
 {
 	m_overloads_vec.push_back(fun_ret(fun_evl, ret));
 }
@@ -264,7 +264,7 @@ candidate_set::candidate_set(Integer over_num)
 candidate_set::~candidate_set()
 {};
 
-void candidate_set::push_back(function fun_evl, Type ret, func_templ_ptr templates, 
+void candidate_set::push_back(const function& fun_evl, Type ret, func_templ_ptr templates, 
                               const templ_vec& deduced)
 {
 	m_overloads_vec.push_back(func_templ(fun_evl, ret, templates, deduced));
@@ -432,7 +432,7 @@ bool overload_resolution::check_deduce_return(const overload_set::fun_ret& evale
 
     return true;
 };
-Type overload_resolution::eval_return(function f, make_return_fptr ret, 
+Type overload_resolution::eval_return(const function& f, make_return_fptr ret, 
             const function_name_templ* ft, const type_vec& deduced, bool& error) const
 {
     error = false;
@@ -747,7 +747,7 @@ spec_type overload_resolution::is_more_specialized(const function_table* ft,
 
 e_match_type overload_resolution::mach_types_list(const function_table* ft,
                     int n_ded, bool ded_ret, int n_args, const Type t[], 
-                    function f, conversion_sequence& match)
+                    const function& f, conversion_sequence& match)
 {    
     if (ded_ret)
         n_ded += 1;

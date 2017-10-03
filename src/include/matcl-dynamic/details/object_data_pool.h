@@ -21,66 +21,28 @@
 #pragma once
 
 #include "matcl-dynamic/details/object_data.h"
-
-namespace boost
-{
-
-template <typename UserAllocator>
-class pool;
-
-struct default_user_allocator_malloc_free;
-};
-
-#pragma warning(push)
-#pragma warning(disable:4251)	//needs to have dll-interface 
+#include "matcl-core/details/hash_table/object_table.h"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
 
-struct item_counter
-{
-    private:
-        using ATOMIC_LONG = matcl::atomic<long>;
-
-    private:
-        static MATCL_DYN_EXPORT ATOMIC_LONG n_item;
-
-    public:
-        static long get()		{ return n_item; };
-        static void inc()		{ ++n_item;	};
-        static void dec()		{ --n_item;	};
-};
-
-class MATCL_DYN_EXPORT object_data_pool_base
-{
-    private:
-        using pool_type         = boost::pool<boost::default_user_allocator_malloc_free>;
-        pool_type*				m_pool;
-
-        object_data_pool_base(const object_data_pool_base&) = delete;
-        object_data_pool_base& operator=(const object_data_pool_base&) = delete;
-
-    protected:
-        object_data_pool_base(size_t size);
-
-        void	free(void* ptr);
-        void*	malloc();
-
-        ~object_data_pool_base();
-};
+namespace md = matcl :: details;
 
 template<class T>
-struct object_data_pool_impl : protected object_data_pool_base
+struct object_data_pool_impl 
+    : protected md::object_allocator<md::default_allocator_simple<true, true, char>>
 {
     private:
-        using base          = object_data_pool_base;
+        using allocator     = md::default_allocator_simple<true, true, char>;
+        using base          = md::object_allocator<allocator>;
         using mutex_type    = matcl::default_spinlock_mutex;
         using lock_type     = std::unique_lock<mutex_type>;
 
         mutex_type          m_mutex;
 
-        object_data_pool_impl()
-            :base(sizeof(object_data<T>))
+        object_data_pool_impl(bool is_global)
+            :base(sizeof(object_data<T>), is_global)
         {};
 
         object_data_pool_impl(const object_data_pool_impl&) = delete;
@@ -91,27 +53,22 @@ struct object_data_pool_impl : protected object_data_pool_base
         void* malloc_impl()
         {
             lock_type lock(m_mutex);
-            item_counter::inc();
             return base::malloc();
         };
+
         void free_impl(void* ptr)
         {
             lock_type lock(m_mutex);
-            item_counter::dec();
             base::free(ptr);
         };
 
         static object_data_pool_impl* get()
         {
-            static object_data_pool_impl* g_instance = new object_data_pool_impl<T>();
+            static object_data_pool_impl* g_instance = new object_data_pool_impl<T>(false);
             return g_instance;
         }
 
     public:
-        long no_existing_objects()
-        {
-            return item_counter::n_item;
-        };
 
         static void* malloc()
         {
@@ -125,5 +82,3 @@ struct object_data_pool_impl : protected object_data_pool_base
 };
 
 };};};
-
-#pragma warning(pop)

@@ -157,9 +157,6 @@ class MATCL_DYN_EXPORT any_type
 
     //internal use
     public:
-        // convert to string
-        std::string     to_string(matcl::details::printer& pr) const;
-
         // display helper
         void            disp(matcl::details::printer& pr, Integer elem_width, 
                             align_type at, Integer value_pos) const;

@@ -26,12 +26,12 @@ namespace matcl { namespace dynamic
 {
 
 inline function::function()
-    :m_evaler(nullptr)
+    :m_evaler()
 {};        
 
 inline bool function::is_null() const
 { 
-    return m_evaler == nullptr; 
+    return m_evaler.get() == nullptr;
 };
 
 inline int function::number_arguments() const
@@ -49,13 +49,36 @@ inline Type function::return_type() const
     return m_evaler? m_evaler->m_ret_ti : Type(); 
 };
 
-inline const function::evaler* function::get_evaler() const
+inline const function::ptr_type& function::get_evaler() const
 { 
     return m_evaler; 
 };
 
 inline function::function(evaler* ev)
-    :m_evaler(ev)
+    :m_evaler(ev, matcl::copy_t())
+{};
+
+inline function::function(const function& other)
+    :m_evaler(other.m_evaler)
+{};
+
+inline function::function(function&& other)
+    :m_evaler(std::move(other.m_evaler))
+{};
+
+inline function& function::operator=(const function& other)
+{
+    m_evaler    = other.m_evaler;
+    return *this;
+}
+
+inline function& function::operator=(function&& other)
+{
+    m_evaler    = std::move(other.m_evaler);
+    return *this;
+}
+
+inline function::~function()
 {};
 
 template<class ... Object>

@@ -19,16 +19,17 @@
  */
 
 #include "matcl-scalar/IO/scalar_io.h"
-#include "matcl-core/details/disp_stream_options.h"
-#include "matcl-core/details/printer.h"
-#include "matcl-core/details/io_impl.h"
-#include "matcl-core/details/disp_impl.h"
+#include "matcl-core/details/IO/disp_stream_options.h"
+#include "matcl-core/details/IO/printer.h"
+#include "matcl-core/details/IO/io_impl.h"
+#include "matcl-core/details/IO/disp_impl.h"
 
-#include "matcl-core/details/disp_stream_impl.h"
+#include "matcl-core/details/IO/disp_stream_impl.h"
 #include "matcl-dynamic/object.h"
 #include "matcl-dynamic/object_type.h"
 #include "matcl-scalar/object.h"
 #include "matcl-scalar/lib_functions/func_unary.h"
+#include "matcl-scalar/details/object_interface.h"
 
 #include "matcl-core/matrix/matrix_traits.h"
 #include "matcl-core/IO/disp_data_provider.h"
@@ -233,15 +234,10 @@ void disp(const disp_stream_ptr& os, const Float_complex& val)
 
 void disp(const disp_stream_ptr& os, const Object& c)
 {
-    //TODO
-    /*
-    if (c.get_type() == OMatrix::get_static_type())
-    {
-        OMatrix om(c);
-        matcl::disp(om.get(), os);
+    md::matrix_object_interface oi(&c);
+
+    if (oi.displayed_object_matrix(os) == true)
         return;
-    };
-    */
 
     mrd::disp_matrix<Object, mrd::struct_scalar>::eval(*os->impl(),os.get(), c);
 };

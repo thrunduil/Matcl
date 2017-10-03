@@ -19,7 +19,7 @@
  */
 
 #include "matcl-mp/utils.h"
-#include "matcl-core/general/memory.h"
+#include "matcl-core/memory/memory.h"
 #include "matcl-mp/cache.h"
 
 namespace matcl { namespace mp

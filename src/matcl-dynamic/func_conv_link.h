@@ -32,8 +32,12 @@ class fun_conv_link : public evaler
     private:	
         std::vector<function>       m_converters;
 
+        fun_conv_link(const fun_conv_link&) = delete;
+        fun_conv_link& operator=(const fun_conv_link&) = delete;
+
     public:
         fun_conv_link(const std::vector<function>& convs);
+        ~fun_conv_link() override;
 
        bool         make_eval(const object** _args, object& ret) const override;
        function     make_converter(int n_deduced, const Type deduced[], Type ded_ret,

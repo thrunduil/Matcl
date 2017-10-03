@@ -22,12 +22,16 @@
 #include "matcl-core/config.h"
 #include "matcl-dynamic/details/fwd_decls.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/refptr.h"
 #include "matcl-dynamic/function_name.h"
 #include "matcl-dynamic/details/evaler.h"
 #include "matcl-dynamic/type.h"
 #include "matcl-dynamic/object.h"
 
 #include <vector>
+
+#pragma warning(push)
+#pragma warning(disable : 4251) // needs to have dll-interface to be used by clients
 
 namespace matcl { namespace dynamic
 {
@@ -37,12 +41,24 @@ class MATCL_DYN_EXPORT function
 {
     private:
         using evaler    = details::evaler;
+        using ptr_type  = matcl::refptr<evaler, details::evaler_traits>;
 
-        evaler*     m_evaler;        
+    private:
+        ptr_type        m_evaler;        
 
     public:
         // construct uninitialized object
         function();
+
+        // copy and move constructr
+        function(const function& other);
+        function(function&& other);
+
+        // copy and move assignment
+        function&       operator=(const function& other);
+        function&       operator=(function&& other);
+
+        ~function();
 
         // return true if this object is uninitialized
         bool            is_null() const;
@@ -57,7 +73,7 @@ class MATCL_DYN_EXPORT function
         Type            return_type() const;
 
         // return function evaler
-        const evaler*   get_evaler() const;
+        const ptr_type& get_evaler() const;
 
         // make function with conversions; returning function first evaluates
         // converters for each input argument and then this function;
@@ -78,7 +94,7 @@ class MATCL_DYN_EXPORT function
 
     //internal use
     public:
-        function(evaler* ev);
+        explicit function(evaler* ev);
 };
 
 // evaluate a registered function; 
@@ -112,4 +128,7 @@ struct eval_function_template
 
 };};
 
+#pragma warning(pop)
+
 #include "matcl-dynamic/details/function.inl"
+

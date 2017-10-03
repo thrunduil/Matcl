@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/general/safe_string_message.h"
+#include "matcl-core/error/safe_string_message.h"
 #include "matcl-core/general/thread.h"
 #include <mutex>
 

@@ -26,17 +26,17 @@ namespace matcl { namespace dynamic { namespace functions
 
 struct validators
 {
-    static bool is_ret_bool(function f)
+    static bool is_ret_bool(const function& f)
     {
         return f.return_type() == predefined::type_bool();
     };
 
-    static bool is_ret_int(function f)
+    static bool is_ret_int(const function& f)
     {
         return f.return_type() == predefined::type_int();
     };
 
-    static bool check_ret_bool(function f)
+    static bool check_ret_bool(const function& f)
     {
         return is_ret_bool(f);
     };
@@ -47,7 +47,7 @@ struct validators
             << predefined::type_bool().to_string();;
     };
 
-    static bool check_ret_int(function f)
+    static bool check_ret_int(const function& f)
     {
         return is_ret_int(f);
     };
@@ -58,7 +58,7 @@ struct validators
             << predefined::type_int().to_string();;
     };
 
-    static bool check_sec_ref(function f)
+    static bool check_sec_ref(const function& f)
     {
         if (f.number_arguments() < 2)
             return false;
@@ -76,7 +76,7 @@ struct validators
         os << "function takes at least two arguments and the second argument must be a reference";
     };
 
-    static bool check_sec_int(function f)
+    static bool check_sec_int(const function& f)
     {
         if (f.number_arguments() < 2)
             return false;

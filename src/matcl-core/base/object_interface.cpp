@@ -45,6 +45,11 @@ void const_object_interface::disp_elem(printer& p, Integer w, align_type at,
     g_object_impl->disp_elem(*m_object, p, w, at, value_pos);
 };
 
+void const_object_interface::write(std::ostream& os)
+{
+    g_object_impl->write(*m_object, os);
+};
+
 nonconst_object_interface::nonconst_object_interface(dynamic::object* obj)
     :m_object(obj)
 {};

@@ -24,6 +24,8 @@ namespace matcl { namespace dynamic { namespace details
 {
 
 type_table_cache::type_table_cache()
+    :m_unifiers(false), m_overloads(false), m_template_overloads(false)
+    ,m_convert(false), m_assign(false)
 {};
 
 Type type_table_cache::get_unifier(Type t1, Type t2) const
@@ -50,7 +52,8 @@ function type_table_cache::get_converter(Type to, Type from, converter_type ctyp
         return function();
 };
 
-function type_table_cache::set_converter(Type to, Type from, converter_type ctype, function f)
+function type_table_cache::set_converter(Type to, Type from, converter_type ctype, 
+                                         const function& f)
 {
     m_convert.get(convert_info{to,from,ctype, f}); 
     return f;
@@ -65,7 +68,7 @@ function type_table_cache::get_assigner(Type to, Type from) const
         return function();
 };
 
-function type_table_cache::set_assigner(Type to, Type from, function f)
+function type_table_cache::set_assigner(Type to, Type from, const function& f)
 {
     m_assign.get(assign_info{to,from,f}); 
     return f;
@@ -82,7 +85,7 @@ function type_table_cache::get_overload(const function_name& func,
 };
 
 function type_table_cache::set_overload(const function_name& func, 
-                            int n_args, const Type t[], function f)
+                            int n_args, const Type t[], const function& f)
 {
     m_overloads.get(overload_info{func,n_args,t, f}); 
     return f;
@@ -101,7 +104,7 @@ function type_table_cache::get_template_overload(const function_name& func, int 
 };
 
 function type_table_cache::set_template_overload(const function_name& func, int n_templ,
-                            const Type templates[], int n_args, const Type t[], function f)
+                    const Type templates[], int n_args, const Type t[], const function& f)
 {
     m_template_overloads.get(toverload_info{func,n_templ, templates, n_args,t, f}); 
     return f;
@@ -109,10 +112,11 @@ function type_table_cache::set_template_overload(const function_name& func, int 
 
 void type_table_cache::clear()
 {
-    m_unifiers.close(true);
-    m_overloads.close(true);
-    m_convert.close(true);
-    m_assign.close(true);
+    m_unifiers.clear();
+    m_overloads.clear();
+    m_convert.clear();
+    m_assign.clear();
+    m_template_overloads.clear();
 };
 
 };};};

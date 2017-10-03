@@ -23,6 +23,7 @@
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-core/options/options_disp.h"
 #include "matcl-core/IO/archive.h"
+#include "matcl-core/IO/base_io.h"
 
 namespace matcl { namespace details
 {
@@ -34,14 +35,12 @@ struct MATCL_CORE_EXPORT saveload_scalar_helper
     static std::ostream&    eval_save(std::ostream& os, Real A);
     static std::ostream&    eval_save(std::ostream& os, const Complex& A);
     static std::ostream&    eval_save(std::ostream& os, const Float_complex& A);
-    //static std::ostream&  eval_save(std::ostream& os, const Object& A);
 
     static std::istream&    eval_load(std::istream& is, Integer& A);
     static std::istream&    eval_load(std::istream& is, Float& A);
     static std::istream&    eval_load(std::istream& is, Real& A);
     static std::istream&    eval_load(std::istream& is, Complex& A);
     static std::istream&    eval_load(std::istream& is, Float_complex& A);
-    //static std::istream&  eval_load(std::istream& is, Object& A);
 };
 
 struct MATCL_CORE_EXPORT to_string_scalar_helper
