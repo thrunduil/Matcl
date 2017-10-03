@@ -34,7 +34,8 @@ namespace matcl { namespace details
 //-----------------------------------------------------------------------------------
 std::string option_impl::pretty_type_name(const std::string& type_name)
 {
-    if (type_name == "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >")
+    const char* str_name    = typeid(std::string).name();
+    if (type_name == str_name)
         return "string";
     else
         return type_name;
@@ -61,9 +62,8 @@ options_impl::option_map& options_impl::get_options_predefined()
 };
 void options_impl::error_unregistered_option(const std::string& opt_name)
 {
-    std::ostringstream os;
-    os << "unregistered option " << opt_name;
-    throw std::runtime_error(os.str());
+    std::ostringstream os;    
+    throw error::option_unregistered(opt_name);
 }
 void details::options_impl::register_option(const option& opt)
 {
@@ -259,11 +259,13 @@ class disp_map : public disp_data_provider
             std::string lab = m_pos_row_header->first;
             return lab;
         };
+
         virtual std::string get_rows_label(const disp_stream* orig) const override
         {
             (void)orig;
             return "option";
         };
+        
         virtual std::string get_col_name(const disp_stream* orig, Integer c) const
         {
             (void)orig;

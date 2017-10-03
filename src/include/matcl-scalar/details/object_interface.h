@@ -18,18 +18,31 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#pragma once
+#include "matcl-scalar/config.h"
+#include "matcl-dynamic/object.h"
 
-#include "matcl-mp/mp_float.h"
-
-namespace matcl { namespace mp { namespace details
+namespace matcl { namespace details
 {
 
-struct mp_float_alloc
+class MATCL_SCALAR_EXPORT matrix_object_interface
 {
-    static void init(mp_float& f, precision prec);
+    private:
+        const dynamic::object*  m_object;
 
-    static void free(mp_float& f, precision p);
+    public:
+        matrix_object_interface(const dynamic::object* obj);
+
+        bool        displayed_object_matrix(const disp_stream_ptr& os) const;
 };
 
-}}}
+class matrix_object_interface_impl
+{
+    public:
+        virtual bool    displayed_object_matrix(const disp_stream_ptr& os, 
+                            const dynamic::object&) const = 0;
+};
+
+MATCL_SCALAR_EXPORT 
+void set_matrix_object_intrface(matrix_object_interface_impl* oi);
+
+}}

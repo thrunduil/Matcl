@@ -217,7 +217,7 @@ template<class T>
 void optional<T>::check_has_value() const
 {
     if (m_has_value == false)
-        throw std::runtime_error("optional does not contain a value");
+        throw error::optional_value_not_set();
 };
 
 }

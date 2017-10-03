@@ -22,59 +22,165 @@
 
 #include "matcl-core/details/hash_table/object_table.h"
 
+#if MATCL_DEBUG_MEMORY
+    #include "matcl-core/details/leak_detector.h"
+#endif
+
+#include <iostream>
+
 namespace matcl { namespace details
 {
 
-template<class Main_allocator>
-inline pool_allocator<Main_allocator>::pool_allocator(size_t size)
-    :m_pool(size)
+//-----------------------------------------------------------------
+//                      object_allocator
+//-----------------------------------------------------------------
+template<class Alloc>
+inline object_allocator<Alloc>::object_allocator(size_t size, bool is_global)
+    :m_pool(size), m_is_global(is_global)
 {};
 
-template<class Main_allocator>
-inline void pool_allocator<Main_allocator>::free(void* ptr,size_t)
+template<class Alloc>
+inline void object_allocator<Alloc>::free(void* ptr)
 {
-    #ifdef _DEBUG
-        assertion(m_pool.is_from(ptr) == true, "invalid free");
+    #if MATCL_DEBUG_MEMORY
+        if(m_pool.is_from(ptr) == false)
+            std::cerr << "invalid free" << "\n";
+
+        if (m_is_global == false)
+            leak_detector::report_free(ptr);
     #endif
+
     m_pool.free(ptr);
 };
 
-template<class Main_allocator>
-inline void* pool_allocator<Main_allocator>::malloc_impl()
-{
-    return m_pool.malloc();
+template<class Alloc>
+inline void* object_allocator<Alloc>::malloc()
+{    
+    void* ptr = m_pool.malloc();
+
+    #if MATCL_DEBUG_MEMORY
+        if (m_is_global == false)
+            leak_detector::report_malloc(ptr);
+    #endif  
+
+    return ptr;
 };
 
-template<class Main_allocator>
-inline void pool_allocator<Main_allocator>::purge_memory()
+template<class Alloc>
+inline void object_allocator<Alloc>::purge_memory()
 {
     m_pool.purge_memory();
 };
 
-template<class V, class H, class E, class A>
-object_table<V,H,E,A>::object_table(size_t capacity)
-:base_type(sizeof(VT)), m_table(capacity)
+//-----------------------------------------------------------------
+//                      hashed_object_handle
+//-----------------------------------------------------------------
+template<class Hash_entry>
+inline 
+hashed_object_handle<Hash_entry>::hashed_object_handle(const Hash_entry& entry)
+    :m_entry(entry)
+{}
+
+template<class Hash_entry>
+inline typename hashed_object_handle<Hash_entry>::value_type const*
+hashed_object_handle<Hash_entry>::get() const
+{
+    return m_entry.get();
+}
+
+template<class Hash_entry>
+inline typename hashed_object_handle<Hash_entry>::value_type*
+hashed_object_handle<Hash_entry>::get()
+{
+    return m_entry.get();
+}
+
+template<class Hash_entry>
+inline typename hashed_object_handle<Hash_entry>::value_type const*
+hashed_object_handle<Hash_entry>::operator->() const
+{
+    return m_entry.get();
+}
+
+template<class Hash_entry>
+inline typename hashed_object_handle<Hash_entry>::value_type*
+hashed_object_handle<Hash_entry>::operator->()
+{
+    return m_entry.get();
+}
+
+template<class Hash_entry>
+inline bool hashed_object_handle<Hash_entry>::empty() const
+{
+    return m_entry.empty();
+}
+
+template<class Hash_entry>
+inline void hashed_object_handle<Hash_entry>::remove()
+{
+    value_type* ptr = nullptr;
+    m_entry.assign(ptr);
+}
+
+template<class Hash_entry>
+inline void hashed_object_handle<Hash_entry>::assign(value_type* ptr)
+{
+    m_entry.assign(ptr);
+};
+
+//-----------------------------------------------------------------
+//                      object_table
+//-----------------------------------------------------------------
+template<class V, class Hasher, class Equaler, class Allocator>
+inline 
+object_table<V, Hasher, Equaler, Allocator>::object_table(bool is_global, size_t capacity)
+ : m_storage(sizeof(value_type), is_global), m_table(capacity)
 {};
 
-template<class V, class H, class E, class A>
-object_table<V,H,E,A>::~object_table()
+template<class V, class Hasher, class Equaler, class Allocator>
+inline object_table<V, Hasher, Equaler, Allocator>::~object_table()
 {
-    close(true);
+    close();
 };
 
-template<class V, class H, class E, class A>
-void object_table<V,H,E,A>::close(bool call_destructors)
+template<class V, class Hasher, class Equaler, class Allocator>
+inline void object_table<V, Hasher, Equaler, Allocator>::close()
 {
-    m_table.close(call_destructors);
-    base_type::purge_memory();
+    m_table.close(false);
+    m_storage.purge_memory();
 };
 
-template<class V, class H, class E, class A>
-template<class Y>
-V object_table<V,H,E,A>::get(const Y& str)
+template<class V, class Hasher, class Equaler, class Allocator>
+inline void object_table<V, Hasher, Equaler, Allocator>::clear()
 {
-    using entry = hash_table::entry;	
-    entry ptr   = m_table.get(str);
+    using func = typename hash_table::traverse_func;
+
+    func f = [=](value_type* ptr) { this->destroy_obj(ptr); };
+    m_table.traverse_items(f);
+
+    m_table.close(false);
+    m_storage.purge_memory();
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class Stack>
+inline void object_table<V, Hasher, Equaler, Allocator>::clear(Stack& st)
+{
+    using func = typename hash_table::traverse_func;
+
+    func f = [this, &st](value_type* ptr) { this->destroy_obj(ptr, st); };
+    m_table.traverse_items(f);
+
+    m_table.close(false);
+    m_storage.purge_memory();
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class ... Args>
+inline V object_table<V, Hasher, Equaler, Allocator>::get(const Args& ... args)
+{
+    using entry = typename hash_table::entry;
+    entry ptr = m_table.get(args ...);
 
     if (!ptr.empty())
     {
@@ -83,18 +189,19 @@ V object_table<V,H,E,A>::get(const Y& str)
     }
     else
     {
-        VT* m_str	= register_obj(str);
+        value_type* m_str = register_obj(args ...);
         ptr.assign(m_str);
         return V::make(*ptr);
     };
 };
 
-template<class V, class H, class E, class A>
-template<class Y>
-V object_table<V,H,E,A>::get_existing(const Y& str) const
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class ... Args>
+inline 
+V object_table<V, Hasher, Equaler, Allocator>::get_existing(const Args& ... args) const
 {
-    using const_entry = hash_table::const_entry;	
-    const_entry ptr   = m_table.get(str);
+    using const_entry = typename hash_table::const_entry;
+    const_entry ptr = m_table.get(args ...);
 
     if (!ptr.empty())
     {
@@ -103,59 +210,305 @@ V object_table<V,H,E,A>::get_existing(const Y& str) const
     }
     else
     {
-        return V::make(nullptr);
+        return V();
     };
 };
 
-template<class V, class H, class E, class A>
-template<class Y>
-typename object_table<V,H,E,A>::VT* object_table<V,H,E,A>::register_obj(Y&& val)
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class ... Args>
+inline typename object_table<V, Hasher, Equaler, Allocator>::handle_type 
+object_table<V, Hasher, Equaler, Allocator>::find(const Args& ... args)
+{
+    using entry = typename hash_table::entry;
+    entry ptr = m_table.get(args ...);
+
+    return handle_type(ptr);
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class ... Args>
+inline typename object_table<V, Hasher, Equaler, Allocator>::value_type* 
+object_table<V, Hasher, Equaler, Allocator>::register_obj(Args&& ... args)
 {   
-    size_t b = allocator::get_bytes_info(val);
-    void* ptr  = base_type::malloc(b);
-    new(ptr) VT(std::forward<Y>(val));
-    return reinterpret_cast<VT*>(ptr);
+    // ptr is not null; otherwise Alloc would throw
+    void* ptr       = m_storage.malloc();
+
+    new(ptr) value_type(std::forward<Args>(args) ...);
+    return reinterpret_cast<value_type*>(ptr);
 };
 
-template<class V, class H, class E, class A>
-void object_table<V,H,E,A>::unregister_obj(VT* ptr)
+template<class V, class Hasher, class Equaler, class Allocator>
+inline void 
+object_table<V, Hasher, Equaler, Allocator>::unregister_obj(value_type* ptr)
 {
-    m_table.remove(ptr);
-    size_t b = allocator::get_bytes(ptr);
-    ptr->~VT();	
-    base_type::free(const_cast<void*>(static_cast<const void*>(ptr)),b);
-};
-
-template<class V, class H, class E, class A>
-template<class stack_type>
-void object_table<V,H,E,A>::unregister_obj(VT* ptr, stack_type& st)
-{
-    using VT_nc = std::remove_const<VT>::type;
+    using VT_nc = typename std::remove_const<value_type>::type;
 
     m_table.remove(ptr);
-    size_t b = allocator::get_bytes(ptr);
-    const_cast<VT_nc*>(ptr)->destroy(st);	
-    base_type::free(const_cast<void*>(static_cast<const void*>(ptr)),b);
+    const_cast<VT_nc*>(ptr)->~value_type();
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
 };
 
-template<class V, class H, class E, class A>
-double object_table<V,H,E,A>::reuse_stats() const
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class Stack>
+inline void 
+object_table<V, Hasher, Equaler, Allocator>::unregister_obj(value_type* ptr, Stack& st)
 {
-    size_t N = m_table.capacity();
-    const VT* const* ptr = m_table.get_entries();
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    m_table.remove(ptr);
+    const_cast<VT_nc*>(ptr)->release(st);    
+    const_cast<VT_nc*>(ptr)->~value_type();
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+inline void object_table<V, Hasher, Equaler, Allocator>::destroy_obj(value_type* ptr)
+{
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    const_cast<VT_nc*>(ptr)->~value_type();
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class Stack>
+inline void 
+object_table<V, Hasher, Equaler, Allocator>::destroy_obj(value_type* ptr, Stack& st)
+{
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    const_cast<VT_nc*>(ptr)->release(st);
+    const_cast<VT_nc*>(ptr)->~value_type();
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+template<class Stack>
+void object_table<V, Hasher, Equaler, Allocator>::remove(handle_type h, Stack& st)
+{
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    if (h.empty() == true)
+        return;
+
+    const value_type* ptr   = h.get();
+
+    h.remove();    
+
+    const_cast<VT_nc*>(ptr)->release(st);
+    const_cast<VT_nc*>(ptr)->~value_type();
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+void object_table<V, Hasher, Equaler, Allocator>::remove(handle_type h)
+{
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    if (h.empty() == true)
+        return;
+
+    const value_type* ptr   = h.get();
+
+    h.remove();    
+
+    const_cast<VT_nc*>(ptr)->~value_type();
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+void object_table<V, Hasher, Equaler, Allocator>
+            ::set(handle_type h, const value_type& v)
+{
+    if (!h.empty())
+    {        
+        //delete exisitng node
+        using VT_nc             = typename std::remove_const<value_type>::type;
+        const value_type* ptr   = h.get();
+
+        const_cast<VT_nc*>(ptr)->~value_type();
+        m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+    };
+
+    value_type* m_str = register_obj(v);
+    
+    h.assign(m_str);
+    return;
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+void object_table<V, Hasher, Equaler, Allocator>
+            ::set(handle_type h, value_type&& v)
+{
+    if (!h.empty())
+    {        
+        //delete exisitng node
+        using VT_nc             = typename std::remove_const<value_type>::type;
+        const value_type* ptr   = h.get();
+
+        const_cast<VT_nc*>(ptr)->~value_type();
+        m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+    };
+
+    value_type* m_str = register_obj(std::move(v));    
+    h.assign(m_str);
+    return;
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+inline double 
+object_table<V, Hasher, Equaler, Allocator>::reuse_stats() const
+{
+    size_t N                        = m_table.capacity();
+    const value_type* const* ptr    = m_table.get_entries();
 
     double M = 0;
+
     double K = 0;
     for (size_t i = 0; i < N; ++i)
     {
-        const VT* elem = ptr[i];
-        if (elem > (const VT*)1)
+        const value_type* elem = ptr[i];
+        if (elem > (const value_type*)1)
         {
             K += elem->refcount();
             M += 1;
         };
     };
     return K/(M+1e-5);
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+inline size_t object_table<V, Hasher, Equaler, Allocator>::size() const
+{ 
+    return m_table.size(); 
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+inline size_t object_table<V, Hasher, Equaler, Allocator>::capacity() const
+{ 
+    return m_table.capacity(); 
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+inline double object_table<V, Hasher, Equaler, Allocator>::collisions() const
+{ 
+    return m_table.collisions();
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+void object_table<V, Hasher, Equaler, Allocator>::print_reuse_stats(std::ostream& os)
+{
+    double k = this->reuse_stats();
+    os << std::string(4,' ') << "tag: " << typeid(value_type).name() << "\n";
+    os << std::string(8,' ') << "value: " << k << "\n";
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+void object_table<V, Hasher, Equaler, Allocator>::print_memory_stats(std::ostream& os)
+{
+    size_t size = this->size();
+    size_t cap  = this->capacity();
+
+    os << std::string(4,' ') << "tag: " << typeid(value_type).name() << "\n";
+    os << std::string(8,' ') << "size: " << size << " capacity: " << cap << "\n";
+};
+
+template<class V, class Hasher, class Equaler, class Allocator>
+void object_table<V, Hasher, Equaler, Allocator>::print_collisions(std::ostream& os)
+{
+    double k = this->collisions();
+    os << std::string(4,' ') << "tag: " << typeid(value_type).name() << "\n";
+    os << std::string(8,' ') << "value: " << k << "\n";
+};
+
+//-----------------------------------------------------------------
+//                      unique_object_table
+//-----------------------------------------------------------------
+template<class V, class Hasher, class Equaler, class Alloc>
+inline 
+unique_object_table<V, Hasher, Equaler, Alloc>::unique_object_table
+                                    (bool is_global, size_t capacity)
+    :m_storage(sizeof(value_type), is_global)
+{
+    (void)capacity;
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+inline unique_object_table<V, Hasher, Equaler, Alloc>::~unique_object_table()
+{
+    close();
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+inline void unique_object_table<V, Hasher, Equaler, Alloc>::close()
+{
+    m_storage.purge_memory();
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+template<class ... Args>
+inline V unique_object_table<V, Hasher, Equaler, Alloc>::get(const Args& ... args)
+{
+    value_type* ptr = register_obj(args ...);
+    return V::make(ptr);
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+template<class ... Args>
+inline typename unique_object_table<V, Hasher, Equaler, Alloc>::value_type* 
+unique_object_table<V, Hasher, Equaler, Alloc>::register_obj(const Args& ... args)
+{   
+    // ptr is not null; otherwise Alloc would throw
+    void* ptr   = m_storage.malloc();
+    
+    new(ptr) value_type(args ...);
+    return reinterpret_cast<value_type*>(ptr);
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+inline void unique_object_table<V, Hasher, Equaler, Alloc>::unregister_obj(value_type* ptr)
+{
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    const_cast<VT_nc*>(ptr)->~value_type();    
+    allocator_type::free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+template<class Stack>
+inline void 
+unique_object_table<V, Hasher, Equaler, Alloc>::unregister_obj(value_type* ptr, Stack& st)
+{
+    using VT_nc = typename std::remove_const<value_type>::type;
+
+    const_cast<VT_nc*>(ptr)->release(st);    
+    const_cast<VT_nc*>(ptr)->~value_type();    
+
+    m_storage.free(const_cast<void*>(static_cast<const void*>(ptr)));
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+void unique_object_table<V, Hasher, Equaler, Alloc>::print_reuse_stats(std::ostream& os)
+{
+    (void)os;
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+void unique_object_table<V, Hasher, Equaler, Alloc>::print_memory_stats(std::ostream& os)
+{
+    (void)os;
+};
+
+template<class V, class Hasher, class Equaler, class Alloc>
+void unique_object_table<V, Hasher, Equaler, Alloc>::print_collisions(std::ostream& os)
+{
+    (void)os;
 };
 
 };};

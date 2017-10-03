@@ -49,14 +49,8 @@ struct pod_destructor : stack_array_elem_destructor<pod_type<value_type>>
     virtual void destroy(elem_type* ptr) override;
 };
 
-struct default_allocator_stack_array
-{
-    static void*    malloc(size_t size);
-    static void     free(void* ptr, size_t size);
-    static void*    realloc(void* ptr, size_t old_size, size_t new_size);
-};
-
-template<class value_type_, int n_elem = 10, class Allocator = default_allocator_stack_array>
+template<class value_type_, int n_elem = 10, 
+    class Allocator = default_allocator<true, false>>
 class stack_array
 {
     static_assert(std::is_pod<value_type_>::value,"value_type must be pod");
@@ -85,20 +79,18 @@ class stack_array
         stack_array(const stack_array&) = delete;
         stack_array& operator=(const stack_array&) = delete;
 
-        void                bad_alloc() const;
-
     public:
         stack_array(size_t size);
         stack_array(size_t size, destructor_type* d);
         ~stack_array();
 
         // get pointer to first element in the array
-        value_type*         get()       { return m_ptr? m_ptr : m_array; };        
+        value_type*         get();
 
         // get pointer to first element in the array; cast to
         // type T is performed
         template<class T>
-        T*                  get_cast()  { return reinterpret_cast<T*>(get()); };
+        T*                  get_cast();
 
         // change array capacity to 'size'; all pointers
         // can be invalidated
@@ -141,24 +133,6 @@ inline const value_type& pod_type<value_type>::cast() const
     return *reinterpret_cast<const value_type*>(&m_data); 
 };
 
-inline void* default_allocator_stack_array::malloc(size_t size)
-{ 
-    return ::malloc(size); 
-};
-
-inline void default_allocator_stack_array::free(void* ptr, size_t size)
-{ 
-    (void)size; 
-    ::free(ptr); 
-};
-
-inline void* default_allocator_stack_array::realloc(void* ptr, size_t old_size, 
-         size_t new_size)
-{ 
-    (void)old_size; 
-    return ::realloc(ptr, new_size); 
-};
-
 template<class value_type, int n_elem, class Allocator>
 stack_array<value_type,n_elem,Allocator>::stack_array(size_t size)	
     :m_ptr(nullptr), m_destructor(nullptr)
@@ -167,13 +141,23 @@ stack_array<value_type,n_elem,Allocator>::stack_array(size_t size)
     {
         header* tmp = (header*)Allocator::malloc(size*sizeof(value_type) + sizeof(header));
 
-        if (!tmp)
-            bad_alloc();
-
         tmp[0] = header(size);
         ++tmp;
         m_ptr = (value_type*)tmp;
     };
+};
+
+template<class value_type, int n_elem, class Allocator>
+inline value_type* stack_array<value_type,n_elem,Allocator>::get()
+{ 
+    return m_ptr? m_ptr : m_array; 
+};        
+
+template<class value_type, int n_elem, class Allocator>
+template<class T>
+inline T* stack_array<value_type,n_elem,Allocator>::get_cast()
+{ 
+    return reinterpret_cast<T*>(get()); 
 };
 
 template<class value_type, int n_elem, class Allocator>
@@ -183,9 +167,6 @@ stack_array<value_type,n_elem,Allocator>::stack_array(size_t size, destructor_ty
     if (size > n_elem)
     {
         header* tmp = (header*)Allocator::malloc(size*sizeof(value_type) + sizeof(header));
-
-        if (!tmp)
-            bad_alloc();
 
         tmp[0] = header(size);
         ++tmp;
@@ -207,9 +188,6 @@ void stack_array<value_type,n_elem,Allocator>::reserve(size_t new_size)
                         m_size*sizeof(value_type) + sizeof(header),
                         new_size * sizeof(value_type) + sizeof(header));
 
-    if (!tmp)
-        bad_alloc();
-
     tmp[0]  = header(new_size);
     ++tmp;
     m_ptr   = (value_type*)tmp;
@@ -228,11 +206,5 @@ stack_array<value_type,n_elem,Allocator>::~stack_array()
         Allocator::free(tmp, tmp[0].m_size*sizeof(value_type) + sizeof(header));
     };
 };
-
-template<class value_type, int n_elem,class Allocator>
-void stack_array<value_type,n_elem,Allocator>::bad_alloc() const
-{
-    throw std::bad_alloc();
-}
 
 };};

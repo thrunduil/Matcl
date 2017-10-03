@@ -58,12 +58,6 @@ struct object_type_traits_default
     template<class T>
     static T            make_zero()                         { return T(); };
 
-    // convert to string; predefined scalar types should be 
-    // converted to string using functions from printer pr
-    template<class T>
-    static std::string  to_string(const T& t, matcl::details::printer& pr)  
-                                                            { return t.to_string(pr); };
-
     // display element
     // if elem_width > 0, then width is fixed to elem_width characters; 
     // if elem_width < 0, then width is not fixed, and width gives maximal width

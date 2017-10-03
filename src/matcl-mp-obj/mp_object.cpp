@@ -20,7 +20,7 @@
 
 #include "matcl-mp-obj/mp_object.h"
 #include "matcl-mp/details/utils.h"
-#include "matcl-core/details/printer.h"
+#include "matcl-core/details/IO/printer.h"
 
 namespace matcl { namespace dynamic
 {
@@ -28,38 +28,20 @@ namespace matcl { namespace dynamic
 namespace md    = matcl::details;
 namespace mmd   = matcl::mp::details;
 
-std::string object_type_traits<mp_int>::to_string(const mp_int& t, md::printer& pr)
-{ 
-    (void)pr;
-    return t.to_string();
-};
-
 void object_type_traits<mp_int>::disp(const mp_int& t, md::printer& pr, Integer elem_width,
                             align_type at, Integer value_pos)
 {
-    pr.disp_elem(elem_width, to_string(t, pr), at, value_pos);
-};
-
-
-std::string object_type_traits<mp_float>::to_string(const mp_float& t, md::printer& pr)
-{ 
-    Integer prec    = pr.get_precision();
-    return t.to_string(precision(prec));
-
+    pr.disp_elem(elem_width, t.to_string(), at, value_pos);
 };
 
 void object_type_traits<mp_float>::disp(const mp_float& t, md::printer& pr, Integer elem_width,
                             align_type at, Integer value_pos)
 {
-    std::ostringstream os;
-    os << to_string(t, pr) << " (" << t.get_precision().get() << ")";
-    pr.disp_elem(elem_width, os.str(), at, value_pos);
-};
-
-std::string object_type_traits<mp_complex>::to_string(const mp_complex& t, md::printer& pr)
-{ 
     Integer prec    = pr.get_precision();
-    return t.to_string(precision(prec));
+
+    std::ostringstream os;
+    os << t.to_string(precision(prec)) << " (" << t.get_precision().get() << ")";
+    pr.disp_elem(elem_width, os.str(), at, value_pos);
 };
 
 void object_type_traits<mp_complex>::disp(const mp_complex& t, md::printer& pr, Integer elem_width,
@@ -70,16 +52,10 @@ void object_type_traits<mp_complex>::disp(const mp_complex& t, md::printer& pr, 
     pr.disp_elem(elem_width, os.str(), at, value_pos);
 };
 
-std::string object_type_traits<mp_rational>::to_string(const mp_rational& t, md::printer& pr)
-{
-    (void)pr;
-    return t.to_string();
-};
-
 void object_type_traits<mp_rational>::disp(const mp_rational& t, md::printer& pr, Integer elem_width,
                             align_type at, Integer value_pos)
 {
-    pr.disp_elem(elem_width, to_string(t, pr), at, value_pos);
+    pr.disp_elem(elem_width, t.to_string(), at, value_pos);
 };
 
 }}

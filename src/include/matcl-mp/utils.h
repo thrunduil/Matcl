@@ -21,7 +21,7 @@
 #pragma once
 
 #include "matcl-mp/config.h"
-#include "matcl-core/general/memory.h"
+#include "matcl-core/memory/memory.h"
 
 namespace matcl { namespace mp
 {

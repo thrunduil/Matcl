@@ -19,7 +19,7 @@
  */
 
 #include "matcl-dynamic/utils.h"
-#include "matcl-core/general/memory.h"
+#include "matcl-core/memory/memory.h"
 #include "type_table.h"
 
 namespace matcl { namespace dynamic

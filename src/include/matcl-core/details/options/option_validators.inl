@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-core/options/option_validators.h"
+#include "matcl-core/error/exception_classes.h"
 
 namespace matcl { namespace opt
 {
@@ -39,8 +40,8 @@ inline auto opt::validator_positive() -> std::function<optional<T> (optional<T>)
                 if (x && x.value() <= T(0))
                 {
                     std::ostringstream os;
-                    os << "invalid option: value must be positive";
-                    throw std::runtime_error(os.str());
+                    os << "value must be positive";
+                    throw error::option_validator_error(os.str());
                 }
                 return x;
             };
@@ -56,8 +57,8 @@ inline auto opt::validator_positive_or_val(T val) -> std::function<optional<T> (
                 if (x && x.value() != val && x.value() <= T(0))
                 {
                     std::ostringstream os;
-                    os << "invalid option: value must be positive";
-                    throw std::runtime_error(os.str());
+                    os << "value must be positive";
+                    throw error::option_validator_error(os.str());
                 }
                 return x;
             };
@@ -73,8 +74,8 @@ inline auto opt::validator_nonnegative() -> std::function<optional<T> (optional<
                 if (x && x.value() < T(0))
                 {
                     std::ostringstream os;
-                    os << "invalid option: value must be positive or zero";
-                    throw std::runtime_error(os.str());
+                    os << "value must be positive or zero";
+                    throw error::option_validator_error(os.str());
                 }
                 return x;
             };
@@ -90,8 +91,8 @@ inline auto opt::validator_nonnegative_or_val(T val) -> std::function<optional<T
                 if (x && x.value() != val && x.value() < T(0))
                 {
                     std::ostringstream os;
-                    os << "invalid option: value must be positive or zero";
-                    throw std::runtime_error(os.str());
+                    os << "value must be positive or zero";
+                    throw error::option_validator_error(os.str());
                 }
                 return x;
             };
@@ -112,26 +113,26 @@ inline auto opt::validator_range(T min, T max, bool open_left, bool open_right)
                 if (open_left == false && (x.value() >= min) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
                 if (open_left == true && (x.value() > min) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
                 if (open_right == false && (x.value() <= max) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
                 if (open_right == true && (x.value() < max) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
 
                 return x;
@@ -156,26 +157,26 @@ inline auto opt::validator_range_or_val(T val, T min, T max, bool open_left, boo
                 if (open_left == false && (x.value() >= min) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
                 if (open_left == true && (x.value() > min) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
                 if (open_right == false && (x.value() <= max) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
                 if (open_right == true && (x.value() < max) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value out of range";
-                    throw std::runtime_error(os.str());
+                    os << "value out of range";
+                    throw error::option_validator_error(os.str());
                 }
 
                 return x;
@@ -192,8 +193,8 @@ inline auto opt::validator_finite() -> std::function<optional<T> (optional<T>)>
                 if (x && is_finite(x.value()) == false)
                 {
                     std::ostringstream os;
-                    os << "invalid option: value must be finite";
-                    throw std::runtime_error(os.str());
+                    os << "value must be finite";
+                    throw error::option_validator_error(os.str());
                 }
                 return x;
             };
@@ -209,8 +210,8 @@ inline auto opt::validator_enum(Integer size) -> std::function<optional<Integer>
                 if (x && (x.value() < 0 || x.value() >= size))
                 {
                     std::ostringstream os;
-                    os << "invalid option: enumeration value is out out range";
-                    throw std::runtime_error(os.str());
+                    os << "enumeration value is out out range";
+                    throw error::option_validator_error(os.str());
                 }
                 return x;
             };

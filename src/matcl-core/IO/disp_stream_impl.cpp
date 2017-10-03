@@ -19,8 +19,8 @@
  */
 
 #include "matcl-core/IO/disp_stream.h"
-#include "matcl-core/details/disp_stream_impl.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/details/IO/disp_stream_impl.h"
+#include "matcl-core/error/exception_classes.h"
 
 #include "matcl-core/details/integer.h"
 
@@ -415,6 +415,11 @@ void disp_stream_impl::do_display_empty_matrix(const disp_stream* user, Integer 
     user->display_empty_matrix(lp, r,c);
 };
 
+bool disp_stream_impl::do_short_print_empty_matrix(const disp_stream* user)
+{
+    return user->short_print_empty_matrix();
+};
+
 void disp_stream_impl::do_start_display_matrix_block(const disp_stream* user, Integer matrix_width,
                             Integer col_start, Integer col_end)
 {
@@ -460,7 +465,7 @@ Integer disp_stream_impl::do_get_column_width(const disp_stream* user, Integer c
 };
 Integer disp_stream_impl::do_get_first_col_separator_width(const disp_stream* user) const
 {
-    if (user->show_row_headers())
+    if (user->show_column_header_row())
     {
         return static_cast<Integer>(user->get_first_col_separator().size());
     }
@@ -470,34 +475,35 @@ Integer disp_stream_impl::do_get_first_col_separator_width(const disp_stream* us
     };
 };
 
-Integer disp_stream_impl::do_get_row_headers_width(const disp_stream* user, Integer max_rows) const
+void disp_stream_impl::do_get_row_headers_width(const disp_stream* user, Integer rows,
+                                                Integer& w_min, Integer& w_max) const
 {
-    if (user->show_row_headers() == false)
+    if (user->show_column_header_row() == false)
     {
-        return 0;
-    };
-    Integer r       = this->do_max_matrix_rows(user);
-    Integer w       = do_get_row_header_width(user);
+        w_min   = 0;
+        w_max   = 0;
 
-    if (max_rows <= r)
-    {        
-        if(user->show_values_labels())
-            w       = std::max(do_get_label_row_id_width(user), w);
-
-        return w;
+        return;
     }
-    else
-    {
-        if(user->show_values_labels())
-            w = std::max(do_get_label_row_id_width(user), w);
 
-        return w;
-    };
+    Integer r       = this->do_max_matrix_rows(user);
+    do_get_row_header_width(user, w_min, w_max);
+
+    if(user->show_values_labels())
+    {
+        Integer w   = do_get_label_row_id_width(user);
+        w_min       = std::max(w, w_min);
+    }
+
+    (void)rows;
+    (void) r;
 };
+
 Integer disp_stream_impl::do_get_row_header_width_sparse(const disp_stream* user, Integer row) const
 {
     return (Integer)user->get_row_name(row).size();
 };
+
 Integer disp_stream_impl::do_get_row_header_width_dense(const disp_stream* user, Integer row) const
 {
     (void)user;
@@ -537,7 +543,8 @@ Integer disp_stream_impl::do_max_matrix_rows_sparse(const disp_stream* user, Int
 };
 
 void disp_stream_impl::do_set_column_min_width(const disp_stream* user, Integer c, 
-                            const std::vector<Integer>& width_vec, Integer max_allowed_width)
+                            const std::vector<Integer>& width_vec, Integer min_allowed,
+                            Integer max_allowed)
 {
     Integer values_width        = 0;
     Integer separator_width     = 0;
@@ -549,26 +556,26 @@ void disp_stream_impl::do_set_column_min_width(const disp_stream* user, Integer 
         values_width            += width_vec[i];
 
         if(i < n_sub - 1)
-        {
             values_width        += do_get_col_values_separator_width(user);
-        }
     }
 
     Integer total_width         = values_width + separator_width;
     Integer modified_width      = 0;
 
     modified_width	            = std::max(total_width,(Integer)this->m_column_labels[c].size());
+    
+    modified_width	            = std::max(modified_width, min_allowed);
+    modified_width              = std::min(modified_width, max_allowed);
     modified_width	            = std::max(modified_width,1);
 
-    Integer res_width           = std::min(modified_width, max_allowed_width);
-    m_column_width[c]           = res_width;
+    m_column_width[c]           = modified_width;
 
     m_column_values_width[c]	= width_vec;
 
-    if (res_width < total_width)
+    if (modified_width < total_width)
     {
         //column header is too large, we must decrease width of values.
-        adjust_width(m_column_values_width[c], res_width - separator_width, true);
+        adjust_width(m_column_values_width[c], modified_width - separator_width, true);
     }
     else
     {
@@ -866,16 +873,15 @@ Integer disp_stream_impl::do_get_label_row_id_width(const disp_stream* user) con
 };
 void disp_stream_impl::do_disp_labels_row_id(const disp_stream* user,Integer w)
 {
-    if (user->show_row_headers() == false)
-    {
+    if (user->show_column_header_row() == false)
         return;
-    };
+
     align_type at       = this->do_get_align_row_header(user);
     m_printer.disp_elem(w, user->get_labels_row_id(),at,0);
 };
 void disp_stream_impl::do_disp_row_header_dense(const disp_stream* user, Integer r, Integer w)
 {
-    if (user->show_row_headers())
+    if (user->show_column_header_row())
     {
         std::string name    = m_row_labels[r];
         align_type at       = this->do_get_align_row_header(user);
@@ -884,14 +890,14 @@ void disp_stream_impl::do_disp_row_header_dense(const disp_stream* user, Integer
 };
 void disp_stream_impl::do_disp_row_header_cont(const disp_stream* user, Integer w)
 {
-    if (user->show_row_headers())
+    if (user->show_column_header_row())
     {
         do_disp_continuation_row(user,w);
     };
 };
 void disp_stream_impl::do_disp_first_col_separator(const disp_stream* user, Integer w)
 {
-    if (user->show_row_headers())
+    if (user->show_column_header_row())
     {
         get_stream().disp(w, user->get_first_col_separator());
     };
@@ -913,40 +919,70 @@ align_type disp_stream_impl::do_get_align_col(const disp_stream* user, Integer c
 {
     return user->get_align_col(c);
 };
-Integer disp_stream_impl::do_get_row_header_width(const disp_stream* user) const
+
+void disp_stream_impl::do_get_col_header_width(const disp_stream* user, Integer c, Integer& w_min, 
+                                Integer& w_max) const
 {
-    if (user->show_row_headers())
+    user->get_column_width(c, w_min, w_max);
+
+    w_min   = std::max(w_min, 1);
+    w_max   = std::max(w_max, 1);
+
+    Integer lab_width   = (Integer)m_column_labels[c].size();
+    w_min   = std::max(w_min, lab_width);
+    w_max   = std::max(w_max, lab_width);
+};
+
+void disp_stream_impl::do_get_row_header_width(const disp_stream* user,
+                                    Integer& w_min, Integer& w_max) const
+{
+    if (user->show_column_header_row())
     {
         std::string row_header = user->get_rows_label();
-        return (Integer)row_header.size();
+        Integer w0  = (Integer)row_header.size();      
+        user->get_column_width_row(w_min, w_max);
+
+        w_min   = std::max(w0, w_min);
+        w_max   = std::max(w0, w_max);
+
+        w_min   = std::max(w_min, 1);
+        w_max   = std::max(w_max, 1);
     }
     else
     {
-        return 0;
+        w_min   = 0;
+        w_max   = 0;
     };
 };
 void disp_stream_impl::do_disp_col_header_row(const disp_stream* user, Integer w)
 {
-    if (user->show_row_headers())
+    if (user->show_column_header_row())
     {
         std::string row_header = user->get_rows_label();
-        get_stream().disp(w, row_header);
+
+        align_type at       = this->do_get_align_row_header(user);
+        m_printer.disp_elem(w, row_header, at, 0);
     };
 };
-bool disp_stream_impl::do_show_row_headers(const disp_stream* user) const
+
+bool disp_stream_impl::do_show_column_header_line(const disp_stream* user) const
 {
-    return user->show_row_headers();
+    return user->show_column_header_line();
+};
+bool disp_stream_impl::do_show_column_header_row(const disp_stream* user) const
+{
+    return user->show_column_header_row();
 };
 void disp_stream_impl::do_disp_col_header_1sep(const disp_stream* user, Integer w)
 {
-    if (user->show_row_headers())
+    if (user->show_column_header_row())
     {
         get_stream().disp(w, user->get_col_separator());
     };
 };
 void disp_stream_impl::do_disp_col_header_col_dense(const disp_stream* user, Integer c, Integer w)
 {
-    if (user->show_column_header())
+    if (user->show_column_header_columns())
     {
         std::string name    = m_column_labels[c];
         align_type at       = this->do_get_align_col(user,c);
@@ -957,14 +993,15 @@ void disp_stream_impl::do_disp_col_header_col_dense(const disp_stream* user, Int
 void disp_stream_impl::do_disp_col_header_col_separator(const disp_stream* user, Integer c, Integer w)
 {
     (void)c;
-    if (user->show_column_header())
+    if (user->show_column_header_columns())
     {    
         get_stream().disp(w,user->get_col_separator());
     };
 };
 void disp_stream_impl::do_disp_first_row_separator(const disp_stream* user, Integer w)
 {
-    if ((user->show_column_header() || user->show_values_labels()) && user->show_first_row_separator())
+    if ((user->show_column_header_columns() || user->show_values_labels()) 
+            && user->show_first_row_separator())
     {
         std::string sep = std::string(w,'-');
 
@@ -1085,7 +1122,7 @@ void disp_stream_impl::do_disp_continuation_value(const disp_stream* user, Integ
 
 void disp_stream_impl::do_disp_continuation_column(const disp_stream* user, Integer w)
 {
-    if (user->show_column_header())
+    if (user->show_column_header_columns())
     {  
         std::string cd_v(std::min(3,w),'.');
         m_printer.disp_elem(w,cd_v,align_type::left, 0);

@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include <cfloat>
+#include "matcl-core/config.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-core/details/complex_details.h"
 #include "matcl-core/details/scalfunc_real.h"
 #include "matcl-core/details/utils.h"
+
+#include <cfloat>
 
 #pragma warning(push)
 #pragma warning(disable:4127)   //conditional expression is constant

@@ -20,6 +20,7 @@
 
 #include "matcl-mp/cache.h"
 #include "utils/impl_types.h"
+#include "matcl-core/error/exception_classes.h"
 
 namespace matcl
 {
@@ -69,20 +70,6 @@ const std::string& unique_id::to_string() const
     return m_name; 
 };
 
-static void error_value_not_in_cache(unique_id id)
-{
-    std::ostringstream msg;
-    msg << "value with id " << id.to_string() << " is not stored in cache";
-    throw std::runtime_error(msg.str());
-};
-static void error_value_not_in_cache_prec(unique_id id, precision save_prec, precision req_prec)
-{
-    std::ostringstream msg;
-    msg << "value with id " << id.to_string() << " and precision " << req_prec 
-        << " is not stored in cache; there is a value with precision " << save_prec;
-    throw std::runtime_error(msg.str());
-};
-
 cache* cache::get()
 {
     MATCL_THREAD_LOCAL
@@ -115,17 +102,15 @@ mp_float cache::get(unique_id id, precision prec)
     auto pos = c->m_map_float.find(id);
 
     if (pos == c->m_map_float.end())
-    {
-        error_value_not_in_cache(id);
-        return mp_float();
-    }
+        throw error::value_not_in_cache(id.to_string(), (Integer)prec, -1);
 
     precision save_prec = pos->second.first;
+
     if (prec > save_prec)
     {
-        error_value_not_in_cache_prec(id, save_prec, prec);
-        return mp_float();
-    };
+        throw error::value_not_in_cache(id.to_string(), (Integer)prec, 
+                                (Integer)save_prec);
+    }
 
     return pos->second.second;
 };

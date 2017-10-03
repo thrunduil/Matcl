@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-core/details/disp_impl.h"
+#include "matcl-core/details/IO/disp_impl.h"
 
 namespace matcl { namespace raw { namespace details
 {
@@ -77,7 +77,7 @@ void disp_elem_helper<V,S>::eval(md::disp_stream_impl& os, const disp_stream* us
 };
 
 //--------------------------------------------------------------------------
-//                         impl disp matrix
+//                         impl disp matrix dense
 //--------------------------------------------------------------------------
 
 template<class V>
@@ -89,9 +89,14 @@ void disp_matrix<V,struct_dense>::eval_matrix_body(md::disp_stream_impl& os,
 
     if (r == 0 || c == 0)
     {
-        os.do_display_empty_matrix(user,r,c);
-        os.do_end_display(user);
-        return;
+        bool short_print    = os.do_short_print_empty_matrix(user);
+
+        if (short_print == true)
+        {
+            os.do_display_empty_matrix(user,r,c);
+            os.do_end_display(user);
+            return;
+        };        
     }
 
     measures ms;
@@ -106,26 +111,30 @@ void disp_matrix<V,struct_dense>::eval_matrix_body(md::disp_stream_impl& os,
 
     os.do_preparse_labels(user, mr, mc, m);
 
-    Integer rhw     = os.do_get_row_headers_width(user,mr);
+    Integer rhw_min, rhw_max;
+    os.do_get_row_headers_width(user, r, rhw_min, rhw_max);
 
-    for (Integer j = 0; j < mr; ++j)
+    if (rhw_max > rhw_min)
     {
-        Integer tmp = os.do_get_row_header_width_dense(user,j);
-        rhw         = std::max(rhw, tmp);
+        for (Integer j = 0; j < mr; ++j)
+        {
+            Integer tmp = os.do_get_row_header_width_dense(user,j);
+            rhw_min     = std::max(rhw_min, tmp);
+        };
     };
 
-    rhw             = std::min(rhw, max_matrix_width/2);
+    rhw_min         = std::min(rhw_min, max_matrix_width/2);
+    rhw_min         = std::min(rhw_min, rhw_max);    
 
     ms.csw          = os.do_get_col_separator_width(user);
-    ms.rhw          = rhw;
+    ms.rhw          = rhw_min;
     ms.fcw          = os.do_get_first_col_separator_width(user);
     ms.chw          = 0;
 
     Integer pos0    = os.do_get_line_prefix_width(user) + ms.rhw + ms.fcw;
     Integer pos     = pos0;            
 
-    Integer lc      = 1;
-    Integer cc      = 1;
+    Integer lc      = 1;    
     Integer n_sub   = os.do_get_number_subvalues(user);
     Integer rbl     = os.do_get_row_block(user);
 
@@ -133,103 +142,10 @@ void disp_matrix<V,struct_dense>::eval_matrix_body(md::disp_stream_impl& os,
     m.hold_column();
     m.hold();            
 
-    for (Integer j = 0; j < mc; ++j, ++cc)
-    {
-        std::vector<Integer> min_value_width(n_sub, 0);
+    process_block(os, user, r, mr, mc, n_sub, is_sym, m, ms, pos0, pos, lc);
 
-        //room for column labels
-        if(os.do_show_values_labels(user))
-        {
-            for(Integer v = 0; v < n_sub; ++v)
-            {
-                min_value_width[v]	= std::max(min_value_width[v],
-                                                os.do_get_subvalue_label_width(user,v+1));
-            }
-        }
+    Integer cc      = mc;
 
-        align_type at = os.do_get_align_col(user,j);
-
-        for (Integer i = 0; i < mr; ++i)
-        {
-            if (is_sym == true && i > j)
-            {
-                //lower triangle, no need to measure
-            }
-            else
-            {
-                bool is_zero;
-                const V& elem       = m.get_value(user, 0, at, i, j, is_zero);
-                m.next_row();
-
-                for(Integer v = 0; v < n_sub; ++v)
-                {
-                    Integer vw			= os.do_get_value_min_width(user, elem, v);
-                    vw					= std::min(vw,os.do_get_max_value_width(user,v));
-                    min_value_width[v]	= std::max(min_value_width[v],vw);
-                }
-            }
-        };
-
-        Integer max_allowed_width   = max_matrix_width - (ms.rhw + ms.fcw);
-
-        os.do_set_column_min_width(user,j,min_value_width, max_allowed_width);
-                
-        pos                         += os.do_get_column_width(user,j);
-
-        if (pos > max_matrix_pos)
-        {
-            cc = std::max(cc-1,lc);
-            --j;
-
-            m.restore_column();
-            m.hold();
-
-            measure_column_header(os, user, ms, lc, cc, false, false);
-            os.do_start_display_matrix_block(user, ms.chw, lc, cc);
-
-            make_column_header(os, user, ms, lc, cc, false, false);
-
-            //print matrix
-            for (Integer i = 0; i < mr; ++i)
-            {
-                if (rbl > 0 && i % rbl == 0 && i > 0)
-                    make_row_separator(os, user, ms);
-
-                make_row(os, user, ms, i, lc, cc, m, true, false, false, is_sym);
-
-                m.restore();
-                m.next_row();
-                m.hold();
-            }
-            if (mr < r)
-            {
-                make_row(os, user, ms, mr, lc, cc, m, false, false, false, is_sym);
-            };
-
-            os.do_end_display_matrix_block(user, ms.chw);
-
-            m.restore_column();
-            for (int k = lc; k <= cc; ++k)
-            {
-                m.next_column();
-            };
-            m.hold_column();
-            m.hold();
-
-            lc      = cc + 1;
-            pos     = pos0;
-        }
-        else
-        {
-            pos     += ms.csw;
-
-            m.restore();
-            m.next_column();
-            m.hold();
-        }
-    };
-
-    cc = mc;
     if (lc <= cc)
     {
         pos += ms.csw;
@@ -288,6 +204,128 @@ void disp_matrix<V,struct_dense>::eval_matrix_body(md::disp_stream_impl& os,
 };
 
 template<class V>
+void disp_matrix<V,struct_dense>::process_block(md::disp_stream_impl& os, const disp_stream* user, 
+                            Integer r, Integer mr, Integer mc, Integer n_sub, bool is_sym, 
+                            matrix_provider_base<V>& m, measures& ms, Integer pos0, Integer& pos, 
+                            Integer& lc)
+{
+    Integer cc                  = 1;
+    Integer max_matrix_width    = os.do_get_max_matrix_width(user);
+    Integer max_matrix_pos      = os.do_get_max_matrix_position(user);
+    Integer rbl                 = os.do_get_row_block(user);
+    bool can_split              = user->can_split();
+
+    for (Integer j = 0; j < mc; ++j, ++cc)
+    {
+        std::vector<Integer> min_value_width(n_sub, 0);
+
+        //room for column labels
+        if(os.do_show_values_labels(user))
+        {
+            for(Integer v = 0; v < n_sub; ++v)
+            {
+                min_value_width[v]	= std::max(min_value_width[v],
+                                                os.do_get_subvalue_label_width(user,v+1));
+            }
+        }
+
+        Integer w_min, w_max;
+        os.do_get_col_header_width(user, j, w_min, w_max);
+
+        align_type at = os.do_get_align_col(user,j);
+
+        if (w_min == w_max && n_sub == 1)
+        {
+            w_min   = std::max(w_min, min_value_width[0]);
+            w_max   = w_min;
+            min_value_width[0]	= w_min;
+        }
+        else
+        {
+            for (Integer i = 0; i < mr; ++i)
+            {
+                if (is_sym == true && i > j)
+                {
+                    //lower triangle, no need to measure
+                }
+                else
+                {
+                    bool is_zero;
+                    const V& elem       = m.get_value(user, 0, at, i, j, is_zero);
+                    m.next_row();
+
+                    for(Integer v = 0; v < n_sub; ++v)
+                    {
+                        Integer vw			= os.do_get_value_min_width(user, elem, v);
+                        vw					= std::min(vw,os.do_get_max_value_width(user,v));
+                        min_value_width[v]	= std::max(min_value_width[v],vw);
+                    }
+                }
+            };
+        };
+
+        Integer max_allowed_width   = max_matrix_width - (ms.rhw + ms.fcw);
+        max_allowed_width           = std::min(max_allowed_width, w_max);
+
+        os.do_set_column_min_width(user,j,min_value_width, w_min, max_allowed_width);
+                
+        pos                         += os.do_get_column_width(user,j);
+
+        if (pos > max_matrix_pos && can_split == true)
+        {
+            cc = std::max(cc-1,lc);
+            --j;
+
+            m.restore_column();
+            m.hold();
+
+            measure_column_header(os, user, ms, lc, cc, false, false);
+            os.do_start_display_matrix_block(user, ms.chw, lc, cc);
+
+            make_column_header(os, user, ms, lc, cc, false, false);
+
+            //print matrix
+            for (Integer i = 0; i < mr; ++i)
+            {
+                if (rbl > 0 && i % rbl == 0 && i > 0)
+                    make_row_separator(os, user, ms);
+
+                make_row(os, user, ms, i, lc, cc, m, true, false, false, is_sym);
+
+                m.restore();
+                m.next_row();
+                m.hold();
+            }
+            if (mr < r)
+            {
+                make_row(os, user, ms, mr, lc, cc, m, false, false, false, is_sym);
+            };
+
+            os.do_end_display_matrix_block(user, ms.chw);
+
+            m.restore_column();
+            for (int k = lc; k <= cc; ++k)
+            {
+                m.next_column();
+            };
+            m.hold_column();
+            m.hold();
+
+            lc      = cc + 1;
+            pos     = pos0;
+        }
+        else
+        {
+            pos     += ms.csw;
+
+            m.restore();
+            m.next_column();
+            m.hold();
+        }
+    };
+};
+
+template<class V>
 void disp_matrix<V,struct_dense>::measure_column_header(md::disp_stream_impl& os, 
                   const disp_stream* user, measures& ms, Integer lc, Integer cc, 
                   bool need_cont, bool add_cont)
@@ -320,10 +358,12 @@ void disp_matrix<V,struct_dense>::make_column_header(md::disp_stream_impl& os,
             const disp_stream* user, measures& ms, Integer lc, Integer cc, bool need_cont, 
             bool add_cont)
 {
-    bool show_row_headers = os.do_show_row_headers(user);
+    bool show_header_line = os.do_show_column_header_line(user);
 
-    if (show_row_headers == true)
-        os.do_disp_new_line(user,0);
+    if (show_header_line == false)
+        return;
+
+    os.do_disp_new_line(user,0);
 
     ms.chw = ms.rhw + ms.fcw;
 
@@ -357,9 +397,7 @@ void disp_matrix<V,struct_dense>::make_column_header(md::disp_stream_impl& os,
         ms.chw += 3 + ms.csw;
     }
 
-    if (show_row_headers == true)
-        os.do_disp_end_line(user,0);
-
+    os.do_disp_end_line(user,0);
     os.do_disp_first_row_separator(user,ms.chw);
 
     if(os.do_show_values_labels(user))

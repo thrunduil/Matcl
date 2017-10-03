@@ -36,9 +36,6 @@
     <ClInclude Include="..\..\src\test\test_dynamic\test_performance.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\test\test_dynamic\test_disp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\test\test_dynamic\main.cpp">
@@ -72,9 +69,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_bin_3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\test\test_dynamic\test_disp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

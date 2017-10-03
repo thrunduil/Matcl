@@ -20,7 +20,7 @@
 
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/details/integer.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 
 namespace matcl 
 {

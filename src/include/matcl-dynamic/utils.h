@@ -21,7 +21,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-dynamic/details/fwd_decls.h"
-#include "matcl-core/general/memory.h"
+#include "matcl-core/memory/memory.h"
 
 namespace matcl { namespace dynamic
 {

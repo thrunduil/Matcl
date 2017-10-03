@@ -19,8 +19,8 @@
  */
 
 #include "matcl-core/IO/disp_stream.h"
-#include "matcl-core/details/disp_stream_impl.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/details/IO/disp_stream_impl.h"
+#include "matcl-core/error/exception_classes.h"
 #include "matcl-core/details/integer.h"
 #include "matcl-core/options/matcl_options.h"
 #include "matcl-core/options/options_disp.h"
@@ -77,6 +77,8 @@ class disp_stream_global : public disp_stream
         virtual void        general_info_sparse_matrix(line_printer& p, Integer r, Integer c, Integer nz,
                                     matcl::value_code vt, const std::string& struct_name) const;
         virtual void        display_empty_matrix(line_printer& p, Integer r, Integer c) const override;
+        virtual bool        short_print_empty_matrix() const override;
+
         virtual bool        show_matrix_header()  const override;  
         virtual void        display_matrix_name(line_printer& p)  const override;
         virtual void        start_display_matrix_block(line_printer& p, Integer block_width, Integer first_col,
@@ -86,7 +88,10 @@ class disp_stream_global : public disp_stream
         virtual void        end_display_matrix_block_sparse(line_printer& p, Integer block_width) const override;
 
         virtual string      get_col_separator() const override;
-        virtual bool        show_row_headers()  const override;
+        virtual bool        show_column_header_line()  const override;
+        virtual bool        show_column_header_row() const override;
+        virtual bool        show_column_header_columns() const override;
+        virtual bool        can_split() const override;
         virtual string      get_first_col_separator() const override;        
         virtual Integer     get_precision() const override;
 
@@ -96,8 +101,10 @@ class disp_stream_global : public disp_stream
         virtual string      get_labels_row_id() const override;        
         virtual string      get_row_name(Integer r) const override;
         virtual std::string get_rows_label() const override;
-        virtual string      get_col_values_separator() const override;
-        virtual bool        show_column_header() const override;
+        virtual void        get_column_width_row(Integer& w_min, Integer& w_max) const override;
+        virtual void        get_column_width(Integer c, Integer& w_min, 
+                                Integer& w_max) const override;
+        virtual string      get_col_values_separator() const override;        
         virtual string      get_col_name(Integer c) const override;
         virtual bool        show_first_row_separator() const override;
         virtual bool        show_final_continuation() const override;
@@ -259,6 +266,11 @@ void disp_stream_global::display_empty_matrix(line_printer& p, Integer r, Intege
     return;
 };
 
+bool disp_stream_global::short_print_empty_matrix() const
+{
+    return true;
+};
+
 bool disp_stream_global::show_final_continuation() const		
 { 
     return false; 
@@ -379,7 +391,11 @@ disp_stream_global::string disp_stream_global::get_labels_row_id() const
 {
     return "L";
 };
-bool disp_stream_global::show_row_headers() const
+bool disp_stream_global::show_column_header_line() const
+{
+    return true;
+};
+bool disp_stream_global::show_column_header_row() const
 {
     return true;
 };
@@ -387,10 +403,15 @@ std::string disp_stream_global::get_first_col_separator() const
 {
     return " | ";
 };
-bool disp_stream_global::show_column_header() const
+bool disp_stream_global::show_column_header_columns() const
 {
     return true;
 };
+bool disp_stream_global::can_split() const
+{
+    return true;
+};
+
 bool disp_stream_global::show_first_row_separator() const
 {
     return true;
@@ -476,6 +497,20 @@ std::string disp_stream_global::get_rows_label() const
 {
     return "";
 };
+
+void disp_stream_global::get_column_width_row(Integer& w_min, Integer& w_max) const
+{
+    w_min   = 0;
+    w_max   = 1000;
+};
+
+void disp_stream_global::get_column_width(Integer c, Integer& w_min, Integer& w_max) const
+{
+    (void)c;
+    w_min   = 0;
+    w_max   = 1000;
+};
+
 disp_stream_ptr matcl::default_disp_stream()
 {
     disp_stream_ptr ds = disp_stream_ptr(new disp_stream_global(global_output_stream()));
@@ -488,31 +523,33 @@ disp_stream_ptr matcl::default_disp_stream()
 static output_stream_ptr get_output_stream(const disp_stream_ptr& other_stream)
 {
     if (!other_stream)
-        throw std::runtime_error("uninitialized output_stream_ptr used");
+        throw error::uninitialized_output_stream();
 
     return other_stream->impl()->get_output_stream();
 };
+
 forwarding_disp_stream::forwarding_disp_stream(const disp_stream_ptr& other_stream, const output_stream_ptr& os)
     :disp_stream(os), m_impl(other_stream)
 {
     if (!other_stream)
-        throw std::runtime_error("uninitialized output_stream_ptr used");
+        throw error::uninitialized_output_stream();
     if (!other_stream)
-        throw std::runtime_error("uninitialized disp_stream_ptr used");
+        throw error::uninitialized_disp_stream();
 };
+
 forwarding_disp_stream::forwarding_disp_stream(const disp_stream_ptr& other_stream, std::ostream& os)
     :disp_stream(os), m_impl(other_stream)
 {
     if (!other_stream)
-        throw std::runtime_error("uninitialized output_stream_ptr used");
+        throw error::uninitialized_output_stream();
     if (!other_stream)
-        throw std::runtime_error("uninitialized disp_stream_ptr used");
+        throw error::uninitialized_disp_stream();
 };
 forwarding_disp_stream::forwarding_disp_stream(const disp_stream_ptr& other_stream)
     :disp_stream(get_output_stream(other_stream)), m_impl(other_stream)
 {
     if (!other_stream)
-        throw std::runtime_error("uninitialized disp_stream_ptr used");
+        throw error::uninitialized_disp_stream();
 }
 
 forwarding_disp_stream::~forwarding_disp_stream()
@@ -558,6 +595,11 @@ void forwarding_disp_stream::general_info_sparse_matrix(line_printer& p, Integer
 void forwarding_disp_stream::display_empty_matrix(line_printer& p, Integer r, Integer c) const
 {
     return m_impl->display_empty_matrix(p, r,c);
+};
+
+bool forwarding_disp_stream::short_print_empty_matrix() const
+{
+    return m_impl->short_print_empty_matrix();
 };
 
 bool forwarding_disp_stream::show_final_continuation() const		
@@ -667,17 +709,27 @@ forwarding_disp_stream::string forwarding_disp_stream::get_labels_row_id() const
 {
     return m_impl->get_labels_row_id();
 };
-bool forwarding_disp_stream::show_row_headers() const
+
+bool forwarding_disp_stream::show_column_header_line() const
 {
-    return m_impl->show_row_headers();
+    return m_impl->show_column_header_line();
 };
+bool forwarding_disp_stream::show_column_header_row() const
+{
+    return m_impl->show_column_header_row();
+};
+bool forwarding_disp_stream::show_column_header_columns() const
+{
+    return m_impl->show_column_header_columns();
+};
+bool forwarding_disp_stream::can_split() const
+{
+    return m_impl->can_split();
+};
+
 std::string forwarding_disp_stream::get_first_col_separator() const
 {
     return m_impl->get_first_col_separator();
-};
-bool forwarding_disp_stream::show_column_header() const
-{
-    return m_impl->show_column_header();
 };
 bool forwarding_disp_stream::show_first_row_separator() const
 {
@@ -763,6 +815,15 @@ std::string forwarding_disp_stream::get_row_name(Integer r) const
 std::string forwarding_disp_stream::get_rows_label() const
 {
     return m_impl->get_rows_label();
+};
+
+void forwarding_disp_stream::get_column_width_row(Integer& w_min, Integer& w_max) const
+{
+    return m_impl->get_column_width_row(w_min, w_max);
+};
+void forwarding_disp_stream::get_column_width(Integer c, Integer& w_min, Integer& w_max) const
+{
+    return m_impl->get_column_width(c, w_min, w_max);
 };
 
 disp_stream_default::disp_stream_default(const output_stream_ptr& os)

@@ -48,6 +48,11 @@ struct object_interface : matcl::details::object_interface_impl
         return v.disp(p, w, at, value_pos);
     };
 
+    void write(const dynamic::object& v, std::ostream& os) const
+    {
+        os << v;
+    }
+
     void read(dynamic::object& v, std::istream& is) const
     {
         is >> v;
@@ -346,11 +351,6 @@ void object::disp(matcl::details::printer& pr, Integer elem_width,
                   matcl::align_type at, Integer value_pos) const
 {
     return details::type_impl::get(m_type)->disp(m_data,pr,elem_width,at,value_pos);
-};
-
-std::string object::to_string(matcl::details::printer& pr) const
-{
-    return details::type_impl::get(m_type)->to_string(m_data,pr);
 };
 
 void object::serialize(oarchive_impl & ar, const unsigned int version) const

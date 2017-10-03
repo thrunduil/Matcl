@@ -113,12 +113,6 @@ bool type_object<T>::is_one(const data_type* obj_data) const
     return object_type_traits<T>::is_one(obj_data->get_value<T>());
 };
 
-template<class T>
-std::string type_object<T>::to_string(const data_type* obj_data, matcl::details::printer& pr) const
-{
-    return object_type_traits<T>::to_string(obj_data->get_value<T>(),pr);
-};
-
 template<class T>  
 void type_object<T>::disp(const data_type* obj_data, matcl::details::printer& pr, Integer elem_width, 
                         align_type at, Integer value_pos) const

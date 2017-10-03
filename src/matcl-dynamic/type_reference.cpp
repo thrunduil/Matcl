@@ -21,6 +21,7 @@
 #include "type_reference.h"
 #include "matcl-dynamic/function.h"
 #include "matcl-dynamic/details/type_object.inl"
+#include "matcl-dynamic/error_handler.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -36,71 +37,90 @@ function reference_type::generate_function(predef_fun fun) const
 }
 reference_type::data_type* reference_type::clone(const data_type*) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 reference_type::data_type* reference_type::copy(const object_data_base*) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 bool reference_type::is_zero(const data_type*) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 bool reference_type::is_one(const data_type*) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
-}
-std::string reference_type::to_string(const data_type*, md::printer&) const
-{
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 void reference_type::disp(const data_type*, md::printer&, Integer, 
                             align_type, Integer) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 reference_type::data_type* reference_type::create() const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 bool reference_type::has_one() const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 reference_type::data_type* reference_type::create_one() const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 
 void reference_type::save(oarchive_impl&, unsigned int, const data_type*) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 reference_type::data_type* reference_type::load(iarchive_impl&, unsigned int) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 
 void reference_type::save(std::ostream&, const data_type*) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 reference_type::data_type* reference_type::load(std::istream&) const
 {
-    throw std::runtime_error("data operation on reference type, this type"
-                             " should not have any instances");
+    error_handler eh;
+    eh.data_operation_on_reference_type();
+    eh.report();
+    throw;
 }
 
 Type get_arg_type_eval<object&>::eval(const object& obj)

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-core/general/memory.h"
+#include "matcl-core/memory/memory.h"
 #include "matcl-core/general/thread.h"
 
 #include <vector>

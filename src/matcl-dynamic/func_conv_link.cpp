@@ -35,6 +35,11 @@ fun_conv_link::fun_conv_link(const std::vector<function>& convs)
     m_arg_ti[0] = convs.front().argument_type(0);
 };
 
+fun_conv_link::~fun_conv_link()
+{
+    delete m_arg_ti;
+};
+
 bool fun_conv_link::make_eval(const object** _args, object& ret) const
 {
     size_t n = m_converters.size();
@@ -43,7 +48,7 @@ bool fun_conv_link::make_eval(const object** _args, object& ret) const
 
     for (size_t i = 0; i < n; ++i)
     {
-        const evaler* ev = m_converters[i].get_evaler();
+        const auto& ev = m_converters[i].get_evaler();
         ev->make_eval(&args, ret);
         args = &ret;
     };
@@ -54,7 +59,8 @@ bool fun_conv_link::make_eval(const object** _args, object& ret) const
 function fun_conv_link::make_converter(int n_deduced, const Type deduced[], 
                     Type ded_ret, const std::vector<function>& conv_vec) const
 {
-    return new details::fun_evaler_conv(this,n_deduced, deduced, ded_ret, conv_vec);
+    evaler* ptr = new details::fun_evaler_conv(this,n_deduced, deduced, ded_ret, conv_vec);
+    return function(ptr);
 };
 
 };};};

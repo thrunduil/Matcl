@@ -19,7 +19,7 @@
  */
 
 #include "matcl-scalar/lib_functions/scalar_gen.h"
-#include "matcl-core/general/alloc.h"
+#include "matcl-core/memory/alloc.h"
 #include "matcl-core/general/thread.h"
 
 #include "sfmt_wrap.h"
@@ -92,19 +92,23 @@ double rand_state::gen_norm()
 MATCL_THREAD_LOCAL 
 matcl::rand_state* global_rs = nullptr;
 
-void rand_state_deleter(rand_state* ptr)
+static void rand_state_deleter(rand_state* ptr)
 {
-    md::default_allocator::aligned_free(ptr, sizeof(rand_state));
+    using allocator = md::default_allocator<true, false>;
+    allocator::aligned_free(ptr, sizeof(rand_state));
 };
-void rand_state_empty_deleter(rand_state* ptr)
+
+static void global_rand_state_deleter(rand_state* ptr)
 {
-    (void)ptr;
+    using allocator = md::default_allocator<true, true>;
+    allocator::aligned_free(ptr, sizeof(rand_state));
 };
 
 static void init_global_rand_state()
 {
-    rand_state* rs  = (rand_state*)md::default_allocator::aligned_malloc(sizeof(rand_state));
-    auto ptr        = matcl::rand_state::rand_state_ptr(rs, &rand_state_deleter);
+    using allocator = md::default_allocator<true, true>;
+    rand_state* rs  = (rand_state*)allocator::aligned_malloc(sizeof(rand_state));
+    auto ptr        = matcl::rand_state::rand_state_ptr(rs, &global_rand_state_deleter);
     ptr->init_genrand(0);
 
     global_rs       = new matcl::rand_state(ptr);
@@ -124,7 +128,9 @@ matcl::rand_state md::get_rand_state()
         init_global_rand_state();
 
     matcl::rand_state ret;
-    rand_state* rs  = (rand_state*)md::default_allocator::aligned_malloc(sizeof(rand_state));
+
+    using allocator = md::default_allocator<true, false>;
+    rand_state* rs  = (rand_state*)allocator::aligned_malloc(sizeof(rand_state));
     ret.m_ptr       = matcl::rand_state::rand_state_ptr(rs, &rand_state_deleter);
     memcpy(rs,global_rs->m_ptr.get(),sizeof(rand_state));
 

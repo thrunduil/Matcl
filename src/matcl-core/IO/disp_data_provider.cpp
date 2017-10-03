@@ -19,7 +19,7 @@
  */
 
 #include "matcl-core/IO/disp_data_provider.h"
-#include "matcl-core/details/printer.h"
+#include "matcl-core/details/IO/printer.h"
 
 namespace matcl
 {
@@ -41,9 +41,18 @@ void disp_data_provider::display_empty_matrix(const disp_stream* orig,line_print
 {
     return orig->display_empty_matrix(p,r,c);
 };
+bool disp_data_provider::short_print_empty_matrix(const disp_stream* orig) const
+{
+    return orig->short_print_empty_matrix();
+};
+
 void disp_data_provider::display_matrix_name(const disp_stream* orig, line_printer& p) const
 {
     return orig->display_matrix_name(p);
+};
+bool disp_data_provider::show_matrix_header(const disp_stream* orig) const
+{
+    return orig->show_matrix_header();
 };
 void disp_data_provider::start_display_matrix_block(const disp_stream* orig, line_printer& p, 
                     Integer block_width, Integer first_col, Integer last_col) const
@@ -55,13 +64,21 @@ void disp_data_provider::end_display_matrix_block(const disp_stream* orig, line_
 {
     return orig->end_display_matrix_block(p,block_width);
 };
-bool disp_data_provider::show_column_header(const disp_stream* orig) const
+bool disp_data_provider::show_column_header_line(const disp_stream* orig) const
 {
-    return orig->show_column_header();
+    return orig->show_column_header_line();
 };
-bool disp_data_provider::show_row_headers(const disp_stream* orig)  const
+bool disp_data_provider::show_column_header_row(const disp_stream* orig) const
 {
-    return orig->show_row_headers();
+    return orig->show_column_header_row();
+};
+bool disp_data_provider::show_column_header_columns(const disp_stream* orig)  const
+{
+    return orig->show_column_header_columns();
+};
+bool disp_data_provider::can_split(const disp_stream* orig)  const
+{
+    return orig->can_split();
 };
 align_type disp_data_provider::get_align_row_header(const disp_stream* orig) const
 {
@@ -79,6 +96,17 @@ std::string disp_data_provider::get_rows_label(const disp_stream* orig) const
 {
     return orig->get_rows_label();
 };
+void disp_data_provider::get_column_width_row(const disp_stream* orig, Integer& w_min, 
+                        Integer& w_max) const
+{
+    return orig->get_column_width_row(w_min, w_max);
+};
+void disp_data_provider::get_column_width(const disp_stream* orig, Integer c, Integer& w_min, 
+                        Integer& w_max) const
+{
+    return orig->get_column_width(c, w_min, w_max);
+};
+
 std::string disp_data_provider::get_col_name(const disp_stream* orig, Integer c) const
 {
     return orig->get_col_name(c);

@@ -69,6 +69,11 @@ fun_evaler_conv::fun_evaler_conv(const evaler* fun, int n_deduced, const Type de
         m_deduced[i + has_ret].reset(object(OType(deduced[i])));
 };
 
+fun_evaler_conv::~fun_evaler_conv()
+{
+    delete[] this->m_arg_ti;
+};
+
 bool fun_evaler_conv::make_eval(const object** _args, object& return_obj) const
 {
     //to avoid using new or malloc

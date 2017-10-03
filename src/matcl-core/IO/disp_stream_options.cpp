@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/details/disp_stream_options.h"
+#include "matcl-core/details/IO/disp_stream_options.h"
 #include "matcl-core/options/options_disp.h"
 
 namespace matcl

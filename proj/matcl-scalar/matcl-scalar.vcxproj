@@ -23,9 +23,12 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\details\enablers.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\io_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\matfunc_helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\object_interface.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalar_gen_details.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalfunc_helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\utils.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\general\fwd_decls.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\IO\formatted_disp.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\IO\scalar_io.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_binary.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_forwarding.h" />
@@ -50,6 +53,7 @@
     <ClInclude Include="..\..\src\matcl-scalar\extern\sfmt\SFMT.h" />
     <ClInclude Include="..\..\src\matcl-scalar\extern\sfmt_wrap.h" />
     <ClInclude Include="..\..\src\matcl-scalar\func\raw\rand.h" />
+    <ClInclude Include="..\..\src\matcl-scalar\IO\formatted_disp_stream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-scalar\extern\dsfmt\dSFMT.c" />
@@ -65,11 +69,14 @@
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\matfunc_pow.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\rand.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\timer.cpp" />
+    <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp.cpp" />
+    <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp_stream.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\scalar_gen.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\utils.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\object.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\object_functions.cpp" />
+    <ClCompile Include="..\..\src\matcl-scalar\objects\object_interface.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\predefined\object_any.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\predefined\object_complex.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\predefined\object_float.cpp" />
@@ -184,7 +191,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -205,7 +212,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -232,7 +239,8 @@
       <OmitFramePointers>false</OmitFramePointers>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
@@ -256,7 +264,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>

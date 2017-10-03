@@ -24,6 +24,7 @@
 #include "matcl-core/details/hash_table/object_table.inl"
 #include "matcl-core/details/hash_table/hash_equal.inl"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -51,7 +52,7 @@ class numeric_conversion
         numeric_conversion(conv_types_data data);
         ~numeric_conversion();
 
-        function        get_function() const    { return m_func; };
+        const function& get_function() const    { return m_func; };
         e_match_type    get_match() const       { return m_match; };
         std::size_t     hash_value() const      { return m_hash; };  
         static size_t   eval_hash(conv_types types);
@@ -141,23 +142,30 @@ class numeric_conversions_table
     private:        
         using string_hash   = matcl::details::obj_hasher<numeric_conversion>;
         using string_equal  = matcl::details::obj_equaler<numeric_conversion>;
+        using allocator     = matcl::details::default_allocator_simple<true, true, char>;
         using conv_table    = matcl::details::object_table<numeric_conversion_ptr,
-                                string_hash,string_equal, matcl::details::default_allocator>;
+                                string_hash,string_equal, allocator>;
 
     private:
         conv_table          m_table;
 
     public:
-        void                    insert(function fun_evl, e_match_type match);
+        numeric_conversions_table();
+
+        void                    insert(const function& fun_evl, e_match_type match);
         numeric_conversion_ptr  get(Type to, Type from) const;
 };
+
+inline numeric_conversions_table::numeric_conversions_table()
+    :m_table(true)
+{};
 
 inline numeric_conversion_ptr numeric_conversions_table::get(Type to, Type from) const
 { 
     return m_table.get_existing(conv_types{to,from}); 
 };
 
-inline void numeric_conversions_table::insert(function fun_evl, e_match_type match)
+inline void numeric_conversions_table::insert(const function& fun_evl, e_match_type match)
 {
     m_table.get(conv_types_data{fun_evl, match}); 
 };

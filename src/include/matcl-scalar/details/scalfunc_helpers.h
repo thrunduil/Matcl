@@ -25,7 +25,6 @@
 
 #include "matcl-scalar/details/utils.h"
 #include "matcl-dynamic/object_type.h"
-#include "matcl-core/general/exception.h"
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-dynamic/matcl_function_names.h"
 #include "matcl-scalar/objects/object_functions.h"

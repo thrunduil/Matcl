@@ -23,7 +23,7 @@
 #include "matcl-core/config.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
-#include "matcl-core/details/matcl_options_details.h"
+#include "matcl-core/details/options/matcl_options_details.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/IO/disp_stream.h"
 #include "matcl-core/options/option_validators.h"
@@ -336,4 +336,4 @@ MATCL_CORE_EXPORT void  help(const option& opts, const disp_stream_ptr& ds = def
 
 #pragma warning( pop )
 
-#include "matcl-core/details/matcl_options_impl.inl"
+#include "matcl-core/details/options/matcl_options_impl.inl"

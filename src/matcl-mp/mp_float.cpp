@@ -23,7 +23,6 @@
 #include "matcl-core/matrix/complex_type.h"
 #include "matcl-core/IO/archive.h"
 #include "utils/utils.h"
-#include "allocator.h"
 
 namespace matcl
 {
@@ -68,7 +67,7 @@ mp_float::mp_float()
 {
     precision prec  = details::correct_prec(precision(0));
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_zero(mmd::impl_value(*this), 1);
 
     update_debug();
@@ -78,7 +77,7 @@ mp_float::mp_float(precision prec)
 {
     prec            = details::correct_prec(prec);    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_zero(mmd::impl_value(*this), 1);
 
     update_debug();
@@ -88,7 +87,7 @@ mp_float::mp_float(Integer v, precision prec)
 {
     prec            = details::correct_prec(prec);    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_si(mmd::impl_value(*this), v, MPFR_RNDN);
 
     update_debug();
@@ -97,7 +96,7 @@ mp_float::mp_float(Real v, precision prec)
 {
     prec            = details::correct_prec(prec);    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_d(mmd::impl_value(*this), v, MPFR_RNDN);
 
     update_debug();
@@ -106,7 +105,7 @@ mp_float::mp_float(long double v, precision prec)
 {
     prec            = details::correct_prec(prec);    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_ld(mmd::impl_value(*this), v, MPFR_RNDN);
 
     update_debug();
@@ -116,7 +115,7 @@ mp_float::mp_float(Float v, precision prec)
 {
     prec            = details::correct_prec(prec);
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_flt(mmd::impl_value(*this), v, MPFR_RNDN);
 
     update_debug();
@@ -128,7 +127,7 @@ mp_float::mp_float(const mp_int& val, precision prec)
     const impl_int& v   = *mmd::get_ptr<mp_int>::eval(val.m_data);
     prec                = details::correct_prec(prec);
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_z(mmd::impl_value(*this), v.backend().data(), MPFR_RNDN);
 
     update_debug();
@@ -139,7 +138,7 @@ mp_float::mp_float(const mp_rational& val, precision prec)
     const impl_rat& v   = *mmd::get_ptr<mp_rational>::eval(val.m_data);
     prec                = details::correct_prec(prec);
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set_q(mmd::impl_value(*this), v.backend().data(), MPFR_RNDN);
 
     update_debug();
@@ -149,7 +148,7 @@ mp_float::mp_float(const mp_float& other)
 {
     precision prec          = details::correct_prec(other.get_precision());    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set(mmd::impl_value(*this), mmd::impl_value(other), MPFR_RNDN);
 
     update_debug();
@@ -171,7 +170,7 @@ mp_float::mp_float(const mp_float& other, precision prec)
 {
     prec                    = details::correct_prec(prec);    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
     mpfr_set(mmd::impl_value(*this), mmd::impl_value(other), MPFR_RNDN);
 
     update_debug();
@@ -192,7 +191,7 @@ mp_float::mp_float(mp_float&& other, precision prec)
     }
     else
     {
-        mmd::mp_float_alloc::init(*this, prec);
+        mpfr_init2(mmd::impl_value(*this), (long)prec);
         mpfr_set(val, oval, MPFR_RNDN);
     };
 
@@ -205,7 +204,7 @@ mp_float::mp_float(const std::string& s, precision prec, int base)
     impl_type& val  = *mmd::get_ptr<mp_float>::eval(this->m_data);
     prec            = details::correct_prec(prec);    
 
-    mmd::mp_float_alloc::init(*this, prec);
+    mpfr_init2(mmd::impl_value(*this), (long)prec);
 
     if (mpfr_set_str(val, s.c_str(), base, MPFR_RNDN) != 0)
     {
@@ -222,7 +221,7 @@ mp_float::~mp_float()
     impl_type& val  = *mmd::get_ptr<mp_float>::eval(this->m_data);
 
     if(val->_mpfr_d != 0)
-        mmd::mp_float_alloc::free(*this, this->get_precision());
+        mpfr_clear(mmd::impl_value(*this));
 };
 
 mp_float& mp_float::operator=(Integer other) &
@@ -280,7 +279,7 @@ mp_float& mp_float::operator=(const mp_float& other) &
 		if(prec_this != prec_other)
         {
 			this->~mp_float();
-            mmd::mp_float_alloc::init(*this, prec_other);
+            mpfr_init2(mmd::impl_value(*this), (long)prec_other);
 		}
 
         mpfr_set(this_val, val, MPFR_RNDN);

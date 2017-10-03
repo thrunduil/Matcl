@@ -18,9 +18,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/details/printer.h"
+#include "matcl-core/details/IO/printer.h"
 #include "matcl-core/IO/disp_stream.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 #include "matcl-core/details/integer.h"
 #include "matcl-core/details/object_interface.h"
 
@@ -81,31 +81,21 @@ std::string printer::disp_string(Integer w, const std::string& s, align_type at)
     {
         std::string s2 = s;
         s2.resize(w);
-        if (w >= 2)
-        {
-            s2[w-1] = '.';
-            s2[w-2] = '.';
-        }
-        else
-        {
-            s2[0]	= '.';
-        };
+
+        s2[w-1] = '.';
 
         os << s2;
         return os.str();
     };	
 
     if (fixed == true)
-    {
         disp_string_align(os, s, w, at);
-    }
     else
-    {
         os << s;
-    }
 
     return os.str();
 };
+
 void printer::disp_string_align(std::ostream& os, const std::string& s, Integer w, align_type at)
 {
     if ((Integer)s.size() == w)
@@ -158,9 +148,7 @@ void printer::disp_elem(Integer w, Integer v, align_type at, Integer vp)
 Integer printer::get_precision(Integer elem_width, Integer off, Integer max_w)
 {
     if (elem_width == 0)
-    {
         return max_w;
-    };
 
     elem_width	= (elem_width > 0)? elem_width : -elem_width;
     Integer p	= std::min(std::max(elem_width-off,1),max_w);
@@ -189,133 +177,172 @@ std::string printer::disp_real(Integer w, Real v, bool disp_zero, align_type at)
     if ( v >= 1e100 )
     {
         //[1e100, inf]
-        Integer p = get_precision(w,7,2+dprec);
+        // req symbols: 1.()e+100 = 7
+        Integer p = get_precision(w, 7, 2 + dprec);
         str << std::scientific << std::setprecision(p) << v;
-    }
+    }    
     else if ( v <= -1e100 )
     {
         //[-inf, -1e100]
-        Integer p = get_precision(w,8,2+dprec);
+        // req symbols: -1.()e+100 = 8
+        Integer p = get_precision(w, 8, 2 + dprec);
         str << std::scientific << std::setprecision(p) << v;
-    }
+    }    
     else if ( v >= 1e4 )
     {
         //[1e4, 1e100)
-        Integer p = get_precision(w,7,2+dprec);
+        // req symbols: 1.()e+10 = 6
+        Integer p = get_precision(w, 6, 2 + dprec);
         str << std::scientific << std::setprecision(p) << v;
-    }
+    }    
     else if ( v <= -1e4)
     {
-        //(-1e100, -1e4)
-        Integer p = get_precision(w,8,2+dprec);
+        //(-1e100, -1e4]
+        // req symbols: -1.()e+10 = 7
+        Integer p = get_precision(w, 7, 2 + dprec);
         str << std::scientific << std::setprecision(p) << v;
-    }
+    }    
     else if ( v >= 1e3 )
     {
         //[1e3, 1e4)
-        Integer p = get_precision(w,5,std::max(0,-1+dprec));
+        // req symbols: 9999. = 5
+        Integer p = get_precision(w, 5, std::max(0,-1+dprec));
         str << std::fixed << std::setprecision(p) << v;
     }
     else if ( v <= -1e3)
     {
         //(-1e4, -1e3]
-        Integer p = get_precision(w,6,std::max(0,-1+dprec));
+        // req symbols: -9999. = 5
+        Integer p = get_precision(w, 6, std::max(0,-1+dprec));
         str << std::fixed << std::setprecision(p) << v;
-    }
+    }    
     else if ( v >= 1e2 )
     {
         //[1e2, 1e3)
-        Integer p = get_precision(w,4,0+dprec);
+        // req symbols: 999. = 4
+        Integer p = get_precision(w, 4, 0 + dprec);
         str << std::fixed << std::setprecision(p) << v;
     }
     else if ( v <= -1e2)
     {
         //(-1e3, -1e2]
-        Integer p = get_precision(w,5,0+dprec);
+        // req symbols: -999. = 5
+        Integer p = get_precision(w, 5, 0 + dprec);
         str << std::fixed << std::setprecision(p) << v;
-    }
+    }    
     else if ( v >= 1e1 )
     {
         //[10, 100)
-        Integer p = get_precision(w,3,1+dprec);
+        // req symbols: 99. = 3
+        Integer p = get_precision(w, 3, 1 + dprec);
         str << std::fixed << std::setprecision(p) << v;
     }
     else if ( v <= -1e1)
     {
         //(-100, -10]
-        Integer p = get_precision(w,4,1+dprec);
+        // req symbols: -99. = 4
+        Integer p = get_precision(w, 4, 1 + dprec);
         str << std::fixed << std::setprecision(p) << v;
     }
-    else if ( v > 0  && v <= 1e-3)
+    else if ( v >= 1.0 )
     {
-        //(0, 0.001]
-        Integer p = get_precision(w,7,2+dprec);
+        //[1, 10)
+        // req symbols: 9. = 2
+        Integer p = get_precision(w, 2, 2 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v <= -1.0 )
+    {
+        //(-10, -1]
+        // req symbols: -9. = 3
+        Integer p = get_precision(w, 3, 2 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v >= 0.1)
+    {
+        //[0.1, 1)
+        // req symbols: 0._ = 2
+        Integer p = get_precision(w, 2, 3 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v <= -0.1)
+    {
+        //(-1, -0.1]
+        // req symbols: -0._ = 3
+        Integer p = get_precision(w, 3, 3 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v >= 1e-2)
+    {
+        //[0.01, 0.1)
+        // req symbols: 0._ = 2
+        Integer p = get_precision(w, 2, 4 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v <= -1e-2)
+    {
+        //(-0.1, -0.01]
+        // req symbols: -0._ = 3
+        Integer p = get_precision(w, 3, 4 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v >= 1e-3)
+    {
+        //[0.001, 0.01)
+        // req symbols: 0._ = 2
+        Integer p = get_precision(w, 2, 5 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if ( v <= -1e-3)
+    {
+        //(-0.01, -0.001]
+        // req symbols: -0._ = 3
+        Integer p = get_precision(w, 3, 5 + dprec);
+        str << std::fixed << std::setprecision(p) << v;
+    }
+    else if (v >= 1e-99)
+    {
+        //[1e-99, 1e-3)
+        // req symbols: 1.()e+10 = 6
+        Integer p = get_precision(w, 6, 2 + dprec);
         str << std::scientific << std::setprecision(p) << v;
-    }
-    else if ( v < 0  && v >= -1e-3)
+    }    
+    else if ( v <= -1e-99 )
     {
-        //[-0.001, 0)
-        Integer p = get_precision(w,8,2+dprec);
+        //(-1e-3, -1e-99)
+        // req symbols: -1.()e+10 = 7
+        Integer p = get_precision(w, 7, 2 + dprec);
         str << std::scientific << std::setprecision(p) << v;
-    }
-    else if ( v > 0   && v <= 1e-2)
+    }    
+    else if (v > 0)
     {
-        //(0.001, 0.01]
-        Integer p = get_precision(w,2,5+dprec);
-        str << std::fixed << std::setprecision(p) << v;
-    }
-    else if ( v < 0 && v >= -1e-2)
-    {
-        //[-0.01, -0.001)
-        Integer p = get_precision(w,3,5+dprec);
-        str << std::fixed << std::setprecision(p) << v;
-    }
-    else if ( v > 0   && v <= 1e-1)
-    {
-        //(0.01, 0.1]
-        Integer p = get_precision(w,2,4+dprec);
-        str << std::fixed << std::setprecision(p) << v;
-    }
-    else if ( v < 0 && v >= -1e-1)
-    {
-        //[-0.1, -0.01)
-        Integer p = get_precision(w,3,4+dprec);
-        str << std::fixed << std::setprecision(p) << v;
-    }
-    else if ( v > 0 && v <= 1)
-    {
-        //(0.1, 1]
-        Integer p = get_precision(w,2,3+dprec);
-        str << std::fixed << std::setprecision(p) << v;
-    }
-    else if ( v < 0 && v >= -1)
-    {
-        //[-1, -0.1)
-        Integer p = get_precision(w,3,3+dprec);
-        str << std::fixed << std::setprecision(p) << v;
-    }
-    else if ( v > 0 )
-    {
-        //(1, 10]
-        Integer p = get_precision(w,2,2+dprec);
-        str << std::fixed << std::setprecision(p) << v;
+        //(1e-999, 1e-100]
+        // req symbols: 1.()e+100 = 7
+        Integer p = get_precision(w, 7, 2 + dprec);
+        str << std::scientific << std::setprecision(p) << v;
     }
     else if ( v < 0 )
     {
-        //[-10, -1)
-        Integer p = get_precision(w,3,2+dprec);
-        str << std::fixed << std::setprecision(p) << v;
+        //[-1e-100, -1e-999)
+        // req symbols: -1.()e+100 = 8
+        Integer p = get_precision(w, 8, 2 + dprec);
+        str << std::scientific << std::setprecision(p) << v;
     }
     else
     {
         if (disp_zero == true)
-            str << 0;
+        {
+            if (std::signbit(v) == false)
+                str << 0;
+            else
+                str << -0;
+        }
     };
 
     //maximum size = 10 + dprec
     return str.str();
 };
-Integer printer::get_min_width(Real v, Integer precition)
+Integer printer::get_min_width(Real v, Integer precision)
 {
     if (std::isnan(v))
         return 3;
@@ -326,23 +353,26 @@ Integer printer::get_min_width(Real v, Integer precition)
         else        return 4;
     };
 
-    //we calculate std::precision required to print the first digit
-    //and precition following; let precition mean total number of 
-    //digits
-    precition           = precition - 1;
+    // we calculate std::precision required to print the first digit
+    // and 'precision' following; let precision mean total number of 
+    // digits
+    precision           = precision - 1;
 
     Integer min_prec    = 2;
-    Integer dprec       = std::max(0,precition - min_prec);
+    Integer dprec       = std::max(0,precision - min_prec);
 
     std::ostringstream str;
+    //scientific
     if ( v >= 1e100 )
         return 7 + 2 + dprec;
     else if ( v <= -1e100 )
         return 8 + 2 + dprec;
     else if ( v >= 1e4 )
-        return 7 + 2+dprec;
+        return 6 + 2+dprec;
     else if ( v <= -1e4)
-        return 8 + 2 + dprec;
+        return 7 + 2 + dprec;
+
+    // fixed > 1
     else if ( v >= 1e3 )
         return 5 + std::max(0,-1+dprec);
     else if ( v <= -1e3)
@@ -355,28 +385,40 @@ Integer printer::get_min_width(Real v, Integer precition)
         return 3 + 1+dprec;
     else if ( v <= -1e1)
         return 4+1+dprec;
-    else if ( v > 0  && v <= 1e-3)
-        return 7 + 2 + dprec;
-    else if ( v < 0  && v >= -1e-3)
-        return 8 + 2 + dprec;
-    else if ( v > 0   && v <= 1e-2)
-        return 2 + 5+dprec;
-    else if ( v < 0 && v >= -1e-2)
-        return 3 + 5+dprec;
-    else if ( v > 0   && v <= 1e-1)
-        return 2 + 4+dprec;
-    else if ( v < 0 && v >= -1e-1)
-        return 3 + 4+dprec;
-    else if ( v > 0 && v <= 1)
-        return 2 + 3 + dprec;
-    else if ( v < 0 && v >= -1)
-        return 3 + 3 + dprec;
-    else if ( v > 0 )
+    else if ( v >= 1.0 )
         return 2 + 2 + dprec;
-    else if ( v < 0 )
+    else if ( v <= -1.0 )
         return 3 + 2 + dprec;
-    else
+
+    // fixed < 1
+    else if ( v >= 0.1)
+        return 2 + 3 + dprec;
+    else if ( v <= -0.1)
+        return 3 + 3 + dprec;
+    else if ( v >= 1e-2)
+        return 2 + 4 + dprec;
+    else if ( v <= -1e-2)
+        return 3 + 4 + dprec;
+    else if ( v >= 1e-3)
+        return 2 + 5 + dprec;
+    else if ( v <= -1e-3)
+        return 3 + 5 + dprec;
+
+    // scientific
+    else if ( v >= 1e-99 )
+        return 6 + 2 + dprec;
+    else if ( v <= -1e-99 )
+        return 7 + 2 + dprec;
+    else if ( v > 0 )
+        return 7 + 2 + dprec;
+    else if ( v < 0 )
+        return 8 + 2 + dprec;
+
+    // zero
+    if (std::signbit(v) == false)
         return 1;
+    else
+        return 2;  
 };
 
 void printer::disp_elem(Integer w, Real v, align_type at, Integer vp)

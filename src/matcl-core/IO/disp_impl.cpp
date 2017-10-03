@@ -18,8 +18,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/details/disp_impl.h"
-#include "matcl-core/details/disp_stream_impl.h"
+#include "matcl-core/details/IO/disp_impl.h"
+#include "matcl-core/details/IO/disp_stream_impl.h"
 #include "matcl-core/matrix/matrix_traits.h"
 #include "matcl-core/IO/disp_data_provider.h"
 
@@ -135,6 +135,14 @@ void disp_stream_data_provider::display_empty_matrix(line_printer& p, Integer r,
 {
     return m_dp.display_empty_matrix(m_owner,p,r,c);
 };
+bool disp_stream_data_provider::short_print_empty_matrix() const
+{
+    return m_dp.short_print_empty_matrix(m_owner);
+};
+bool disp_stream_data_provider::show_matrix_header() const
+{
+    return m_dp.show_matrix_header(m_owner);
+};
 
 void disp_stream_data_provider::display_matrix_name(line_printer& p) const
 {
@@ -153,15 +161,24 @@ void disp_stream_data_provider::end_display_matrix_block(line_printer& p,
     return m_dp.end_display_matrix_block(m_owner,p, block_width);
 };
 
-bool disp_stream_data_provider::show_column_header() const
+bool disp_stream_data_provider::show_column_header_line() const
 {
-    return m_dp.show_column_header(m_owner);
+    return m_dp.show_column_header_line(m_owner);
 }
 
-bool disp_stream_data_provider::show_row_headers() const
+bool disp_stream_data_provider::show_column_header_row() const
 {
-    return m_dp.show_row_headers(m_owner);
+    return m_dp.show_column_header_row(m_owner);
 }
+
+bool disp_stream_data_provider::show_column_header_columns() const
+{
+    return m_dp.show_column_header_columns(m_owner);
+}
+bool disp_stream_data_provider::can_split() const
+{
+    return m_dp.can_split(m_owner);
+};
 
 align_type disp_stream_data_provider::get_align_row_header() const
 {
@@ -186,6 +203,16 @@ std::string disp_stream_data_provider::get_col_name(Integer c) const
 std::string disp_stream_data_provider::get_rows_label() const
 {
     return m_dp.get_rows_label(m_owner);
+};
+
+void disp_stream_data_provider::get_column_width_row(Integer& w_min, Integer& w_max) const
+{
+    return m_dp.get_column_width_row(m_owner, w_min, w_max);
+};
+
+void disp_stream_data_provider::get_column_width(Integer c, Integer& w_min, Integer& w_max) const
+{
+    return m_dp.get_column_width(m_owner, c, w_min, w_max);
 };
 
 //--------------------------------------------------------------------------

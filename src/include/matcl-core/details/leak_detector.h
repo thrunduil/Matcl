@@ -1,5 +1,5 @@
-/*
- *  This file is a part of Matrix Computation Library (MATCL)
+/* 
+ *  This file is a part of sym_arrow library.
  *
  *  Copyright (c) Pawe³ Kowal 2017
  *
@@ -20,24 +20,24 @@
 
 #pragma once
 
-#include "matcl-core/matrix/scalar_types.h"
-#include "matcl-core/matrix/complex_type.h"
+#include "matcl-core/config.h"
+#include <functional>
+#include <vector>
+#include <memory>
 
 namespace matcl { namespace details
 {
 
-// alligned allocation is not strictly necessary in matcl but may
-// increase performance (aligning to cache line is recommended in MKL)
-struct MATCL_CORE_EXPORT default_allocator
+class MATCL_CORE_EXPORT leak_detector
 {
-    static void*    malloc(size_t n);
-    static void*    aligned_malloc(size_t n);
+    public:
+        static void report_malloc(void* ptr);
+        static void report_free(void* ptr);
 
-    static void*    realloc(void* ptr, size_t old_size, size_t n);
-    static void*    aligned_realloc(void* ptr, size_t old_size, size_t n);
+        static void break_at_codes(const std::vector<size_t>& codes,
+                        const std::function<void ()>& handler);
 
-    static void     free(void* ptr, size_t bytes);
-    static void     aligned_free(void* ptr, size_t bytes);
+        static void report_leaks(std::ostream& os);
 };
 
 };};

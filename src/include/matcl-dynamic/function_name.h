@@ -67,7 +67,7 @@ class MATCL_DYN_EXPORT identifier
 struct function_validator
 {
     public:
-        using validator = bool (*)(function);
+        using validator = bool (*)(const function&);
         using printer   = void (*)(std::ostream& os);
 
     private:
@@ -112,7 +112,7 @@ class MATCL_DYN_EXPORT function_name : public identifier
 
         // check if function f satisfies requirements defined by the
         // validator
-        bool            validate_function(function f) const;
+        bool            validate_function(const function& f) const;
 
         // display function requirements
         void            disp_requirements(std::ostream& os) const;                

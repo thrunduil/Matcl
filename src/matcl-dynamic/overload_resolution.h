@@ -135,7 +135,7 @@ class overload_set
         overload_set(Integer over_num);
         ~overload_set();
 
-        void				push_back(function fun_evl, make_return_fptr ret);
+        void				push_back(const function& fun_evl, make_return_fptr ret);
         Integer             size() const;
         void                clear();
         fun_ret             get_function(Integer pos) const;
@@ -151,13 +151,13 @@ struct func_templ
     type_vec                m_deduced;
     Type                    m_return;
 
-    func_templ(function f, Type ret, func_templ_ptr templates, 
+    func_templ(const function& f, Type ret, func_templ_ptr templates, 
                const std::vector<Type>& deduced)
         :m_function(f), m_deduced(deduced), m_templates(templates), m_return(ret)
     {};
 
     Type                    get_return() const          { return m_return; };
-    function                function() const            { return m_function; };
+    const function&         function() const            { return m_function; };
     const type_vec&         deduced() const             { return m_deduced; };
     func_templ_ptr          get_templates() const       { return m_templates; }
     bool                    has_deduced_return() const  { return m_return != nullptr; }
@@ -180,8 +180,8 @@ class candidate_set
         candidate_set(Integer over_num);
         ~candidate_set();
 
-        void				push_back(function fun_evl, Type ret, func_templ_ptr templates, 
-                                const templ_vec& deduced);
+        void				push_back(const function& fun_evl, Type ret, 
+                                func_templ_ptr templates, const templ_vec& deduced);
         void				push_back(const func_templ& ft);
         Integer             size() const;
         void                clear();
@@ -239,14 +239,14 @@ class overload_resolution
 
     private:
         static e_match_type mach_types_list(const function_table* ft, int n_ded, 
-                                bool ded_ret, int n_args, const Type t[], function f, 
+                                bool ded_ret, int n_args, const Type t[], const function& f, 
                                 conversion_sequence& match);
 
         static spec_type    is_more_specialized(const function_table* ft, 
                                 const func_templ& func_1, const func_templ& func_2);
         static spec_type    is_more_specialized(const function_table* ft, Type type_1,
                                 Type type_2);
-        Type                eval_return(function f, make_return_fptr ret, 
+        Type                eval_return(const function& f, make_return_fptr ret, 
                                 const function_name_templ* ft, 
                                 const type_vec& deduced, bool& error) const;
         bool                check_deduce_return(const overload_set::fun_ret& evaler) const;

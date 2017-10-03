@@ -22,7 +22,8 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/matrix/scalar_types.h"
-#include "matcl-core/general/exception_message.h"
+#include "matcl-core/error/exception.h"
+#include "matcl-core/error/exception_message.h"
 #include "matcl-core/details/exception_details.h"
 
 #include <exception>
@@ -35,63 +36,8 @@
 namespace matcl { namespace error
 {
 
-// base class for exceptions throws in matcl
-class MATCL_CORE_EXPORT matcl_exception : public std::exception
-{
-    protected:
-        mutable std::string m_message;
-
-    public:
-        virtual const char* what() const throw();
-
-    private:
-        virtual const char* what(exception_message& em) const = 0;
-};
-
-// enable or disable all warnings in current scope, restore previous settings
-// after exiting from current scope; if global is true, then warnings are
-// enabled/disabled in all threads, otherwise only in current thread; global
-// setting has precedence over local setting, i.e. if warnings are disabled 
-// globally but enabled locally, then no warnings are displayed;
-MATCL_CORE_EXPORT details::enable_warnings_raii
-                        enable_warnings(bool enable, bool global = false);
-
-// check if warnings are enabled
-MATCL_CORE_EXPORT bool check_warnings_enabled();
-
 // classes representing exceptions thrown in matcl_basic
 // these classes belongs to private interface and should not be used directly
-
-// asserts fauilures are converted to exceptions not derived from std::exception
-// if this exception is caught; then program should not continue further
-class MATCL_CORE_EXPORT assert_exception
-{
-    private:
-        std::string file;
-        int         line;
-        std::string message;
-
-    public:
-        assert_exception(const std::string& file_, int line_, const std::string& message_);
-        virtual std::string what() const throw();
-};
-
-// helper function
-inline void _assert(const char* txt, const char* description, const char* file, int line)
-{
-    std::string message = "matcl_assert failed: ";
-    message				+= txt;
-    if (description)
-    {
-        message			+= ": ";
-        message			+= description;
-    };
-    throw assert_exception(file,line,message);
-}
-
-// matcl assert
-#define matcl_assert(cond,description)  \
-    ((cond) ? (void)0 : ::matcl::error::_assert(#cond,description, __FILE__, __LINE__))
 
 // this function is called when memory corruption is detected
 // error message is printed and std::terminate() is called
@@ -680,13 +626,13 @@ class MATCL_CORE_EXPORT invalid_single_index : public matcl_exception
 class MATCL_CORE_EXPORT alloc : public matcl_exception
 {
     public:
-        Integer m_size;
+        size_t m_size;
 
     public:
-        alloc(Integer size)	: m_size(size) {};
+        alloc(size_t size)  : m_size(size) {};
 
         //unknown memory error or unknown size
-        alloc()				: m_size(0) {};
+        alloc()             : m_size(0) {};
 
         virtual const char* what(exception_message& em) const override;
 };
@@ -854,6 +800,113 @@ class MATCL_CORE_EXPORT square_matrix_required: public matcl_exception
         square_matrix_required(Integer r, Integer c)
             :m_rows(r), m_cols(c)
         {};
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT option_validator_error : public matcl_exception
+{
+    private:
+        std::string m_reason;
+
+    public:
+        option_validator_error(const std::string& reason)
+            :m_reason(reason)
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT invalid_option_type  : public matcl_exception
+{
+    private:
+        std::string m_opt_name;
+        std::string m_req_type;
+        std::string m_opt_type;
+
+    public:
+        invalid_option_type(const std::string& opt_name, const std::string& req_type,
+                        const std::string& opt_type);
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT optional_value_not_set : public matcl_exception
+{
+    public:
+        optional_value_not_set(){};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT option_unregistered : public matcl_exception
+{
+    private:
+        std::string m_opt_name;
+
+    public:
+        option_unregistered(const std::string& opt_name);
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT uninitialized_disp_stream : public matcl_exception
+{
+    public:
+        uninitialized_disp_stream(){};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT uninitialized_output_stream : public matcl_exception
+{
+    public:
+        uninitialized_output_stream(){};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT formatted_disp_invalid_column : public matcl_exception
+{
+    private:
+        Integer     m_col;
+        Integer     m_num_cols;
+
+    public:
+        formatted_disp_invalid_column(Integer col, Integer num_cols)
+            :m_col(col), m_num_cols(num_cols)
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT formatted_disp_invalid_row_size : public matcl_exception
+{
+    private:
+        Integer     m_size;
+        Integer     m_req_size;
+
+    public:
+        formatted_disp_invalid_row_size(Integer size, Integer req_size)
+            :m_size(size), m_req_size(req_size)
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT value_not_in_cache : public matcl_exception
+{
+    private:
+        std::string m_name;
+        Integer     m_prec;
+        Integer     m_cache_prec;
+
+    public:
+        // set cache_prec = -1, if value not in cache
+        value_not_in_cache(const std::string& name, Integer prec, 
+                            Integer cache_prec)
+            :m_name(name), m_prec(prec), m_cache_prec(cache_prec)
+        {};
+
         virtual const char* what(exception_message& em) const override;
 };
 

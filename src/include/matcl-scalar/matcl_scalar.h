@@ -31,5 +31,6 @@
 #include "matcl-scalar/lib_functions/func_matrix.h"
 #include "matcl-scalar/lib_functions/func_forwarding.h"
 #include "matcl-scalar/IO/scalar_io.h"
+#include "matcl-scalar/IO/formatted_disp.h"
 #include "matcl-scalar/objects/object_functions.h"
 #include "matcl-scalar/objects/typed_object_functions.h"

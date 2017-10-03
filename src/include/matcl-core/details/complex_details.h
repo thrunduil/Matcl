@@ -96,7 +96,7 @@ struct convert_complex<complex<T>, complex<T>>
     using type_2 = complex<T>;
 
     force_inline
-    static type_1 eval(const type_2& arg)
+    static const type_1& eval(const type_2& arg)
     {
         return arg;
     };

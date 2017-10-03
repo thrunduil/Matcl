@@ -22,7 +22,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
-#include "matcl-core/details/printer.h"
+#include "matcl-core/details/IO/printer.h"
 
 #include <string>
 #include <iosfwd>
@@ -100,6 +100,7 @@ class MATCL_CORE_EXPORT disp_stream_impl
         void                do_displaying_sparse_matrix(const disp_stream* user, Integer r, Integer c,
                                     Integer nz, matcl::value_code vt, const std::string& struct_name);
         void                do_display_empty_matrix(const disp_stream* user, Integer r, Integer c);
+        bool                do_short_print_empty_matrix(const disp_stream* user);
         void                do_start_display_matrix_block(const disp_stream* user, Integer matrix_width,
                                     Integer col_start, Integer col_end);
         void                do_end_display_matrix_block(const disp_stream* user, Integer matrix_width);
@@ -119,7 +120,10 @@ class MATCL_CORE_EXPORT disp_stream_impl
         void                do_disp_first_col_separator(const disp_stream* user, Integer w);
         void                do_disp_continuation_value(const disp_stream* user, Integer w);
         void                do_disp_col_separator(const disp_stream* user, Integer w, Integer c);
-        Integer             do_get_row_header_width(const disp_stream* user) const;
+        void                do_get_row_header_width(const disp_stream* user, Integer& w_min, 
+                                Integer& w_max) const;
+        void                do_get_col_header_width(const disp_stream* user, Integer c, Integer& w_min, 
+                                Integer& w_max) const;
         void                do_disp_col_header_row(const disp_stream* user, Integer w);
         void                do_disp_col_header_1sep(const disp_stream* user, Integer w);
         void                do_disp_col_header_col_separator(const disp_stream* user, Integer c, Integer w);                
@@ -136,7 +140,8 @@ class MATCL_CORE_EXPORT disp_stream_impl
 
         //measurement
         Integer             do_get_col_separator_width(const disp_stream* user)  const;
-        Integer             do_get_row_headers_width(const disp_stream* user, Integer max_rows) const;
+        void                do_get_row_headers_width(const disp_stream* user, Integer rows,
+                                Integer& w_min, Integer& w_max) const;
         Integer             do_get_row_header_width_sparse(const disp_stream* user, Integer row) const;
         Integer             do_get_row_header_width_dense(const disp_stream* user, Integer row) const;
         Integer             do_get_first_col_separator_width(const disp_stream* user) const;        
@@ -180,7 +185,9 @@ class MATCL_CORE_EXPORT disp_stream_impl
         Integer             do_get_number_subvalues(const disp_stream* user) const;
         Integer             do_get_max_value_width(const disp_stream* user, Integer value_pos) const;
         bool                do_show_values_labels(const disp_stream* user) const;
-        bool                do_show_row_headers(const disp_stream* user) const;
+        bool                do_show_column_header_line(const disp_stream* user) const;
+        bool                do_show_column_header_row(const disp_stream* user) const;
+
         Integer             do_get_subvalue_label_width(const disp_stream* user, Integer value_pos) const;
         Integer             do_get_values_labels_width(const disp_stream* user, 
                                     const std::vector<Integer>& min_value_width) const;        
@@ -192,7 +199,8 @@ class MATCL_CORE_EXPORT disp_stream_impl
 
         //config printers
         void                do_set_column_min_width(const disp_stream* user, Integer c, 
-                                    const std::vector<Integer>& width_vec, Integer max_allowed_width);        
+                                    const std::vector<Integer>& width_vec, Integer min_allowed,
+                                    Integer max_allowed);        
         Integer             do_get_column_width(const disp_stream* user, Integer c) const;
         bufor_info&         get_stream()            { return m_buf; };
         const std::vector<Integer>& 

@@ -24,6 +24,7 @@
 #include "matcl-dynamic/details/fwd_decls.h"
 #include "matcl-dynamic/type.h"
 #include "matcl-dynamic/object.h"
+#include "matcl-core/general/thread.h"
 
 #include <vector>
 
@@ -34,13 +35,22 @@ class evaler
 {
     private:
         using func_vec  = std::vector<function>;
+        using asize_t   = matcl::atomic<size_t>;
 
     public:
-        Type*       m_arg_ti;
-        Type        m_ret_ti;
-        int         m_args_size;
+        mutable asize_t m_refcount;
+        Type*           m_arg_ti;
+        Type            m_ret_ti;
+        int             m_args_size;        
 
     public:
+        evaler();
+
+        virtual ~evaler() {};
+
+        void            increase_refcount() const;
+        bool            decrease_refcount() const;
+
         virtual function    make_converter(int n_deduced, const Type deduced[],
                                 Type deduced_ret, const func_vec& arg_conv) const = 0;
 
@@ -48,6 +58,49 @@ class evaler
         // of existing argument (only fun_conv_null converter returns true) 
         virtual bool        make_eval(const object** args, object& ret) const = 0;
 };
+
+struct evaler_traits
+{
+    private:
+        using value_type    = evaler;
+
+    public:
+        static void     check_free(const value_type* p);
+        static void     copy(const value_type* p);
+        static void     assign(const value_type* to, const value_type* from);
+};
+
+inline void evaler_traits::check_free(const value_type* p)
+{
+    if (p && p->decrease_refcount())
+        delete p;
+};
+
+inline void evaler_traits::copy(const value_type* p)
+{
+    if (p) 
+        p->increase_refcount();
+}
+
+inline void evaler_traits::assign(const value_type* to, const value_type* from)
+{
+    copy(from);
+    check_free(to);
+};
+
+inline evaler::evaler()
+    :m_refcount(0)
+{};
+
+inline void evaler::increase_refcount() const
+{
+    ++m_refcount;
+};
+
+inline bool evaler::decrease_refcount() const
+{
+    return ((--m_refcount ) == 0);
+}
 
 template<class T>
 struct get_object_type

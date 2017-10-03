@@ -18,9 +18,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-core/general/exception_message.h"
+#include "matcl-core/error/exception_message.h"
 #include "matcl-core/matrix/matrix_traits.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception.h"
 #include "matcl-core/IO/output_stream.h"
 
 #include <sstream>
@@ -88,7 +88,7 @@ std::string default_exception_message::matrix_type_string(matcl::mat_code mt)
     return val_name + " " + struct_name; 
 };
 
-const char* default_exception_message::alloc(Integer size)
+const char* default_exception_message::alloc(size_t size)
 {
     std::ostringstream buf;
 
@@ -735,10 +735,108 @@ void default_exception_message::warning_precision_lost_int_to_float(Integer val)
     warning("conversion of integer scalar to float scalar: precision is lost");
 };
 
+void default_exception_message::possibly_inaccurate_result(const std::string& func_name)
+{
+    std::ostringstream os;
+    os << "possibly inaccurate result from " << func_name;
+    warning(os.str());
+};
+
 const char* default_exception_message::square_matrix_required(Integer rows, Integer cols)
 {
     std::ostringstream msg;
     msg << "square matrix is required, matrix size is: " << rows << "x" << cols;
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::option_validator_error(const std::string& reason)
+{
+    std::ostringstream msg;
+    msg << "invalid option value: " << reason;
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::invalid_option_type(const std::string& opt_name, const std::string& req_type,
+                const std::string& opt_type)
+{
+    std::ostringstream msg;
+    msg << "invalid option type " << req_type
+        << ", option " << opt_name << " has type " << opt_type;
+
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::optional_value_not_set()
+{
+    std::ostringstream msg;
+    msg << "optional value not set";
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::option_unregistered(const std::string& opt_name)
+{
+    std::ostringstream msg;
+    msg << "unknown option: " << opt_name;
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::uninitialized_disp_stream()
+{
+    std::ostringstream msg;
+    msg << "uninitialized disp stream used";
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::uninitialized_output_stream()
+{
+    std::ostringstream msg;
+    msg << "uninitialized output stream used";
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::value_not_in_cache(const std::string& name, Integer prec, 
+                Integer cache_prec)
+{
+    std::ostringstream msg;
+    if (cache_prec < 0)
+    {
+        msg << "value with id " << name << " is not stored in cache";
+    }
+    else
+    {
+        msg << "value with id " << name << " and precision " << prec 
+            << " is not stored in cache; there is a value with precision " << cache_prec;
+    };
+
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::formatted_disp_invalid_column(Integer col, Integer num_cols)
+{
+    std::ostringstream msg;
+
+    msg << "access to invalid column " << col << "; formatted disp has " << num_cols << " columns";
+
+    current_message = msg.str();
+    return current_message.c_str();
+};
+
+const char* default_exception_message::formatted_disp_invalid_row_size(Integer size, Integer req_size)
+{
+    std::ostringstream msg;
+
+    msg << "invalid call to formatted_disp::disp_row function"
+        << "; expecting " << req_size << " values"
+        << "; number of supplied values is " << size;
+
     current_message = msg.str();
     return current_message.c_str();
 };
@@ -761,6 +859,7 @@ void set_global_messanger(exception_message_ptr msg)
         messanger = msg;
     };
 };
+
 exception_message_ptr get_global_messanger()
 {
     return messanger;

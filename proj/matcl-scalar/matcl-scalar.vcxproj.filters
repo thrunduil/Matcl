@@ -49,6 +49,9 @@
     <Filter Include="Source Files\src\IO">
       <UniqueIdentifier>{97c5054d-208f-4b6e-b96e-2e0e17b672bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\general">
+      <UniqueIdentifier>{6506c749-b8cb-416a-881b-e58dee6de5f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-scalar\objects\object_functions.h">
@@ -144,6 +147,18 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\details\io_impl.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\IO\formatted_disp.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\general\fwd_decls.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-scalar\IO\formatted_disp_stream.h">
+      <Filter>Source Files\src\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\object_interface.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-scalar\objects\object_functions.cpp">
@@ -202,6 +217,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp">
       <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp_stream.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-scalar\objects\object_interface.cpp">
+      <Filter>Source Files\src\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

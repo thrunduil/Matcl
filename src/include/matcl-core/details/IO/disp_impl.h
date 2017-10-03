@@ -101,6 +101,10 @@ class disp_matrix<V,struct_dense>
                                     matrix_provider_base<V>& m);
 
     private:
+        static void process_block(md::disp_stream_impl& os, const disp_stream* user, 
+                        Integer r, Integer mr, Integer mc, Integer n_sub, bool is_sym, 
+                        matrix_provider_base<V>& m, measures& ms, Integer pos0, Integer& pos,
+                        Integer& lc);
         static void measure_column_header(md::disp_stream_impl& os, const disp_stream* user, 
                         measures& ms, Integer lc, Integer cc, bool need_cont, bool add_cont);
 
@@ -136,8 +140,9 @@ class MATCL_CORE_EXPORT disp_stream_data_provider : public forwarding_disp_strea
 
         virtual void end_display(line_printer& p) const override;
         
-        virtual void display_empty_matrix(line_printer& p, Integer r,
-                                Integer c) const override;
+        virtual void display_empty_matrix(line_printer& p, Integer r, Integer c) const override;
+        virtual bool short_print_empty_matrix() const override;
+        virtual bool show_matrix_header() const override;
 
         virtual void display_matrix_name(line_printer& p) const;
 
@@ -150,17 +155,30 @@ class MATCL_CORE_EXPORT disp_stream_data_provider : public forwarding_disp_strea
         virtual void end_display_matrix_block(line_printer& p, Integer 
                         block_width) const override;
 
-        virtual bool        show_column_header() const override;
-        virtual bool        show_row_headers()  const override;
+        // show row and column destriptions?
+        virtual bool        show_column_header_line() const override;
+        
+        // show row destription? called when show_column_header_line() = true
+        virtual bool        show_column_header_row()  const override;
+        
+        // show columns destription? called when show_column_header_line() = true
+        virtual bool        show_column_header_columns()  const override;
+
+        // if true, then matrix can be split on blocks, when required
+        virtual bool        can_split() const override;
+
         virtual align_type  get_align_row_header() const override;
         virtual align_type  get_align_col(Integer c) const;
         virtual string      get_row_name(Integer r) const override;
         virtual string      get_col_name(Integer c) const override;
         virtual string      get_rows_label() const override;
+        virtual void        get_column_width_row(Integer& w_min, Integer& w_max) const override;
+        virtual void        get_column_width(Integer c, Integer& w_min, 
+                                Integer& w_max) const override;
 };
 
 MATCL_CORE_EXPORT void  disp(const disp_stream_ptr &os, disp_data_provider& v);
 
 }};
 
-#include "matcl-core/details/disp_impl.inl"
+#include "matcl-core/details/IO/disp_impl.inl"

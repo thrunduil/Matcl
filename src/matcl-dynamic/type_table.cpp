@@ -452,13 +452,13 @@ bool type_table::process_functions(error_handler& eh)
     return true;
 };
 
-void type_table::register_function(const function_name& fn, function fun_evl, 
+void type_table::register_function(const function_name& fn, const function& fun_evl, 
                                    error_handler& eh)
 {
     m_fun_tab.insert(fn, fun_evl, nullptr, eh);
 };
 
-void type_table::register_function_template(const function_name& fn, function fun_evl, 
+void type_table::register_function_template(const function_name& fn, const function& fun_evl, 
                     const type_vec& types, make_return_fptr ret, error_handler& eh)
 {
     m_fun_tab.insert_template(fn, fun_evl, types, ret, eh);

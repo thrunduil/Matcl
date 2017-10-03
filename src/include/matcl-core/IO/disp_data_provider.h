@@ -93,8 +93,12 @@ class MATCL_CORE_EXPORT disp_data_provider
         // How to print empty data?
         virtual void        display_empty_matrix(const disp_stream* orig,line_printer& p, Integer r,
                                     Integer c) const;
+        // call display_empty_matrix function for empty matrices?
+        virtual bool        short_print_empty_matrix(const disp_stream* orig) const;
         // Name of data set
         virtual void        display_matrix_name(const disp_stream* orig, line_printer& p) const;
+        // show matrix header?
+        virtual bool        show_matrix_header(const disp_stream* orig) const;
 
         // A new block of dense matrix will be displayed for columns [first_col, last_col].
         virtual void        start_display_matrix_block(const disp_stream* orig, line_printer& p, 
@@ -104,10 +108,18 @@ class MATCL_CORE_EXPORT disp_data_provider
         virtual void        end_display_matrix_block(const disp_stream* orig, line_printer& p, 
                                     Integer block_width) const;
 
-        // Display information about columns?
-        virtual bool        show_column_header(const disp_stream* orig) const;
-        // Display information about rows?
-        virtual bool        show_row_headers(const disp_stream* orig)  const;
+        // show row and column destriptions?
+        virtual bool        show_column_header_line(const disp_stream* orig) const;
+        
+        // show row destription? called when show_column_header_line() = true
+        virtual bool        show_column_header_row(const disp_stream* orig)  const;
+        
+        // show columns destription? called when show_column_header_line() = true
+        virtual bool        show_column_header_columns(const disp_stream* orig) const;
+
+        // if true, then matrix can be split on blocks, when required
+        virtual bool        can_split(const disp_stream* orig) const;
+
         // How to align row headers?
         virtual align_type  get_align_row_header(const disp_stream* orig) const;
         // How to align columns?
@@ -119,6 +131,14 @@ class MATCL_CORE_EXPORT disp_data_provider
         virtual std::string get_col_name(const disp_stream* orig, Integer c) const;
         // Label of the row names column
         virtual std::string get_rows_label(const disp_stream* orig) const;
+
+        // get minimum and maximum width of column with row labels
+        virtual void        get_column_width_row(const disp_stream* orig, Integer& w_min, 
+                                Integer& w_max) const;
+
+        // get minimum and maximum width of i-th column
+        virtual void        get_column_width(const disp_stream* orig, Integer c, 
+                                Integer& w_min, Integer& w_max) const;
 
     public:
         // Converting functions from Integer, Real, and Complex to string.

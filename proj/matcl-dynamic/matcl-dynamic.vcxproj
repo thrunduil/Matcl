@@ -50,6 +50,7 @@
     <ClInclude Include="..\..\src\include\matcl-dynamic\predefined_functions_names.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\predefined_type_traits.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\register_function.h" />
+    <ClInclude Include="..\..\src\include\matcl-dynamic\result_of.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\special_types.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\type.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\typed_object_functions.h" />
@@ -89,7 +90,6 @@
     <ClCompile Include="..\..\src\matcl-dynamic\matcl_function_names.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\null_conversions_table.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\object.cpp" />
-    <ClCompile Include="..\..\src\matcl-dynamic\object_data_pool.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\overload_resolution.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\predefined\object_any.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\predefined\object_bool.cpp" />
@@ -206,7 +206,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -227,7 +227,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -254,7 +254,8 @@
       <OmitFramePointers>false</OmitFramePointers>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
@@ -278,7 +279,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>

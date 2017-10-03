@@ -23,11 +23,14 @@
 #include "test_gmp_prec.h"
 #include "test_gmp_object.h"
 #include "test_performance.h"
-#include "test_disp.h"
 #include "matcl-mp/matcl_mp.h"
 #include "matcl-core/options/matcl_options.h"
 
+#include "matcl-scalar/IO/scalar_io.h"
+#include "matcl-scalar/IO/formatted_disp.h"
+
 #include <iostream>
+#include <iomanip>
 
 namespace mdy = matcl::dynamic;
 using namespace matcl;
@@ -36,12 +39,7 @@ int main(int argc, const char* argv[])
 {
     try
     { 
-        options opts;
-        opts.help();
-
-        matcl::test::test_disp();
-
-        matcl::test::test_gmp();
+        matcl::test::test_gmp();        
         matcl::test::test_gmp_bin();        
         matcl::test::test_gmp_object();                     
 
@@ -50,6 +48,9 @@ int main(int argc, const char* argv[])
 
         matcl::test::test_gmp_prec(std::cout);
         matcl::test::test_performance();         
+
+        matcl::free_caches();
+        matcl::details::leak_detector::report_leaks(std::cout);
 
         std::cout << "finished" << "\n";
     }

@@ -20,8 +20,14 @@
 
 #pragma once
 
-#include <cfloat>
+#include "matcl-core/config.h"
 #include "matcl-core/lib_functions/constants.h"
+
+#if MATCL_HAS_FMA
+    #include "matcl-core/details/simd/simd.h"
+#endif
+
+#include <cfloat>
 
 namespace matcl { namespace raw { namespace details
 {
@@ -1274,21 +1280,45 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double fma(double x, double y, double z)
     {
-        return std::fma(x,y,z);
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_HAS_FMA
+            return simd::fma(x, y, z);
+        #else
+            return x * y + z;
+        #endif
     };
     force_inline float fma(float x, float y, float z)
     {
-        return std::fma(x,y,z);
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_HAS_FMA
+            return simd::fma(x, y, z);
+        #else
+            return x * y + z;
+        #endif
     };
 
     //--------------------------------------------------------------------
     force_inline double fms(double x, double y, double z)
     {
-        return std::fma(x,y,-z);
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_HAS_FMA
+            return simd::fms(x, y, z);
+        #else
+            return x * y - z;
+        #endif
     };
     force_inline float fms(float x, float y, float z)
     {
-        return std::fma(x,y,-z);
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_HAS_FMA
+            return simd::fms(x, y, z);
+        #else
+            return x * y - z;
+        #endif
     };
 
     //--------------------------------------------------------------------

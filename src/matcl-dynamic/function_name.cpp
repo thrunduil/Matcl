@@ -23,6 +23,7 @@
 #include "matcl-core/details/hash_table/object_table.inl"
 #include "matcl-core/details/hash_table/hash_equal.inl"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl { namespace dynamic
 {
@@ -145,8 +146,9 @@ class identifier_table
     private:        
         using string_hash   = matcl::details::obj_hasher<identifier_impl>;
         using string_equal  = matcl::details::obj_equaler<identifier_impl>;
+        using allocator     = matcl::details::default_allocator_simple<true, true, char>;
         using string_table  = matcl::details::object_table<identifier_ptr,string_hash,string_equal,
-                                                matcl::details::default_allocator>;
+                                allocator>;
         using mutex_type    = matcl::default_spinlock_mutex;
         using lock_type     = std::unique_lock<mutex_type>;
 
@@ -155,8 +157,14 @@ class identifier_table
         mutex_type          m_mutex;
 
     public:
+        identifier_table();
+        
         identifier_ptr      get(const std::string& val);
 };
+
+identifier_table::identifier_table()
+    :m_table(true)
+{};
 
 identifier_ptr identifier_table::get(const std::string& val)
 { 
@@ -232,7 +240,7 @@ void function_name::disp_requirements(std::ostream& os) const
     m_validator.get_printer()(os);
 };
 
-bool function_name::validate_function(function f) const
+bool function_name::validate_function(const function& f) const
 {
     if (f.is_null() == true)
         return false;

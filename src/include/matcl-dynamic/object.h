@@ -150,7 +150,6 @@ class MATCL_DYN_EXPORT object
     public:
         void				    disp(matcl::details::printer& pr, Integer elem_width, 
                                      matcl::align_type at, Integer value_pos) const; 
-        std::string             to_string(matcl::details::printer& pr) const;        
 
         const data_type*        get_data() const        { return m_data; };		
         data_type*              get_data_unique()       { make_unique(); return m_data; };	
