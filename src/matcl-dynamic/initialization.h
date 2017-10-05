@@ -18,37 +18,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "type_table_cache.inl"
+#pragma once
+
+#include "matcl-dynamic/config.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
 
-//--------------------------------------------------------------------------
-//                         type_table_cache
-//--------------------------------------------------------------------------
-type_table_cache::type_table_cache()
-    :m_unifiers(false), m_overloads(false), m_template_overloads(false)
-    ,m_convert(false), m_assign(false)
-{};
+void initialize_funcions();
+void initialize_identifier_table();
 
-void type_table_cache::clear()
-{
-    m_unifiers.clear();
-    m_overloads.clear();
-    m_convert.clear();
-    m_assign.clear();
-    m_template_overloads.clear();
-    m_last_call.clear();
-};
-
-void type_table_cache::clear_global()
-{
-    clear();
-}
-
-void type_table_cache::close_global()
-{    
-    delete this;
-}
-
-};};};
+}}}

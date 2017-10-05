@@ -35,12 +35,18 @@
 namespace mdy = matcl::dynamic;
 using namespace matcl;
 
+static void break_func()
+{
+    std::cout << "break" << "\n";
+};
+
 int main(int argc, const char* argv[])
 {
     try
-    { 
+    {                     
         matcl::test::test_performance();
 
+        //TODO
         /*
         matcl::test::test_gmp();        
         matcl::test::test_gmp_bin();        
@@ -50,14 +56,8 @@ int main(int argc, const char* argv[])
         test.make();  
 
         matcl::test::test_gmp_prec(std::cout);
-        matcl::test::test_performance();
         */
-
-        matcl::free_caches();
-
-      #if MATCL_DEBUG_MEMORY
-        matcl::details::leak_detector::report_leaks(std::cout);
-      #endif
+        //matcl::test::test_performance();                
 
         std::cout << "finished" << "\n";
     }

@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-mp/details/fwd_decls.h"
+#include "matcl-mp/details/initializer.h"
 #include "matcl-core/details/isa.h"
 #include "matcl-mp/details/utils.h"
 

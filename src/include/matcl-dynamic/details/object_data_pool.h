@@ -29,12 +29,15 @@ namespace matcl { namespace dynamic { namespace details
 
 namespace md = matcl :: details;
 
+class global_objects;
+
 // object_data pool must be shared between dlls
 class object_data_pool_impl
-    : protected md::object_allocator<md::default_allocator_simple<true, true, char>>
+    : protected md::object_allocator<default_allocator_simple<true, char>>
+    , public matcl_new_delete
 {
     private:
-        using allocator     = md::default_allocator_simple<true, true, char>;
+        using allocator     = default_allocator_simple<true, char>;
         using base          = md::object_allocator<allocator>;
         using this_type     = object_data_pool_impl;
         using mutex_type    = matcl::default_spinlock_mutex;
@@ -43,8 +46,8 @@ class object_data_pool_impl
         mutex_type          m_mutex;
 
     private:
-        object_data_pool_impl(bool is_global, size_t size)
-            :base(size, is_global)
+        object_data_pool_impl(size_t size)
+            :base(size)
         {};
 
         object_data_pool_impl(const object_data_pool_impl&) = delete;
@@ -67,6 +70,11 @@ class object_data_pool_impl
             lock_type lock(m_mutex);
             base::free(ptr);
         };
+
+        void clear_global()
+        {
+            delete this;
+        }
 };
 
 template<class T>

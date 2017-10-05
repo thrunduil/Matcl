@@ -41,7 +41,7 @@ class MATCL_DYN_EXPORT function
 {
     private:
         using evaler    = details::evaler;
-        using ptr_type  = matcl::refptr<evaler, details::evaler_traits>;
+        using ptr_type  = const evaler*;
 
     private:
         ptr_type        m_evaler;        
@@ -49,16 +49,6 @@ class MATCL_DYN_EXPORT function
     public:
         // construct uninitialized object
         function();
-
-        // copy and move constructr
-        function(const function& other);
-        function(function&& other);
-
-        // copy and move assignment
-        function&       operator=(const function& other);
-        function&       operator=(function&& other);
-
-        ~function();
 
         // return true if this object is uninitialized
         bool            is_null() const;
@@ -74,19 +64,6 @@ class MATCL_DYN_EXPORT function
 
         // return function evaler
         const ptr_type& get_evaler() const;
-
-        // make function with conversions; returning function first evaluates
-        // converters for each input argument and then this function;
-        // return type of n-th converter must be the same as n-th argument
-        // type of this function; deduced_ret is the deduced return type
-        // and is different from Type() if return deduction is enabled;
-        // n_deduced is the number of deduced template types with deduced 
-        // types given by deduced; deduced return (if not empty) and deduced
-        // template arguments must be passed as first m + n_deduced arguments
-        // of type OType, where m is 1 if deduced_ret is not Type() and zero
-        // otherwise; deduced return must be passed first
-        function        make_converter(int n_deduced, const Type deduced[],
-                            Type deduced_ret, const std::vector<function>& arg_converters) const;
 
         // evaluate this function; arguments must be valid, i.e. input 
         // types must be equal to function args types

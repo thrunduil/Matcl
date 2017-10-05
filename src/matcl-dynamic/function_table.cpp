@@ -23,7 +23,6 @@
 #include "matcl-dynamic/predefined_functions.h"
 #include "predefined/special_functions.h"
 #include "matcl-dynamic/details/type_impl.h"
-#include "func_conv_link.h"
 #include "matcl-core/details/stack_array.h"
 #include "type_table_cache_data.h"
 #include "matcl-dynamic/object_type.h"
@@ -44,13 +43,21 @@ converter_set::converter_set(Integer over_num)
 converter_set::~converter_set()
 {};
 
-void converter_set::push_back(const function& fun_evl, e_match_type match, error_handler& eh)
+void converter_set::clear_global()
+{
+    for (auto& elem : m_overloads_vec)
+        const_cast<evaler*>(elem.first.get_evaler())->destroy();
+
+    m_overloads_vec.clear();
+};
+
+void converter_set::push_back(function fun_evl, e_match_type match, error_handler& eh)
 {
     check_converter(fun_evl,eh);
     m_overloads_vec.push_back(func_match(fun_evl,match));
 }
 
-void converter_set::check_converter(const function& fun_evl, error_handler& eh)
+void converter_set::check_converter(function fun_evl, error_handler& eh)
 {
     if (fun_evl.number_arguments() != 1)
         eh.error_invalid_converter_number_args(fun_evl);
@@ -62,11 +69,6 @@ void converter_set::check_converter(const function& fun_evl, error_handler& eh)
 Integer converter_set::size() const
 {
     return (Integer)m_overloads_vec.size();
-};
-
-void converter_set::clear()
-{
-    m_overloads_vec.clear();
 };
 
 function converter_set::get_function(Integer pos, e_match_type& match) const
@@ -103,18 +105,18 @@ void converter_candidate_set::clear()
     m_match = conversion_match::make_no_match();
 };
 
-const function& converter_candidate_set::get_final_function(Integer pos) const
+function converter_candidate_set::get_final_function(Integer pos) const
 {
     return m_overloads_vec[pos].first;
 };
 
-const function& converter_candidate_set::get_main_function(Integer pos) const
+function converter_candidate_set::get_main_function(Integer pos) const
 {
     return m_overloads_vec[pos].second;
 };
 
-void converter_candidate_set::add(const function& fun_evl, conversion_match match, 
-                                  const function& main_fun_evl)
+void converter_candidate_set::add(function fun_evl, conversion_match match, 
+                                  function main_fun_evl)
 {
     if (match < get_match())
     {
@@ -146,8 +148,8 @@ void converter_candidate_set::join(const converter_candidate_set& other)
     return;
 }
 
-void converter_candidate_set::set(const function& fun_evl, conversion_match match, 
-                                  const function& main_fun_evl)
+void converter_candidate_set::set(function fun_evl, conversion_match match, 
+                                  function main_fun_evl)
 {
     this->clear();
     this->m_match = match;
@@ -181,6 +183,9 @@ function_name_templ::~function_name_templ()
 
     delete[] m_templates;
 };
+
+void function_name_templ::clear_global() const
+{};
 
 function_name_templ::function_name_templ(function_name_templ&& other)
     :m_name(other.m_name), m_owns_array(other.m_owns_array), n_templates(other.n_templates)
@@ -226,24 +231,28 @@ function_table::function_table()
 {};
 
 function_table::~function_table()
-{};
+{
+};
 
 void function_table::finish_initialization()
 {};
 
-void function_table::insert_conv_numeric(const function& fun_evl, e_match_type match)
+void function_table::insert_conv_numeric(function fun_evl, e_match_type match)
 {
     m_num_convert_table.insert(fun_evl, match);
 };
 
-void function_table::insert_unifier(const function& fun_evl, error_handler& eh)
+void function_table::insert_unifier(function fun_evl, error_handler& eh)
 {
     check_unifier(fun_evl,eh);
     Type unif_type = fun_evl.return_type();
     m_unifiers.insert(unif_type);
+
+    //function no longer needed
+    clear_global(fun_evl);
 };
 
-void function_table::insert_assigner(const function& fun_evl, error_handler& eh)
+void function_table::insert_assigner(function fun_evl, error_handler& eh)
 {
     check_assigner(fun_evl, eh);
 
@@ -257,7 +266,7 @@ void function_table::insert_assigner(const function& fun_evl, error_handler& eh)
     return;
 };
 
-void function_table::insert_special(const function_name& func, const function& fun_evl, 
+void function_table::insert_special(const function_name& func, function fun_evl, 
                                     error_handler& eh)
 {
     if (func == special_functions::assign())
@@ -369,7 +378,7 @@ void function_table::insert_special(const function_name& func, const function& f
     };
 };
 
-void function_table::insert(const function_name& func, const function& fun_evl,
+void function_table::insert(const function_name& func, function fun_evl,
                             make_return_fptr ret, error_handler& eh)
 {
     if (special_functions::is_special(func) == true)
@@ -397,7 +406,7 @@ void function_table::insert(const function_name& func, const function& fun_evl,
         eh.error_function_constraints_not_satisfied(func, fun_evl);
 };
 
-void function_table::insert_template(const function_name& func, const function& fun_evl, 
+void function_table::insert_template(const function_name& func, function fun_evl, 
                     const type_vec& types, make_return_fptr ret, error_handler& eh)
 {
     using iterator_1    = function_templ_map::iterator;
@@ -766,8 +775,8 @@ bool function_table::is_numeric(Type  t) const
     return false;
 };
 
-function function_table::link_converters(const function& ev_1, const function& ev_2, 
-                const function& ev_3, e_match_type m1, e_match_type m2, e_match_type m3) const
+function function_table::link_converters(function ev_1, function ev_2, 
+                function ev_3, e_match_type m1, e_match_type m2, e_match_type m3) const
 {
     if (m1 < e_match_type::standard_conversions)
         return link_converters(ev_2,ev_3, m2, m3);
@@ -781,10 +790,10 @@ function function_table::link_converters(const function& ev_1, const function& e
     conv_vec[1] = ev_2;
     conv_vec[2] = ev_3;
 
-    return function(new details::fun_conv_link(conv_vec));
+    return m_link_convert_table.get(conv_vec);
 };
 
-function function_table::link_converters(const function& ev_1, const function& ev_2,
+function function_table::link_converters(function ev_1, function ev_2,
                                     e_match_type m1, e_match_type m2) const
 {
     if (m1 < e_match_type::standard_conversions)
@@ -796,7 +805,7 @@ function function_table::link_converters(const function& ev_1, const function& e
     conv_vec[0] = ev_1;
     conv_vec[1] = ev_2;
 
-    return function(new details::fun_conv_link(conv_vec));
+    return m_link_convert_table.get(conv_vec);
 };
 
 void function_table::get_assigner(Type to, Type from, assigner_candidate_set& as,
@@ -893,7 +902,7 @@ void function_table::get_assigner(Type to, Type from, assigner_candidate_set& as
     return;
 };
 
-function function_table::make_exact(const function& fun_evl, int n_deduced, const Type deduced[], 
+function function_table::make_exact(function fun_evl, int n_deduced, const Type deduced[], 
                                     Type deduced_ret, int n_args, const Type t[], error_handler& eh) const
 {
 	std::vector<function> conv_vec(n_args);
@@ -931,8 +940,7 @@ function function_table::make_exact(const function& fun_evl, int n_deduced, cons
 		}
 	}
 
-	function fun = fun_evl.make_converter(n_deduced, deduced, deduced_ret, conv_vec);
-	return fun;
+    return m_convert_table.get(fun_evl, n_deduced, deduced, deduced_ret, conv_vec);
 };
 
 void function_table::make_exact(candidate_set& candidates, e_match_type match, int n_args, 
@@ -958,7 +966,7 @@ void function_table::make_exact(candidate_set& candidates, e_match_type match, i
     };
 }
 
-function function_table::link_assign_convert(const function& assign, const function& conv, 
+function function_table::link_assign_convert(function assign, function conv, 
                                              e_match_type conv_match) const
 {
     if (conv_match < e_match_type::standard_conversions)
@@ -968,17 +976,16 @@ function function_table::link_assign_convert(const function& assign, const funct
     conv_vec[0] = function();
     conv_vec[1] = conv;
 
-	function fun = assign.make_converter(0, nullptr, Type(), conv_vec);
-	return fun;
+	return m_convert_table.get(assign, 0, nullptr, Type(), conv_vec);
 };
 
-void function_table::check_unifier(const function& fun, error_handler& eh) const
+void function_table::check_unifier(function fun, error_handler& eh) const
 {
     if (fun.number_arguments() != 0)
         eh.error_invalid_unifier_number_args(fun);
 };
 
-void function_table::check_assigner(const function& fun, error_handler& eh) const
+void function_table::check_assigner(function fun, error_handler& eh) const
 {
     if (fun.number_arguments() != 2)
         eh.error_invalid_assigner_number_args(fun);
@@ -987,5 +994,56 @@ void function_table::check_assigner(const function& fun, error_handler& eh) cons
     if (ret != predefined::type_unit())
         eh.error_invalid_assigner_return_type(fun);
 };
+
+void function_table::clear_global(function_templ_map& map)
+{
+    for (auto& elem : map)
+    {
+        for (auto& elem2 : elem.second)
+        {
+            elem2.first.clear_global();
+            elem2.second.clear_global();
+        }
+    }
+
+    map.clear();
+};
+
+void function_table::clear_global(function& f)
+{
+    const_cast<evaler*>(f.get_evaler())->destroy();
+    f = function();
+}
+
+void function_table::clear_global(unifier_set& us)
+{
+    us.clear();
+}
+
+void function_table::clear_global()
+{
+    for (auto& elem : m_map)
+        elem.second.clear_global();
+
+    m_map.clear();
+
+    clear_global(m_map_templ);
+    clear_global(m_map_templ_deduce);
+
+    m_converters.clear_global();
+    m_assigners.clear_global();
+
+    m_num_convert_table.clear_global();
+    m_null_convert_table.clear_global();
+    m_link_convert_table.clear_global();
+    m_convert_table.clear_global();
+
+    clear_global(m_unifiers);
+    clear_global(m_function_id);
+    clear_global(m_id_assign);
+    clear_global(m_function_convert_to_any);
+    clear_global(m_function_convert_to_unit);
+};
+
 
 };};};

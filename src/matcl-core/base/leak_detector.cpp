@@ -20,6 +20,7 @@
 
 #include "matcl-core/details/leak_detector.h"
 #include "matcl-core/error/exception_classes.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <map>
 #include <set>
@@ -50,7 +51,6 @@ struct leak_detector_impl
         void        report_leaks(std::ostream& os);
         void        break_at_codes(const std::vector<size_t>& codes,
                         const std::function<void ()>& handler);
-
 };
 
 leak_detector_impl::leak_detector_impl()
@@ -107,10 +107,11 @@ void leak_detector_impl::report_leaks(std::ostream& os)
     os << "\n";
 };
 
+
+static leak_detector_impl* g_instance = nullptr;
+
 leak_detector_impl* get_leak_detector()
 {
-    static leak_detector_impl* g_instance = new leak_detector_impl();
-
     return g_instance;
 };
 
@@ -133,6 +134,17 @@ void leak_detector::break_at_codes(const std::vector<size_t>& codes,
                 const std::function<void ()>& handler)
 {
     get_leak_detector()->break_at_codes(codes, handler);
+};
+
+
+void leak_detector::open_global()
+{
+    g_instance = new leak_detector_impl();
+};
+
+void leak_detector::close_global()
+{
+    delete g_instance;
 };
 
 };};

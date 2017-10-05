@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/disp_stream.h"
 
 namespace matcl
@@ -27,7 +28,7 @@ namespace matcl
 
 // Class allows for displaying any data using formatting rules used for matrices.
 // Actual display is performed by disp function.
-class MATCL_CORE_EXPORT disp_data_provider
+class MATCL_CORE_EXPORT disp_data_provider : public matcl_new_delete
 {
     public:
         virtual ~disp_data_provider(){};

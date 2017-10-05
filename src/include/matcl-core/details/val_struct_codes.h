@@ -22,6 +22,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/enums.h"
 #include "matcl-core/matrix/scalar_types.h"
 

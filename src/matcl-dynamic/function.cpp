@@ -28,15 +28,6 @@
 namespace matcl { namespace dynamic
 {
 
-function function::make_converter(int n_deduced, const Type deduced[], Type deduced_ret, 
-                                  const std::vector<function>& arg_converters) const
-{
-    if (!m_evaler)
-        return function();
-
-    return m_evaler->make_converter(n_deduced, deduced, deduced_ret, arg_converters);
-};
-
 void function::make(int n_args, const object* args[], object& ret) const
 {
     (void)n_args;

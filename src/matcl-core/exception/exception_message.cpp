@@ -22,6 +22,7 @@
 #include "matcl-core/matrix/matrix_traits.h"
 #include "matcl-core/error/exception.h"
 #include "matcl-core/IO/output_stream.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <sstream>
 #include <iostream>

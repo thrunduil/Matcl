@@ -93,7 +93,7 @@ class overload_impl
         static size_t   eval_hash(const overload_info& in);
         bool            equal(const overload_info& in) const;
 
-        const function& get() const             { return m_overload; };
+        function        get() const             { return m_overload; };
         std::size_t     hash_value() const      { return m_hash; };
 
     private:
@@ -119,7 +119,7 @@ class toverload_impl
         static size_t   eval_hash(const toverload_info& in);
         bool            equal(const toverload_info& in) const;
 
-        const function& get() const             { return m_overload; };
+        function        get() const             { return m_overload; };
         std::size_t     hash_value() const      { return m_hash; };
 
     private:
@@ -142,7 +142,7 @@ class convert_impl
         static size_t   eval_hash(convert_info in);
         bool            equal(convert_info in) const;
 
-        const function& get() const             { return m_converter; };
+        function        get() const             { return m_converter; };
         std::size_t     hash_value() const      { return m_hash; };
 
 };
@@ -161,7 +161,7 @@ class assign_impl
         static size_t   eval_hash(assign_info in);
         bool            equal(assign_info in) const;
 
-        const function& get() const             { return m_assigner; };
+        function        get() const             { return m_assigner; };
         std::size_t     hash_value() const      { return m_hash; };
 };
 

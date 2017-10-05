@@ -81,7 +81,7 @@ class object_data : public details::object_data_base, public register_object<T>
         value_type&             get();
 
         void*					operator new(size_t size);
-        void					operator delete(void* ptr, size_t size);
+        void					operator delete(void* ptr);
 };
 
 };};};

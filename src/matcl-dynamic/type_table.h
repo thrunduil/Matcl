@@ -56,6 +56,8 @@ struct type_data_handle
             : m_constructor(nullptr), m_pool(nullptr)
         {};
         
+        void        clear_global();
+
         void        set_constructor(constr_type cons);
         void        call_constructor();
 
@@ -63,7 +65,7 @@ struct type_data_handle
         Type        get_data(pool_type*& pool) const;
 };
 
-class type_table
+class type_table : public matcl_new_delete, global_object
 {
     private:
         matcl::default_mutex            m_mutex_reg_functions;
@@ -103,12 +105,12 @@ class type_table
 
         // returned function pointer can be invalidated, by subsequent call
         // of any type_table function
-        const function*         get_overload(const function_name& func, int n_args, const Type t[]);
-        const function*         get_template_overload(const function_name& func, int n_templ, 
+        function                get_overload(const function_name& func, int n_args, const Type t[]);
+        function                get_template_overload(const function_name& func, int n_templ, 
                                     const Type templates[], int n_args, const Type arg_types[]);
-        const function*         get_converter(Type to, Type from, bool implicit);
-        const function*         get_cast_function(Type to, Type from);
-        const function*         get_assigner(Type to, Type from);
+        function                get_converter(Type to, Type from, bool implicit);
+        function                get_cast_function(Type to, Type from);
+        function                get_assigner(Type to, Type from);
 
         //raw class_name must be given by typeid(T).name()
         Type                    get_type_data(const char* raw_class_name, pool_type*& pool);
@@ -133,12 +135,15 @@ class type_table
         void				    initialize();
         void                    finish_initialization();
         bool				    process_functions(error_handler& eh);
-        void				    register_function(const function_name& func, const function& fun_evl, 
+        void				    register_function(const function_name& func, function fun_evl, 
                                     error_handler& eh);
         void				    register_function_template(const function_name& func, 
-                                    const function& fun_evl, const type_vec& types, 
+                                    function fun_evl, const type_vec& types, 
                                     make_return_fptr ret, error_handler& eh);
         void                    add_predefined_functions(const std::string& type_name);
+
+        virtual void            clear_global() override;
+        virtual void            close_global() override;
 };
 
 inline type_table* type_table::get()

@@ -29,23 +29,45 @@
 namespace matcl { namespace details
 {
 
+template<class Allocator>
+struct pool_allocator
+{
+    using size_type         = std::size_t;
+    using difference_type   = std::ptrdiff_t;
+
+    static char* malloc(size_t n_bytes)
+    {
+        // address of allocated memory must be different, than
+        // address of the first element allocated by the pool,
+        // otherwise leak_detector will complain
+        char* ptr   = (char*)Allocator::malloc(n_bytes + sizeof(size_t));
+        ptr         += sizeof(size_t);
+        return ptr;
+    };
+
+    static void free(void* ptr)
+    {
+        char* root  = (char*)(ptr);
+        root        -= sizeof(size_t);
+
+        Allocator::free(root);
+    };
+};
+
 // pool allocator for dag nodes
 template<class Allocator>
 class object_allocator
 {
     private:
-        using pool          = boost::pool<Allocator>;
+        using alocator      = pool_allocator<Allocator>;
+        using pool          = boost::pool<alocator>;
 
     private:
         pool                m_pool;
-        bool                m_is_global;
 
     public:
         // costructor of allocator for objects of sizeof = size
-        // if is_global is true, then it is assumed, that allocated
-        // objects will be released at program exit and leaks will not
-        // be reported
-        object_allocator(size_t size, bool is_global);
+        object_allocator(size_t size);
         
         // deallocate previously created object; ptr != nulltpr
         void                free(void* ptr);
@@ -110,7 +132,8 @@ class object_table
         using hasher            = Hasher;
         using equaler           = Equaler;
         using storage_type      = object_allocator<Allocator>;
-        using hash_table        = hash_table<value_type, hasher, equaler>;
+        using tracker           = default_track_value<value_type>;
+        using hash_table        = hash_table<value_type, hasher, equaler, tracker, Allocator>;
         using hash_entry        = typename hash_table::entry;
 
     public:
@@ -128,10 +151,7 @@ class object_table
 
     public:
         // costructor; capacity is the initial capacity of hash table
-        // if is_global is true, then it is assumed, that allocated
-        // objects will be released at program exit and leaks will not
-        // be reported
-        object_table(bool is_global, size_t capacity = 0);
+        object_table(size_t capacity = 0);
 
         // destructor; release all memory
         ~object_table();
@@ -223,10 +243,7 @@ class unique_object_table
 
     public:
         // constructor; capacity argument is not used
-        // if is_global is true, then it is assumed, that allocated
-        // objects will be released at program exit and leaks will not
-        // be reported
-        unique_object_table(bool is_global, size_t capacity = 0);
+        unique_object_table(size_t capacity = 0);
 
         // destructor; release all memory
         ~unique_object_table();

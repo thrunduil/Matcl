@@ -44,28 +44,38 @@ class MATCL_DYN_EXPORT fun_evaler_conv : public evaler
         std::vector<function>       m_converters;
         std::vector<object>         m_deduced;
         Type                        m_deduced_ret;
+        bool                        m_has_deduced_ret;
 
         fun_evaler_conv(const fun_evaler_conv&) = delete;
         fun_evaler_conv& operator=(const fun_evaler_conv&) = delete;
 
-    public:
+    private:
         fun_evaler_conv(const evaler* fun, int n_deduced, const Type deduced[],
                         Type deduced_ret, const std::vector<function>& convs);
 
-        ~fun_evaler_conv() override;
+        void                destroy() override;
 
-        bool make_eval(const object** _args, object& ret) const override;
-        void make_eval(const object** _args) const override;
+        static 
+        fun_evaler_conv*    make(const evaler* fun, int n_deduced, const Type deduced[],
+                                Type deduced_ret, const std::vector<function>& convs);
 
-        function make_converter(int, const Type[], Type, const func_vec&) const override
-        {
-            matcl_assert(false, "Should never be here!");
-            return function();
-        };
+        friend class conversion;
+
+    public:
+        int                 number_deduced_types() const;
+        Type                get_deduced_type(size_t n) const;
+        Type                get_deduced_ret() const;
+        int                 number_converters() const;
+        function            get_coverter(size_t n) const;
+
+    public:
+
+        bool                make_eval(const object** _args, object& ret) const override;
+        void                make_eval(const object** _args) const override;
 
     private:
-        void        make_convert(const object** _args, const object**, 
-                        object* buff_obj, Integer n_deduced, Integer& size_counter) const;
+        void                make_convert(const object** _args, const object**, 
+                                object* buff_obj, Integer n_deduced, Integer& size_counter) const;
 };
 
 #pragma warning(pop)

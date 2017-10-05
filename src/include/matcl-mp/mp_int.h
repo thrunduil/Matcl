@@ -24,6 +24,7 @@
 #include "matcl-mp/config.h"
 #include "matcl-mp/details/fwd_decls.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-mp/details/initializer.h"
 #include "matcl-core/matrix/enums.h"
 #include "matcl-mp/mp_float.h"
 

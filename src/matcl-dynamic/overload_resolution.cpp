@@ -221,7 +221,19 @@ overload_set::overload_set(Integer over_num)
 overload_set::~overload_set()
 {};
 
-void overload_set::push_back(const function& fun_evl, make_return_fptr ret)
+overload_set::overload_set(overload_set&& other)
+    :m_overloads_vec(std::move(other.m_overloads_vec))
+{};
+
+void overload_set::clear_global()
+{
+    for (auto& elem : m_overloads_vec)
+        const_cast<evaler*>(elem.first.get_evaler())->destroy();
+
+    m_overloads_vec.clear();
+};
+
+void overload_set::push_back(function fun_evl, make_return_fptr ret)
 {
 	m_overloads_vec.push_back(fun_ret(fun_evl, ret));
 }
@@ -229,11 +241,6 @@ void overload_set::push_back(const function& fun_evl, make_return_fptr ret)
 Integer overload_set::size() const
 {
     return (Integer)m_overloads_vec.size();
-};
-
-void overload_set::clear()
-{
-    m_overloads_vec.clear();
 };
 
 overload_set::fun_ret overload_set::get_function(Integer pos) const
@@ -264,7 +271,7 @@ candidate_set::candidate_set(Integer over_num)
 candidate_set::~candidate_set()
 {};
 
-void candidate_set::push_back(const function& fun_evl, Type ret, func_templ_ptr templates, 
+void candidate_set::push_back(function fun_evl, Type ret, func_templ_ptr templates, 
                               const templ_vec& deduced)
 {
 	m_overloads_vec.push_back(func_templ(fun_evl, ret, templates, deduced));
@@ -432,7 +439,7 @@ bool overload_resolution::check_deduce_return(const overload_set::fun_ret& evale
 
     return true;
 };
-Type overload_resolution::eval_return(const function& f, make_return_fptr ret, 
+Type overload_resolution::eval_return(function f, make_return_fptr ret, 
             const function_name_templ* ft, const type_vec& deduced, bool& error) const
 {
     error = false;
@@ -747,7 +754,7 @@ spec_type overload_resolution::is_more_specialized(const function_table* ft,
 
 e_match_type overload_resolution::mach_types_list(const function_table* ft,
                     int n_ded, bool ded_ret, int n_args, const Type t[], 
-                    const function& f, conversion_sequence& match)
+                    function f, conversion_sequence& match)
 {    
     if (ded_ret)
         n_ded += 1;

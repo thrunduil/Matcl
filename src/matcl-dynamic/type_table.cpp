@@ -113,6 +113,12 @@ void type_data_handle::set_constructor(constr_type cons)
     m_constructor = cons;
 };
 
+void type_data_handle::clear_global()
+{
+    m_pool->clear_global();
+    delete m_type.get_impl();
+};
+
 void type_data_handle::call_constructor()
 {
     m_type  = m_constructor(m_pool);
@@ -285,8 +291,8 @@ Type type_table::unify_types(Type t1, Type t2)
     {
         if (set.size() == 1)
         {
-            const function& f   = set.get_final_function(0);
-            Type ty             = f.return_type();
+            function f   = set.get_final_function(0);
+            Type ty      = f.return_type();
             get_cache()->set_unifier(t1,t2, ty);
             return ty;
         }
@@ -316,13 +322,13 @@ Type type_table::unify_types(Type t1, Type t2)
     };
 };
 
-const function*
+function
 type_table::get_overload(const function_name& func, int n_args, const Type t[])
 {
-    const function* f;
+    function f;
     f = get_cache()->get_overload(func, n_args, t);
 
-    if (f != nullptr)
+    if (f.is_null() == false)
         return f;
 
     initialize();
@@ -335,7 +341,7 @@ type_table::get_overload(const function_name& func, int n_args, const Type t[])
 
     if (candidates.size() == 1)
     {
-        const function& buf = candidates.get_function(0).function();
+        function buf = candidates.get_function(0).function();
         return get_cache()->set_overload(func,n_args, t, buf);
     };
 
@@ -345,17 +351,17 @@ type_table::get_overload(const function_name& func, int n_args, const Type t[])
         eh.error_function_ambiguity(func, n_args, t, candidates);
 
     eh.report();
-    return nullptr;
+    return function();
 };
 
-const function* type_table::get_template_overload(const function_name& func, int n_templ, 
+function type_table::get_template_overload(const function_name& func, int n_templ, 
                         const Type templates[], int n_args, const Type targs[])
 {
-    const function* f;
+    function f;
     
     f = get_cache()->get_template_overload(func,n_templ, templates, n_args, targs);
 
-    if (f != nullptr)
+    if (f.is_null() == false)
         return f;
 
     initialize();
@@ -368,7 +374,7 @@ const function* type_table::get_template_overload(const function_name& func, int
 
     if (candidates.size() == 1)
     {
-        const function& buf = candidates.get_function(0).function();
+        function buf = candidates.get_function(0).function();
         return get_cache()->set_template_overload(func, n_templ, templates, n_args, targs, buf);
     };
     if (candidates.size() == 0)
@@ -377,19 +383,19 @@ const function* type_table::get_template_overload(const function_name& func, int
         eh.error_template_function_ambiguity(func, n_templ, templates, n_args, targs, candidates);
 
     eh.report();
-    return nullptr;
+    return function();
 };
 
-const function*
+function
 type_table::get_converter(Type to, Type from, bool implicit)
 {
     converter_type c_type = implicit ? converter_type::conv_implicit 
                                      : converter_type::conv_explicit;
 
-    const function* f;
+    function f;
     f = get_cache()->get_converter(to, from, c_type);
 
-    if (f != nullptr)
+    if (f.is_null() == false)
         return f;
 
     initialize();
@@ -398,7 +404,7 @@ type_table::get_converter(Type to, Type from, bool implicit)
 
     if (set.size() == 1)
     {
-        const function& buf = set.get_final_function(0);
+        function buf = set.get_final_function(0);
         return get_cache()->set_converter(to,from, c_type, buf);
     };
 
@@ -410,15 +416,15 @@ type_table::get_converter(Type to, Type from, bool implicit)
         eh.error_convert_ambiguity(to,from,c_type,set);
 
     eh.report();
-    return nullptr;
+    return function();
 };
 
-const function* type_table::get_cast_function(Type to, Type from)
+function type_table::get_cast_function(Type to, Type from)
 {
-    const function* f;
+    function f;
     f = get_cache()->get_converter(to,from,converter_type::conv_cast);
 
-    if (f != nullptr)
+    if (f.is_null() == false)
         return f;
 
     initialize();
@@ -427,7 +433,7 @@ const function* type_table::get_cast_function(Type to, Type from)
 
     if (set.size() == 1)
     {
-        const function& buf = set.get_final_function(0);
+        function buf = set.get_final_function(0);
         return get_cache()->set_converter(to,from, converter_type::conv_cast, buf);
     };
 
@@ -439,15 +445,15 @@ const function* type_table::get_cast_function(Type to, Type from)
         eh.error_convert_ambiguity(to,from,converter_type::conv_cast, set);
 
     eh.report();
-    return nullptr;
+    return function();
 };
 
-const function* type_table::get_assigner(Type to, Type from)
+function type_table::get_assigner(Type to, Type from)
 {
-    const function* f;
+    function f;
     f = get_cache()->get_assigner(to,from);
 
-    if (f != nullptr)
+    if (f.is_null() == false)
         return f;
 
     initialize();
@@ -461,7 +467,7 @@ const function* type_table::get_assigner(Type to, Type from)
 
     if (as.size() == 1)
     {
-        const function& buf = as.get_final_function(0);
+        function buf = as.get_final_function(0);
         return get_cache()->set_assigner(to,from, buf);
     };
 
@@ -471,7 +477,7 @@ const function* type_table::get_assigner(Type to, Type from)
         eh.error_assign_ambiguity(to, from, as);        
 
     eh.report();
-    return nullptr;
+    return function();
 }
 
 void type_table::initialize()
@@ -493,9 +499,39 @@ void type_table::finish_initialization()
     m_fun_tab.finish_initialization();
 };
 
-static bool g_is_initialized = false;
-static std::vector<delayed_function_register*>* g_reg_int_vec = nullptr;
-static std::vector<delayed_function_template_register*>* g_reg_templ_int_vec = nullptr;
+struct delayed_func_vec : matcl_new_delete, global_object
+{
+    std::vector<delayed_function_register*> m_data;
+
+    void clear_global() override
+    {
+        m_data.clear();
+    };
+
+    void close_global() override
+    {
+        delete this;
+    };
+};
+
+struct delayed_templ_func_vec : matcl_new_delete, global_object
+{
+    std::vector<delayed_function_template_register*> m_data;
+
+    void clear_global() override
+    {
+        m_data.clear();
+    };
+
+    void close_global() override
+    {
+        delete this;
+    };
+};
+
+static bool                     g_is_initialized = false;
+static delayed_func_vec*        g_reg_int_vec = nullptr;
+static delayed_templ_func_vec*  g_reg_templ_int_vec = nullptr;
 
 bool type_table::process_functions(error_handler& eh)
 {
@@ -506,13 +542,13 @@ bool type_table::process_functions(error_handler& eh)
 
     if (g_reg_int_vec != nullptr)
     {
-        for(int i = (int)g_reg_int_vec->size() - 1; i >= 0 ; --i)
+        for(int i = (int)g_reg_int_vec->m_data.size() - 1; i >= 0 ; --i)
         {
-            function fun_evl = (*g_reg_int_vec)[i]->execute_registration();
-            register_function((*g_reg_int_vec)[i]->get_fun_name(), fun_evl, eh);
+            function fun_evl = g_reg_int_vec->m_data[i]->execute_registration();
+            register_function(g_reg_int_vec->m_data[i]->get_fun_name(), fun_evl, eh);
 
-            delete (*g_reg_int_vec)[i];
-            g_reg_int_vec->pop_back();
+            delete g_reg_int_vec->m_data[i];
+            g_reg_int_vec->m_data.pop_back();
         }
     };
 
@@ -520,16 +556,16 @@ bool type_table::process_functions(error_handler& eh)
 
     if (g_reg_templ_int_vec != nullptr)
     {
-        for(int i = (int)g_reg_templ_int_vec->size() - 1; i >= 0 ; --i)
+        for(int i = (int)g_reg_templ_int_vec->m_data.size() - 1; i >= 0 ; --i)
         {
             make_return_fptr ret;
-            function fun_evl = (*g_reg_templ_int_vec)[i]->execute_registration(types, ret);
+            function fun_evl = g_reg_templ_int_vec->m_data[i]->execute_registration(types, ret);
 
-            register_function_template((*g_reg_templ_int_vec)[i]->get_fun_name(), 
+            register_function_template(g_reg_templ_int_vec->m_data[i]->get_fun_name(), 
                                        fun_evl, types, ret, eh);
 
-            delete (*g_reg_templ_int_vec)[i];
-            g_reg_templ_int_vec->pop_back();
+            delete g_reg_templ_int_vec->m_data[i];
+            g_reg_templ_int_vec->m_data.pop_back();
         }
     };
 
@@ -538,13 +574,13 @@ bool type_table::process_functions(error_handler& eh)
     return true;
 };
 
-void type_table::register_function(const function_name& fn, const function& fun_evl, 
+void type_table::register_function(const function_name& fn, function fun_evl, 
                                    error_handler& eh)
 {
     m_fun_tab.insert(fn, fun_evl, nullptr, eh);
 };
 
-void type_table::register_function_template(const function_name& fn, const function& fun_evl, 
+void type_table::register_function_template(const function_name& fn, function fun_evl, 
                     const type_vec& types, make_return_fptr ret, error_handler& eh)
 {
     m_fun_tab.insert_template(fn, fun_evl, types, ret, eh);
@@ -553,17 +589,37 @@ void type_table::register_function_template(const function_name& fn, const funct
 void type_table::initial_register_function(delayed_function_register* fun)
 {
     if (!g_reg_int_vec)
-        g_reg_int_vec = new std::vector<delayed_function_register*>();
+        g_reg_int_vec = new delayed_func_vec();
 
-    g_reg_int_vec->push_back(fun);
+    g_reg_int_vec->m_data.push_back(fun);
 };
 
 void type_table::initial_register_function_template(delayed_function_template_register* fun)
 {
     if (!g_reg_templ_int_vec)
-        g_reg_templ_int_vec = new std::vector<delayed_function_template_register*>();
+        g_reg_templ_int_vec = new delayed_templ_func_vec();
 
-    g_reg_templ_int_vec->push_back(fun);
+    g_reg_templ_int_vec->m_data.push_back(fun);
+};
+
+void type_table::clear_global()
+{
+    m_fun_tab.clear_global();
+
+    for (auto& elem : m_type_map)
+        elem.second.clear_global();
+
+    m_type_map.clear();
+
+    for (auto& elem : m_type_map_ref)
+        delete elem.second.get_impl();
+    
+    m_type_map_ref.clear();
+};
+
+void type_table::close_global()
+{
+    delete this;
 };
 
 };};};

@@ -18,37 +18,47 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "type_table_cache.inl"
+#include "matcl-mp/details/initializer.h"
+#include "utils/impl_types.h"
+#include "matcl-core/memory/alloc.h"
 
-namespace matcl { namespace dynamic { namespace details
+namespace matcl 
 {
 
-//--------------------------------------------------------------------------
-//                         type_table_cache
-//--------------------------------------------------------------------------
-type_table_cache::type_table_cache()
-    :m_unifiers(false), m_overloads(false), m_template_overloads(false)
-    ,m_convert(false), m_assign(false)
-{};
-
-void type_table_cache::clear()
+static void open()
 {
-    m_unifiers.clear();
-    m_overloads.clear();
-    m_convert.clear();
-    m_assign.clear();
-    m_template_overloads.clear();
-    m_last_call.clear();
+    using allocator = default_allocator<true>;
+
+    //set allocator
+    mp_set_memory_functions 
+    ( 
+        &allocator::malloc,
+        &allocator::realloc,
+        &allocator::free
+    );
 };
 
-void type_table_cache::clear_global()
+static void close()
 {
-    clear();
+};
+
+// nifty counter
+static int g_counter = 0;
+
+matcl_mp_initializer::matcl_mp_initializer()
+{
+    if (g_counter == 0)
+        open();
+
+    ++g_counter;
+};
+
+matcl_mp_initializer::~matcl_mp_initializer()
+{
+    --g_counter;
+
+    if (g_counter == 0)   
+        close();
 }
 
-void type_table_cache::close_global()
-{    
-    delete this;
-}
-
-};};};
+};

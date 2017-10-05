@@ -48,11 +48,19 @@ class numeric_conversion
         e_match_type    m_match;
         size_t          m_hash;
 
-    public:
-        numeric_conversion(conv_types_data data);
+    private:
+        numeric_conversion(const numeric_conversion&) = delete;
+        numeric_conversion& operator=(const numeric_conversion&) = delete;
+
         ~numeric_conversion();
 
-        const function& get_function() const    { return m_func; };
+        template<class Ptr_type, class Hasher, class Equaler, class Allocator>
+        friend class matcl::details::object_table;
+
+    public:
+        numeric_conversion(conv_types_data data);        
+
+        function        get_function() const    { return m_func; };
         e_match_type    get_match() const       { return m_match; };
         std::size_t     hash_value() const      { return m_hash; };  
         static size_t   eval_hash(conv_types types);
@@ -69,7 +77,9 @@ inline numeric_conversion::numeric_conversion(conv_types_data data)
 };
 
 inline numeric_conversion::~numeric_conversion()
-{};
+{
+    const_cast<evaler*>(m_func.get_evaler())->destroy();
+};
 
 inline size_t numeric_conversion::eval_hash(conv_types types)
 {
@@ -142,17 +152,22 @@ class numeric_conversions_table
     private:        
         using string_hash   = matcl::details::obj_hasher<numeric_conversion>;
         using string_equal  = matcl::details::obj_equaler<numeric_conversion>;
-        using allocator     = matcl::details::default_allocator_simple<true, true, char>;
+        using allocator     = matcl::default_allocator_simple<true, char>;
         using conv_table    = matcl::details::object_table<numeric_conversion_ptr,
                                 string_hash,string_equal, allocator>;
 
     private:
         conv_table          m_table;
 
+        numeric_conversions_table(const numeric_conversions_table&) = delete;
+        numeric_conversions_table& operator=(const numeric_conversions_table&) = delete;
+
     public:
         numeric_conversions_table();
 
-        void                    insert(const function& fun_evl, e_match_type match);
+        void                    clear_global();
+
+        void                    insert(function fun_evl, e_match_type match);
         numeric_conversion_ptr  get(Type to, Type from) const;
 };
 
@@ -160,12 +175,17 @@ inline numeric_conversions_table::numeric_conversions_table()
     :m_table(true)
 {};
 
+inline void numeric_conversions_table::clear_global()
+{
+    m_table.clear();
+}
+
 inline numeric_conversion_ptr numeric_conversions_table::get(Type to, Type from) const
 { 
     return m_table.get_existing(conv_types{to,from}); 
 };
 
-inline void numeric_conversions_table::insert(const function& fun_evl, e_match_type match)
+inline void numeric_conversions_table::insert(function fun_evl, e_match_type match)
 {
     m_table.get(conv_types_data{fun_evl, match}); 
 };

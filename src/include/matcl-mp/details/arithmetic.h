@@ -24,6 +24,7 @@
 #include "matcl-mp/config.h"
 #include "matcl-mp/details/fwd_decls.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-mp/details/initializer.h"
 #include "matcl-core/matrix/complex_type.h"
 #include "matcl-mp/mp_float.h"
 #include "matcl-mp/details/utils.h"

@@ -20,29 +20,21 @@
 
 #pragma once
 
-#include "matcl-dynamic/function.h"
+#include "matcl-core/memory/global_objects.h"
 
-#include <cassert>
-
-namespace matcl { namespace dynamic { namespace details
+namespace matcl
 {
 
-class fun_conv_link : public evaler
+template<class T>
+void matcl_initializer::open_global()
 {
-    private:	
-        std::vector<function>       m_converters;
-
-        fun_conv_link(const fun_conv_link&) = delete;
-        fun_conv_link& operator=(const fun_conv_link&) = delete;
-
-    public:
-        fun_conv_link(const std::vector<function>& convs);
-        ~fun_conv_link() override;
-
-       bool         make_eval(const object** _args, object& ret) const override;
-       void         make_eval(const object** _args) const;
-       function     make_converter(int n_deduced, const Type deduced[], Type ded_ret,
-                        const std::vector<function>&) const override;
+    T::open_global();
 };
 
-};};};
+template<class T>
+void matcl_initializer::close_global()
+{
+    T::close_global();
+};
+
+};

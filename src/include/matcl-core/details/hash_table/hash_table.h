@@ -23,6 +23,8 @@
 #include <new>
 
 #include "matcl-core/details/hash_table/hash_table_details.h"
+#include "matcl-core/memory/alloc.h"
+#include "matcl-core/memory/global_objects.h"
 
 namespace matcl
 {
@@ -57,24 +59,6 @@ struct default_track_value
     static void     free(T* ptr)            {(void)ptr;};
     static void     copy(T* ptr)            {(void)ptr;};
     static void     assign(T* to, T* from)  {(void)from;(void)to;};
-};
-
-// allocator used by hash table to manage internal memory
-struct default_allocator
-{
-    static void* malloc(size_t bytes)
-    { 
-        void * ptr = ::malloc(bytes); 
-        if (ptr == nullptr)
-            throw std::bad_alloc();
-
-        return ptr;
-    }
-    
-    static void free(void* ptr)
-    { 
-        ::free(ptr); 
-    };
 };
 
 // reference to an element stored in hash table; VT is the type
@@ -125,7 +109,8 @@ class hash_table;
 // hash table storing pointers to T; memory allocations must be performed
 // by a user, template argument track_value helps to do this
 template<class T,class hasher_ = default_hasher,class equaler_ = default_equaler,
-         class track_value = default_track_value<T>, class allocator = default_allocator>
+         class track_value = default_track_value<T>, 
+         class allocator = default_allocator_simple<true, false, char>>
 class hash_table : private details::ht_base
 {
     public:

@@ -31,28 +31,21 @@
 namespace matcl { namespace dynamic { namespace details
 {
 
-class evaler
+class evaler : public matcl_new_delete
 {
     private:
         using func_vec  = std::vector<function>;
-        using asize_t   = matcl::atomic<size_t>;
 
     public:
-        mutable asize_t m_refcount;
         Type*           m_arg_ti;
         Type            m_ret_ti;
         int             m_args_size;        
 
     public:
         evaler();
+        virtual ~evaler(){};
 
-        virtual ~evaler() {};
-
-        void            increase_refcount() const;
-        bool            decrease_refcount() const;
-
-        virtual function    make_converter(int n_deduced, const Type deduced[],
-                                Type deduced_ret, const func_vec& arg_conv) const = 0;
+        virtual void        destroy() = 0;
 
         // if function returns true, ret is a new object; otherwise ret is one
         // of existing argument (only fun_conv_null converter returns false) 
@@ -62,49 +55,10 @@ class evaler
         virtual void        make_eval(const object** args) const = 0;
 };
 
-struct evaler_traits
-{
-    private:
-        using value_type    = evaler;
-
-    public:
-        static void     check_free(const value_type* p);
-        static void     copy(const value_type* p);
-        static void     assign(const value_type* to, const value_type* from);
-};
-
-inline void evaler_traits::check_free(const value_type* p)
-{
-    if (p && p->decrease_refcount())
-        delete p;
-};
-
-inline void evaler_traits::copy(const value_type* p)
-{
-    if (p) 
-        p->increase_refcount();
-}
-
-inline void evaler_traits::assign(const value_type* to, const value_type* from)
-{
-    copy(from);
-    check_free(to);
-};
-
 inline evaler::evaler()
-    :m_refcount(0)
+    :m_arg_ti(nullptr), m_args_size(0)
 {};
-
-inline void evaler::increase_refcount() const
-{
-    ++m_refcount;
-};
-
-inline bool evaler::decrease_refcount() const
-{
-    return ((--m_refcount ) == 0);
-}
-
+ 
 template<class T>
 struct get_object_type
 {

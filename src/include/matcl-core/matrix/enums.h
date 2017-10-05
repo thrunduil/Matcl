@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl-core/memory/global_objects.h"
 #include <math.h>
 
 namespace matcl

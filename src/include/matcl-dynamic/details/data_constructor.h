@@ -85,14 +85,14 @@ struct data_constructor
     template<int N, class T>
     typename enable_nconst<T>::type get() const;
 
-    void      set_return(object&& arg)      {m_ret->reset(std::move(arg)); };
-    void      set_return(const object& arg) {m_ret->reset(arg); };
+    void      set_return(object&& arg)      {new(m_ret) object(std::move(arg)); };
+    void      set_return(const object& arg) {new(m_ret) object(arg); };
 
     template<class Ty>
-    void      set_return(const Ty& arg)     {m_ret->reset(object(arg)); };
+    void      set_return(const Ty& arg)     {new(m_ret) object(arg); };
 
     template<class Ty>
-    void      set_return(Ty&& arg)          {m_ret->reset(object(std::move(arg))); };
+    void      set_return(Ty&& arg)          {new(m_ret) object(std::move(arg)); };
 };
 
 template <class Base_constr>

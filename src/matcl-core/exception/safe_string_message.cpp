@@ -20,11 +20,14 @@
 
 #include "matcl-core/error/safe_string_message.h"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/alloc.h"
+
 #include <mutex>
 
 namespace matcl { namespace error
 {
-class safe_string_message::safe_string_message_impl
+
+class safe_string_message::safe_string_message_impl : public matcl_new_delete
 {
     private:
         matcl::default_mutex    msg_mutex;

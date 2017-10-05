@@ -32,7 +32,7 @@ enum class predef_fun
     is_one
 };
 
-class type_impl
+class type_impl : public matcl_new_delete
 {
     protected:
         using data_type             = details::object_data_base;

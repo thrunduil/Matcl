@@ -96,7 +96,7 @@ details::local_rand_state_raii matcl::local_rand_state(unsigned long s)
 
 namespace details
 {
-    class local_rand_state_raii_impl
+    class local_rand_state_raii_impl : public matcl_new_delete
     {
         private:
             matcl::rand_state  m_rand_state;

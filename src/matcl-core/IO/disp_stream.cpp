@@ -40,7 +40,8 @@ disp_stream::disp_stream(const output_stream_ptr& os)
     :m_impl(new details::disp_stream_impl(os))
 {};
 disp_stream::disp_stream(std::ostream& os)
-    :m_impl(new details::disp_stream_impl(output_stream_ptr(new output_stream_from_ostream(os))))
+    :m_impl(new details::disp_stream_impl
+                (output_stream_ptr(new output_stream_from_ostream(os))))
 {
 };
 disp_stream::impl_type disp_stream::impl() const

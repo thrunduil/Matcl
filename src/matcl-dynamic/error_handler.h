@@ -43,9 +43,9 @@ class error_handler
 
         void    error_one_not_defined(Type t);
 
-        void    error_function_constraints_not_satisfied(function_name func, const function& f);
+        void    error_function_constraints_not_satisfied(function_name func, function f);
         void    error_function_defined_with_different_validator(function_name old, function_name newf);
-        void    error_function_must_return_template(function_name func, const function& f, 
+        void    error_function_must_return_template(function_name func, function f, 
                     int n_templ, const Type templ[]);
 
         void    error_function_not_found(function_name func, int n_args, const Type t[]);
@@ -57,10 +57,10 @@ class error_handler
         void    error_template_function_ambiguity(function_name func, int n_templ, const Type templ[],
                     int n_args, const Type t[], const candidate_set& candidates);
 
-        void    error_invalid_converter_number_args(const function& conv);
-        void    error_invalid_unifier_number_args(const function& conv);
-        void    error_invalid_assigner_number_args(const function& fun);
-        void    error_invalid_assigner_return_type(const function& fun);
+        void    error_invalid_converter_number_args(function conv);
+        void    error_invalid_unifier_number_args(function conv);
+        void    error_invalid_assigner_number_args(function fun);
+        void    error_invalid_assigner_return_type(function fun);
 
         void    error_unable_to_convert(Type to, Type from, converter_type c_type);
         void    error_convert_ambiguity(Type to, Type from, converter_type c_type, 
@@ -83,20 +83,20 @@ class error_handler
                         const Type t[]);
         void    disp_template_function_call(std::ostringstream& os, function_name func, int n_templ,
                         const Type templ[], int n_args, const Type t[]);
-        void    disp_function_declaration(std::ostringstream& os, const function& f, 
+        void    disp_function_declaration(std::ostringstream& os, function f, 
                         const std::string& name = "");
         void    disp_function_declaration(std::ostringstream& os, const func_templ& f, 
                         const std::string& name = "");
-        void    disp_function_declaration(std::ostringstream& os, const function& f, 
+        void    disp_function_declaration(std::ostringstream& os, function f, 
                         Type deduced_return, int n_templ, const Type templ[], 
                         const std::string& name = "");
 
-        void    disp_function_name(std::ostringstream& os, const function& f, Type deduced_return, 
+        void    disp_function_name(std::ostringstream& os, function f, Type deduced_return, 
                         const std::string& name);
         void    disp_function_name(std::ostringstream& os, const func_templ& f, const std::string& name);
-        void    disp_function_name(std::ostringstream& os, const function& f, Type deduced_return, 
+        void    disp_function_name(std::ostringstream& os, function f, Type deduced_return, 
                         int n_templ, const Type templ[], int& n_ded, const std::string& name);
-        void    disp_function_arguments(std::ostringstream& os, const function& f, int n_deduced);
+        void    disp_function_arguments(std::ostringstream& os, function f, int n_deduced);
 
         void    disp_type(std::ostringstream& os, Type t);
         void    disp_function_name(std::ostringstream& os, function_name func, int n_templ, 

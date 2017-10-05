@@ -97,9 +97,8 @@ void* object_data<T>::operator new(size_t)
 
 template<class T>
 force_inline
-void object_data<T>::operator delete(void* ptr, size_t size)
+void object_data<T>::operator delete(void* ptr)
 {
-    (void)size;
     object_data_pool<T>::free(ptr);
 };
 

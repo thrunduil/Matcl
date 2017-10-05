@@ -216,9 +216,15 @@ double performance_tester::test_mult_obj(T& res, Integer M, Integer K, Integer N
 
 void performance_tester::make()
 {
+  #ifdef _DEBUG
+    Integer M       = 50;
+    Integer K       = 50;
+    Integer N       = 50;    
+  #else
     Integer M       = 100;
     Integer K       = 100;
     Integer N       = 100;    
+  #endif
 
     //TODO
     bool int_only   = true;
@@ -235,7 +241,7 @@ void performance_tester::make()
 
     dm.disp_header();
 
-    for (int i = 0; i < 200; ++i)
+    for (int i = 0; i < 20; ++i)
     {
         Integer res;
         OInteger ores;

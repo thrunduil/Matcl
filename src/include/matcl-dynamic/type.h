@@ -23,12 +23,13 @@
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
 #include "matcl-dynamic/function_name.h"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl { namespace dynamic
 {
 
 // class representing type of an object
-class MATCL_DYN_EXPORT Type 
+class MATCL_DYN_EXPORT Type : public matcl_new_delete
 {
     private:
         using type_impl    = matcl::dynamic::details::type_impl;

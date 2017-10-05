@@ -21,6 +21,8 @@
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-dynamic/details/object.inl"
 #include "matcl-dynamic/details/object_data.inl"
+#include "matcl-core/details/stack_array.h"
+#include "matcl-dynamic/initialization.h"
 #include "type_table.h"
 
 namespace matcl { namespace dynamic { namespace functions
@@ -31,16 +33,16 @@ namespace matcl { namespace dynamic { namespace functions
 //---------------------------------------------------------------
 struct validators
 {
-    static bool is_ret_bool(const function& f)
+    static bool is_ret_bool(function f)
     {
         return f.return_type() == predefined::type_bool();
     };
-    static bool is_ret_int(const function& f)
+    static bool is_ret_int(function f)
     {
         return f.return_type() == predefined::type_int();
     };
 
-    static bool check_2args_ret_bool(const function& f)
+    static bool check_2args_ret_bool(function f)
     {
         return check_2args(f) && is_ret_bool(f);
     };
@@ -51,7 +53,7 @@ struct validators
            << predefined::type_bool().to_string();
     };
 
-    static bool check_2args(const function& f)
+    static bool check_2args(function f)
     {
         return f.number_arguments() == 2;
     };
@@ -61,7 +63,7 @@ struct validators
         os << "function takes two arguments";
     };
 
-    static bool check_1args_ret_bool(const function& f)
+    static bool check_1args_ret_bool(function f)
     {
         return check_1args(f) && is_ret_bool(f);
     };
@@ -78,7 +80,7 @@ struct validators
             << predefined::type_bool().to_string();;
     };
 
-    static bool check_ret_int(const function& f)
+    static bool check_ret_int(function f)
     {
         return is_ret_int(f);
     };
@@ -89,7 +91,7 @@ struct validators
             << predefined::type_int().to_string();;
     };
 
-    static bool check_1args(const function& f)
+    static bool check_1args(function f)
     {
         return f.number_arguments() == 1;
     };
@@ -99,7 +101,7 @@ struct validators
         os << "function takes one argument";
     };
 
-    static bool check_2args_sec_ref(const function& f)
+    static bool check_2args_sec_ref(function f)
     {
         if (f.number_arguments() != 2)
             return false;
@@ -127,115 +129,167 @@ static function_validator validator_1arg_ret_bool()
 //---------------------------------------------------------------
 //                  functions
 //---------------------------------------------------------------
+enum class func_code : size_t
+{
+    op_eeq,     op_neq,     op_lt,      op_leq,     op_geq,
+    op_gt,      op_uminus,  op_plus,    op_minus,   op_mul,
+    op_div,     idiv,       op_bool,    op_not,     real,
+    imag,       is_zero,    is_one,
+
+    size
+};
+
+using function_name_pod = md::pod_type<function_name>;
+
+// function names must be initialized very early; dynamic initialization
+// phase is too late; we could do initialization using static variables
+// in functions, but overhead in this case is very high.
+// function names are initialized by matcl_dynamic initializer
+
+static
+function_name_pod func_name[(size_t)func_code::size];
+
+static inline
+const function_name* cast(const function_name_pod* arr)
+{
+    return reinterpret_cast<const function_name*>(arr);
+};
+
 function_name functions::op_eeq::eval()
 {
-    static function_name f("op_eeq");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_eeq];
 };
 
 function_name functions::op_neq::eval()
 {
-    static function_name f("op_neq");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_neq];
 };
 
 function_name functions::op_lt::eval()
 {
-    static function_name f("op_lt");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_lt];
 };
 
 function_name functions::op_leq::eval()
 {
-    static function_name f("op_leq");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_leq];
 };
 
 function_name functions::op_geq::eval()
 {
-    static function_name f("op_geq");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_geq];
 };
 
 function_name functions::op_gt::eval()
 {
-    static function_name f("op_gt");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_gt];
 };
 
 function_name functions::op_uminus::eval()
 {
-    static function_name f("op_uminus");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_uminus];
 };
 
 function_name functions::op_plus::eval()
 {
-    static function_name f("op_plus");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_plus];
 };
 
 function_name functions::op_minus::eval()
 {
-    static function_name f("op_minus");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_minus];
 };
 
 function_name functions::op_mul::eval()
 {
-    static function_name f("op_mul");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_mul];
 };
 
 function_name functions::op_div::eval()
 {
-    static function_name f("op_div");
-    return f;
+    return cast(func_name)[(size_t)func_code::op_div];
 };
 
 function_name functions::idiv::eval()
 {
-    static function_name f("idiv");
-    return f;
+    return cast(func_name)[(size_t)func_code::idiv];
 };
 
 function_name functions::op_bool::eval()
 {
-    static function_name f("op_bool", validator_1arg_ret_bool());
-    return f;
+    return cast(func_name)[(size_t)func_code::op_bool];
 };
 
 function_name functions::op_not::eval()
 {
-    static function_name f("op_not", validator_1arg_ret_bool());
-    return f;
+    return cast(func_name)[(size_t)func_code::op_not];
 };
 
 function_name functions::real::eval()
 {
-    static function_name f("real");
-    return f;
+    return cast(func_name)[(size_t)func_code::real];
 };
 
 function_name functions::imag::eval()
 {
-    static function_name f("imag");
-    return f;
+    return cast(func_name)[(size_t)func_code::imag];
 };
 
 function_name functions::is_zero::eval()
 {
-    static function_name f("is_zero", validator_1arg_ret_bool());
-    return f;
+    return cast(func_name)[(size_t)func_code::is_zero];
 };
 
 function_name functions::is_one::eval()
 {
-    static function_name f("is_one", validator_1arg_ret_bool());
-    return f;
+    return cast(func_name)[(size_t)func_code::is_one];
 };
 
 };};};
+
+namespace matcl { namespace dynamic
+{
+
+#define init_func(name)                                         \
+new(functions::func_name +(size_t)functions::func_code::name)   \
+    function_name(#name);
+
+void details::initialize_funcions()
+{
+    init_func(op_eeq)
+    init_func(op_neq)
+    init_func(op_lt)
+    init_func(op_leq)
+    init_func(op_geq)
+    init_func(op_gt)
+    init_func(op_uminus)
+    init_func(op_plus)
+    init_func(op_minus)
+    init_func(op_mul)
+    init_func(op_div)
+    init_func(idiv)
+    init_func(real)
+    init_func(imag)
+
+    init_func(op_bool)
+    init_func(op_not)
+    init_func(is_zero)
+    init_func(is_one)
+
+    new (functions::func_name + (size_t)functions::func_code::op_bool) 
+        function_name("op_bool", functions::validator_1arg_ret_bool());
+
+    new (functions::func_name + (size_t)functions::func_code::op_not) 
+        function_name("op_not", functions::validator_1arg_ret_bool());
+
+    new (functions::func_name + (size_t)functions::func_code::is_zero) 
+        function_name("is_zero", functions::validator_1arg_ret_bool());
+
+    new (functions::func_name + (size_t)functions::func_code::is_one)
+        function_name("is_one", functions::validator_1arg_ret_bool());
+};
+
+}}
 
 namespace matcl { namespace dynamic
 {

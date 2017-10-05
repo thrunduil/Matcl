@@ -49,8 +49,18 @@ namespace boost { namespace serialization
     class access;
 };};
 
+namespace matcl { namespace details
+{
+
+class disp_stream_impl;
+class printer;
+
+}};
+
 namespace matcl
 {
+    namespace md    = matcl::details;
+
     using iarchive_impl     = eos::portable_iarchive;
     using oarchive_impl     = eos::portable_oarchive;
 
@@ -71,14 +81,6 @@ namespace matcl
     using Object            = dynamic::object;
     using disp_stream_ptr   = std::shared_ptr<disp_stream>;
 }
-
-namespace matcl { namespace details
-{
-
-class disp_stream_impl;
-class printer;
-
-}};
 
 namespace matcl { namespace error
 {

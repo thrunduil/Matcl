@@ -22,7 +22,9 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <string>
 #include <iosfwd>
@@ -32,7 +34,7 @@ namespace matcl
 {
 
 // this class is responsible for printing on proper device
-class MATCL_CORE_EXPORT output_stream
+class MATCL_CORE_EXPORT output_stream : public matcl_new_delete
 {
     public:
         virtual ~output_stream() {};

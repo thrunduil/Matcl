@@ -129,13 +129,7 @@
     <ClInclude Include="..\..\src\matcl-dynamic\error_handler.h">
       <Filter>Source Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\matcl-dynamic\func_conv_link.h">
-      <Filter>Source Files\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\matcl-dynamic\function_table.h">
-      <Filter>Source Files\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-dynamic\null_conversions_table.h">
       <Filter>Source Files\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\matcl-dynamic\numeric_conversions_table.h">
@@ -170,6 +164,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\global_objects.h">
       <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-dynamic\conversions_table.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-dynamic\initialization.h">
+      <Filter>Source Files\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,9 +256,6 @@
     <ClCompile Include="..\..\src\matcl-dynamic\predefined\special_functions.cpp">
       <Filter>Source Files\src\predefined</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-dynamic\func_conv_link.cpp">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-dynamic\func_evaler_conv.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
@@ -269,9 +266,6 @@
       <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-dynamic\function_table.cpp">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-dynamic\null_conversions_table.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-dynamic\object.cpp">
@@ -314,6 +308,9 @@
       <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-dynamic\matcl_function_names.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-dynamic\conversions_table.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>

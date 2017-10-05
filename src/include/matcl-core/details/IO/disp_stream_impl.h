@@ -22,6 +22,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/IO/printer.h"
 
 #include <string>
@@ -43,7 +44,7 @@ struct MATCL_CORE_EXPORT label_iterators
 };
 
 //all indices are 0-based except new_line and end_line which are 1-base (0 - column headers)
-class MATCL_CORE_EXPORT disp_stream_impl
+class MATCL_CORE_EXPORT disp_stream_impl : public matcl_new_delete
 {
     private:
         using string            = std::string;

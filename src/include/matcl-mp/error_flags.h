@@ -22,6 +22,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-mp/config.h"
+#include "matcl-mp/details/initializer.h"
 
 namespace matcl { namespace error_flags
 {

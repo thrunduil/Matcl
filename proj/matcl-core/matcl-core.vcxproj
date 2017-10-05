@@ -67,6 +67,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\matrix\matrix_traits.h" />
     <ClInclude Include="..\..\src\include\matcl-core\matrix\scalar_types.h" />
     <ClInclude Include="..\..\src\include\matcl-core\memory\alloc.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\memory\global_objects.h" />
     <ClInclude Include="..\..\src\include\matcl-core\memory\memory.h" />
     <ClInclude Include="..\..\src\include\matcl-core\memory\refptr.h" />
     <ClInclude Include="..\..\src\include\matcl-core\options\matcl_options.h" />
@@ -76,7 +77,9 @@
     <ClInclude Include="..\..\src\matcl-core\base\malloc.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\src\include\matcl-core\details\alloc.inl" />
     <None Include="..\..\src\include\matcl-core\details\constants.inl" />
+    <None Include="..\..\src\include\matcl-core\details\global_objects.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_table.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\object_table.inl" />
@@ -91,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-core\base\alloc.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\archive.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\base\global_objects.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\integer.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\leak_detector.cpp" />
     <ClCompile Include="..\..\src\matcl-core\base\malloc.cpp" />

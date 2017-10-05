@@ -21,6 +21,8 @@
 #pragma once
 
 #include "matcl-core/config.h"
+#include "matcl-core/memory/global_objects.h"
+
 #include <functional>
 #include <vector>
 #include <memory>
@@ -38,6 +40,12 @@ class MATCL_CORE_EXPORT leak_detector
                         const std::function<void ()>& handler);
 
         static void report_leaks(std::ostream& os);
+
+    private:
+        static void open_global();
+        static void close_global();        
+
+        friend matcl_initializer;
 };
 
 };};

@@ -89,29 +89,59 @@ double rand_state::gen_norm()
     return u * s;
 }
 
-MATCL_THREAD_LOCAL 
-matcl::rand_state* global_rs = nullptr;
-
-static void rand_state_deleter(rand_state* ptr)
+struct rand_state_data : global_object, matcl_new_delete
 {
-    using allocator = md::default_allocator<true, false>;
-    allocator::aligned_free(ptr, sizeof(rand_state));
+    matcl::rand_state m_data;
+
+    rand_state_data(const matcl::rand_state::rand_state_ptr& ptr);
+    ~rand_state_data();
+
+    void    clear_global() override;
+    void    close_global() override;
 };
 
 static void global_rand_state_deleter(rand_state* ptr)
 {
-    using allocator = md::default_allocator<true, true>;
+    using allocator = default_allocator<true>;
     allocator::aligned_free(ptr, sizeof(rand_state));
 };
 
+rand_state_data::rand_state_data(const matcl::rand_state::rand_state_ptr& ptr)
+    :m_data(ptr)
+{    
+};
+
+rand_state_data::~rand_state_data()
+{
+};
+
+void rand_state_data::clear_global()
+{
+    m_data = matcl::rand_state();
+};
+
+void rand_state_data::close_global()
+{
+    delete this;
+}
+
+static void rand_state_deleter(rand_state* ptr)
+{
+    using allocator = default_allocator<true>;
+    allocator::aligned_free(ptr, sizeof(rand_state));
+};
+
+MATCL_THREAD_LOCAL 
+rand_state_data* global_rs = nullptr;
+
 static void init_global_rand_state()
 {
-    using allocator = md::default_allocator<true, true>;
+    using allocator = default_allocator<true>;
     rand_state* rs  = (rand_state*)allocator::aligned_malloc(sizeof(rand_state));
     auto ptr        = matcl::rand_state::rand_state_ptr(rs, &global_rand_state_deleter);
     ptr->init_genrand(0);
 
-    global_rs       = new matcl::rand_state(ptr);
+    global_rs = new rand_state_data(ptr);
 };
 
 const matcl::rand_state& md::global_rand_state()
@@ -119,7 +149,7 @@ const matcl::rand_state& md::global_rand_state()
     if (!global_rs)
         init_global_rand_state();
 
-    return *global_rs;
+    return global_rs->m_data;
 };
 
 matcl::rand_state md::get_rand_state()
@@ -129,10 +159,10 @@ matcl::rand_state md::get_rand_state()
 
     matcl::rand_state ret;
 
-    using allocator = md::default_allocator<true, false>;
+    using allocator = default_allocator<true>;
     rand_state* rs  = (rand_state*)allocator::aligned_malloc(sizeof(rand_state));
     ret.m_ptr       = matcl::rand_state::rand_state_ptr(rs, &rand_state_deleter);
-    memcpy(rs,global_rs->m_ptr.get(),sizeof(rand_state));
+    memcpy(rs,global_rs->m_data.m_ptr.get(),sizeof(rand_state));
 
     return ret;
 };
@@ -142,7 +172,7 @@ void md::set_rand_state(const matcl::rand_state& st)
     if (!global_rs)
         init_global_rand_state();
 
-    memcpy(global_rs->m_ptr.get(),st.m_ptr.get(),sizeof(rand_state));
+    memcpy(global_rs->m_data.m_ptr.get(),st.m_ptr.get(),sizeof(rand_state));
 };
 
 };};

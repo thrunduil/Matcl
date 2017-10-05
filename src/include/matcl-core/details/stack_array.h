@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl-core/memory/global_objects.h"
 #include <memory>
 
 namespace matcl { namespace details
@@ -50,7 +51,7 @@ struct pod_destructor : stack_array_elem_destructor<pod_type<value_type>>
 };
 
 template<class value_type_, int n_elem = 10, 
-    class Allocator = default_allocator<true, false>>
+    class Allocator = default_allocator<true>>
 class stack_array
 {
     static_assert(std::is_pod<value_type_>::value,"value_type must be pod");

@@ -155,4 +155,14 @@ void cache::clear()
     mpfr_free_cache();
 };
 
+void cache::clear_global()
+{
+    clear();
+}
+
+void cache::close_global()
+{
+    delete this;
+}
+
 };
