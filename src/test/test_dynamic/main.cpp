@@ -39,6 +39,9 @@ int main(int argc, const char* argv[])
 {
     try
     { 
+        matcl::test::test_performance();
+
+        /*
         matcl::test::test_gmp();        
         matcl::test::test_gmp_bin();        
         matcl::test::test_gmp_object();                     
@@ -47,10 +50,14 @@ int main(int argc, const char* argv[])
         test.make();  
 
         matcl::test::test_gmp_prec(std::cout);
-        matcl::test::test_performance();         
+        matcl::test::test_performance();
+        */
 
         matcl::free_caches();
+
+      #if MATCL_DEBUG_MEMORY
         matcl::details::leak_detector::report_leaks(std::cout);
+      #endif
 
         std::cout << "finished" << "\n";
     }

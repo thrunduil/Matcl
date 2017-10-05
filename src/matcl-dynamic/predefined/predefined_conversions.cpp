@@ -22,6 +22,7 @@
 #include "matcl-dynamic/object_type.h"
 #include "matcl-dynamic/predefined_functions.h"
 #include "special_functions.h"
+#include "matcl-dynamic/details/object.inl"
 
 namespace matcl { namespace dynamic
 {

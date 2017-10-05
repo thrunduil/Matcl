@@ -21,55 +21,59 @@
 #pragma once
 
 #include "matcl-core/general/thread.h"
+#include <boost/smart_ptr/detail/spinlock.hpp>
 
 namespace matcl
 {
 
+//--------------------------------------------------------------------------
+//                         atomic_nothread
+//--------------------------------------------------------------------------
 // implements interface of atomics in single threaded version of matcl
 template<class V>
-inline atomic_nothread<V>::atomic_nothread()
+force_inline atomic_nothread<V>::atomic_nothread()
     :m_data(V(0))
 {};
 
 template<class V>
-inline atomic_nothread<V>::atomic_nothread(V v)
+force_inline atomic_nothread<V>::atomic_nothread(V v)
     :m_data(v)
 {};
 
 template<class V>
-inline V atomic_nothread<V>::load(std::memory_order) const
+force_inline V atomic_nothread<V>::load(std::memory_order) const
 { 
     return m_data; 
 };
 
 template<class V>
-inline void atomic_nothread<V>::store(V val, std::memory_order)
+force_inline void atomic_nothread<V>::store(V val, std::memory_order)
 { 
     m_data = val; 
 };
 
 template<class V>
-inline atomic_nothread<V>::operator V() const
+force_inline atomic_nothread<V>::operator V() const
 { 
     return m_data; 
 };
 
 template<class V>
-inline atomic_nothread<V>& atomic_nothread<V>::operator++()
+force_inline atomic_nothread<V>& atomic_nothread<V>::operator++()
 { 
     ++m_data; 
     return *this; 
 };
 
 template<class V>
-inline atomic_nothread<V>& atomic_nothread<V>::operator--()
+force_inline atomic_nothread<V>& atomic_nothread<V>::operator--()
 { 
     --m_data; 
     return *this; 
 };
 
 template<class V>
-inline atomic_nothread<V>& atomic_nothread<V>::operator=(V val)
+force_inline atomic_nothread<V>& atomic_nothread<V>::operator=(V val)
 {
     m_data = val; 
     return *this;
@@ -77,7 +81,7 @@ inline atomic_nothread<V>& atomic_nothread<V>::operator=(V val)
 
 template<class V>
 template<class T>
-inline V atomic_nothread<V>::fetch_add(T inc, std::memory_order)
+force_inline V atomic_nothread<V>::fetch_add(T inc, std::memory_order)
 { 
     V old   = m_data; 
     m_data  += inc; 
@@ -86,11 +90,44 @@ inline V atomic_nothread<V>::fetch_add(T inc, std::memory_order)
 
 template<class V>
 template<class T>
-inline V atomic_nothread<V>::fetch_sub(T inc, std::memory_order)
+force_inline V atomic_nothread<V>::fetch_sub(T inc, std::memory_order)
 { 
     V old   = m_data; 
     m_data  -= inc; 
     return old; 
 };
+
+//--------------------------------------------------------------------------
+//                         spinlock_mutex
+//--------------------------------------------------------------------------
+
+force_inline 
+boost::detail::spinlock& get_boost_spinlock(spinlock_mutex* ptr)
+{
+    static_assert(sizeof(boost::detail::spinlock) == sizeof(spinlock_mutex),
+                  "invalid spinlock");
+
+    return *reinterpret_cast<boost::detail::spinlock*>(ptr);
+};
+
+force_inline spinlock_mutex::spinlock_mutex()
+{
+    m_mutex = 0; 
+}
+
+force_inline bool spinlock_mutex::try_lock()
+{ 
+    return get_boost_spinlock(this).try_lock(); 
+}
+
+force_inline void spinlock_mutex::lock()
+{ 
+    get_boost_spinlock(this).lock(); 
+}
+
+force_inline void spinlock_mutex::unlock()
+{ 
+    get_boost_spinlock(this).unlock(); 
+}
 
 };

@@ -29,12 +29,28 @@ namespace matcl { namespace dynamic { namespace details
 
 struct MATCL_DYN_EXPORT register_object_helper
 {
-    register_object_helper(const char*, Type (*creator)());
+    private:
+        using pool_type         = object_data_pool_impl;
+        using constr_type       = Type (*)(pool_type*& pool);
 
-    template<class T>           
-    static Type             create_object();
-    static std::string      get_name(const char* name);
-    Type                    get_object(const char* n);
+    private:
+        // type and pool must be shared between dlls
+        Type                    m_type;
+        pool_type*              m_pool;
+
+    public:
+        register_object_helper(const char*, constr_type constr);
+
+        template<class T>           
+        static Type             create_data(pool_type*& pool);
+        static std::string      get_name(const char* name);
+        
+        Type                    get_type() const;
+        pool_type*              get_pool() const;
+
+    private:
+        void                    get_type_data(const char* n, Type& ty,
+                                    pool_type*& pool);
 };
 
 template<class T> 
@@ -63,11 +79,7 @@ class mark_reference_type
 template<class T>
 struct register_object
 {
-    private:
-        static details::register_object_helper  g_hook;
-        friend mark_type<T>;
+    static details::register_object_helper  g_hook;
 };
 
 };};};
-
-#include "matcl-dynamic/details/register_object.inl"

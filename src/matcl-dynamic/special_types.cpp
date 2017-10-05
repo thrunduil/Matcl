@@ -20,7 +20,7 @@
 
 #include "matcl-dynamic/special_types.h"
 #include "matcl-core/IO/archive.h"
-#include "matcl-dynamic/details/object_data.h"
+#include "matcl-dynamic/details/object_data.inl"
 #include "matcl-dynamic/object_type.h"
 #include "matcl-core/details/IO/printer.h"
 

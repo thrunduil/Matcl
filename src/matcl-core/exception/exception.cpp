@@ -142,6 +142,7 @@ void assert_exception::make(const char* txt, const char* description, const char
         message			+= description;
     };
 
+    std::cerr << message << "\n";
     throw assert_exception(file,line,message);
 }
 

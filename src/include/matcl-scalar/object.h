@@ -24,7 +24,7 @@
 
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/enums.h"
-#include "matcl-dynamic/object.h"
+#include "matcl-dynamic/details/object.inl"
 
 namespace matcl { namespace details
 {

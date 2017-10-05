@@ -21,6 +21,7 @@
 #include "matcl-dynamic/details/func_evaler_conv.h"
 #include "matcl-core/details/stack_array.h"
 #include "matcl-dynamic/object_type.h"
+#include "matcl-dynamic/details/object.inl"
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -94,6 +95,51 @@ bool fun_evaler_conv::make_eval(const object** _args, object& return_obj) const
     const object** buff_ptr = args.get();
     object* buff_obj        = reinterpret_cast<object*>(args_vec.get());
 
+    (void)buff_obj;
+    make_convert(_args, buff_ptr, buff_obj, n_deduced, size_counter);
+
+	m_fun->make_eval(buff_ptr, return_obj);
+
+    if (m_deduced_ret != Type())
+    {
+        //is is ensured, that return_obj has Template type
+        return_obj.reset(object(m_deduced_ret, return_obj));
+    };
+
+    return true;
+};
+
+void fun_evaler_conv::make_eval(const object** _args) const
+{
+    //to avoid using new or malloc
+    using obj_pod           = matcl::details::pod_type<object>;
+    using obj_destructor    = obj_pod::destructor_type;
+    using stack_array_ptr   = matcl::details::stack_array<const object*,10>;
+    using stack_array_obj   = matcl::details::stack_array<obj_pod,10>;
+
+    Integer n_arg           = (Integer)m_converters.size();
+    Integer n_deduced       = (Integer)m_deduced.size();
+
+    Integer size_counter    = 0;
+
+    obj_destructor d(&size_counter);
+	stack_array_ptr args(n_arg + n_deduced);
+    stack_array_obj args_vec(n_arg + n_deduced, &d);
+
+    const object** buff_ptr = args.get();
+    object* buff_obj        = reinterpret_cast<object*>(args_vec.get());
+
+    (void)buff_obj;
+    make_convert(_args, buff_ptr, buff_obj, n_deduced, size_counter);
+
+	m_fun->make_eval(buff_ptr);
+
+    return;
+};
+
+void fun_evaler_conv::make_convert(const object** _args, const object** buff_ptr, 
+                    object* buff_obj, Integer n_deduced, Integer& size_counter) const
+{
     for (int i = 0; i < n_deduced; ++i)
         buff_ptr[i]         = &m_deduced[i];
 
@@ -120,16 +166,6 @@ bool fun_evaler_conv::make_eval(const object** _args, object& return_obj) const
 			buff_ptr[i+n_deduced]       = _args[i];
 		}
 	}
-
-	m_fun->make_eval(buff_ptr, return_obj);
-
-    if (m_deduced_ret != Type())
-    {
-        //is is ensured, that return_obj has Template type
-        return_obj.reset(object(m_deduced_ret, return_obj));
-    };
-
-    return true;
 };
 
 };};};

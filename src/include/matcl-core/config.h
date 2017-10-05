@@ -58,7 +58,9 @@
 
 // enable multithreaded mode; compiler must implement "magic statics"
 // otherwise it will not be save to use matcl in multithreaded environment
-#define MATCL_THREADING_MODE MATCL_MULTITHREAD_MODE
+//#define MATCL_THREADING_MODE MATCL_MULTITHREAD_MODE
+#define MATCL_THREADING_MODE MATCL_SINGLETHREAD_MODE
+//TODO
 
 // when this macro is set to 1, then dllmalloc memory manager is used
 // instead of the default one

@@ -90,7 +90,10 @@ class MATCL_DYN_EXPORT function
 
         // evaluate this function; arguments must be valid, i.e. input 
         // types must be equal to function args types
-        object          make(int n_args, const object* args[]) const;
+        void            make(int n_args, const object* args[], object& ret) const;
+
+        // version of make function, when output is not needed
+        void            make(int n_args, const object* args[]) const;
 
     //internal use
     public:

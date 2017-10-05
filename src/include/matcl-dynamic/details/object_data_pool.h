@@ -29,55 +29,68 @@ namespace matcl { namespace dynamic { namespace details
 
 namespace md = matcl :: details;
 
-template<class T>
-struct object_data_pool_impl 
+// object_data pool must be shared between dlls
+class object_data_pool_impl
     : protected md::object_allocator<md::default_allocator_simple<true, true, char>>
 {
     private:
         using allocator     = md::default_allocator_simple<true, true, char>;
         using base          = md::object_allocator<allocator>;
+        using this_type     = object_data_pool_impl;
         using mutex_type    = matcl::default_spinlock_mutex;
         using lock_type     = std::unique_lock<mutex_type>;
 
         mutex_type          m_mutex;
 
-        object_data_pool_impl(bool is_global)
-            :base(sizeof(object_data<T>), is_global)
+    private:
+        object_data_pool_impl(bool is_global, size_t size)
+            :base(size, is_global)
         {};
 
         object_data_pool_impl(const object_data_pool_impl&) = delete;
         object_data_pool_impl& operator=(const object_data_pool_impl&) = delete;
 
-        ~object_data_pool_impl();
+        ~object_data_pool_impl()
+        {};
 
-        void* malloc_impl()
+        friend class global_objects;
+
+    public:
+        void* malloc()
         {
             lock_type lock(m_mutex);
             return base::malloc();
         };
 
-        void free_impl(void* ptr)
+        void free(void* ptr)
         {
             lock_type lock(m_mutex);
             base::free(ptr);
         };
+};
 
+template<class T>
+struct object_data_pool
+{
+    private:
+        using allocator     = object_data_pool_impl;
+
+    private:
+        
         static object_data_pool_impl* get()
-        {
-            static object_data_pool_impl* g_instance = new object_data_pool_impl<T>(false);
-            return g_instance;
+        {            
+            return register_object<T>::g_hook.get_pool();
         }
 
     public:
-
         static void* malloc()
         {
-            return get()->malloc_impl();
+            return get()->malloc();
         };
 
         static void free(void* ptr)
         {
-            return get()->free_impl(ptr);
+            return get()->free(ptr);
         };
 };
 

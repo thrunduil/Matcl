@@ -21,54 +21,29 @@
 #pragma once
 
 #include "matcl-dynamic/config.h"
-#include "matcl-core/config.h"
+#include "matcl-dynamic/details/type_object.h"
+#include "matcl-dynamic/details/object_data_pool.h"
 
-namespace matcl { namespace impl
+namespace matcl { namespace dynamic { namespace details
 {
 
-struct false_type{};
-
-}};
-
-namespace matcl { namespace details
+class global_objects
 {
+    private:
+        using pool_type     = object_data_pool_impl;
 
-class printer;
-
-}};
-
-namespace matcl { namespace dynamic
-{
-
-namespace details
-{
-    enum class e_match_type : int;
-    enum class converter_type : int;
-
-    class type_impl;
-    class object_data_pool_impl;
-    class object_data_base;
-    class type_table;
-    class function_table;
-    class evaler;
-    struct delayed_function_register;
-    struct delayed_function_template_register;
-    class identifier_impl;
-    class converter_candidate_set;
-    class overload_set;
-    struct function_name_templ;
-    class candidate_set;
-    class candidate_type_set;
-    class evaler;
-
-    template<class T> class mark_type;
+    public:
+        template<class T>
+        static type_impl*   initialize_type(pool_type*& pool);
 };
 
-class object;
-class Type;
-class function;
-class null_type;
+template<class T>
+type_impl* global_objects::initialize_type(pool_type*& pool)
+{
+    type_impl* type = new details::type_object<T>();
+    pool            = new object_data_pool_impl(false, sizeof(object_data<T>));
 
-template<class T> class object_type;
+    return type;
+};
 
-}};
+};};};

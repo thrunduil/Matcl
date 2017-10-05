@@ -85,10 +85,24 @@ template<class return_type, class data_constructor,
          class Function, class ... A>
 struct make_call<return_type, data_constructor, Function, make_list<A...>>
 {
-    static return_type eval(data_constructor& dh,Function fun)
+    force_inline
+    static void eval(data_constructor& dh,Function fun)
     {
         (void)dh;
-        return fun(get_arg<data_constructor, A>::eval(dh) ...);
+        return_type ret = fun(get_arg<data_constructor, A>::eval(dh) ...);
+        dh.set_return(std::move(ret));
+    };
+};
+
+template<class data_constructor, 
+         class Function, class ... A>
+struct make_call<void, data_constructor, Function, make_list<A...>>
+{
+    force_inline
+    static void eval(data_constructor& dh,Function fun)
+    {
+        (void)dh;
+        fun(get_arg<data_constructor, A>::eval(dh) ...);
     };
 };
 
@@ -97,9 +111,23 @@ template<class cl_type, class return_type, class data_constructor,
 struct make_call_member<cl_type, return_type, data_constructor, 
                         Function, make_list<A...>>
 {
-    static return_type eval(data_constructor& dh,Function fun, cl_type obj)
+    force_inline
+    static void eval(data_constructor& dh,Function fun, cl_type obj)
     {
-        return (obj.*fun)(get_arg<data_constructor, A>::eval(dh) ...);
+        return_type ret = (obj.*fun)(get_arg<data_constructor, A>::eval(dh) ...);
+        dh.set_return(std::move(val));
+    };
+};
+
+template<class cl_type, class data_constructor, 
+         class Function, class ... A>
+struct make_call_member<cl_type, void, data_constructor, 
+                        Function, make_list<A...>>
+{
+    force_inline
+    static void eval(data_constructor& dh,Function fun, cl_type obj)
+    {
+        (obj.*fun)(get_arg<data_constructor, A>::eval(dh) ...);
     };
 };
 
@@ -111,6 +139,7 @@ struct function_evaler<n_args,true,data_constructor,function_traits>
 {
     using Function = typename function_traits::function;
 
+    force_inline
     static void eval(data_constructor& dh,Function fun)
     {
         using in_type           = typename function_traits::input_type;
@@ -129,16 +158,16 @@ template<int n_args, class data_constructor,class function_traits>
 struct function_evaler<n_args,false,data_constructor,function_traits>
 {
     using Function = typename function_traits::function;
+
+    force_inline
     static void eval(data_constructor& dh,Function fun)
     {
-        using in_type           = typename function_traits::input_type;
-        using return_type       = typename function_traits::return_type;
+        using in_type           = typename function_traits::input_type;        
         using arguments_type    = typename make_arg_pos_list<n_args, in_type>::type;
-        
-        return_type val = make_call<return_type, data_constructor, Function, arguments_type>
-                            ::eval(dh,fun);
+        using return_type       = typename function_traits::return_type;
 
-        dh.set_return(object(std::move(val)));
+        make_call<return_type, data_constructor, Function, arguments_type>
+                            ::eval(dh, fun);
     };
 };
 
@@ -150,6 +179,7 @@ struct member_evaler<n_args,true,data_constructor,function_traits,cl_type>
 {
     using Function = typename function_traits::function;
 
+    force_inline
     static void eval(data_constructor ds,Function fun, cl_type obj)
     {
         using in_type           = typename function_traits::input_type;
@@ -169,16 +199,15 @@ struct member_evaler<n_args,false,data_constructor,function_traits,cl_type>
 {
     using Function = typename function_traits::function;
 
+    force_inline
     static void eval(data_constructor ds,Function fun, cl_type obj)
     {
         using in_type           = typename function_traits::input_type;
         using return_type       = typename function_traits::return_type;
         using arguments_type    = typename make_arg_pos_list<n_args, in_type>::type;
 
-        return_type ret = make_call_member<cl_type, return_type, data_constructor, Function, 
+        make_call_member<cl_type, return_type, data_constructor, Function, 
                                 arguments_type>::eval(ds,fun, obj);
-
-        ds.set_return(ret);
     };
 };
 

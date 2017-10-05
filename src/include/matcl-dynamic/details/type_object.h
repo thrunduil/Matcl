@@ -62,4 +62,3 @@ class type_object : public type_impl
 
 #pragma warning(pop)
 
-#include "matcl-dynamic/details/type_object.inl"

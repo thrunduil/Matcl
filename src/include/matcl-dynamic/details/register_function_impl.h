@@ -347,6 +347,17 @@ class matcl_dynamic_function : public dynamic_function<Fun,base>
             this->eval(&ds);
             return true;
         };
+
+        virtual void make_eval(const dynamic::object** args) const override
+        {
+            using data_cons = data_constructor_no_ret<data_constructor>;
+            using ret_t     = typename function_traits::return_type;
+
+            data_cons ds;
+            ds.m_args   = args;
+            this->eval(&ds);
+            return;
+        };
 };
 
 template<class Fun>
@@ -425,7 +436,12 @@ struct get_from_object
 { 
     using T0    = typename std::decay<T>::type;
     using Ret   = typename T0::value_type;
-    static const Ret& eval(const T& val) { return val.get(); }; 
+
+    force_inline
+    static const Ret& eval(const T& val)
+    { 
+        return val.get(); 
+    }; 
 };
 
 template<class T>
@@ -433,7 +449,12 @@ struct get_from_object<T&>
 {
     using T0    = typename std::decay<T>::type;
     using Ret   = typename T0::value_type;
-    static Ret& eval(T& val) { return val.get_unique(); }; 
+
+    force_inline
+    static Ret& eval(T& val)
+    { 
+        return val.get_unique(); 
+    }; 
 };
 
 template<class T>
@@ -441,7 +462,12 @@ struct get_from_object<T&&>
 {
     using T0    = typename std::decay<T>::type;
     using Ret   = typename T0::value_type;
-    static const Ret& eval(const T& val) { return val.get(); }; 
+
+    force_inline
+    static const Ret& eval(const T& val)
+    { 
+        return val.get(); 
+    }; 
 };
 
 template<class T>
@@ -449,7 +475,12 @@ struct get_from_object<const T&&>
 {
     using T0    = typename std::decay<T>::type;
     using Ret   = typename T0::value_type;
-    static const Ret& eval(const T& val) { return val.get(); }; 
+
+    force_inline
+    static const Ret& eval(const T& val)
+    { 
+        return val.get(); 
+    }; 
 };
 
 template<class T>
@@ -457,7 +488,12 @@ struct get_from_object<const T&>
 {
     using T0    = typename std::decay<T>::type;
     using Ret   = typename T0::value_type;
-    static const Ret& eval(const T& val) { return val.get(); }; 
+
+    force_inline
+    static const Ret& eval(const T& val) 
+    { 
+        return val.get(); 
+    }; 
 };
 
 template<class T, bool Is_enum = std::is_enum<T>::value>

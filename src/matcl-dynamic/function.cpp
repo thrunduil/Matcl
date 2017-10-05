@@ -37,14 +37,16 @@ function function::make_converter(int n_deduced, const Type deduced[], Type dedu
     return m_evaler->make_converter(n_deduced, deduced, deduced_ret, arg_converters);
 };
 
-object function::make(int n_args, const object* args[]) const
+void function::make(int n_args, const object* args[], object& ret) const
 {
     (void)n_args;
-
-    object ret;
     m_evaler->make_eval(args, ret);
+};
 
-    return ret;
+void function::make(int n_args, const object* args[]) const
+{
+    (void)n_args;
+    m_evaler->make_eval(args);
 };
 
 };};

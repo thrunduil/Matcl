@@ -22,8 +22,10 @@
 
 #include "matcl-dynamic/function.h"
 #include "matcl-core/error/exception_classes.h"
+//#include "matcl-dynamic/details/evaler.h"
 
 #include <cassert>
+#include <vector>
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -53,12 +55,17 @@ class MATCL_DYN_EXPORT fun_evaler_conv : public evaler
         ~fun_evaler_conv() override;
 
         bool make_eval(const object** _args, object& ret) const override;
+        void make_eval(const object** _args) const override;
 
         function make_converter(int, const Type[], Type, const func_vec&) const override
         {
             matcl_assert(false, "Should never be here!");
             return function();
         };
+
+    private:
+        void        make_convert(const object** _args, const object**, 
+                        object* buff_obj, Integer n_deduced, Integer& size_counter) const;
 };
 
 #pragma warning(pop)

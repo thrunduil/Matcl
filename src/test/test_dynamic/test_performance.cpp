@@ -220,7 +220,8 @@ void performance_tester::make()
     Integer K       = 100;
     Integer N       = 100;    
 
-    bool int_only   = false;
+    //TODO
+    bool int_only   = true;
 
     formatted_disp dm;
 
@@ -234,6 +235,7 @@ void performance_tester::make()
 
     dm.disp_header();
 
+    for (int i = 0; i < 200; ++i)
     {
         Integer res;
         OInteger ores;

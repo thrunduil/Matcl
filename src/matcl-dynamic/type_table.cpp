@@ -27,19 +27,21 @@
 #include "matcl-dynamic/details/type_impl.h"
 #include "predefined/special_functions.h"
 #include "type_reference.h"
+#include "type_table_cache.inl"
 
 #include <sstream>
 
 namespace matcl { namespace dynamic { namespace details
 {
 
-void type_table::register_object(const char* obj, Type (*creator)())
+void type_table::register_object(const char* obj, constr_type constr)
 {
     std::string obj_name = get_class_name(obj);
 
     using value_type = type_map::value_type;
-    type_handle h;
-    h.constructor = creator;
+    type_data_handle h;
+    h.set_constructor(constr);
+
     auto pos = m_type_map.insert(value_type(obj_name,h));
 
     if (pos.second == true)
@@ -57,7 +59,7 @@ struct predefined_functions_reg : delayed_function_register
 
     virtual function execute_registration() override
     {
-        Type t = type_table::get()->get_type_from_class(class_name);
+        Type t = type_table::get()->get_type_data_from_class(class_name);
         return t.get_impl()->generate_function(fun);
     };
 
@@ -103,22 +105,64 @@ std::string type_table::get_class_name(const char* name)
     return obj_name;
 };
 
+//---------------------------------------------------------------------------
+//                  type_data_handle
+//---------------------------------------------------------------------------        
+void type_data_handle::set_constructor(constr_type cons)
+{
+    m_constructor = cons;
+};
+
+void type_data_handle::call_constructor()
+{
+    m_type  = m_constructor(m_pool);
+}
+
+Type type_data_handle::get_type() const
+{
+    return m_type;
+};
+
+Type type_data_handle::get_data(pool_type*& pool) const
+{
+    pool    = m_pool;
+    return m_type;
+};
+
+//---------------------------------------------------------------------------
+//                  type_table
+//---------------------------------------------------------------------------        
+type_table* type_table::g_instance  = nullptr;
+
+void type_table::open()
+{
+    if (g_instance == nullptr)
+        g_instance = new type_table;
+}
+
 type_table::type_table()
 {};
 
-type_table* type_table::get()
+Type type_table::get_type_data(const char* name, object_data_pool_impl*& pool)
 {
-    static type_table* g_instance = new type_table();
-    return g_instance;
+    std::string cl_name = get_class_name(name);
+    return get_type_data_from_class(cl_name, pool);
 };
 
 Type type_table::get_type(const char* name)
 {
     std::string cl_name = get_class_name(name);
-    return get_type_from_class(cl_name);
+    pool_type* p;
+    return get_type_data_from_class(cl_name, p);
 };
 
-Type type_table::get_type_from_class(const std::string& cl_name)
+Type type_table::get_type_data_from_class(const std::string& cl_name)
+{
+    pool_type* p;
+    return get_type_data_from_class(cl_name, p);
+};
+
+Type type_table::get_type_data_from_class(const std::string& cl_name, pool_type*& pool)
 {
     using iterator  = type_map::iterator;
     iterator pos    = m_type_map.find(cl_name);
@@ -126,11 +170,11 @@ Type type_table::get_type_from_class(const std::string& cl_name)
     if (pos == m_type_map.end())
         return Type();
 
-    if (pos->second.ti != Type())
-        return pos->second.ti;
+    if (pos->second.get_type() != Type())
+        return pos->second.get_data(pool);
 
-    pos->second.ti = pos->second.constructor();
-    return pos->second.ti;
+    pos->second.call_constructor();
+    return pos->second.get_data(pool);
 }
 
 Type type_table::get_predefined(predefined_type t)
@@ -176,12 +220,25 @@ Type type_table::make_reference_type(Type t)
     return ref_t;
 };
 
+MATCL_THREAD_LOCAL static 
+type_table_cache* g_inst = nullptr;
+
 inline type_table_cache* type_table::get_cache()
 {
-    MATCL_THREAD_LOCAL static 
-    type_table_cache* g_inst = new type_table_cache();
+    // g_inst is thread local and we don't need a mutex
+    // during initialization since only one thread can access
+    // given instance of g_inst
 
-    return g_inst;
+    type_table_cache* inst = g_inst;
+    if (inst == nullptr)
+    {
+        g_inst  = new type_table_cache();
+        return g_inst;
+    }
+    else
+    {
+        return inst;
+    };
 };
 
 void type_table::free_cache()
@@ -214,7 +271,11 @@ Type type_table::unify_types(Type t1, Type t2)
     m_fun_tab.get_registered_unifier(t1, t2, ts);
 
     if (ts.size() == 0 && set.size() == 0)
-        return get_cache()->set_unifier(t1,t2,predefined::type_any());
+    {
+        Type ty = predefined::type_any();
+        get_cache()->set_unifier(t1,t2, ty);
+        return ty;
+    }
 
     //if match for converters is equal to match for unifiers, then prefer converter
     bool select_converter   = (ts.size() == 0) 
@@ -224,8 +285,10 @@ Type type_table::unify_types(Type t1, Type t2)
     {
         if (set.size() == 1)
         {
-            function f  = set.get_final_function(0);
-            return get_cache()->set_unifier(t1,t2, f.return_type());
+            const function& f   = set.get_final_function(0);
+            Type ty             = f.return_type();
+            get_cache()->set_unifier(t1,t2, ty);
+            return ty;
         }
 
         // set.size() > 1
@@ -238,7 +301,11 @@ Type type_table::unify_types(Type t1, Type t2)
     else
     {
         if (ts.size() == 1)
-            return get_cache()->set_unifier(t1,t2,ts.get_type(0));
+        {
+            Type ty = ts.get_type(0);
+            get_cache()->set_unifier(t1,t2, ty);
+            return ty;
+        }
 
         //ts.size() > 1
         error_handler eh;
@@ -249,10 +316,13 @@ Type type_table::unify_types(Type t1, Type t2)
     };
 };
 
-function type_table::get_overload(const function_name& func, int n_args, const Type t[])
+const function*
+type_table::get_overload(const function_name& func, int n_args, const Type t[])
 {
-    function f = get_cache()->get_overload(func,n_args,t);
-    if (f.is_null() == false)
+    const function* f;
+    f = get_cache()->get_overload(func, n_args, t);
+
+    if (f != nullptr)
         return f;
 
     initialize();
@@ -264,7 +334,10 @@ function type_table::get_overload(const function_name& func, int n_args, const T
     eh.report();
 
     if (candidates.size() == 1)
-        return get_cache()->set_overload(func,n_args, t, candidates.get_function(0).function());
+    {
+        const function& buf = candidates.get_function(0).function();
+        return get_cache()->set_overload(func,n_args, t, buf);
+    };
 
     if (candidates.size() == 0)
         eh.error_function_not_found(func, n_args, t);
@@ -272,15 +345,17 @@ function type_table::get_overload(const function_name& func, int n_args, const T
         eh.error_function_ambiguity(func, n_args, t, candidates);
 
     eh.report();
-
-    return function();
+    return nullptr;
 };
 
-function type_table::get_template_overload(const function_name& func, int n_templ, 
+const function* type_table::get_template_overload(const function_name& func, int n_templ, 
                         const Type templates[], int n_args, const Type targs[])
 {
-    function f = get_cache()->get_template_overload(func,n_templ, templates, n_args, targs);
-    if (f.is_null() == false)
+    const function* f;
+    
+    f = get_cache()->get_template_overload(func,n_templ, templates, n_args, targs);
+
+    if (f != nullptr)
         return f;
 
     initialize();
@@ -292,26 +367,29 @@ function type_table::get_template_overload(const function_name& func, int n_temp
     eh.report();
 
     if (candidates.size() == 1)
-        return get_cache()->set_template_overload(func, n_templ, templates, n_args, targs, 
-                                                  candidates.get_function(0).function());
-
+    {
+        const function& buf = candidates.get_function(0).function();
+        return get_cache()->set_template_overload(func, n_templ, templates, n_args, targs, buf);
+    };
     if (candidates.size() == 0)
         eh.error_template_function_not_found(func, n_templ, templates, n_args, targs);
     else
         eh.error_template_function_ambiguity(func, n_templ, templates, n_args, targs, candidates);
 
     eh.report();
-
-    return function();
+    return nullptr;
 };
 
-function type_table::get_converter(Type to, Type from, bool implicit)
+const function*
+type_table::get_converter(Type to, Type from, bool implicit)
 {
     converter_type c_type = implicit ? converter_type::conv_implicit 
                                      : converter_type::conv_explicit;
 
-    function f = get_cache()->get_converter(to,from,c_type);
-    if (f.is_null() == false)
+    const function* f;
+    f = get_cache()->get_converter(to, from, c_type);
+
+    if (f != nullptr)
         return f;
 
     initialize();
@@ -319,7 +397,10 @@ function type_table::get_converter(Type to, Type from, bool implicit)
     m_fun_tab.get_converter(to, from, c_type, set);
 
     if (set.size() == 1)
-        return get_cache()->set_converter(to,from, c_type, set.get_final_function(0));
+    {
+        const function& buf = set.get_final_function(0);
+        return get_cache()->set_converter(to,from, c_type, buf);
+    };
 
     error_handler eh;
 
@@ -329,14 +410,15 @@ function type_table::get_converter(Type to, Type from, bool implicit)
         eh.error_convert_ambiguity(to,from,c_type,set);
 
     eh.report();
-
-    return function();
+    return nullptr;
 };
 
-function type_table::get_cast_function(Type to, Type from)
+const function* type_table::get_cast_function(Type to, Type from)
 {
-    function f = get_cache()->get_converter(to,from,converter_type::conv_cast);
-    if (f.is_null() == false)
+    const function* f;
+    f = get_cache()->get_converter(to,from,converter_type::conv_cast);
+
+    if (f != nullptr)
         return f;
 
     initialize();
@@ -345,8 +427,8 @@ function type_table::get_cast_function(Type to, Type from)
 
     if (set.size() == 1)
     {
-        return get_cache()->set_converter(to,from, converter_type::conv_cast, 
-                                          set.get_final_function(0));
+        const function& buf = set.get_final_function(0);
+        return get_cache()->set_converter(to,from, converter_type::conv_cast, buf);
     };
 
     error_handler eh;
@@ -357,14 +439,15 @@ function type_table::get_cast_function(Type to, Type from)
         eh.error_convert_ambiguity(to,from,converter_type::conv_cast, set);
 
     eh.report();
-
-    return function();
+    return nullptr;
 };
 
-function type_table::get_assigner(Type to, Type from)
+const function* type_table::get_assigner(Type to, Type from)
 {
-    function f = get_cache()->get_assigner(to,from);
-    if (f.is_null() == false)
+    const function* f;
+    f = get_cache()->get_assigner(to,from);
+
+    if (f != nullptr)
         return f;
 
     initialize();
@@ -377,7 +460,10 @@ function type_table::get_assigner(Type to, Type from)
     eh.report();
 
     if (as.size() == 1)
-        return get_cache()->set_assigner(to,from,as.get_final_function(0));
+    {
+        const function& buf = as.get_final_function(0);
+        return get_cache()->set_assigner(to,from, buf);
+    };
 
     if (as.size() == 0)
         eh.error_unable_to_assign(to,from);
@@ -385,7 +471,7 @@ function type_table::get_assigner(Type to, Type from)
         eh.error_assign_ambiguity(to, from, as);        
 
     eh.report();
-    return function();
+    return nullptr;
 }
 
 void type_table::initialize()

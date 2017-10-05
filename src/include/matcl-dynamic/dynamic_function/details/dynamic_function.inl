@@ -27,6 +27,7 @@ namespace matcl { namespace dynamic { namespace details
 
 template<typename Fun, class base_type>
 template<class data_constructor>
+force_inline
 void dynamic_function<Fun,base_type>::eval(data_constructor arg) const
 {
     static const 
@@ -45,6 +46,7 @@ void dynamic_function<Fun,base_type>::eval(data_constructor arg) const
 
 template<typename Fun, class base_type>
 template<class class_type,class data_constructor>
+force_inline
 void dynamic_function<Fun,base_type>::eval(class_type object, data_constructor arg) const
 {
     static const 

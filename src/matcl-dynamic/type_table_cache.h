@@ -29,6 +29,33 @@
 namespace matcl { namespace dynamic { namespace details
 {
 
+struct last_call_info
+{
+    int         n_args;
+    Type        m_ty_1;
+    Type        m_ty_2;
+    function    m_func;
+
+    last_call_info();
+
+    last_call_info(int n_args, Type t1, Type t2, const function& f);
+};
+
+class last_call_cache
+{
+    private:
+        using vec_type  = std::vector<last_call_info>;
+
+    private:
+        vec_type        m_cache;
+
+    public:
+        void            clear();
+        const function* get_last_function(size_t code, int n_args, Type t1, Type t2) const;
+        void            set_last_function(size_t code, int n_args, Type t1, Type t2, 
+                            const function& f);
+};
+
 //class is not thread safe
 class type_table_cache
 {
@@ -65,24 +92,25 @@ class type_table_cache
         toverload_table m_template_overloads;
         convert_table   m_convert;
         assign_table    m_assign;
+        last_call_cache m_last_call;
 
     public:
         type_table_cache();
 
         Type            get_unifier(Type t1, Type t2) const;
-        function        get_overload(const function_name& func, int n_args, const Type t[]) const;
-        function        get_template_overload(const function_name& func, int n_templ, 
+        const function* get_overload(const function_name& func, int n_args, const Type t[]);
+        const function* get_template_overload(const function_name& func, int n_templ, 
                             const Type templates[], int n_args, const Type args[]) const;
-        function        get_converter(Type to, Type from, converter_type type) const;
-        function        get_assigner(Type to, Type from) const;
+        const function* get_converter(Type to, Type from, converter_type type) const;
+        const function* get_assigner(Type to, Type from) const;
 
-        Type            set_unifier(Type t1, Type t2, Type t);
-        function        set_overload(const function_name& func, int n_args, const Type t[],
+        void            set_unifier(Type t1, Type t2, Type t);
+        const function* set_overload(const function_name& func, int n_args, const Type t[],
                                 const function& f);
-        function        set_template_overload(const function_name& func, int n_templ, 
+        const function* set_template_overload(const function_name& func, int n_templ, 
                             const Type templates[], int n_args, const Type t[], const function& f);
-        function        set_converter(Type to, Type from, converter_type type, const function& f);
-        function        set_assigner(Type to, Type from, const function& f);
+        const function* set_converter(Type to, Type from, converter_type type, const function& f);
+        const function* set_assigner(Type to, Type from, const function& f);
 
         void            clear();
 

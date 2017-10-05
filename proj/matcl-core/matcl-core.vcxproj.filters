@@ -72,9 +72,6 @@
     <ClInclude Include="..\..\src\include\matcl-core\general\type_traits.h">
       <Filter>Source Files\include\general</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\IO\archive.h">
-      <Filter>Source Files\include\IO</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\IO\output_stream.h">
       <Filter>Source Files\include\IO</Filter>
     </ClInclude>
@@ -95,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\config.h">
       <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h">
-      <Filter>Source Files\include\IO</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.h">
       <Filter>Source Files\include\details\hash_table</Filter>
@@ -227,6 +221,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-core\details\val_struct_codes.h">
       <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\archive.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h">
+      <Filter>Source Files\include\IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include "matcl-dynamic/details/register_object.h"
-#include "matcl-dynamic/details/object_data.h"
+#include "matcl-dynamic/details/register_object.inl"
+#include "matcl-dynamic/details/object_data.inl"
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-dynamic/typed_object_functions.h"
 
@@ -69,7 +69,7 @@ object_type<T>::object_type(const object_type<T>& arg)
 template<class T>
 force_inline
 object_type<T>::object_type(object_type<T>&& arg)
-    :m_data(std::move(arg))
+    :m_data(std::move(arg.m_data))
 {};
 
 template<class T>
@@ -77,7 +77,9 @@ template<class S>
 force_inline
 object_type<T>::object_type(const object_type<S>& other, 
                             typename details::enable_if_different_conv<S,T,true,void*>::type)
-    :m_data(dynamic::details::mark_type<T>().get(),details::object_data<T>::create(T(other.get())))
+    :m_data(dynamic::details::mark_type<T>().get(),
+            details::object_data<T>::create(T(other.get())),
+            object::not_null())
 {};
 
 template<>
@@ -85,7 +87,7 @@ template<class S>
 force_inline
 object_type<any_type>::object_type(const object_type<S>& other, 
                             typename details::enable_if_different_conv<S,any_type,true,void*>::type)
-    :m_data(dynamic::details::mark_type<any_type>().get(),object(other))
+    :m_data(dynamic::details::mark_type<any_type>().get(), object(other))
 {};
 
 template<class T>
@@ -93,7 +95,9 @@ template<class S>
 force_inline
 object_type<T>::object_type(const object_type<S>& other, 
                             typename details::enable_if_different_conv<S,T,false,void*>::type)
-    :m_data(dynamic::details::mark_type<T>().get(),details::object_data<T>::create(T(other.get())))
+    :m_data(dynamic::details::mark_type<T>().get(),
+            details::object_data<T>::create(T(other.get())),
+            object::not_null())
 {};
 
 template<>
@@ -109,7 +113,8 @@ template<class S>
 force_inline
 object_type<T>::object_type(S&& arg, typename details::enable_if_nonobject_conv<S,T,true,void*>::type)
     :m_data(dynamic::details::mark_type<T>().get(),
-            details::object_data<T>::create(T(std::forward<S>(arg))))
+            details::object_data<T>::create(T(std::forward<S>(arg))),
+            object::not_null())
 {};
 
 template<class T>
@@ -117,16 +122,18 @@ template<class S>
 force_inline
 object_type<T>::object_type(S&& arg, typename details::enable_if_nonobject_conv<S,T,false,void*>::type)
     :m_data(dynamic::details::mark_type<T>().get(),
-            details::object_data<T>::create(T(std::forward<S>(arg))))
+            details::object_data<T>::create(T(std::forward<S>(arg))),
+            object::not_null())
 {};
 
 template<class T>
 template<class Arg1, class Arg2, class ... Args, class Enable>
 force_inline
 object_type<T>::object_type(Arg1&& arg1, Arg2&& arg2, Args&& ... args)
-    :m_data(dynamic::details::mark_type<T>().get()
-    ,details::object_data<T>::create(T(std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), 
-                                       std::forward<Args>(args)...)))
+    :m_data(dynamic::details::mark_type<T>().get(),
+            details::object_data<T>::create(T(std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), 
+                                       std::forward<Args>(args)...)),
+            object::not_null())
 {};
 
 template<class T>
@@ -321,13 +328,6 @@ force_inline
 object_type<S> object_type<T>::convert() const
 {
     return dynamic::convert<S>(*this);
-}
-
-template<class T>
-force_inline
-object_type<T>::operator const object&() const
-{
-    return m_data;
 }
 
 template<class T>

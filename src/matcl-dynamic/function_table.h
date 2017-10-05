@@ -81,9 +81,9 @@ class converter_candidate_set
         Integer             size() const;
         void                clear();
         //final function to call
-        function            get_final_function(Integer pos) const;
+        const function&     get_final_function(Integer pos) const;
         //main function only for error reporting purpose
-        function            get_main_function(Integer pos) const;
+        const function&     get_main_function(Integer pos) const;
 };
 
 using assigner_candidate_set = converter_candidate_set;

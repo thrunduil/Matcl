@@ -23,7 +23,6 @@
 #include <new>
 #include <boost/functional/hash.hpp>
 
-
 namespace matcl { namespace details
 {
 

@@ -21,8 +21,8 @@
 #pragma once
 
 #include "matcl-dynamic/config.h"
-#include "matcl-core/config.h"
 #include "matcl-dynamic/details/fwd_decls.h"
+#include "matcl-core/config.h"
 #include "matcl-dynamic/type.h"
 #include "matcl-dynamic/exception.h"
 #include "matcl-core/matrix/enums.h"
@@ -59,6 +59,14 @@ class MATCL_DYN_EXPORT object
         // reference count is increased
         object(const object& other);
         object(object&& other);
+
+        // conversion from typed object
+        template<class T>
+        explicit object(const object_type<T>& other);
+
+        // conversion from temporary typed object
+        template<class T>
+        explicit object(object_type<T>&& other);
 
         // convert predefined scalar types to object type
         explicit object(bool);
@@ -155,10 +163,21 @@ class MATCL_DYN_EXPORT object
         data_type*              get_data_unique()       { make_unique(); return m_data; };	
 
     protected:
-        object(Type ti, data_type* m_data);
+        struct not_null{};
+        struct null{};
+
+        // ti and m_data are not null
+        object(Type ti, data_type* m_data, not_null);
+
+        // ti and m_data are null
+        object(Type ti, null);
 
         template<class T>
         friend class object_type;
+
+    private:
+        void                    make_assignment(const object& other, Type ty1, Type ty2);
+        void                    make_assignment(object&& other, Type ty1, Type ty2);
 };
 
 // matcl-dynamic library initializer

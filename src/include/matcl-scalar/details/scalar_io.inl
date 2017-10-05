@@ -22,7 +22,6 @@
 
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-core/options/options_disp.h"
-#include "matcl-core/IO/archive.h"
 #include "matcl-core/IO/scalar_io.h"
 
 namespace matcl

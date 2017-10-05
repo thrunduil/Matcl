@@ -19,7 +19,7 @@
  */
 
 #include "matcl-dynamic/predefined_type_traits.h"
-#include "matcl-dynamic/object.h"
+#include "matcl-dynamic/details/object.inl"
 #include "matcl-core/IO/archive.h"
 #include "matcl-core/details/complex_details.h"
 #include "matcl-core/details/IO/printer.h"

@@ -19,8 +19,8 @@
  */
 #pragma once
 
-#include "matcl-core/config.h"
 #include "matcl-dynamic/details/fwd_decls.h"
+#include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
 #include "matcl-dynamic/function_name.h"
 
@@ -122,11 +122,14 @@ MATCL_DYN_EXPORT Type       make_reference_type(Type t);
 
 // get function overload for functions with name func based on types of 
 // input arguments
-MATCL_DYN_EXPORT function   get_overload(const function_name& func, int n_args, const Type t[]);
+MATCL_DYN_EXPORT 
+function                    get_overload(const function_name& func, int n_args,
+                                const Type t[]);
 
 // get function overload for functions with name func based on types of 
 // input arguments and template arguments
-MATCL_DYN_EXPORT function   get_template_overload(const function_name& func, int n_templ, 
+MATCL_DYN_EXPORT 
+function                    get_template_overload(const function_name& func, int n_templ, 
                                 const Type templates[], int n_args, const Type arg_types[]);
 
 // find return type of function overload for functions with name func based

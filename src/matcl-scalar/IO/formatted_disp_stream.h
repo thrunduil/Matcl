@@ -24,7 +24,7 @@
 #include "matcl-scalar/general/fwd_decls.h"
 #include "matcl-scalar/IO/formatted_disp.h"
 #include "matcl-core/IO/disp_data_provider.h"
-#include "matcl-dynamic/object.h"
+#include "matcl-dynamic/details/object.inl"
 
 namespace matcl { namespace details
 {

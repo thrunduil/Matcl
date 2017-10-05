@@ -18,8 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-dynamic/object.h"
-#include "matcl-dynamic/details/object_data.inl"
+#include "matcl-dynamic/details/object.inl"
 #include "matcl-dynamic/object_type.h"
 #include "matcl-dynamic/predefined_functions.h"
 #include "matcl-dynamic/function.h"
@@ -100,23 +99,6 @@ object_initializer::~object_initializer()
 //------------------------------------------------------------
 //                      object
 //------------------------------------------------------------
-object::object()
-    :m_data(nullptr)
-{};
-
-object::object(const object& other)    
-    :m_type(other.m_type),m_data(other.m_data)
-{
-    if (m_data)
-        m_data->increase_refcount();
-};
-
-object::object(object&& other)
-    :m_type(std::move(other.m_type)), m_data(other.m_data)
-{
-    other.m_data = nullptr;
-};
-
 object::object(Type t, const object& other)
     :m_type(t), m_data(nullptr)
 {
@@ -163,18 +145,6 @@ object object::make_one(Type t)
 
     ret.m_data->increase_refcount();
     return ret;
-};
-
-object::object(Type ti, data_type* data)
-    :m_type(ti),m_data(data)
-{
-    if (m_type == Type())
-        return;
-
-    if(data == nullptr)
-        m_data = details::type_impl::get(m_type)->create();
-
-    m_data->increase_refcount();
 };
 
 object::object(bool v)
@@ -237,64 +207,36 @@ object::object(const Complex& v)
     swap(*this, tmp);
 };
 
-object::~object()
-{
-    if (m_data)
-        m_data->decrease_refcount();
-};
-
-object& object::operator=(const object& other) &
+void object::make_assignment(const object& other, Type ty1, Type ty2)
 {
     make_unique();
 
-    Type in1                = this->get_type();
-    Type in2                = other.get_type();
-    function f              = details::type_table::get()->get_assigner(in1, in2);
+    function buf;
+    const function* f       = details::type_table::get()->get_assigner(ty1, ty2, buf, true);
+
     const object* args[]    = {this, &other};
-    f.make(2,args);
-
-    return *this;
+    f->make(2,args);
 };
 
-object& object::operator=(object&& other) &
+void object::make_assignment(object&& other, Type ty1, Type ty2)
 {
     make_unique();
 
     Type in1                = this->get_type();
     Type in2                = other.get_type();
-    function f              = details::type_table::get()->get_assigner(in1, in2);
+
+    function buf;
+    const function* f       = details::type_table::get()->get_assigner
+                                (ty1, ty2, buf, true);
 
     object tmp(std::move(other));
     const object* args[]    = {this, &tmp};
-    f.make(2,args);
-
-    return *this;
+    f->make(2, args);
 };
 
 object::operator bool() const
 {
     return cast_bool(*this);
-};
-
-void object::reset(const object& other) &
-{
-    data_type* ptr = other.m_data;
-
-    if (ptr)
-        ptr->increase_refcount();
-
-    if(m_data != nullptr)
-        m_data->decrease_refcount();
-
-    m_data  = ptr;
-    m_type  = other.m_type;
-    return;
-};
-
-void object::reset(object&& other) &
-{
-    swap(*this, other);
-    return;
 };
 
 object object::clone() const
@@ -303,16 +245,8 @@ object object::clone() const
         return *this;
 
     data_type* ptr = details::type_impl::get(m_type)->clone(m_data);
-    return object(m_type,ptr);
+    return object(m_type, ptr, not_null());
 };
-
-bool object::is_unique() const
-{
-    if (m_data == nullptr || m_data->is_unique())
-        return true;
-    else 
-        return false;
-}
 
 void object::make_unique()
 {
@@ -323,12 +257,6 @@ void object::make_unique()
     ptr->increase_refcount();
     m_data->decrease_refcount();
     m_data = ptr;
-};
-
-void swap(object& o1, object& o2)
-{
-    std::swap(o1.m_type,o2.m_type);
-    std::swap(o1.m_data,o2.m_data);
 };
 
 bool object::is_zero() const
@@ -372,13 +300,13 @@ void object::serialize(iarchive_impl & ar, const unsigned int version)
 
     if (m_type == Type())
     {
-        *this = object(m_type, nullptr);
+        *this = object(m_type, null());
         return;
     };
 
     data_type* ptr = details::type_impl::get(m_type)->load(ar,version);
 
-    *this = object(m_type, ptr);
+    *this = object(m_type, ptr, not_null());
 };
 
 std::ostream& dynamic::save_data(std::ostream& os, const object& A)
@@ -408,7 +336,7 @@ std::istream& dynamic::load_data(std::istream& is, object& A)
         return is;
 
     object::data_type* ptr = details::type_impl::get(A.m_type)->load(is);
-    A = object(A.get_type(),ptr);
+    A = object(A.get_type(), ptr, object::not_null());
     return is;
 };
 
@@ -419,9 +347,14 @@ std::istream& dynamic::operator>>(std::istream& is, object& A)
     object::data_type* ptr = nullptr;
 
     if (A.is_null() == false)
+    {
         ptr = details::type_impl::get(A.m_type)->load(is);
-
-    A = object(A.get_type(),ptr);
+        A = object(A.get_type(), ptr, object::not_null());
+    }
+    else
+    {
+        A = object(A.get_type(), object::null());
+    }
     return is;
 };
 
@@ -432,10 +365,15 @@ MATCL_DYN_EXPORT object dynamic::convert(Type new_type, const object& obj)
     if (in1 == new_type)
         return obj;
 
-    function f              = details::type_table::get()->get_converter(new_type, in1, false);
+    function buf;
+    const function* f       = details::type_table::get()->get_converter
+                                    (new_type, in1, false, buf, true);
+
     const object* args[]    = {&obj};
 
-    return f.make(1,args);
+    object ret;
+    f->make(1,args, ret);
+    return ret;
 };
 
 MATCL_DYN_EXPORT object dynamic::cast(Type new_type, const object& obj)
@@ -445,10 +383,16 @@ MATCL_DYN_EXPORT object dynamic::cast(Type new_type, const object& obj)
     if (in1 == new_type)
         return obj;
 
-    function f              = details::type_table::get()->get_cast_function(new_type, in1);
+    function buf;
+    const function* f       = details::type_table::get()->get_cast_function
+                                    (new_type, in1, buf, true);
+
     const object* args[]    = {&obj};
 
-    return f.make(1,args);
+    object ret;
+    f->make(1, args, ret);
+
+    return ret;
 };
 
 };};
