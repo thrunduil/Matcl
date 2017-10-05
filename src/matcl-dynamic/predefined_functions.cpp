@@ -19,8 +19,8 @@
  */
 
 #include "matcl-dynamic/predefined_functions.h"
-#include "matcl-dynamic/object.h"
-#include "matcl-dynamic/details/object_data.h"
+#include "matcl-dynamic/details/object.inl"
+#include "matcl-dynamic/details/object_data.inl"
 #include "type_table.h"
 
 namespace matcl { namespace dynamic { namespace functions

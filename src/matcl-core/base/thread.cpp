@@ -21,32 +21,8 @@
 #pragma once
 
 #include "matcl-core/general/thread.h"
-#include <boost/smart_ptr/detail/spinlock.hpp>
 
 namespace matcl
 {
-
-inline boost::detail::spinlock& get_boost_spinlock(spinlock_mutex* ptr)
-{
-    static_assert(sizeof(boost::detail::spinlock) == sizeof(spinlock_mutex),
-                  "invalid spinlock");
-
-    return *reinterpret_cast<boost::detail::spinlock*>(ptr);
-};
-
-bool spinlock_mutex::try_lock()
-{ 
-    return get_boost_spinlock(this).try_lock(); 
-}
-
-void spinlock_mutex::lock()
-{ 
-    get_boost_spinlock(this).lock(); 
-}
-
-void spinlock_mutex::unlock()
-{ 
-    get_boost_spinlock(this).unlock(); 
-}
 
 };

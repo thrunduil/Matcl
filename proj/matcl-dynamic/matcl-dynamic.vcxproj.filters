@@ -168,6 +168,9 @@
     <ClInclude Include="..\..\src\include\matcl-dynamic\result_of.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-dynamic\details\global_objects.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-dynamic\details\data_constructor.inl">
@@ -199,6 +202,12 @@
     </None>
     <None Include="..\..\src\include\matcl-dynamic\details\function.inl">
       <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-dynamic\details\object.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\matcl-dynamic\type_table_cache.inl">
+      <Filter>Source Files\src</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

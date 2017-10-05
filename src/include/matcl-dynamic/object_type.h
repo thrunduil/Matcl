@@ -38,6 +38,8 @@ class object_type
     private:
         object  m_data;
 
+        friend object;
+
     public:
         // type of stored data
         using value_type            = T;
@@ -172,10 +174,6 @@ class object_type
         // registered cast function
         template<class S>
         object_type<S>      cast() const;
-
-        // convert to object; conversion to nonconstant reference to object
-        // is not allowed
-        explicit            operator const object&() const;
 
         // serialization and deserialization
         void                serialize(oarchive_impl & ar, const unsigned int version) const;

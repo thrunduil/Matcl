@@ -22,6 +22,7 @@
 
 #include "matcl-dynamic/details/object_data.h"
 #include "matcl-dynamic/details/object_data_pool.h"
+#include "matcl-dynamic/details/register_object.inl"
 
 #pragma warning(push)
 #pragma warning(disable:4251)	//needs to have dll-interface 
@@ -91,8 +92,7 @@ template<class T>
 force_inline
 void* object_data<T>::operator new(size_t)
 {
-    return object_data_pool_impl<T>::malloc();
-
+    return object_data_pool<T>::malloc();
 };
 
 template<class T>
@@ -100,7 +100,7 @@ force_inline
 void object_data<T>::operator delete(void* ptr, size_t size)
 {
     (void)size;
-    object_data_pool_impl<T>::free(ptr);
+    object_data_pool<T>::free(ptr);
 };
 
 template<class T>

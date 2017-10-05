@@ -41,6 +41,7 @@ class identifier_impl
 
         size_t          m_size;
         size_t          m_hash;
+        size_t          m_code;
         const char*     m_data;
 
     public:
@@ -51,12 +52,17 @@ class identifier_impl
 
         const char*     get_data() const    { return m_data; };
         size_t          get_size() const    { return m_size; };
+        size_t          get_code() const    { return m_code; };
+
         bool            is_special() const;
 
         static size_t   eval_hash(const char* data, size_t size);
         static size_t   eval_hash(const std::string& data);
         std::size_t     hash_value() const;  
         bool            equal(const std::string& data) const;
+
+    private:
+        static size_t   get_next_code();
 };
 
 inline identifier_impl::identifier_impl(string_t val)
@@ -71,6 +77,7 @@ inline identifier_impl::identifier_impl(string_t val)
     tmp[N]      = 0;
 
     m_data      = tmp;
+    m_code      = get_next_code();
 };
 
 inline identifier_impl::identifier_impl(const char* data, size_t size)
@@ -85,6 +92,14 @@ inline identifier_impl::identifier_impl(const char* data, size_t size)
     tmp[N]      = 0;
 
     m_data      = tmp;
+    m_code      = get_next_code();
+};
+
+size_t identifier_impl::get_next_code()
+{
+    // only one thread can call this function at this moment
+    static size_t code  = 0;
+    return code++;
 };
 
 inline size_t identifier_impl::eval_hash(const char* data, size_t size)
@@ -185,6 +200,7 @@ identifier::identifier(const std::string& name)
     details::identifier_ptr ptr = details::g_id_table.get(name);
     m_impl  = ptr.m_ptr;
     m_hash  = ptr.m_ptr->hash_value();
+    m_code  = ptr.m_ptr->get_code();
 };
 
 std::string identifier::to_string() const

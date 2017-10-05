@@ -70,7 +70,7 @@ void leak_detector_impl::report_free(void* ptr)
 {
     auto pos = m_ptr_map.find(ptr);
 
-    matcl_assert(pos == m_ptr_map.end(), "invalid free");
+    matcl_assert(pos != m_ptr_map.end(), "invalid free");
 
     m_ptr_map.erase(pos);
 };

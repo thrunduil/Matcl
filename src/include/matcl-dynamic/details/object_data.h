@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl-dynamic/config.h"
 #include "matcl-dynamic/details/register_object.h"
 #include "matcl-core/general/thread.h"
 
@@ -87,4 +88,3 @@ class object_data : public details::object_data_base, public register_object<T>
 
 #pragma warning(pop)
 
-#include "matcl-dynamic/details/object_data.inl"

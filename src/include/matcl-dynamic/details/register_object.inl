@@ -21,7 +21,8 @@
 #pragma once
 
 #include "matcl-core/general/fwd_decls.h"
-#include "matcl-dynamic/details/type_object.h"
+#include "matcl-dynamic/details/global_objects.h"
+#include "matcl-dynamic/details/type_object.inl"
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -34,19 +35,30 @@ std::string mark_type<T>::name() const
 
 template<class T>
 details::register_object_helper 
-register_object<T>::g_hook(typeid(T).name(),details::register_object_helper::create_object<T>);
+register_object<T>::g_hook(typeid(T).name(), details::register_object_helper::create_data<T>);
 
 template<class T> 
 Type mark_type<T>::get() const
 {    
-    static Type ti( register_object<T>::g_hook.get_object(typeid(T).name()) );
-    return ti;
+    //static Type ti( register_object<T>::g_hook.get_object(typeid(T).name()) );
+    return register_object<T>::g_hook.get_type();
 };
 
 template<class T>
-Type details::register_object_helper::create_object()
-{ 
-    return Type(new details::type_object<T>()); 
+Type details::register_object_helper::create_data(pool_type*& pool)
+{     
+    return Type(global_objects::initialize_type<T>(pool)); 
+};
+
+inline Type details::register_object_helper::get_type() const
+{
+    return m_type;
+};
+
+inline details::register_object_helper::pool_type* 
+details::register_object_helper::get_pool() const
+{
+    return m_pool;
 };
 
 force_inline

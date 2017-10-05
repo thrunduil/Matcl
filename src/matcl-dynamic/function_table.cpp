@@ -103,11 +103,12 @@ void converter_candidate_set::clear()
     m_match = conversion_match::make_no_match();
 };
 
-function converter_candidate_set::get_final_function(Integer pos) const
+const function& converter_candidate_set::get_final_function(Integer pos) const
 {
     return m_overloads_vec[pos].first;
 };
-function converter_candidate_set::get_main_function(Integer pos) const
+
+const function& converter_candidate_set::get_main_function(Integer pos) const
 {
     return m_overloads_vec[pos].second;
 };

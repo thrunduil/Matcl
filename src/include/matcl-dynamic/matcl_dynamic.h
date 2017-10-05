@@ -28,3 +28,4 @@
 #include "matcl-dynamic/function.h"
 #include "matcl-dynamic/register_function.h"
 #include "matcl-dynamic/utils.h"
+#include "matcl-dynamic/details/object.inl"

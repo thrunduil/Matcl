@@ -18,16 +18,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-dynamic/details/register_object.h"
+#include "matcl-dynamic/details/register_object.inl"
 #include "matcl-core/config.h"
 #include "type_table.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
 
-Type register_object_helper::get_object(const char* obj_name)
+void register_object_helper::get_type_data(const char* obj_name, Type& ty,
+                                           pool_type*& pool)
 {
-    return type_table::get()->get_type(obj_name);
+    ty = type_table::get()->get_type_data(obj_name, pool);
 };
 
 std::string	register_object_helper::get_name(const char* name)
@@ -35,9 +36,11 @@ std::string	register_object_helper::get_name(const char* name)
     return type_table::get_class_name(name);
 };
 
-register_object_helper::register_object_helper(const char* obj_name, Type (*creator)())
+register_object_helper::register_object_helper(const char* obj_name, constr_type constr)
 {
-    type_table::get()->register_object(obj_name,creator);
+    type_table::open();
+    type_table::get()->register_object(obj_name, constr);
+    get_type_data(obj_name, m_type, m_pool);
 };
 
 };};};

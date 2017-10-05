@@ -56,6 +56,13 @@ bool fun_conv_link::make_eval(const object** _args, object& ret) const
     return true;
 }
 
+void fun_conv_link::make_eval(const object** _args) const
+{
+    //nothing to do
+    (void)_args;
+    return;
+}
+
 function fun_conv_link::make_converter(int n_deduced, const Type deduced[], 
                     Type ded_ret, const std::vector<function>& conv_vec) const
 {

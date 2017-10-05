@@ -55,8 +55,11 @@ class evaler
                                 Type deduced_ret, const func_vec& arg_conv) const = 0;
 
         // if function returns true, ret is a new object; otherwise ret is one
-        // of existing argument (only fun_conv_null converter returns true) 
+        // of existing argument (only fun_conv_null converter returns false) 
         virtual bool        make_eval(const object** args, object& ret) const = 0;
+
+        // equivalent to make_eval, but return is ignored
+        virtual void        make_eval(const object** args) const = 0;
 };
 
 struct evaler_traits

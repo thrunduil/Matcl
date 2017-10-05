@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\evaler.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\func_evaler_conv.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\fwd_decls.h" />
+    <ClInclude Include="..\..\src\include\matcl-dynamic\details\global_objects.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\object_data.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\object_data_pool.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\details\register_function_impl.h" />
@@ -71,6 +72,7 @@
   <ItemGroup>
     <None Include="..\..\src\include\matcl-dynamic\details\data_constructor.inl" />
     <None Include="..\..\src\include\matcl-dynamic\details\function.inl" />
+    <None Include="..\..\src\include\matcl-dynamic\details\object.inl" />
     <None Include="..\..\src\include\matcl-dynamic\details\object_data.inl" />
     <None Include="..\..\src\include\matcl-dynamic\details\object_type.inl" />
     <None Include="..\..\src\include\matcl-dynamic\details\object_type_traits.inl" />
@@ -79,6 +81,7 @@
     <None Include="..\..\src\include\matcl-dynamic\details\typed_object_functions.inl" />
     <None Include="..\..\src\include\matcl-dynamic\details\type_object.inl" />
     <None Include="..\..\src\include\matcl-dynamic\dynamic_function\details\dynamic_function.inl" />
+    <None Include="..\..\src\matcl-dynamic\type_table_cache.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-dynamic\error_handler.cpp" />
@@ -209,11 +212,11 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -230,11 +233,11 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -259,9 +262,11 @@
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -281,12 +286,15 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

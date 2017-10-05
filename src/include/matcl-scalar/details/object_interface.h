@@ -19,7 +19,7 @@
  */
 
 #include "matcl-scalar/config.h"
-#include "matcl-dynamic/object.h"
+#include "matcl-dynamic/details/object.inl"
 
 namespace matcl { namespace details
 {

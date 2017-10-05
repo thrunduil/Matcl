@@ -86,9 +86,15 @@ inline object eval_function::eval(const function_name& func, Object&& ... args)
 {
     Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
     int n_args              = sizeof...(Object);
-    function f              = operations::get_overload(func, n_args, types);
+
+    function buf;
+    const function* f       = operations::get_overload(func, n_args, types, buf, true);
+
     const object* args[]    = {(const object*)&args...};
-    object ret              = f.make(n_args, args);
+
+    object ret;
+    f->make(n_args, args, ret);
+
     return ret;
 };
 
@@ -96,9 +102,15 @@ inline object eval_function::eval(const function_name& func)
 {
     Type* types             = nullptr;
     int n_args              = 0;
-    function f              = operations::get_overload(func, n_args, types);
+    
+    function buf;
+    const function* f       = operations::get_overload(func, n_args, types, buf, true);
+
     const object** args     = nullptr;
-    object ret              = f.make(n_args, args);
+
+    object ret;
+    f->make(n_args, args, ret);
+    
     return ret;
 };
 
@@ -112,10 +124,16 @@ inline object eval_function_template::eval(const function_name& func, Object&& .
     Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
     int n_args              = sizeof...(Object);
     int n_types             = (int)m_types.size();
-    function f              = operations::get_template_overload(func, n_types, m_types.data(), 
-                                    n_args, types);
+
+    function buf;
+    const function* f       = operations::get_template_overload(func, n_types, 
+                                m_types.data(), n_args, types, buf, true);
+
     const object* args[]    = {(const object*)&args...};
-    object ret              = f.make(n_args, args);
+
+    object ret;    
+    f->make(n_args, args, ret);
+
     return ret;
 };
 
@@ -124,10 +142,16 @@ inline object eval_function_template::eval(const function_name& func)
     Type* types             = nullptr;
     int n_args              = 0;
     int n_types             = (int)m_types.size();
-    function f              = operations::get_template_overload(func, n_types, m_types.data(), 
-                                    n_args, types);
+
+    function buf;
+    const function* f       = operations::get_template_overload(func, n_types, 
+                                m_types.data(), n_args, types, buf, true);
+
     const object** args     = nullptr;
-    object ret              = f.make(n_args, args);
+    
+    object ret;
+    f->make(n_args, args, ret);
+
     return ret;
 };
 

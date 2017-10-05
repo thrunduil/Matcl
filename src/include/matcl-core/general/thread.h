@@ -36,7 +36,7 @@ class MATCL_CORE_EXPORT spinlock_mutex
         long        m_mutex;
 
     public:
-        spinlock_mutex()        {m_mutex = 0; }
+        spinlock_mutex();
 
         spinlock_mutex(const spinlock_mutex&) = delete;
         spinlock_mutex& operator=(const spinlock_mutex&) = delete;

@@ -20,8 +20,8 @@
 #pragma once
 
 #include "matcl-dynamic/config.h"
-#include "matcl-core/config.h"
 #include "matcl-dynamic/details/fwd_decls.h"
+#include "matcl-core/config.h"
 
 #include <string>
 
@@ -42,6 +42,7 @@ class MATCL_DYN_EXPORT identifier
     protected:
         impl_type*      m_impl;
         size_t          m_hash;
+        size_t          m_code;
 
     public:
         // construct an identifier from string id
@@ -52,6 +53,9 @@ class MATCL_DYN_EXPORT identifier
 
         // convert to string
         std::string     to_string() const;
+
+        // return unique code associated to this identifier
+        size_t          get_unique_code() const;
 
         // equality and inequality comparison
         bool            operator==(identifier other) const;

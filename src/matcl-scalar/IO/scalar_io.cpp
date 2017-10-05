@@ -25,7 +25,7 @@
 #include "matcl-core/details/IO/disp_impl.h"
 
 #include "matcl-core/details/IO/disp_stream_impl.h"
-#include "matcl-dynamic/object.h"
+#include "matcl-dynamic/details/object.inl"
 #include "matcl-dynamic/object_type.h"
 #include "matcl-scalar/object.h"
 #include "matcl-scalar/lib_functions/func_unary.h"

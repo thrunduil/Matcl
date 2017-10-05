@@ -40,6 +40,7 @@ class fun_conv_link : public evaler
         ~fun_conv_link() override;
 
        bool         make_eval(const object** _args, object& ret) const override;
+       void         make_eval(const object** _args) const;
        function     make_converter(int n_deduced, const Type deduced[], Type ded_ret,
                         const std::vector<function>&) const override;
 };

@@ -394,10 +394,10 @@ void default_allocator<Throw_bad_alloc, Is_global>::aligned_free(void* ptr, size
     return allocator_impl::aligned_free(ptr);
 }
 
-template struct default_allocator<false, false>;
-template struct default_allocator<false, true>;
-template struct default_allocator<true, false>;
-template struct default_allocator<true, true>;
+template MATCL_CORE_EXPORT struct default_allocator<false, false>;
+template MATCL_CORE_EXPORT struct default_allocator<false, true>;
+template MATCL_CORE_EXPORT struct default_allocator<true, false>;
+template MATCL_CORE_EXPORT struct default_allocator<true, true>;
 
 };};
 

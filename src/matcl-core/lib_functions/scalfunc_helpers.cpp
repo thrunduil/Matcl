@@ -20,7 +20,7 @@
 
 #include "matcl-core/details/scalfunc_real.h"
 #include "matcl-core/details/scalfunc_complex.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 
 #pragma warning(push)
 #pragma warning(disable:4127)   //conditional expression is constant

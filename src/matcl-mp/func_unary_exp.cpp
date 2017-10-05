@@ -25,7 +25,7 @@
 #include "matcl-mp/constants.h"
 #include "matcl-mp/func_binary.h"
 #include "matcl-core/details/scalfunc_real.h"
-#include "matcl-core/general/exception.h"
+#include "matcl-core/error/exception_classes.h"
 #include "error.h"
 #include "impl_functions.h"
 

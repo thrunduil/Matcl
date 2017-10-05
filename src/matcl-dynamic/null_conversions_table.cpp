@@ -38,6 +38,7 @@ class fun_conv_null : public evaler
         ~fun_conv_null() override;
 
         bool        make_eval(const object** _args, object& ret) const override;
+        void        make_eval(const object** _args) const override;
         function    make_converter(int n_deduced, const Type deduced[], Type deduced_ret, 
                         const std::vector<function>& arg_converters) const override;
 };
@@ -61,6 +62,13 @@ bool fun_conv_null::make_eval(const object** _args, object& ret) const
     obj_null.reset(object(m_ret_ti));
     ret.reset(obj_null);  
     return false;
+};
+
+void fun_conv_null::make_eval(const object** _args) const
+{
+    object& obj_null = *const_cast<object*>(_args[0]);
+    obj_null.reset(object(m_ret_ti));
+    return;
 };
 
 function fun_conv_null::make_converter(int, const Type[], Type, 
