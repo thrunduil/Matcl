@@ -31,7 +31,7 @@ inline function::function()
 
 inline bool function::is_null() const
 { 
-    return m_evaler.get() == nullptr;
+    return m_evaler == nullptr;
 };
 
 inline int function::number_arguments() const
@@ -55,30 +55,7 @@ inline const function::ptr_type& function::get_evaler() const
 };
 
 inline function::function(evaler* ev)
-    :m_evaler(ev, matcl::copy_t())
-{};
-
-inline function::function(const function& other)
-    :m_evaler(other.m_evaler)
-{};
-
-inline function::function(function&& other)
-    :m_evaler(std::move(other.m_evaler))
-{};
-
-inline function& function::operator=(const function& other)
-{
-    m_evaler    = other.m_evaler;
-    return *this;
-}
-
-inline function& function::operator=(function&& other)
-{
-    m_evaler    = std::move(other.m_evaler);
-    return *this;
-}
-
-inline function::~function()
+    :m_evaler(ev)
 {};
 
 template<class ... Object>
@@ -87,29 +64,27 @@ inline object eval_function::eval(const function_name& func, Object&& ... args)
     Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
     int n_args              = sizeof...(Object);
 
-    function buf;
-    const function* f       = operations::get_overload(func, n_args, types, buf, true);
 
+    function f              = operations::get_overload(func, n_args, types);
     const object* args[]    = {(const object*)&args...};
 
     object ret;
-    f->make(n_args, args, ret);
+    f.make(n_args, args, ret);
 
     return ret;
 };
 
 inline object eval_function::eval(const function_name& func)
 {
-    Type* types             = nullptr;
-    int n_args              = 0;
+    Type* types         = nullptr;
+    int n_args          = 0;
     
-    function buf;
-    const function* f       = operations::get_overload(func, n_args, types, buf, true);
+    function f          = operations::get_overload(func, n_args, types);
 
-    const object** args     = nullptr;
+    const object** args = nullptr;
 
     object ret;
-    f->make(n_args, args, ret);
+    f.make(n_args, args, ret);
     
     return ret;
 };
@@ -125,32 +100,30 @@ inline object eval_function_template::eval(const function_name& func, Object&& .
     int n_args              = sizeof...(Object);
     int n_types             = (int)m_types.size();
 
-    function buf;
-    const function* f       = operations::get_template_overload(func, n_types, 
-                                m_types.data(), n_args, types, buf, true);
+    function f              = operations::get_template_overload(func, n_types, 
+                                m_types.data(), n_args, types);
 
     const object* args[]    = {(const object*)&args...};
 
     object ret;    
-    f->make(n_args, args, ret);
+    f.make(n_args, args, ret);
 
     return ret;
 };
 
 inline object eval_function_template::eval(const function_name& func)
 {
-    Type* types             = nullptr;
-    int n_args              = 0;
-    int n_types             = (int)m_types.size();
+    Type* types         = nullptr;
+    int n_args          = 0;
+    int n_types         = (int)m_types.size();
 
-    function buf;
-    const function* f       = operations::get_template_overload(func, n_types, 
-                                m_types.data(), n_args, types, buf, true);
+    function f          = operations::get_template_overload(func, n_types, 
+                                m_types.data(), n_args, types);
 
-    const object** args     = nullptr;
+    const object** args = nullptr;
     
     object ret;
-    f->make(n_args, args, ret);
+    f.make(n_args, args, ret);
 
     return ret;
 };

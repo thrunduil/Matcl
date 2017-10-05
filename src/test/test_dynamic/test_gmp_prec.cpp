@@ -186,9 +186,14 @@ struct Log10e_const
 
 void gmp_tester_prec::make(std::ostream& os)
 {
-    Integer N       = 500;
+    Integer N       = 500;    
+    Integer Nb      = 500;
+
+  #ifdef _DEBUG
+    Integer Nc      = 10;
+  #else
     Integer Nc      = 100;
-    Integer Nb      = 5000;
+  #endif
 
     prec_vec prec   = {precision(10), precision(23), precision(53), 
                         precision(100), precision(500)};

@@ -228,6 +228,9 @@
     <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h">
       <Filter>Source Files\include\IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\memory\global_objects.h">
+      <Filter>Source Files\include\memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
@@ -261,6 +264,12 @@
       <Filter>Source Files\include\details</Filter>
     </None>
     <None Include="..\..\src\include\matcl-core\details\thread.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\alloc.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\global_objects.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
   </ItemGroup>
@@ -348,6 +357,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\exception\exception_classes.cpp">
       <Filter>Source Files\src\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\base\global_objects.cpp">
+      <Filter>Source Files\src\base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

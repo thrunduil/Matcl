@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/scalar_types.h"
 
 #pragma warning(push)

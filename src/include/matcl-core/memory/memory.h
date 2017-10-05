@@ -21,13 +21,15 @@
 #pragma once
 
 #include "matcl-core/config.h"
+#include "matcl-core/memory/global_objects.h"
+#include "matcl-core/memory/alloc.h"
 #include <memory>
 
 namespace matcl
 {
 
 // an intermediary class implementing cache clearing
-class cache_registerer
+class cache_registerer : public matcl_new_delete
 {
     public:
         virtual ~cache_registerer(){};
@@ -37,7 +39,7 @@ class cache_registerer
 };
 
 // register on object, that stores memory, which can be released at
-// any time; this memory will be released then free_caches function
+// any time; this memory will be released when free_caches function
 // is called or malloc fails; only thread local caches can be registered
 // in this way; one can also register global caches protected by a mutex
 // if they can be cleared at any time from any thread; this function is 

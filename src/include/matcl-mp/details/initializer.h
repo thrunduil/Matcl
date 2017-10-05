@@ -18,37 +18,19 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "type_table_cache.inl"
+#pragma once
 
-namespace matcl { namespace dynamic { namespace details
+#include "matcl-mp/config.h"
+
+namespace matcl 
 {
 
-//--------------------------------------------------------------------------
-//                         type_table_cache
-//--------------------------------------------------------------------------
-type_table_cache::type_table_cache()
-    :m_unifiers(false), m_overloads(false), m_template_overloads(false)
-    ,m_convert(false), m_assign(false)
-{};
-
-void type_table_cache::clear()
+struct MATCL_MP_EXPORT matcl_mp_initializer
 {
-    m_unifiers.clear();
-    m_overloads.clear();
-    m_convert.clear();
-    m_assign.clear();
-    m_template_overloads.clear();
-    m_last_call.clear();
+    matcl_mp_initializer();
+    ~matcl_mp_initializer();
 };
 
-void type_table_cache::clear_global()
-{
-    clear();
-}
+static matcl_mp_initializer mp_init;
 
-void type_table_cache::close_global()
-{    
-    delete this;
-}
-
-};};};
+};

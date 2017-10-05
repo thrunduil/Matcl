@@ -26,9 +26,15 @@
 namespace matcl { namespace dynamic { namespace details
 {
 
+fun_evaler_conv* fun_evaler_conv::make(const evaler* fun, int n_deduced, const Type deduced[],
+                        Type deduced_ret, const std::vector<function>& convs)
+{
+    return new fun_evaler_conv(fun, n_deduced, deduced, deduced_ret, convs);
+};
+
 fun_evaler_conv::fun_evaler_conv(const evaler* fun, int n_deduced, const Type deduced[],
                                  Type ded_ret, const std::vector<function>& convs)
-	: m_fun(fun), m_converters(convs)
+	: m_fun(fun), m_converters(convs), m_has_deduced_ret(false)
 {
 	this->m_ret_ti      = fun->m_ret_ti;
 	this->m_args_size   = fun->m_args_size - n_deduced;
@@ -38,8 +44,9 @@ fun_evaler_conv::fun_evaler_conv(const evaler* fun, int n_deduced, const Type de
     
     if (this->m_deduced_ret != Type())
     {
-        this->m_ret_ti  = this->m_deduced_ret;
-        has_ret         = 1;
+        this->m_ret_ti      = this->m_deduced_ret;
+        has_ret             = 1;
+        m_has_deduced_ret   = true;
         this->m_args_size   -= 1;
     }
 
@@ -51,7 +58,7 @@ fun_evaler_conv::fun_evaler_conv(const evaler* fun, int n_deduced, const Type de
     };
 
     if (this->m_args_size > 0)
-	    this->m_arg_ti  = new Type[this->m_args_size];
+        this->m_arg_ti  = new Type[this->m_args_size];
 	
     for(size_t i = 0; i < m_converters.size(); ++i)
 	{
@@ -70,14 +77,48 @@ fun_evaler_conv::fun_evaler_conv(const evaler* fun, int n_deduced, const Type de
         m_deduced[i + has_ret].reset(object(OType(deduced[i])));
 };
 
-fun_evaler_conv::~fun_evaler_conv()
+void fun_evaler_conv::destroy()
 {
     delete[] this->m_arg_ti;
+    delete this;
+};
+
+int fun_evaler_conv::number_deduced_types() const
+{
+    int n = (int)m_deduced.size();
+
+    if (m_has_deduced_ret == true)
+        return n - 1;
+    else
+        return n;
+};
+
+Type fun_evaler_conv::get_deduced_type(size_t n) const
+{
+    if (m_has_deduced_ret == false)
+        return m_deduced[n].get_type();
+    else
+        return m_deduced[1 + n].get_type();
+};
+
+Type fun_evaler_conv::get_deduced_ret() const
+{
+    return m_deduced_ret;
+};
+
+int fun_evaler_conv::number_converters() const
+{
+    return (int)m_converters.size();
+}
+
+function fun_evaler_conv::get_coverter(size_t n) const
+{
+    return m_converters[n];
 };
 
 bool fun_evaler_conv::make_eval(const object** _args, object& return_obj) const
 {
-    //to avoid using new or malloc
+    // avoid using new or malloc
     using obj_pod           = matcl::details::pod_type<object>;
     using obj_destructor    = obj_pod::destructor_type;
     using stack_array_ptr   = matcl::details::stack_array<const object*,10>;
@@ -111,7 +152,7 @@ bool fun_evaler_conv::make_eval(const object** _args, object& return_obj) const
 
 void fun_evaler_conv::make_eval(const object** _args) const
 {
-    //to avoid using new or malloc
+    //avoid using new or malloc
     using obj_pod           = matcl::details::pod_type<object>;
     using obj_destructor    = obj_pod::destructor_type;
     using stack_array_ptr   = matcl::details::stack_array<const object*,10>;

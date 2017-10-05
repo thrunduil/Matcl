@@ -23,6 +23,7 @@
 #include "matcl-dynamic/config.h"
 #include "matcl-dynamic/details/type_object.h"
 #include "matcl-dynamic/details/object_data_pool.h"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl { namespace dynamic { namespace details
 {
@@ -41,7 +42,7 @@ template<class T>
 type_impl* global_objects::initialize_type(pool_type*& pool)
 {
     type_impl* type = new details::type_object<T>();
-    pool            = new object_data_pool_impl(false, sizeof(object_data<T>));
+    pool            = new object_data_pool_impl(sizeof(object_data<T>));
 
     return type;
 };

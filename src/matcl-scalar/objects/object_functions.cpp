@@ -30,7 +30,7 @@ namespace matcl { namespace dynamic { namespace functions
 
 struct validators
 {
-    static bool check_ret_unit(const function& f)
+    static bool check_ret_unit(function f)
     {
         return f.return_type() == predefined::type_unit();
     };
@@ -40,7 +40,7 @@ struct validators
         os << "function must return " << predefined::type_unit().to_string();
     };
 
-    static bool check_ret_string(const function& f)
+    static bool check_ret_string(function f)
     {
         return f.return_type() == predefined::type_string();
     };

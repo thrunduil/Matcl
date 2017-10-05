@@ -19,6 +19,8 @@
  */
 
 #include "matcl-core/IO/output_stream.h"
+#include "matcl-core/memory/alloc.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -44,13 +46,13 @@ output_stream_from_ostream_synchronized
     ::output_stream_from_ostream_synchronized(std::ostream& os)
     :m_stream(os)
 {
-    m_mutex = new matcl::default_mutex();
+    m_mutex = matcl_new<matcl::default_mutex>();
 }
 
 output_stream_from_ostream_synchronized
     ::~output_stream_from_ostream_synchronized() 
 {
-    delete m_mutex;
+    matcl_delete(m_mutex);
 }
 
 void output_stream_from_ostream_synchronized::disp(std::stringstream& of)

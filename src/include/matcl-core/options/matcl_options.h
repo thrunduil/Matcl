@@ -21,12 +21,14 @@
 #pragma once
 
 #include "matcl-core/config.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
 #include "matcl-core/details/options/matcl_options_details.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/IO/disp_stream.h"
 #include "matcl-core/options/option_validators.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <map>
 #include <type_traits>
@@ -63,7 +65,7 @@ class MATCL_CORE_EXPORT option_visitor
 };
 
 //base class for concrete options; this class should never be used directly.
-class MATCL_CORE_EXPORT option
+class MATCL_CORE_EXPORT option : public matcl_new_delete
 {
     private:
         using impl_type     = std::shared_ptr<details::option_impl>;

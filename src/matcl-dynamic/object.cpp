@@ -26,6 +26,7 @@
 #include "matcl-dynamic/predefined_type_traits.h"
 #include "type_table.h"
 #include "matcl-core/details/object_interface.h"
+#include "matcl-dynamic/initialization.h"
 
 namespace matcl { namespace dynamic
 {
@@ -74,6 +75,9 @@ static void open()
 {
     static object_interface oi; 
     set_object_intrface(&oi);
+
+    details::initialize_identifier_table();
+    details::initialize_funcions();
 };
 
 static void close()
@@ -211,11 +215,9 @@ void object::make_assignment(const object& other, Type ty1, Type ty2)
 {
     make_unique();
 
-    function buf;
-    const function* f       = details::type_table::get()->get_assigner(ty1, ty2, buf, true);
-
+    function f              = details::type_table::get()->get_assigner(ty1, ty2);
     const object* args[]    = {this, &other};
-    f->make(2,args);
+    f.make(2,args);
 };
 
 void object::make_assignment(object&& other, Type ty1, Type ty2)
@@ -225,13 +227,11 @@ void object::make_assignment(object&& other, Type ty1, Type ty2)
     Type in1                = this->get_type();
     Type in2                = other.get_type();
 
-    function buf;
-    const function* f       = details::type_table::get()->get_assigner
-                                (ty1, ty2, buf, true);
+    function f              = details::type_table::get()->get_assigner(ty1, ty2);
 
     object tmp(std::move(other));
     const object* args[]    = {this, &tmp};
-    f->make(2, args);
+    f.make(2, args);
 };
 
 object::operator bool() const
@@ -365,14 +365,13 @@ MATCL_DYN_EXPORT object dynamic::convert(Type new_type, const object& obj)
     if (in1 == new_type)
         return obj;
 
-    function buf;
-    const function* f       = details::type_table::get()->get_converter
-                                    (new_type, in1, false, buf, true);
+    function f              = details::type_table::get()->get_converter
+                                    (new_type, in1, false);
 
     const object* args[]    = {&obj};
 
     object ret;
-    f->make(1,args, ret);
+    f.make(1,args, ret);
     return ret;
 };
 
@@ -383,14 +382,13 @@ MATCL_DYN_EXPORT object dynamic::cast(Type new_type, const object& obj)
     if (in1 == new_type)
         return obj;
 
-    function buf;
-    const function* f       = details::type_table::get()->get_cast_function
-                                    (new_type, in1, buf, true);
+    function f              = details::type_table::get()->get_cast_function
+                                    (new_type, in1);
 
     const object* args[]    = {&obj};
 
     object ret;
-    f->make(1, args, ret);
+    f.make(1, args, ret);
 
     return ret;
 };

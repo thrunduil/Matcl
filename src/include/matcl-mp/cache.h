@@ -20,8 +20,10 @@
 
 #pragma once
 
+#include "matcl-mp/details/initializer.h"
 #include "matcl-mp/mp_float.h"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <map>
 
@@ -56,7 +58,7 @@ class unique_id
 
 // a thread local class that allow for caching computed values
 // this class is thread save
-class cache
+class cache : matcl_new_delete, global_object
 {
     private:
         using value_float   = std::pair<precision, mp_float>;
@@ -88,6 +90,9 @@ class cache
 
     private:
         static cache*   get();
+
+        virtual void    clear_global() override;
+        virtual void    close_global() override;
 };
 
 };

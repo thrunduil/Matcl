@@ -87,6 +87,9 @@
     <ClInclude Include="..\..\src\include\matcl-mp\matcl_mp.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-mp\details\initializer.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-mp\details\func_binary.inl">
@@ -146,6 +149,9 @@
       <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-mp\utils.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-mp\initializer.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>

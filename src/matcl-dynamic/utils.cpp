@@ -40,7 +40,7 @@ void dynamic::free_cache()
     details::type_table::get()->free_cache();
 }
 
-struct register_cache_dynamic
+struct register_cache_dynamic : global_object
 {
     std::shared_ptr<cache_registerer> reg;
 
@@ -50,9 +50,18 @@ struct register_cache_dynamic
 
         matcl::register_cache(reg);
     };
+
+    void clear_global() override
+    {
+    };
+
+    void close_global() override
+    {
+        delete this;
+    };
 };
 
-static register_cache_dynamic g_reg_cache;
+register_cache_dynamic* g_reg_cache = new register_cache_dynamic();
 
 };};
 

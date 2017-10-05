@@ -151,20 +151,20 @@ Type operations::make_reference_type(Type t)
 
 Type operations::return_type(const function_name& func, int n_args, const Type* t)
 {
-    const function* f   = details::type_table::get()->get_overload(func,n_args,t);
-    return f->return_type();
+    function f   = details::type_table::get()->get_overload(func,n_args,t);
+    return f.return_type();
 }
 
 function operations::get_overload(const function_name& func, int n_args, const Type t[])
 {
-    return *details::type_table::get()->get_overload(func, n_args, t);
+    return details::type_table::get()->get_overload(func, n_args, t);
 };
 
 function
 operations::get_template_overload(const function_name& func, int n_templ, 
                    const Type templates[], int n_args, const Type arg_types[])
 {
-    return *details::type_table::get()->get_template_overload
+    return details::type_table::get()->get_template_overload
                         (func,n_templ, templates, n_args, arg_types);
 }
 

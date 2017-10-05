@@ -21,10 +21,12 @@
 #pragma once
 
 #include "matcl-core/config.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
 #include "matcl-core/matrix/enums.h"
 #include "matcl-core/error/safe_string_message.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <string>
 #pragma warning(push)
@@ -51,7 +53,7 @@ enum class unable_create_view_reason
 };
 
 // class responsible for creating string message for exception classes
-class MATCL_CORE_EXPORT exception_message
+class MATCL_CORE_EXPORT exception_message : public matcl_new_delete
 {
     public:
         virtual ~exception_message(){};

@@ -22,6 +22,8 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/global_objects.h"
+
 #include <complex>
 
 namespace matcl { namespace details

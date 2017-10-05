@@ -21,6 +21,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/enums.h"
 #include "matcl-core/IO/output_stream.h"
 
@@ -56,7 +57,7 @@ class MATCL_CORE_EXPORT line_printer
 using disp_stream_ptr = std::shared_ptr<class disp_stream>;
 
 // this class controls behavior of matrix printers
-class MATCL_CORE_EXPORT disp_stream
+class MATCL_CORE_EXPORT disp_stream : public matcl_new_delete
 {
     public:
         enum class line_type

@@ -56,10 +56,10 @@
     <ClInclude Include="..\..\src\include\matcl-dynamic\type.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\typed_object_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-dynamic\utils.h" />
+    <ClInclude Include="..\..\src\matcl-dynamic\conversions_table.h" />
     <ClInclude Include="..\..\src\matcl-dynamic\error_handler.h" />
     <ClInclude Include="..\..\src\matcl-dynamic\function_table.h" />
-    <ClInclude Include="..\..\src\matcl-dynamic\func_conv_link.h" />
-    <ClInclude Include="..\..\src\matcl-dynamic\null_conversions_table.h" />
+    <ClInclude Include="..\..\src\matcl-dynamic\initialization.h" />
     <ClInclude Include="..\..\src\matcl-dynamic\numeric_conversions_table.h" />
     <ClInclude Include="..\..\src\matcl-dynamic\overload_resolution.h" />
     <ClInclude Include="..\..\src\matcl-dynamic\predefined\special_functions.h" />
@@ -84,14 +84,13 @@
     <None Include="..\..\src\matcl-dynamic\type_table_cache.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-dynamic\conversions_table.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\error_handler.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\function.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\function_name.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\function_table.cpp" />
-    <ClCompile Include="..\..\src\matcl-dynamic\func_conv_link.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\func_evaler_conv.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\matcl_function_names.cpp" />
-    <ClCompile Include="..\..\src\matcl-dynamic\null_conversions_table.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\object.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\overload_resolution.cpp" />
     <ClCompile Include="..\..\src\matcl-dynamic\predefined\object_any.cpp" />

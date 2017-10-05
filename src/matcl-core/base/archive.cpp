@@ -20,13 +20,14 @@
 
 #include "matcl-core/IO/archive.h"
 #include "matcl-core/IO/serialize.h"
+#include "matcl-core/memory/alloc.h"
 
 namespace matcl 
 {
 
 iarchive::iarchive(std::istream& is)
 {
-    m_impl          = new archive_type(is);
+    m_impl          = matcl_new<archive_type>(is);
     m_need_delete   = true;
 };
 
@@ -39,16 +40,9 @@ iarchive::iarchive(archive_type& ar)
 iarchive::~iarchive()
 {
     if (m_need_delete)
-        delete m_impl;
+        matcl_delete(m_impl);
 };
 
-/*
-iarchive& iarchive::operator>>(Matrix& mat)
-{
-    load(*this,mat);
-    return *this;
-};
-*/
 iarchive& iarchive::operator>>(Integer& v)
 {
     details::serialize_load(get(),v,0);
@@ -77,7 +71,7 @@ iarchive& iarchive::operator>>(Float_complex& v)
 
 oarchive::oarchive(std::ostream& os)
 {
-    m_impl          = new archive_type(os);
+    m_impl          = matcl_new<archive_type>(os);
     m_need_delete   = true;
 };
 oarchive::oarchive(archive_type& ar)
@@ -88,16 +82,9 @@ oarchive::oarchive(archive_type& ar)
 oarchive::~oarchive()
 {
     if (m_need_delete == true)
-        delete m_impl; 
+        matcl_delete(m_impl); 
 };
 
-/*
-oarchive& oarchive::operator<<(const Matrix& mat)
-{
-    save(*this,mat);
-    return *this;
-};
-*/
 oarchive& oarchive::operator<<(Integer v)
 {
     details::serialize_save(get(),v,0);

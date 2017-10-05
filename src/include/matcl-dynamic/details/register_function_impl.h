@@ -42,7 +42,7 @@ struct MATCL_DYN_EXPORT assign_tag  { static function_name eval(); };
 
 struct enum_tag;
 
-struct delayed_function_register
+struct delayed_function_register : public matcl_new_delete
 {
     virtual function            execute_registration() = 0;
     virtual function_name       get_fun_name() const = 0;
@@ -51,7 +51,7 @@ struct delayed_function_register
 using make_return_fptr  = Type (*)(int n_template, const Type templates[],
                                            int n_args, const Type args[]);
 
-struct delayed_function_template_register
+struct delayed_function_template_register : public matcl_new_delete
 {
     virtual function            execute_registration(std::vector<Type>& types, 
                                                      make_return_fptr& ret) = 0;
@@ -295,18 +295,20 @@ struct init_template_types<>
     static void eval(std::vector<Type>&){};
 };
 
-template<class data_constructor, typename Fun, class base>
-class matcl_dynamic_function : public dynamic_function<Fun,base>
+template<class data_constructor, typename Fun>
+class matcl_dynamic_function : public dynamic_function<Fun, matcl::dynamic::details::evaler>
 {
     private:
-        using base_type         = typename dynamic_function<Fun,base>;
+        using base              = matcl::dynamic::details::evaler;
+        using base_type         = typename dynamic_function<Fun, base>;
         using function_traits   = typename matcl::dynamic::details::function_traits<Fun>;
 
         matcl_dynamic_function(const matcl_dynamic_function&) = delete;
         matcl_dynamic_function& operator=(const matcl_dynamic_function&) = delete;
 
-    public:
-        matcl_dynamic_function(Fun f) : base_type(f)
+    private:
+        matcl_dynamic_function(Fun f)
+            : base_type(f)
         {
             static const int n_inputs   = function_traits::n_inputs;
             static const bool is_obj    = is_object<return_type>::value;
@@ -324,18 +326,18 @@ class matcl_dynamic_function : public dynamic_function<Fun,base>
             init_ret<return_type>::init(base_type::m_ret_ti);
         };
 
-        ~matcl_dynamic_function() override
+        void destroy() override
         {
             delete[] base_type::m_arg_ti;
+            delete this;
         };
 
-        virtual dynamic::function make_converter(int n_deduced, const Type deduced[], Type ded_ret,
-                                    const std::vector<dynamic::function>& conv_vec) const override
+    public:
+
+        static matcl_dynamic_function* make(Fun f)
         {
-            static const int N = function_traits::n_inputs;
-            evaler* ptr = new details::fun_evaler_conv(this, n_deduced, deduced, ded_ret, conv_vec);
-            return dynamic::function(ptr);
-        };
+            return new matcl_dynamic_function(f);
+        }
 
         virtual bool make_eval(const dynamic::object** args, object& ret) const override
         {
@@ -365,9 +367,9 @@ function function_register<Fun>::process_function(Fun fun)
 {
     using fun_traits        = matcl::dynamic::details::function_traits<Fun>;
     using data_cons_type    = data_constructor<fun_traits>;
+    using dyn_func          = matcl_dynamic_function<data_cons_type, Fun>;
 
-    return function(new matcl_dynamic_function<data_cons_type, Fun, 
-                            matcl::dynamic::details::evaler>(fun));
+    return function(dyn_func::make(fun));
 };
 
 template<class Fun, class ... Templates>
@@ -379,8 +381,8 @@ function function_template_register<Fun, Templates...>::process_function(Fun fun
     types.clear();
     init_template_types<Templates...>::eval(types);
     
-    return function(new matcl_dynamic_function<data_cons_type, Fun, 
-                            matcl::dynamic::details::evaler>(fun));
+    using dyn_func          = matcl_dynamic_function<data_cons_type, Fun>;
+    return function(dyn_func::make(fun));
 };
 
 template<class Fun, class ... Templates>

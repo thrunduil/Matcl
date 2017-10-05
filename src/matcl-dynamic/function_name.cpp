@@ -24,6 +24,7 @@
 #include "matcl-core/details/hash_table/hash_equal.inl"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/memory/alloc.h"
+#include "matcl-dynamic/initialization.h"
 
 namespace matcl { namespace dynamic
 {
@@ -38,6 +39,7 @@ class identifier_impl
 {
     private:
         using string_t  = std::string;
+        using allocator = default_allocator_simple<true, char>;
 
         size_t          m_size;
         size_t          m_hash;
@@ -71,7 +73,7 @@ inline identifier_impl::identifier_impl(string_t val)
     size_t N    = val.size();    
     m_size      = N;
 
-    char* tmp   = (char*)malloc((m_size+1)*sizeof(char));
+    char* tmp   = allocator::malloc((m_size+1)*sizeof(char));
 
     strcpy_s(tmp, N+1, val.data());
     tmp[N]      = 0;
@@ -86,13 +88,18 @@ inline identifier_impl::identifier_impl(const char* data, size_t size)
     size_t N    = size;    
     m_size      = N;
     
-    char* tmp   = (char*)malloc((m_size+1)*sizeof(char));    
+    char* tmp   = allocator::malloc((m_size+1)*sizeof(char));    
 
     strcpy_s(tmp, N+1, data);
     tmp[N]      = 0;
 
     m_data      = tmp;
     m_code      = get_next_code();
+};
+
+identifier_impl::~identifier_impl()
+{
+    allocator::free(const_cast<char*>(m_data));
 };
 
 size_t identifier_impl::get_next_code()
@@ -156,12 +163,12 @@ struct identifier_ptr
     static identifier_ptr   make(identifier_impl* p) { return identifier_ptr{p}; };
 };
 
-class identifier_table
+class identifier_table : public matcl_new_delete, global_object
 {
     private:        
         using string_hash   = matcl::details::obj_hasher<identifier_impl>;
         using string_equal  = matcl::details::obj_equaler<identifier_impl>;
-        using allocator     = matcl::details::default_allocator_simple<true, true, char>;
+        using allocator     = matcl::default_allocator_simple<true, char>;
         using string_table  = matcl::details::object_table<identifier_ptr,string_hash,string_equal,
                                 allocator>;
         using mutex_type    = matcl::default_spinlock_mutex;
@@ -173,13 +180,12 @@ class identifier_table
 
     public:
         identifier_table();
+        ~identifier_table();
         
+        void                clear_global() override;
+        void                close_global() override;
         identifier_ptr      get(const std::string& val);
 };
-
-identifier_table::identifier_table()
-    :m_table(true)
-{};
 
 identifier_ptr identifier_table::get(const std::string& val)
 { 
@@ -188,7 +194,29 @@ identifier_ptr identifier_table::get(const std::string& val)
     return m_table.get(val); 
 };
 
-static identifier_table g_id_table;
+identifier_table::identifier_table()
+{
+};
+
+void identifier_table::clear_global()
+{
+    m_table.clear();
+};
+
+void identifier_table::close_global()
+{
+    delete this;
+}
+
+identifier_table::~identifier_table()
+{}
+
+identifier_table* g_id_table = nullptr;
+
+void details::initialize_identifier_table()
+{
+    g_id_table = new identifier_table();
+};
 
 };
 
@@ -197,7 +225,7 @@ static identifier_table g_id_table;
 //---------------------------------------------------------------
 identifier::identifier(const std::string& name)
 {
-    details::identifier_ptr ptr = details::g_id_table.get(name);
+    details::identifier_ptr ptr = details::g_id_table->get(name);
     m_impl  = ptr.m_ptr;
     m_hash  = ptr.m_ptr->hash_value();
     m_code  = ptr.m_ptr->get_code();
@@ -256,7 +284,7 @@ void function_name::disp_requirements(std::ostream& os) const
     m_validator.get_printer()(os);
 };
 
-bool function_name::validate_function(const function& f) const
+bool function_name::validate_function(function f) const
 {
     if (f.is_null() == true)
         return false;

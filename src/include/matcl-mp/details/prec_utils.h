@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl-mp/details/initializer.h"
 #include "matcl-mp/mp_float.h"
 #include <algorithm>
 

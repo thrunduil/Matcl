@@ -20,18 +20,17 @@
 
 #pragma once
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
 
-namespace matcl { namespace details
+namespace matcl
 {
 
 // default allocator;
 // if Throw_bad_alloc = true, then error is thrown when malloc fails
-// otherwise nullptr is returned;
-// if Is_global is true, then it is assumed, that allocated memory will
-// be released at program exit and leaks will not be reported
-template<bool Throw_bad_alloc, bool Is_global>
+// otherwise nullptr is returned
+template<bool Throw_bad_alloc>
 struct MATCL_CORE_EXPORT default_allocator
 {
     using size_type         = std::size_t;
@@ -57,12 +56,10 @@ struct MATCL_CORE_EXPORT default_allocator
 
 // default allocator;
 // if Throw_bad_alloc = true, then error is thrown when malloc fails
-// otherwise nullptr is returned;
-// if Is_global is true, then it is assumed, that allocated memory will
-// be released at program exit and leaks will not be reported
-template<bool Throw_bad_alloc, bool Is_global, class Type = void>
+// otherwise nullptr is returned
+template<bool Throw_bad_alloc, class Type = void>
 struct default_allocator_simple 
-    : protected default_allocator<Throw_bad_alloc,Is_global>
+    : protected default_allocator<Throw_bad_alloc>
 {
     using size_type         = std::size_t;
     using difference_type   = std::ptrdiff_t;
@@ -71,21 +68,48 @@ struct default_allocator_simple
     static void     free(void* ptr);
 };
 
-template<bool Throw_bad_alloc, bool Is_global, class Type>
-inline Type* 
-default_allocator_simple<Throw_bad_alloc, Is_global, Type>
+template<bool Throw_bad_alloc, class Type>
+inline Type* default_allocator_simple<Throw_bad_alloc, Type>
                 ::malloc(size_t n_bytes)
 {
-    using base_type = default_allocator<Throw_bad_alloc, Is_global>;
+    using base_type = default_allocator<Throw_bad_alloc>;
     return (Type*)base_type::simple_malloc(n_bytes);
 }
 
-template<bool Throw_bad_alloc, bool Is_global, class Type>
-inline void 
-default_allocator_simple<Throw_bad_alloc, Is_global, Type>::free(void* ptr)
+template<bool Throw_bad_alloc, class Type>
+inline void default_allocator_simple<Throw_bad_alloc, Type>::free(void* ptr)
 {
-    using base_type = default_allocator<Throw_bad_alloc, Is_global>;
+    using base_type = default_allocator<Throw_bad_alloc>;
     return base_type::simple_free(ptr);
 }
 
-};};
+// defines new and delete operators used for classes derived from
+// matcl_new_delete
+struct matcl_new_delete
+{
+    // new operator will call default_allocator<true>::simple_malloc
+    void*   operator new(size_t size);
+
+    // new[] operator will call default_allocator<true>::simple_malloc
+    void*   operator new[](std::size_t size);
+
+    // delete operator will call default_allocator<true>::simple_free
+    void    operator delete(void* ptr);
+
+    // delete operator will call default_allocator<true>::simple_free
+    void    operator delete[](void* ptr);
+};
+
+};
+
+// call new Ty(args); 
+// function default_allocator<true>::simple_malloc will be called
+template<class Ty, class ... Args>
+Ty*     matcl_new(Args&& ... args);
+
+// call delete ptr, where ptr has type Ty and was created using matcl_new
+// function
+template<class Ty>
+void    matcl_delete(Ty* ptr);
+
+#include "matcl-core/details/alloc.inl"

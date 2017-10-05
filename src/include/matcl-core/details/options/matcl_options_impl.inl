@@ -19,6 +19,8 @@
  */
 #pragma once
 
+#include "matcl-core/memory/alloc.h"
+
 #pragma warning(push)
 #pragma warning(disable : 4702) //unreachable code
 
@@ -47,7 +49,7 @@ optional<T> option::get() const
 //-----------------------------------------------------------------------------------
 template<class T>
 option_type<T>::option_type(const std::string& name, const std::string& descr,
-                            const optional<T>& val)
+                            const optional<T>& val)    
     :option(impl_type(new option_impl_type(name, descr, val)))
 {}
 

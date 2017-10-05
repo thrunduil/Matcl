@@ -24,6 +24,7 @@
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/options/optional.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <ostream>
 #include <stdexcept>
@@ -93,7 +94,7 @@ class option_impl_type : public option_impl
         virtual std::string get_option_type() const override;
 };
 
-class MATCL_CORE_EXPORT options_impl
+class MATCL_CORE_EXPORT options_impl : public matcl_new_delete
 {
     private:
         using option_map    = std::map<std::string, option>;

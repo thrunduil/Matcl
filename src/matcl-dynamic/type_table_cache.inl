@@ -31,7 +31,7 @@ inline last_call_info::last_call_info()
     :n_args(0)
 {};
 
-inline last_call_info::last_call_info(int args, Type t1, Type t2, const function& f)
+inline last_call_info::last_call_info(int args, Type t1, Type t2, function f)
     :n_args(args), m_ty_1(t1), m_ty_2(t2), m_func(f)
 {};
 
@@ -44,10 +44,10 @@ inline void last_call_cache::clear()
 }
 
 force_inline
-const function* last_call_cache::get_last_function(size_t code, int n_args, Type t1, Type t2) const
+function last_call_cache::get_last_function(size_t code, int n_args, Type t1, Type t2) const
 {
     if (code >= m_cache.size())
-        return nullptr;
+        return function();
 
     const last_call_info& info  = m_cache[code];
 
@@ -56,14 +56,14 @@ const function* last_call_cache::get_last_function(size_t code, int n_args, Type
     bool eq3    = info.m_ty_2   == t2;
     
     if (eq1 && eq2 && eq3)
-        return &info.m_func;
+        return info.m_func;
     else
-        return nullptr;
+        return function();
 };
 
 force_inline
 void last_call_cache::set_last_function(size_t code, int n_args, Type t1, Type t2, 
-                    const function& f)
+                    function f)
 {
     if (code >= m_cache.size())
         m_cache.resize(code + 1);
@@ -91,42 +91,44 @@ void type_table_cache::set_unifier(Type t1, Type t2, Type t)
 };
 
 inline
-const function* type_table_cache::get_converter(Type to, Type from, converter_type ctype) const
+function type_table_cache::get_converter(Type to, Type from, converter_type ctype) const
 {
     convert_ptr ret = m_convert.get_existing(convert_info{to,from,ctype}); 
+
     if (ret.m_ptr)
-        return &ret.m_ptr->get();
+        return ret.m_ptr->get();
     else
-        return nullptr;
+        return function();
 };
 
 inline
-const function* type_table_cache::set_converter(Type to, Type from, converter_type ctype, 
-                                         const function& f)
+function type_table_cache::set_converter(Type to, Type from, converter_type ctype, 
+                                         function f)
 {
     convert_ptr ret = m_convert.get(convert_info{to,from,ctype, f}); 
-    return &ret.m_ptr->get();
+    return ret.m_ptr->get();
 };
 
 inline
-const function* type_table_cache::get_assigner(Type to, Type from) const
+function type_table_cache::get_assigner(Type to, Type from) const
 {
     assign_ptr ret = m_assign.get_existing(assign_info{to,from}); 
+
     if (ret.m_ptr)
-        return &ret.m_ptr->get();
+        return ret.m_ptr->get();
     else
-        return nullptr;
+        return function();
 };
 
 inline
-const function* type_table_cache::set_assigner(Type to, Type from, const function& f)
+function type_table_cache::set_assigner(Type to, Type from, function f)
 {
     assign_ptr ret = m_assign.get(assign_info{to,from,f}); 
-    return &ret.m_ptr->get();
+    return ret.m_ptr->get();
 };
 
 force_inline
-const function* type_table_cache::get_overload(const function_name& func, 
+function type_table_cache::get_overload(const function_name& func, 
                                 int n_args, const Type t[])
 {
     Type t1, t2;
@@ -146,52 +148,52 @@ const function* type_table_cache::get_overload(const function_name& func,
         }
     }
 
-    const function* f;
+    function f;
 
     size_t code = func.get_unique_code();    
     f           = m_last_call.get_last_function(code, n_args, t1, t2);
 
-    if (f != nullptr)
+    if (f.is_null() == false)
         return f;
 
     overload_ptr ret = m_overloads.get_existing(overload_info{func,n_args,t}); 
 
     if (ret.m_ptr)
     {
-        f = &ret.m_ptr->get();
-        m_last_call.set_last_function(code, n_args, t1, t2, *f);
+        f = ret.m_ptr->get();
+        m_last_call.set_last_function(code, n_args, t1, t2, f);
     }
 
     return f;
 };
 
 inline
-const function* type_table_cache::set_overload(const function_name& func, 
-                            int n_args, const Type t[], const function& f)
+function type_table_cache::set_overload(const function_name& func, 
+                            int n_args, const Type t[], function f)
 {
     overload_ptr ret = m_overloads.get(overload_info{func,n_args,t, f}); 
-    &ret.m_ptr->get();
+    return ret.m_ptr->get();
 };
 
 inline
-const function* type_table_cache::get_template_overload(const function_name& func, int n_templ, 
+function type_table_cache::get_template_overload(const function_name& func, int n_templ, 
                 const Type templates[], int n_args, const Type args[]) const
 {
     toverload_ptr ret = m_template_overloads.get_existing
                             (toverload_info{func,n_templ,templates,n_args,args}); 
 
     if (ret.m_ptr)
-        return &ret.m_ptr->get();
+        return ret.m_ptr->get();
     else
-        return nullptr;
+        return function();
 };
 
 inline
-const function* type_table_cache::set_template_overload(const function_name& func, int n_templ,
-                    const Type templates[], int n_args, const Type t[], const function& f)
+function type_table_cache::set_template_overload(const function_name& func, int n_templ,
+                    const Type templates[], int n_args, const Type t[], function f)
 {
     toverload_ptr ret = m_template_overloads.get(toverload_info{func,n_templ, templates, n_args,t, f}); 
-    return &ret.m_ptr->get();
+    return ret.m_ptr->get();
 };
 
 };};};

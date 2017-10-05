@@ -22,6 +22,7 @@
 
 #include "matcl-core/memory/memory.h"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/alloc.h"
 
 #include <vector>
 
@@ -29,7 +30,7 @@ namespace matcl { namespace details
 {
 
 //cache management
-class cache_handler
+class cache_handler : public matcl_new_delete, global_object
 {
     private:
         using mutex_type        = matcl::default_mutex;
@@ -46,6 +47,10 @@ class cache_handler
 
     private:
         cache_handler();
+
+        virtual void            clear_global() override;
+        virtual void            close_global() override;
+
         static cache_handler*   get();
 
         void                    implement_free_caches();
@@ -56,6 +61,16 @@ cache_handler::cache_handler()
     //explicitly register caches from matcl::dynamic
     //registerer_ptr reg_dyn = matcl::dynamic::get_cache_registerer();
     //m_caches.push_back(reg_dyn);
+}
+
+void cache_handler::clear_global()
+{
+    m_caches.clear();
+};
+
+void cache_handler::close_global()
+{
+    delete this;
 }
 
 cache_handler* cache_handler::get()

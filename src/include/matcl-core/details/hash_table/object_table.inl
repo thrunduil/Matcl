@@ -35,8 +35,8 @@ namespace matcl { namespace details
 //                      object_allocator
 //-----------------------------------------------------------------
 template<class Alloc>
-inline object_allocator<Alloc>::object_allocator(size_t size, bool is_global)
-    :m_pool(size), m_is_global(is_global)
+inline object_allocator<Alloc>::object_allocator(size_t size)
+    :m_pool(size)
 {};
 
 template<class Alloc>
@@ -46,8 +46,7 @@ inline void object_allocator<Alloc>::free(void* ptr)
         if(m_pool.is_from(ptr) == false)
             std::cerr << "invalid free" << "\n";
 
-        if (m_is_global == false)
-            leak_detector::report_free(ptr);
+        leak_detector::report_free(ptr);
     #endif
 
     m_pool.free(ptr);
@@ -59,8 +58,7 @@ inline void* object_allocator<Alloc>::malloc()
     void* ptr = m_pool.malloc();
 
     #if MATCL_DEBUG_MEMORY
-        if (m_is_global == false)
-            leak_detector::report_malloc(ptr);
+        leak_detector::report_malloc(ptr);
     #endif  
 
     return ptr;
@@ -133,8 +131,8 @@ inline void hashed_object_handle<Hash_entry>::assign(value_type* ptr)
 //-----------------------------------------------------------------
 template<class V, class Hasher, class Equaler, class Allocator>
 inline 
-object_table<V, Hasher, Equaler, Allocator>::object_table(bool is_global, size_t capacity)
- : m_storage(sizeof(value_type), is_global), m_table(capacity)
+object_table<V, Hasher, Equaler, Allocator>::object_table(size_t capacity)
+ : m_storage(sizeof(value_type)), m_table(capacity)
 {};
 
 template<class V, class Hasher, class Equaler, class Allocator>
@@ -432,9 +430,9 @@ void object_table<V, Hasher, Equaler, Allocator>::print_collisions(std::ostream&
 //-----------------------------------------------------------------
 template<class V, class Hasher, class Equaler, class Alloc>
 inline 
-unique_object_table<V, Hasher, Equaler, Alloc>::unique_object_table
-                                    (bool is_global, size_t capacity)
-    :m_storage(sizeof(value_type), is_global)
+unique_object_table<V, Hasher, Equaler, Alloc>
+            ::unique_object_table(size_t capacity)
+    :m_storage(sizeof(value_type))
 {
     (void)capacity;
 };
