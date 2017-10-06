@@ -297,37 +297,49 @@ namespace matcl { namespace dynamic
 object dynamic::operator==(const object& a, const object& b)
 {
     using func  = functions::op_eeq;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::operator!=(const object& a, const object& b)
 {
     using func  = functions::op_neq;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::operator<(const object& a, const object& b)
 {
     using func  = functions::op_lt;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 }
 
 object dynamic::operator<=(const object& a, const object& b)
 {
     using func  = functions::op_leq;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::operator>=(const object& a, const object& b)
 {
     using func  = functions::op_geq;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 }
 
 object dynamic::operator>(const object& a, const object& b)
 {
     using func  = functions::op_gt;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 }
 
 bool dynamic::operator!(const object& a)
@@ -336,7 +348,8 @@ bool dynamic::operator!(const object& a)
         return true;
 
     using func  = functions::op_not;
-    object ret = eval_function::eval(func::eval(), a);
+    object ret;
+    eval_function::eval(func::eval(), ret, a);
 
     //it is ensured, that this function returns OBool
     return static_cast<const details::object_data<bool>*>(ret.get_data())->get();
@@ -348,7 +361,8 @@ bool dynamic::cast_bool(const object& a)
         return false;
 
     using func  = functions::op_bool;
-    object ret = eval_function::eval(func::eval(), a);
+    object ret;
+    eval_function::eval(func::eval(), ret, a);
 
     //it is ensured, that this function returns OBool
     return static_cast<const details::object_data<bool>*>(ret.get_data())->get();
@@ -357,49 +371,65 @@ bool dynamic::cast_bool(const object& a)
 object dynamic::operator-(const object& a)
 {
     using func  = functions::op_uminus;
-    return eval_function::eval(func::eval(), a);
+    object ret;
+    eval_function::eval(func::eval(), ret, a);
+    return ret;
 }
 
 object dynamic::operator+(const object& a, const object& b)
 {
     using func  = functions::op_plus;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::operator-(const object& a, const object& b)
 {
     using func  = functions::op_minus;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::operator*(const object& a, const object& b)
 {
     using func  = functions::op_mul;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::operator/(const object& a, const object& b)
 {
     using func  = functions::op_div;
-    return eval_function::eval(func::eval(), a,b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::real(const object& a)
 {
     using func  = functions::real;
-    return eval_function::eval(func::eval(), a);
+    object ret;
+    eval_function::eval(func::eval(), ret, a);
+    return ret;
 };
 
 object dynamic::idiv(const object& a, const object& b)
 {
     using func  = functions::idiv;
-    return eval_function::eval(func::eval(), a, b);
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b);
+    return ret;
 };
 
 object dynamic::imag(const object& a)
 {
     using func  = functions::imag;
-    return eval_function::eval(func::eval(), a);
+    object ret;
+    eval_function::eval(func::eval(), ret, a);
+    return ret;
 };
 
 bool dynamic::is_zero(const object& a)

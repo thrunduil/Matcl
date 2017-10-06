@@ -59,34 +59,24 @@ inline function::function(evaler* ev)
 {};
 
 template<class ... Object>
-inline object eval_function::eval(const function_name& func, Object&& ... args)
+force_inline 
+void eval_function::eval(const function_name& func, object& ret, Object&& ... args)
 {
     Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
-    int n_args              = sizeof...(Object);
-
-
-    function f              = operations::get_overload(func, types, n_args);
     const object* args[]    = {(const object*)&args...};
+    static const int n_args = sizeof...(Object);
 
-    object ret;
-    f.make(n_args, args, ret);
-
-    return ret;
+    using evaler            = typename details::select_evaler<n_args>::type;
+    evaler::eval(func, ret, types, args, n_args);
 };
 
-inline object eval_function::eval(const function_name& func)
+force_inline
+void eval_function::eval(const function_name& func, object& ret)
 {
     Type* types         = nullptr;
-    int n_args          = 0;
-    
-    function f          = operations::get_overload(func, types, n_args);
-
     const object** args = nullptr;
-
-    object ret;
-    f.make(n_args, args, ret);
     
-    return ret;
+    details::eval_function_n::eval(func, ret, types, args, 0);
 };
 
 inline eval_function_template::eval_function_template(std::initializer_list<Type> types)
@@ -94,38 +84,24 @@ inline eval_function_template::eval_function_template(std::initializer_list<Type
 {};
 
 template<class ... Object>
-inline object eval_function_template::eval(const function_name& func, Object&& ... args)
+force_inline
+void eval_function_template::eval(const function_name& func, object& ret, Object&& ... args)
 {
     Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
-    int n_args              = sizeof...(Object);
-    int n_types             = (int)m_types.size();
-
-    function f              = operations::get_template_overload(func, n_types, 
-                                m_types.data(), n_args, types);
-
     const object* args[]    = {(const object*)&args...};
+    int n_args              = sizeof...(Object);
 
-    object ret;    
-    f.make(n_args, args, ret);
-
-    return ret;
+    eval_impl(func, ret, types, args, n_args);
 };
 
-inline object eval_function_template::eval(const function_name& func)
+force_inline 
+void eval_function_template::eval(const function_name& func, object& ret)
 {
     Type* types         = nullptr;
-    int n_args          = 0;
-    int n_types         = (int)m_types.size();
-
-    function f          = operations::get_template_overload(func, n_types, 
-                                m_types.data(), n_args, types);
-
     const object** args = nullptr;
-    
-    object ret;
-    f.make(n_args, args, ret);
+    int n_args          = 0;
 
-    return ret;
+    eval_impl(func, ret, types, args, n_args);
 };
 
 };};

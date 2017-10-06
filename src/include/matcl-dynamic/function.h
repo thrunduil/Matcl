@@ -25,6 +25,7 @@
 #include "matcl-core/memory/refptr.h"
 #include "matcl-dynamic/function_name.h"
 #include "matcl-dynamic/details/evaler.h"
+#include "matcl-dynamic/details/eval_function_impl.h"
 #include "matcl-dynamic/type.h"
 #include "matcl-dynamic/object.h"
 
@@ -83,10 +84,11 @@ class MATCL_DYN_EXPORT function
 struct eval_function
 {
     // all Object types must be derived from object or be convertible to object
+    // object 'ret' cannot be initialized (otherwise memory leaks are possible)
     template<class ... Object>
-    static object eval(const function_name& func, Object&& ... args);
+    static void eval(const function_name& func, object& ret, Object&& ... args);
 
-    static object eval(const function_name& func);
+    static void eval(const function_name& func, object& ret);
 };
 
 // evaluate a registered template function; 
@@ -100,10 +102,17 @@ struct eval_function_template
         eval_function_template(std::initializer_list<Type> types);
 
         // all Object types must be derived from object or be convertible to object
+        // object 'ret' cannot be initialized (otherwise memory leaks are possible)
         template<class ... Object>
-        object eval(const function_name& func, Object&& ... args);
+        void eval(const function_name& func, object& ret, Object&& ... args);
 
-        object eval(const function_name& func);
+        void eval(const function_name& func, object& ret);
+
+        // object 'ret' cannot be initialized (otherwise memory leaks are possible)
+        // types and args are arrays of size n_args; types[i] == args[i]->get_type() 
+        MATCL_DYN_EXPORT
+        void eval_impl(const function_name& func, object& ret, const Type* types,
+                    const object ** args, int n_args);
 };
 
 };};
