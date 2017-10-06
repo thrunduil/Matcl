@@ -226,15 +226,24 @@ void details::initialize_identifier_table()
 identifier::identifier(const std::string& name)
 {
     details::identifier_ptr ptr = details::g_id_table->get(name);
-    m_impl  = ptr.m_ptr;
-    m_hash  = ptr.m_ptr->hash_value();
-    m_code  = ptr.m_ptr->get_code();
+    m_impl  = ptr.m_ptr;    
 };
 
 std::string identifier::to_string() const
 {
     return m_impl->get_data();
 };
+
+size_t identifier::hash_value() const
+{ 
+    return m_impl->hash_value();
+};
+
+size_t identifier::get_unique_code() const
+{
+    return m_impl->get_code();
+};
+
 
 bool identifier::operator==(identifier other) const
 {

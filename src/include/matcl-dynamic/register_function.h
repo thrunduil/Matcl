@@ -51,19 +51,19 @@ struct register_unifier
 };
 
 // implicit conversion; user defined promotions
-struct MATCL_DYN_EXPORT convert_promotion   { static function_name eval(); };
+struct MATCL_DYN_EXPORT convert_promotion   { static const function_name& eval(); };
 
 // implicit conversion; user defined lossless conversions changing kind
-struct MATCL_DYN_EXPORT convert_equivalent  { static function_name eval(); };
+struct MATCL_DYN_EXPORT convert_equivalent  { static const function_name& eval(); };
 
 // implicit conversion; user defined conversions with data loss
-struct MATCL_DYN_EXPORT convert_decay       { static function_name eval(); };
+struct MATCL_DYN_EXPORT convert_decay       { static const function_name& eval(); };
 
 // explicit conversion
-struct MATCL_DYN_EXPORT convert_explicit    { static function_name eval(); };
+struct MATCL_DYN_EXPORT convert_explicit    { static const function_name& eval(); };
 
 // explicit cast, called when the function cast is called
-struct MATCL_DYN_EXPORT convert_cast        { static function_name eval(); };
+struct MATCL_DYN_EXPORT convert_cast        { static const function_name& eval(); };
 
 // register conversion from From type to To type; 
 // in order to do registration this type must be instantiated

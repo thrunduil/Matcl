@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#pragma once
 #include "type_table_cache.h"
 
 namespace matcl { namespace dynamic { namespace details
@@ -50,10 +51,10 @@ function last_call_cache::get_last_function(size_t code, int n_args, Type t1, Ty
         return function();
 
     const last_call_info& info  = m_cache[code];
-
-    bool eq1    = info.n_args   == n_args;
-    bool eq2    = info.m_ty_1   == t1;
-    bool eq3    = info.m_ty_2   == t2;
+    
+    bool eq1    = info.m_ty_1   == t1;
+    bool eq2    = info.m_ty_2   == t2;
+    bool eq3    = info.n_args   == n_args;
     
     if (eq1 && eq2 && eq3)
         return info.m_func;
@@ -129,7 +130,7 @@ function type_table_cache::set_assigner(Type to, Type from, function f)
 
 force_inline
 function type_table_cache::get_overload(const function_name& func, 
-                                int n_args, const Type t[])
+                                const Type t[], int n_args)
 {
     Type t1, t2;
 
@@ -169,7 +170,7 @@ function type_table_cache::get_overload(const function_name& func,
 
 inline
 function type_table_cache::set_overload(const function_name& func, 
-                            int n_args, const Type t[], function f)
+                            const Type t[], int n_args, function f)
 {
     overload_ptr ret = m_overloads.get(overload_info{func,n_args,t, f}); 
     return ret.m_ptr->get();

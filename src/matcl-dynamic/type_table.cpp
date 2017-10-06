@@ -227,24 +227,11 @@ Type type_table::make_reference_type(Type t)
 };
 
 MATCL_THREAD_LOCAL static 
-type_table_cache* g_inst = nullptr;
+type_table_cache* g_inst = new type_table_cache();
 
 inline type_table_cache* type_table::get_cache()
 {
-    // g_inst is thread local and we don't need a mutex
-    // during initialization since only one thread can access
-    // given instance of g_inst
-
-    type_table_cache* inst = g_inst;
-    if (inst == nullptr)
-    {
-        g_inst  = new type_table_cache();
-        return g_inst;
-    }
-    else
-    {
-        return inst;
-    };
+    return g_inst;
 };
 
 void type_table::free_cache()
@@ -323,14 +310,8 @@ Type type_table::unify_types(Type t1, Type t2)
 };
 
 function
-type_table::get_overload(const function_name& func, int n_args, const Type t[])
+type_table::make_overload(const function_name& func, const Type t[], int n_args)
 {
-    function f;
-    f = get_cache()->get_overload(func, n_args, t);
-
-    if (f.is_null() == false)
-        return f;
-
     initialize();
 
     error_handler eh;
@@ -342,7 +323,7 @@ type_table::get_overload(const function_name& func, int n_args, const Type t[])
     if (candidates.size() == 1)
     {
         function buf = candidates.get_function(0).function();
-        return get_cache()->set_overload(func,n_args, t, buf);
+        return get_cache()->set_overload(func, t, n_args, buf);
     };
 
     if (candidates.size() == 0)

@@ -40,35 +40,35 @@ fun_templ_register_helper::fun_templ_register_helper(delayed_function_template_r
 namespace matcl { namespace dynamic
 {
 
-function_name convert_promotion::eval()
+const function_name& convert_promotion::eval()
 {
     return special_functions::convert_promotion();
 }
-function_name convert_equivalent::eval()
+const function_name& convert_equivalent::eval()
 {
     return special_functions::convert_equivalent();
 };
 
-function_name convert_decay::eval()
+const function_name& convert_decay::eval()
 {
     return special_functions::convert_decay();
 };
 
-function_name convert_explicit::eval()
+const function_name& convert_explicit::eval()
 {
     return special_functions::convert_explicit();
 };
-function_name convert_cast::eval()
+const function_name& convert_cast::eval()
 {
     return special_functions::convert_cast();
 };
 
-function_name details::unifier_tag::eval()
+const function_name& details::unifier_tag::eval()
 {
     return special_functions::unifier();
 };
 
-function_name details::assign_tag::eval()
+const function_name& details::assign_tag::eval()
 {
     return special_functions::assign();
 };

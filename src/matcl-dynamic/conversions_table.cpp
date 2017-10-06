@@ -149,11 +149,15 @@ bool fun_conv_link::make_eval(const object** _args, object& ret) const
 
     const object* args = _args[0];
 
-    for (size_t i = 0; i < n; ++i)
+    const auto& ev = m_converters[0].get_evaler();
+    ev->make_eval(&args, ret);    
+
+    for (size_t i = 1; i < n; ++i)
     {
-        const auto& ev = m_converters[i].get_evaler();
-        ev->make_eval(&args, ret);
-        args = &ret;
+        object tmp          = object(std::move(ret));
+        const auto& ev2     = m_converters[i].get_evaler();
+        const object* tmp2  = &tmp;
+        ev2->make_eval(&tmp2, ret);    
     };
 
     return true;
@@ -274,12 +278,12 @@ bool conversion::equal(const build_convert_info& info) const
     if (info.m_deduced_ret != m_func->get_deduced_ret())
         return false;
 
-    size_t num_conv = info.m_arg_converters->size();
+    int num_conv = (int)info.m_arg_converters->size();
 
     if (num_conv != m_func->number_converters())
         return false;
 
-    for (size_t i = 0; i < num_conv; ++i)
+    for (int i = 0; i < num_conv; ++i)
     {
         if ((*info.m_arg_converters)[i].get_evaler() != m_func->get_coverter(i).get_evaler())
             return false;

@@ -65,7 +65,7 @@ inline object eval_function::eval(const function_name& func, Object&& ... args)
     int n_args              = sizeof...(Object);
 
 
-    function f              = operations::get_overload(func, n_args, types);
+    function f              = operations::get_overload(func, types, n_args);
     const object* args[]    = {(const object*)&args...};
 
     object ret;
@@ -79,7 +79,7 @@ inline object eval_function::eval(const function_name& func)
     Type* types         = nullptr;
     int n_args          = 0;
     
-    function f          = operations::get_overload(func, n_args, types);
+    function f          = operations::get_overload(func, types, n_args);
 
     const object** args = nullptr;
 

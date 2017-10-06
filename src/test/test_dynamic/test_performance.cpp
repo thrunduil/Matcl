@@ -226,8 +226,7 @@ void performance_tester::make()
     Integer N       = 100;    
   #endif
 
-    //TODO
-    bool int_only   = true;
+    bool int_only   = false;
 
     formatted_disp dm;
 
@@ -241,7 +240,24 @@ void performance_tester::make()
 
     dm.disp_header();
 
-    for (int i = 0; i < 20; ++i)
+    //TODO
+    for (int i = 0; i < 200; ++i)
+    {
+        Real res;
+        OReal ores;
+        Integer prec        = 53;
+
+        double time         = test_mult<Real>(res, M, K, N, prec);
+        double otime        = test_mult<OReal>(ores, M, K, N, prec);
+        double otime2       = test_mult_obj<OReal>(ores, M, K, N, prec);
+
+        double rel1         = otime/time;
+        double rel2         = otime2/otime;
+        double rel3         = otime2/time;
+        dm.disp_row("Real", time, otime, otime2, rel1, rel2, rel3);
+    }
+
+    return;
     {
         Integer res;
         OInteger ores;

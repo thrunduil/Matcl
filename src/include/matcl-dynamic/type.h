@@ -124,8 +124,8 @@ MATCL_DYN_EXPORT Type       make_reference_type(Type t);
 // get function overload for functions with name func based on types of 
 // input arguments
 MATCL_DYN_EXPORT 
-function                    get_overload(const function_name& func, int n_args,
-                                const Type t[]);
+function                    get_overload(const function_name& func, const Type t[], 
+                                int n_args);
 
 // get function overload for functions with name func based on types of 
 // input arguments and template arguments

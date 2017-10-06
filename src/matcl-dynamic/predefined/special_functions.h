@@ -25,30 +25,30 @@
 namespace matcl { namespace dynamic { namespace special_functions
 {
 
-function_name   convert_numeric_promotion_1();
-function_name   convert_numeric_promotion_2();
-function_name   convert_numeric_equivalent_1();
-function_name   convert_numeric_equivalent_2();
-function_name   convert_numeric_decay_1();
-function_name   convert_numeric_decay_2();
-function_name   convert_numeric_int_float();
-function_name   convert_numeric_explicit();
-function_name   convert_numeric_cast();
-function_name   convert_any();
-function_name   convert_unit();
-function_name   convert_id();
+const function_name&   convert_numeric_promotion_1();
+const function_name&   convert_numeric_promotion_2();
+const function_name&   convert_numeric_equivalent_1();
+const function_name&   convert_numeric_equivalent_2();
+const function_name&   convert_numeric_decay_1();
+const function_name&   convert_numeric_decay_2();
+const function_name&   convert_numeric_int_float();
+const function_name&   convert_numeric_explicit();
+const function_name&   convert_numeric_cast();
+const function_name&   convert_any();
+const function_name&   convert_unit();
+const function_name&   convert_id();
 
-function_name   convert_promotion();
-function_name   convert_equivalent();
-function_name   convert_decay();
-function_name   convert_explicit();
-function_name   convert_cast();
+const function_name&   convert_promotion();
+const function_name&   convert_equivalent();
+const function_name&   convert_decay();
+const function_name&   convert_explicit();
+const function_name&   convert_cast();
 
-function_name   unifier();
-function_name   assign();
-function_name   assign_id();
+const function_name&   unifier();
+const function_name&   assign();
+const function_name&   assign_id();
 
-bool is_special(function_name func);
+bool is_special(const function_name& func);
 
 };};};
 

@@ -121,10 +121,7 @@ object::object(Type t)
     :m_type(t), m_data(nullptr)
 {
     if (m_type != Type())
-    {
         m_data = details::type_impl::get(m_type)->create();
-        m_data->increase_refcount();
-    };
 };
 
 static void error_no_one(Type t)
@@ -147,7 +144,6 @@ object object::make_one(Type t)
     if (ret.m_data == nullptr)
         error_no_one(t);
 
-    ret.m_data->increase_refcount();
     return ret;
 };
 
@@ -254,7 +250,7 @@ void object::make_unique()
         return;
 
     data_type* ptr = details::type_impl::get(m_type)->copy(m_data);
-    ptr->increase_refcount();
+
     m_data->decrease_refcount();
     m_data = ptr;
 };

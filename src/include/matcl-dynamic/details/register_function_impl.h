@@ -37,8 +37,8 @@
 namespace matcl { namespace dynamic { namespace details
 {
 
-struct MATCL_DYN_EXPORT unifier_tag { static function_name eval(); };
-struct MATCL_DYN_EXPORT assign_tag  { static function_name eval(); };
+struct MATCL_DYN_EXPORT unifier_tag { static const function_name& eval(); };
+struct MATCL_DYN_EXPORT assign_tag  { static const function_name& eval(); };
 
 struct enum_tag;
 
