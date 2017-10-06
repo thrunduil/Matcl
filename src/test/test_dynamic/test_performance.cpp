@@ -240,24 +240,6 @@ void performance_tester::make()
 
     dm.disp_header();
 
-    //TODO
-    for (int i = 0; i < 200; ++i)
-    {
-        Real res;
-        OReal ores;
-        Integer prec        = 53;
-
-        double time         = test_mult<Real>(res, M, K, N, prec);
-        double otime        = test_mult<OReal>(ores, M, K, N, prec);
-        double otime2       = test_mult_obj<OReal>(ores, M, K, N, prec);
-
-        double rel1         = otime/time;
-        double rel2         = otime2/otime;
-        double rel3         = otime2/time;
-        dm.disp_row("Real", time, otime, otime2, rel1, rel2, rel3);
-    }
-
-    return;
     {
         Integer res;
         OInteger ores;
@@ -468,12 +450,6 @@ void performance_tester::make()
         type << "mp_compl (" << res.get_precision() << ")";
         dm.disp_row(type.str(), time, otime, otime2, rel1, rel2, rel3);
     }
-};
-
-void performance_tester::disp_res(const std::string& type, double time, double otime, double otime2)
-{
-    std::cout << type << ": " << "raw: " << time << ", obj: " << otime 
-              << ", obj2:" << otime2 << ", rel: " << otime/time << " " << otime2/otime << " " << otime2/time << "\n";
 };
 
 }};
