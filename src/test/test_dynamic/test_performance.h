@@ -46,8 +46,6 @@ class performance_tester
 
         template<class T, class TR = T>
         void    mult(const T* A, const T* B, T* C, Integer M, Integer K, Integer N);
-
-        void    disp_res(const std::string& type, double time, double otime, double otime2);
 };
 
 }};
