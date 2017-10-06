@@ -29,7 +29,7 @@
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/general/thread.h"
 #include "function_table.h"
-#include "type_table_cache.h"
+#include "type_table_cache.inl"
 #include "matcl-dynamic/details/register_function_impl.h"
 
 #include <map>
@@ -105,7 +105,7 @@ class type_table : public matcl_new_delete, global_object
 
         // returned function pointer can be invalidated, by subsequent call
         // of any type_table function
-        function                get_overload(const function_name& func, int n_args, const Type t[]);
+        function                get_overload(const function_name& func, const Type t[], int n_args);
         function                get_template_overload(const function_name& func, int n_templ, 
                                     const Type templates[], int n_args, const Type arg_types[]);
         function                get_converter(Type to, Type from, bool implicit);
@@ -141,6 +141,7 @@ class type_table : public matcl_new_delete, global_object
                                     function fun_evl, const type_vec& types, 
                                     make_return_fptr ret, error_handler& eh);
         void                    add_predefined_functions(const std::string& type_name);
+        function                make_overload(const function_name& func, const Type t[], int n_args);
 
         virtual void            clear_global() override;
         virtual void            close_global() override;
@@ -149,6 +150,19 @@ class type_table : public matcl_new_delete, global_object
 inline type_table* type_table::get()
 {
     return g_instance;
+};
+
+force_inline
+function
+type_table::get_overload(const function_name& func, const Type t[], int n_args)
+{
+    function f;
+    f = get_cache()->get_overload(func, t, n_args);
+
+    if (f.is_null() == false)
+        return f;
+    else
+        return make_overload(func, t, n_args);
 };
 
 };};};

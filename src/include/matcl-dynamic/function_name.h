@@ -41,8 +41,6 @@ class MATCL_DYN_EXPORT identifier
 
     protected:
         impl_type*      m_impl;
-        size_t          m_hash;
-        size_t          m_code;
 
     public:
         // construct an identifier from string id

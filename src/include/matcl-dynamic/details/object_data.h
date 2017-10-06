@@ -43,10 +43,11 @@ class MATCL_DYN_EXPORT object_data_base
         mutable asize_t	    m_refcount;
 
     public:     
-        virtual ~object_data_base();
+        virtual ~object_data_base(){};
 
         void                increase_refcount() const;
         void                decrease_refcount();
+        size_t              get_count() const;
         bool                is_unique() const;
 
         template<class T> 

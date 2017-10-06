@@ -43,11 +43,14 @@ static void break_func()
 int main(int argc, const char* argv[])
 {
     try
-    {                     
+    {         
+        //details::leak_detector::break_at_codes({37204, 51566, 52566, 25195, 36023, 40397},
+        //                                       &break_func);
+
         matcl::test::test_performance();
 
-        //TODO
-        /*
+        return 0;
+
         matcl::test::test_gmp();        
         matcl::test::test_gmp_bin();        
         matcl::test::test_gmp_object();                     
@@ -56,8 +59,7 @@ int main(int argc, const char* argv[])
         test.make();  
 
         matcl::test::test_gmp_prec(std::cout);
-        */
-        //matcl::test::test_performance();                
+        matcl::test::test_performance();
 
         std::cout << "finished" << "\n";
     }

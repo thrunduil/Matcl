@@ -31,64 +31,64 @@ namespace matcl { namespace dynamic { namespace functions
 
 // (bool)(object); function with this name must take one argument 
 // and return OBool
-struct MATCL_DYN_EXPORT op_bool     { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_bool     { static const function_name& eval(); };
 
 // OBool operator!(object); function with this name must take one argument 
 // and return OBool
-struct MATCL_DYN_EXPORT op_not      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_not      { static const function_name& eval(); };
 
 // check if value is zero; this function is generated automatically and
 // should not be registered explicitly
-struct MATCL_DYN_EXPORT is_zero     { static function_name eval(); };
+struct MATCL_DYN_EXPORT is_zero     { static const function_name& eval(); };
 
 // check if value is one; this function is generated automatically and
 // should not be registered explicitly
-struct MATCL_DYN_EXPORT is_one      { static function_name eval(); };
+struct MATCL_DYN_EXPORT is_one      { static const function_name& eval(); };
 
 // real part of complex number
-struct MATCL_DYN_EXPORT real        { static function_name eval(); };
+struct MATCL_DYN_EXPORT real        { static const function_name& eval(); };
 
 // imaginary part of complex number
-struct MATCL_DYN_EXPORT imag        { static function_name eval(); };
+struct MATCL_DYN_EXPORT imag        { static const function_name& eval(); };
 
 // OBool operator==(object,object)
-struct MATCL_DYN_EXPORT op_eeq      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_eeq      { static const function_name& eval(); };
 
 // operator!=(object,object)
-struct MATCL_DYN_EXPORT op_neq      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_neq      { static const function_name& eval(); };
 
 // OBool operator<(object,object)
-struct MATCL_DYN_EXPORT op_lt       { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_lt       { static const function_name& eval(); };
 
 // OBool operator<=(object,object)
-struct MATCL_DYN_EXPORT op_leq      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_leq      { static const function_name& eval(); };
 
 // OBool operator>=(object,object)
-struct MATCL_DYN_EXPORT op_geq      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_geq      { static const function_name& eval(); };
 
 // OBool operator>(object,object)
-struct MATCL_DYN_EXPORT op_gt       { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_gt       { static const function_name& eval(); };
 
 // operator-(object)
-struct MATCL_DYN_EXPORT op_uminus   { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_uminus   { static const function_name& eval(); };
 
 // operator+(object,object)
-struct MATCL_DYN_EXPORT op_plus     { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_plus     { static const function_name& eval(); };
 
 // operator-(object,object)
-struct MATCL_DYN_EXPORT op_minus    { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_minus    { static const function_name& eval(); };
 
 // operator*(object,object)
-struct MATCL_DYN_EXPORT op_mul      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_mul      { static const function_name& eval(); };
 
 // name of function operator/(object,object), for objects
 // representing integer values this should give values as close
 // as possible to value when integers are conveted to floats;
 // integer division is represented by function op_idiv; 
 // function with this name must take two arguments
-struct MATCL_DYN_EXPORT op_div      { static function_name eval(); };
+struct MATCL_DYN_EXPORT op_div      { static const function_name& eval(); };
 
 // division, equivalent to op_div for objects not representing integers
-struct MATCL_DYN_EXPORT idiv        { static function_name eval(); };
+struct MATCL_DYN_EXPORT idiv        { static const function_name& eval(); };
 
 };};};

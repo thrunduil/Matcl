@@ -34,13 +34,17 @@ namespace matcl { namespace dynamic { namespace details
 force_inline
 void object_data_base::increase_refcount() const
 {
-    ++m_refcount;
+    // ++m_refcount
+    m_refcount.fetch_add( 1, std::memory_order_relaxed );
 };
 
 force_inline
 void object_data_base::decrease_refcount()
 {
-    if((--m_refcount ) == 0)
+    // --m_refcount
+    size_t last_count  = m_refcount.fetch_sub( 1, std::memory_order_acq_rel);
+
+    if (last_count == 1)
         delete this;
 };
 
@@ -59,18 +63,21 @@ T& object_data_base::get_value()
 };
 
 force_inline
-object_data_base::~object_data_base()
-{};
+size_t object_data_base::get_count() const
+{
+    size_t count = m_refcount.load( std::memory_order_acquire );
+    return count;
+};
 
 force_inline
 bool object_data_base::is_unique() const
 { 
-    return m_refcount == 1; 
+    return get_count() == 1; 
 };
 
 force_inline
 object_data_base::object_data_base()
-    :m_refcount(0)
+    :m_refcount(1)
 {};
 
 

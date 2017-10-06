@@ -24,16 +24,6 @@
 namespace matcl { namespace dynamic
 {
 
-inline size_t identifier::hash_value() const
-{ 
-    return m_hash; 
-};
-
-inline size_t identifier::get_unique_code() const
-{
-    return m_code;
-};
-
 inline function_validator::function_validator()
     : m_validator(nullptr), m_printer(nullptr) 
 {};

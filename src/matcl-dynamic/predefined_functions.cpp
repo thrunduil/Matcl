@@ -155,92 +155,92 @@ const function_name* cast(const function_name_pod* arr)
     return reinterpret_cast<const function_name*>(arr);
 };
 
-function_name functions::op_eeq::eval()
+const function_name& functions::op_eeq::eval()
 {
     return cast(func_name)[(size_t)func_code::op_eeq];
 };
 
-function_name functions::op_neq::eval()
+const function_name& functions::op_neq::eval()
 {
     return cast(func_name)[(size_t)func_code::op_neq];
 };
 
-function_name functions::op_lt::eval()
+const function_name& functions::op_lt::eval()
 {
     return cast(func_name)[(size_t)func_code::op_lt];
 };
 
-function_name functions::op_leq::eval()
+const function_name& functions::op_leq::eval()
 {
     return cast(func_name)[(size_t)func_code::op_leq];
 };
 
-function_name functions::op_geq::eval()
+const function_name& functions::op_geq::eval()
 {
     return cast(func_name)[(size_t)func_code::op_geq];
 };
 
-function_name functions::op_gt::eval()
+const function_name& functions::op_gt::eval()
 {
     return cast(func_name)[(size_t)func_code::op_gt];
 };
 
-function_name functions::op_uminus::eval()
+const function_name& functions::op_uminus::eval()
 {
     return cast(func_name)[(size_t)func_code::op_uminus];
 };
 
-function_name functions::op_plus::eval()
+const function_name& functions::op_plus::eval()
 {
     return cast(func_name)[(size_t)func_code::op_plus];
 };
 
-function_name functions::op_minus::eval()
+const function_name& functions::op_minus::eval()
 {
     return cast(func_name)[(size_t)func_code::op_minus];
 };
 
-function_name functions::op_mul::eval()
+const function_name& functions::op_mul::eval()
 {
     return cast(func_name)[(size_t)func_code::op_mul];
 };
 
-function_name functions::op_div::eval()
+const function_name& functions::op_div::eval()
 {
     return cast(func_name)[(size_t)func_code::op_div];
 };
 
-function_name functions::idiv::eval()
+const function_name& functions::idiv::eval()
 {
     return cast(func_name)[(size_t)func_code::idiv];
 };
 
-function_name functions::op_bool::eval()
+const function_name& functions::op_bool::eval()
 {
     return cast(func_name)[(size_t)func_code::op_bool];
 };
 
-function_name functions::op_not::eval()
+const function_name& functions::op_not::eval()
 {
     return cast(func_name)[(size_t)func_code::op_not];
 };
 
-function_name functions::real::eval()
+const function_name& functions::real::eval()
 {
     return cast(func_name)[(size_t)func_code::real];
 };
 
-function_name functions::imag::eval()
+const function_name& functions::imag::eval()
 {
     return cast(func_name)[(size_t)func_code::imag];
 };
 
-function_name functions::is_zero::eval()
+const function_name& functions::is_zero::eval()
 {
     return cast(func_name)[(size_t)func_code::is_zero];
 };
 
-function_name functions::is_one::eval()
+const function_name& functions::is_one::eval()
 {
     return cast(func_name)[(size_t)func_code::is_one];
 };

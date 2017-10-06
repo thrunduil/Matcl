@@ -34,7 +34,7 @@ force_inline object::object()
 {};
 
 force_inline object::object(const object& other)    
-    :m_type(other.m_type),m_data(other.m_data)
+    :m_type(other.m_type), m_data(other.m_data)
 {
     if (m_data)
         m_data->increase_refcount();
@@ -47,10 +47,8 @@ force_inline object::object(object&& other)
 };
 
 force_inline object::object(Type ti, data_type* data, not_null)
-    :m_type(ti),m_data(data)
-{
-    m_data->increase_refcount();
-};
+    :m_type(ti), m_data(data)
+{};
 
 force_inline object::object(Type ti, null)
     :m_type(ti), m_data(nullptr)

@@ -23,120 +23,120 @@
 namespace matcl { namespace dynamic { namespace special_functions
 {
 
-function_name special_functions::convert_numeric_promotion_1()
+const function_name& special_functions::convert_numeric_promotion_1()
 {
     static function_name f("$convert_numeric_promotion_1");
     return f;
 };
-function_name special_functions::convert_numeric_promotion_2()
+const function_name& special_functions::convert_numeric_promotion_2()
 {
     static function_name f("$convert_numeric_promotion_2");
     return f;
 };
-function_name special_functions::convert_numeric_equivalent_1()
+const function_name& special_functions::convert_numeric_equivalent_1()
 {
     static function_name f("$convert_numeric_equivalent_1");
     return f;
 };
-function_name special_functions::convert_numeric_equivalent_2()
+const function_name& special_functions::convert_numeric_equivalent_2()
 {
     static function_name f("$convert_numeric_equivalent_2");
     return f;
 };
-function_name special_functions::convert_numeric_decay_1()
+const function_name& special_functions::convert_numeric_decay_1()
 {
     static function_name f("$convert_numeric_decay_1");
     return f;
 };
-function_name special_functions::convert_numeric_decay_2()
+const function_name& special_functions::convert_numeric_decay_2()
 {
     static function_name f("$convert_numeric_decay_2");
     return f;
 };
-function_name special_functions::convert_numeric_int_float()
+const function_name& special_functions::convert_numeric_int_float()
 {
     static function_name f("$convert_numeric_int_float");
     return f;
 };
 
-function_name special_functions::convert_numeric_explicit()
+const function_name& special_functions::convert_numeric_explicit()
 {
     static function_name f("$convert_numeric_explicit");
     return f;
 };
 
-function_name special_functions::convert_numeric_cast()
+const function_name& special_functions::convert_numeric_cast()
 {
     static function_name f("$convert_numeric_cast");
     return f;
 };
 
-function_name special_functions::convert_any()
+const function_name& special_functions::convert_any()
 {
     static function_name f("$convert_any");
     return f;
 };
 
-function_name special_functions::convert_unit()
+const function_name& special_functions::convert_unit()
 {
     static function_name f("$convert_unit");
     return f;
 };
 
-function_name special_functions::convert_id()
+const function_name& special_functions::convert_id()
 {
     static function_name f("$convert_id");
     return f;
 };
 
-function_name special_functions::convert_promotion()
+const function_name& special_functions::convert_promotion()
 {
     static function_name f("$convert_promotion");
     return f;
 };
-function_name special_functions::convert_equivalent()
+const function_name& special_functions::convert_equivalent()
 {
     static function_name f("$convert_equivalent");
     return f;
 };
 
-function_name special_functions::convert_decay()
+const function_name& special_functions::convert_decay()
 {
     static function_name f("$convert_decay");
     return f;
 };
 
-function_name special_functions::convert_explicit()
+const function_name& special_functions::convert_explicit()
 {
     static function_name f("$convert_explicit");
     return f;
 };
 
-function_name special_functions::convert_cast()
+const function_name& special_functions::convert_cast()
 {
     static function_name f("$convert_cast");
     return f;
 };
 
-function_name special_functions::unifier()
+const function_name& special_functions::unifier()
 {
     static function_name f("$unifier");
     return f;
 };
 
-function_name special_functions::assign()
+const function_name& special_functions::assign()
 {
     static function_name f("$assign");
     return f;
 }
 
-function_name special_functions::assign_id()
+const function_name& special_functions::assign_id()
 {
     static function_name f("$assign_id");
     return f;
 }
 
-bool special_functions::is_special(function_name func)
+bool special_functions::is_special(const function_name& func)
 {
     return func.is_special();
 
