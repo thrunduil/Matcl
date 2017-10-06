@@ -1,0 +1,23 @@
+external libraries:
+1. MATCL-CORE
+    -   BOOST, http://www.boost.org/
+    -   EOS Portable Archive: extension of boost::serialization
+            library
+        -   licence: boost
+        -   souce: https://epa.codeplex.com/
+    -   DLMALLOC: memory allocator, author: Doug Lea
+        -   licence: public domain as explained at
+                http://creativecommons.org/licenses/publicdomain
+        -   source: https://gist.github.com/ichenq/2166885
+2. MATCL-MP
+    -   MPFR: multiprecision floating point arithmetics
+        -   licence: LGPL
+        -   source: http://www.mpfr.org/
+    -   MPIR: multiprecision integer arithmetics
+        -   licence: LGPL
+        -   source: http://mpir.org/
+3.  MATCL-SCALAR
+    -   SSFMT / DSFMT:  SIMD oriented Fast Mersenne Twister
+        -   authors:  Mutsuo Saito, Makoto Matsumoto
+        -   licence: BSD
+        -   source: http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/
