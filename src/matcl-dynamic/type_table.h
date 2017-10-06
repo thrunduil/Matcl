@@ -105,7 +105,10 @@ class type_table : public matcl_new_delete, global_object
 
         // returned function pointer can be invalidated, by subsequent call
         // of any type_table function
-        function                get_overload(const function_name& func, const Type t[], int n_args);
+        function                get_overload_1(const function_name& func, const Type t[]);
+        function                get_overload_2(const function_name& func, const Type t[]);
+        function                get_overload_n(const function_name& func, const Type t[], int n_args);
+
         function                get_template_overload(const function_name& func, int n_templ, 
                                     const Type templates[], int n_args, const Type arg_types[]);
         function                get_converter(Type to, Type from, bool implicit);
@@ -154,15 +157,41 @@ inline type_table* type_table::get()
 
 force_inline
 function
-type_table::get_overload(const function_name& func, const Type t[], int n_args)
+type_table::get_overload_1(const function_name& func, const Type t[])
 {
     function f;
-    f = get_cache()->get_overload(func, t, n_args);
+    f = get_cache()->get_overload_1(func, t);
 
     if (f.is_null() == false)
         return f;
     else
-        return make_overload(func, t, n_args);
+        return make_overload(func, t, 1);
+};
+
+force_inline
+function
+type_table::get_overload_2(const function_name& func, const Type t[])
+{
+    function f;
+    f = get_cache()->get_overload_2(func, t);
+
+    if (f.is_null() == false)
+        return f;
+    else
+        return make_overload(func, t, 2);
+};
+
+force_inline
+function
+type_table::get_overload_n(const function_name& func, const Type t[], int n)
+{
+    function f;
+    f = get_cache()->get_overload_n(func, t, n);
+
+    if (f.is_null() == false)
+        return f;
+    else
+        return make_overload(func, t, n);
 };
 
 };};};

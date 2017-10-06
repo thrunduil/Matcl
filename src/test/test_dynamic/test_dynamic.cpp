@@ -88,11 +88,17 @@ bool test_dynamic::test_predefined_func_impl(const dynamic::function_name& func,
     mdy::object obj_compl    = mdy::object(t_compl);
     mdy::object obj_fcompl   = mdy::object(t_fcompl);
 
-    mdy::object o_ii     = mdy::eval_function::eval(func, obj_int, obj_int);
-    mdy::object o_if     = mdy::eval_function::eval(func, obj_int, obj_float);
-    mdy::object o_ir     = mdy::eval_function::eval(func, obj_int, obj_real);
-    mdy::object o_ic     = mdy::eval_function::eval(func, obj_int, obj_compl);
-    mdy::object o_ifc    = mdy::eval_function::eval(func, obj_int, obj_fcompl);
+    mdy::object o_ii;
+    mdy::object o_if;
+    mdy::object o_ir;
+    mdy::object o_ic;
+    mdy::object o_ifc;
+
+    mdy::eval_function::eval(func, o_ii, obj_int, obj_int);
+    mdy::eval_function::eval(func, o_if, obj_int, obj_float);
+    mdy::eval_function::eval(func, o_ir, obj_int, obj_real);
+    mdy::eval_function::eval(func, o_ic, obj_int, obj_compl);
+    mdy::eval_function::eval(func, o_ifc, obj_int, obj_fcompl);
 
     mdy::Type t_ii       = mdy::operations::unify_types(t_int,t_int);
     mdy::Type t_if       = mdy::operations::unify_types(t_int,t_float);
@@ -106,11 +112,17 @@ bool test_dynamic::test_predefined_func_impl(const dynamic::function_name& func,
         return false;
     };
 
-    mdy::object o_fi     = mdy::eval_function::eval(func, obj_float, obj_int);
-    mdy::object o_ff     = mdy::eval_function::eval(func, obj_float, obj_float);
-    mdy::object o_fr     = mdy::eval_function::eval(func, obj_float, obj_real);
-    mdy::object o_fc     = mdy::eval_function::eval(func, obj_float, obj_compl);
-    mdy::object o_ffc    = mdy::eval_function::eval(func, obj_float, obj_fcompl);
+    mdy::object o_fi;
+    mdy::object o_ff;
+    mdy::object o_fr;
+    mdy::object o_fc;
+    mdy::object o_ffc;
+
+    mdy::eval_function::eval(func, o_fi, obj_float, obj_int);
+    mdy::eval_function::eval(func, o_ff, obj_float, obj_float);
+    mdy::eval_function::eval(func, o_fr, obj_float, obj_real);
+    mdy::eval_function::eval(func, o_fc, obj_float, obj_compl);
+    mdy::eval_function::eval(func, o_ffc,obj_float, obj_fcompl);
 
     mdy::Type t_fi       = mdy::operations::unify_types(t_float,t_int);
     mdy::Type t_ff       = mdy::operations::unify_types(t_float,t_float);
@@ -124,11 +136,17 @@ bool test_dynamic::test_predefined_func_impl(const dynamic::function_name& func,
         return false;
     };
 
-    mdy::object o_ri     = mdy::eval_function::eval(func, obj_real, obj_int);
-    mdy::object o_rf     = mdy::eval_function::eval(func, obj_real, obj_float);
-    mdy::object o_rr     = mdy::eval_function::eval(func, obj_real, obj_real);
-    mdy::object o_rc     = mdy::eval_function::eval(func, obj_real, obj_compl);
-    mdy::object o_rfc    = mdy::eval_function::eval(func, obj_real, obj_fcompl);
+    mdy::object o_ri;
+    mdy::object o_rf;
+    mdy::object o_rr;
+    mdy::object o_rc;
+    mdy::object o_rfc;
+
+    mdy::eval_function::eval(func, o_ri,  obj_real, obj_int);
+    mdy::eval_function::eval(func, o_rf,  obj_real, obj_float);
+    mdy::eval_function::eval(func, o_rr,  obj_real, obj_real);
+    mdy::eval_function::eval(func, o_rc,  obj_real, obj_compl);
+    mdy::eval_function::eval(func, o_rfc, obj_real, obj_fcompl);
 
     mdy::Type t_ri       = mdy::operations::unify_types(t_real,t_int);
     mdy::Type t_rf       = mdy::operations::unify_types(t_real,t_float);
@@ -142,11 +160,17 @@ bool test_dynamic::test_predefined_func_impl(const dynamic::function_name& func,
         return false;
     };
 
-    mdy::object o_ci     = mdy::eval_function::eval(func, obj_compl, obj_int);
-    mdy::object o_cf     = mdy::eval_function::eval(func, obj_compl, obj_float);
-    mdy::object o_cr     = mdy::eval_function::eval(func, obj_compl, obj_real);
-    mdy::object o_cc     = mdy::eval_function::eval(func, obj_compl, obj_compl);
-    mdy::object o_cfc    = mdy::eval_function::eval(func, obj_compl, obj_fcompl);
+    mdy::object o_ci;
+    mdy::object o_cf;
+    mdy::object o_cr;
+    mdy::object o_cc;
+    mdy::object o_cfc;
+
+    mdy::eval_function::eval(func, o_ci,  obj_compl, obj_int);
+    mdy::eval_function::eval(func, o_cf,  obj_compl, obj_float);
+    mdy::eval_function::eval(func, o_cr,  obj_compl, obj_real);
+    mdy::eval_function::eval(func, o_cc,  obj_compl, obj_compl);
+    mdy::eval_function::eval(func, o_cfc, obj_compl, obj_fcompl);
 
     mdy::Type t_ci       = mdy::operations::unify_types(t_compl,t_int);
     mdy::Type t_cf       = mdy::operations::unify_types(t_compl,t_float);
@@ -160,11 +184,17 @@ bool test_dynamic::test_predefined_func_impl(const dynamic::function_name& func,
         return false;
     };
 
-    mdy::object o_fci     = mdy::eval_function::eval(func, obj_fcompl, obj_int);
-    mdy::object o_fcf     = mdy::eval_function::eval(func, obj_fcompl, obj_float);
-    mdy::object o_fcr     = mdy::eval_function::eval(func, obj_fcompl, obj_real);
-    mdy::object o_fcc     = mdy::eval_function::eval(func, obj_fcompl, obj_compl);
-    mdy::object o_fcfc    = mdy::eval_function::eval(func, obj_fcompl, obj_fcompl);
+    mdy::object o_fci;
+    mdy::object o_fcf;
+    mdy::object o_fcr;
+    mdy::object o_fcc;
+    mdy::object o_fcfc;
+
+    mdy::eval_function::eval(func, o_fci,  obj_fcompl, obj_int);
+    mdy::eval_function::eval(func, o_fcf,  obj_fcompl, obj_float);
+    mdy::eval_function::eval(func, o_fcr,  obj_fcompl, obj_real);
+    mdy::eval_function::eval(func, o_fcc,  obj_fcompl, obj_compl);
+    mdy::eval_function::eval(func, o_fcfc, obj_fcompl, obj_fcompl);
 
     mdy::Type t_fci       = mdy::operations::unify_types(t_fcompl,t_int);
     mdy::Type t_fcf       = mdy::operations::unify_types(t_fcompl,t_float);

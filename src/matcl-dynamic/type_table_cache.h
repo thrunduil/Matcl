@@ -51,7 +51,9 @@ class last_call_cache
 
     public:
         void            clear();
-        function        get_last_function(size_t code, int n_args, Type t1, Type t2) const;
+        function        get_last_function_1(size_t code, Type t1) const;
+        function        get_last_function_2(size_t code, Type t1, Type t2) const;
+
         void            set_last_function(size_t code, int n_args, Type t1, Type t2, 
                             function f);
 };
@@ -98,7 +100,10 @@ class type_table_cache : public matcl_new_delete, global_object
         type_table_cache();
 
         Type            get_unifier(Type t1, Type t2) const;
-        function        get_overload(const function_name& func, const Type t[], int n_args);
+        function        get_overload_1(const function_name& func, const Type t[]);
+        function        get_overload_2(const function_name& func, const Type t[]);
+        function        get_overload_n(const function_name& func, const Type t[], int n);
+
         function        get_template_overload(const function_name& func, int n_templ, 
                             const Type templates[], int n_args, const Type args[]) const;
         function        get_converter(Type to, Type from, converter_type type) const;

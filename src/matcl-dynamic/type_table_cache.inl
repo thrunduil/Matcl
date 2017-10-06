@@ -45,7 +45,24 @@ inline void last_call_cache::clear()
 }
 
 force_inline
-function last_call_cache::get_last_function(size_t code, int n_args, Type t1, Type t2) const
+function last_call_cache::get_last_function_1(size_t code, Type t1) const
+{
+    if (code >= m_cache.size())
+        return function();
+
+    const last_call_info& info  = m_cache[code];
+    
+    bool eq1    = info.m_ty_1   == t1;
+    bool eq3    = info.n_args   == 1;
+    
+    if (eq1 && eq3)
+        return info.m_func;
+    else
+        return function();
+};
+
+force_inline
+function last_call_cache::get_last_function_2(size_t code, Type t1, Type t2) const
 {
     if (code >= m_cache.size())
         return function();
@@ -54,7 +71,7 @@ function last_call_cache::get_last_function(size_t code, int n_args, Type t1, Ty
     
     bool eq1    = info.m_ty_1   == t1;
     bool eq2    = info.m_ty_2   == t2;
-    bool eq3    = info.n_args   == n_args;
+    bool eq3    = info.n_args   == 2;
     
     if (eq1 && eq2 && eq3)
         return info.m_func;
@@ -129,43 +146,55 @@ function type_table_cache::set_assigner(Type to, Type from, function f)
 };
 
 force_inline
-function type_table_cache::get_overload(const function_name& func, 
-                                const Type t[], int n_args)
+function type_table_cache::get_overload_1(const function_name& func, const Type t[])
 {
-    Type t1, t2;
-
-    switch(n_args)
-    {
-        case 2:
-        {
-            t1  = t[0];
-            t2  = t[1];
-            break;
-        }
-        case 1:
-        {
-            t1  = t[0];
-            break;
-        }
-    }
-
-    function f;
-
     size_t code = func.get_unique_code();    
-    f           = m_last_call.get_last_function(code, n_args, t1, t2);
+    function f  = m_last_call.get_last_function_1(code, t[0]);
 
     if (f.is_null() == false)
         return f;
 
-    overload_ptr ret = m_overloads.get_existing(overload_info{func,n_args,t}); 
+    overload_ptr ret = m_overloads.get_existing(overload_info{func, 1, t}); 
 
     if (ret.m_ptr)
     {
         f = ret.m_ptr->get();
-        m_last_call.set_last_function(code, n_args, t1, t2, f);
+        m_last_call.set_last_function(code, 1, t[0], Type(), f);
     }
 
     return f;
+};
+
+force_inline
+function type_table_cache::get_overload_2(const function_name& func, const Type t[])
+{
+    size_t code = func.get_unique_code();    
+    function f  = m_last_call.get_last_function_2(code, t[0], t[1]);
+
+    if (f.is_null() == false)
+        return f;
+
+    overload_ptr ret = m_overloads.get_existing(overload_info{func, 2, t}); 
+
+    if (ret.m_ptr)
+    {
+        f = ret.m_ptr->get();
+        m_last_call.set_last_function(code, 2, t[0], t[1], f);
+    }
+
+    return f;
+};
+
+force_inline
+function type_table_cache::get_overload_n(const function_name& func, 
+                                const Type t[], int n_args)
+{
+    overload_ptr ret = m_overloads.get_existing(overload_info{func,n_args,t}); 
+
+    if (ret.m_ptr)
+        return ret.m_ptr->get();
+    else
+        return function();
 };
 
 inline

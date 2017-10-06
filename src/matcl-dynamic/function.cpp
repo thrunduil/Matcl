@@ -24,6 +24,7 @@
 
 #include "matcl-dynamic/function.h"
 #include "matcl-dynamic/type.h"
+#include "type_table.h"
 
 namespace matcl { namespace dynamic
 {
@@ -38,6 +39,37 @@ void function::make(int n_args, const object* args[]) const
 {
     (void)n_args;
     m_evaler->make_eval(args);
+};
+
+void details::eval_function_1::eval(const function_name& func, object& ret, const Type* types,
+                const object ** args, int)
+{
+    function f  = details::type_table::get()->get_overload_1(func, types);
+    f.get_evaler()->make_eval(args, ret);
+};
+
+void details::eval_function_2::eval(const function_name& func, object& ret, const Type* types,
+                const object ** args, int)
+{
+    function f  = details::type_table::get()->get_overload_2(func, types);
+    f.get_evaler()->make_eval(args, ret);
+};
+
+void details::eval_function_n::eval(const function_name& func, object& ret, const Type* types,
+                const object ** args, int n_args)
+{
+    function f  = details::type_table::get()->get_overload_n(func, types, n_args);
+    f.get_evaler()->make_eval(args, ret);
+};
+
+void eval_function_template::eval_impl(const function_name& func, object& ret, const Type* types,
+            const object ** args, int n_args)
+{
+    int n_types = (int)m_types.size();
+    function f  = details::type_table::get()->get_template_overload
+                        (func, n_types, m_types.data(), n_args, types);
+
+    f.get_evaler()->make_eval(args, ret);
 };
 
 };};
