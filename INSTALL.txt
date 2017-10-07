@@ -1,0 +1,63 @@
+==================================================================
+                Installation Instructions
+==================================================================
+
+------------------------------------------------------------------
+                Requirements
+------------------------------------------------------------------
+1.  Visual Studio 2015 or later. Source code in principle can be 
+    compiled using other compilers, but compiler independent
+    build system is not available currently.    
+2.  Boost library. Tested version: 1.62.
+3.  matcl-mp and matcl-mp-obj projects requires MPIR and MPFR libraries
+    (see extern_libraries.txt for details). Prebuild versions of these
+    libraries can be found in src/extern.
+
+------------------------------------------------------------------
+                BUILD
+------------------------------------------------------------------
+
+1. MATCL can be build from source using Visual Studio solution. 
+2. Project files must be modified in order to set up paths to
+    required external libraries
+
+------------------------------------------------------------------
+                Machine dependent parameters
+------------------------------------------------------------------    
+1.  MATCL_CACHE_LINE_SIZE 
+        - defined in matcl-core/config.h
+        - cache line size in bytes; 
+        - this is optimization parameters, invalid value may have 
+          negative impact on performance
+2.  MATCL_AVX_ALIGNMENT 
+        - defined in matcl-core/config.h
+        - alignment for SIMD related types
+        - this is optimization parameters, invalid value may have 
+          negative impact on performance
+3.  MATCL_HAS_FMA 
+        - defined in matcl-core/config.h
+        - is FMA instruction available? (AVX2 instruction set is required)
+        - should be set to 1 whenever possible; in this way faster and
+          more accurate versions of library functions will be used
+
+------------------------------------------------------------------
+                Important parameters
+------------------------------------------------------------------  
+1.  MATCL_THREADING_MODE 
+        - defined in matcl-core/config.h
+        - when set to MATCL_MULTITHREAD_MODE, then thread safety is 
+          enabled; however this has negative impact on performance
+2.  MATCL_USE_DLMALLOC
+        - defined in matcl-core/config.h
+        - when set to 1, then DLMALLOC is used instead of default malloc
+        - usually DLMALLOC allocator is faster than default malloc
+3.  MATCL_DEBUG_MEMORY 
+        - defined in matcl-core/config.h
+        - when set to 1, then memory debugging and leak detection is enabled
+4.  MATCL_DEBUG_MP_FLOAT
+        - defined in matcl-mp/config.h
+        - when set to 1, then mp_float class contains a string member
+          representing stored value
+
+Copyright (C) 2017  Paweł Kowal
+email: thrunduil@gmail.com

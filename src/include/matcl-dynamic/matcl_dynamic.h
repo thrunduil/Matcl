@@ -29,3 +29,4 @@
 #include "matcl-dynamic/register_function.h"
 #include "matcl-dynamic/utils.h"
 #include "matcl-dynamic/details/object.inl"
+#include "matcl-dynamic/details/register_function_macro.h"

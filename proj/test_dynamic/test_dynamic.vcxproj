@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\test\test_dynamic\main.cpp" />
+    <ClCompile Include="..\..\src\test\test_dynamic\object_example.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\rand_scalars.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_dynamic.cpp" />
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp.cpp" />

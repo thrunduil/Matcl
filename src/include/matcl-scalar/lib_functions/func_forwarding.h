@@ -26,6 +26,13 @@
 #include "matcl-dynamic/result_of.h"
 #include "matcl-dynamic/object_type_traits.h"
 
+namespace matcl
+{
+
+//--------------------------------------------------------------
+//          GENERAL INFO
+//--------------------------------------------------------------
+
 // different functions defined for scalar types that should be forwarded
 // to one of existing function; these functions are defined only for scalar
 // types defined in other libraries
@@ -34,8 +41,8 @@
 // but redefinined functions cannot have variadic template arguments unless
 // at least one additional argument is required
 
-namespace matcl
-{
+// these functions are for internal use only; equivalent public functions
+// are declared in func_binary, func_matrix, func_unary, scalar_io headers
 
 //--------------------------------------------------------------
 //          UNARY AND BINARY FUNCTIONS

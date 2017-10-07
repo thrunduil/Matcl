@@ -26,18 +26,22 @@ namespace matcl
 
 namespace md = matcl::details;
 
-// matrix multiplication x * y
-template<class S1, class S2, class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
+// matrix multiplication x * y; for scalar types
+// this function is equivalent to scalar multiplication mul
+template<class S1, class S2, 
+         class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
 typename md::unify_types_promote<S1,S2>::type
                             mmul(const S1& x, const S2& y);
 
 // multiplication x * y; equivalent to mmul function
-template<class S1, class S2, class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
+template<class S1, class S2, 
+         class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
 typename md::unify_types_promote<S1,S2>::type
                             operator*(const S1& x, const S2& y);
 
 // for scalars the kron function is equivalent to mul
-template<class S1, class S2, class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
+template<class S1, class S2, 
+         class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
 typename md::unify_types_promote<S1,S2>::type
                             kron(const S1& x, const S2& y);
 

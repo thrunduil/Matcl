@@ -48,9 +48,24 @@
     #define MATCL_CORE_EXTERN
 #endif
 
-// machine dependent parameters
+//--------------------------------------------------------------------------
+//                      Machine dependent parameters
+//--------------------------------------------------------------------------
+// cache line size in bytes; this is optimization parameters, invalid value
+// may have negative impact on performance
 #define MATCL_CACHE_LINE_SIZE   64
+
+// alignment for SIMD related types; this is optimization parameters, invalid
+// value may have negative impact on performance
 #define MATCL_AVX_ALIGNMENT     32
+
+// set this macro to 1 if fma instruction is available (AVX2 instruction
+// set is required)
+#define MATCL_HAS_FMA           1
+
+//--------------------------------------------------------------------------
+//                      Configuration parameters
+//--------------------------------------------------------------------------
 
 // threading
 #define MATCL_MULTITHREAD_MODE  0
@@ -72,7 +87,3 @@
 #else
     #define MATCL_DEBUG_MEMORY  0
 #endif
-
-// set this macro to 1 if fma instruction is available (AVX2 instruction
-// set is required)
-#define MATCL_HAS_FMA           1

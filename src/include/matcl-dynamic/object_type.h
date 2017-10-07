@@ -198,7 +198,7 @@ using Unit              = object_type<unit_type>;
 // object of any type
 using Any               = object_type<any_type>;
 
-// object of bool type
+// object of null type (stores nullptr)
 using ONull             = object_type<null_type>;
 
 // object of bool type

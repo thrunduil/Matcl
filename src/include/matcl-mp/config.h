@@ -33,7 +33,8 @@
 #endif
 
 // if this macro is 1, then mp_float class contains a string member
-// representing value, that allow to inspect values in debugger
+// representing stored value; this allows to inspect mp_float values
+// in debugger
 #define MATCL_DEBUG_MP_FLOAT 0
 
 // if this macro is 1, then testing mode is enabled (internal use only)
