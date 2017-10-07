@@ -156,7 +156,7 @@ class MATCL_DYN_EXPORT object
 
     //internal use
     public:
-        void				    disp(matcl::details::printer& pr, Integer elem_width, 
+        void                    disp(matcl::details::printer& pr, Integer elem_width, 
                                      matcl::align_type at, Integer value_pos) const; 
 
         const data_type*        get_data() const        { return m_data; };		

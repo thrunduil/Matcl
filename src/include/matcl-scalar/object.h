@@ -26,43 +26,38 @@
 #include "matcl-core/matrix/enums.h"
 #include "matcl-dynamic/details/object.inl"
 
-namespace matcl { namespace details
-{
-
-class printer;
-
-}};
-
 namespace matcl 
 {
 
 // type of object
 using Object            = dynamic::object;
 
-// object storing an element of type T
-template<class T>
-using object_type       = dynamic::object_type<T>;
-
 // string object
-using String            = dynamic::object_type<std::string>;
+using String            = dynamic::OString;
+
+// object storing an element of type T
+using dynamic::object_type;
 
 // bool object
-using OBool             = dynamic::object_type<bool>;
+using dynamic::OBool;
 
 // integer object
-using OInteger          = dynamic::object_type<Integer>;
+using dynamic::OInteger;
 
 // double precision floating point value object
-using OReal             = dynamic::object_type<Real>;
+using dynamic::OReal;
 
 // single precision floating point value object
-using OFloat            = dynamic::object_type<Float>;
+using dynamic::OFloat;
 
 // double precision complex floating point value object
-using OComplex          = dynamic::object_type<Complex>;
+using dynamic::OComplex;
 
 // single precision complex floating point value object
-using OFloat_complex    = dynamic::object_type<Float_complex>;
+using dynamic::OFloat_complex;
+
+// object of string type
+using dynamic::OString;
 
 // cast object to Integer
 MATCL_SCALAR_EXPORT

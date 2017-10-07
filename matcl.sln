@@ -15,6 +15,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-mp-obj", "proj\matcl-
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-scalar", "proj\matcl-scalar\matcl-scalar.vcxproj", "{16DBDFFF-845B-4087-B27B-B39631D7F63E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "info", "info", "{E2838274-ED71-41DE-A6EF-FDCC7EB31AFE}"
+	ProjectSection(SolutionItems) = preProject
+		extern_libraries.txt = extern_libraries.txt
+		INSTALL.txt = INSTALL.txt
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

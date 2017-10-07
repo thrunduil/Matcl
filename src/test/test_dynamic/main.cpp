@@ -35,6 +35,8 @@
 namespace mdy = matcl::dynamic;
 using namespace matcl;
 
+void example_object();
+
 static void break_func()
 {
     std::cout << "break" << "\n";
@@ -47,9 +49,7 @@ int main(int argc, const char* argv[])
         //details::leak_detector::break_at_codes({37204, 51566, 52566, 25195, 36023, 40397},
         //                                       &break_func);
 
-        matcl::test::test_performance();
-
-        return 0;
+        example_object();
 
         matcl::test::test_gmp();        
         matcl::test::test_gmp_bin();        

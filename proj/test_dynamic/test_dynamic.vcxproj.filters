@@ -71,5 +71,8 @@
     <ClCompile Include="..\..\src\test\test_dynamic\test_gmp_bin_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\test_dynamic\object_example.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
