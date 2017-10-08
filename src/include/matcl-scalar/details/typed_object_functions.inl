@@ -370,7 +370,7 @@ struct eval_fpclassify
     static fp_type eval(const T& a)
     {
         Integer res = (Integer)fpclassify(a);
-        return mrd::int_to_fptype(res);
+        return mrd::scal_func::int_to_fptype(res);
     };
 };
 

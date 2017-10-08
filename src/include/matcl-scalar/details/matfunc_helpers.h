@@ -1254,7 +1254,7 @@ struct mod_helper_impl
         if (arg2 == S2())
             return arg2;
         if (arg1 == S1())
-            return std::copysign(ret(), arg2);
+            return scal_func::copysign(ret(), arg2);
 
         if (scal_func::isinf(arg2) == true)
         {
@@ -1270,7 +1270,7 @@ struct mod_helper_impl
 
         ret n   = floor_helper<ret>::eval(gl_div(arg1,arg2));
         ret res = gl_minus(arg1, gl_mult(n, arg2));
-        return std::copysign(res, arg2);
+        return scal_func::copysign(res, arg2);
     };
 };
 template<class ret,class S1,class S2>
@@ -1342,7 +1342,7 @@ struct rem_helper_impl
     static ret eval(const S1& arg1, const S2& arg2)
     {
         if (arg2 == S2() || arg1 == S1())
-            return std::copysign(ret(), arg1);
+            return scal_func::copysign(ret(), arg1);
 
         ret n = trunc_helper<ret>::eval(gl_div(arg1,arg2));
 
@@ -1350,7 +1350,7 @@ struct rem_helper_impl
             return arg1;
 
         ret out = gl_minus(arg1, gl_mult(n,arg2)); 
-        return std::copysign(out, arg1);
+        return scal_func::copysign(out, arg1);
     };
 };
 template<class ret,class S1,class S2>
@@ -1463,22 +1463,26 @@ struct idiv_helper<Integer,Integer>
 };
 
 //pow
-template<class Ret, class T1, class T2>
-struct MATCL_SCALAR_EXPORT pow_complex
-{
-    static Ret eval(const T1& arg1, const T2& arg2);
-};
 
-template<typename T, typename S1, typename S2, bool isc>
+template<class T, class S1, class S2, bool isc>
 struct pow_helper_eval_impl
 {
     static T eval(const S1& arg1, const S2& arg2)
     {
-        return std::pow(arg1,arg2); 
+        return scal_func::pow(T(arg1), T(arg2)); 
     };
 };
 
-template<typename T, typename S1, typename S2>
+template<class T, class S1>
+struct pow_helper_eval_impl<T, S1, Integer, false>
+{
+    static T eval(const S1& arg1, Integer arg2)
+    {
+        return scal_func::pow(arg1, arg2); 
+    };
+};
+
+template<class T, class S1, class S2>
 struct pow_helper_eval_impl<T, S1, S2, true>
 {
     static T eval(const S1& arg1, const S2& arg2)
@@ -1516,7 +1520,7 @@ struct pow_helper<T1, T2, true>
     {
         Object obj1(A);
         Object obj2(B);
-        return dynamic::pow(std::move(obj1),std::move(obj2));
+        return dynamic::pow(std::move(obj1), std::move(obj2));
     };
 };
 
@@ -1568,7 +1572,7 @@ struct pow_c_helper<T1, T2, true>
     {
         Object obj1(A);
         Object obj2(B);
-        return dynamic::pow_c(std::move(obj1),std::move(obj2));
+        return dynamic::pow_c(std::move(obj1), std::move(obj2));
     };
 };
 

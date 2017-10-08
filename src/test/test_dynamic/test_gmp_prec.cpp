@@ -28,7 +28,6 @@
 #include "matcl-scalar/lib_functions/func_unary.h"
 #include "matcl-scalar/lib_functions/func_binary.h"
 
-//TODO: pow
 namespace matcl { namespace test
 {
 

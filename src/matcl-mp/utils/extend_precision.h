@@ -30,7 +30,8 @@ namespace matcl { namespace mp { namespace details
 // first order approximations of error propagations for:
 //  x + y           : ep_plus = |x/(x + y)| * a + |y/(x + y)| * b
 //                  : for x,y >= 0: ep_plus <= max(a, b)
-//  x - y           : ep_minus = |x/(x - y)| * a + |y/(x - y)| * b
+//  x - y           : ep_minus  = |x/(x - y)| * a + |y/(x - y)| * b
+//                              <= a + |y/(x - y)| * (a + b)
 //  x * y           : ep_mult   = a + b
 //  x / y           : ep_div    = a + b
 //  log(x)          : ep_log    = 1/log(x) * a

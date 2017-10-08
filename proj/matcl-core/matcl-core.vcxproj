@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\src\matcl-core\IO\io_impl.cpp" />
     <ClCompile Include="..\..\src\matcl-core\IO\scalar_io.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\matfunc_pow.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp" />

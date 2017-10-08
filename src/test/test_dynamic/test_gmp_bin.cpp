@@ -46,7 +46,8 @@ void test_gmp_bin()
 
 void gmp_tester_bin::make()
 {
-    test_pow_spec();
+    test_pow();
+    test_pow_c();
 
     test_copysign();
     test_nextafter();    

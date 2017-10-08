@@ -685,11 +685,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double cot(double x)
     {
-        return scal_func::cos(x) / scal_func::sin(x);
+        return 1.0/ scal_func::tan(x);
     };
     force_inline float cot(float x)
     {
-        return scal_func::cos(x) / scal_func::sin(x);
+        return 1.0f / scal_func::tan(x);
     };
 
     //--------------------------------------------------------------------
@@ -743,18 +743,15 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double exp10(Integer x)
     {
-        Real v_log10 = constants::ln10();
-        return scal_func::exp(x*v_log10);
+        return std::pow(10.0, Real(x));
     };
     force_inline double exp10(double x)
     {
-        Real v_log10 = constants::ln10();
-        return scal_func::exp(x*v_log10);
+        return std::pow(10.0, x);
     };
     force_inline float exp10(float x)
     {
-        Float v_log10 = constants::f_ln10();
-        return scal_func::exp(x*v_log10);
+        return std::pow(10.0f, x);
     };
 
     //--------------------------------------------------------------------
@@ -1348,6 +1345,71 @@ namespace scal_func
     {
         return dot2_ac_impl<float>::eval(a,b,c,d);
     };
+
+    //--------------------------------------------------------------------
+    force_inline float pow(float x, float y)
+    {
+        return std::pow(x, y);
+    }
+    force_inline double pow(double x, double y)
+    {
+        return std::pow(x, y);
+    }
+
+    force_inline float pow(float x, int y)
+    {
+        return std::pow(x, y);
+    }
+    force_inline double pow(double x, int y)
+    {
+        return std::pow(x, y);
+    }
+
+    //--------------------------------------------------------------------
+    force_inline float ldexp(float x, Integer y)
+    {
+        return std::ldexp(x, y);
+    }
+    force_inline double ldexp(double x, Integer y)
+    {
+        return std::ldexp(x, y);
+    }
+
+    //--------------------------------------------------------------------
+    force_inline float scalbn(float x, Integer y)
+    {
+        return std::scalbn(x, y);
+    }
+    force_inline double scalbn(double x, Integer y)
+    {
+        return std::scalbn(x, y);
+    }
+
+    //--------------------------------------------------------------------
+    inline fp_type int_to_fptype(int code)
+    {
+        switch(code)
+        {
+            case FP_INFINITE:   return fp_type::fp_infinite;
+            case FP_NAN:        return fp_type::fp_nan;
+            case FP_ZERO:       return fp_type::fp_zero;
+            case FP_SUBNORMAL:  return fp_type::fp_subnormal;
+            case FP_NORMAL:     return fp_type::fp_normal;
+            default:
+                return fp_type::fp_unknown;
+        }
+    };
+
+    force_inline fp_type fpclassify(float x)
+    {
+        int ret = std::fpclassify(x);
+        return int_to_fptype(ret);
+    }
+    force_inline fp_type fpclassify(double x)
+    {
+        int ret = std::fpclassify(x);
+        return int_to_fptype(ret);
+    }
 }
 
 }}}

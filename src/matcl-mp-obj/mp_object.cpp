@@ -47,8 +47,10 @@ void object_type_traits<mp_float>::disp(const mp_float& t, md::printer& pr, Inte
 void object_type_traits<mp_complex>::disp(const mp_complex& t, md::printer& pr, Integer elem_width,
                             align_type at, Integer value_pos)
 {
+    Integer prec    = pr.get_precision();
+
     std::ostringstream os;
-    os << t.to_string(precision(5)) << " (" << t.get_precision().get() << ")";
+    os << t.to_string(precision(prec)) << " (" << t.get_precision().get() << ")";
     pr.disp_elem(elem_width, os.str(), at, value_pos);
 };
 

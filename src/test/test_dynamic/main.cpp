@@ -22,7 +22,6 @@
 #include "test_gmp.h"
 #include "test_gmp_prec.h"
 #include "test_gmp_object.h"
-#include "test_performance.h"
 #include "matcl-mp/matcl_mp.h"
 #include "matcl-core/options/matcl_options.h"
 
@@ -51,15 +50,14 @@ int main(int argc, const char* argv[])
 
         example_object();
 
-        matcl::test::test_gmp();        
-        matcl::test::test_gmp_bin();        
+        matcl::test::test_gmp_bin();
+        matcl::test::test_gmp();                        
         matcl::test::test_gmp_object();                     
 
         matcl::test::test_dynamic test;
         test.make();  
 
         matcl::test::test_gmp_prec(std::cout);
-        matcl::test::test_performance();
 
         std::cout << "finished" << "\n";
     }

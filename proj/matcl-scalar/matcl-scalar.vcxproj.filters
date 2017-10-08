@@ -191,9 +191,6 @@
     <ClCompile Include="..\..\src\matcl-scalar\func\basic_binfunc_helper.cpp">
       <Filter>Source Files\src\func</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-scalar\func\raw\matfunc_pow.cpp">
-      <Filter>Source Files\src\func\raw</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-scalar\objects\object.cpp">
       <Filter>Source Files\src\objects</Filter>
     </ClCompile>

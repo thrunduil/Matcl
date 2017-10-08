@@ -330,7 +330,6 @@ mp_complex matcl::log1p(const mp_complex& x, precision req_prec)
 
     for(int iter = 0; ; ++iter)
     {
-        //|x_re| > |x_im|
         mp_float hyp_m_1= mul(x_im, x_im, int_prec) + mul(x_re, x_re, int_prec)
                         + mul(x_re, 2, int_prec);       //1.5 + 1*M ulp
         r_re            = log1p(hyp_m_1, req_prec);     //(1.5 + 1*M)*a + 0.5 ulp

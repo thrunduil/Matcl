@@ -38,6 +38,12 @@ namespace matcl { namespace raw { namespace details
 
 namespace md    = matcl::details;
 
+template<class Ret, class T1, class T2>
+struct MATCL_CORE_EXPORT pow_complex
+{
+    static Ret eval(const T1& arg1, const T2& arg2);
+};
+
 template<>
 struct is_zero_helper<Float_complex>
 {
@@ -178,17 +184,30 @@ namespace scal_func
             Real_t x_im   = imag(x);
 
             if (is_zero(x_im) == true)
-                return scal_func:: expm1(x_re);
+                return scal_func:: expm1(x_re);            
 
-            Real tol_small  = 0.05; //just an assumption
+            // re = exp(xre) * cos(xim) - 1
+            // im = exp(xre) * sin(xim)
 
-            if (abs(x_re) > tol_small || abs(x_im) > tol_small)
+            // error in calculating re is:
+            //  e1  = |exp(xre) * cos(xim)|/|exp(xre) * cos(xim) - 1|*1.5 ulp
+            //      <= [1 + 1/|exp(xre) * cos(xim) - 1|] * 1.5 ulp
+
+            // re = exp(xre) * cos(xim) - 1 = expm1(xre) * cos(xim) - 2*sin(xim/2)^2
+            // error in calculating re is
+            //  e2 = c1 * 1.5 ulp + c2 * 1.5 ulp
+            //  c1 = |expm1(xre) * cos(xim)|/|re|; c2 = |2*sin(xim/2)^2|/|re|
+            //  e2 <= [1 + (1+|cos(xim)|) * |cos(xim) - 1|/|exp(xre)*cos(xim) - 1|] * 1.5 ulp
+            // since (1+|cos(xim)|) * |cos(xim) - 1| <= 4, e2 is not much worse than e1
+            // but can be much better, when cos(xim) ~ 1
+
+            // select e1, when |xim| <= 1 and |xre| > 1.1, then 
+            //  1/|exp(xre) * cos(xim) - 1| < 2 and e1 <= 4.5 ulp
+            if (abs(x_re) > 1.1 && abs(x_im) < 1.0)
             {
                 Compl ret = eval(x);
                 return Compl(real(ret) - 1, imag(ret));
             }
-
-            // re = exp(xre) * cos(xim) - 1 = (exp(xre) -1) * cos(xim) - 2*sin(xim/2)^2
 
             Real_t exp_re = scal_func::exp(x_re);
 
@@ -219,8 +238,17 @@ namespace scal_func
             Real_t x_re     = real(x);
             Real_t x_im     = imag(x);
 
+            Real_t abs_xre  = abs(x_re);
+            Real_t abs_xim  = abs(x_im);
+
+            Real_t min_x    = Real_t(0.85);
+            Real_t max_x    = Real_t(1.40);
+
+            bool select_x   = (abs_xre >= min_x && abs_xre <= max_x && abs_xim < 0.5);
+            bool select_y   = (abs_xim >= min_x && abs_xim <= max_x && abs_xre < 0.5);
+
             Real_t r_im     = scal_func::atan2(x_im, x_re);
-            Real_t hyp      = scal_func::abs(x);
+            Real_t hyp      = scal_func::abs(x);    //1.0 ulp
 
             if (scal_func::finite(hyp) == false)
             {
@@ -228,50 +256,37 @@ namespace scal_func
                 return Complex(hyp, r_im);
             };    
 
-            Real_t eps_hyp  = Real_t(0.05);
-            Real_t eps_x    = Real_t(0.05);
-
-            Real_t abs_xre  = abs(x_re);
-            Real_t abs_xim  = abs(x_im);
-
-            bool select_1   = (hyp > 1 - eps_hyp && hyp < 1 + eps_hyp)
-                            && ((abs_xre > 1 - eps_x && abs_xre < 1 + eps_x)
-                                || (abs_xim > 1 - eps_x && abs_xim < 1 + eps_x));
-
-            if (select_1)
+            if (select_x || select_y)
             {       
-                // Pawel Kowal:
-                // this version is more accurate if ||x_re| - 1|< 0.05 or ||x_im| - 1| < 0.05
-                // and |hyp - 1| < 0.1; this range was obtained by comparing errors
-                // of these two methods:
-                //
                 // ep   = 2.0 * abs(e / hyp_m_1)
-                // err1 = (2.5 + 3 * abs(ep)) * 1.05 + 0.5;
-                // err2 = 0.5*abs(1/log(hyp)) + 1
+                // err1 = (2.5 + 2.5 * abs(ep)) * a + 0.5;
+                // err2 = 1.0 * abs(1/log(hyp)) + 0.5
+                // a    = |hyp_m_1/(log(hyp_m_1 + 1)*(hyp_m_1 + 1))|
                 //
                 // where err1 is error of this version; err2 is error of the second version 
-                // measured in ulp
+                // measured in ulp;
+                // err1/err2 < 1 for 0.85 <= x_re <= 1.4; -0.5 <= x_im <= 0.5
 
-                if (abs_xre > abs_xim)
+                if (select_x)
                 {
-                    //|x_re| > |x_im|
-                    Real_t e        = 1 - abs_xre;
-                    Real_t hyp_m_1  = scal_func::abs2(x_im) + scal_func::abs2(e) - 2 * e;
-                    Real_t r_re     = scal_func::log1p(hyp_m_1) / Real_t(2);
+                    Real_t e        = 1 - abs_xre;                          //0.5 ulp
+                    Real_t hyp_m_1  = scal_func::abs2(x_im) 
+                                    + scal_func::abs2(e) - 2 * e;           //2.0 + (2.0 + 0.5)*ep + 0.5
+                    Real_t r_re     = scal_func::log1p(hyp_m_1) / Real_t(2);//(2.5 + 2.5*M)*a + 0.5
                     return Compl(r_re, r_im);
                 }
                 else
                 {
-                    //|x_re| <= |x_im|
-                    Real_t e        = 1 - abs_xim;
-                    Real_t hyp_m_1  = scal_func::abs2(x_re) + scal_func::abs2(e) - 2 * e;
-                    Real_t r_re     = scal_func::log1p(hyp_m_1) / Real_t(2);
+                    Real_t e        = 1 - abs_xim;                          //0.5
+                    Real_t hyp_m_1  = scal_func::abs2(x_re) 
+                                    + scal_func::abs2(e) - 2 * e;           //2.0 + (2.0 + 0.5)*ep + 0.5
+                    Real_t r_re     = scal_func::log1p(hyp_m_1) / Real_t(2);//(2.5 + 2.5*M)*a + 0.5
                     return Compl(r_re, r_im);
                 }                
             }
             else
             {
-                Real_t r_re         = scal_func::log(hyp);            
+                Real_t r_re = scal_func::log(hyp);   //1.0 * abs(1/log(hyp)) + 1
                 return Compl(r_re, r_im);
             };
         };
@@ -282,13 +297,19 @@ namespace scal_func
             Real_t x_re     = real(x);
             Real_t x_im     = imag(x);
 
-            Real_t eps_x    = Real_t(0.05);
-
             Real_t abs_xre  = abs(x_re);
-            Real_t abs_xim  = abs(x_im);
+            Real_t abs_xim  = abs(x_im);            
 
-            // see also eval
-            bool select_1   = (abs_xre < eps_x && abs_xim < eps_x);
+            // ep    = 2.0 * abs(x_re / hyp_m_1)
+            // err1  = (1.5 + 1*ep) * a + 0.5
+            // err2  = 2.0 * abs(1/log(hyp)) + 0.5
+            // a     = |hyp_m_1/(log(hyp_m_1 + 1)*(hyp_m_1 + 1))|
+            // 
+            // |err1| < |err2| for x_re > -0.35
+
+            bool select_1   = (x_re >= -0.35);
+            (void)abs_xre;
+            (void)abs_xim;
 
             if (select_1 == false)
             {
@@ -297,7 +318,13 @@ namespace scal_func
             };
 
             Real_t r_im     = scal_func::atan2(x_im, Real_t(1) + x_re);
-            Real_t hyp_m_1  = scal_func::abs2(x_im) + scal_func::abs2(x_re) + 2 * x_re;
+
+            // ep   = 2.0 * abs(x_re / hyp_m_1)
+            // err  = 1.0 + ep * (1.0 + 0.0) + 0.5 = 1.5 + 1*ep
+            Real_t hyp_m_1  = scal_func::abs2(x_im) + scal_func::abs2(x_re) 
+                            + 2 * x_re;
+            // err  = (1.5 + 1*ep) * 1.5 + 0.5 (assumption: hyp_m_1 > -0.5, 
+            //                                  then ep[log1p] <= 1.5)
             Real_t r_re     = scal_func::log1p(hyp_m_1) / Real_t(2);
             return Compl(r_re, r_im);
         };
@@ -503,7 +530,7 @@ namespace scal_func
     force_inline double abs(const Complex& arg)		
     {	
         //in VS hypot is slightly faster than std::abs but less accurate
-        //(around 1.5ulp to 0.5 ulp)
+        //(around 1.5ulp to 1.0 ulp)
         return std::abs(arg.value);
     };
     force_inline float abs(const Float_complex& arg)		
@@ -541,6 +568,16 @@ namespace scal_func
     {	
         return arg.value.real() * arg.value.real() 
                     + arg.value.imag() * arg.value.imag();	
+    };
+
+    //--------------------------------------------------------------------
+    force_inline Complex conj(const Complex& arg)		
+    {	
+        return Complex(real(arg), -imag(arg));
+    };
+    force_inline Float_complex conj(const Float_complex& arg)		
+    {	
+        return Float_complex(real(arg), -imag(arg));
     };
 
     //--------------------------------------------------------------------
@@ -682,25 +719,68 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline Complex exp2(const Complex& arg)		
     {
-        Real v_log2 = constants::ln2();
-        return scal_func::exp(arg * v_log2);
+        double y_re    = real(arg);
+        double y_im    = imag(arg);
+
+        // a ^ (x + iy) = a ^ x * exp(i * log(a) * y)
+        double v_log2   = constants::ln2();
+        double exp_re   = scal_func::exp2(y_re);
+        double mult_im  = y_im * v_log2;
+        Complex exp_im  = scal_func::expi(mult_im);
+
+        double r_re     = mult_zero(exp_re , real(exp_im));
+        double r_im     = mult_zero(exp_re , imag(exp_im));
+        Complex ret     = Complex(r_re, r_im);
+        return ret;
     };
     force_inline Float_complex exp2(const Float_complex& arg)		
     {
-        Float v_log2 = constants::f_ln2();
-        return scal_func::exp(arg * v_log2);
+        float y_re      = real(arg);
+        float y_im      = imag(arg);
+
+        // a ^ (x + iy) = a ^ x * exp(i * log(a) * y)
+        float v_log2    = constants::f_ln2();
+        float exp_re    = scal_func::exp2(y_re);
+        float mult_im   = y_im * v_log2;
+
+        Float_complex exp_im  = scal_func::expi(mult_im);
+        float r_re      = mult_zero(exp_re , real(exp_im));
+        float r_im      = mult_zero(exp_re , imag(exp_im));
+        Float_complex ret = Float_complex(r_re, r_im);
+        return ret;
     };
 
     //--------------------------------------------------------------------
     force_inline Complex exp10(const Complex& arg)		
     {
-        Real v_log10 = constants::ln10();
-        return scal_func::exp(arg * v_log10);
+        double y_re    = real(arg);
+        double y_im    = imag(arg);
+
+        // a ^ (x + iy) = a ^ x * exp(i * log(a) * y)
+        double v_log10  = constants::ln10();
+        double exp_re   = scal_func::exp10(y_re);
+        double mult_im  = y_im * v_log10;
+        Complex exp_im  = scal_func::expi(mult_im);
+        double r_re     = mult_zero(exp_re , real(exp_im));
+        double r_im     = mult_zero(exp_re , imag(exp_im));
+        Complex ret     = Complex(r_re, r_im);
+        return ret;
     };
     force_inline Float_complex exp10(const Float_complex& arg)		
     {
-        Float v_log10 = constants::f_ln10();
-        return scal_func::exp(arg * v_log10);
+        float y_re      = real(arg);
+        float y_im      = imag(arg);
+
+        // a ^ (x + iy) = a ^ x * exp(i * log(a) * y)
+        float v_log10   = constants::f_ln10();
+        float exp_re    = scal_func::exp10(y_re);
+        float mult_im   = y_im * v_log10;
+
+        Float_complex exp_im  = scal_func::expi(mult_im);
+        float r_re          = mult_zero(exp_re , real(exp_im));
+        float r_im          = mult_zero(exp_re , imag(exp_im));
+        Float_complex ret   = Float_complex(r_re, r_im);
+        return ret;
     };
 
     //--------------------------------------------------------------------
