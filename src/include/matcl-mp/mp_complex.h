@@ -28,6 +28,8 @@
 #include "matcl-core/matrix/enums.h"
 #include "matcl-mp/mp_float.h"
 
+#include <complex>
+
 namespace matcl
 {
 
@@ -68,6 +70,9 @@ class MATCL_MP_EXPORT mp_complex
         // rounding is required
         mp_complex(const Complex& val, precision prec = precision(0));
         mp_complex(const Float_complex& val, precision prec = precision(0));
+
+        template<class Type>
+        mp_complex(const std::complex<Type>& val, precision prec = precision(0));
 
         // conversion from variable precision floating point values
         mp_complex(const mp_float& re);
@@ -184,5 +189,10 @@ class MATCL_MP_EXPORT mp_complex
 // save and load to stream
 MATCL_MP_EXPORT std::istream&   operator>>(std::istream&, mp_complex& val);
 MATCL_MP_EXPORT std::ostream&   operator<<(std::ostream&, const mp_complex& val);
+
+template<class Type>
+inline mp_complex::mp_complex(const std::complex<Type>& val, precision prec)
+    :mp_complex(std::real(val), std::imag(val), prec)
+{};
 
 };

@@ -65,11 +65,11 @@ float scal_func::sqrt1pm1(float arg)
 }
 Complex scal_func::sqrt1pm1(const Complex& arg)
 {
-    return md::minus_c(scal_func::sqrt(md::plus_c(1.0,arg)), 1.0);
+    return arg / md::plus_c(1.0, scal_func::sqrt(md::plus_c(1.0, arg)));
 }
 Float_complex scal_func::sqrt1pm1(const Float_complex& arg)
 {
-    return md::minus_c(scal_func::sqrt(md::plus_c(1.0f,arg)), 1.0f);
+    return arg / md::plus_c(1.0f, scal_func::sqrt(md::plus_c(1.0f, arg)));
 }
 
 //--------------------------------------------------------------------

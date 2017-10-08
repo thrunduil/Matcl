@@ -86,7 +86,7 @@ and complex types as well as functions operating on these types.
 
 For integer, rational, and floating point types this is just a wraper
 over MPFR and MPIR library with unified interface.
-Matcl-mp defines however functions on multiprecision complex type
+Matcl-mp defines however functions for multiprecision complex type
 accurate up to 1 ulp.
 
 ## matcl-mp-obj

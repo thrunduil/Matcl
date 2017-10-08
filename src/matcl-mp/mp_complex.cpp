@@ -275,8 +275,13 @@ std::string mp_complex::to_string(const std::string& format) const
 
     std::ostringstream out;
     out << m_re.to_string(format);
-    out << "+";
-    out << m_im.to_string(format);
+
+    if (signbit(m_im) == false)
+        out << " + ";
+    else
+        out << " - ";
+
+    out << abs(m_im).to_string(format);
     out << "i";
 
     return out.str();

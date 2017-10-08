@@ -23,7 +23,7 @@
 
 #include "test_performance.h"
 #include "matcl-mp/matcl_mp.h"
-#include "rand_scalars.h"
+#include "test/test_dynamic/rand_scalars.h"
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 #include "matcl-scalar/lib_functions/utils.h"
 #include "matcl-scalar/IO/formatted_disp.h"

@@ -32,20 +32,6 @@
 namespace matcl { namespace raw { namespace details
 {
 
-inline fp_type int_to_fptype(int code)
-{
-    switch(code)
-    {
-        case FP_INFINITE:   return fp_type::fp_infinite;
-        case FP_NAN:        return fp_type::fp_nan;
-        case FP_ZERO:       return fp_type::fp_zero;
-        case FP_SUBNORMAL:  return fp_type::fp_subnormal;
-        case FP_NORMAL:     return fp_type::fp_normal;
-        default:
-            return fp_type::fp_unknown;
-    }
-};
-
 namespace md    = matcl::details;
 namespace mdyf  = matcl::dynamic::functions;
 namespace mrd   = matcl::raw::details;
@@ -705,7 +691,7 @@ struct conj_helper<Complex>
     force_inline
     static Complex eval(const Complex& arg)		
     {	
-        return Complex(std::conj(arg.value));
+        return scal_func::conj(arg);
     };
     static dynamic::function_name name()
     { 
@@ -718,7 +704,7 @@ struct conj_helper<Float_complex>
     force_inline
     static Float_complex eval(const Float_complex& arg)		
     {	
-        return Float_complex(std::conj(arg.value));
+        return scal_func::conj(arg);
     };
     static dynamic::function_name name()
     { 
@@ -1168,8 +1154,7 @@ struct exp10_helper<Complex>
     force_inline
     static ret_type eval(const T& val)
     { 
-        Real v_log10    = constants::ln10();
-        return exp_helper<Complex>::eval(Complex(real(val)*v_log10, imag(val)*v_log10));
+        return scal_func::exp10(val);
     };
 
     static dynamic::function_name name() { return mdyf::exp10::eval(); };
@@ -1183,8 +1168,7 @@ struct exp10_helper<Float_complex>
     force_inline
     static ret_type eval(const T& val)
     { 
-        Float v_log10   = constants::f_ln10();
-        return exp_helper<Float_complex>::eval(Float_complex(real(val)*v_log10, imag(val)*v_log10));
+        return scal_func::exp10(val);
     };
 
     static dynamic::function_name name() { return mdyf::exp10::eval(); };
@@ -4146,11 +4130,15 @@ struct fpclassify_helper
     force_inline
     static fp_type eval(const T& val)
     {
-        int ret = std::fpclassify(val);
-        return int_to_fptype(ret);
+        return scal_func::fpclassify(val);
     };
-    static dynamic::function_name name() { return mdyf::fpclassify::eval(); };
+    
+    static dynamic::function_name name() 
+    { 
+        return mdyf::fpclassify::eval(); 
+    };
 };
+
 template<>
 struct fpclassify_helper<Integer>
 {
@@ -4185,7 +4173,7 @@ struct ldexp_helper<Real>
     force_inline
     static Real eval(Real x, Integer exp)
     {
-        return std::ldexp(x,exp);
+        return scal_func::ldexp(x,exp);
     }
     static dynamic::function_name name() { return mdyf::ldexp::eval(); };
 };
@@ -4206,7 +4194,7 @@ struct ldexp_helper<Float>
     force_inline
     static Float eval(Float x, Integer exp)
     {
-        return std::ldexp(x,exp);
+        return scal_func::ldexp(x,exp);
     }
     static dynamic::function_name name() { return mdyf::ldexp::eval(); };
 };
@@ -4252,7 +4240,7 @@ struct scalbn_helper<Real>
     force_inline
     static Real eval(Real x, Integer n)
     {
-        return std::scalbn(x,n);
+        return scal_func::scalbn(x,n);
     }
     static dynamic::function_name name() { return mdyf::ldexp::eval(); };
 };
@@ -4272,7 +4260,7 @@ struct scalbn_helper<Float>
     force_inline
     static Float eval(Float x, Integer n)
     {
-        return std::scalbn(x,n);
+        return scal_func::scalbn(x,n);
     }
     static dynamic::function_name name() { return mdyf::ldexp::eval(); };
 };
@@ -4381,7 +4369,7 @@ struct modf_helper<Real>
     force_inline
     static Real eval(Real x, Real& n)
     {
-        return std::modf(x,&n);
+        return scal_func::modf(x, n);
     }
     static dynamic::function_name name() { return mdyf::modf::eval(); };
 };
@@ -4401,7 +4389,7 @@ struct modf_helper<Float>
     force_inline
     static Float eval(Float x, Float& n)
     {
-        return std::modf(x, &n);
+        return scal_func::modf(x, n);
     }
     static dynamic::function_name name() { return mdyf::modf::eval(); };
 };

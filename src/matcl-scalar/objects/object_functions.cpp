@@ -244,7 +244,7 @@ fp_type dynamic::fpclassify(const object& a)
 
     //it is ensured, that this function returns OInteger
     Integer v   = static_cast<const details::object_data<Integer>*>(ret.get_data())->get();
-    return matcl::raw::details::int_to_fptype(v);
+    return matcl::raw::details::scal_func::int_to_fptype(v);
 };
 
 object dynamic::copysign(const object& x, const object& y)

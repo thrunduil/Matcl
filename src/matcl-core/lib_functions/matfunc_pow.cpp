@@ -18,9 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-scalar/details/matfunc_helpers.h"
-#include "matcl-scalar/details/scalfunc_helpers.h"
-#include "matcl-scalar/lib_functions/manip.h"
+#include "matcl-core/details/scalfunc_complex.h"
 
 #include <cfloat>
 
@@ -31,12 +29,12 @@ namespace mr = matcl :: raw;
 
 inline Complex exp_complex(const Complex& arg)
 {
-    return exp_helper<Complex>::eval(arg);
+    return scal_func::exp(arg);
 };
 
 inline Float_complex exp_complex(const Float_complex& arg)
 {
-    return exp_helper<Float_complex>::eval(arg);
+    return scal_func::exp(arg);
 };
 
 template<class Ret,class T1,class T2,bool isc_1,bool isc_2>
@@ -59,7 +57,7 @@ struct pow_complex_helper<Ret,T1,T2,true,true>
         }
         else
         {
-            Ret tmp = matcl::details::mul_c(arg2 , log_helper<Ret>::eval(Ret(arg1)));
+            Ret tmp = matcl::details::mul_c(arg2 , scal_func::log(Ret(arg1)));
             return exp_complex(tmp);
         };
     };
@@ -93,7 +91,7 @@ struct pow_complex_helper<Ret,T1,T2,true,false>
                 return Ret(std::pow(Ret_R(real(arg1)), Ret_R(arg2)));
         };
     
-        Ret tmp = matcl::details::mul_c(arg2 , log_helper<Ret>::eval(Ret(arg1)));
+        Ret tmp = matcl::details::mul_c(arg2 , scal_func::log(Ret(arg1)));
         return exp_complex(tmp);
     };
 };
@@ -160,11 +158,11 @@ struct pow_complex_helper<Ret,T1,Integer,true,false>
                 if (arg2 < 0)
                 {
                     auto tmp2 = matcl::details::div_c(Ret_R(1),value);
-                    return matcl::convert_scalar<Ret, decltype(tmp)>(tmp2);
+                    return Ret(tmp2);
                 }
                 else
                 {
-                    return matcl::convert_scalar<Ret, decltype(value)>(value);
+                    return Ret(value);
                 }
             };
         };
@@ -193,19 +191,38 @@ struct pow_complex_helper<Ret,T1,T2,false,true>
             if (scal_func::isregular(real(arg2)) == false || scal_func::finite(arg1) == false)
                 return Ret(std::pow(arg1, real(arg2)));
 
-            Ret tmp     = log_helper<Ret>::eval(arg1);
+            Ret tmp     = scal_func::log(Ret(arg1));
             tmp         = matcl::details::mul_c(real(arg2) , tmp);
             return exp_complex(tmp);
         };
 
         if (arg1 > T1())
         {
-            Ret tmp = matcl::details::mul_c(arg2 ,log_helper<Ret_R>::eval(arg1));
-            return exp_complex(tmp);
+            if (scal_func::finite(arg1) == false 
+                        || scal_func::finite(arg2) == false)
+            {
+                Ret tmp = matcl::details::mul_c(arg2, scal_func::log(arg1));
+                return exp_complex(tmp);
+            };
+
+            Ret_R   x_re    = arg1;
+            Ret_R   y_re    = real(arg2);
+            Ret_R   y_im    = imag(arg2);
+
+            // a ^ (x + iy) = a ^ x * exp(i * log(a) * y)
+            Ret_R exp_re    = scal_func::pow(x_re, y_re);
+            Ret_R mult_im   = y_im * scal_func::log(x_re);
+            Ret exp_im      = scal_func::expi(mult_im);
+
+            Ret_R r_re      = scal_func::mult_zero(exp_re , real(exp_im));
+            Ret_R r_im      = scal_func::mult_zero(exp_re , imag(exp_im));
+            Ret ret         = Ret(r_re, r_im);
+
+            return ret;
         }
         else
         {
-            Ret tmp     = log_helper<Ret>::eval(arg1);
+            Ret tmp     = scal_func::log(Ret(arg1));
             tmp         = matcl::details::mul_c(arg2 , tmp);
             return exp_complex(tmp);
         };

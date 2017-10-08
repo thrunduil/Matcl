@@ -23,6 +23,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "info", "info", "{E2838274-E
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{306CBFB8-552E-4634-BD0D-FABD2579CDC5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_performance", "proj\test_performance\test_performance.vcxproj", "{F959582F-0999-4B45-B9A5-93D0A0359472}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_scal_accuracy", "proj\test_scal_accuracy\test_scal_accuracy.vcxproj", "{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -79,9 +85,30 @@ Global
 		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x64.Build.0 = Release|x64
 		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x86.ActiveCfg = Release|Win32
 		{16DBDFFF-845B-4087-B27B-B39631D7F63E}.Release|x86.Build.0 = Release|Win32
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Debug|x64.ActiveCfg = Debug|x64
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Debug|x64.Build.0 = Debug|x64
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Debug|x86.ActiveCfg = Debug|Win32
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Debug|x86.Build.0 = Debug|Win32
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Release|x64.ActiveCfg = Release|x64
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Release|x64.Build.0 = Release|x64
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Release|x86.ActiveCfg = Release|Win32
+		{F959582F-0999-4B45-B9A5-93D0A0359472}.Release|x86.Build.0 = Release|Win32
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Debug|x64.ActiveCfg = Debug|x64
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Debug|x64.Build.0 = Debug|x64
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Debug|x86.ActiveCfg = Debug|Win32
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Debug|x86.Build.0 = Debug|Win32
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Release|x64.ActiveCfg = Release|x64
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Release|x64.Build.0 = Release|x64
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Release|x86.ActiveCfg = Release|Win32
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{67FBB7B2-D5DD-448E-ABCB-28F5947B6463} = {306CBFB8-552E-4634-BD0D-FABD2579CDC5}
+		{F959582F-0999-4B45-B9A5-93D0A0359472} = {306CBFB8-552E-4634-BD0D-FABD2579CDC5}
+		{BC8AF3C6-5A73-4A07-AB6C-594EDDEBCB63} = {306CBFB8-552E-4634-BD0D-FABD2579CDC5}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

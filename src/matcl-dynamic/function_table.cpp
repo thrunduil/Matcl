@@ -1011,7 +1011,9 @@ void function_table::clear_global(function_templ_map& map)
 
 void function_table::clear_global(function& f)
 {
-    const_cast<evaler*>(f.get_evaler())->destroy();
+    if (f.get_evaler() != nullptr)
+        const_cast<evaler*>(f.get_evaler())->destroy();
+
     f = function();
 }
 

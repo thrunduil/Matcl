@@ -61,7 +61,7 @@ void test_gmp()
 
 void gmp_tester::make()
 {   
-    test_inv();  
+    test_func(test_mp_complex(), "mp_complex");
 
     test_ldexp_p3();
     test_ldexp_m3();
@@ -1696,13 +1696,6 @@ double gmp_tester::test_mp_complex()
             if (prec2 != 2 * prec)
                 res += 1;
         }
-        {
-            mp_complex z(-123.5, 123.5);
-
-            if (z.to_string() != "-123.5+123.5i")
-                res += 1.0;
-        };
-
         {
             std::ostringstream ss;
             oarchive ia(ss);
