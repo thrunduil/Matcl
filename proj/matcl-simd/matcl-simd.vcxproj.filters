@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\simd">
+      <UniqueIdentifier>{9fab0a75-1c85-45b2-b051-c3b114be358e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\impl">
+      <UniqueIdentifier>{78d852df-4704-466b-a6e5-84b101f750a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\arch">
+      <UniqueIdentifier>{de2c349f-7060-4a5d-9559-b9ac09d98f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\arch\reg_128">
+      <UniqueIdentifier>{47db2251-b112-4257-b736-cc23444f9927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\arch\reg_256">
+      <UniqueIdentifier>{41e0861a-e88f-4bb9-8552-382b2960da0b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\reg_128\simd_128.h">
+      <Filter>Source Files\include\arch\reg_128</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\reg_256\simd_256.h">
+      <Filter>Source Files\include\arch\reg_256</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\reg_256\simd_256_compl.h">
+      <Filter>Source Files\include\arch\reg_256</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\reg_128\simd_128_compl.h">
+      <Filter>Source Files\include\arch\reg_128</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd\simd_128_compl_func.h">
+      <Filter>Source Files\include\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd\simd_128_func.h">
+      <Filter>Source Files\include\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd\simd_256_compl_func.h">
+      <Filter>Source Files\include\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd\simd_256_func.h">
+      <Filter>Source Files\include\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd\simd_general.h">
+      <Filter>Source Files\include\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd\simd_scalar_func.h">
+      <Filter>Source Files\include\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\config.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_utils.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-simd\test_simd_compile.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\include\matcl-simd\impl\simd_128_compl_func.inl">
+      <Filter>Source Files\include\impl</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\impl\simd_128_func.inl">
+      <Filter>Source Files\include\impl</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\impl\simd_256_compl_func.inl">
+      <Filter>Source Files\include\impl</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\impl\simd_256_func.inl">
+      <Filter>Source Files\include\impl</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\impl\simd_helpers.inl">
+      <Filter>Source Files\include\impl</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\impl\simd_scal_func.inl">
+      <Filter>Source Files\include\impl</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\arch\reg_128\simd_128.inl">
+      <Filter>Source Files\include\arch\reg_128</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\arch\reg_128\simd_128_compl.inl">
+      <Filter>Source Files\include\arch\reg_128</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\arch\reg_256\simd_256.inl">
+      <Filter>Source Files\include\arch\reg_256</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\arch\reg_256\simd_256_compl.inl">
+      <Filter>Source Files\include\arch\reg_256</Filter>
+    </None>
+  </ItemGroup>
+</Project>
