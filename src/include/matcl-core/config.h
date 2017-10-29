@@ -27,6 +27,9 @@
     #define force_inline inline __attribute__((always_inline))
 #endif
 
+// keyword indicating that a symbol is not aliased in the current scope
+#define MATCL_RESTRICTED        __restrict
+
 // export macros
 #ifdef MATCL_CORE_EXPORTS
     #define MATCL_CORE_EXPORT  __declspec(dllexport)
