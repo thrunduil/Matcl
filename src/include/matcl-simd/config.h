@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include "matcl-core/config.h"
-
 // define MATCL_LEVEL1_COMPLEX_DEFINED in order to use
 // nondefault complex types; these types must be defined
 // before including simd headers
@@ -31,3 +29,9 @@
 #else
     #define MATCL_USE_MATCL_COMPLEX 0
 #endif
+
+//TODO:
+#define MATCL_TEST_MISSING 0
+
+// machine dependent parameters
+#include "matcl-core/general/machine.h"

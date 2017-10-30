@@ -20,26 +20,10 @@
 
 #pragma once
 
-#include "matcl-simd/arch/reg_128/simd_128.h"
-#include "matcl-simd/arch/reg_128/simd_128_compl.h"
+#include "matcl-simd/config.h"
+#include "matcl-simd/simd_general.h"
+#include "matcl-simd/func/simd_func.h"
+#include "matcl-simd/arch/simd_impl.inl"
+#include "matcl-simd/func/simd_func.inl"
+#include "matcl-simd/default_simd.h"
 
-#include "matcl-simd/arch/reg_256/simd_256.h"
-#include "matcl-simd/arch/reg_256/simd_256_compl.h"
-
-#include "matcl-simd/simd/simd_scalar_func.h"
-#include "matcl-simd/simd/simd_128_func.h"
-#include "matcl-simd/simd/simd_256_func.h"
-#include "matcl-simd/simd/simd_128_compl_func.h"
-#include "matcl-simd/simd/simd_256_compl_func.h"
-
-#include "matcl-simd/impl/simd_128_compl_func.inl"
-#include "matcl-simd/impl/simd_256_func.inl"
-#include "matcl-simd/impl/simd_256_compl_func.inl"
-#include "matcl-simd/impl/simd_scal_func.inl"
-
-#include "matcl-simd/arch/reg_128/simd_128.inl"
-#include "matcl-simd/arch/reg_128/simd_128_compl.inl"
-#include "matcl-simd/arch/reg_256/simd_256.inl"
-#include "matcl-simd/arch/reg_256/simd_256_compl.inl"
-
-#include "matcl-simd/simd_utils.h"

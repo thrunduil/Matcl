@@ -453,7 +453,6 @@ struct div_helper<complex<T>,complex<S>>
         namespace ms = mrd::scal_func;
 
 		TS r        = b_im / b_re;		
-        //TS t      = TS(1)/ (b_re + r * b_im);
         TS t        = TS(1) / ms::fma(r, b_im, b_re);        
 
         //underflow protection; see A Robust Complex Division in Scilab

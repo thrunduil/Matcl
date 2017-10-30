@@ -20,10 +20,21 @@
 
 #pragma once
 
-#include "matcl-simd/simd.h"
+#include "matcl-simd/arch/simd_impl.h"
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+namespace matcl { namespace simd
+{
 
+template<>
+struct default_simd_type<double>
+{ 
+    using type = simd<double, 256, avx_tag>; 
+};
+
+template<>
+struct default_simd_type<float>
+{ 
+    using type = simd<float, 256, avx_tag>; 
+};
+
+}}

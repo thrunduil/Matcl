@@ -20,10 +20,16 @@
 
 #pragma once
 
-#include "matcl-simd/simd.h"
+namespace matcl { namespace simd
+{
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+// simd type for storing values of given type with maximum size
+template<class V>
+struct default_simd_type 
+{};
+
+}}
+
+// specialize default_simd_type type for given type and given architecture
+#include "matcl-simd/arch/default_simd.h"
 

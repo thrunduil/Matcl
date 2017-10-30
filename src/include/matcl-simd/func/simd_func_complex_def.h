@@ -20,10 +20,36 @@
 
 #pragma once
 
-#include "matcl-simd/simd.h"
+#include "matcl-simd/simd_general.h"
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+namespace matcl { namespace simd
+{
 
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_reverse{};
+    
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_mult{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_div{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_plus{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_minus{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_uminus{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_fma{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_fms{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_sum_all{};
+
+}}

@@ -20,10 +20,8 @@
 
 #pragma once
 
-#include "matcl-simd/simd.h"
+#include "matcl-simd/default_simd.h"
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+// specialize default_simd_type type for given type and given architecture
+#include "matcl-simd/arch/default_simd_complex.h"
 

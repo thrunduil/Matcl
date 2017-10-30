@@ -22,8 +22,9 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/lib_functions/constants.h"
+#include "matcl-core/general/machine.h"
 
-#if MATCL_HAS_FMA
+#if MATCL_ARCHITECTURE_HAS_FMA
     #include "matcl-core/details/simd/simd.h"
 #endif
 
@@ -1289,7 +1290,7 @@ namespace scal_func
     {
         // do not use std::fma, this function is incredibly slow on VS
 
-        #if MATCL_HAS_FMA
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return simd::fma(x, y, z);
         #else
             return x * y + z;
@@ -1301,7 +1302,7 @@ namespace scal_func
     {
         // do not use std::fma, this function is incredibly slow on VS
 
-        #if MATCL_HAS_FMA
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return simd::fms(x, y, z);
         #else
             return x * y - z;
@@ -1311,7 +1312,7 @@ namespace scal_func
     {
         // do not use std::fma, this function is incredibly slow on VS
 
-        #if MATCL_HAS_FMA
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return simd::fms(x, y, z);
         #else
             return x * y - z;

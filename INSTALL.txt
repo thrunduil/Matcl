@@ -24,19 +24,18 @@
 ------------------------------------------------------------------
                 Machine dependent parameters
 ------------------------------------------------------------------    
+machine dependent parameters are defined in "matcl-core/general/machine.h"
+
 1.  MATCL_CACHE_LINE_SIZE 
-        - defined in matcl-core/config.h
         - cache line size in bytes; 
         - this is optimization parameters, invalid value may have 
           negative impact on performance
-2.  MATCL_AVX_ALIGNMENT 
-        - defined in matcl-core/config.h
+2.  MATCL_SIMD_ALIGNMENT 
         - alignment for SIMD related types
         - this is optimization parameters, invalid value may have 
           negative impact on performance
-3.  MATCL_HAS_FMA 
-        - defined in matcl-core/config.h
-        - is FMA instruction available? (AVX2 instruction set is required)
+3.  MATCL_ARCHITECTURE_HAS_[INSTR]
+        - is instruction set [INSTR] available?
         - should be set to 1 whenever possible; in this way faster and
           more accurate versions of library functions will be used
 
