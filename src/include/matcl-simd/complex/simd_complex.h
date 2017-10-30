@@ -17,13 +17,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 #pragma once
 
-#include "matcl-simd/simd.h"
+#include "matcl-simd/config.h"
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+#if MATCL_USE_MATCL_COMPLEX
+    #include "matcl-core/matrix/scalar_types.h"
+    #include "matcl-core/details/complex_details.h"
+#endif
 
+namespace matcl { namespace simd
+{
+
+#if MATCL_USE_MATCL_COMPLEX
+
+    using simd_double_complex   = matcl::Complex;
+    using simd_single_complex   = matcl::Float_complex;
+
+#else
+
+    //types simd_double_complex and simd_single_complex
+    //must already be defined by a user in the namespace matcl::simd
+
+#endif
+
+}}

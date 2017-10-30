@@ -51,6 +51,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\error\exception_classes.h" />
     <ClInclude Include="..\..\src\include\matcl-core\error\exception_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\error\safe_string_message.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\general\machine.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\thread.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\type_traits.h" />

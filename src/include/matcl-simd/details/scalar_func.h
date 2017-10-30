@@ -20,10 +20,22 @@
 
 #pragma once
 
-#include "matcl-simd/simd.h"
+// implementation of missing simd functions
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+#include <cmath>
+
+namespace matcl { namespace simd { namespace scalar_func
+{
+
+inline float round(float f)     { return std::round(f); };
+inline float floor(float f)     { return std::floor(f); };
+inline float ceil(float f)      { return std::ceil(f); };
+inline float trunc(float f)     { return std::trunc(f); };
+
+inline double round(double f)   { return std::round(f); };
+inline double floor(double f)   { return std::floor(f); };
+inline double ceil(double f)    { return std::ceil(f); };
+inline double trunc(double f)   { return std::trunc(f); };
+
+}}}
 

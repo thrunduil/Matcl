@@ -20,10 +20,18 @@
 
 #pragma once
 
-#include "matcl-simd/simd.h"
+#include "matcl-simd/config.h"
 
-#include "matcl-simd/func/simd_func_complex.h"
-#include "matcl-simd/complex/simd_complex_impl.h"
-#include "matcl-simd/func/simd_func_complex.inl"
-#include "matcl-simd/default_simd_complex.h"
+//TODO
+//#include "matcl-simd/arch/nosimd/func/simd_128.h"
+//#include "matcl-simd/arch/nosimd/func/simd_256.h"
 
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    #include "matcl-simd/arch/sse/func_complex/simd_float_128_func.h"
+    #include "matcl-simd/arch/sse/func_complex/simd_double_128_func.h"
+#endif
+
+#if MATCL_ARCHITECTURE_HAS_AVX
+    #include "matcl-simd/arch/avx/func_complex/simd_float_256_func.h"
+    #include "matcl-simd/arch/avx/func_complex/simd_double_256_func.h"
+#endif

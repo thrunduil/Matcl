@@ -21,53 +21,61 @@
 #pragma once
 
 #include "matcl-core/details/simd/simd.h"
-#include <immintrin.h>
+#include "matcl-simd/simd.h"
 
 namespace matcl
 {
 
-inline double simd::fma(const double& x, const double& y, const double& z)
+force_inline
+double simd::fma(const double& x, const double& y, const double& z)
 {
-    __m128d xs  = _mm_set1_pd(x);
-    __m128d ys  = _mm_set1_pd(y);
-    __m128d zs  = _mm_set1_pd(z);
+    using simd_type = matcl::simd::default_simd_type<double>::type;
 
-    __m128d ret = _mm_fmadd_pd(xs, ys, zs);
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
 
-    return ret.m128d_f64[0];
+    simd_type ret = fma(xs, ys, zs);
+    return ret.get<0>();
 };
 
-inline float simd::fma(const float& x, const float& y, const float& z)
+force_inline
+float simd::fma(const float& x, const float& y, const float& z)
 {
-    __m128 xs   = _mm_set1_ps(x);
-    __m128 ys   = _mm_set1_ps(y);
-    __m128 zs   = _mm_set1_ps(z);
+    using simd_type = matcl::simd::default_simd_type<float>::type;
 
-    __m128 ret  = _mm_fmadd_ps(xs, ys, zs);
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
 
-    return ret.m128_f32[0];
+    simd_type ret = fma(xs, ys, zs);
+    return ret.get<0>();
 }
 
-inline double simd::fms(const double& x, const double& y, const double& z)
+force_inline
+double simd::fms(const double& x, const double& y, const double& z)
 {
-    __m128d xs  = _mm_set1_pd(x);
-    __m128d ys  = _mm_set1_pd(y);
-    __m128d zs  = _mm_set1_pd(z);
+    using simd_type = matcl::simd::default_simd_type<double>::type;
 
-    __m128d ret = _mm_fmsub_pd(xs, ys, zs);
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
 
-    return ret.m128d_f64[0];
+    simd_type ret = fms(xs, ys, zs);
+    return ret.get<0>();
 }
 
-inline float  simd::fms(const float& x, const float& y, const float& z)
+force_inline
+float simd::fms(const float& x, const float& y, const float& z)
 {
-    __m128 xs   = _mm_set1_ps(x);
-    __m128 ys   = _mm_set1_ps(y);
-    __m128 zs   = _mm_set1_ps(z);
+    using simd_type = matcl::simd::default_simd_type<float>::type;
 
-    __m128 ret  = _mm_fmsub_ps(xs, ys, zs);
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
 
-    return ret.m128_f32[0];
+    simd_type ret = fms(xs, ys, zs);
+    return ret.get<0>();
 }
 
 }

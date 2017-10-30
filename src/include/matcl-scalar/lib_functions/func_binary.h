@@ -305,25 +305,25 @@ typename md::real_unify_types_promote<S1,Float>::type
                             nextbelow(const S1& x);
 
 // return a * b + c; 
-// when fma instruction is available (i.e. MATCL_HAS_FMA = 1), then only
-// one rounding at the end of computation is performed, otherwise this 
-// function is evaluated as two arithmetic operations
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as two arithmetic operations
 inline Real                 fma(Real a, Real b, Real c);
 inline Float                fma(Float a, Float b, Float c);
 inline Object               fma(const Object& a, const Object& b, const Object& c);
 
 // return a * b - c
-// when fma instruction is available (i.e. MATCL_HAS_FMA = 1), then only
-// one rounding at the end of computation is performed, otherwise this 
-// function is evaluated as two arithmetic operations
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as two arithmetic operations
 inline Real                 fms(Real a, Real b, Real c);
 inline Float                fms(Float a, Float b, Float c);
 inline Object               fms(const Object& a, const Object& b, const Object& c);
 
 // compute a * b + c * d 
-// when fma instruction is available (i.e. MATCL_HAS_FMA = 1), then Kahan's
-// algorithm is used, which gives high accuracy of the result, otherwise 
-// this function is evaluated according to definition
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then Kahan's algorithm is used, which gives high accuracy of the result,
+// otherwise this function is evaluated according to definition
 inline Real                 dot2_ac(Real a, Real b, Real c, Real d);
 inline Float                dot2_ac(Float a, Float b, Float c, Float d);
 inline Object               dot2_ac(const Object& a, const Object& b, const Object& c, 
