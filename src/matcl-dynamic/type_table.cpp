@@ -486,6 +486,9 @@ struct delayed_func_vec : matcl_new_delete, global_object
 
     void clear_global() override
     {
+        for(int i = (int)m_data.size() - 1; i >= 0 ; --i)
+            delete m_data[i];
+
         m_data.clear();
     };
 
@@ -501,6 +504,9 @@ struct delayed_templ_func_vec : matcl_new_delete, global_object
 
     void clear_global() override
     {
+        for (size_t i = 0; i < m_data.size(); ++i)
+            delete m_data[i];
+
         m_data.clear();
     };
 

@@ -33,7 +33,7 @@ struct simd_compl_reverse<double, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX2 && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_AVX2
             static const int control = 2 + (3 << 2) + (0 << 4) + (1 << 6);
             return _mm256_permute4x64_pd(x.data.data, control);
         #else
@@ -57,7 +57,7 @@ struct simd_compl_mult<double, 256, avx_tag>
         __m256d x_re   = _mm256_shuffle_pd(x.data.data, x.data.data, 0);    // real of x in both
         __m256d x_imy  = _mm256_mul_pd(x_im, y_flip);                       // (x.im*y.im, x.im*y.re)
 
-        #if MATCL_ARCHITECTURE_HAS_FMA && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return  _mm256_fmaddsub_pd(x_re, y.data.data, x_imy);           // a_re * y -/+ x_imy
         #else
             __m256d x_rey = _mm256_mul_pd(x_re, y.data.data);               // a_re * y
@@ -96,9 +96,9 @@ struct simd_compl_div<double, 256, avx_tag>
         __m256d x_im   = _mm256_shuffle_pd(x.data.data, x.data.data, 0xF);  // imag of x in both
         __m256d x_re   = _mm256_shuffle_pd(x.data.data, x.data.data, 0);    // real of x in both
         __m256d x_rey  = _mm256_mul_pd(x_re, y.data.data);                  // (x.re*b.re, x.re*b.im)  
-        simd_real yy   = _mm256_mul_pd(y.data.data, y.data.data);           // (y.re*y.re, y.im*y.im)
+        __m256d yy     = _mm256_mul_pd(y.data.data, y.data.data);           // (y.re*y.re, y.im*y.im)
 
-        #if MATCL_ARCHITECTURE_HAS_FMA && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_FMA
             __m256d n      = _mm256_fmsubadd_pd(x_im, y_flip, x_rey);       // x_re * y +/- x_imy
         #else
             __m256d x_imy   = _mm256_mul_pd(x_im, y_flip);                  // (x_im * y_im, x_im * y_re)
@@ -107,8 +107,7 @@ struct simd_compl_div<double, 256, avx_tag>
             __m256d n       = sub_add(xv_imy, -xv_rey).data;                // x_re * y +/- x_imy
         #endif
         
-        __m256d yy2    = horizontal_add(yy,yy).data;                        // (y.re*y.re + y.im*y.im) 
-
+        __m256d yy2 = _mm256_hadd_pd(yy,yy);                                // (y.re*y.re + y.im*y.im) 
         return _mm256_div_pd(n, yy2);
     };
 };

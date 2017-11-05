@@ -459,11 +459,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline Float sqrt(Float arg)		
     {
-        return ::sqrt(arg);
+        return std::sqrt(arg);
     };
     force_inline Real sqrt(Real arg)		
     {
-        return ::sqrt(arg);
+        return std::sqrt(arg);
     };
 
     //--------------------------------------------------------------------
@@ -531,11 +531,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline Float log(Float arg)		
     {
-        return ::log(arg);
+        return std::log(arg);
     };
     force_inline Real log(Real arg)		
     {
-        return ::log(arg);
+        return std::log(arg);
     };
 
     //--------------------------------------------------------------------
@@ -582,11 +582,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline Float log10(Float arg)		
     {
-        return ::log10(arg);
+        return std::log10(arg);
     };
     force_inline Real log10(Real arg)		
     {
-        return ::log10(arg);
+        return std::log10(arg);
     };
 
     //--------------------------------------------------------------------
@@ -608,11 +608,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double log2(double a) 
     { 
-        return ::log2(a);
+        return std::log2(a);
     };
     force_inline float log2(float a) 
     { 
-        return ::log2(a);
+        return std::log2(a);
     };
 
     //--------------------------------------------------------------------
@@ -634,41 +634,41 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double tan(double x)
     {
-        return ::tan(x);
+        return std::tan(x);
     };
     force_inline float tan(float x)
     {
-        return ::tan(x);
+        return std::tan(x);
     };
 
     //--------------------------------------------------------------------
     force_inline double cos(double x)
     {
-        return ::cos(x);
+        return std::cos(x);
     };
     force_inline float cos(float x)
     {
-        return ::cos(x);
+        return std::cos(x);
     };
 
     //--------------------------------------------------------------------
     force_inline double sec(double x) 
     { 
-        return 1. / ::cos(x); 
+        return 1. / std::cos(x); 
     };
     force_inline float sec(float x) 
     { 
-        return 1.f / ::cos(x); 
+        return 1.f / std::cos(x); 
     };
 
     //--------------------------------------------------------------------
     force_inline double sin(double x)
     {
-        return ::sin(x);
+        return std::sin(x);
     };
     force_inline float sin(float x)
     {
-        return ::sin(x);
+        return std::sin(x);
     };
 
     //--------------------------------------------------------------------
@@ -696,11 +696,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline Float exp(Float arg)		
     {
-        return ::exp(arg);
+        return std::exp(arg);
     };
     force_inline Real exp(Real arg)		
     {
-        return ::exp(arg);
+        return std::exp(arg);
     };
 
     //--------------------------------------------------------------------
@@ -800,11 +800,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double floor(double a) 
     {
-        return ::floor(a);
+        return std::floor(a);
     }
     force_inline float floor(float a) 
     {
-        return ::floor(a);
+        return std::floor(a);
     }
 
     //--------------------------------------------------------------------
@@ -824,11 +824,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double ceil(double a) 
     {
-        return ::ceil(a);
+        return std::ceil(a);
     }
     force_inline float ceil(float a) 
     {
-        return ::ceil(a);
+        return std::ceil(a);
     }
 
     //--------------------------------------------------------------------
@@ -958,11 +958,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double atan(double x)
     {
-        return ::atan(x);
+        return std::atan(x);
     };
     force_inline float atan(float x)
     {
-        return ::atan(x);
+        return std::atan(x);
     };
 
     //--------------------------------------------------------------------
@@ -978,11 +978,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double asec(double x) 
     { 
-        return ::acos(1./x); 
+        return std::acos(1./x); 
     };
     force_inline float asec(float x) 
     { 
-        return ::acos(1.f/x); 
+        return std::acos(1.f/x); 
     };
 
     //--------------------------------------------------------------------
@@ -1004,11 +1004,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double acsc(double x) 
     { 
-        return ::asin(1./x); 
+        return std::asin(1./x); 
     };
     force_inline float acsc(float x) 
     { 
-        return ::asin(1.f/x); 
+        return std::asin(1.f/x); 
     };
 
     //--------------------------------------------------------------------
@@ -1030,21 +1030,21 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline Float tanh(Float arg)		
     {
-        return ::tanh(arg);
+        return std::tanh(arg);
     };
     force_inline Real tanh(Real arg)		
     {
-        return ::tanh(arg);
+        return std::tanh(arg);
     };
 
     //--------------------------------------------------------------------
     force_inline double coth(double x) 
     { 
-        return 1./::tanh(x); 
+        return 1./std::tanh(x); 
     };
     force_inline float coth(float x) 
     { 
-        return 1.f/::tanh(x); 
+        return 1.f/std::tanh(x); 
     };
 
     //--------------------------------------------------------------------
@@ -1060,21 +1060,21 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double sech(double x) 
     { 
-        return 1./::cosh(x); 
+        return 1./std::cosh(x); 
     };
     force_inline float sech(float x) 
     { 
-        return 1.f/::cosh(x); 
+        return 1.f/std::cosh(x); 
     };
 
     //--------------------------------------------------------------------
     force_inline double sinh(double x) 
     { 
-        return ::sinh(x); 
+        return std::sinh(x); 
     };
     force_inline float sinh(float x) 
     { 
-        return ::sinh(x); 
+        return std::sinh(x); 
     };
 
     //--------------------------------------------------------------------
@@ -1092,11 +1092,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double csch(double x) 
     { 
-        return 1./::sinh(x); 
+        return 1./std::sinh(x); 
     }
     force_inline float csch(float x) 
     { 
-        return 1.f/::sinh(x); 
+        return 1.f/std::sinh(x); 
     }
 
     //--------------------------------------------------------------------

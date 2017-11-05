@@ -128,6 +128,7 @@ MATCL_REGISTER_BIN_FUNC(f_dim, matcl::fdim, Integer, Integer, mdyf::fdim)
 
 MATCL_REGISTER_BIN_FUNC(f_copysign, matcl::copysign, Integer, Integer, mdyf::copysign)
 MATCL_REGISTER_BIN_FUNC(f_nextafter, matcl::nextafter, Integer, Integer, mdyf::nextafter)
+MATCL_REGISTER_BIN_FUNC(f_float_distance, matcl::float_distance, Integer, Integer, mdyf::float_distance)
 
 MATCL_REGISTER_BIN_FUNC(f_pow, matcl::pow, Integer, Integer, mdyf::pow)
 MATCL_REGISTER_BIN_FUNC(f_pow_c, matcl::pow_c, Integer, Integer, mdyf::pow_c)

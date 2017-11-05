@@ -49,9 +49,6 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_abs{};
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_horizontal_add{};
-
-template<class Val, int Bits, class Simd_tag>
 struct simd_sub_add{};
 
 template<class Val, int Bits, class Simd_tag>

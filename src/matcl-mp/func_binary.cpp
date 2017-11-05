@@ -81,6 +81,26 @@ mp_float mp_nextafter_helper::eval(const mp_float& x, const mp_float& y)
     return a;
 };
 
+mp_float mp_float_distance_helper::eval(const mp_float& x, const mp_float& y)
+{
+    precision p1    = x.get_precision();
+    precision p2    = y.get_precision();
+    precision p     = std::min(p1, p2);
+
+    if (is_nan(x) || is_nan(y))
+        return constants::mp_nan(p);
+
+    mp_float xp     = mp_float(x, p);
+    mp_float yp     = mp_float(y, p);
+
+    if (xp == yp)
+        return mp_float(0.0, p);
+
+    //TODO: this is only an approximation
+    mp_float dist   = abs(xp - yp) / eps(xp);
+    return dist;
+};
+
 mp_float mp_copysign_helper::eval(const mp_float& x, const mp_float& y)
 {
     mp_float ret(x.get_precision());

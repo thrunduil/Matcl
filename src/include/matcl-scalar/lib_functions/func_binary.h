@@ -304,6 +304,14 @@ template<class S1, class Enable = typename md::enable_if_scalar_ntobj<S1,void>::
 typename md::real_unify_types_promote<S1,Float>::type
                             nextbelow(const S1& x);
 
+// return number of distinct representations between x and y;
+// if one of arguments is NaN, then NaN is returned;
+// the result is always a signed integer value stored in double type
+// not defined for complex arguments
+template<class S1, class S2, class Enable = typename md::enable_if_scalar2<S1,S2,void>::type>
+typename md::real_unify_types_promote<S1,Float>::type
+                            float_distance(const S1& x, const S2& y);
+
 // return a * b + c; 
 // when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
 // then only one rounding at the end of computation is performed, otherwise

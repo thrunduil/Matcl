@@ -7,9 +7,6 @@
     <Filter Include="Source Files\include">
       <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\src">
-      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\include\arch">
       <UniqueIdentifier>{de2c349f-7060-4a5d-9559-b9ac09d98f4f}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Source Files\include\arch\avx\func_complex">
       <UniqueIdentifier>{1a748464-0083-404c-9f15-c496f85c53d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\arch\nosimd\func">
+      <UniqueIdentifier>{c3fdbf3e-a00e-489a-bf31-f0a57f209b15}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,11 +165,12 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_complex_impl.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\matcl-simd\test_simd_compile.cpp">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\func\simd_func.h">
+      <Filter>Source Files\include\arch\nosimd\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_256_func.h">
+      <Filter>Source Files\include\arch\sse\func</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\arch\sse\simd_128.inl">

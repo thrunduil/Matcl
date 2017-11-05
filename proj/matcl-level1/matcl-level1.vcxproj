@@ -19,64 +19,66 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_double_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_float_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_double_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_float_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\helpers.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\default_simd.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\default_simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\func\simd_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_128.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_func_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_func_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_double_128_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_float_128_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_float_128_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_128.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_256_compl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\config.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\default_simd.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\default_simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex_def.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_def.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_general.h" />
+    <ProjectReference Include="..\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\matcl-dynamic\matcl-dynamic.vcxproj">
+      <Project>{87be42f1-96bb-43d6-a8a8-9b5d8510bfe8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-simd\arch\avx\simd_256.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_128.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_256.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\simd_impl.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_double_128_func.h" />
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_128.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_256.inl" />
-    <None Include="..\..\src\include\matcl-simd\complex\simd_128_compl.inl" />
-    <None Include="..\..\src\include\matcl-simd\complex\simd_256_compl.inl" />
-    <None Include="..\..\src\include\matcl-simd\func\simd_func.inl" />
-    <None Include="..\..\src\include\matcl-simd\func\simd_func_complex.inl" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\config.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\details\eval_row_functors.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\details\simd_details.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_apby.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_axpby.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_basic.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_other.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas\level1\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\include\matcl-blas\level1\details\level1_apby.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\details\level1_axpby.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\details\level1_basic.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\details\level1_other.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\amy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\apby.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\apy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ax.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axmy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpby.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpby_test.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpy_test.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ay.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\mx.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\mxpby.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\my.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xmy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xmya.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xpby.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xpya.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ymx.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ypx.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ypxm.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\copy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_mat.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_mat_XY.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_scal.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\set_val.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\swap.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\other\apx_abs.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\other\axypz.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\other\dot.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\other\xy.inl" />
+    <None Include="..\..\src\include\matcl-blas\level1\impl\other\x_abs.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-blas\test_level1_compile.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{18102545-1797-4A67-8D54-E64826B582C8}</ProjectGuid>
+    <ProjectGuid>{E97C04A8-1280-441B-94F8-F98174D2F117}</ProjectGuid>
     <RootNamespace>symbolic</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <SccProjectName>

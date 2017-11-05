@@ -60,11 +60,6 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 abs(const simd<Val, Bits, Simd_tag>& x);
 
-// horizontally add adjacent pairs of floating-point elements in x and y
-template<class Val, int Bits, class Simd_tag>
-simd<Val, Bits, Simd_tag> 
-horizontal_add(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
-
 // alternatively subtract and add elements in x and y
 // i.e. form [x[0] - y[0], x[1] + y[1], x[2] - y[2], x[3] + y[3], ...]
 template<class Val, int Bits, class Simd_tag>

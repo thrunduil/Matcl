@@ -910,6 +910,15 @@ Ret                     nextafter(const object_type<T>& x, const S& y);
 template<class T, class S, class Ret = result_of::result_of_nextafter<T,S>::type_object>
 Ret                     nextafter(const T& x, const object_type<S>& y);
 
+// return number of distinct representations between x and y;
+// if one of arguments is NaN, then NaN is returned;
+template<class T, class S, class Ret = result_of::result_of_float_distance<T,S>::type_object>
+Ret                     float_distance(const object_type<T>& x, const object_type<S>& y);
+template<class T, class S, class Ret = result_of::result_of_float_distance<T,S>::type_object>
+Ret                     float_distance(const object_type<T>& x, const S& y);
+template<class T, class S, class Ret = result_of::result_of_float_distance<T,S>::type_object>
+Ret                     float_distance(const T& x, const object_type<S>& y);
+
 // return the next representable value after x in the direction +INF
 template<class T>
 typename result_of::result_of_nextabove<T>::type_object

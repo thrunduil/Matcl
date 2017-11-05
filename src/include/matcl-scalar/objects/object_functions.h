@@ -129,6 +129,10 @@ MATCL_SCALAR_EXPORT object     copysign(const object& x, const object& y);
 // return the next representable value after x in the direction of y
 MATCL_SCALAR_EXPORT object     nextafter(const object& x, const object& y);
 
+// return number of distinct representations between x and y;
+// if one of arguments is NaN, then NaN is returned;
+MATCL_SCALAR_EXPORT object     float_distance(const object& x, const object& y);
+
 // return the next representable value after x in the direction +INF
 MATCL_SCALAR_EXPORT object     nextabove(const object& x);
 

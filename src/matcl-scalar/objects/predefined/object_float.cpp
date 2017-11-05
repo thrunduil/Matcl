@@ -134,6 +134,10 @@ MATCL_REGISTER_BIN_FUNC(nextafter_1, matcl::nextafter, Float, Integer, mdyf::nex
 MATCL_REGISTER_BIN_FUNC(nextafter_2, matcl::nextafter, Float, Float, mdyf::nextafter)
 MATCL_REGISTER_BIN_FUNC(nextafter_3, matcl::nextafter, Float, Real, mdyf::nextafter)
 
+MATCL_REGISTER_BIN_FUNC(float_distance_1, matcl::float_distance, Float, Integer, mdyf::float_distance)
+MATCL_REGISTER_BIN_FUNC(float_distance_2, matcl::float_distance, Float, Float, mdyf::float_distance)
+MATCL_REGISTER_BIN_FUNC(float_distance_3, matcl::float_distance, Float, Real, mdyf::float_distance)
+
 MATCL_REGISTER_3_FUNC(fma, matcl::fma, Float, Float, Float, mdyf::fma)
 MATCL_REGISTER_3_FUNC(fms, matcl::fma, Float, Float, Float, mdyf::fms)
 MATCL_REGISTER_4_FUNC(dot2_ac, matcl::dot2_ac, Float, Float, Float, Float, mdyf::dot2_ac)

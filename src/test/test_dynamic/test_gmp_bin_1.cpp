@@ -357,6 +357,31 @@ struct eval_nextafter : eval_binfunc<eval_nextafter>
         return OReal(0);
     };
 };
+
+struct eval_float_distance : eval_binfunc<eval_float_distance>
+{
+    eval_float_distance(Integer c) : eval_binfunc(c,false,false,false,false,1.0,true){};
+
+    template<class T1, class T2, class Enable = typename enable_not_complex<T1,T2>::type>
+    static auto eval(const T1& a1, const T2& a2) 
+        -> decltype(float_distance(std::declval<T1>() , std::declval<T2>()))
+    {
+        return float_distance(a1,a2);
+    };
+
+    template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
+    static auto eval(const T1& a1, const T2& a2) -> Real
+    {
+        return Real(0);
+    };
+
+    template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
+    static auto eval(const T1& a1, const T2& a2) -> OReal
+    {
+        return OReal(0);
+    };
+};
+
 struct eval_copysign : eval_binfunc<eval_copysign>
 {
     eval_copysign(Integer c) : eval_binfunc(c,true,true,false,false,1.0,true){};
@@ -468,6 +493,12 @@ double gmp_tester_bin::test_fdim(const Scalar& s1, const Scalar& s2, Integer cod
 double gmp_tester_bin::test_nextafter(const Scalar& s1, const Scalar& s2, Integer code)
 {
     eval_nextafter test(code);
+    return test.make(s1, s2);
+};
+
+double gmp_tester_bin::test_float_distance(const Scalar& s1, const Scalar& s2, Integer code)
+{
+    eval_float_distance test(code);
     return test.make(s1, s2);
 };
 

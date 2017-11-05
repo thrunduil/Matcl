@@ -339,6 +339,14 @@ object dynamic::nextafter(const object& x, const object& y)
     return ret;
 };
 
+object dynamic::float_distance(const object& x, const object& y)
+{
+    using func  = functions::float_distance;
+    object ret;
+    eval_function::eval(func::eval(), ret, x, y);
+    return ret;
+};
+
 object dynamic::nextabove(const object& a)
 {
     using func  = functions::nextabove;

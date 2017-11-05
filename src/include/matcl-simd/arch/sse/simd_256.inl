@@ -147,13 +147,13 @@ simd<double, 256, sse_tag>::broadcast(const double& arr)
 force_inline void simd<double, 256, sse_tag>::store(double* arr, std::true_type aligned) const
 {
     data[0].store(arr, aligned);
-    data[0].store(arr + 2, aligned);
+    data[1].store(arr + 2, aligned);
 };
 
 force_inline void simd<double, 256, sse_tag>::store(double* arr, std::false_type not_aligned) const
 {
     data[0].store(arr, not_aligned);
-    data[0].store(arr + 2, not_aligned);
+    data[1].store(arr + 2, not_aligned);
 };
 
 template<int Step>
@@ -279,13 +279,13 @@ simd<float, 256, sse_tag>::broadcast(const float& arr)
 force_inline void simd<float, 256, sse_tag>::store(float* arr, std::true_type aligned) const
 {
     data[0].store(arr, aligned);
-    data[0].store(arr + 4, aligned);
+    data[1].store(arr + 4, aligned);
 };
 
 force_inline void simd<float, 256, sse_tag>::store(float* arr, std::false_type not_aligned) const
 {
     data[0].store(arr, not_aligned);
-    data[0].store(arr + 4, not_aligned);
+    data[1].store(arr + 4, not_aligned);
 };
 
 template<int Step>

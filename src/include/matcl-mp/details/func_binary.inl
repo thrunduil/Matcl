@@ -44,6 +44,11 @@ struct MATCL_MP_EXPORT mp_nextafter_helper
     static mp_float eval(const mp_float& x, const mp_float& y);
 };
 
+struct MATCL_MP_EXPORT mp_float_distance_helper
+{
+    static mp_float eval(const mp_float& x, const mp_float& y);
+};
+
 struct MATCL_MP_EXPORT mp_copysign_helper
 {
     static mp_float eval(const mp_float& x, const mp_float& y);
@@ -276,6 +281,19 @@ mp_float matcl::nextafter(const T1& x, const T2& y)
     mp_float yp(y);
 
     return mmd::mp_nextafter_helper::eval(xp,yp);
+};
+
+template<class T1, class T2, class Enable>
+mp_float matcl::float_distance(const T1& x, const T2& y)
+{
+    static_assert(!md::is_complex<T1>::value && !md::is_complex<T2>::value, 
+                  "not available for complex");
+
+    namespace mmd = matcl :: mp :: details;
+    mp_float xp(x);
+    mp_float yp(y);
+
+    return mmd::mp_float_distance_helper::eval(xp,yp);
 };
 
 template<class T1, class T2, class Enable>
