@@ -24,6 +24,7 @@
 #pragma warning(push)
 #pragma warning(disable:4127)   //conditional expression is constant
 #include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/next.hpp>
 #pragma warning(pop)
 
 namespace matcl { namespace raw { namespace details { namespace scal_func
@@ -45,6 +46,21 @@ namespace matcl { namespace raw { namespace details { namespace scal_func
         BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(boost__ignore_policy)
     }
 };};}}
+
+namespace matcl { namespace raw { namespace details
+{
+
+float scal_func::float_distance(float x, float y)
+{
+    return std::abs(ignore_errors::float_distance(x, y));
+};
+
+double scal_func::float_distance(double x, double y)
+{
+    return std::abs(ignore_errors::float_distance(x, y));
+}
+
+}}}
 
 namespace matcl { namespace details
 {

@@ -3254,6 +3254,7 @@ void test_dynamic::test_compile_func_binary_notcompl()
     atan2(x,y);
     copysign(x,y);
     nextafter(x,y);
+    float_distance(x,y);
     nextabove(x);
     nextbelow(x);
     fdim(x,y);

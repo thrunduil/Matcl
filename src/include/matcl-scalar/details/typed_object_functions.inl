@@ -212,6 +212,15 @@ struct eval_nextafter
 };
 
 template<class Ret, class T, class S>
+struct eval_float_distance
+{
+    static Ret eval(const T& a, const S& b)
+    {
+        return Ret(float_distance(a,b));
+    }
+};
+
+template<class Ret, class T, class S>
 struct eval_min
 {
     static Ret eval(const T& a, const S& b)
@@ -1987,6 +1996,22 @@ template<class T, class S, class Ret>
 Ret dynamic::nextafter(const T& a, const object_type<S>& b)
 {
     return matcl::unqualified_call::eval_nextafter<Ret,T,S>::eval(a,b.get());
+}
+
+template<class T, class S, class Ret>
+Ret dynamic::float_distance(const object_type<T>& a, const object_type<S>& b)
+{
+    return matcl::unqualified_call::eval_float_distance<Ret,T,S>::eval(a.get(),b.get());
+}
+template<class T, class S, class Ret>
+Ret dynamic::float_distance(const object_type<T>& a, const S& b)
+{
+    return matcl::unqualified_call::eval_float_distance<Ret,T,S>::eval(a.get(),b);
+}
+template<class T, class S, class Ret>
+Ret dynamic::float_distance(const T& a, const object_type<S>& b)
+{
+    return matcl::unqualified_call::eval_float_distance<Ret,T,S>::eval(a,b.get());
 }
 
 template<class T, class S, class Ret>

@@ -30,8 +30,5 @@
     #define MATCL_USE_MATCL_COMPLEX 0
 #endif
 
-//TODO:
-#define MATCL_TEST_MISSING 0
-
 // machine dependent parameters
 #include "matcl-core/general/machine.h"

@@ -172,6 +172,7 @@ class gmp_tester_bin
         void            test_rem();
         void            test_fdim();
         void            test_nextafter();
+        void            test_float_distance();
         void            test_copysign();
         void            test_pow_spec();
         void            test_min();
@@ -187,6 +188,7 @@ class gmp_tester_bin
         void            test_hypot_obj();
         void            test_copysign_obj();
         void            test_nextafter_obj();
+        void            test_float_distance_obj();
         void            test_mod_obj();
         void            test_rem_obj();
         void            test_fdim_obj();
@@ -226,6 +228,7 @@ class gmp_tester_bin
         double          test_rem(const Scalar& s1, const Scalar& s2, Integer code);
         double          test_fdim(const Scalar& s1, const Scalar& s2, Integer code);
         double          test_nextafter(const Scalar& s1, const Scalar& s2, Integer code);
+        double          test_float_distance(const Scalar& s1, const Scalar& s2, Integer code);
         double          test_copysign(const Scalar& s1, const Scalar& s2, Integer code);
 
         double          test_add(const Scalar& s1, const Scalar& s2, Integer code);
@@ -261,6 +264,7 @@ class gmp_tester_bin
         double          test_hypot_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);
         double          test_copysign_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);
         double          test_nextafter_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);
+        double          test_float_distance_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);
         double          test_mod_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);
         double          test_rem_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);
         double          test_fdim_obj(const Scalar_ext& s1, const Scalar_ext& s2, Integer code);

@@ -169,11 +169,20 @@ mp_float        atan2(const T1& x, const T2& y, precision p = precision());
 
 // return the next representable value after x in the direction of y;
 // return mp_float value with the same precision as the the first argument
-// (possible after conversion to mp_float)
+// (possibly after conversion to mp_float)
 // not available for complex arguments
 template<class T1, class T2, 
         class Enable = typename mp::details::enable_mp_bin<T1,T2,void>::type>
 mp_float        nextafter(const T1& x, const T2& y);
+
+// return number of distinct representations between x and y;
+// if x and y have different precision, then x or y is converted to
+// mp_float with precision p being the smallest precision of x and y;
+// if one of arguments is NaN, then NaN is returned;
+// not available for complex arguments
+template<class T1, class T2, 
+        class Enable = typename mp::details::enable_mp_bin<T1,T2,void>::type>
+mp_float        float_distance(const T1& x, const T2& y);
 
 // returns a value with the magnitude of x and the sign of y
 // not available for complex arguments

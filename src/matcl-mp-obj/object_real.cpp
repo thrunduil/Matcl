@@ -115,6 +115,7 @@ MATCL_REGISTER_BIN_FUNC(atan2_1, atan2, mp_float, mp_float, mdyf::atan2)
 MATCL_REGISTER_BIN_FUNC(hypot_1, hypot, mp_float, mp_float, mdyf::hypot)
 MATCL_REGISTER_BIN_FUNC(f_copysign, copysign, mp_float, mp_float, mdyf::copysign)
 MATCL_REGISTER_BIN_FUNC(f_nextafter, nextafter, mp_float, mp_float, mdyf::nextafter)
+MATCL_REGISTER_BIN_FUNC(f_float_distance, float_distance, mp_float, mp_float, mdyf::float_distance)
 
 MATCL_REGISTER_BIN_FUNC(ldexp1, matcl::ldexp, mp_float, Integer, mdyf::ldexp)
 MATCL_REGISTER_BIN_FUNC(frexp1, matcl::frexp, mp_float, Integer&, mdyf::frexp)

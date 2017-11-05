@@ -19,65 +19,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_double_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_float_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_double_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_float_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\helpers.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\default_simd.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\default_simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\func\simd_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_128.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_func_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_func_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_double_128_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_float_128_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_256_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_float_128_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_128.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_256_compl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex_impl.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\config.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\default_simd.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\default_simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex_def.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_def.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_general.h" />
+    <ClCompile Include="..\..\..\src\test\test_simd\main.cpp" />
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd.cpp" />
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_compile.cpp" />
+    <ClCompile Include="..\..\..\src\test\test_simd\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-simd\arch\avx\simd_256.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_128.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_256.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\simd_impl.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_double_128_func.h" />
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_128.inl" />
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_256.inl" />
-    <None Include="..\..\src\include\matcl-simd\complex\simd_128_compl.inl" />
-    <None Include="..\..\src\include\matcl-simd\complex\simd_256_compl.inl" />
-    <None Include="..\..\src\include\matcl-simd\func\simd_func.inl" />
-    <None Include="..\..\src\include\matcl-simd\func\simd_func_complex.inl" />
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd.h" />
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd_config.h" />
+    <ClInclude Include="..\..\..\src\test\test_simd\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl-dynamic\matcl-dynamic.vcxproj">
+      <Project>{87be42f1-96bb-43d6-a8a8-9b5d8510bfe8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl-scalar\matcl-scalar.vcxproj">
+      <Project>{16dbdfff-845b-4087-b27b-b39631d7f63e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{18102545-1797-4A67-8D54-E64826B582C8}</ProjectGuid>
-    <RootNamespace>symbolic</RootNamespace>
+    <ProjectGuid>{3C2C0793-E0B8-4CB6-B997-B65F1532FBAC}</ProjectGuid>
+    <RootNamespace>test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <SccProjectName>
     </SccProjectName>
@@ -87,22 +52,23 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -131,10 +97,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
@@ -150,98 +116,107 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;MATCL_TEST_SIMD_FMA; WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;MATCL_TEST_SIMD_FMA; WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OmitFramePointers>false</OmitFramePointers>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;MATCL_TEST_SIMD_FMA; WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>false</Profile>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;MATCL_TEST_SIMD_FMA; WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <Profile>false</Profile>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\gsli\$(Platform)\$(Configuration);..\..\..\dbs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>

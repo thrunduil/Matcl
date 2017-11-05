@@ -88,14 +88,6 @@ ms::abs(const simd<Val, Bits, Simd_tag>& x)
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag> 
-ms::horizontal_add(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
-{
-    return simd_horizontal_add<Val, Bits, Simd_tag>::eval(x, y);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline
-simd<Val, Bits, Simd_tag> 
 ms::sub_add(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
     return simd_sub_add<Val, Bits, Simd_tag>::eval(x, y);
@@ -139,7 +131,7 @@ force_inline
 simd<Val, Bits, Simd_tag>  
 ms::min(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_min<Val, Bits, Simd_tag>::eval(x);
+    return simd_min<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -147,7 +139,7 @@ force_inline
 simd<Val, Bits, Simd_tag>  
 ms::eeq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_eeq<Val, Bits, Simd_tag>::eval(x);
+    return simd_eeq<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -155,7 +147,7 @@ force_inline
 simd<Val, Bits, Simd_tag>  
 ms::neq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_neq<Val, Bits, Simd_tag>::eval(x);
+    return simd_neq<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -163,7 +155,7 @@ force_inline
 simd<Val, Bits, Simd_tag>  
 ms::lt(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_lt<Val, Bits, Simd_tag>::eval(x);
+    return simd_lt<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -171,7 +163,7 @@ force_inline
 simd<Val, Bits, Simd_tag>  
 ms::gt(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_gt<Val, Bits, Simd_tag>::eval(x);
+    return simd_gt<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -179,7 +171,7 @@ force_inline
 simd<Val, Bits, Simd_tag> 
 ms::leq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_leq<Val, Bits, Simd_tag>::eval(x);
+    return simd_leq<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -187,7 +179,7 @@ force_inline
 simd<Val, Bits, Simd_tag>  
 ms::geq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_geq<Val, Bits, Simd_tag>::eval(x);
+    return simd_geq<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>

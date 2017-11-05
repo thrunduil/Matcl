@@ -25,31 +25,45 @@
 //--------------------------------------------------------------------------
 // cache line size in bytes; this is optimization parameters, invalid value
 // may have negative impact on performance
-#define MATCL_CACHE_LINE_SIZE   64
+#ifndef MATCL_CACHE_LINE_SIZE
+    #define MATCL_CACHE_LINE_SIZE   64
+#endif
 
 // set value of this macro to 1 if SSE2 instruction set is available and 0
 // otherwise
-#define MATCL_ARCHITECTURE_HAS_SSE2 1
+#ifndef MATCL_ARCHITECTURE_HAS_SSE2
+    #define MATCL_ARCHITECTURE_HAS_SSE2 1
+#endif
 
 // set value of this macro to 1 if SSE3 instruction set is available and 0
 // otherwise
-#define MATCL_ARCHITECTURE_HAS_SSE3 1
+#ifndef MATCL_ARCHITECTURE_HAS_SSE3
+    #define MATCL_ARCHITECTURE_HAS_SSE3 1
+#endif
 
 // set value of this macro to 1 if SSE4.1 instruction set is available and 0
 // otherwise
-#define MATCL_ARCHITECTURE_HAS_SSE41 1
+#ifndef MATCL_ARCHITECTURE_HAS_SSE41
+    #define MATCL_ARCHITECTURE_HAS_SSE41 1
+#endif
 
 // set value of this macro to 1 if AVX instruction set is available and 0
 // otherwise
-#define MATCL_ARCHITECTURE_HAS_AVX 1
+#ifndef MATCL_ARCHITECTURE_HAS_AVX
+    #define MATCL_ARCHITECTURE_HAS_AVX 1
+#endif
 
 // set value of this macro to 1 if AVX2 instruction set is available and 0
 // otherwise
-#define MATCL_ARCHITECTURE_HAS_AVX2 1
+#ifndef MATCL_ARCHITECTURE_HAS_AVX2
+    #define MATCL_ARCHITECTURE_HAS_AVX2 1
+#endif
 
 // set value of this macro to 1 if FMA instruction set is available and 0
 // otherwise
-#define MATCL_ARCHITECTURE_HAS_FMA 1
+#ifndef MATCL_ARCHITECTURE_HAS_FMA
+    #define MATCL_ARCHITECTURE_HAS_FMA 1
+#endif
 
 // alignment for SIMD related types; this is optimization parameters, invalid
 // value may have negative impact on performance

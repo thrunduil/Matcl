@@ -24,6 +24,14 @@
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-scalar/details/func_unary.inl"
 
+namespace matcl { namespace raw { namespace details { namespace scal_func
+{
+
+MATCL_SCALAR_EXPORT float   float_distance(float x, float y);
+MATCL_SCALAR_EXPORT double  float_distance(double x, double y);
+
+}}}}
+
 namespace matcl { namespace details
 {
 
@@ -32,7 +40,7 @@ struct MATCL_SCALAR_EXPORT basic_binfunc_helper
 {
     using SF = typename unify_types<S,Float>::type;
 
-    static SF   eval_powm1(const S& x, const S& y);
+    static SF   eval_powm1(const S& x, const S& y);    
 };
 
 template<class S>
@@ -66,6 +74,23 @@ struct nextafter_helper<Object>
     static Object eval(const Object& x, const Object& y)
     {
         return dynamic::nextafter(x,y);
+    }
+};
+
+template<class S>
+struct float_distance_helper
+{
+    static S eval(const S& x, const S& y)
+    {
+        return mrd::scal_func::float_distance(x,y);
+    }
+};
+template<>
+struct float_distance_helper<Object>
+{
+    static Object eval(const Object& x, const Object& y)
+    {
+        return dynamic::float_distance(x,y);
     }
 };
 
@@ -392,6 +417,17 @@ matcl::nextafter(const S1& x, const S2& y)
 
     using S = typename md::real_unify_types_promote<S1,Float>::type;
     return details::nextafter_helper<S>::eval(S(real(x)), S(real(y)));
+}
+
+template<class S1, class S2, class Enable>
+typename md::real_unify_types_promote<S1,Float>::type
+matcl::float_distance(const S1& x, const S2& y)
+{
+    static_assert(!md::is_complex<S1>::value && !md::is_complex<S2>::value, 
+                  "not available for complex");
+
+    using S = typename md::real_unify_types_promote<S1,Float>::type;
+    return details::float_distance_helper<S>::eval(S(real(x)), S(real(y)));
 }
 
 template<class S1, class Enable>

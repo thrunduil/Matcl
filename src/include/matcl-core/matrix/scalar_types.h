@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-core/config.h"
+#include "matcl-core/memory/global_objects.h"
 #include <stdint.h>
 
 namespace matcl
@@ -43,7 +44,7 @@ using Float_complex = matcl::complex<Float>;
 // double precision complex number
 using Complex       = matcl::complex<Real>;
 
-// 64-bit singned integer
+// 64-bit signed integer
 using Integer_64    = int64_t;
 
 };

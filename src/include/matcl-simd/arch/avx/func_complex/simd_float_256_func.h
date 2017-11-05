@@ -34,7 +34,7 @@ struct simd_compl_reverse<float, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX2 && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_AVX2
             static const __m256i control = details::vector_8_int<1,0,3,2,5,4,7,6>();
             return _mm256_permutevar8x32_ps(x.data.data, control);
         #else
@@ -58,7 +58,7 @@ struct simd_compl_mult<float, 256, avx_tag>
         __m256 x_re   = _mm256_shuffle_ps(x.data.data, x.data.data, 0xA0);  // real of x in both
         __m256 x_imy  = _mm256_mul_ps(x_im, y_flip);                        // (x.im*y.im, x.im*y.re)
 
-        #if MATCL_ARCHITECTURE_HAS_FMA && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return  _mm256_fmaddsub_ps(x_re, y.data.data, x_imy);           // a_re * y -/+ x_imy
         #else
             __m256 x_rey = _mm256_mul_ps(x_re, y.data.data);                // a_re * y
@@ -99,7 +99,7 @@ struct simd_compl_div<float, 256, avx_tag>
         __m256 x_rey  = _mm256_mul_ps(x_re, y.data.data);                   // (x.re*b.re, x.re*b.im)  
         __m256 yy     = _mm256_mul_ps(y.data.data, y.data.data);            // (y.re*y.re, y.im*y.im)
 
-        #if MATCL_ARCHITECTURE_HAS_FMA && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_FMA
             __m256 n      = _mm256_fmsubadd_ps(x_im, y_flip, x_rey);        // x_re * y +/- x_imy
         #else
             __m256 x_imy    = _mm256_mul_ps(x_im, y_flip);                  // (x_im * y_im, x_im * y_re)

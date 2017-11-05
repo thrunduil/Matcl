@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include "test_simd_config.h"
 #include "matcl-simd/simd.h"
 #include "matcl-simd/simd_complex.h"
 

@@ -51,6 +51,7 @@ void gmp_tester_bin::make()
 
     test_copysign();
     test_nextafter();    
+    test_float_distance();    
     test_hypot();
     test_atan2();    
     test_mod();
@@ -59,6 +60,7 @@ void gmp_tester_bin::make()
 
     test_copysign_obj();
     test_nextafter_obj();    
+    test_float_distance_obj();    
     test_hypot_obj();
     test_atan2_obj();    
     test_mod_obj();
@@ -615,6 +617,26 @@ void gmp_tester_bin::test_nextafter()
         std::cout << "nextafter" << ": FAILED" << "\n";
 };
 
+void gmp_tester_bin::test_float_distance()
+{
+    std::vector<Scalar> scalars1;
+    std::vector<Scalar> scalars2;
+
+    Integer N   = 1000;
+    rand_scalars::make(scalars1, N, false);
+    rand_scalars::make(scalars2, N, false);
+
+    double res = 0.0;
+
+    for (Integer i = 0; i < 1000; ++i)
+        res     += test_float_distance(scalars1[i],scalars2[i], i);
+
+    if (res == 0.0)
+        std::cout << "float_distance: ok" << "\n";
+    else
+        std::cout << "float_distance" << ": FAILED" << "\n";
+};
+
 void gmp_tester_bin::test_copysign()
 {
     std::vector<Scalar> scalars1;
@@ -712,6 +734,26 @@ void gmp_tester_bin::test_nextafter_obj()
         std::cout << "nextafter obj: ok" << "\n";
     else
         std::cout << "nextafter obj" << ": FAILED" << "\n";
+};
+
+void gmp_tester_bin::test_float_distance_obj()
+{
+    std::vector<Scalar_ext> scalars1;
+    std::vector<Scalar_ext> scalars2;
+
+    Integer N   = 1000;
+    rand_scalars_ext::make(scalars1, N, false);
+    rand_scalars_ext::make(scalars2, N, false);
+
+    double res = 0.0;
+
+    for (Integer i = 0; i < 1000; ++i)
+        res     += test_float_distance_obj(scalars1[i],scalars2[i], i);
+
+    if (res == 0.0)
+        std::cout << "float_distance obj: ok" << "\n";
+    else
+        std::cout << "float_distance obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_atan2_obj()

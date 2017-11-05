@@ -311,6 +311,12 @@ const function_name& functions::nextafter::eval()
     return f;
 };
 
+const function_name& functions::float_distance::eval()
+{
+    static function_name f("float_distance");
+    return f;
+};
+
 const function_name& functions::nextbelow::eval()
 {
     static function_name f("nextbelow");

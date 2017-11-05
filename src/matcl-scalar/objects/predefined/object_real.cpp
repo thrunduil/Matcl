@@ -128,6 +128,7 @@ MATCL_REGISTER_BIN_FUNC(f_rem, matcl::rem, Real, Real, mdyf::rem)
 
 MATCL_REGISTER_BIN_FUNC(copysign_1, matcl::copysign, Real, Real, mdyf::copysign)
 MATCL_REGISTER_BIN_FUNC(nextafter_1, matcl::nextafter, Real, Real, mdyf::nextafter)
+MATCL_REGISTER_BIN_FUNC(float_distance_1, matcl::float_distance, Real, Real, mdyf::float_distance)
 
 MATCL_REGISTER_3_FUNC(fma, matcl::fma, Real, Real, Real, mdyf::fma)
 MATCL_REGISTER_3_FUNC(fms, matcl::fma, Real, Real, Real, mdyf::fms)

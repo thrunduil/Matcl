@@ -35,8 +35,8 @@ struct simd_reverse<float, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX2 && !MATCL_TEST_MISSING
-            static const __m256i control = details::vector_8_int<0,1,2,3,4,5,6,7>();
+        #if MATCL_ARCHITECTURE_HAS_AVX2
+            static const __m256i control = details::vector_8_int<7,6,5,4,3,2,1,0>();
             return _mm256_permutevar8x32_ps(x.data, control);
         #else
             return simd_type(reverse(x.extract_high()), reverse(x.extract_low()));
@@ -113,23 +113,7 @@ struct simd_sum_all<float, 256, avx_tag>
     force_inline
     static float eval(const simd_type& x)
     {
-        simd_type s = horizontal_add(x, x);
-        s           = horizontal_add(s,s);
-        s           = horizontal_add(s,s);
-
-        return s.get<0>();
-    };
-};
-
-template<>
-struct simd_horizontal_add<float, 256, avx_tag>
-{
-    using simd_type = simd<float, 256, avx_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& x, const simd_type& y)
-    {
-        __m256 s   = _mm256_hadd_ps(x.data, y.data);
+        float s = sum_all(x.extract_low()) + sum_all(x.extract_high());
         return s;
     };
 };
@@ -155,7 +139,7 @@ struct simd_fma<float, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
     {
-        #if MATCL_ARCHITECTURE_HAS_FMA && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return _mm256_fmadd_ps( x.data, y.data, z.data);
         #else
             return x * y + z;
@@ -171,7 +155,7 @@ struct simd_fms<float, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
     {
-        #if MATCL_ARCHITECTURE_HAS_FMA && !MATCL_TEST_MISSING
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return _mm256_fmsub_ps( x.data, y.data, z.data);
         #else
             return x * y - z;

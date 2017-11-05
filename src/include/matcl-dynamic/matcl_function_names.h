@@ -130,6 +130,10 @@ struct MATCL_DYN_EXPORT nextbelow       { static const function_name& eval(); };
 // return the next representable value after x in the direction of +INF
 struct MATCL_DYN_EXPORT nextabove       { static const function_name& eval(); };
 
+// return number of distinct representations between x and y;
+// if one of arguments is NaN, then NaN is returned;
+struct MATCL_DYN_EXPORT float_distance  { static const function_name& eval(); };
+
 // determines if the given value is negative
 struct MATCL_DYN_EXPORT signbit         { static const function_name& eval(); };    
 
