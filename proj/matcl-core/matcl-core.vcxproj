@@ -59,6 +59,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\IO\base_io.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\disp_data_provider.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\disp_stream.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\IO\logger.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\output_stream.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\scalar_io.h" />
     <ClInclude Include="..\..\src\include\matcl-core\IO\serialize.h" />

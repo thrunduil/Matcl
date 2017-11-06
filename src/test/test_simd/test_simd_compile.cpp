@@ -39,21 +39,29 @@ template float simd<float, 128, nosimd_tag>::get<2>() const;
 template void simd<float, 128, nosimd_tag>::scatter<2>(float*) const;
 template double simd<double, 128, nosimd_tag>::get<2>() const;
 template void simd<double, 128, nosimd_tag>::scatter<2>(double*) const;
+template void simd<float, 128, nosimd_tag>::set<2>(float);
+template void simd<double, 128, nosimd_tag>::set<2>(double);
 
 template float simd<float, 256, nosimd_tag>::get<2>() const;
 template void simd<float, 256, nosimd_tag>::scatter<2>(float*) const;
 template double simd<double, 256, nosimd_tag>::get<2>() const;
 template void simd<double, 256, nosimd_tag>::scatter<2>(double*) const;
+template void simd<float, 256, nosimd_tag>::set<2>(float);
+template void simd<double, 256, nosimd_tag>::set<2>(double);
 
 template simd_single_complex simd_compl<float, 128, nosimd_tag>::get<2>() const;
 template void simd_compl<float, 128, nosimd_tag>::scatter<2>(simd_single_complex*) const;
 template simd_double_complex simd_compl<double, 128, nosimd_tag>::get<2>() const;
 template void simd_compl<double, 128, nosimd_tag>::scatter<2>(simd_double_complex*) const;
+template void simd_compl<float, 128, nosimd_tag>::set<2>(const simd_single_complex&);
+template void simd_compl<double, 128, nosimd_tag>::set<2>(const simd_double_complex&);
 
 template simd_single_complex simd_compl<float, 256, nosimd_tag>::get<2>() const;
 template void simd_compl<float, 256, nosimd_tag>::scatter<2>(simd_single_complex*) const;
 template simd_double_complex simd_compl<double, 256, nosimd_tag>::get<2>() const;
 template void simd_compl<double, 256, nosimd_tag>::scatter<2>(simd_double_complex*) const;
+template void simd_compl<float, 256, nosimd_tag>::set<2>(const simd_single_complex&);
+template void simd_compl<double, 256, nosimd_tag>::set<2>(const simd_double_complex&);
 
 #if MATCL_ARCHITECTURE_HAS_SSE2
     template simd<float, 128, sse_tag>;
@@ -70,22 +78,29 @@ template void simd_compl<double, 256, nosimd_tag>::scatter<2>(simd_double_comple
     template void simd<float, 128, sse_tag>::scatter<2>(float*) const;
     template double simd<double, 128, sse_tag>::get<2>() const;
     template void simd<double, 128, sse_tag>::scatter<2>(double*) const;
+    template void simd<float, 128, sse_tag>::set<2>(float);
+    template void simd<double, 128, sse_tag>::set<2>(double);
 
     template float simd<float, 256, sse_tag>::get<2>() const;
     template void simd<float, 256, sse_tag>::scatter<2>(float*) const;
     template double simd<double, 256, sse_tag>::get<2>() const;
     template void simd<double, 256, sse_tag>::scatter<2>(double*) const;
+    template void simd<float, 256, sse_tag>::set<2>(float);
+    template void simd<double, 256, sse_tag>::set<2>(double);
 
     template simd_single_complex simd_compl<float, 128, sse_tag>::get<2>() const;
     template void simd_compl<float, 128, sse_tag>::scatter<2>(simd_single_complex*) const;
     template simd_double_complex simd_compl<double, 128, sse_tag>::get<2>() const;
     template void simd_compl<double, 128, sse_tag>::scatter<2>(simd_double_complex*) const;
+    template void simd_compl<float, 128, sse_tag>::set<2>(const simd_single_complex&);
+    template void simd_compl<double, 128, sse_tag>::set<2>(const simd_double_complex&);
 
     template simd_single_complex simd_compl<float, 256, sse_tag>::get<2>() const;
     template void simd_compl<float, 256, sse_tag>::scatter<2>(simd_single_complex*) const;
     template simd_double_complex simd_compl<double, 256, sse_tag>::get<2>() const;
     template void simd_compl<double, 256, sse_tag>::scatter<2>(simd_double_complex*) const;
-
+    template void simd_compl<float, 256, sse_tag>::set<2>(const simd_single_complex&);
+    template void simd_compl<double, 256, sse_tag>::set<2>(const simd_double_complex&);
 #endif
 
 #if MATCL_ARCHITECTURE_HAS_AVX
@@ -98,11 +113,15 @@ template void simd_compl<double, 256, nosimd_tag>::scatter<2>(simd_double_comple
     template void simd<float, 256, avx_tag>::scatter<2>(float*) const;
     template double simd<double, 256, avx_tag>::get<2>() const;
     template void simd<double, 256, avx_tag>::scatter<2>(double*) const;
+    template void simd<float, 256, avx_tag>::set<2>(float);
+    template void simd<double, 256, avx_tag>::set<2>(double);
 
     template simd_single_complex simd_compl<float, 256, avx_tag>::get<2>() const;
     template void simd_compl<float, 256, avx_tag>::scatter<2>(simd_single_complex*) const;
     template simd_double_complex simd_compl<double, 256, avx_tag>::get<2>() const;
     template void simd_compl<double, 256, avx_tag>::scatter<2>(simd_double_complex*) const;
+    template void simd_compl<float, 256, avx_tag>::set<2>(const simd_single_complex&);
+    template void simd_compl<double, 256, avx_tag>::set<2>(const simd_double_complex&);
 
 #endif
 

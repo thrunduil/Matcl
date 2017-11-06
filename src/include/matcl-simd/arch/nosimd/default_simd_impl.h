@@ -28,13 +28,13 @@ namespace matcl { namespace simd
 template<>
 struct default_simd_type<double>
 { 
-    using type = simd<double, 64, nosimd_tag>; 
+    using type = simd<double, 256, nosimd_tag>; 
 };
 
 template<>
 struct default_simd_type<float>
 { 
-    using type = simd<float, 32, nosimd_tag>; 
+    using type = simd<float, 256, nosimd_tag>; 
 };
 
 }}

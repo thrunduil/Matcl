@@ -138,7 +138,7 @@ simd_compl<double, 128, Simd_tag>::store(simd_double_complex* arr, std::false_ty
 
 template<class Simd_tag>
 force_inline
-simd_double_complex simd_compl<double, 128, Simd_tag>::get(Integer pos) const
+simd_double_complex simd_compl<double, 128, Simd_tag>::get(int pos) const
 {
     (void)pos;
     return simd_double_complex(data.get<0>(), data.get<1>());
@@ -150,6 +150,23 @@ force_inline
 simd_double_complex simd_compl<double, 128, Simd_tag>::get() const
 {
     return simd_double_complex(data.get<0>(), data.get<1>());
+};
+
+template<class Simd_tag>
+force_inline
+void simd_compl<double, 128, Simd_tag>::set(int pos, const simd_double_complex& val)
+{
+    data.set(pos*2, real(val));
+    data.set(pos*2 + 1, imag(val));
+};
+
+template<class Simd_tag>
+template<int Pos>
+force_inline
+void simd_compl<double, 128, Simd_tag>::set(const simd_double_complex& val)
+{
+    data.set<Pos*2>(real(val));
+    data.set<Pos*2 + 1>(imag(val));
 };
 
 template<class Simd_tag>
@@ -275,6 +292,23 @@ force_inline
 simd_single_complex simd_compl<float, 128, Simd_tag>::get() const
 {
     return simd_single_complex(data.get<Pos*2>(), data.get<Pos*2 + 1>());
+};
+
+template<class Simd_tag>
+force_inline
+void simd_compl<float, 128, Simd_tag>::set(int pos, const simd_single_complex& val)
+{
+    data.set(pos*2, real(val));
+    data.set(pos*2 + 1, imag(val));
+};
+
+template<class Simd_tag>
+template<int Pos>
+force_inline
+void simd_compl<float, 128, Simd_tag>::set(const simd_single_complex& val)
+{
+    data.set<Pos*2>(real(val));
+    data.set<Pos*2 + 1>(imag(val));
 };
 
 template<class Simd_tag>

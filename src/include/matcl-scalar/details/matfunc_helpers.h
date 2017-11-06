@@ -283,15 +283,16 @@ struct min_helper_impl
 {
     static ret eval(const S1& arg1, const S2& arg2)
     {
-        return gt_helper<S1,S2>::eval(arg1,arg2) ? ret(arg2) : ret(arg1); 
+        return (arg1 < arg2)? ret(arg1) : ret(arg2);
     };
 };
+
 template<class ret,class S1,class S2>
 struct min_helper_impl<ret,true,false,S1,S2>
 {
     static ret eval(const S1& arg1, const S2& arg2)
     {
-        return md::gt_c(arg1,arg2)? ret(arg2) : ret(arg1); 
+        return md::lt_c(arg1,arg2)? ret(arg1) : ret(arg2); 
     };
 };
 template<class ret,class S1,class S2>

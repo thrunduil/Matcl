@@ -24,8 +24,6 @@
 #include "matcl-scalar/object.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
 
-//TODO: simd version of min, max, cmp
-
 namespace matcl
 {
 

@@ -43,6 +43,9 @@
     <Filter Include="Source Files\include\arch\nosimd\func">
       <UniqueIdentifier>{c3fdbf3e-a00e-489a-bf31-f0a57f209b15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\arch\nosimd\func_complex">
+      <UniqueIdentifier>{c25f53a1-606d-45d0-a647-cec3db092fb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-simd\config.h">
@@ -170,6 +173,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_256_func.h">
       <Filter>Source Files\include\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\func_complex\simd_compl_func.h">
+      <Filter>Source Files\include\arch\nosimd\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_256_func_compl.h">
+      <Filter>Source Files\include\arch\sse\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\complex\recover_nan.h">
+      <Filter>Source Files\include\complex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -101,6 +101,13 @@ class alignas(16) simd<double, 128, nosimd_tag>
         // get i-th element from the vector; Pos is 0-based
         template<int Pos>
         double          get() const;
+
+        // set i-th element of the vector; pos is 0-based
+        void            set(int pos, double val);
+
+        // set i-th element of the vector; Pos is 0-based
+        template<int Pos>
+        void            set(double val);
 };
 
 //-------------------------------------------------------------------
@@ -172,6 +179,13 @@ class alignas(16) simd<float, 128, nosimd_tag>
         // get i-th element from the vector; Pos is 0-based
         template<int Pos>
         float           get() const;
+
+        // set i-th element of the vector; pos is 0-based
+        void            set(int pos, float val);
+
+        // set i-th element of the vector; Pos is 0-based
+        template<int Pos>
+        void            set(float val);
 };
 
 }}

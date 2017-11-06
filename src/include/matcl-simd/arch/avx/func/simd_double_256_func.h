@@ -279,7 +279,7 @@ struct simd_neq<double, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        return _mm256_cmp_pd(x.data, y.data, _CMP_NEQ_OQ);
+        return _mm256_cmp_pd(x.data, y.data, _CMP_NEQ_UQ);
     };
 };
 
@@ -328,6 +328,37 @@ struct simd_geq<double, 256, avx_tag>
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
         return _mm256_cmp_pd(x.data, y.data, _CMP_GE_OQ);
+    };
+};
+
+template<>
+struct simd_any_nan<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        __m256d nt  = _mm256_cmp_pd(x.data, x.data, _CMP_NEQ_UQ);
+        int res     = _mm256_movemask_pd(nt);
+
+        return res != 0;
+    };
+};
+
+template<>
+struct simd_any_inf<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        simd_type inf   = simd_type(std::numeric_limits<double>::infinity());
+        __m256d nt      = _mm256_cmp_pd(x.data, inf.data, _CMP_EQ_OQ);
+        int res         = _mm256_movemask_pd(nt);
+
+        return res != 0;
     };
 };
 

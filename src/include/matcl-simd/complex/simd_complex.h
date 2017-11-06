@@ -26,6 +26,8 @@
     #include "matcl-core/details/complex_details.h"
 #endif
 
+#include "matcl-simd/simd_general.h"
+
 namespace matcl { namespace simd
 {
 
@@ -42,3 +44,22 @@ namespace matcl { namespace simd
 #endif
 
 }}
+
+namespace matcl { namespace simd { namespace details
+{
+
+template<class T>   struct real_type                        {};
+template<>          struct real_type<simd_single_complex>   { using type = float; };
+template<>          struct real_type<simd_double_complex>   { using type = double; };
+
+template<class T, int Bits, class Tag>
+                    struct real_type<simd_compl<T,Bits,Tag>>{ using type = simd<T,Bits,Tag>; };
+
+template<class T>   struct complex_type                     {};
+template<>          struct complex_type<float>              { using type = simd_single_complex; };
+template<>          struct complex_type<double>             { using type = simd_double_complex; };
+
+template<class T, int Bits, class Tag>
+                    struct complex_type<simd<T,Bits,Tag>>   { using type = simd_compl<T,Bits,Tag>; };
+
+}}}

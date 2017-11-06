@@ -104,6 +104,19 @@ double simd<double, 128, nosimd_tag>::get() const
 };
 
 force_inline
+void simd<double, 128, nosimd_tag>::set(int pos, double val)
+{ 
+    data[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<double, 128, nosimd_tag>::set(double val)
+{ 
+    data[Pos] = val; 
+};
+
+force_inline
 simd<double, 128, nosimd_tag> simd<double, 128, nosimd_tag>::zero()
 {
     simd<double, 128, nosimd_tag> ret;
@@ -224,6 +237,19 @@ force_inline
 float simd<float, 128, nosimd_tag>::get() const
 { 
     return data[Pos]; 
+};
+
+force_inline
+void simd<float, 128, nosimd_tag>::set(int pos, float val)
+{ 
+    data[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<float, 128, nosimd_tag>::set(float val)
+{ 
+    data[Pos] = val; 
 };
 
 force_inline

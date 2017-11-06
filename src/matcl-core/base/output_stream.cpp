@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/IO/output_stream.h"
+#include "matcl-core/IO/logger.h"
 #include "matcl-core/memory/alloc.h"
 
 #include <iostream>
@@ -69,6 +70,9 @@ void output_stream_from_ostream_synchronized::disp(std::stringstream& of)
 
 class global_output_stream_impl : public output_stream
 {
+    private:
+        using log_ptr   = std::shared_ptr<std::ofstream>;
+
     public:
         global_output_stream_impl()
         {
@@ -76,8 +80,16 @@ class global_output_stream_impl : public output_stream
             m_stream_impl = output_stream_ptr(new stream_type(std::cout));
         };
 
+        virtual ~global_output_stream_impl() override
+        {
+            close_logger();
+        };
+
         virtual void disp(std::stringstream& of) override
         {
+            if (m_log_stream)
+                m_log_stream->disp(of);
+
             return get_stream_impl()->disp(of);
         };
 
@@ -85,6 +97,7 @@ class global_output_stream_impl : public output_stream
         {
             return get_stream_impl();
         };
+
         void set_current(const output_stream_ptr& ptr)
         {
             if (!ptr)
@@ -100,15 +113,51 @@ class global_output_stream_impl : public output_stream
             m_stream_impl = ptr;
         };
 
+        void set_logger(const log_ptr& log)
+        {
+            close_logger();
+
+            if (!log)
+                return;
+
+            m_logger        = log;
+            m_log_stream    = output_stream_ptr(new output_stream_from_ostream_synchronized(*log));
+        };
+
+        const log_ptr& get_logger() const
+        {
+            return m_logger;
+        };
+
+        const output_stream_ptr& get_logger_output_stream() const
+        {
+            return m_log_stream;
+        }
+
+    private:
+        void close_logger()
+        {
+            if (m_logger)
+            {
+                m_logger->flush();
+                m_logger->close();
+
+                m_logger        = log_ptr();
+                m_log_stream    = output_stream_ptr();
+            }
+        };
+
     private:
         output_stream_ptr   get_stream_impl() { return m_stream_impl; }
         output_stream_ptr   m_stream_impl;
+
+        log_ptr             m_logger;
+        output_stream_ptr   m_log_stream;
 };
 
 output_stream_ptr matcl::global_output_stream()
 {
     static output_stream_ptr impl(new global_output_stream_impl());
-
     return impl;
 };
 
@@ -126,6 +175,30 @@ void set_current_output_stream(const output_stream_ptr& os)
         = dynamic_cast<global_output_stream_impl*>(global_output_stream().get());
 
     return impl->set_current(os);
+};
+
+void matcl::set_logger(const std::shared_ptr<std::ofstream>& log_file)
+{
+    global_output_stream_impl* impl 
+        = dynamic_cast<global_output_stream_impl*>(global_output_stream().get());
+
+    return impl->set_logger(log_file);
+};
+
+std::shared_ptr<std::ofstream> matcl::get_logger()
+{
+    global_output_stream_impl* impl 
+        = dynamic_cast<global_output_stream_impl*>(global_output_stream().get());
+
+    return impl->get_logger();
+};
+ 
+output_stream_ptr matcl::get_logger_output_stream()
+{
+    global_output_stream_impl* impl 
+        = dynamic_cast<global_output_stream_impl*>(global_output_stream().get());
+
+    return impl->get_logger_output_stream();
 };
 
 #include <windows.h>

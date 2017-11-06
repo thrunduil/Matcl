@@ -98,6 +98,19 @@ double simd<double, 256, nosimd_tag>::get() const
     return data[Pos]; 
 };
 
+force_inline
+void simd<double, 256, nosimd_tag>::set(int pos, double val)
+{ 
+    data[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<double, 256, nosimd_tag>::set(double val)
+{ 
+    data[Pos] = val; 
+};
+
 force_inline simd<double, 256, nosimd_tag>::simd_half
 simd<double, 256, nosimd_tag>::extract_low() const
 {
@@ -279,6 +292,19 @@ force_inline
 float simd<float, 256, nosimd_tag>::get() const  
 { 
     return data[Pos]; 
+};
+
+force_inline
+void simd<float, 256, nosimd_tag>::set(int pos, float val)
+{ 
+    data[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<float, 256, nosimd_tag>::set(float val)
+{ 
+    data[Pos] = val; 
 };
 
 force_inline simd<float, 256, nosimd_tag>::simd_half

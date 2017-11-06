@@ -113,6 +113,13 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
         // get i-th element from the vector; Pos is 0-based
         template<int Pos>
         simd_double_complex get() const;
+
+        // set i-th element of the vector; pos is 0-based
+        void                set(int pos, const simd_double_complex& val);
+
+        // set i-th element of the vector; Pos is 0-based
+        template<int Pos>
+        void                set(const simd_double_complex& val);
 };
 
 //-------------------------------------------------------------------
@@ -199,6 +206,13 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         // get i-th element from the vector; Pos is 0-based
         template<int Pos>
         simd_single_complex get() const;
+
+        // set i-th element of the vector; pos is 0-based
+        void                set(int pos, const simd_single_complex& val);
+
+        // set i-th element of the vector; Pos is 0-based
+        template<int Pos>
+        void                set(const simd_single_complex& val);
 };
 
 }}
