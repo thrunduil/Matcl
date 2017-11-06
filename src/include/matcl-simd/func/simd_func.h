@@ -147,4 +147,18 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 trunc(const simd<Val, Bits, Simd_tag>& x);
 
+// return true if at least element in the vector x is +INF
+template<class Val, int Bits, class Simd_tag>
+bool
+any_inf(const simd<Val, Bits, Simd_tag>& x);
+
+// return true if at least element in the vector x is NAN
+template<class Val, int Bits, class Simd_tag>
+bool
+any_nan(const simd<Val, Bits, Simd_tag>& x);
+
+// print content of a vector to a stream
+template<class Val, int Bits, class Simd_tag>
+std::ostream& operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& x);
+
 }}

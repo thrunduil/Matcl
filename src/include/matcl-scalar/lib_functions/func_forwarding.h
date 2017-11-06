@@ -454,7 +454,7 @@ typename md::unify_types<S1,S2>::type
 min(const S1& x, const S2& y, Args...) 
 {
     using ret = typename md::unify_types<S1,S2>::type;
-    return (x > y)? ret(y) : ret(x); 
+    return (x < y)? ret(x) : ret(y); 
 };
 
 // call pow for complex

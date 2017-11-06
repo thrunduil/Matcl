@@ -27,7 +27,10 @@ namespace matcl { namespace simd
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_compl_reverse{};
-    
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_compl_conj{};
+
 template<class Val, int Bits, class Simd_tag>
 struct simd_compl_mult{};
 
@@ -42,12 +45,6 @@ struct simd_compl_minus{};
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_compl_uminus{};
-
-template<class Val, int Bits, class Simd_tag>
-struct simd_compl_fma{};
-
-template<class Val, int Bits, class Simd_tag>
-struct simd_compl_fms{};
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_compl_sum_all{};

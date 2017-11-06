@@ -40,6 +40,14 @@ ms::reverse(const simd_compl<Val, Bits, Simd_tag>& x)
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd_compl<Val, Bits, Simd_tag> 
+ms::conj(const simd_compl<Val, Bits, Simd_tag>& x)
+{
+    return simd_compl_conj<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag> 
 ms::operator*(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y)
 {
     return simd_compl_mult<Val, Bits, Simd_tag>::eval(x, y);
@@ -50,7 +58,7 @@ force_inline
 simd_compl<Val, Bits, Simd_tag>
 ms::operator*(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y)
 {
-    return simd_compl_mult<Val, Bits, Simd_tag>::eval(x, y);
+    return simd_compl_mult<Val, Bits, Simd_tag>::eval_rc(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -58,7 +66,7 @@ force_inline
 simd_compl<Val, Bits, Simd_tag>
 ms::operator*(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
-    return simd_compl_mult<Val, Bits, Simd_tag>::eval(x, y);
+    return simd_compl_mult<Val, Bits, Simd_tag>::eval_cr(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -67,6 +75,22 @@ simd_compl<Val, Bits, Simd_tag>
 ms::operator/(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y)
 {
     return simd_compl_div<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+ms::operator/(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y)
+{
+    return simd_compl_div<Val, Bits, Simd_tag>::eval_rc(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+ms::operator/(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return simd_compl_div<Val, Bits, Simd_tag>::eval_cr(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -95,46 +119,41 @@ ms::operator-(const simd_compl<Val, Bits, Simd_tag>& x)
 
 template<class Val, int Bits, class Simd_tag>
 force_inline
-simd_compl<Val, Bits, Simd_tag>
-ms::fma(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
-                       const simd_compl<Val, Bits, Simd_tag>& z)
-{
-    return simd_compl_fma<Val, Bits, Simd_tag>::eval(x, y, z);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline
-simd_compl<Val, Bits, Simd_tag>
-ms::fma(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
-                       const simd_compl<Val, Bits, Simd_tag>& z)
-{
-    return simd_compl_fma<Val, Bits, Simd_tag>::eval(x, y, z);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline
-simd_compl<Val, Bits, Simd_tag>
-ms::fms(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
-                       const simd_compl<Val, Bits, Simd_tag>& z)
-{
-    return simd_compl_fms<Val, Bits, Simd_tag>::eval(x, y, z);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline
-simd_compl<Val, Bits, Simd_tag>
-ms::fms(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
-                       const simd_compl<Val, Bits, Simd_tag>& z)
-{
-    return simd_compl_fms<Val, Bits, Simd_tag>::eval(x, y, z);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline
 typename simd_compl<Val, Bits, Simd_tag>::value_type
 ms::sum_all(const simd_compl<Val, Bits, Simd_tag>& x)
 {
     return simd_compl_sum_all<Val, Bits, Simd_tag>::eval(x);
 };
+
+template<class Val, int Bits, class Simd_tag>
+std::ostream& ms::operator<<(std::ostream& os, const simd_compl<Val, Bits, Simd_tag>& x)
+{
+    int vec_size    = simd_compl<Val, Bits, Simd_tag>::vector_size;
+
+    os << "{" << x.get(0);
+
+    for (int i = 1; i < vec_size; ++i)
+        os << ", " << x.get(i);
+
+    os << "}";
+
+    return os;
+};
+
+// return true if at least element in the vector x is +INF
+template<class Val, int Bits, class Simd_tag>
+force_inline bool
+any_inf(const simd_compl<Val, Bits, Simd_tag>& x)
+{
+    return any_inf(x.data);
+}
+
+// return true if at least element in the vector x is NAN
+template<class Val, int Bits, class Simd_tag>
+force_inline bool
+any_nan(const simd_compl<Val, Bits, Simd_tag>& x)
+{
+    return any_nan(x.data);
+}
 
 }}

@@ -112,6 +112,13 @@ class alignas(32) simd<double, 256, avx_tag>
         template<int Pos>
         double          get() const;
 
+        // set i-th element of the vector; pos is 0-based
+        void            set(int pos, double val);
+
+        // set i-th element of the vector; Pos is 0-based
+        template<int Pos>
+        void            set(double val);
+
         // return simd storing first two elements
         simd_half       extract_low() const;
 
@@ -196,6 +203,13 @@ class alignas(32) simd<float, 256, avx_tag>
         // get i-th element from the vector; Pos is 0-based
         template<int Pos>
         float           get() const;
+
+        // set i-th element of the vector; pos is 0-based
+        void            set(int pos, float val);
+
+        // set i-th element of the vector; Pos is 0-based
+        template<int Pos>
+        void            set(float val);
 
         // return simd storing first four elements
         simd_half       extract_low() const;

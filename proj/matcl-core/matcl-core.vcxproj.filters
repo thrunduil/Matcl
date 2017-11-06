@@ -234,6 +234,9 @@
     <ClInclude Include="..\..\src\include\matcl-core\general\machine.h">
       <Filter>Source Files\include\general</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\IO\logger.h">
+      <Filter>Source Files\include\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">

@@ -86,6 +86,19 @@ double simd<double, 128, sse_tag>::get() const
 };
 
 force_inline
+void simd<double, 128, sse_tag>::set(int pos, double val)
+{ 
+    data.m128d_f64[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<double, 128, sse_tag>::set(double val)
+{ 
+    data.m128d_f64[Pos] = val; 
+};
+
+force_inline
 simd<double, 128, sse_tag> simd<double, 128, sse_tag>::zero()
 {
     impl_type data  = _mm_setzero_pd();
@@ -168,6 +181,19 @@ force_inline
 float simd<float, 128, sse_tag>::get() const
 { 
     return data.m128_f32[Pos]; 
+};
+
+force_inline
+void simd<float, 128, sse_tag>::set(int pos, float val)
+{ 
+    data.m128_f32[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<float, 128, sse_tag>::set(float val)
+{ 
+    data.m128_f32[Pos] = val; 
 };
 
 force_inline

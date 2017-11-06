@@ -91,8 +91,8 @@ class MATCL_CORE_EXPORT output_stream_from_ostream_synchronized : public output_
 using output_stream_ptr = std::shared_ptr<output_stream>;
 
 // global output stream, which points to current output stream
-// if set_current_output_stream() is called, then global output stream
-// will change
+// if set_current_output_stream() is called later, then returned
+// output stream will point to the new output stream
 MATCL_CORE_EXPORT 
 output_stream_ptr   global_output_stream();
 

@@ -47,6 +47,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_simd_no_sse3", "proj\t
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_simd_no_sse4", "proj\test_simd\no_sse4\test_simd_no_sse4.vcxproj", "{39938B9D-E03E-4FB0-BDF3-E8CEF140C0A1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_simd_values", "proj\test_simd\test_values\test_simd_values.vcxproj", "{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -175,6 +177,14 @@ Global
 		{39938B9D-E03E-4FB0-BDF3-E8CEF140C0A1}.Release|x64.Build.0 = Release|x64
 		{39938B9D-E03E-4FB0-BDF3-E8CEF140C0A1}.Release|x86.ActiveCfg = Release|Win32
 		{39938B9D-E03E-4FB0-BDF3-E8CEF140C0A1}.Release|x86.Build.0 = Release|Win32
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Debug|x64.ActiveCfg = Debug|x64
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Debug|x64.Build.0 = Debug|x64
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Debug|x86.ActiveCfg = Debug|Win32
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Debug|x86.Build.0 = Debug|Win32
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Release|x64.ActiveCfg = Release|x64
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Release|x64.Build.0 = Release|x64
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Release|x86.ActiveCfg = Release|Win32
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,6 +200,7 @@ Global
 		{959EAB1E-4906-4793-A041-11CB3A74E842} = {B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}
 		{47AECD21-674F-4198-959A-14710F09E968} = {B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}
 		{39938B9D-E03E-4FB0-BDF3-E8CEF140C0A1} = {B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}
+		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE} = {B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

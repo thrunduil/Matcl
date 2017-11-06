@@ -20,11 +20,11 @@
 
 #pragma once
 
-// define MATCL_LEVEL1_COMPLEX_DEFINED in order to use
+// define MATCL_USE_MATCL_COMPLEX in order to use
 // nondefault complex types; these types must be defined
 // before including simd headers
 
-#ifndef MATCL_LEVEL1_COMPLEX_DEFINED
+#ifndef MATCL_USE_MATCL_COMPLEX
     #define MATCL_USE_MATCL_COMPLEX 1
 #else
     #define MATCL_USE_MATCL_COMPLEX 0

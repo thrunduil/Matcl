@@ -222,4 +222,33 @@ ms::trunc(const simd<Val, Bits, Simd_tag>& x)
     return simd_trunc<Val, Bits, Simd_tag>::eval(x);
 };
 
+template<class Val, int Bits, class Simd_tag>
+force_inline bool
+any_inf(const simd<Val, Bits, Simd_tag>& x)
+{
+    return simd_any_inf<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline bool
+any_nan(const simd<Val, Bits, Simd_tag>& x)
+{
+    return simd_any_nan<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+std::ostream& ms::operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& x)
+{
+    int vec_size    = simd<Val, Bits, Simd_tag>::vector_size;
+
+    os << "{" << x.get(0);
+
+    for (int i = 1; i < vec_size; ++i)
+        os << ", " << x.get(i);
+
+    os << "}";
+
+    return os;
+};
+
 }}

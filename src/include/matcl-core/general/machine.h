@@ -67,5 +67,27 @@
 
 // alignment for SIMD related types; this is optimization parameters, invalid
 // value may have negative impact on performance
-// TODO
-#define MATCL_SIMD_ALIGNMENT    32
+#ifndef MATCL_SIMD_ALIGNMENT
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        #define MATCL_SIMD_ALIGNMENT    32
+    #elif MATCL_ARCHITECTURE_HAS_SSE2
+        #define MATCL_SIMD_ALIGNMENT    16
+    #else
+        #define MATCL_SIMD_ALIGNMENT    8
+    #endif
+
+#endif
+
+// set value of this macro to 1 if SIMD registers are available
+#ifndef MATCL_ARCHITECTURE_HAS_SIMD
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        #define MATCL_ARCHITECTURE_HAS_SIMD 1
+    #elif MATCL_ARCHITECTURE_HAS_SSE2
+        #define MATCL_ARCHITECTURE_HAS_SIMD 1
+    #else
+        #define MATCL_ARCHITECTURE_HAS_SIMD 0
+    #endif
+
+#endif

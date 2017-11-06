@@ -22,13 +22,12 @@
 
 #include "matcl-simd/config.h"
 
-//TODO
-//#include "matcl-simd/arch/nosimd/func/simd_128.h"
-//#include "matcl-simd/arch/nosimd/func/simd_256.h"
+#include "matcl-simd/arch/nosimd/func_complex/simd_compl_func.h"
 
 #if MATCL_ARCHITECTURE_HAS_SSE2
     #include "matcl-simd/arch/sse/func_complex/simd_float_128_func.h"
     #include "matcl-simd/arch/sse/func_complex/simd_double_128_func.h"
+    #include "matcl-simd/arch/sse/func_complex/simd_256_func_compl.h"
 #endif
 
 #if MATCL_ARCHITECTURE_HAS_AVX

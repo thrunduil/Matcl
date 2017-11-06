@@ -99,4 +99,10 @@ struct simd_ceil{};
 template<class Val, int Bits, class Simd_tag>
 struct simd_trunc{};
 
+template<class Val, int Bits, class Simd_tag>
+struct simd_any_inf{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_any_nan{};
+
 }}

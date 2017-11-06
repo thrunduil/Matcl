@@ -1,0 +1,535 @@
+/*
+ *  This file is a part of Matrix Computation Library (MATCL)
+ *
+ *  Copyright (c) Pawe³ Kowal 2017
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+#include "test_simd_config.h"
+#include "test_simd.h"
+#include "utils.h"
+
+#include "matcl-scalar/lib_functions/utils.h"
+#include "matcl-scalar/lib_functions/func_unary.h"
+#include "matcl-scalar/lib_functions/func_binary.h"
+#include "matcl-scalar/IO/scalar_io.h"
+#include "matcl-simd/simd.h"
+
+#include <vector>
+
+namespace matcl { namespace test
+{
+
+namespace ms = matcl::simd;
+
+void test::test_performance_real()
+{
+    test_simd(false).make_unary();
+    test_simd(false).make_binary();    
+    test_simd(false).make_ternary();    
+};
+
+void test::test_values_real()
+{
+    test_simd(true).make_unary();
+    test_simd(true).make_binary();    
+    test_simd(true).make_ternary();    
+};
+
+template<class T>
+bool test_simd::test_equal(const T& res, const T& res_gen, double max_dist, double& dist)
+{
+    dist = 0.0;
+
+    if (res == res_gen)
+        return true;
+
+    if (is_nan(res) && is_nan(res_gen))
+        return true;
+
+    dist = float_distance(res, res_gen);
+
+    if (is_nan(dist) == true)
+        return false;
+
+    if (dist > max_dist)
+        return false;
+    else
+        return true;
+}
+
+template<class T>
+bool test_simd::test_equal(int size, const T* res, const T* res_gen, double max_dist, double& dist)
+{
+    bool eq         = true;
+    dist            = 0.0;
+
+    double loc_dist;
+
+    for (int i = 0; i < size; ++i)
+    {
+        bool tmp    = test_equal(res[i], res_gen[i], max_dist, loc_dist);
+        eq          = eq && tmp;
+        dist        = std::max(dist, loc_dist);
+    };
+
+    return eq;
+}
+
+test_simd::test_simd(bool test_values)
+    :m_instr_tag(MATCL_TEST_SIMD_TAG), m_test_values(test_values)
+{};
+
+void test_simd::make_unary()
+{
+    test_functions<float>();
+    test_functions<double>();
+};
+
+void test_simd::make_binary()
+{
+    test_functions_bin<float>();
+    test_functions_bin<double>();
+};
+
+void test_simd::make_ternary()
+{
+    test_functions_3<float>();
+    test_functions_3<double>();
+};
+
+template<class T, class Simd_type, class Func>
+double test_simd::test_function_simd(int size, int n_rep, const T* in, T* out)
+{
+    static const int vec_size   = Simd_type::vector_size;
+
+    tic();
+
+    for(int j = 0; j < n_rep; ++j)
+    {
+        for (int i = 0; i < size; i += vec_size)
+        {
+            Simd_type x     = Simd_type::load(in + i, std::false_type());
+            Simd_type res   = Func::eval(x);
+
+            res.store(out + i, std::false_type());
+        };
+    };
+
+    double t = toc();
+    return t;
+};
+
+template<class T, class Simd_type, class Func>
+double test_simd::test_function_bin_simd(int size, int n_rep, const T* in1, const T* in2, T* out)
+{
+    static const int vec_size   = Simd_type::vector_size;
+
+    tic();
+
+    for(int j = 0; j < n_rep; ++j)
+    {
+        for (int i = 0; i < size; i += vec_size)
+        {
+            Simd_type x1    = Simd_type::load(in1 + i, std::false_type());
+            Simd_type x2    = Simd_type::load(in2 + i, std::false_type());
+
+            Simd_type res   = Func::eval(x1, x2);
+
+            res.store(out + i, std::false_type());
+        };
+    };
+
+    double t = toc();
+    return t;
+};
+
+template<class T, class Simd_type, class Func>
+double test_simd::test_function_3_simd(int size, int n_rep, const T* in1, const T* in2, 
+                                              const T* in3, T* out)
+{
+    static const int vec_size   = Simd_type::vector_size;
+
+    tic();
+
+    for(int j = 0; j < n_rep; ++j)
+    {
+        for (int i = 0; i < size; i += vec_size)
+        {
+            Simd_type x1    = Simd_type::load(in1 + i, std::false_type());
+            Simd_type x2    = Simd_type::load(in2 + i, std::false_type());
+            Simd_type x3    = Simd_type::load(in3 + i, std::false_type());
+
+            Simd_type res   = Func::eval(x1, x2, x3);
+
+            res.store(out + i, std::false_type());
+        };
+    };
+
+    double t = toc();
+    return t;
+};
+
+template<class T, class Func>
+double test_simd::test_function_generic(int size, int n_rep, const T* in, T* out)
+{
+    tic();
+
+    for(int j = 0; j < n_rep; ++j)
+    {
+        for (int i = 0; i < size; i += 1)
+        {
+            out[i]  = Func::eval(in[i]);
+        };
+    };
+
+    double t = toc();
+    return t;
+};
+
+template<class T, class Func>
+void test_simd::test_function(formatted_disp& fd, int size, int n_rep, 
+                                     const T* in, T* out, T* out_gen)
+{
+    double t0, t1, t2, t3, t4, t5;
+    bool v1, v2, v3, v4, v5;
+    double d1, d2, d3, d4, d5;
+
+    t0  = test_function_simd<T, ms::simd<T, 128, ms::nosimd_tag>, Func>(size, n_rep, in, out_gen);
+
+    t1  = test_function_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, n_rep, in, out);
+    v1  = test_equal(size, out, out_gen, 1.0, d1);
+
+    t2  = test_function_simd<T, simd::simd<T, 256, simd::nosimd_tag>, Func>(size, n_rep, in, out);
+    v2  = test_equal(size, out, out_gen, 1.0, d2);
+
+    t3  = test_function_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(size, n_rep, in, out);    
+    v3  = test_equal(size, out, out_gen, 1.0, d3);
+
+    t4  = test_function_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, n_rep, in, out);
+    v4  = test_equal(size, out, out_gen, 1.0, d4);
+
+    t5  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, n_rep, in, out);    
+    v5  = test_equal(size, out, out_gen, 1.0, d5);
+
+    bool ok = v1 && v2 && v3 && v4 && v5;
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+};
+
+template<class T, class Func>
+void test_simd::test_function_bin(formatted_disp& fd, int size, int n_rep, 
+                                     const T* in_1, const T* in_2, T* out, T* out_gen)
+{
+    double t0, t1, t2, t3, t4, t5;
+    bool v1, v2, v3, v4, v5;
+    double d1, d2, d3, d4, d5;
+
+    t0  = test_function_bin_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, n_rep, in_1, in_2, out_gen);
+
+    t1  = test_function_bin_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, n_rep, in_1, in_2, out);
+    v1  = test_equal(size, out, out_gen, 1.0, d1);
+
+    t2  = test_function_bin_simd<T, simd::simd<T, 256, simd::nosimd_tag>, Func>(size, n_rep, in_1, in_2, out);
+    v2  = test_equal(size, out, out_gen, 1.0, d2);
+
+    t3  = test_function_bin_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(size, n_rep, in_1, in_2, out);    
+    v3  = test_equal(size, out, out_gen, 1.0, d3);
+
+    t4  = test_function_bin_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, n_rep, in_1, in_2, out);
+    v4  = test_equal(size, out, out_gen, 1.0, d4);
+
+    t5  = test_function_bin_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, n_rep, in_1, in_2, out);    
+    v5  = test_equal(size, out, out_gen, 1.0, d5);
+
+    bool ok = v1 && v2 && v3 && v4 && v5;
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+};
+
+template<class T, class Func>
+void test_simd::test_function_3(formatted_disp& fd, int size, int n_rep, 
+                                     const T* in_1, const T* in_2, const T* in_3, T* out, T* out_gen)
+{
+    double t0, t1, t2, t3, t4, t5;
+    bool v1, v2, v3, v4, v5;
+    double d1, d2, d3, d4, d5;
+
+    t0  = test_function_3_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, n_rep, in_1, in_2, in_3, out_gen);
+
+    t1  = test_function_3_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, n_rep, in_1, in_2, in_3, out);
+    v1  = test_equal(size, out, out_gen, 1.0, d1);
+
+    t2  = test_function_3_simd<T, simd::simd<T, 256, simd::nosimd_tag>, Func>(size, n_rep, in_1, in_2, in_3, out);
+    v2  = test_equal(size, out, out_gen, 1.0, d2);
+
+    t3  = test_function_3_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(size, n_rep, in_1, in_2, in_3, out);    
+    v3  = test_equal(size, out, out_gen, 1.0, d3);
+
+    t4  = test_function_3_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, n_rep, in_1, in_2, in_3, out);
+    v4  = test_equal(size, out, out_gen, 1.0, d4);
+
+    t5  = test_function_3_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, n_rep, in_1, in_2, in_3, out);    
+    v5  = test_equal(size, out, out_gen, 1.0, d5);
+
+    bool ok = v1 && v2 && v3 && v4 && v5;
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+};
+
+template<class T, class Func>
+void test_simd::test_function_block(formatted_disp& fd, int size, int n_rep, 
+                                             const T* in, T* out, T* out_gen)
+{
+    double t0, t1, t2, t3, t4;
+    bool v1, v3, v4;
+    double d1, d3, d4;
+
+    t0  = test_function_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, n_rep, in, out_gen);
+
+    t1  = test_function_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(size, n_rep, in, out);    
+    v1  = test_equal(size, out, out_gen, 4.0, d1);
+
+    t2  = test_function_simd<T, simd::simd<T, 256, simd::nosimd_tag>, Func>(size, n_rep, in, out_gen);
+
+    t3  = test_function_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, n_rep, in, out);
+    v3  = test_equal(size, out, out_gen, 4.0, d3);
+
+    t4  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, n_rep, in, out);    
+    v4  = test_equal(size, out, out_gen, 4.0, d4);
+
+    bool ok = v1 && v3 && v4;
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t0, t0/t0, t2/t0, t1/t0, t3/t0, t4/t0, status);
+};
+
+int test_simd::get_N() const
+{
+    #ifdef _DEBUG
+        int N   = 1000;
+        int M   = 100;
+    #else
+        int N   = 10000;
+        int M   = 10000;
+    #endif
+
+    if (m_test_values == true)
+        return N * M;
+    else
+        return N;
+};
+
+int test_simd::get_M() const
+{
+    #ifdef _DEBUG
+        int N   = 1000;
+        int M   = 100;
+    #else
+        int N   = 10000;
+        int M   = 10000;
+    #endif
+
+    if (m_test_values == true)
+        return 1;
+    else
+        return M;
+}
+
+template<class T>
+void test_simd::test_functions()
+{
+    int N   = get_N();
+    int M   = get_M();
+
+    std::vector<T> in;
+    std::vector<T> out;
+    std::vector<T> out_gen;
+
+    in.resize(N);
+    out.resize(N);
+    out_gen.resize(N);
+
+    T* ptr_in       = in.data();
+    T* ptr_out      = out.data();
+    T* ptr_out_gen  = out_gen.data();
+
+    for (int i = 0; i < N; ++i)
+        ptr_in[i]   = rand_scalar<T>::make(m_test_values);
+
+    std::string header  = m_instr_tag + " " + typeid(T).name();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",    align_type::right, 7);
+    dm.add_column("nosimd",     align_type::left, 5);
+    dm.add_column("128 no",     align_type::left, 5);
+    dm.add_column("256 no",     align_type::left, 5);
+    dm.add_column("128 sse",    align_type::left, 5);
+    dm.add_column("256 sse",    align_type::left, 5);
+    dm.add_column("256 avx",    align_type::left, 5);
+    dm.add_column("status",     align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function<T, Func_abs>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, Func_sqrt>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, Func_round>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, Func_floor>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, Func_ceil>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, Func_trunc>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, Func_uminus>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+
+    test_function_block<T, Func_any_inf>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);    
+    test_function_block<T, Func_any_nan>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);    
+    test_function_block<T, Func_reverse>(dm, N, M, ptr_in, ptr_out, ptr_out_gen); 
+
+    // block methods are not exact; use positive values in order to
+    // reduce roundoff errors
+    for (int i = 0; i < N; ++i)
+        ptr_in[i]   = std::abs(ptr_in[i]);
+    
+    test_function_block<T, Func_sum_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen); 
+};
+
+template<class T>
+void test_simd::test_functions_bin()
+{
+    int N   = get_N();
+    int M   = get_M();
+
+    std::vector<T> in_1;
+    std::vector<T> in_2;
+    std::vector<T> out;
+    std::vector<T> out_gen;
+
+    in_1.resize(N);
+    in_2.resize(N);
+    out.resize(N);
+    out_gen.resize(N);
+
+    T* ptr_in_1     = in_1.data();
+    T* ptr_in_2     = in_2.data();
+    T* ptr_out      = out.data();
+    T* ptr_out_gen  = out_gen.data();
+
+    for (int i = 0; i < N; ++i)
+    {
+        ptr_in_1[i] = rand_scalar<T>::make(m_test_values);
+        ptr_in_2[i] = rand_scalar<T>::make(m_test_values);
+    };
+
+    std::string header  = m_instr_tag + " " + typeid(T).name();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",    align_type::right, 7);
+    dm.add_column("nosimd",     align_type::left, 5);
+    dm.add_column("128 no",     align_type::left, 5);
+    dm.add_column("256 no",     align_type::left, 5);
+    dm.add_column("128 sse",    align_type::left, 5);
+    dm.add_column("256 sse",    align_type::left, 5);
+    dm.add_column("256 avx",    align_type::left, 5);
+    dm.add_column("status",     align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function_bin<T, Func_sub_add>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_mult>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_div>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_plus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
+    test_function_bin<T, Func_minus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
+    test_function_bin<T, Func_max>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_min>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_eeq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_neq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_leq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_geq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_lt>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, Func_gt>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+};
+
+template<class T>
+void test_simd::test_functions_3()
+{
+    int N   = get_N();
+    int M   = get_M();
+
+    std::vector<T> in_1;
+    std::vector<T> in_2;
+    std::vector<T> in_3;
+    std::vector<T> out;
+    std::vector<T> out_gen;
+
+    in_1.resize(N);
+    in_2.resize(N);
+    in_3.resize(N);
+    out.resize(N);
+    out_gen.resize(N);
+
+    T* ptr_in_1     = in_1.data();
+    T* ptr_in_2     = in_2.data();
+    T* ptr_in_3     = in_3.data();
+    T* ptr_out      = out.data();
+    T* ptr_out_gen  = out_gen.data();
+
+    for (int i = 0; i < N; ++i)
+    {
+        // avoid large round-off errors
+        ptr_in_1[i] = std::abs(rand_scalar<T>::make(m_test_values));
+        ptr_in_2[i] = std::abs(rand_scalar<T>::make(m_test_values));
+        ptr_in_3[i] = std::abs(rand_scalar<T>::make(m_test_values));
+    };
+
+    std::string header  = m_instr_tag + " " + typeid(T).name();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",    align_type::right, 7);
+    dm.add_column("nosimd",     align_type::left, 5);
+    dm.add_column("128 no",     align_type::left, 5);
+    dm.add_column("256 no",     align_type::left, 5);
+    dm.add_column("128 sse",    align_type::left, 5);
+    dm.add_column("256 sse",    align_type::left, 5);
+    dm.add_column("256 avx",    align_type::left, 5);
+    dm.add_column("status",     align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function_3<T, Func_fma>(dm, N, M, ptr_in_1, ptr_in_2, ptr_in_3, ptr_out, ptr_out_gen);
+
+    for (int i = 0; i < N; ++i)
+    {
+        // avoid large round-off errors
+        ptr_in_3[i] = -ptr_in_3[i];
+    };
+
+    test_function_3<T, Func_fms>(dm, N, M, ptr_in_1, ptr_in_2, ptr_in_3, ptr_out, ptr_out_gen);
+};
+
+}};

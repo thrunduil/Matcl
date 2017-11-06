@@ -1280,7 +1280,7 @@ namespace scal_func
     {
         // do not use std::fma, this function is incredibly slow on VS
 
-        #if MATCL_HAS_FMA
+        #if MATCL_ARCHITECTURE_HAS_FMA
             return simd::fma(x, y, z);
         #else
             return x * y + z;

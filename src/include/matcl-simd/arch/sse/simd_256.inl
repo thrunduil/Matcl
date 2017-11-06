@@ -87,6 +87,19 @@ double simd<double, 256, sse_tag>::get() const
     return data[0].data.m128d_f64[Pos]; 
 };
 
+force_inline
+void simd<double, 256, sse_tag>::set(int pos, double val)
+{ 
+    data[0].data.m128d_f64[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<double, 256, sse_tag>::set(double val)
+{ 
+    data[0].data.m128d_f64[Pos] = val; 
+};
+
 force_inline simd<double, 256, sse_tag>::simd_half
 simd<double, 256, sse_tag>::extract_low() const
 {
@@ -216,6 +229,19 @@ force_inline
 float simd<float, 256, sse_tag>::get() const
 { 
     return data[0].data.m128_f32[Pos]; 
+};
+
+force_inline
+void simd<float, 256, sse_tag>::set(int pos, float val)
+{ 
+    data[0].data.m128_f32[pos] = val; 
+};
+
+template<int Pos>
+force_inline
+void simd<float, 256, sse_tag>::set(float val)
+{ 
+    data[0].data.m128_f32[Pos] = val; 
 };
 
 force_inline simd<float, 256, sse_tag>::simd_half

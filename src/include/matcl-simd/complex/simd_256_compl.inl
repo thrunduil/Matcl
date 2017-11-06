@@ -173,6 +173,23 @@ simd_double_complex simd_compl<double, 256, Simd_tag>::get() const
 };
 
 template<class Simd_tag>
+force_inline
+void simd_compl<double, 256, Simd_tag>::set(int pos, const simd_double_complex& val)
+{
+    data.set(pos*2, real(val));
+    data.set(pos*2 + 1, imag(val));
+};
+
+template<class Simd_tag>
+template<int Pos>
+force_inline
+void simd_compl<double, 256, Simd_tag>::set(const simd_double_complex& val)
+{
+    data.set<Pos*2>(real(val));
+    data.set<Pos*2 + 1>(imag(val));
+};
+
+template<class Simd_tag>
 template<int Step>
 force_inline
 void simd_compl<double, 256, Simd_tag>::scatter(simd_double_complex* arr0) const
@@ -329,6 +346,23 @@ force_inline
 simd_single_complex simd_compl<float, 256, Simd_tag>::get() const
 {
     return simd_single_complex(data.get<Pos*2>(), data.get<Pos*2 + 1>());
+};
+
+template<class Simd_tag>
+force_inline
+void simd_compl<float, 256, Simd_tag>::set(int pos, const simd_single_complex& val)
+{
+    data.set(pos*2, real(val));
+    data.set(pos*2 + 1, imag(val));
+};
+
+template<class Simd_tag>
+template<int Pos>
+force_inline
+void simd_compl<float, 256, Simd_tag>::set(const simd_single_complex& val)
+{
+    data.set<Pos*2>(real(val));
+    data.set<Pos*2 + 1>(imag(val));
 };
 
 template<class Simd_tag>
