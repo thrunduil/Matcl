@@ -30,6 +30,9 @@ using namespace matcl;
 
 int main(int argc, const char* argv[])
 {
+    (void)argc;
+    (void)argv;
+
     using log_ptr   = std::shared_ptr<std::ofstream>;
 
     try
@@ -39,7 +42,7 @@ int main(int argc, const char* argv[])
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
         };
-        
+                
         matcl::test::test_values_complex();
         matcl::test::test_values_real();        
 

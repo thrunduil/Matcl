@@ -548,7 +548,7 @@ template<class S, class Enable = typename md::enable_if_scalar_ntobj<S,void>::ty
 typename md::promote_scalar<S>::type
                         ceil(const S& x);
 
-// round to nearest integer, rounding halfway cases away from zero; 
+// round to nearest integer, rounding halfway cases to nearest even integer;
 // for complex numbers real and imaginary part are rounded separately
 template<class S, class Enable = typename md::enable_if_scalar_ntobj<S,void>::type>
 typename md::promote_scalar<S>::type

@@ -22,6 +22,7 @@
 
 #include "matcl-simd/arch/simd_impl.h"
 #include "matcl-simd/func/simd_func_def.h"
+#include <fenv.h> 
 
 namespace matcl { namespace simd
 {
@@ -267,7 +268,7 @@ struct simd_max<T, Bits, nosimd_tag>
         simd_type res;
 
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = matcl::max(x.data[i], y.data[i]);
+            res.data[i] = (x.data[i] > y.data[i]) ? x.data[i] : y.data[i];
 
         return res;
     };
@@ -287,7 +288,7 @@ struct simd_min<T, Bits, nosimd_tag>
         simd_type res;
 
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = matcl::min(x.data[i], y.data[i]);
+            res.data[i] = (x.data[i] < y.data[i]) ? x.data[i] : y.data[i];
 
         return res;
     };
@@ -326,9 +327,9 @@ struct simd_round<T, Bits, nosimd_tag>
     {
         simd_type res;
 
-        //TODO
+        ::fesetround(FE_TONEAREST);
+        
         for (int i = 0; i < vector_size; ++i)
-            //res.data[i] = std::round(x.data[i]);
             res.data[i] = std::nearbyint(x.data[i]);
 
         return res;
@@ -401,14 +402,24 @@ struct simd_cmp_base;
 template<>
 struct simd_cmp_base<float>
 {
-    static constexpr float val_true     = -std::numeric_limits<float>::quiet_NaN();
+    force_inline
+    static float get_val_true()
+    {
+        return true_value<float>::get();
+    };
+
     static constexpr float val_false    = 0.0f;
 };
 
 template<>
 struct simd_cmp_base<double>
 {
-    static constexpr double val_true    = -std::numeric_limits<double>::quiet_NaN();
+    force_inline
+    static double get_val_true()
+    {
+        return true_value<double>::get();
+    };
+
     static constexpr double val_false   = 0.0;
 };
 
@@ -424,6 +435,8 @@ struct simd_eeq<T, Bits, nosimd_tag> : simd_cmp_base<T>
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
         simd_type res;
+
+        T val_true  = get_val_true();
 
         for (int i = 0; i < vector_size; ++i)
             res.data[i] = (x.data[i] == y.data[i]) ? val_true : val_false;
@@ -445,6 +458,8 @@ struct simd_neq<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
+        T val_true  = get_val_true();
+
         for (int i = 0; i < vector_size; ++i)
             res.data[i] = (x.data[i] != y.data[i]) ? val_true : val_false;
 
@@ -465,8 +480,12 @@ struct simd_lt<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
+        T val_true  = get_val_true();
+
+        // do not use comparison operators; 
+        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = (x.data[i] < y.data[i]) ? val_true : val_false;
+            res.data[i] = std::isless(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
@@ -485,8 +504,12 @@ struct simd_gt<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
+        T val_true  = get_val_true();
+
+        // do not use comparison operators; 
+        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = (x.data[i] > y.data[i]) ? val_true : val_false;
+            res.data[i] = std::isgreater(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
@@ -505,8 +528,12 @@ struct simd_leq<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
+        T val_true  = get_val_true();
+
+        // do not use comparison operators; 
+        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = (x.data[i] <= y.data[i]) ? val_true : val_false;
+            res.data[i] = std::islessequal(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
@@ -525,8 +552,12 @@ struct simd_geq<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
+        T val_true  = get_val_true();
+
+        // do not use comparison operators; 
+        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = (x.data[i] >= y.data[i]) ? val_true : val_false;
+            res.data[i] = std::isgreaterequal(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
@@ -552,7 +583,26 @@ struct simd_any_nan<T, Bits, nosimd_tag>
 };
 
 template<class T, int Bits>
-struct simd_any_inf<T, Bits, nosimd_tag>
+struct simd_any<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        bool res = true;
+        for (int i = 0; i < vector_size; ++i)
+            res &= (x.data[i] == T());
+
+        return !res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_all<T, Bits, nosimd_tag>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -564,9 +614,9 @@ struct simd_any_inf<T, Bits, nosimd_tag>
     {
         bool res = false;
         for (int i = 0; i < vector_size; ++i)
-            res |= (x.data[i] == std::numeric_limits<T>::infinity());
+            res |= (x.data[i] == T());
 
-        return res;
+        return !res;
     };
 };
 

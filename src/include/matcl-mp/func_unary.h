@@ -493,7 +493,7 @@ MATCL_MP_EXPORT mp_float        ceil(const mp_float& x);
 MATCL_MP_EXPORT mp_float        ceil(const mp_rational& x);
 MATCL_MP_EXPORT mp_complex      ceil(const mp_complex& x);
 
-// round to nearest integer, rounding halfway cases away from zero; 
+// round to nearest integer, rounding halfway cases to nearest even integer;
 // for complex numbers real and imaginary part are rounded separately
 MATCL_MP_EXPORT mp_int          round(const mp_int& x);
 MATCL_MP_EXPORT mp_float        round(const mp_float& x);

@@ -300,14 +300,7 @@ struct simd_eeq<double, 128, sse_tag> : simd_cmp_base<double>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_pd(x.data, y.data, _CMP_EQ_OQ);
-        #else
-            double s1   = (x.get<0>() == y.get<0>()) ? val_true : val_false;
-            double s2   = (x.get<1>() == y.get<1>()) ? val_true : val_false;
-
-            return simd_type(s1, s2);
-        #endif
+        return _mm_cmpeq_pd(x.data, y.data);
     };
 };
 
@@ -319,14 +312,7 @@ struct simd_neq<double, 128, sse_tag> : simd_cmp_base<double>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_pd(x.data, y.data, _CMP_NEQ_UQ);
-        #else
-            double s1   = (x.get<0>() != y.get<0>()) ? val_true : val_false;
-            double s2   = (x.get<1>() != y.get<1>()) ? val_true : val_false;
-
-            return simd_type(s1, s2);
-        #endif
+        return _mm_cmpneq_pd(x.data, y.data);
     };
 };
 
@@ -338,14 +324,7 @@ struct simd_lt<double, 128, sse_tag> : simd_cmp_base<double>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_pd(x.data, y.data, _CMP_LT_OQ);
-        #else
-            double s1   = (x.get<0>() < y.get<0>()) ? val_true : val_false;
-            double s2   = (x.get<1>() < y.get<1>()) ? val_true : val_false;
-
-            return simd_type(s1, s2);
-        #endif
+        return _mm_cmplt_pd(x.data, y.data);
     };
 };
 
@@ -357,14 +336,7 @@ struct simd_gt<double, 128, sse_tag> : simd_cmp_base<double>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_pd(x.data, y.data, _CMP_GT_OQ);
-        #else
-            double s1   = (x.get<0>() > y.get<0>()) ? val_true : val_false;
-            double s2   = (x.get<1>() > y.get<1>()) ? val_true : val_false;
-
-            return simd_type(s1, s2);
-        #endif
+        return _mm_cmpgt_pd(x.data, y.data);
     };
 };
 
@@ -376,14 +348,7 @@ struct simd_leq<double, 128, sse_tag> : simd_cmp_base<double>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_pd(x.data, y.data, _CMP_LE_OQ);
-        #else
-            double s1   = (x.get<0>() <= y.get<0>()) ? val_true : val_false;
-            double s2   = (x.get<1>() <= y.get<1>()) ? val_true : val_false;
-
-            return simd_type(s1, s2);
-        #endif
+        return _mm_cmple_pd(x.data, y.data);
     };
 };
 
@@ -395,14 +360,7 @@ struct simd_geq<double, 128, sse_tag> : simd_cmp_base<double>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_pd(x.data, y.data, _CMP_GE_OQ);
-        #else
-            double s1   = (x.get<0>() >= y.get<0>()) ? val_true : val_false;
-            double s2   = (x.get<1>() >= y.get<1>()) ? val_true : val_false;
-
-            return simd_type(s1, s2);
-        #endif
+        return _mm_cmpge_pd(x.data, y.data);
     };
 };
 
@@ -422,18 +380,28 @@ struct simd_any_nan<double, 128, sse_tag>
 };
 
 template<>
-struct simd_any_inf<double, 128, sse_tag>
+struct simd_any<double, 128, sse_tag>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
     force_inline
     static bool eval(const simd_type& x)
     {
-        simd_type inf   = simd_type(std::numeric_limits<double>::infinity());
-        __m128d nt      = _mm_cmp_pd(x.data, inf.data, _CMP_EQ_OQ);
-        int res         = _mm_movemask_pd(nt);
-
+        int res     = _mm_movemask_pd(x.data);
         return res != 0;
+    };
+};
+
+template<>
+struct simd_all<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        int res     = _mm_movemask_pd(x.data);
+        return res == 3;
     };
 };
 

@@ -61,7 +61,7 @@ void test_gmp()
 
 void gmp_tester::make()
 {   
-    test_func(test_mp_complex(), "mp_complex");
+    test_round();
 
     test_ldexp_p3();
     test_ldexp_m3();
@@ -152,13 +152,13 @@ void gmp_tester::test_reim()
     }
     catch(std::exception& ex)
     {
-        std::cout << "mp reim EXCEPTION: " << ex.what() << "\n";
+        out_stream << "mp reim EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "mp reim: " << "ok" << "\n";
+        out_stream << "mp reim: " << "ok" << "\n";
     else
-        std::cout << "mp reim: " << "FAILED" << "\n";
+        out_stream << "mp reim: " << "FAILED" << "\n";
 };
 
 void gmp_tester::test_uminus()
@@ -171,13 +171,13 @@ void gmp_tester::test_uminus()
     }
     catch(std::exception& ex)
     {
-        std::cout << "mp uminus EXCEPTION: " << ex.what() << "\n";
+        out_stream << "mp uminus EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "mp uminus: " << "ok" << "\n";
+        out_stream << "mp uminus: " << "ok" << "\n";
     else
-        std::cout << "mp uminus: " << "FAILED" << "\n";
+        out_stream << "mp uminus: " << "FAILED" << "\n";
 };
 
 void gmp_tester::test_is()
@@ -190,13 +190,13 @@ void gmp_tester::test_is()
     }
     catch(std::exception& ex)
     {
-        std::cout << "mp is EXCEPTION: " << ex.what() << "\n";
+        out_stream << "mp is EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "mp is: " << "ok" << "\n";
+        out_stream << "mp is: " << "ok" << "\n";
     else
-        std::cout << "mp is: " << "FAILED" << "\n";
+        out_stream << "mp is: " << "FAILED" << "\n";
 };
 void gmp_tester::test_next()
 {
@@ -208,13 +208,13 @@ void gmp_tester::test_next()
     }
     catch(std::exception& ex)
     {
-        std::cout << "mp next EXCEPTION: " << ex.what() << "\n";
+        out_stream << "mp next EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "mp next: " << "ok" << "\n";
+        out_stream << "mp next: " << "ok" << "\n";
     else
-        std::cout << "mp next: " << "FAILED" << "\n";
+        out_stream << "mp next: " << "FAILED" << "\n";
 };
 void gmp_tester::test_signbit()
 {
@@ -226,13 +226,13 @@ void gmp_tester::test_signbit()
     }
     catch(std::exception& ex)
     {
-        std::cout << "mp sign EXCEPTION: " << ex.what() << "\n";
+        out_stream << "mp sign EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "mp sign: " << "ok" << "\n";
+        out_stream << "mp sign: " << "ok" << "\n";
     else
-        std::cout << "mp sign: " << "FAILED" << "\n";
+        out_stream << "mp sign: " << "FAILED" << "\n";
 };
 void gmp_tester::test_eps()
 {
@@ -244,21 +244,21 @@ void gmp_tester::test_eps()
     }
     catch(std::exception& ex)
     {
-        std::cout << "mp eps EXCEPTION: " << ex.what() << "\n";
+        out_stream << "mp eps EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "mp eps: " << "ok" << "\n";
+        out_stream << "mp eps: " << "ok" << "\n";
     else
-        std::cout << "mp eps: " << "FAILED" << "\n";
+        out_stream << "mp eps: " << "FAILED" << "\n";
 };
 
 void gmp_tester::test_func(double dif, const std::string& test_name)
 {
     if (dif == 0.0)
-        std::cout << test_name << ": ok" << "\n";
+        out_stream << test_name << ": ok" << "\n";
     else
-        std::cout << test_name << ": FAILED" << "\n";
+        out_stream << test_name << ": FAILED" << "\n";
 };
 
 double gmp_tester::test_mp_int()
@@ -2222,7 +2222,7 @@ double gmp_tester::test_mp_rational()
     catch(std::exception& ex)
     {
         std::string err = ex.what();
-        std::cout << err << "\n";
+        out_stream << err << "\n";
         return 1.0;
     }
     catch(...)
@@ -2332,9 +2332,9 @@ void gmp_tester::test_scalar_func()
         res     += test_scalar<Func>(scalars1[i], i);
 
     if (res != 0.0)
-        std::cout << Func::name() << ": FAILED" << "\n";
+        out_stream << Func::name() << ": FAILED" << "\n";
     else
-        std::cout << Func::name() << ": ok" << "\n";        
+        out_stream << Func::name() << ": ok" << "\n";        
 };
 
 template<class Derived>
@@ -2379,7 +2379,7 @@ struct eval_function : eval_scalars_1<eval_function<Derived>>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         auto res        = eval_op(s1);
 
@@ -2426,11 +2426,11 @@ struct eval_function : eval_scalars_1<eval_function<Derived>>
 
         if (out != 0)
         {
-            std::cout << code << " " << s1 << "\n";
-            std::cout << res1_1 << " " << res1_2 << "\n";
-            std::cout << res2_1 << " " << res2_2 << "\n";
-            std::cout << res3_1 << " " << res3_2 << "\n";
-            std::cout << res4_1 << " " << res4_2 << "\n";
+            out_stream << code << " " << s1 << "\n";
+            out_stream << res1_1 << " " << res1_2 << "\n";
+            out_stream << res2_1 << " " << res2_2 << "\n";
+            out_stream << res3_1 << " " << res3_2 << "\n";
+            out_stream << res4_1 << " " << res4_2 << "\n";
         }
 
         return out;
@@ -2531,8 +2531,8 @@ struct eval_function_num : eval_scalars_1<eval_function_num<Derived>>
 
         if (code == -1)
         {
-            std::cout << a << " " << b << "\n";
-            std::cout << dif << " " << tol << "\n";
+            out_stream << a << " " << b << "\n";
+            out_stream << dif << " " << tol << "\n";
         }
         return true;
     }
@@ -2540,7 +2540,7 @@ struct eval_function_num : eval_scalars_1<eval_function_num<Derived>>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         if (naninf_allowed == false && (is_inf(s1) || is_nan(s1)))
             return 0.0;
@@ -2586,11 +2586,11 @@ struct eval_function_num : eval_scalars_1<eval_function_num<Derived>>
 
         if (out != 0)
         {
-            std::cout << code << " " << s1 << "\n";
-            std::cout << res_i_1 << " " << res_i_2 << " " << res_i_1 - res_i_2 << "\n";
-            std::cout << res_f_1 << " " << res_f_2 << " " << res_f_1 - res_f_2 << "\n";
-            std::cout << res_r_1 << " " << res_r_2 << " " << res_r_1 - res_r_2 << "\n";
-            std::cout << res_c_1 << " " << res_c_2 << " " << res_c_1 - res_c_2 << "\n";
+            out_stream << code << " " << s1 << "\n";
+            out_stream << res_i_1 << " " << res_i_2 << " " << res_i_1 - res_i_2 << "\n";
+            out_stream << res_f_1 << " " << res_f_2 << " " << res_f_1 - res_f_2 << "\n";
+            out_stream << res_r_1 << " " << res_r_2 << " " << res_r_1 - res_r_2 << "\n";
+            out_stream << res_c_1 << " " << res_c_2 << " " << res_c_1 - res_c_2 << "\n";
         }
 
         return out;
@@ -3350,9 +3350,9 @@ void gmp_tester::test_combinatorics2()
     }
 
     if (res == 0.0)
-        std::cout << "combinatorics2: ok" << "\n";
+        out_stream << "combinatorics2: ok" << "\n";
     else
-        std::cout << "combinatorics2" << ": FAILED" << "\n";
+        out_stream << "combinatorics2" << ": FAILED" << "\n";
 };
 
 void gmp_tester::test_trunc()

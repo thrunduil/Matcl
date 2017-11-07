@@ -100,9 +100,12 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_trunc{};
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_any_inf{};
+struct simd_any_nan{};
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_any_nan{};
+struct simd_any{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_all{};
 
 }}

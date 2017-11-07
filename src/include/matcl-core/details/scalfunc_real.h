@@ -29,6 +29,7 @@
 #endif
 
 #include <cfloat>
+#include <fenv.h> 
 
 namespace matcl { namespace raw { namespace details
 {
@@ -872,11 +873,13 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double round(double a) 
     { 
-        return std::round(a);
+        ::fesetround(FE_TONEAREST);
+        return std::nearbyint(a);
     }
     force_inline float round(float a) 
     { 
-        return std::round(a);
+        ::fesetround(FE_TONEAREST);
+        return std::nearbyint(a);
     }
 
     //--------------------------------------------------------------------

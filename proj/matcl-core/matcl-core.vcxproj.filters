@@ -237,6 +237,9 @@
     <ClInclude Include="..\..\src\include\matcl-core\IO\logger.h">
       <Filter>Source Files\include\IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\matcl-core\IO\out_stream_initializer.h">
+      <Filter>Source Files\src\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
@@ -286,9 +289,6 @@
     <ClCompile Include="..\..\src\matcl-core\base\memory.cpp">
       <Filter>Source Files\src\base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-core\base\output_stream.cpp">
-      <Filter>Source Files\src\base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\base\thread.cpp">
       <Filter>Source Files\src\base</Filter>
     </ClCompile>
@@ -326,9 +326,6 @@
       <Filter>Source Files\src\base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\base\integer.cpp">
-      <Filter>Source Files\src\base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-core\base\printer.cpp">
       <Filter>Source Files\src\base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\IO\disp_data_provider.cpp">
@@ -369,6 +366,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\lib_functions\matfunc_pow.cpp">
       <Filter>Source Files\src\lib_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\IO\output_stream.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\IO\printer.cpp">
+      <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\IO\out_stream.cpp">
+      <Filter>Source Files\src\IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

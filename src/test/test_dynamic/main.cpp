@@ -27,6 +27,7 @@
 
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-scalar/IO/formatted_disp.h"
+#include "matcl-core/IO/logger.h"
 
 #include <iostream>
 #include <iomanip>
@@ -38,13 +39,24 @@ void example_object();
 
 static void break_func()
 {
-    std::cout << "break" << "\n";
+    disp("break");
 };
+
+#include <iostream>
+#include <sstream>
 
 int main(int argc, const char* argv[])
 {
+    using log_ptr   = std::shared_ptr<std::ofstream>;
+
     try
     {         
+        {
+            std::string log_file_name   = std::string("log_test_dynamic.txt");
+            log_ptr log = log_ptr(new std::ofstream(log_file_name));
+            set_logger(log);
+        };
+
         //details::leak_detector::break_at_codes({37204, 51566, 52566, 25195, 36023, 40397},
         //                                       &break_func);
 
@@ -57,13 +69,13 @@ int main(int argc, const char* argv[])
         matcl::test::test_dynamic test;
         test.make();  
 
-        matcl::test::test_gmp_prec(std::cout);
+        matcl::test::test_gmp_prec(out_stream);
 
-        std::cout << "finished" << "\n";
+        disp("finished");
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         return 1;
     };
 

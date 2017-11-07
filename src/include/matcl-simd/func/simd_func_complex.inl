@@ -140,14 +140,6 @@ std::ostream& ms::operator<<(std::ostream& os, const simd_compl<Val, Bits, Simd_
     return os;
 };
 
-// return true if at least element in the vector x is +INF
-template<class Val, int Bits, class Simd_tag>
-force_inline bool
-any_inf(const simd_compl<Val, Bits, Simd_tag>& x)
-{
-    return any_inf(x.data);
-}
-
 // return true if at least element in the vector x is NAN
 template<class Val, int Bits, class Simd_tag>
 force_inline bool

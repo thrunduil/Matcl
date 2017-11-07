@@ -27,6 +27,7 @@
 #include "matcl-scalar/lib_functions/func_binary.h"
 #include "matcl-scalar/lib_functions/func_matrix.h"
 #include "matcl-scalar/lib_functions/func_forwarding.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 #include "rand_scalars.h"
 #include "eval_cons.h"
@@ -46,12 +47,11 @@ void test_gmp_bin()
 
 void gmp_tester_bin::make()
 {
-    test_pow();
-    test_pow_c();
+    test_min_obj();
 
     test_copysign();
     test_nextafter();    
-    test_float_distance();    
+
     test_hypot();
     test_atan2();    
     test_mod();
@@ -125,6 +125,9 @@ void gmp_tester_bin::make()
     test_elem_and_obj();
     test_elem_or_obj();
     test_elem_xor_obj();
+
+    //TODO
+    //test_float_distance();
 };
 
 void gmp_tester_bin::test_add()
@@ -142,9 +145,9 @@ void gmp_tester_bin::test_add()
         res     += test_add(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "add: ok" << "\n";
+        out_stream << "add: ok" << "\n";
     else
-        std::cout << "add" << ": FAILED" << "\n";
+        out_stream << "add" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_sub()
@@ -162,9 +165,9 @@ void gmp_tester_bin::test_sub()
         res     += test_sub(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "sub: ok" << "\n";
+        out_stream << "sub: ok" << "\n";
     else
-        std::cout << "sub" << ": FAILED" << "\n";
+        out_stream << "sub" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_mul()
@@ -182,9 +185,9 @@ void gmp_tester_bin::test_mul()
         res     += test_mul(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "mul: ok" << "\n";
+        out_stream << "mul: ok" << "\n";
     else
-        std::cout << "mul" << ": FAILED" << "\n";
+        out_stream << "mul" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_mmul()
@@ -202,9 +205,9 @@ void gmp_tester_bin::test_mmul()
         res     += test_mmul(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "mmul: ok" << "\n";
+        out_stream << "mmul: ok" << "\n";
     else
-        std::cout << "mmul" << ": FAILED" << "\n";
+        out_stream << "mmul" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_div()
@@ -222,9 +225,9 @@ void gmp_tester_bin::test_div()
         res     += test_div(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div: ok" << "\n";
+        out_stream << "div: ok" << "\n";
     else
-        std::cout << "div" << ": FAILED" << "\n";
+        out_stream << "div" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_div2()
 {
@@ -241,9 +244,9 @@ void gmp_tester_bin::test_div2()
         res     += test_div2(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div2: ok" << "\n";
+        out_stream << "div2: ok" << "\n";
     else
-        std::cout << "div2" << ": FAILED" << "\n";
+        out_stream << "div2" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_div_0()
@@ -261,9 +264,9 @@ void gmp_tester_bin::test_div_0()
         res     += test_div_0(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div_0: ok" << "\n";
+        out_stream << "div_0: ok" << "\n";
     else
-        std::cout << "div_0" << ": FAILED" << "\n";
+        out_stream << "div_0" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_div_1()
 {
@@ -280,9 +283,9 @@ void gmp_tester_bin::test_div_1()
         res     += test_div_1(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div_1: ok" << "\n";
+        out_stream << "div_1: ok" << "\n";
     else
-        std::cout << "div_1" << ": FAILED" << "\n";
+        out_stream << "div_1" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_idiv()
@@ -300,9 +303,9 @@ void gmp_tester_bin::test_idiv()
         res     += test_idiv(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "idiv: ok" << "\n";
+        out_stream << "idiv: ok" << "\n";
     else
-        std::cout << "idiv" << ": FAILED" << "\n";
+        out_stream << "idiv" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_pow()
@@ -320,9 +323,9 @@ void gmp_tester_bin::test_pow()
         res     += test_pow(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "pow: ok" << "\n";
+        out_stream << "pow: ok" << "\n";
     else
-        std::cout << "pow" << ": FAILED" << "\n";
+        out_stream << "pow" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_pow_c()
@@ -340,9 +343,9 @@ void gmp_tester_bin::test_pow_c()
         res     += test_pow_c(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "pow_c: ok" << "\n";
+        out_stream << "pow_c: ok" << "\n";
     else
-        std::cout << "pow_c" << ": FAILED" << "\n";
+        out_stream << "pow_c" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_atan2()
@@ -360,9 +363,9 @@ void gmp_tester_bin::test_atan2()
         res     += test_atan2(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "atan2: ok" << "\n";
+        out_stream << "atan2: ok" << "\n";
     else
-        std::cout << "atan2" << ": FAILED" << "\n";
+        out_stream << "atan2" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_mod()
@@ -380,9 +383,9 @@ void gmp_tester_bin::test_mod()
         res     += test_mod(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "mod: ok" << "\n";
+        out_stream << "mod: ok" << "\n";
     else
-        std::cout << "mod" << ": FAILED" << "\n";
+        out_stream << "mod" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_rem()
@@ -400,9 +403,9 @@ void gmp_tester_bin::test_rem()
         res     += test_rem(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "rem: ok" << "\n";
+        out_stream << "rem: ok" << "\n";
     else
-        std::cout << "rem" << ": FAILED" << "\n";
+        out_stream << "rem" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_min()
 {
@@ -419,9 +422,9 @@ void gmp_tester_bin::test_min()
         res     += test_min(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "min: ok" << "\n";
+        out_stream << "min: ok" << "\n";
     else
-        std::cout << "min" << ": FAILED" << "\n";
+        out_stream << "min" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_max()
 {
@@ -438,9 +441,9 @@ void gmp_tester_bin::test_max()
         res     += test_max(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "max: ok" << "\n";
+        out_stream << "max: ok" << "\n";
     else
-        std::cout << "max" << ": FAILED" << "\n";
+        out_stream << "max" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_op_and()
 {
@@ -457,9 +460,9 @@ void gmp_tester_bin::test_op_and()
         res     += test_op_and(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "op_and: ok" << "\n";
+        out_stream << "op_and: ok" << "\n";
     else
-        std::cout << "op_and" << ": FAILED" << "\n";
+        out_stream << "op_and" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_op_or()
 {
@@ -476,9 +479,9 @@ void gmp_tester_bin::test_op_or()
         res     += test_op_or(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "op_or: ok" << "\n";
+        out_stream << "op_or: ok" << "\n";
     else
-        std::cout << "op_or" << ": FAILED" << "\n";
+        out_stream << "op_or" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_op_xor()
 {
@@ -495,9 +498,9 @@ void gmp_tester_bin::test_op_xor()
         res     += test_op_xor(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "op_xor: ok" << "\n";
+        out_stream << "op_xor: ok" << "\n";
     else
-        std::cout << "op_xor" << ": FAILED" << "\n";
+        out_stream << "op_xor" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_elem_and()
 {
@@ -514,9 +517,9 @@ void gmp_tester_bin::test_elem_and()
         res     += test_elem_and(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "elem_and: ok" << "\n";
+        out_stream << "elem_and: ok" << "\n";
     else
-        std::cout << "elem_and" << ": FAILED" << "\n";
+        out_stream << "elem_and" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_elem_or()
 {
@@ -533,9 +536,9 @@ void gmp_tester_bin::test_elem_or()
         res     += test_elem_or(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "elem_or: ok" << "\n";
+        out_stream << "elem_or: ok" << "\n";
     else
-        std::cout << "elem_or" << ": FAILED" << "\n";
+        out_stream << "elem_or" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_elem_xor()
 {
@@ -552,9 +555,9 @@ void gmp_tester_bin::test_elem_xor()
         res     += test_elem_xor(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "elem_xor: ok" << "\n";
+        out_stream << "elem_xor: ok" << "\n";
     else
-        std::cout << "elem_xor" << ": FAILED" << "\n";
+        out_stream << "elem_xor" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_fdim()
@@ -572,9 +575,9 @@ void gmp_tester_bin::test_fdim()
         res     += test_fdim(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "fdim: ok" << "\n";
+        out_stream << "fdim: ok" << "\n";
     else
-        std::cout << "fdim" << ": FAILED" << "\n";
+        out_stream << "fdim" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_hypot()
@@ -592,9 +595,9 @@ void gmp_tester_bin::test_hypot()
         res     += test_hypot(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "hypot: ok" << "\n";
+        out_stream << "hypot: ok" << "\n";
     else
-        std::cout << "hypot" << ": FAILED" << "\n";
+        out_stream << "hypot" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_nextafter()
@@ -612,9 +615,9 @@ void gmp_tester_bin::test_nextafter()
         res     += test_nextafter(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "nextafter: ok" << "\n";
+        out_stream << "nextafter: ok" << "\n";
     else
-        std::cout << "nextafter" << ": FAILED" << "\n";
+        out_stream << "nextafter" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_float_distance()
@@ -632,9 +635,9 @@ void gmp_tester_bin::test_float_distance()
         res     += test_float_distance(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "float_distance: ok" << "\n";
+        out_stream << "float_distance: ok" << "\n";
     else
-        std::cout << "float_distance" << ": FAILED" << "\n";
+        out_stream << "float_distance" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_copysign()
@@ -652,9 +655,9 @@ void gmp_tester_bin::test_copysign()
         res     += test_copysign(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "copysign: ok" << "\n";
+        out_stream << "copysign: ok" << "\n";
     else
-        std::cout << "copysign" << ": FAILED" << "\n";
+        out_stream << "copysign" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_eeq()
@@ -672,9 +675,9 @@ void gmp_tester_bin::test_eeq()
         res     += test_eeq(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "eeq: ok" << "\n";
+        out_stream << "eeq: ok" << "\n";
     else
-        std::cout << "eeq" << ": FAILED" << "\n";
+        out_stream << "eeq" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_eeq_nan()
 {
@@ -691,9 +694,9 @@ void gmp_tester_bin::test_eeq_nan()
         res     += test_eeq_nan(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "eeq_nan: ok" << "\n";
+        out_stream << "eeq_nan: ok" << "\n";
     else
-        std::cout << "eeq_nan" << ": FAILED" << "\n";
+        out_stream << "eeq_nan" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_copysign_obj()
@@ -711,9 +714,9 @@ void gmp_tester_bin::test_copysign_obj()
         res     += test_copysign_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "copysign obj: ok" << "\n";
+        out_stream << "copysign obj: ok" << "\n";
     else
-        std::cout << "copysign obj" << ": FAILED" << "\n";
+        out_stream << "copysign obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_nextafter_obj()
@@ -731,9 +734,9 @@ void gmp_tester_bin::test_nextafter_obj()
         res     += test_nextafter_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "nextafter obj: ok" << "\n";
+        out_stream << "nextafter obj: ok" << "\n";
     else
-        std::cout << "nextafter obj" << ": FAILED" << "\n";
+        out_stream << "nextafter obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_float_distance_obj()
@@ -751,9 +754,9 @@ void gmp_tester_bin::test_float_distance_obj()
         res     += test_float_distance_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "float_distance obj: ok" << "\n";
+        out_stream << "float_distance obj: ok" << "\n";
     else
-        std::cout << "float_distance obj" << ": FAILED" << "\n";
+        out_stream << "float_distance obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_atan2_obj()
@@ -771,9 +774,9 @@ void gmp_tester_bin::test_atan2_obj()
         res     += test_atan2_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "atan2 obj: ok" << "\n";
+        out_stream << "atan2 obj: ok" << "\n";
     else
-        std::cout << "atan2 obj" << ": FAILED" << "\n";
+        out_stream << "atan2 obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_mod_obj()
@@ -791,9 +794,9 @@ void gmp_tester_bin::test_mod_obj()
         res     += test_mod_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "mod obj: ok" << "\n";
+        out_stream << "mod obj: ok" << "\n";
     else
-        std::cout << "mod obj" << ": FAILED" << "\n";
+        out_stream << "mod obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_rem_obj()
@@ -811,9 +814,9 @@ void gmp_tester_bin::test_rem_obj()
         res     += test_rem_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "rem obj: ok" << "\n";
+        out_stream << "rem obj: ok" << "\n";
     else
-        std::cout << "rem obj" << ": FAILED" << "\n";
+        out_stream << "rem obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_max_obj()
 {
@@ -830,9 +833,9 @@ void gmp_tester_bin::test_max_obj()
         res     += test_max_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "max obj: ok" << "\n";
+        out_stream << "max obj: ok" << "\n";
     else
-        std::cout << "max obj" << ": FAILED" << "\n";
+        out_stream << "max obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_min_obj()
 {
@@ -849,9 +852,9 @@ void gmp_tester_bin::test_min_obj()
         res     += test_min_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "min obj: ok" << "\n";
+        out_stream << "min obj: ok" << "\n";
     else
-        std::cout << "min obj" << ": FAILED" << "\n";
+        out_stream << "min obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_op_or_obj()
 {
@@ -868,9 +871,9 @@ void gmp_tester_bin::test_op_or_obj()
         res     += test_op_or_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "op_or obj: ok" << "\n";
+        out_stream << "op_or obj: ok" << "\n";
     else
-        std::cout << "op_or obj" << ": FAILED" << "\n";
+        out_stream << "op_or obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_op_xor_obj()
 {
@@ -887,9 +890,9 @@ void gmp_tester_bin::test_op_xor_obj()
         res     += test_op_xor_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "op_xor obj: ok" << "\n";
+        out_stream << "op_xor obj: ok" << "\n";
     else
-        std::cout << "op_xor obj" << ": FAILED" << "\n";
+        out_stream << "op_xor obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_op_and_obj()
 {
@@ -906,9 +909,9 @@ void gmp_tester_bin::test_op_and_obj()
         res     += test_op_and_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "op_and obj: ok" << "\n";
+        out_stream << "op_and obj: ok" << "\n";
     else
-        std::cout << "op_and obj" << ": FAILED" << "\n";
+        out_stream << "op_and obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_elem_or_obj()
 {
@@ -925,9 +928,9 @@ void gmp_tester_bin::test_elem_or_obj()
         res     += test_elem_or_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "elem_or obj: ok" << "\n";
+        out_stream << "elem_or obj: ok" << "\n";
     else
-        std::cout << "elem_or obj" << ": FAILED" << "\n";
+        out_stream << "elem_or obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_elem_xor_obj()
 {
@@ -944,9 +947,9 @@ void gmp_tester_bin::test_elem_xor_obj()
         res     += test_elem_xor_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "elem_xor obj: ok" << "\n";
+        out_stream << "elem_xor obj: ok" << "\n";
     else
-        std::cout << "elem_xor obj" << ": FAILED" << "\n";
+        out_stream << "elem_xor obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_elem_and_obj()
 {
@@ -963,9 +966,9 @@ void gmp_tester_bin::test_elem_and_obj()
         res     += test_elem_and_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "elem_and obj: ok" << "\n";
+        out_stream << "elem_and obj: ok" << "\n";
     else
-        std::cout << "elem_and obj" << ": FAILED" << "\n";
+        out_stream << "elem_and obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_fdim_obj()
@@ -983,9 +986,9 @@ void gmp_tester_bin::test_fdim_obj()
         res     += test_fdim_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "fdim obj: ok" << "\n";
+        out_stream << "fdim obj: ok" << "\n";
     else
-        std::cout << "fdim obj" << ": FAILED" << "\n";
+        out_stream << "fdim obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_hypot_obj()
@@ -1003,9 +1006,9 @@ void gmp_tester_bin::test_hypot_obj()
         res     += test_hypot_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "hypot obj: ok" << "\n";
+        out_stream << "hypot obj: ok" << "\n";
     else
-        std::cout << "hypot obj" << ": FAILED" << "\n";
+        out_stream << "hypot obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_add_obj()
@@ -1023,9 +1026,9 @@ void gmp_tester_bin::test_add_obj()
         res     += test_add_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "add obj: ok" << "\n";
+        out_stream << "add obj: ok" << "\n";
     else
-        std::cout << "add obj" << ": FAILED" << "\n";
+        out_stream << "add obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_sub_obj()
@@ -1043,9 +1046,9 @@ void gmp_tester_bin::test_sub_obj()
         res     += test_sub_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "sub obj: ok" << "\n";
+        out_stream << "sub obj: ok" << "\n";
     else
-        std::cout << "sub obj" << ": FAILED" << "\n";
+        out_stream << "sub obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_mul_obj()
@@ -1063,9 +1066,9 @@ void gmp_tester_bin::test_mul_obj()
         res     += test_mul_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "mul obj: ok" << "\n";
+        out_stream << "mul obj: ok" << "\n";
     else
-        std::cout << "mul obj" << ": FAILED" << "\n";
+        out_stream << "mul obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_mmul_obj()
@@ -1083,9 +1086,9 @@ void gmp_tester_bin::test_mmul_obj()
         res     += test_mmul_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "mmul obj: ok" << "\n";
+        out_stream << "mmul obj: ok" << "\n";
     else
-        std::cout << "mmul obj" << ": FAILED" << "\n";
+        out_stream << "mmul obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_div_obj()
@@ -1103,9 +1106,9 @@ void gmp_tester_bin::test_div_obj()
         res     += test_div_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div obj: ok" << "\n";
+        out_stream << "div obj: ok" << "\n";
     else
-        std::cout << "div obj" << ": FAILED" << "\n";
+        out_stream << "div obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_div2_obj()
 {
@@ -1122,9 +1125,9 @@ void gmp_tester_bin::test_div2_obj()
         res     += test_div2_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div2 obj: ok" << "\n";
+        out_stream << "div2 obj: ok" << "\n";
     else
-        std::cout << "div2 obj" << ": FAILED" << "\n";
+        out_stream << "div2 obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_div_0_obj()
 {
@@ -1141,9 +1144,9 @@ void gmp_tester_bin::test_div_0_obj()
         res     += test_div_0_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div_0 obj: ok" << "\n";
+        out_stream << "div_0 obj: ok" << "\n";
     else
-        std::cout << "div_0 obj" << ": FAILED" << "\n";
+        out_stream << "div_0 obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_div_1_obj()
 {
@@ -1160,9 +1163,9 @@ void gmp_tester_bin::test_div_1_obj()
         res     += test_div_1_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "div_1 obj: ok" << "\n";
+        out_stream << "div_1 obj: ok" << "\n";
     else
-        std::cout << "div_1 obj" << ": FAILED" << "\n";
+        out_stream << "div_1 obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_idiv_obj()
@@ -1180,9 +1183,9 @@ void gmp_tester_bin::test_idiv_obj()
         res     += test_idiv_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "idiv obj: ok" << "\n";
+        out_stream << "idiv obj: ok" << "\n";
     else
-        std::cout << "idiv obj" << ": FAILED" << "\n";
+        out_stream << "idiv obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_pow_obj()
 {
@@ -1199,9 +1202,9 @@ void gmp_tester_bin::test_pow_obj()
         res     += test_pow_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "pow obj: ok" << "\n";
+        out_stream << "pow obj: ok" << "\n";
     else
-        std::cout << "pow obj" << ": FAILED" << "\n";
+        out_stream << "pow obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_pow_c_obj()
 {
@@ -1218,9 +1221,9 @@ void gmp_tester_bin::test_pow_c_obj()
         res     += test_pow_c_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "pow_c obj: ok" << "\n";
+        out_stream << "pow_c obj: ok" << "\n";
     else
-        std::cout << "pow_c obj" << ": FAILED" << "\n";
+        out_stream << "pow_c obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_eeq_obj()
@@ -1238,9 +1241,9 @@ void gmp_tester_bin::test_eeq_obj()
         res     += test_eeq_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "eeq obj: ok" << "\n";
+        out_stream << "eeq obj: ok" << "\n";
     else
-        std::cout << "eeq obj" << ": FAILED" << "\n";
+        out_stream << "eeq obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_eeq_nan_obj()
 {
@@ -1257,9 +1260,9 @@ void gmp_tester_bin::test_eeq_nan_obj()
         res     += test_eeq_nan_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "eeq_nan obj: ok" << "\n";
+        out_stream << "eeq_nan obj: ok" << "\n";
     else
-        std::cout << "eeq_nan obj" << ": FAILED" << "\n";
+        out_stream << "eeq_nan obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_neq()
@@ -1277,9 +1280,9 @@ void gmp_tester_bin::test_neq()
         res     += test_neq(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "neq: ok" << "\n";
+        out_stream << "neq: ok" << "\n";
     else
-        std::cout << "neq" << ": FAILED" << "\n";
+        out_stream << "neq" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_neq_nan()
 {
@@ -1296,9 +1299,9 @@ void gmp_tester_bin::test_neq_nan()
         res     += test_neq_nan(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "neq_nan: ok" << "\n";
+        out_stream << "neq_nan: ok" << "\n";
     else
-        std::cout << "neq_nan" << ": FAILED" << "\n";
+        out_stream << "neq_nan" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_neq_obj()
@@ -1316,9 +1319,9 @@ void gmp_tester_bin::test_neq_obj()
         res     += test_neq_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "neq obj: ok" << "\n";
+        out_stream << "neq obj: ok" << "\n";
     else
-        std::cout << "neq obj" << ": FAILED" << "\n";
+        out_stream << "neq obj" << ": FAILED" << "\n";
 };
 void gmp_tester_bin::test_neq_nan_obj()
 {
@@ -1335,9 +1338,9 @@ void gmp_tester_bin::test_neq_nan_obj()
         res     += test_neq_nan_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "neq_nan obj: ok" << "\n";
+        out_stream << "neq_nan obj: ok" << "\n";
     else
-        std::cout << "neq_nan obj" << ": FAILED" << "\n";
+        out_stream << "neq_nan obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_leq()
@@ -1355,9 +1358,9 @@ void gmp_tester_bin::test_leq()
         res     += test_leq(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "leq: ok" << "\n";
+        out_stream << "leq: ok" << "\n";
     else
-        std::cout << "leq" << ": FAILED" << "\n";
+        out_stream << "leq" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_leq_obj()
@@ -1375,9 +1378,9 @@ void gmp_tester_bin::test_leq_obj()
         res     += test_leq_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "leq obj: ok" << "\n";
+        out_stream << "leq obj: ok" << "\n";
     else
-        std::cout << "leq obj" << ": FAILED" << "\n";
+        out_stream << "leq obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_geq()
@@ -1395,9 +1398,9 @@ void gmp_tester_bin::test_geq()
         res     += test_geq(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "geq: ok" << "\n";
+        out_stream << "geq: ok" << "\n";
     else
-        std::cout << "geq" << ": FAILED" << "\n";
+        out_stream << "geq" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_geq_obj()
@@ -1415,9 +1418,9 @@ void gmp_tester_bin::test_geq_obj()
         res     += test_geq_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "geq obj: ok" << "\n";
+        out_stream << "geq obj: ok" << "\n";
     else
-        std::cout << "geq obj" << ": FAILED" << "\n";
+        out_stream << "geq obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_lt()
@@ -1435,9 +1438,9 @@ void gmp_tester_bin::test_lt()
         res     += test_lt(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "lt: ok" << "\n";
+        out_stream << "lt: ok" << "\n";
     else
-        std::cout << "lt" << ": FAILED" << "\n";
+        out_stream << "lt" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_lt_obj()
@@ -1455,9 +1458,9 @@ void gmp_tester_bin::test_lt_obj()
         res     += test_lt_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "lt obj: ok" << "\n";
+        out_stream << "lt obj: ok" << "\n";
     else
-        std::cout << "lt obj" << ": FAILED" << "\n";
+        out_stream << "lt obj" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_gt()
@@ -1475,9 +1478,9 @@ void gmp_tester_bin::test_gt()
         res     += test_gt(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "gt: ok" << "\n";
+        out_stream << "gt: ok" << "\n";
     else
-        std::cout << "gt" << ": FAILED" << "\n";
+        out_stream << "gt" << ": FAILED" << "\n";
 };
 
 void gmp_tester_bin::test_gt_obj()
@@ -1495,9 +1498,9 @@ void gmp_tester_bin::test_gt_obj()
         res     += test_gt_obj(scalars1[i],scalars2[i], i);
 
     if (res == 0.0)
-        std::cout << "gt obj: ok" << "\n";
+        out_stream << "gt obj: ok" << "\n";
     else
-        std::cout << "gt obj" << ": FAILED" << "\n";
+        out_stream << "gt obj" << ": FAILED" << "\n";
 };
 
 template<class Derived>
@@ -1516,9 +1519,9 @@ struct eval_operator : eval_scalars<eval_operator<Derived>>
     template<class T1, class T2>
     double eval_scal_func(const T1& s1, const T2& s2)
     {
-        //std::cout << code << "\n";
+        //out_stream << code << "\n";
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         bool res        = eval_op(s1,s2);
         bool is_real_1  = matcl::imag(s1) == 0;
@@ -1593,7 +1596,7 @@ struct eval_operator : eval_scalars<eval_operator<Derived>>
             out     += 1;
 
         if (out != 0)
-            std::cout << code << " " << s1 << " " << s2 << "\n";
+            out_stream << code << " " << s1 << " " << s2 << "\n";
 
         return out;
     };
@@ -1745,9 +1748,9 @@ struct eval_operator_obj : eval_scalars<eval_operator_obj<Derived>>
     template<class T1, class T2>
     double eval_scal_func(const T1& s1, const T2& s2)
     {
-        //std::cout << code << "\n";
+        //out_stream << code << "\n";
         //if (code == 0)
-        //    std::cout << "break\n";
+        //    disp("break");
 
         bool res_1      = eval_op(s1,s2);
 
@@ -1778,8 +1781,8 @@ struct eval_operator_obj : eval_scalars<eval_operator_obj<Derived>>
 
         if (out != 0.0)
         {
-            std::cout << s1 << " " << s2 << "\n";
-            std::cout << code << "\n";
+            out_stream << s1 << " " << s2 << "\n";
+            out_stream << code << "\n";
         }
         return out;
     };

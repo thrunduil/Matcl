@@ -27,6 +27,7 @@
 #include "matcl-scalar/lib_functions/func_binary.h"
 #include "matcl-scalar/lib_functions/func_matrix.h"
 #include "matcl-scalar/lib_functions/func_forwarding.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 #include "rand_scalars.h"
 #include "eval_cons.h"
@@ -80,9 +81,9 @@ struct eval_operator_arithm : eval_scalars<eval_operator_arithm<Derived>>
 
         if (code == -1)
         {
-            std::cout << a << " " << b << "\n";
-            std::cout << v1 << " " << v2 << "\n";
-            std::cout << dif << " " << tol << "\n";
+            out_stream << a << " " << b << "\n";
+            out_stream << v1 << " " << v2 << "\n";
+            out_stream << dif << " " << tol << "\n";
         };
 
         return true;
@@ -91,9 +92,9 @@ struct eval_operator_arithm : eval_scalars<eval_operator_arithm<Derived>>
     template<class T1, class T2>
     double eval_scal_func(const T1& s1, const T2& s2)
     {
-        //std::cout << code << "\n";
+        //out_stream << code << "\n";
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         auto res        = eval_op(s1,s2);
         bool is_real_1  = matcl::imag(s1) == 0;
@@ -256,7 +257,7 @@ struct eval_operator_arithm : eval_scalars<eval_operator_arithm<Derived>>
             out     = 0;
 
         if (out != 0)
-            std::cout << code << " " << s1 << " " << s2 << "\n";
+            out_stream << code << " " << s1 << " " << s2 << "\n";
 
         return out;
     };

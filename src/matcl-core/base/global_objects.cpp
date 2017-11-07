@@ -24,6 +24,7 @@
 #include "matcl-core/memory/memory.h"
 #include "matcl-core/details/global_objects.inl"
 #include "matcl-core/details/leak_detector.h"
+#include "matcl-core/IO/out_stream_initializer.h"
 
 #include <iostream>
 
@@ -97,6 +98,7 @@ global_objects_impl::~global_objects_impl()
 
 void global_objects_impl::open()
 {
+    matcl_initializer::open_global<details::out_stream_initializer>();
     matcl_initializer::open_global<details::leak_detector>();
 };
 
@@ -112,6 +114,7 @@ void global_objects_impl::close()
     #endif
         
     matcl_initializer::close_global<details::leak_detector>();
+    matcl_initializer::close_global<details::out_stream_initializer>();
 };
 
 void global_objects_impl::register_global(global_object* gl)

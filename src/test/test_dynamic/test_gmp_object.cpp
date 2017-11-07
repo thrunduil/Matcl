@@ -28,6 +28,7 @@
 #include "matcl-dynamic/type.h"
 #include "rand_scalars.h"
 #include "eval_cons.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 #pragma warning(pop)
 
@@ -143,13 +144,13 @@ void gmp_object_tester::test_cons()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_cons EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_cons EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "constructors: " << "ok" << "\n";
+        out_stream << "constructors: " << "ok" << "\n";
     else
-        std::cout << "constructors: " << "FAILED" << "\n";
+        out_stream << "constructors: " << "FAILED" << "\n";
 };
 void gmp_object_tester::test_cons_val()
 {
@@ -161,13 +162,13 @@ void gmp_object_tester::test_cons_val()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_cons_val EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_cons_val EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "constructors val: " << "ok" << "\n";
+        out_stream << "constructors val: " << "ok" << "\n";
     else
-        std::cout << "constructors val: " << "FAILED" << "\n";
+        out_stream << "constructors val: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_object_func()
@@ -180,13 +181,13 @@ void gmp_object_tester::test_object_func()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_object_func EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_object_func EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "object_func: " << "ok" << "\n";
+        out_stream << "object_func: " << "ok" << "\n";
     else
-        std::cout << "object_func: " << "FAILED" << "\n";
+        out_stream << "object_func: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_object_func_val()
@@ -199,13 +200,13 @@ void gmp_object_tester::test_object_func_val()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_object_func_val EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_object_func_val EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "object_func val: " << "ok" << "\n";
+        out_stream << "object_func val: " << "ok" << "\n";
     else
-        std::cout << "object_func val: " << "FAILED" << "\n";
+        out_stream << "object_func val: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_compare()
@@ -218,13 +219,13 @@ void gmp_object_tester::test_func_compare()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_compare EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_compare EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "compare_func: " << "ok" << "\n";
+        out_stream << "compare_func: " << "ok" << "\n";
     else
-        std::cout << "compare_func: " << "FAILED" << "\n";
+        out_stream << "compare_func: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_unify()
@@ -237,13 +238,13 @@ void gmp_object_tester::test_func_unify()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_unify EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_unify EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "unify mp: " << "ok" << "\n";
+        out_stream << "unify mp: " << "ok" << "\n";
     else
-        std::cout << "unify mp: " << "FAILED" << "\n";
+        out_stream << "unify mp: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_uminus()
@@ -256,13 +257,13 @@ void gmp_object_tester::test_func_uminus()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_uminus EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_uminus EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "func_uminus: " << "ok" << "\n";
+        out_stream << "func_uminus: " << "ok" << "\n";
     else
-        std::cout << "func_uminus: " << "FAILED" << "\n";
+        out_stream << "func_uminus: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_uminus_val()
@@ -275,13 +276,13 @@ void gmp_object_tester::test_func_uminus_val()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_uminus_val EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_uminus_val EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "func_uminus val: " << "ok" << "\n";
+        out_stream << "func_uminus val: " << "ok" << "\n";
     else
-        std::cout << "func_uminus val: " << "FAILED" << "\n";
+        out_stream << "func_uminus val: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_reim()
@@ -294,13 +295,13 @@ void gmp_object_tester::test_func_reim()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_reim EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_reim EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "reim: " << "ok" << "\n";
+        out_stream << "reim: " << "ok" << "\n";
     else
-        std::cout << "reim: " << "FAILED" << "\n";
+        out_stream << "reim: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_is()
@@ -313,13 +314,13 @@ void gmp_object_tester::test_func_is()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_is EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_is EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "is obj: " << "ok" << "\n";
+        out_stream << "is obj: " << "ok" << "\n";
     else
-        std::cout << "is obj: " << "FAILED" << "\n";
+        out_stream << "is obj: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_next()
@@ -332,13 +333,13 @@ void gmp_object_tester::test_func_next()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_next EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_next EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "next obj: " << "ok" << "\n";
+        out_stream << "next obj: " << "ok" << "\n";
     else
-        std::cout << "next obj: " << "FAILED" << "\n";
+        out_stream << "next obj: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_sign()
@@ -351,13 +352,13 @@ void gmp_object_tester::test_func_sign()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_sign EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_sign EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "sign obj: " << "ok" << "\n";
+        out_stream << "sign obj: " << "ok" << "\n";
     else
-        std::cout << "sign obj: " << "FAILED" << "\n";
+        out_stream << "sign obj: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_eps()
@@ -370,13 +371,13 @@ void gmp_object_tester::test_func_eps()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_eps EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_eps EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "eps obj: " << "ok" << "\n";
+        out_stream << "eps obj: " << "ok" << "\n";
     else
-        std::cout << "eps obj: " << "FAILED" << "\n";
+        out_stream << "eps obj: " << "FAILED" << "\n";
 };
 
 void gmp_object_tester::test_func_reim_val()
@@ -389,13 +390,13 @@ void gmp_object_tester::test_func_reim_val()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_reim_val EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_reim_val EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "reim val: " << "ok" << "\n";
+        out_stream << "reim val: " << "ok" << "\n";
     else
-        std::cout << "reim val: " << "FAILED" << "\n";
+        out_stream << "reim val: " << "FAILED" << "\n";
 };
 
 template<class Func, bool With_mp>
@@ -420,9 +421,9 @@ void gmp_object_tester::test_scalar_func()
         res     += test_scalar<Func, With_mp>(scalars1[i], i);
 
     if (res != 0.0)
-        std::cout << Func::name() << " obj: FAILED" << "\n";
+        out_stream << Func::name() << " obj: FAILED" << "\n";
     else
-        std::cout << Func::name() << " obj: ok" << "\n";        
+        out_stream << Func::name() << " obj: ok" << "\n";        
 };
 
 void gmp_object_tester::test_ldexp()
@@ -843,7 +844,7 @@ double gmp_object_tester::test_cons_1(mdy::Type t1, mdy::Type t2, const type2_se
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 
@@ -858,7 +859,7 @@ double gmp_object_tester::test_cons_1(mdy::Type t1, mdy::Type t2, const type2_se
     {
         if (missing_cons.find(type2(t1, t2)) == missing_cons.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -874,7 +875,7 @@ double gmp_object_tester::test_cons_1(mdy::Type t1, mdy::Type t2, const type2_se
     {
         if (missing_cons.find(type2(t1, t2)) == missing_cons.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -890,7 +891,7 @@ double gmp_object_tester::test_cons_1(mdy::Type t1, mdy::Type t2, const type2_se
     {
         if (missing_assign.find(type2(t1, t2)) == missing_assign.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -966,7 +967,7 @@ double gmp_object_tester::test_func_1(mdy::Type t1)
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 
@@ -1062,7 +1063,7 @@ double gmp_object_tester::test_compare_1(mdy::Type t1, mdy::Type t2, const type2
     {
         if (missing.find(type2(t1, t2)) == missing.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -1107,7 +1108,7 @@ double gmp_object_tester::test_func_uminus_1(mdy::Type t1)
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 
@@ -1183,7 +1184,7 @@ double gmp_object_tester::test_func_reim_1(mdy::Type t1)
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 
@@ -1252,7 +1253,7 @@ bool gmp_object_tester::test_func_unify_impl()
 double gmp_object_tester::test_unify_1(mdy::Type t1, mdy::Type t2, Integer code)
 {
     //if (code == 45)
-    //    std::cout << "break" << "\n";
+    //    out_stream << "break" << "\n";
 
     mdy::Type tt[]   = {t1, t2};    
     mdy::Type ta     = mdy::operations::return_type(mdy::functions::op_plus::eval(), 2, tt);
@@ -1267,10 +1268,10 @@ double gmp_object_tester::test_unify_1(mdy::Type t1, mdy::Type t2, Integer code)
     if (tu2 == td)
         return 0.0;
 
-    std::cout << code << "\n";
-    std::cout << t1 << " " << t2 << "\n";
-    std::cout << tu1 << " " << ta << "\n";
-    std::cout << tu2 << " " << td << "\n";
+    out_stream << code << "\n";
+    out_stream << t1 << " " << t2 << "\n";
+    out_stream << tu1 << " " << ta << "\n";
+    out_stream << tu2 << " " << td << "\n";
 
     return 1.0;
 }

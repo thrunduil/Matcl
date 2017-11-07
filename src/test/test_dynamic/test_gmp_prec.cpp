@@ -27,6 +27,7 @@
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 #include "matcl-scalar/lib_functions/func_unary.h"
 #include "matcl-scalar/lib_functions/func_binary.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 namespace matcl { namespace test
 {
@@ -764,7 +765,7 @@ struct eval_scalar_func_prec
     double make(const mp_float& s, precision prec)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         precision prec_ext  = precision(prec + 50);
 
@@ -808,7 +809,7 @@ struct eval_bin_func_prec
     double make(const mp_float& s1, const mp_float& s2, precision prec)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         precision prec_ext  = precision(prec + 50);
 
@@ -880,7 +881,7 @@ struct eval_scalar_func_prec_c
     dtup_2 make(const mp_complex& s, precision prec)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         precision prec_ext  = precision(prec + 50);
 
@@ -939,7 +940,7 @@ struct eval_bin_func_prec_c
     dtup_2 make(const T1& s10, const T2& s20, precision prec)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         precision prec_ext  = precision(prec + 50);
 

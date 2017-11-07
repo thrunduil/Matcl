@@ -229,7 +229,7 @@ struct eval_cons_val : eval_scalars<eval_cons_val>
                 }
                 else
                 {
-                    std::cout << ex.what() << "\n";
+                    disp(ex.what());
                     res += 1;                    
                 };                
             }     
@@ -277,7 +277,7 @@ struct eval_cons_val : eval_scalars<eval_cons_val>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            disp(code);
 
         return res;
     };
@@ -289,7 +289,7 @@ struct eval_assign_val_impl
     static double eval(Integer code, const T1& s1, const T2& s2)
     {
         //if (code == 22)
-        //    std::cout << "break\n";
+        //    disp("break");
 
         using type_1    = mdy::object_type<T1>;
         using type_2    = mdy::object_type<T2>;
@@ -315,7 +315,7 @@ struct eval_assign_val_impl
         }
         catch(std::exception& ex)
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };        
 
@@ -329,9 +329,9 @@ struct eval_assign_val_impl
 
         if (res != 0)
         {
-            //std::cout << s1 << " " << s2 << "\n";
-            //std::cout << val_3 << " " << v1 << "\n";
-            std::cout << code << "\n";
+            //out_stream << s1 << " " << s2 << "\n";
+            //out_stream << val_3 << " " << v1 << "\n";
+            disp(code);
         }
 
         return res;
@@ -373,7 +373,7 @@ struct eval_cast_val_impl
     static double eval(Integer code, const T1& s1, const T2& s2)
     {
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         using type_1    = mdy::object_type<T1>;
         using type_2    = mdy::object_type<T2>;
@@ -401,7 +401,7 @@ struct eval_cast_val_impl
         }
         catch(std::exception& ex)
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };        
 
@@ -419,9 +419,9 @@ struct eval_cast_val_impl
 
         if (res != 0)
         {
-            std::cout << s1 << " " << s2 << "\n";
-            std::cout << val_3 << " " << v1 << "\n";
-            std::cout << code << "\n";
+            out_stream << s1 << " " << s2 << "\n";
+            out_stream << val_3 << " " << v1 << "\n";
+            out_stream << code << "\n";
         }
 
         return res;
@@ -464,7 +464,7 @@ struct eval_object_func_val : eval_scalars_1<eval_object_func_val>
     double eval_scal_func(const T1& s1)
     {
         //if (code == 4)
-        //    std::cout << "break" << "\n";
+        //    out_stream << "break" << "\n";
 
         using type_1    = mdy::object_type<T1>;
 
@@ -505,7 +505,7 @@ struct eval_object_func_val : eval_scalars_1<eval_object_func_val>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -521,7 +521,7 @@ struct eval_uminus_val : eval_scalars_1<eval_uminus_val>
     double eval_scal_func(const T1& s1)
     {
         //if (code == 12)
-        //    std::cout << "break" << "\n";
+        //    out_stream << "break" << "\n";
 
         using type_1    = mdy::object_type<T1>;
 
@@ -545,7 +545,7 @@ struct eval_uminus_val : eval_scalars_1<eval_uminus_val>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -561,7 +561,7 @@ struct eval_reim_val : eval_scalars_1<eval_reim_val>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break" << "\n";
+            out_stream << "break" << "\n";
 
         using T1_re     = typename matcl::details::real_type<T1>::type;
         using T1_fre    = decltype(arg(s1));
@@ -646,7 +646,7 @@ struct eval_reim_val : eval_scalars_1<eval_reim_val>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -662,7 +662,7 @@ struct eval_is : eval_scalars_1<eval_is>
     double eval_scal_func(const T1& s1)
     {
         //if (code == 10)
-        //    std::cout << "break" << "\n";
+        //    out_stream << "break" << "\n";
 
         using T1_re     = typename matcl::details::real_type<T1>::type;
         using type_1    = mdy::object_type<T1>;
@@ -735,7 +735,7 @@ struct eval_is : eval_scalars_1<eval_is>
         };
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -755,7 +755,7 @@ struct eval_next : eval_scalars_1<eval_next>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break" << "\n";
+            out_stream << "break" << "\n";
 
         using type_1    = mdy::object_type<T1>;
 
@@ -799,7 +799,7 @@ struct eval_next : eval_scalars_1<eval_next>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -815,7 +815,7 @@ struct test_eval_eps : eval_scalars_1<test_eval_eps>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break" << "\n";
+            out_stream << "break" << "\n";
 
         using type_1    = mdy::object_type<T1>;
 
@@ -844,7 +844,7 @@ struct test_eval_eps : eval_scalars_1<test_eval_eps>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -864,7 +864,7 @@ struct eval_signbit : eval_scalars_1<eval_signbit>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break" << "\n";
+            out_stream << "break" << "\n";
 
         using type_1    = mdy::object_type<T1>;
 
@@ -886,7 +886,7 @@ struct eval_signbit : eval_scalars_1<eval_signbit>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -906,7 +906,7 @@ struct eval_isign : eval_scalars_1<eval_isign>
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break" << "\n";
+            out_stream << "break" << "\n";
 
         using type_1    = mdy::object_type<T1>;
 
@@ -928,7 +928,7 @@ struct eval_isign : eval_scalars_1<eval_isign>
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };
@@ -951,7 +951,7 @@ struct eval_scalar_func_templ_obj : eval_scalars_1<eval_scalar_func_templ_obj<Fu
     double eval_scal_func(const T1& s1)
     {
         if (code == -1)
-            std::cout << "break" << "\n";
+            out_stream << "break" << "\n";
 
         if (md::is_complex<T1>::value && Func::is_complex_allowed == false)
             return 0.0;
@@ -983,7 +983,7 @@ struct eval_scalar_func_templ_obj : eval_scalars_1<eval_scalar_func_templ_obj<Fu
             res += 1;
 
         if (res != 0)
-            std::cout << code << "\n";
+            out_stream << code << "\n";
 
         return res;
     };

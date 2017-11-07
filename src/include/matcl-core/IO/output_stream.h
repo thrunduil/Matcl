@@ -45,6 +45,7 @@ class MATCL_CORE_EXPORT output_stream : public matcl_new_delete
 
         // display string stream
         virtual void        disp(std::stringstream& of) = 0;
+        virtual void        disp(const std::string& of) = 0;
 };
 
 // convert std::ostream to output_stream
@@ -60,6 +61,7 @@ class MATCL_CORE_EXPORT output_stream_from_ostream : public output_stream
         virtual ~output_stream_from_ostream() {};
 
         virtual void    disp(std::stringstream& of) override;
+        virtual void    disp(const std::string& str) override;
 
     private:
         output_stream_from_ostream(const output_stream_from_ostream&) = delete;
@@ -82,6 +84,7 @@ class MATCL_CORE_EXPORT output_stream_from_ostream_synchronized : public output_
         virtual ~output_stream_from_ostream_synchronized();
 
         virtual void    disp(std::stringstream& of) override;
+        virtual void    disp(const std::string& str) override;
 
     private:
         this_type(const this_type&) = delete;
@@ -106,5 +109,10 @@ void                set_current_output_stream(const output_stream_ptr&);
 // then returned output stream will not change
 MATCL_CORE_EXPORT 
 output_stream_ptr   get_current_output_stream();
+
+// stream equivalent to std::cout, but prints to global output stream
+// (and possibly to a logger if set)
+extern MATCL_CORE_EXPORT
+std::ostream&       out_stream;
 
 }

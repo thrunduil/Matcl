@@ -130,6 +130,9 @@ struct simd_compl_div<float, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
+        bool o1         = check_overflow(x);
+        bool o2         = check_overflow(y);
+
         __m128 y_flip   = _mm_shuffle_ps(y.data.data, y.data.data, 0xB1);   // swap y.re and y.im
         __m128 x_im     = _mm_shuffle_ps(x.data.data, x.data.data, 0xF5);   // imag of x in both
         __m128 x_re     = _mm_shuffle_ps(x.data.data, x.data.data, 0xA0);   // real of x in both
@@ -138,8 +141,6 @@ struct simd_compl_div<float, 128, sse_tag>
 
         __m128 yy2    = _mm_shuffle_ps(yy, yy, 0xB1);                       // swap yy.re and yy.im
         __m128 yy3    = _mm_add_ps(yy,yy2);                                 // add pairwise
-
-        bool overflow1 = any_inf(simd_real(yy3));
 
         #if MATCL_ARCHITECTURE_HAS_FMA
             __m128 n    = _mm_fmsubadd_ps(x_im, y_flip, x_rey.data);        // (x_im * y_im, x_im * y_re) +/- x_rey
@@ -150,12 +151,10 @@ struct simd_compl_div<float, 128, sse_tag>
             __m128 n        = sub_add(xv_imy, -xv_rey).data;                // x_re * y +/- x_imy
         #endif
         
-        bool overflow2  = any_inf(simd_real(n));
         __m128 res      = _mm_div_ps(n, yy3);
-        bool nan        = any_nan(simd_real(res));
 
-        if (nan || overflow1 || overflow2)
-            return recover_nan(x, y, simd_type(res));
+        if (o1 || o2)
+            return recover_nan(x, y);
         else
             return res;
     };
@@ -164,25 +163,24 @@ struct simd_compl_div<float, 128, sse_tag>
     force_inline
     static simd_type eval_rc(const simd_real& x, const simd_type& y)
     {
+        __m128 x_re     = _mm_shuffle_ps(x.data, x.data, 0xA0);             // real of x in both
+        bool o1         = check_overflow(simd_real(x_re));
+        bool o2         = check_overflow(y);
+
         const __m128 mask = _mm_setr_ps(0.0f, -0.0f, 0.0f, -0.0f);
 
-        __m128 y_flip   = _mm_shuffle_ps(y.data.data, y.data.data, 0xB1);   // swap y.re and y.im
-        __m128 x_re     = _mm_shuffle_ps(x.data, x.data, 0xA0);             // real of x in both
+        __m128 y_flip   = _mm_shuffle_ps(y.data.data, y.data.data, 0xB1);   // swap y.re and y.im        
         __m128 x_rey    = _mm_mul_ps(x_re, y.data.data);                    // (x.re*b.re, x.re*b.im)  
         __m128 yy       = _mm_mul_ps(y.data.data, y.data.data);             // (y.re*y.re, y.im*y.im)        
         
         __m128 yy2      = _mm_shuffle_ps(yy, yy, 0xB1);       // swap yy.re and yy.im
         __m128 yy3      = _mm_add_ps(yy,yy2);                 // add pairwise
-        bool overflow1  = any_inf(simd_real(yy3));
 
         __m128 n        = _mm_xor_ps(x_rey, mask);                          // +/- x_rey
-        bool overflow2  = any_inf(simd_real(n));
-
         __m128 res      = _mm_div_ps(n, yy3);
-        bool nan        = any_nan(simd_real(res));
 
-        if (nan || overflow1 || overflow2)
-            return recover_nan_rc(x, y, simd_type(res));
+        if (o1 || o2)
+            return recover_nan_rc(x, y);
         else
             return res;
     };
@@ -194,7 +192,23 @@ struct simd_compl_div<float, 128, sse_tag>
         return res;
     }
 
-    static simd_type recover_nan(const simd_type& x, const simd_type& y, const simd_type& xy)
+    force_inline
+    static bool check_overflow(const simd_type& x)
+    {
+        //MIN = 1.175494351e-38F
+        //MAX = 3.402823466e+38F
+
+        simd_real xa        = abs(x.data);
+        const __m128 max    = _mm_set1_ps(1.30e+19f); // max < sqrt(MAX/2)
+        const __m128 min    = _mm_set1_ps(4.45e-16f); // min > sqrt(MIN/eps*2)
+
+        bool res1           = !all(gt(xa, simd_real(min)));
+        bool res2           = !all(lt(xa, simd_real(max)));
+
+        return res1 || res2;
+    };
+
+    static simd_type recover_nan(const simd_type& x, const simd_type& y)
     {
         using value_type            = typename simd_type::value_type;
         using div_impl              = details::recover_nan_div<float>;
@@ -211,7 +225,7 @@ struct simd_compl_div<float, 128, sse_tag>
         return res;
     };
 
-    static simd_type recover_nan_rc(const simd_real& x, const simd_type& y, const simd_type& xy)
+    static simd_type recover_nan_rc(const simd_real& x, const simd_type& y)
     {
         using value_type            = typename simd_type::value_type;
         using div_impl              = details::recover_nan_div_rc<float>;;
