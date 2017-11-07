@@ -27,6 +27,7 @@
 #include "matcl-scalar/lib_functions/func_binary.h"
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-simd/simd.h"
+#include "test_functions.h"
 
 #include <vector>
 
@@ -324,14 +325,16 @@ int test_simd::get_N() const
 {
     #ifdef _DEBUG
         int N   = 1000;
-        int M   = 100;
     #else
         int N   = 10000;
-        int M   = 10000;
     #endif
 
     if (m_test_values == true)
-        return N * M;
+        #ifdef _DEBUG
+            return 100000;
+        #else
+            return 1000000;
+        #endif
     else
         return N;
 };
@@ -339,11 +342,9 @@ int test_simd::get_N() const
 int test_simd::get_M() const
 {
     #ifdef _DEBUG
-        int N   = 1000;
         int M   = 100;
     #else
-        int N   = 10000;
-        int M   = 10000;
+        int M   = 1000;
     #endif
 
     if (m_test_values == true)
@@ -391,24 +392,25 @@ void test_simd::test_functions()
 
     dm.disp_header();
 
-    test_function<T, Func_abs>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, Func_sqrt>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, Func_round>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, Func_floor>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, Func_ceil>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, Func_trunc>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, Func_uminus>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_abs>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_sqrt>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_round>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_floor>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_ceil>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_trunc>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function<T, test_functions::Func_uminus>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
 
-    test_function_block<T, Func_any_inf>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);    
-    test_function_block<T, Func_any_nan>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);    
-    test_function_block<T, Func_reverse>(dm, N, M, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_any_nan>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);    
+    test_function_block<T, test_functions::Func_any>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);    
+    test_function_block<T, test_functions::Func_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_reverse>(dm, N, M, ptr_in, ptr_out, ptr_out_gen); 
 
     // block methods are not exact; use positive values in order to
-    // reduce roundoff errors
+    // reduce roundoff errors; scaling in order to avoid overflows
     for (int i = 0; i < N; ++i)
-        ptr_in[i]   = std::abs(ptr_in[i]);
+        ptr_in[i]   = std::abs(ptr_in[i]) / T(8);
     
-    test_function_block<T, Func_sum_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_sum_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen); 
 };
 
 template<class T>
@@ -456,19 +458,19 @@ void test_simd::test_functions_bin()
 
     dm.disp_header();
 
-    test_function_bin<T, Func_sub_add>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_mult>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_div>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_plus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
-    test_function_bin<T, Func_minus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
-    test_function_bin<T, Func_max>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_min>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_eeq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_neq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_leq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_geq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_lt>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, Func_gt>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_sub_add>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_mult>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_div>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_plus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
+    test_function_bin<T, test_functions::Func_minus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
+    test_function_bin<T, test_functions::Func_max>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_min>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_eeq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_neq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_leq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_geq>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_lt>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_gt>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
 };
 
 template<class T>
@@ -521,7 +523,8 @@ void test_simd::test_functions_3()
 
     dm.disp_header();
 
-    test_function_3<T, Func_fma>(dm, N, M, ptr_in_1, ptr_in_2, ptr_in_3, ptr_out, ptr_out_gen);
+    test_function_3<T, test_functions::Func_fma>(dm, N, M, ptr_in_1, ptr_in_2, 
+                                                 ptr_in_3, ptr_out, ptr_out_gen);
 
     for (int i = 0; i < N; ++i)
     {
@@ -529,7 +532,8 @@ void test_simd::test_functions_3()
         ptr_in_3[i] = -ptr_in_3[i];
     };
 
-    test_function_3<T, Func_fms>(dm, N, M, ptr_in_1, ptr_in_2, ptr_in_3, ptr_out, ptr_out_gen);
+    test_function_3<T, test_functions::Func_fms>(dm, N, M, ptr_in_1, ptr_in_2, 
+                                                 ptr_in_3, ptr_out, ptr_out_gen);
 };
 
 }};

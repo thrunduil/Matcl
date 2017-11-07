@@ -332,17 +332,32 @@ struct simd_any_nan<T, 256, sse_tag>
 };
 
 template<class T>
-struct simd_any_inf<T, 256, sse_tag>
+struct simd_any<T, 256, sse_tag>
 {
     using simd_type = simd<T, 256, sse_tag>;
 
     force_inline
     static bool eval(const simd_type& x)
     {
-        bool b1 = any_inf(x.extract_low());
-        bool b2 = any_inf(x.extract_high());
+        bool b1 = any(x.extract_low());
+        bool b2 = any(x.extract_high());
 
         return b1 || b2;
+    };
+};
+
+template<class T>
+struct simd_all<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        bool b1 = all(x.extract_low());
+        bool b2 = all(x.extract_high());
+
+        return b1 && b2;
     };
 };
 

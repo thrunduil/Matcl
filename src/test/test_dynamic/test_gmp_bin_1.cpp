@@ -28,6 +28,7 @@
 #include "matcl-mp/matcl_mp.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-scalar/objects/object_functions.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 #include "utils.h"
 
@@ -84,9 +85,9 @@ struct eval_binfunc : eval_scalars<eval_binfunc<Derived>>
 
         if (code == -1)
         {
-            std::cout << a << " " << b << "\n";
-            std::cout << v1 << " " << v2 << "\n";
-            std::cout << dif << " " << tol << "\n";
+            out_stream << a << " " << b << "\n";
+            out_stream << v1 << " " << v2 << "\n";
+            out_stream << dif << " " << tol << "\n";
         };
 
         return true;
@@ -95,9 +96,9 @@ struct eval_binfunc : eval_scalars<eval_binfunc<Derived>>
     template<class T1, class T2>
     double eval_scal_func(const T1& s1, const T2& s2)
     {
-        //std::cout << code << "\n";
+        //out_stream << code << "\n";
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         bool is_real_1  = matcl::imag(s1) == 0;
         bool is_real_2  = matcl::imag(s2) == 0;
@@ -208,7 +209,7 @@ struct eval_binfunc : eval_scalars<eval_binfunc<Derived>>
             out     = 0;
 
         if (out != 0)
-            std::cout << code << " " << s1 << " " << s2 << "\n";
+            out_stream << code << " " << s1 << " " << s2 << "\n";
 
         return out;
     };
@@ -571,14 +572,14 @@ void gmp_tester_bin::test_pow_spec()
         if (dif > tol || is_finite(res1) == false || is_finite(res2) == false)
         {
             res         = false;
-            std::cout << res1 << " " << res2 << " " << dif << "\n";
+            out_stream << res1 << " " << res2 << " " << dif << "\n";
         }
     };
 
     if (res == true)
-        std::cout << "pow special: OK" << "\n";
+        out_stream << "pow special: OK" << "\n";
     else
-        std::cout << "pow special: FAILED" << "\n";
+        out_stream << "pow special: FAILED" << "\n";
 };
 
 }};

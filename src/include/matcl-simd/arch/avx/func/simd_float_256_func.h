@@ -348,18 +348,28 @@ struct simd_any_nan<float, 256, avx_tag>
 };
 
 template<>
-struct simd_any_inf<float, 256, avx_tag>
+struct simd_any<float, 256, avx_tag>
 {
     using simd_type = simd<float, 256, avx_tag>;
 
     force_inline
     static bool eval(const simd_type& x)
     {
-        simd_type inf   = simd_type(std::numeric_limits<float>::infinity());
-        __m256 nt       = _mm256_cmp_ps(x.data, inf.data, _CMP_EQ_OQ);
-        int res         = _mm256_movemask_ps(nt);
-
+        int res     = _mm256_movemask_ps(x.data);
         return res != 0;
+    };
+};
+
+template<>
+struct simd_all<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        int res     = _mm256_movemask_ps(x.data);
+        return res == 255;
     };
 };
 

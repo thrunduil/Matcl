@@ -1690,7 +1690,7 @@ mp_float matcl::round(const mp_float& x)
 {
     mp_float ret(0.0, x.get_precision());
 
-    mpfr_round(mmd::impl_value(ret), mmd::impl_value(x));
+    mpfr_rint(mmd::impl_value(ret), mmd::impl_value(x), MPFR_RNDN);
     ret.update_debug();
     return ret;
 }

@@ -289,8 +289,9 @@ struct f_min : dynamic::register_function_template_return<f_min, functions::min>
         const object& o1    = x.get();
         const object& o2    = y.get();
 
-        return (bool)(o1 > o2) ? object(t_ret.get(), o2) : object(t_ret.get(), o1);
+        return (bool)(o1 < o2) ? object(t_ret.get(), o1) : object(t_ret.get(), o2);
     }
+
     static dynamic::Type eval_return(int, const dynamic::Type[], int, const dynamic::Type args[])
     {
         Type t1 = args[0];

@@ -20,19 +20,28 @@
 
 #include "test_scal_accuracy.h"
 #include "matcl-mp/matcl_mp.h"
+#include "matcl-core/IO/logger.h"
 
 #include <iostream>
 
 int main(int argc, const char* argv[])
 {
+    using log_ptr   = std::shared_ptr<std::ofstream>;
+
     try
     {         
-        matcl::test::test_scal_accuracy(std::cout);
-        std::cout << "finished" << "\n";
+        {
+            std::string log_file_name   = std::string("log_test_scal_accuracy.txt");
+            log_ptr log = log_ptr(new std::ofstream(log_file_name));
+            matcl::set_logger(log);
+        };
+
+        matcl::test::test_scal_accuracy(matcl::out_stream);
+        matcl::out_stream << "finished" << "\n";
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        matcl::out_stream << ex.what() << "\n";
         return 1;
     };
 

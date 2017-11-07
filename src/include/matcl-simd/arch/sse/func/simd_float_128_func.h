@@ -312,16 +312,7 @@ struct simd_eeq<float, 128, sse_tag> : simd_cmp_base<float>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_ps(x.data, y.data, _CMP_EQ_OQ);
-        #else
-            float s1    = (x.get<0>() == y.get<0>()) ? val_true : val_false;
-            float s2    = (x.get<1>() == y.get<1>()) ? val_true : val_false;
-            float s3    = (x.get<2>() == y.get<2>()) ? val_true : val_false;
-            float s4    = (x.get<3>() == y.get<3>()) ? val_true : val_false;
-
-            return simd_type(s1, s2, s3, s4);
-        #endif
+        return _mm_cmpeq_ps(x.data, y.data);
     };
 };
 
@@ -333,16 +324,7 @@ struct simd_neq<float, 128, sse_tag> : simd_cmp_base<float>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_ps(x.data, y.data, _CMP_NEQ_UQ);
-        #else
-            float s1    = (x.get<0>() != y.get<0>()) ? val_true : val_false;
-            float s2    = (x.get<1>() != y.get<1>()) ? val_true : val_false;
-            float s3    = (x.get<2>() != y.get<2>()) ? val_true : val_false;
-            float s4    = (x.get<3>() != y.get<3>()) ? val_true : val_false;
-
-            return simd_type(s1, s2, s3, s4);
-        #endif
+        return _mm_cmpneq_ps(x.data, y.data);
     };
 };
 
@@ -354,16 +336,7 @@ struct simd_lt<float, 128, sse_tag> : simd_cmp_base<float>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_ps(x.data, y.data, _CMP_LT_OQ);
-        #else
-            float s1    = (x.get<0>() < y.get<0>()) ? val_true : val_false;
-            float s2    = (x.get<1>() < y.get<1>()) ? val_true : val_false;
-            float s3    = (x.get<2>() < y.get<2>()) ? val_true : val_false;
-            float s4    = (x.get<3>() < y.get<3>()) ? val_true : val_false;
-
-            return simd_type(s1, s2, s3, s4);
-        #endif
+        return _mm_cmplt_ps(x.data, y.data);
     };
 };
 
@@ -375,16 +348,7 @@ struct simd_gt<float, 128, sse_tag> : simd_cmp_base<float>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_ps(x.data, y.data, _CMP_GT_OQ);
-        #else
-            float s1    = (x.get<0>() > y.get<0>()) ? val_true : val_false;
-            float s2    = (x.get<1>() > y.get<1>()) ? val_true : val_false;
-            float s3    = (x.get<2>() > y.get<2>()) ? val_true : val_false;
-            float s4    = (x.get<3>() > y.get<3>()) ? val_true : val_false;
-
-            return simd_type(s1, s2, s3, s4);
-        #endif
+        return _mm_cmpgt_ps(x.data, y.data);
     };
 };
 
@@ -396,16 +360,7 @@ struct simd_leq<float, 128, sse_tag> : simd_cmp_base<float>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_ps(x.data, y.data, _CMP_LE_OQ);
-        #else
-            float s1    = (x.get<0>() <= y.get<0>()) ? val_true : val_false;
-            float s2    = (x.get<1>() <= y.get<1>()) ? val_true : val_false;
-            float s3    = (x.get<2>() <= y.get<2>()) ? val_true : val_false;
-            float s4    = (x.get<3>() <= y.get<3>()) ? val_true : val_false;
-
-            return simd_type(s1, s2, s3, s4);
-        #endif
+        return _mm_cmple_ps(x.data, y.data);
     };
 };
 
@@ -417,16 +372,7 @@ struct simd_geq<float, 128, sse_tag> : simd_cmp_base<float>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX
-            return _mm_cmp_ps(x.data, y.data, _CMP_GE_OQ);
-        #else
-            float s1    = (x.get<0>() >= y.get<0>()) ? val_true : val_false;
-            float s2    = (x.get<1>() >= y.get<1>()) ? val_true : val_false;
-            float s3    = (x.get<2>() >= y.get<2>()) ? val_true : val_false;
-            float s4    = (x.get<3>() >= y.get<3>()) ? val_true : val_false;
-
-            return simd_type(s1, s2, s3, s4);
-        #endif
+        return _mm_cmpge_ps(x.data, y.data);
     };
 };
 
@@ -446,18 +392,28 @@ struct simd_any_nan<float, 128, sse_tag>
 };
 
 template<>
-struct simd_any_inf<float, 128, sse_tag>
+struct simd_any<float, 128, sse_tag>
 {
     using simd_type = simd<float, 128, sse_tag>;
 
     force_inline
     static bool eval(const simd_type& x)
     {
-        simd_type inf   = simd_type(std::numeric_limits<float>::infinity());
-        __m128 nt       = _mm_cmp_ps(x.data, inf.data, _CMP_EQ_OQ);
-        int res         = _mm_movemask_ps(nt);
-
+        int res     = _mm_movemask_ps(x.data);
         return res != 0;
+    };
+};
+
+template<>
+struct simd_all<float, 128, sse_tag>
+{
+    using simd_type = simd<float, 128, sse_tag>;
+
+    force_inline
+    static bool eval(const simd_type& x)
+    {
+        int res     = _mm_movemask_ps(x.data);
+        return res == 15;
     };
 };
 

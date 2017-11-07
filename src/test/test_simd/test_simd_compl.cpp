@@ -29,6 +29,7 @@
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-simd/simd.h"
 #include "matcl-simd/simd_complex.h"
+#include "test_functions.h"
 
 #include <vector>
 
@@ -44,9 +45,9 @@ void test::test_performance_complex()
 };
 
 void test::test_values_complex()
-{
-    test_simd_compl(true).make_binary();
+{    
     test_simd_compl(true).make_unary();
+    test_simd_compl(true).make_binary();
 };
 
 test_simd_compl::test_simd_compl(bool test_values)
@@ -55,8 +56,8 @@ test_simd_compl::test_simd_compl(bool test_values)
 
 void test_simd_compl::make_unary()
 {
-    test_functions<Complex>();
     test_functions<Float_complex>();    
+    test_functions<Complex>();    
 };
 
 void test_simd_compl::make_binary()
@@ -69,14 +70,16 @@ int test_simd_compl::get_N() const
 {
     #ifdef _DEBUG
         int N   = 1000;
-        int M   = 100;
     #else
         int N   = 10000;
-        int M   = 10000;
     #endif
 
     if (m_test_values == true)
-        return N * M;
+        #ifdef _DEBUG
+            return 100000;
+        #else
+            return 1000000;
+        #endif
     else
         return N;
 };
@@ -84,11 +87,9 @@ int test_simd_compl::get_N() const
 int test_simd_compl::get_M() const
 {
     #ifdef _DEBUG
-        int N   = 1000;
         int M   = 100;
     #else
-        int N   = 10000;
-        int M   = 10000;
+        int M   = 1000;
     #endif
 
     if (m_test_values == true)
@@ -136,19 +137,20 @@ void test_simd_compl::test_functions()
 
     dm.disp_header();
 
-    test_function<T, Func_uminus>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function<T, Func_conj>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function<T, test_functions::Func_uminus>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function<T, test_functions::Func_conj>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
 
-    test_function_block<T, Func_any_inf>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function_block<T, Func_any_nan>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function_block<T, Func_reverse>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);    
+    test_function_block<T, test_functions::Func_any_nan>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function_block<T, test_functions::Func_reverse>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);    
+
+    using TR    = typename ms::details::real_type<T>::type;
 
     // block methods are not exact; use positive values in order to
-    // reduce roundoff errors
+    // reduce roundoff errors; scaling in order to avoid overflows
     for (int i = 0; i < N; ++i)
-        ptr_in[i]   = T(std::abs(real(ptr_in[i])), std::abs(imag(ptr_in[i])));
+        ptr_in[i]   = T(std::abs(real(ptr_in[i])) / TR(8), std::abs(imag(ptr_in[i])) / TR(8));
     
-    test_function_block<T, Func_sum_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true); 
+    test_function_block<T, test_functions::Func_sum_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true); 
 };
 
 template<class T>
@@ -201,15 +203,23 @@ void test_simd_compl::test_functions_bin()
     TR* ptr_in_1r = (TR*)ptr_in_1;
     TR* ptr_in_2r = (TR*)ptr_in_2;
 
-    test_function_bin<T, Func_mult>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
-    test_function_bin<T, Func_div>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
-    test_function_bin<T, Func_plus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
-    test_function_bin<T, Func_minus>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+    test_function_bin<T, test_functions::Func_mult>
+        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+    test_function_bin<T, test_functions::Func_div>
+        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
+    test_function_bin<T, test_functions::Func_plus>
+        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+    test_function_bin<T, test_functions::Func_minus>
+        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
 
-    test_function_bin_RC<T, Func_mult_RC, TR>(dm, N, M, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
-    test_function_bin_RC<T, Func_div_RC, TR>(dm, N, M, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
-    test_function_bin_CR<T, Func_mult_CR, TR>(dm, N, M, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
-    test_function_bin_CR<T, Func_div_CR, TR>(dm, N, M, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
+    test_function_bin_RC<T, test_functions::Func_mult_RC, TR>
+        (dm, N, M, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+    test_function_bin_RC<T, test_functions::Func_div_RC, TR>
+        (dm, N, M, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
+    test_function_bin_CR<T, test_functions::Func_mult_CR, TR>
+        (dm, N, M, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
+    test_function_bin_CR<T, test_functions::Func_div_CR, TR>
+        (dm, N, M, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
 };
 
 template<class T, class Func>

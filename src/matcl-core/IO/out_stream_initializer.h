@@ -18,32 +18,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#pragma once
-
 #include "matcl-core/config.h"
-#include "matcl-core/IO/output_stream.h"
+#include "matcl-core/memory/global_objects.h"
 
-#include <fstream>
-#include <memory>
-
-namespace matcl 
+namespace matcl { namespace details
 {
 
-// set log file; every messages printed to global output stream
-// (for example when disp function is called on global output stream)
-// will also be printed to the log file
-MATCL_CORE_EXPORT 
-void                set_logger(const std::shared_ptr<std::ofstream>& log_file);
+struct out_stream_initializer
+{
+    static void open_global();
+    static void close_global();
+};
 
-// return pointer to previously set log file; return empty pointer
-// if log file was not set
-MATCL_CORE_EXPORT
-std::shared_ptr<std::ofstream>
-                    get_logger();   
-
-// return previously set logger as output stream; this stream is synchronized; 
-// return empty pointer if log file was not set
-MATCL_CORE_EXPORT 
-output_stream_ptr   get_logger_output_stream();
-
-}
+}}

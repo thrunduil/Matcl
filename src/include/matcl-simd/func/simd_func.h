@@ -25,6 +25,20 @@
 namespace matcl { namespace simd
 {
 
+// value representing true
+template<class T>
+struct true_value
+{
+    static T get();
+};
+
+// value representing false
+template<class T>
+struct false_value
+{
+    static T get();
+};
+
 // vector of elements in reverse order
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
@@ -92,32 +106,38 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 min(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// test x == y 
+// test x == y; return a vector of floating point numbers containing
+// true_value or false_value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 eeq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// test x != y 
+// test x != y; return a vector of floating point numbers containing
+// true_value or false_value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 neq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// test x < y 
+// test x < y; return a vector of floating point numbers containing
+// true_value or false_value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 lt(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// test x == y 
+// test x == y; return a vector of floating point numbers containing
+// true_value or false_value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 gt(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// test x <= y 
+// test x <= y; return a vector of floating point numbers containing
+// true_value or false_value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 leq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// test x >= y 
+// test x >= y; return a vector of floating point numbers containing
+// true_value or false_value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 geq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
@@ -147,15 +167,19 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 trunc(const simd<Val, Bits, Simd_tag>& x);
 
-// return true if at least element in the vector x is +INF
-template<class Val, int Bits, class Simd_tag>
-bool
-any_inf(const simd<Val, Bits, Simd_tag>& x);
-
 // return true if at least element in the vector x is NAN
 template<class Val, int Bits, class Simd_tag>
-bool
-any_nan(const simd<Val, Bits, Simd_tag>& x);
+bool any_nan(const simd<Val, Bits, Simd_tag>& x);
+
+// return true if all elements in the vector x are equal to true_value,
+// where x contains only true_value or false value
+template<class Val, int Bits, class Simd_tag>
+bool all(const simd<Val, Bits, Simd_tag>& x);
+
+// return true if at least one element in the vector x are equal to true_value,
+// where x contains only true_value or false value
+template<class Val, int Bits, class Simd_tag>
+bool any(const simd<Val, Bits, Simd_tag>& x);
 
 // print content of a vector to a stream
 template<class Val, int Bits, class Simd_tag>

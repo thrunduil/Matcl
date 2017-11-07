@@ -20,21 +20,30 @@
 
 #include "test_performance.h"
 #include "matcl-mp/matcl_mp.h"
+#include "matcl-core/IO/logger.h"
 
 namespace mdy = matcl::dynamic;
 using namespace matcl;
 
 int main(int argc, const char* argv[])
 {
+    using log_ptr   = std::shared_ptr<std::ofstream>;
+
     try
-    {         
+    {      
+        {
+            std::string log_file_name   = std::string("log_test_performance.txt");
+            log_ptr log = log_ptr(new std::ofstream(log_file_name));
+            matcl::set_logger(log);
+        };
+
         matcl::test::test_performance();
 
-        std::cout << "finished" << "\n";
+        out_stream << "finished" << "\n";
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        out_stream << ex.what() << "\n";
         return 1;
     };
 

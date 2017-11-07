@@ -58,7 +58,7 @@ template<class Type>
 void scal_accuracy_tester::test_unary(std::ostream& os, Integer N, const max_vec& max_v)
 {
 
-    std::cout << "type: " << type_name<Type>::value() << "\n";
+    out_stream << "type: " << type_name<Type>::value() << "\n";
 
     formatted_disp dm;
 
@@ -123,7 +123,7 @@ template<class Type>
 void scal_accuracy_tester::test_unary_compl(std::ostream& os, Integer N, const max_vec& max_v)
 {
 
-    std::cout << "type: " << complex_type_name<Type>::value() << "\n";
+    out_stream << "type: " << complex_type_name<Type>::value() << "\n";
 
     formatted_disp dm;
 

@@ -27,6 +27,7 @@
 #include "matcl-scalar/lib_functions/func_binary.h"
 #include "matcl-scalar/lib_functions/func_matrix.h"
 #include "matcl-scalar/lib_functions/func_forwarding.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 #include "rand_scalars.h"
 #include "eval_cons.h"
@@ -70,17 +71,17 @@ struct eval_operator_arithm_obj : eval_scalars<eval_operator_arithm_obj<Derived>
         if (dif <= tol)
             return false;
 
-        std::cout << a << " " << b << "\n";
-        std::cout << dif << " " << tol << "\n";
+        out_stream << a << " " << b << "\n";
+        out_stream << dif << " " << tol << "\n";
         return true;
     };
 
     template<class T1, class T2>
     double eval_scal_func(const T1& s1, const T2& s2)
     {
-        //std::cout << code << "\n";
+        //out_stream << code << "\n";
         if (code == -1)
-            std::cout << "break\n";
+            disp("break");
 
         if ((md::is_complex<T1>::value || md::is_complex<T2>::value) && complex_allowed == false)
             return 0.0;
@@ -139,8 +140,8 @@ struct eval_operator_arithm_obj : eval_scalars<eval_operator_arithm_obj<Derived>
 
         if (out != 0.0)
         {
-            std::cout << s1 << " " << s2 << "\n";
-            std::cout << code << "\n";
+            out_stream << s1 << " " << s2 << "\n";
+            out_stream << code << "\n";
         }
         return out;
     };

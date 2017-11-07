@@ -29,6 +29,7 @@
 #include "matcl-dynamic/matcl_dynamic.h"
 #include "matcl-scalar/objects/typed_object_functions.h"
 #include "matcl-scalar/lib_functions/manip.h"
+#include "matcl-scalar/IO/scalar_io.h"
 
 #include "rand_scalars.h"
 
@@ -351,13 +352,13 @@ void test_dynamic::test_predefined_unify()
     }
     catch(std::exception& ex)
     {
-        std::cout << "predefinedunify EXCEPTION: " << ex.what() << "\n";
+        out_stream << "predefined unify EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "predefined unify: " << "ok" << "\n";
+        out_stream << "predefined unify: " << "ok" << "\n";
     else
-        std::cout << "predefined unify: " << "FAILED" << "\n";
+        out_stream << "predefined unify: " << "FAILED" << "\n";
 };
 void test_dynamic::test_object()
 {
@@ -369,13 +370,13 @@ void test_dynamic::test_object()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_object EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_object EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "object: " << "ok" << "\n";
+        out_stream << "object: " << "ok" << "\n";
     else
-        std::cout << "object: " << "FAILED" << "\n";
+        out_stream << "object: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_one()
@@ -388,13 +389,13 @@ void test_dynamic::test_one()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_one EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_one EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "one: " << "ok" << "\n";
+        out_stream << "one: " << "ok" << "\n";
     else
-        std::cout << "one: " << "FAILED" << "\n";
+        out_stream << "one: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_object_type()
@@ -407,13 +408,13 @@ void test_dynamic::test_object_type()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_object_type EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_object_type EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "typed object: " << "ok" << "\n";
+        out_stream << "typed object: " << "ok" << "\n";
     else
-        std::cout << "typed object: " << "FAILED" << "\n";
+        out_stream << "typed object: " << "FAILED" << "\n";
 };
 void test_dynamic::test_special_types()
 {
@@ -425,13 +426,13 @@ void test_dynamic::test_special_types()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_special_types EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_special_types EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "special types: " << "ok" << "\n";
+        out_stream << "special types: " << "ok" << "\n";
     else
-        std::cout << "special types: " << "FAILED" << "\n";
+        out_stream << "special types: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_cons()
@@ -444,13 +445,13 @@ void test_dynamic::test_cons()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_cons EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_cons EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "constructors: " << "ok" << "\n";
+        out_stream << "constructors: " << "ok" << "\n";
     else
-        std::cout << "constructors: " << "FAILED" << "\n";
+        out_stream << "constructors: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_cons_val()
@@ -463,13 +464,13 @@ void test_dynamic::test_cons_val()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_cons_val EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_cons_val EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "constructors val: " << "ok" << "\n";
+        out_stream << "constructors val: " << "ok" << "\n";
     else
-        std::cout << "constructors val: " << "FAILED" << "\n";
+        out_stream << "constructors val: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_object_func()
@@ -482,13 +483,13 @@ void test_dynamic::test_object_func()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_object_func EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_object_func EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "object_func: " << "ok" << "\n";
+        out_stream << "object_func: " << "ok" << "\n";
     else
-        std::cout << "object_func: " << "FAILED" << "\n";
+        out_stream << "object_func: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_object_func_val()
@@ -501,13 +502,13 @@ void test_dynamic::test_object_func_val()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_object_func_val EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_object_func_val EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "object_func val: " << "ok" << "\n";
+        out_stream << "object_func val: " << "ok" << "\n";
     else
-        std::cout << "object_func val: " << "FAILED" << "\n";
+        out_stream << "object_func val: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_func_uminus()
@@ -520,13 +521,13 @@ void test_dynamic::test_func_uminus()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_uminus EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_uminus EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "func_uminus: " << "ok" << "\n";
+        out_stream << "func_uminus: " << "ok" << "\n";
     else
-        std::cout << "func_uminus: " << "FAILED" << "\n";
+        out_stream << "func_uminus: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_func_reim()
@@ -539,13 +540,13 @@ void test_dynamic::test_func_reim()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_reim EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_reim EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "reim: " << "ok" << "\n";
+        out_stream << "reim: " << "ok" << "\n";
     else
-        std::cout << "reim: " << "FAILED" << "\n";
+        out_stream << "reim: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_func_compare()
@@ -558,13 +559,13 @@ void test_dynamic::test_func_compare()
     }
     catch(std::exception& ex)
     {
-        std::cout << "test_func_compare EXCEPTION: " << ex.what() << "\n";
+        out_stream << "test_func_compare EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "compare_func: " << "ok" << "\n";
+        out_stream << "compare_func: " << "ok" << "\n";
     else
-        std::cout << "compare_func: " << "FAILED" << "\n";
+        out_stream << "compare_func: " << "FAILED" << "\n";
 };
 
 void test_dynamic::test_predefined_func(const dynamic::function_name& func, bool promote_int)
@@ -577,15 +578,15 @@ void test_dynamic::test_predefined_func(const dynamic::function_name& func, bool
     }
     catch(std::exception& ex)
     {
-        std::cout << "predefined function "
+        out_stream << "predefined function "
                 << func.to_string() << " EXCEPTION: " << ex.what() << "\n";
     };
 
     if (res == true)
-        std::cout << "predefined function: " 
+        out_stream << "predefined function: " 
                   << func.to_string() << " ok" << "\n";
     else
-        std::cout << "predefined function: " 
+        out_stream << "predefined function: " 
                   << func.to_string() << " FAILED" << "\n";
 };
 
@@ -2613,7 +2614,7 @@ double test_dynamic::test_cons_1(mdy::Type t1, mdy::Type t2, const type2_set& mi
     {
         if (missing.find(type2(t1, t2)) == missing.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -2629,7 +2630,7 @@ double test_dynamic::test_cons_1(mdy::Type t1, mdy::Type t2, const type2_set& mi
     {
         if (missing_as.find(type2(t1, t2)) == missing_as.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -2750,7 +2751,7 @@ double test_dynamic::test_compare_1(mdy::Type t1, mdy::Type t2, const type2_set&
     {
         if (missing.find(type2(t1, t2)) == missing.end())
         {
-            std::cout << ex.what() << "\n";
+            disp(ex.what());
             res += 1;
         };
     }
@@ -2803,7 +2804,7 @@ double test_dynamic::test_func_1(mdy::Type t1)
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 
@@ -2889,7 +2890,7 @@ double test_dynamic::test_func_uminus_1(mdy::Type t1)
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 
@@ -2953,7 +2954,7 @@ double test_dynamic::test_func_reim_1(mdy::Type t1)
     }
     catch(std::exception& ex)
     {
-        std::cout << ex.what() << "\n";
+        disp(ex.what());
         res += 1;
     }
 

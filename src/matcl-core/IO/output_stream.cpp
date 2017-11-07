@@ -43,6 +43,12 @@ void output_stream_from_ostream::disp(std::stringstream& of)
     m_stream.flush();
 };
 
+void output_stream_from_ostream::disp(const std::string& str)
+{
+    m_stream << str;
+    m_stream.flush();
+};
+
 output_stream_from_ostream_synchronized
     ::output_stream_from_ostream_synchronized(std::ostream& os)
     :m_stream(os)
@@ -65,6 +71,14 @@ void output_stream_from_ostream_synchronized::disp(std::stringstream& of)
         m_stream << of.rdbuf();
 
     of.seekg(0, std::ios::end);
+    m_stream.flush();
+};
+
+void output_stream_from_ostream_synchronized::disp(const std::string& str)
+{
+    std::unique_lock<matcl::default_mutex> lock(*m_mutex);
+
+    m_stream << str;
     m_stream.flush();
 };
 
@@ -91,6 +105,14 @@ class global_output_stream_impl : public output_stream
                 m_log_stream->disp(of);
 
             return get_stream_impl()->disp(of);
+        };
+
+        virtual void disp(const std::string& str) override
+        {
+            if (m_log_stream)
+                m_log_stream->disp(str);
+
+            return get_stream_impl()->disp(str);
         };
 
         output_stream_ptr get_current()

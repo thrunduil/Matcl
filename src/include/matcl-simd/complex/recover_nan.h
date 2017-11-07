@@ -22,9 +22,12 @@
 
 #include "matcl-simd/config.h"
 #include "matcl-core/details/complex_details.h"
+#include "matcl-core/details/scalfunc_real.h"
 
 namespace matcl { namespace simd { namespace details
 {
+
+namespace mrd = matcl::raw::details;
 
 template<class T>
 struct recover_nan_mul
@@ -49,7 +52,7 @@ struct recover_nan_mul<double>
     {
         using impl_type = md::mul_helper<Complex, Complex>;
 
-        if (is_nan(r_re) == false || is_nan(r_im) == false)
+        if (mrd::scal_func::isnan(r_re) == false || mrd::scal_func::isnan(r_im) == false)
             return complex_type(r_re, r_im);
 
         matcl_complex mx(real(x), imag(x));
@@ -71,7 +74,7 @@ struct recover_nan_mul<float>
     {
         using impl_type = md::mul_helper<Float_complex, Float_complex>;
 
-        if (is_nan(r_re) == false || is_nan(r_im) == false)
+        if (mrd::scal_func::isnan(r_re) == false || mrd::scal_func::isnan(r_im) == false)
             return complex_type(r_re, r_im);
 
         matcl_complex mx(real(x), imag(x));
