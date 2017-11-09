@@ -107,6 +107,9 @@ struct eval_operator_arithm : eval_scalars<eval_operator_arithm<Derived>>
         bool is_int_1   = std::is_same<T1,Integer>::value;
         bool is_int_2   = std::is_same<T2,Integer>::value;
 
+        (void)is_zero_1;
+        (void)is_zero_2;
+
         mp_int      v1_1    = convert_scalar<mp_int>(s1);
         mp_float    v1_2    = convert_scalar<mp_float>(s1);
         mp_rational v1_3    = convert_scalar<mp_rational>(s1);

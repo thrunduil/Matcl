@@ -461,44 +461,81 @@ matcl::powm1(const S1& x, const S2& y)
     return details::basic_binfunc_helper<S>::eval_powm1(S(x), S(y));
 };
 
-inline Real matcl::fma(Real a, Real b, Real c)
+inline Real matcl::fma_f(Real a, Real b, Real c)
 {
-    return mrd::fma_helper<Real>::eval(a,b,c);
-};
-inline Float matcl::fma(Float a, Float b, Float c)
-{
-    return mrd::fma_helper<Float>::eval(a,b,c);
-};
-inline Object matcl::fma(const Object& a, const Object& b, const Object& c)
-{
-    return mrd::fma_helper<Object>::eval(a,b,c);
+    return mrd::fma_f_helper<Real>::eval(a,b,c);
 };
 
-inline Real matcl::fms(Real a, Real b, Real c)
+inline Float matcl::fma_f(Float a, Float b, Float c)
 {
-    return mrd::fms_helper<Real>::eval(a,b,c);
-};
-inline Float matcl::fms(Float a, Float b, Float c)
-{
-    return mrd::fms_helper<Float>::eval(a,b,c);
-};
-inline Object matcl::fms(const Object& a, const Object& b, const Object& c)
-{
-    return mrd::fms_helper<Object>::eval(a,b,c);
+    return mrd::fma_f_helper<Float>::eval(a,b,c);
 };
 
-inline Real matcl::dot2_ac(Real a, Real b, Real c, Real d)
+inline Object matcl::fma_f(const Object& a, const Object& b, const Object& c)
 {
-    return mrd::dot2_ac_helper<Real>::eval(a,b,c,d);
-}
-inline Float matcl::dot2_ac(Float a, Float b, Float c, Float d)
+    return mrd::fma_f_helper<Object>::eval(a,b,c);
+};
+
+inline Real matcl::fms_f(Real a, Real b, Real c)
 {
-    return mrd::dot2_ac_helper<Float>::eval(a,b,c,d);
+    return mrd::fms_f_helper<Real>::eval(a,b,c);
+};
+
+inline Float matcl::fms_f(Float a, Float b, Float c)
+{
+    return mrd::fms_f_helper<Float>::eval(a,b,c);
+};
+
+inline Object matcl::fms_f(const Object& a, const Object& b, const Object& c)
+{
+    return mrd::fms_f_helper<Object>::eval(a,b,c);
+};
+
+//
+inline Real matcl::fma_a(Real a, Real b, Real c)
+{
+    return mrd::fma_a_helper<Real>::eval(a,b,c);
+};
+
+inline Float matcl::fma_a(Float a, Float b, Float c)
+{
+    return mrd::fma_a_helper<Float>::eval(a,b,c);
+};
+
+inline Object matcl::fma_a(const Object& a, const Object& b, const Object& c)
+{
+    return mrd::fma_a_helper<Object>::eval(a,b,c);
+};
+
+inline Real matcl::fms_a(Real a, Real b, Real c)
+{
+    return mrd::fms_a_helper<Real>::eval(a,b,c);
+};
+
+inline Float matcl::fms_a(Float a, Float b, Float c)
+{
+    return mrd::fms_a_helper<Float>::eval(a,b,c);
+};
+
+inline Object matcl::fms_a(const Object& a, const Object& b, const Object& c)
+{
+    return mrd::fms_a_helper<Object>::eval(a,b,c);
+};
+
+inline Real matcl::dot2_a(Real a, Real b, Real c, Real d)
+{
+    return mrd::dot2_a_helper<Real>::eval(a,b,c,d);
 }
-inline Object matcl::dot2_ac(const Object& a, const Object& b, const Object& c, 
+
+inline Float matcl::dot2_a(Float a, Float b, Float c, Float d)
+{
+    return mrd::dot2_a_helper<Float>::eval(a,b,c,d);
+}
+
+inline Object matcl::dot2_a(const Object& a, const Object& b, const Object& c, 
                                     const Object& d)
 {
-    return mrd::dot2_ac_helper<Object>::eval(a,b,c,d);
+    return mrd::dot2_a_helper<Object>::eval(a,b,c,d);
 }
 
 }

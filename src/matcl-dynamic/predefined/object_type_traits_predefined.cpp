@@ -123,8 +123,10 @@ bool object_type_traits<Complex>::read(std::istream& is, T& val)
 
     val = Complex(re,im);
 
-    if (is.fail() || is.bad())  return false;
-    else						return true;
+    if (is.fail() || is.bad())
+        return false;
+    else
+        return true;
 }
 
 void object_type_traits<Complex>::write(std::ostream& os, const T& t)
@@ -166,8 +168,10 @@ bool object_type_traits<Float_complex>::read(std::istream& is, T& val)
 
     val = Float_complex(re,im);
 
-    if (is.fail() || is.bad())  return false;
-    else						return true;
+    if (is.fail() || is.bad())
+        return false;
+    else
+        return true;
 }
 
 void object_type_traits<Float_complex>::write(std::ostream& os, const T& t)

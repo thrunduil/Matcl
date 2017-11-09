@@ -61,6 +61,12 @@
     <Filter Include="Source Files\include\details\options">
       <UniqueIdentifier>{7420eb63-f091-4049-ac26-4163269153ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\float">
+      <UniqueIdentifier>{a1965280-4d2b-4d0a-a602-2e96f9d66bb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\float">
+      <UniqueIdentifier>{348d87f4-32b6-4693-a2c5-dbf01bf697c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h">
@@ -240,6 +246,12 @@
     <ClInclude Include="..\..\src\matcl-core\IO\out_stream_initializer.h">
       <Filter>Source Files\src\IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\float\twofold.h">
+      <Filter>Source Files\include\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\float\float_binary_rep.h">
+      <Filter>Source Files\include\float</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
@@ -280,6 +292,12 @@
     </None>
     <None Include="..\..\src\include\matcl-core\details\global_objects.inl">
       <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\float\twofold.inl">
+      <Filter>Source Files\include\details\float</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\float\float_binary_rep.inl">
+      <Filter>Source Files\include\details\float</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +393,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\IO\out_stream.cpp">
       <Filter>Source Files\src\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\twofold.cpp">
+      <Filter>Source Files\src\lib_functions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

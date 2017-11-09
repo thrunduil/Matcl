@@ -25,6 +25,8 @@
 #include "utils/extend_precision.h"
 #include "matcl-mp/constants.h"
 
+#include <iostream>
+
 namespace matcl { namespace mp { namespace details
 {
 
@@ -81,11 +83,11 @@ mp_float mp_nextafter_helper::eval(const mp_float& x, const mp_float& y)
     return a;
 };
 
-mp_float mp_float_distance_helper::eval(const mp_float& x, const mp_float& y)
+mp_float mp_float_distance_helper::eval(const mp_float& x, const mp_float& y, precision req_p)
 {
     precision p1    = x.get_precision();
     precision p2    = y.get_precision();
-    precision p     = std::min(p1, p2);
+    precision p     = req_p == 0 ? std::min(p1, p2) : req_p;
 
     if (is_nan(x) || is_nan(y))
         return constants::mp_nan(p);
@@ -96,8 +98,26 @@ mp_float mp_float_distance_helper::eval(const mp_float& x, const mp_float& y)
     if (xp == yp)
         return mp_float(0.0, p);
 
-    //TODO: this is only an approximation
-    mp_float dist   = abs(xp - yp) / eps(xp);
+    mp_float axp    = abs(xp);
+    mp_float ayp    = abs(yp);
+    mp_float min_xy = (axp < ayp) ? axp : ayp;
+    mp_float dist   = abs(x - y) / eps(mp_float(min_xy, p));
+    return dist;
+};
+
+mp_float mp_ulp_distance_helper::eval(const mp_float& x, const mp_float& y, precision req_p)
+{
+    precision p1    = x.get_precision();
+    precision p2    = y.get_precision();
+    precision p     = req_p == 0 ? std::min(p1, p2) : req_p;
+
+    if (is_nan(x) || is_nan(y))
+        return constants::mp_nan(p);
+
+    if (x == y)
+        return mp_float(0.0, p);
+
+    mp_float dist   = abs(x - y) / eps(mp_float(x, p));
     return dist;
 };
 

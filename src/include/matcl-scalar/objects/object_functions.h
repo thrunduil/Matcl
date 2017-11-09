@@ -178,14 +178,22 @@ MATCL_SCALAR_EXPORT object     logb(const object& x);
 // cast result of logb to integer
 MATCL_SCALAR_EXPORT object     ilogb(const object& x);
 
-// return fused multiply add (a*b + c)
-MATCL_SCALAR_EXPORT object     fma(const object& x, const object& y, const object& c);
+// return fused multiply add (a*b + c); can be evaluated according to 
+// definition (i.e. with two roundings) if FMA instruction is not available
+MATCL_SCALAR_EXPORT object     fma_f(const object& x, const object& y, const object& c);
 
-// return fused multiply subtract (a*b - c)
-MATCL_SCALAR_EXPORT object     fms(const object& x, const object& y, const object& c);
+// return fused multiply add (a*b + c); only one rounding is allowed
+MATCL_SCALAR_EXPORT object     fma_a(const object& x, const object& y, const object& c);
+
+// return fused multiply subtract (a*b - c); can be evaluated according to 
+// definition (i.e. with two roundings) if FMA instruction is not available
+MATCL_SCALAR_EXPORT object     fms_f(const object& x, const object& y, const object& c);
+
+// return fused multiply subtract (a*b - c); only one rounding is allowed
+MATCL_SCALAR_EXPORT object     fms_a(const object& x, const object& y, const object& c);
 
 // calculate a * b + c * d accurately
-MATCL_SCALAR_EXPORT object     dot2_ac(const object& x, const object& y, const object& c, 
+MATCL_SCALAR_EXPORT object     dot2_a(const object& x, const object& y, const object& c, 
                                 const object& d);
 
 // return epsilon value eps, i.e positive distance from abs(x) to the next larger in

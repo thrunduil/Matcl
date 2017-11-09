@@ -466,31 +466,31 @@ struct Func_gt
     };
 };
 
-struct Func_fma
+struct Func_fma_f
 {
     template<class T>    
     force_inline static T eval(const T& x1, const T& x2, const T& x3)
     { 
-        return fma(x1, x2, x3); 
+        return fma_f(x1, x2, x3); 
     }
 
     static std::string name()
     { 
-        return "fma"; 
+        return "fma_f"; 
     };
 };
 
-struct Func_fms
+struct Func_fms_f
 {
     template<class T>    
     force_inline static T eval(const T& x1, const T& x2, const T& x3)
     { 
-        return fms(x1, x2, x3); 
+        return fms_f(x1, x2, x3); 
     }
 
     static std::string name()
     { 
-        return "fms"; 
+        return "fms_f"; 
     };
 };
 

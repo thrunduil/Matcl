@@ -26,13 +26,15 @@
 namespace matcl { namespace simd
 {
 
-// return x * y + z; 
-inline double fma(const double& x, const double& y, const double& z);
-inline float  fma(const float& x, const float& y, const float& z);
+// return x * y + z; use FMA instruction if available, otherwise
+// evaluate according to definition (with two roundings)
+inline double fma_f(const double& x, const double& y, const double& z);
+inline float  fma_f(const float& x, const float& y, const float& z);
 
-// return x * y - z; 
-inline double fms(const double& x, const double& y, const double& z);
-inline float  fms(const float& x, const float& y, const float& z);
+// return x * y - z; use FMA instruction if available, otherwise
+// evaluate according to definition (with two roundings) 
+inline double fms_f(const double& x, const double& y, const double& z);
+inline float  fms_f(const float& x, const float& y, const float& z);
 
 }}
 

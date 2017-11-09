@@ -48,7 +48,7 @@ namespace matcl { namespace details
     template<class T, bool Is_compl = is_complex<T>::value>
     struct saveload_scalar_helper_impl
     {
-        static std::ostream& eval_save(std::ostream& os, const T& A)
+        static void eval_save(std::ostream& os, const T& A)
         {
             boost::io::ios_flags_saver old_flags(os);
             boost::io::ios_precision_saver old_prec(os);
@@ -61,19 +61,19 @@ namespace matcl { namespace details
             os << " ";
             mr::stream_helpers::write(os, A);
             os << " ";
-            return os;
+            return;
         }
-        static std::istream& eval_load(std::istream& is, T& A)
+
+        static bool eval_load(std::istream& is, T& A)
         {
-            mr::stream_helpers::read(is, A);
-            return is;
+            return mr::stream_helpers::read(is, A);
         }
     };
 
     template<class T>
     struct saveload_scalar_helper_impl<T, true>
     {
-        static std::ostream& eval_save(std::ostream& os, const T& A)
+        static void eval_save(std::ostream& os, const T& A)
         {
             boost::io::ios_flags_saver old_flags(os);
             boost::io::ios_precision_saver old_prec(os);
@@ -86,59 +86,53 @@ namespace matcl { namespace details
             os << " ";
             mr::stream_helpers::write(os, A);
             os << " ";
-            return os;
+            return;
         }
-        static std::istream& eval_load(std::istream& is, T& A)
+ 
+        static bool eval_load(std::istream& is, T& A)
         {
-            mr::stream_helpers::read(is, A);
-            return is;
+            return mr::stream_helpers::read(is, A);
         }
     };
 
-    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Integer A)
+    void saveload_scalar_helper::eval_save(std::ostream& os, Integer A)
     {
         return saveload_scalar_helper_impl<Integer>::eval_save(os, A);
     };
-    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Float A)
+    void saveload_scalar_helper::eval_save(std::ostream& os, Float A)
     {
         return saveload_scalar_helper_impl<Float>::eval_save(os, A);
     };
-    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, Real A)
+    void saveload_scalar_helper::eval_save(std::ostream& os, Real A)
     {
         return saveload_scalar_helper_impl<Real>::eval_save(os, A);
     };
-    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, const Complex& A)
+    void saveload_scalar_helper::eval_save(std::ostream& os, const Complex& A)
     {
         return saveload_scalar_helper_impl<Complex>::eval_save(os, A);
     };
-    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, const Float_complex& A)
+    void saveload_scalar_helper::eval_save(std::ostream& os, const Float_complex& A)
     {
         return saveload_scalar_helper_impl<Float_complex>::eval_save(os, A);
     };
-    /*
-    std::ostream& saveload_scalar_helper::eval_save(std::ostream& os, const Object& A)
-    {
-        return saveload_scalar_helper_impl<Object>::eval_save(os, A);
-    };
-    */
 
-    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Integer& A)
+    bool saveload_scalar_helper::eval_load(std::istream& is, Integer& A)
     {
         return saveload_scalar_helper_impl<Integer>::eval_load(is, A);
     }
-    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Real& A)
+    bool saveload_scalar_helper::eval_load(std::istream& is, Real& A)
     {
         return saveload_scalar_helper_impl<Real>::eval_load(is, A);
     }
-    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Float& A)
+    bool saveload_scalar_helper::eval_load(std::istream& is, Float& A)
     {
         return saveload_scalar_helper_impl<Float>::eval_load(is, A);
     }
-    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Complex& A)
+    bool saveload_scalar_helper::eval_load(std::istream& is, Complex& A)
     {
         return saveload_scalar_helper_impl<Complex>::eval_load(is, A);
     }
-    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Float_complex& A)
+    bool saveload_scalar_helper::eval_load(std::istream& is, Float_complex& A)
     {
         return saveload_scalar_helper_impl<Float_complex>::eval_load(is, A);
     }

@@ -96,7 +96,7 @@ sum_all(const simd_compl<Val, Bits, Simd_tag>& x);
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd_compl<Val, Bits, Simd_tag>
-fma(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+fma_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
                        const simd_compl<Val, Bits, Simd_tag>& z)
 {
     return x * y + z;
@@ -106,7 +106,7 @@ fma(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_t
 // of x * y, where x is a real vector and y is a complex vector
 template<class Val, int Bits, class Simd_tag>
 simd_compl<Val, Bits, Simd_tag>
-fma(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+fma_f(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
                        const simd_compl<Val, Bits, Simd_tag>& z)
 {
     return x * y + z;
@@ -117,7 +117,7 @@ fma(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd_compl<Val, Bits, Simd_tag>
-fma(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+fma_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd_compl<Val, Bits, Simd_tag>& z)
 {
     return x * y + z;
@@ -127,7 +127,7 @@ fma(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd_compl<Val, Bits, Simd_tag>
-fms(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+fms_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
                        const simd_compl<Val, Bits, Simd_tag>& z)
 {
     return x * y - z;
@@ -138,7 +138,7 @@ fms(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_t
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd_compl<Val, Bits, Simd_tag>
-fms(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+fms_f(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
                        const simd_compl<Val, Bits, Simd_tag>& z)
 {
     return x * y - z;
@@ -149,7 +149,7 @@ fms(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd_compl<Val, Bits, Simd_tag>
-fms(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+fms_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd_compl<Val, Bits, Simd_tag>& z)
 {
     return x * y - z;

@@ -314,25 +314,41 @@ typename md::real_unify_types_promote<S1,Float>::type
 // when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
 // then only one rounding at the end of computation is performed, otherwise
 // this function is evaluated as two arithmetic operations
-inline Real                 fma(Real a, Real b, Real c);
-inline Float                fma(Float a, Float b, Float c);
-inline Object               fma(const Object& a, const Object& b, const Object& c);
+inline Real                 fma_f(Real a, Real b, Real c);
+inline Float                fma_f(Float a, Float b, Float c);
+inline Object               fma_f(const Object& a, const Object& b, const Object& c);
+
+// return a * b + c; 
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+inline Real                 fma_a(Real a, Real b, Real c);
+inline Float                fma_a(Float a, Float b, Float c);
+inline Object               fma_a(const Object& a, const Object& b, const Object& c);
 
 // return a * b - c
 // when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
 // then only one rounding at the end of computation is performed, otherwise
 // this function is evaluated as two arithmetic operations
-inline Real                 fms(Real a, Real b, Real c);
-inline Float                fms(Float a, Float b, Float c);
-inline Object               fms(const Object& a, const Object& b, const Object& c);
+inline Real                 fms_f(Real a, Real b, Real c);
+inline Float                fms_f(Float a, Float b, Float c);
+inline Object               fms_f(const Object& a, const Object& b, const Object& c);
 
-// compute a * b + c * d 
+// return a * b - c
 // when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
-// then Kahan's algorithm is used, which gives high accuracy of the result,
-// otherwise this function is evaluated according to definition
-inline Real                 dot2_ac(Real a, Real b, Real c, Real d);
-inline Float                dot2_ac(Float a, Float b, Float c, Float d);
-inline Object               dot2_ac(const Object& a, const Object& b, const Object& c, 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+inline Real                 fms_a(Real a, Real b, Real c);
+inline Float                fms_a(Float a, Float b, Float c);
+inline Object               fms_a(const Object& a, const Object& b, const Object& c);
+
+// compute a * b + c * d using the Kahan's algorithm, which gives high
+// accuracy of the result;
+// this function uses fma instruction is available; when fma is not available
+// (i.e. MATCL_ARCHITECTURE_HAS_FMA = 0), this function can be very slow
+inline Real                 dot2_a(Real a, Real b, Real c, Real d);
+inline Float                dot2_a(Float a, Float b, Float c, Float d);
+inline Object               dot2_a(const Object& a, const Object& b, const Object& c, 
                                     const Object& d);
 
 };

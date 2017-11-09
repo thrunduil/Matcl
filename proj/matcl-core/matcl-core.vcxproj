@@ -51,6 +51,8 @@
     <ClInclude Include="..\..\src\include\matcl-core\error\exception_classes.h" />
     <ClInclude Include="..\..\src\include\matcl-core\error\exception_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\error\safe_string_message.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\float\float_binary_rep.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\float\twofold.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\machine.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\thread.h" />
@@ -82,6 +84,8 @@
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\alloc.inl" />
     <None Include="..\..\src\include\matcl-core\details\constants.inl" />
+    <None Include="..\..\src\include\matcl-core\details\float\float_binary_rep.inl" />
+    <None Include="..\..\src\include\matcl-core\details\float\twofold.inl" />
     <None Include="..\..\src\include\matcl-core\details\global_objects.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_table.inl" />
@@ -124,6 +128,7 @@
     <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\matfunc_pow.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\twofold.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp" />
   </ItemGroup>

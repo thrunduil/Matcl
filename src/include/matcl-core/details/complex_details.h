@@ -270,8 +270,8 @@ struct mul_helper<complex<T>,complex<S>>
 
         namespace ms = mrd::scal_func;
 
-        real_type r_re  = ms::fms(a_re, b_re, a_im * b_im);
-        real_type r_im  = ms::fma(a_re, b_im, a_im * b_re);        
+        real_type r_re  = ms::fms_f(a_re, b_re, a_im * b_im);
+        real_type r_im  = ms::fma_f(a_re, b_im, a_im * b_re);        
 
         if (ms::isnan(r_re) == true && ms::isnan(r_im) == true)
             return recover_nan(a, b, r_re, r_im);
@@ -347,8 +347,8 @@ struct mul_helper<complex<T>,complex<S>>
 
         if (recalc) 
         {
-            r_re = constants::inf<real_type>() * ms::fms(a_re, b_re, - a_im * b_im );
-            r_im = constants::inf<real_type>() * ms::fma(a_re, b_im,   a_im * b_re );
+            r_re = constants::inf<real_type>() * ms::fms_f(a_re, b_re, - a_im * b_im );
+            r_im = constants::inf<real_type>() * ms::fma_f(a_re, b_im,   a_im * b_re );
         }
 
         return return_type(r_re, r_im);
@@ -453,28 +453,28 @@ struct div_helper<complex<T>,complex<S>>
         namespace ms = mrd::scal_func;
 
 		TS r        = b_im / b_re;		
-        TS t        = TS(1) / ms::fma(r, b_im, b_re);        
+        TS t        = TS(1) / ms::fma_f(r, b_im, b_re);        
 
         //underflow protection; see A Robust Complex Division in Scilab
         //Michael Baudin, Robert L. Smith;
 
         //use fma instead of sequence of *,+ in order to gain speed and
-        //accuracy
+        //possibly accuracy
         if (r != TS(0))
         {            
             //ret_re    = (a_re + a_im * r) * t;
-            ret_re      = ms::fma(a_im, r, a_re) * t;
+            ret_re      = ms::fma_f(a_im, r, a_re) * t;
 
             //ret_im    = (a_im - a_re * r) * t;
-            ret_im      = ms::fma(-a_re, r, a_im) * t;		    
+            ret_im      = ms::fma_f(-a_re, r, a_im) * t;		    
         }
         else
         {
             //ret_re    = (a_re + b_im * (a_im/b_re)) * t;
-            ret_re      = ms::fma(b_im, a_im/b_re, a_re) * t;
+            ret_re      = ms::fma_f(b_im, a_im/b_re, a_re) * t;
 
             //ret_im    = (a_im - b_im * (a_re/b_re)) * t;
-            ret_im      = ms::fma(-b_im, a_re/b_re, a_im) * t;		    
+            ret_im      = ms::fma_f(-b_im, a_re/b_re, a_im) * t;		    
         }
 
         return;
@@ -613,7 +613,7 @@ struct div_helper<T,complex<S>>
 
 		TS r        = b_im / b_re;
 		//TS d      = b_re + r * b_im;
-        TS d        = ms::fma(r, b_im, b_re);
+        TS d        = ms::fma_f(r, b_im, b_re);
 
         if (r != TS(0))
         {            
@@ -636,7 +636,7 @@ struct div_helper<T,complex<S>>
 
 		TS r        = b_re / b_im;
 		//TS d      = b_im + r * b_re;
-        TS d        = ms::fma(r, b_re, b_im);
+        TS d        = ms::fma_f(r, b_re, b_im);
 
         if (r != TS(0))
         {            

@@ -37,16 +37,21 @@ using namespace matcl;
 
 void example_object();
 
+/*
 static void break_func()
 {
     disp("break");
 };
+*/
 
 #include <iostream>
 #include <sstream>
 
 int main(int argc, const char* argv[])
 {
+    (void)argc;
+    (void)argv;
+
     using log_ptr   = std::shared_ptr<std::ofstream>;
 
     try

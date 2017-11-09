@@ -4485,64 +4485,112 @@ struct nextbelow_helper<dynamic::object>
 };
 
 template<class T>
-struct fma_helper
+struct fma_f_helper
 {
     force_inline
     static T eval(const T& a, const T& b, const T& c)
     {
-        return scal_func::fma(a, b, c);
+        return scal_func::fma_f(a, b, c);
     }
 
-    static dynamic::function_name name() { return mdyf::fma::eval(); };
+    static dynamic::function_name name() { return mdyf::fma_f::eval(); };
 };
+
 template<>
-struct fma_helper<dynamic::object>
+struct fma_f_helper<dynamic::object>
 {
     static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, const dynamic::object& c)
     {
-        return dynamic::fma(a, b, c);
+        return dynamic::fma_f(a, b, c);
     }
-    static dynamic::function_name name() { return mdyf::fma::eval(); };
+    static dynamic::function_name name() { return mdyf::fma_f::eval(); };
 };
 
 template<class T>
-struct fms_helper
+struct fms_f_helper
 {
     force_inline
     static T eval(const T& a, const T& b, const T& c)
     {
-        return scal_func::fms(a, b, c);
+        return scal_func::fms_f(a, b, c);
     }
-    static dynamic::function_name name() { return mdyf::fms::eval(); };
+
+    static dynamic::function_name name() { return mdyf::fms_f::eval(); };
 };
+
 template<>
-struct fms_helper<dynamic::object>
+struct fms_f_helper<dynamic::object>
 {
     static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, const dynamic::object& c)
     {
-        return dynamic::fms(a, b, c);
+        return dynamic::fms_f(a, b, c);
     }
-    static dynamic::function_name name() { return mdyf::fms::eval(); };
+    static dynamic::function_name name() { return mdyf::fms_f::eval(); };
+};
+
+//
+template<class T>
+struct fma_a_helper
+{
+    force_inline
+    static T eval(const T& a, const T& b, const T& c)
+    {
+        return scal_func::fma_a(a, b, c);
+    }
+
+    static dynamic::function_name name() { return mdyf::fma_a::eval(); };
+};
+
+template<>
+struct fma_a_helper<dynamic::object>
+{
+    static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, const dynamic::object& c)
+    {
+        return dynamic::fma_a(a, b, c);
+    }
+    static dynamic::function_name name() { return mdyf::fma_a::eval(); };
 };
 
 template<class T>
-struct dot2_ac_helper
+struct fms_a_helper
+{
+    force_inline
+    static T eval(const T& a, const T& b, const T& c)
+    {
+        return scal_func::fms_a(a, b, c);
+    }
+
+    static dynamic::function_name name() { return mdyf::fms_f::eval(); };
+};
+
+template<>
+struct fms_a_helper<dynamic::object>
+{
+    static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, const dynamic::object& c)
+    {
+        return dynamic::fms_a(a, b, c);
+    }
+    static dynamic::function_name name() { return mdyf::fms_a::eval(); };
+};
+
+template<class T>
+struct dot2_a_helper
 {
     force_inline
     static T eval(const T& a, const T& b, const T& c, const T& d)
     {
-        return scal_func::dot2_ac(a, b, c, d);
+        return scal_func::dot2_a(a, b, c, d);
     }
-    static dynamic::function_name name() { return mdyf::fms::dot2_ac(); };
+    static dynamic::function_name name() { return mdyf::fms::dot2_a(); };
 };
 template<>
-struct dot2_ac_helper<dynamic::object>
+struct dot2_a_helper<dynamic::object>
 {
     static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, const dynamic::object& c, const dynamic::object& d)
     {
-        return dynamic::dot2_ac(a, b, c, d);
+        return dynamic::dot2_a(a, b, c, d);
     }
-    static dynamic::function_name name() { return mdyf::dot2_ac::eval(); };
+    static dynamic::function_name name() { return mdyf::dot2_a::eval(); };
 };
 
 }}}

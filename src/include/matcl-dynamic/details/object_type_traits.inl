@@ -36,8 +36,11 @@ template<class T>
 bool object_type_traits_default::read(std::istream& is, T& val)
 {
     is >> val;
-    if (is.fail() || is.bad())  return false;
-    else						return true;
+
+    if (is.fail() || is.bad())
+        return false;
+    else
+        return true;
 };
 
 template<class T>

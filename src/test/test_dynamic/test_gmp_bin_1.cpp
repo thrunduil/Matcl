@@ -121,6 +121,9 @@ struct eval_binfunc : eval_scalars<eval_binfunc<Derived>>
         bool is_int_2   = std::is_same<T2,Integer>::value;
         bool both_int   = is_int_1 && is_int_2;
 
+        (void)is_zero_1;
+        (void)is_zero_2;
+
         mp_int      v1_1    = convert_scalar<mp_int>(s1);
         mp_float    v1_2    = convert_scalar<mp_float>(s1);
         mp_rational v1_3    = convert_scalar<mp_rational>(s1);
@@ -228,12 +231,16 @@ struct eval_atan2 : eval_binfunc<eval_atan2>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -260,12 +267,16 @@ struct eval_mod : eval_binfunc<eval_mod>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -282,12 +293,16 @@ struct eval_rem : eval_binfunc<eval_rem>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -326,12 +341,16 @@ struct eval_fdim : eval_binfunc<eval_fdim>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -349,12 +368,16 @@ struct eval_nextafter : eval_binfunc<eval_nextafter>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -373,12 +396,16 @@ struct eval_float_distance : eval_binfunc<eval_float_distance>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -396,6 +423,8 @@ struct eval_copysign : eval_binfunc<eval_copysign>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 

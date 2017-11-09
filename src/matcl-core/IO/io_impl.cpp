@@ -203,24 +203,31 @@ bool stream_helpers::check_nl(std::istream &is)
         return false;
 }
 
+// set failbit and return false
+static bool set_failbit(std::istream &is)
+{
+    is.setstate(std::ios::failbit);
+    return false;
+};
+
 static bool Iread(std::istream &is, Integer &i)
 {
     int c;
 
     is >> i;
+
     if (is.fail() || is.bad()) 
         return false;
-    else
-    {
-        if (is.eof()) 
-            return true;
+
+    if (is.eof()) 
+        return true;
  
-        c = is.peek();
+    c = is.peek();
         
-        if (c == ' ' || c == '\t' || c == '\n') 
-            return true;
-    }
-    return false;
+    if (c == ' ' || c == '\t' || c == '\n') 
+        return true;
+    
+    return set_failbit(is);
 }
 
 static bool Rread_helper(std::istream &is, Real &r)
@@ -236,7 +243,7 @@ static bool Rread_helper(std::istream &is, Real &r)
     }
 
     if (is.eof())
-        return false;
+        return set_failbit(is);
 
     if (c == '-') 
         neg = true; 
@@ -260,9 +267,14 @@ static bool Rread_helper(std::istream &is, Real &r)
                     return true;
                 }
                 else 
-                    return false;
+                {
+                    return set_failbit(is);
+                }
             }
-            else return false;
+            else
+            {
+                return set_failbit(is);
+            }
         }
         if (is && (c == 'n' || c == 'N'))
         {
@@ -276,18 +288,22 @@ static bool Rread_helper(std::istream &is, Real &r)
                     return true;
                 }
                 else 
-                    return false;
+                {
+                    return set_failbit(is);
+                };
             }
             else
-                return false;
+            {
+                return set_failbit(is);
+            };
         }
 
         if (c == '-')
-            return false; // double -
+            return set_failbit(is); // double -
     }
     else
     {
-        return false;
+        return set_failbit(is);
     }
 
     is.putback(c);
@@ -323,7 +339,7 @@ static bool Rread(std::istream &is, Real &r)
         }
     }
 
-    return false;
+    return set_failbit(is);
 }
 
 static bool Cread(std::istream &is, Complex &cm)
@@ -339,7 +355,7 @@ static bool Cread(std::istream &is, Complex &cm)
     }
 
     if (is.eof())
-        return false;
+        return set_failbit(is);
 
     if (c == '(') // format '(re, im)'
     {
@@ -351,15 +367,15 @@ static bool Cread(std::istream &is, Complex &cm)
         }
 
         if (!is)
-            return false;
+            return set_failbit(is);
         
         if (c == '\n')
-            return false; // everything should be in one line
+            return set_failbit(is); // everything should be in one line
 
         is.putback(c);
         
         if (!Rread_helper(is, r)) 
-            return false;
+            return set_failbit(is);
 
         while (is)
         {
@@ -369,10 +385,10 @@ static bool Cread(std::istream &is, Complex &cm)
         }
 
         if (!is)
-            return false;
+            return set_failbit(is);
         
         if (c != ',')
-            return false;
+            return set_failbit(is);
 
         while (is)
         {
@@ -382,15 +398,15 @@ static bool Cread(std::istream &is, Complex &cm)
         }
 
         if (!is)
-            return false;
+            return set_failbit(is);
 
         if (c == '\n')
-            return false; // everything should be in one line
+            return set_failbit(is); // everything should be in one line
 
         is.putback(c);
         
         if (!Rread_helper(is, i))
-            return false;
+            return set_failbit(is);
 
         while (is)
         {
@@ -400,10 +416,10 @@ static bool Cread(std::istream &is, Complex &cm)
         }
 
         if (!is)
-            return false;
+            return set_failbit(is);
 
         if (c != ')')
-            return false;
+            return set_failbit(is);
 
         if (is.eof())
         {
@@ -414,7 +430,7 @@ static bool Cread(std::istream &is, Complex &cm)
             int c2 = is.peek();
             
             if (c2 != ' ' && c2 != '\t' && c2 != '\n')
-                return false;
+                return set_failbit(is);
 
             cm = Complex(r, i);
         };
@@ -427,7 +443,7 @@ static bool Cread(std::istream &is, Complex &cm)
     // format 're im' (complex number as a pair of reals 
     // separated by whitespace or tab)
     if (!Rread_helper(is, r))
-        return false;
+        return set_failbit(is);
 
     while (is)
     {
@@ -437,20 +453,20 @@ static bool Cread(std::istream &is, Complex &cm)
     }
 
     if (!is)
-        return false;
+        return set_failbit(is);
     
     if (c == '\n')
-        return false; // everything should be in one line
+        return set_failbit(is);; // everything should be in one line
 
     is.putback(c);
     
     if (!Rread_helper(is, i)) 
-        return false;
+        return set_failbit(is);
 
     {
         int c2 = is.peek();
         if (c2 != ' ' && c2 != '\t' && c2 != '\n')
-            return false;
+            return set_failbit(is);
 
         cm = Complex(r, i);
     };
@@ -492,13 +508,14 @@ bool stream_helpers::read(std::istream& is,Float_complex& x)
 bool stream_helpers::read(std::istream& is,std::string& str)
 {
     is >> str;
+
     if (is.fail() || is.bad())
         return false;
     else
         return true;
 }
 
-bool stream_helpers::read(std::istream& is, dynamic::object& x)
+bool stream_helpers::read(std::istream& is, Object& x)
 {
     md::nonconst_object_interface oi(&x);
     oi.read(is);
@@ -576,7 +593,7 @@ void stream_helpers::write(std::ostream& os,const std::string& str)
     os << str;
 }
 
-void stream_helpers::write(std::ostream& os,const dynamic::object& x)
+void stream_helpers::write(std::ostream& os,const Object& x)
 {
     md::const_object_interface oi(&x);
     oi.write(os);

@@ -23,37 +23,7 @@
 #include "matcl-simd/func/simd_func.h"
 #include "matcl-simd/func/simd_func_def.h"
 #include "matcl-simd/arch/simd_func_impl.h"
-
-namespace matcl { namespace simd { namespace details
-{
-
-union convert_int_float
-{
-    uint32_t    m_int;
-    float       m_float;
-};
-
-union convert_int_double
-{
-    uint64_t    m_int;
-    double      m_float;
-};
-
-force_inline float hex_float(uint32_t val)
-{
-    convert_int_float conv;
-    conv.m_int = val;
-    return conv.m_float;
-};
-
-force_inline double hex_double(uint64_t val)
-{
-    convert_int_double conv;
-    conv.m_int = val;
-    return conv.m_float;
-};
-
-}}};
+#include "matcl-core/float/float_binary_rep.h"
 
 namespace matcl { namespace simd
 {
@@ -64,14 +34,14 @@ template<>
 force_inline
 float true_value<float>::get()
 {
-    return details::hex_float(0xFFFFFFFF);
+    return matcl::hex_float(0xFFFFFFFF);
 };
 
 template<>
 force_inline
 double true_value<double>::get()
 {
-    return details::hex_double(0xFFFFFFFFFFFFFFFF);
+    return matcl::hex_double(0xFFFFFFFFFFFFFFFF);
 };
 
 template<class T>
@@ -148,19 +118,19 @@ ms::sub_add(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>&
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag> 
-ms::fma(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+ms::fma_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z)
 {
-    return simd_fma<Val, Bits, Simd_tag>::eval(x, y, z);
+    return simd_fma_f<Val, Bits, Simd_tag>::eval(x, y, z);
 };
 
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag> 
-ms::fms(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+ms::fms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z)
 {
-    return simd_fms<Val, Bits, Simd_tag>::eval(x, y, z);
+    return simd_fms_f<Val, Bits, Simd_tag>::eval(x, y, z);
 };
 
 template<class Val, int Bits, class Simd_tag>

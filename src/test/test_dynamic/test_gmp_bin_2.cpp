@@ -34,6 +34,9 @@
 #include "utils.h"
 #include <iostream>
 
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+
 namespace matcl { namespace test
 {
 
@@ -381,12 +384,16 @@ struct eval_copysign_obj : eval_operator_arithm_obj<eval_copysign_obj>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -404,12 +411,16 @@ struct eval_nextafter_obj : eval_operator_arithm_obj<eval_nextafter_obj>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -428,12 +439,16 @@ struct eval_float_distance_obj : eval_operator_arithm_obj<eval_float_distance_ob
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -462,12 +477,16 @@ struct eval_atan2_obj : eval_operator_arithm_obj<eval_atan2_obj>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 
@@ -486,12 +505,16 @@ struct eval_mod_obj : eval_operator_arithm_obj<eval_mod_obj>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -509,12 +532,16 @@ struct eval_rem_obj : eval_operator_arithm_obj<eval_rem_obj>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -584,12 +611,16 @@ struct eval_fdim_obj : eval_operator_arithm_obj<eval_fdim_obj>
     template<class T1, class T2, class Enable = typename enable_complex_nobj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> Real
     {
+        (void)a1;
+        (void)a2;
         return Real(0);
     };
 
     template<class T1, class T2, class Enable = typename enable_complex_obj<T1,T2>::type>
     static auto eval(const T1& a1, const T2& a2) -> OReal
     {
+        (void)a1;
+        (void)a2;
         return OReal(0);
     };
 };
@@ -670,3 +701,5 @@ double gmp_tester_bin::test_fdim_obj(const Scalar_ext& s1, const Scalar_ext& s2,
 };
 
 }};
+
+#pragma warning(pop)

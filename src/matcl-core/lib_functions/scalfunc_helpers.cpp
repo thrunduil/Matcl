@@ -21,6 +21,7 @@
 #include "matcl-core/details/scalfunc_real.h"
 #include "matcl-core/details/scalfunc_complex.h"
 #include "matcl-core/error/exception_classes.h"
+#include "matcl-core/float/twofold.h"
 
 #pragma warning(push)
 #pragma warning(disable:4127)   //conditional expression is constant
@@ -315,5 +316,15 @@ Float_complex scal_func::acosh(const Float_complex& cm)
 {
     return Float_complex(::boost::math::acosh(cm.value));
 };
+
+double scal_func::fma_dekker(double x, double y, double z)
+{
+    return matcl::fma_dekker(x, y, z);
+};
+
+float scal_func::fma_dekker(float x, float y, float z)
+{
+    return matcl::fma_dekker(x, y, z);
+}
 
 }}};

@@ -123,28 +123,28 @@ struct simd_sub_add<T, 256, sse_tag>
     };
 };
 template<class T>
-struct simd_fma<T, 256, sse_tag>
+struct simd_fma_f<T, 256, sse_tag>
 {
     using simd_type = simd<T, 256, sse_tag>;
 
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
     {
-        return simd_type(fma(x.data[0], y.data[0], z.data[0]), 
-                         fma(x.data[1], y.data[1], z.data[1]));
+        return simd_type(fma_f(x.data[0], y.data[0], z.data[0]), 
+                         fma_f(x.data[1], y.data[1], z.data[1]));
     };
 };
 
 template<class T>
-struct simd_fms<T, 256, sse_tag>
+struct simd_fms_f<T, 256, sse_tag>
 {
     using simd_type = simd<T, 256, sse_tag>;
 
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
     {
-        return simd_type(fms(x.data[0], y.data[0], z.data[0]), 
-                         fms(x.data[1], y.data[1], z.data[1]));
+        return simd_type(fms_f(x.data[0], y.data[0], z.data[0]), 
+                         fms_f(x.data[1], y.data[1], z.data[1]));
     };
 };
 

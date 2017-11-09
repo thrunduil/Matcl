@@ -21,3 +21,8 @@ external libraries:
         - authors:  Mutsuo Saito, Makoto Matsumoto
         - licence: BSD (modified)
         - source: http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/
+
+CREDITS:
+1. Sylvie Boldo (implementation of Dekker's algorithm for exact multiplication
+        of two doubles)
+2. Evgeny Latkin (twofold algorithms)

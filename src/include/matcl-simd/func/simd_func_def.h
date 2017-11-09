@@ -52,10 +52,10 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_sub_add{};
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_fma{};
+struct simd_fma_f{};
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_fms{};
+struct simd_fms_f{};
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_sum_all{};

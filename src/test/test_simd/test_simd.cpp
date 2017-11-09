@@ -523,7 +523,7 @@ void test_simd::test_functions_3()
 
     dm.disp_header();
 
-    test_function_3<T, test_functions::Func_fma>(dm, N, M, ptr_in_1, ptr_in_2, 
+    test_function_3<T, test_functions::Func_fma_f>(dm, N, M, ptr_in_1, ptr_in_2, 
                                                  ptr_in_3, ptr_out, ptr_out_gen);
 
     for (int i = 0; i < N; ++i)
@@ -532,7 +532,7 @@ void test_simd::test_functions_3()
         ptr_in_3[i] = -ptr_in_3[i];
     };
 
-    test_function_3<T, test_functions::Func_fms>(dm, N, M, ptr_in_1, ptr_in_2, 
+    test_function_3<T, test_functions::Func_fms_f>(dm, N, M, ptr_in_1, ptr_in_2, 
                                                  ptr_in_3, ptr_out, ptr_out_gen);
 };
 

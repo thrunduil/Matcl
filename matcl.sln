@@ -51,6 +51,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_simd_values", "proj\te
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_all", "proj\test_all\test_all.vcxproj", "{D169657F-BE8D-4F9D-9430-C068C8C29330}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_twofold", "proj\test_twofold\test_twofold.vcxproj", "{245E1843-7884-4CC0-807F-6AD248A896FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -195,6 +197,14 @@ Global
 		{D169657F-BE8D-4F9D-9430-C068C8C29330}.Release|x64.Build.0 = Release|x64
 		{D169657F-BE8D-4F9D-9430-C068C8C29330}.Release|x86.ActiveCfg = Release|Win32
 		{D169657F-BE8D-4F9D-9430-C068C8C29330}.Release|x86.Build.0 = Release|Win32
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Debug|x64.ActiveCfg = Debug|x64
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Debug|x64.Build.0 = Debug|x64
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Debug|x86.ActiveCfg = Debug|Win32
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Debug|x86.Build.0 = Debug|Win32
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Release|x64.ActiveCfg = Release|x64
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Release|x64.Build.0 = Release|x64
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Release|x86.ActiveCfg = Release|Win32
+		{245E1843-7884-4CC0-807F-6AD248A896FE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +222,7 @@ Global
 		{39938B9D-E03E-4FB0-BDF3-E8CEF140C0A1} = {B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}
 		{FFBAC419-238F-4938-85FF-B8F8EFBC64DE} = {B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}
 		{D169657F-BE8D-4F9D-9430-C068C8C29330} = {306CBFB8-552E-4634-BD0D-FABD2579CDC5}
+		{245E1843-7884-4CC0-807F-6AD248A896FE} = {306CBFB8-552E-4634-BD0D-FABD2579CDC5}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

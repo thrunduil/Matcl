@@ -175,14 +175,24 @@ template<class T1, class T2,
         class Enable = typename mp::details::enable_mp_bin<T1,T2,void>::type>
 mp_float        nextafter(const T1& x, const T2& y);
 
-// return number of distinct representations between x and y;
-// if x and y have different precision, then x or y is converted to
-// mp_float with precision p being the smallest precision of x and y;
+// return approximate number of distinct representations between x and y;
+// if x and y have different precision and p has default value, then x or
+// y is converted to mp_float with precision p being the smallest precision
+// of x and y; if precision p is set, then precision of x and y is set to p;
 // if one of arguments is NaN, then NaN is returned;
 // not available for complex arguments
 template<class T1, class T2, 
         class Enable = typename mp::details::enable_mp_bin<T1,T2,void>::type>
-mp_float        float_distance(const T1& x, const T2& y);
+mp_float        float_distance(const T1& x, const T2& y, precision p = precision());
+
+// return distance between x and y measured with respect to ulp (unit in last
+// place) of x with respect to precision p; if x and y have different precision
+// and p has default value, then p is taken as the smallest precision of x and y;
+// if one of arguments is NaN, then NaN is returned;
+// not available for complex arguments
+template<class T1, class T2, 
+        class Enable = typename mp::details::enable_mp_bin<T1,T2,void>::type>
+mp_float        ulp_distance(const T1& x_true, const T2& y, precision p = precision());
 
 // returns a value with the magnitude of x and the sign of y
 // not available for complex arguments
@@ -227,8 +237,36 @@ mp_float        fms(const mp_float& a, const mp_float& b, const mp_float& c,
 // compute a * b + c * d with high accuracy using Kahan's algorithm;
 // this function is accurate up to 1 ulp
 MATCL_MP_EXPORT
-mp_float        dot2_ac(const mp_float& a, const mp_float& b, const mp_float& c,
+mp_float        dot2_a(const mp_float& a, const mp_float& b, const mp_float& c,
                         const mp_float& d, precision p = precision());
+
+// compute a x b + c; equivalent to fma function
+inline mp_float
+fma_f(const mp_float& a, const mp_float& b, const mp_float& c, precision p = precision())
+{
+    return fma(a, b, c, p);
+}
+
+// compute a x b + c; equivalent to fma function
+inline mp_float
+fma_a(const mp_float& a, const mp_float& b, const mp_float& c, precision p = precision())
+{
+    return fma(a, b, c, p);
+}
+
+// compute a x b - c; equivalent to fms function
+inline mp_float
+fms_f(const mp_float& a, const mp_float& b, const mp_float& c, precision p = precision())
+{
+    return fms(a, b, c, p);
+}
+
+// compute a x b - c; equivalent to fms function
+inline mp_float
+fms_a(const mp_float& a, const mp_float& b, const mp_float& c, precision p = precision())
+{
+    return fms(a, b, c, p);
+}
 
 };
 

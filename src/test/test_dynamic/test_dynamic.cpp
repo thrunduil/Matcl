@@ -344,7 +344,7 @@ bool test_dynamic::test_predefined_unify_impl()
 
 void test_dynamic::test_predefined_unify()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -362,7 +362,7 @@ void test_dynamic::test_predefined_unify()
 };
 void test_dynamic::test_object()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -381,7 +381,7 @@ void test_dynamic::test_object()
 
 void test_dynamic::test_one()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -400,7 +400,7 @@ void test_dynamic::test_one()
 
 void test_dynamic::test_object_type()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -418,7 +418,7 @@ void test_dynamic::test_object_type()
 };
 void test_dynamic::test_special_types()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -437,7 +437,7 @@ void test_dynamic::test_special_types()
 
 void test_dynamic::test_cons()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -456,7 +456,7 @@ void test_dynamic::test_cons()
 
 void test_dynamic::test_cons_val()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -475,7 +475,7 @@ void test_dynamic::test_cons_val()
 
 void test_dynamic::test_object_func()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -494,7 +494,7 @@ void test_dynamic::test_object_func()
 
 void test_dynamic::test_object_func_val()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -513,7 +513,7 @@ void test_dynamic::test_object_func_val()
 
 void test_dynamic::test_func_uminus()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -532,7 +532,7 @@ void test_dynamic::test_func_uminus()
 
 void test_dynamic::test_func_reim()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -551,7 +551,7 @@ void test_dynamic::test_func_reim()
 
 void test_dynamic::test_func_compare()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -570,7 +570,7 @@ void test_dynamic::test_func_compare()
 
 void test_dynamic::test_predefined_func(const dynamic::function_name& func, bool promote_int)
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -1544,9 +1544,11 @@ bool test_dynamic::test_object_type_impl()
             res += 1;
     };
 
-    Complex v1(1.f);
-    OComplex f1(v1);
-    OFloat_complex f2 = f1.convert<Float_complex>();
+    {
+        Complex v1(1.f);
+        OComplex f1(v1);
+        OFloat_complex f2 = f1.convert<Float_complex>();
+    }
 
     {
         Complex v1(1.f);
@@ -2744,6 +2746,13 @@ double test_dynamic::test_compare_1(mdy::Type t1, mdy::Type t2, const type2_set&
         bool res5 = (bool)(lhs <= rhs);
         bool res6 = (bool)(lhs >= rhs);
 
+        (void)res1;
+        (void)res2;
+        (void)res3;
+        (void)res4;
+        (void)res5;
+        (void)res6;
+
         if (missing.find(type2(t1, t2)) != missing.end())
             res += 1;
     }
@@ -3214,6 +3223,12 @@ void test_dynamic::test_compile_func_binary()
     auto v2 = x - y;
     auto v3 = x * y;
     auto v4 = x / y;
+
+    (void)v1;
+    (void)v2;
+    (void)v3;
+    (void)v4;
+
     idiv(x,y);
     plus(x,y);
     minus(x,y);

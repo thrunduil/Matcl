@@ -419,7 +419,7 @@ mp_float matcl::fms(const mp_float& a, const mp_float& b, const mp_float& c,
 
 //------------------------------------------------------
 MATCL_MP_EXPORT
-mp_float matcl::dot2_ac(const mp_float& a, const mp_float& b, const mp_float& c,
+mp_float matcl::dot2_a(const mp_float& a, const mp_float& b, const mp_float& c,
                         const mp_float& d, precision req_prec)
 {
     //Kahan's algorithm
@@ -432,7 +432,7 @@ mp_float matcl::dot2_ac(const mp_float& a, const mp_float& b, const mp_float& c,
                                            std::max<size_t>(c.get_precision(), d.get_precision()));
 
     req_prec            = mmd::result_prec(req_prec,  precision(p_max));
-    precision int_prec  = mmd::extend_prec_dot2_ac(req_prec);
+    precision int_prec  = mmd::extend_prec_dot2_a(req_prec);
 
     mp_float w = mul(c, d, int_prec);       //w = c * d
     mp_float e = fms(c, d, w, int_prec);   //e = c * d - w

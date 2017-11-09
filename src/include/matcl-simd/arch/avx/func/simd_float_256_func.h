@@ -132,7 +132,7 @@ struct simd_sub_add<float, 256, avx_tag>
 };
 
 template<>
-struct simd_fma<float, 256, avx_tag>
+struct simd_fma_f<float, 256, avx_tag>
 {
     using simd_type = simd<float, 256, avx_tag>;
 
@@ -148,7 +148,7 @@ struct simd_fma<float, 256, avx_tag>
 };
 
 template<>
-struct simd_fms<float, 256, avx_tag>
+struct simd_fms_f<float, 256, avx_tag>
 {
     using simd_type = simd<float, 256, avx_tag>;
 

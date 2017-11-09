@@ -80,16 +80,18 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 sub_add(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-//res = x*y + z; only one rounding at the end
+//res = x*y + z; use FMA instruction if available, otherwise
+// evaluate according to definition (with two roundings)
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
-fma(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+fma_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z);
 
-//res = x*y - z; only one rounding at the end
+//res = x*y - z; use FMA instruction if available, otherwise
+// evaluate according to definition (with two roundings)
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
-fms(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+fms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z);
 
 // sum of all elements stored in the vector x

@@ -34,18 +34,15 @@
 
 #include <iostream>
 
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+
 namespace matcl
 {
 
 static bool is_nan(bool)
 {
     return false;
-};
-
-static std::ostream& operator<<(std::ostream& os, fp_type t)
-{
-    os << (Integer)t;
-    return os;
 };
 
 };
@@ -144,7 +141,7 @@ void gmp_tester::make()
 
 void gmp_tester::test_reim()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -163,7 +160,7 @@ void gmp_tester::test_reim()
 
 void gmp_tester::test_uminus()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -182,7 +179,7 @@ void gmp_tester::test_uminus()
 
 void gmp_tester::test_is()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -200,7 +197,7 @@ void gmp_tester::test_is()
 };
 void gmp_tester::test_next()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -218,7 +215,7 @@ void gmp_tester::test_next()
 };
 void gmp_tester::test_signbit()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -236,7 +233,7 @@ void gmp_tester::test_signbit()
 };
 void gmp_tester::test_eps()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -2382,6 +2379,7 @@ struct eval_function : eval_scalars_1<eval_function<Derived>>
             disp("break");
 
         auto res        = eval_op(s1);
+        (void)res;
 
         Integer     v0_1    = convert_scalar<Integer>(s1);
         Real        v0_2    = convert_scalar<Real>(s1);
@@ -2546,12 +2544,12 @@ struct eval_function_num : eval_scalars_1<eval_function_num<Derived>>
             return 0.0;
 
         auto res        = eval_op(s1);
+        (void)res;
 
         Integer     si  = convert_scalar<Integer>(s1);
         Real        sr  = convert_scalar<Real>(s1);
         Complex     sc  = convert_scalar<Complex>(s1);
 
-        bool test_fin   = false;
         bool is_fin     = matcl::is_finite(s1);
 
         mp_int      vi(si);
@@ -2569,11 +2567,6 @@ struct eval_function_num : eval_scalars_1<eval_function_num<Derived>>
         auto res_r_2    = eval_op(si);
         auto res_c_1    = eval_op(vc);
         auto res_c_2    = eval_op(sc);
-
-        bool test_1     = true;
-        bool test_2     = true;
-        bool test_3     = true;
-        bool test_4     = true;
 
         if (different_re(res_i_1, res_i_2) && is_fin)
             out     += 1;
@@ -3389,3 +3382,5 @@ void gmp_tester::test_fpclassify()
 }
 
 }};
+
+#pragma warning(pop)

@@ -125,6 +125,9 @@ namespace scal_func
     Complex MATCL_CORE_EXPORT        acosh(const Complex& x);
     Float_complex MATCL_CORE_EXPORT  acosh(const Float_complex& x);
 
+    float MATCL_CORE_EXPORT          fma_dekker(float x, float y, float z);
+    double MATCL_CORE_EXPORT         fma_dekker(double x, double y, double z);
+
     Float_complex               log1p(const Float_complex&);
     Complex                     log1p(const Complex&);
     Float_complex               log(const Float_complex&);
@@ -290,11 +293,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double abs(double x) 
     { 
-        return x < 0. ? - x : x; 
+        return std::abs(x);
     };
     force_inline float abs(float x) 
     { 
-        return x < 0.f ? - x : x; 
+        return std::abs(x);
     };
     force_inline Integer abs(Integer x) 
     { 
@@ -448,13 +451,15 @@ namespace scal_func
     {
         return (x < 0);
     };
-    force_inline bool signbit(float x)
+    force_inline bool signbit(const float& x)
     {
-        return std::signbit(x);
+        //return std::signbit(x);
+        return reinterpret_cast<const double_binary_rep*>(&x)->sign != 0;
     };
-    force_inline bool signbit(double x)
+    force_inline bool signbit(const double& x)
     {
-        return std::signbit(x);
+        //return std::signbit(x);
+        return reinterpret_cast<const double_binary_rep*>(&x)->sign != 0;
     };
 
     //--------------------------------------------------------------------
@@ -1279,52 +1284,98 @@ namespace scal_func
     };
 
     //--------------------------------------------------------------------
-    force_inline double fma(double x, double y, double z)
+    force_inline double fma_f(double x, double y, double z)
     {
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fma(x, y, z);
+            return simd::fma_f(x, y, z);
         #else
             return x * y + z;
         #endif
     };
-    force_inline float fma(float x, float y, float z)
+
+    force_inline float fma_f(float x, float y, float z)
     {
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fma(x, y, z);
+            return simd::fma_f(x, y, z);
         #else
             return x * y + z;
         #endif
     };
 
     //--------------------------------------------------------------------
-    force_inline double fms(double x, double y, double z)
+    force_inline double fms_f(double x, double y, double z)
     {
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fms(x, y, z);
+            return simd::fms_f(x, y, z);
         #else
             return x * y - z;
         #endif
     };
-    force_inline float fms(float x, float y, float z)
+    force_inline float fms_f(float x, float y, float z)
     {
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fms(x, y, z);
+            return simd::fms_f(x, y, z);
         #else
             return x * y - z;
+        #endif
+    };
+
+    //--------------------------------------------------------------------
+    force_inline double fma_a(double x, double y, double z)
+    {
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return simd::fma_f(x, y, z);
+        #else
+            return fma_dekker(x, y, z);
+        #endif
+    };
+
+    force_inline float fma_a(float x, float y, float z)
+    {
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return simd::fma_f(x, y, z);
+        #else
+            return fma_dekker(x, y, z);
+        #endif
+    };
+
+    //--------------------------------------------------------------------
+    force_inline double fms_a(double x, double y, double z)
+    {
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return simd::fms_f(x, y, z);
+        #else
+            return fma_dekker(x, y, -z);
+        #endif
+    };
+    force_inline float fms_a(float x, float y, float z)
+    {
+        // do not use std::fma, this function is incredibly slow on VS
+
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return simd::fms_f(x, y, z);
+        #else
+            return fma_dekker(x, y, -z);
         #endif
     };
 
     //--------------------------------------------------------------------
     template<class T>
-    struct dot2_ac_impl
+    struct dot2_a_impl
     {
         static T eval(T a, T b, T c, T d)
         {
@@ -1335,19 +1386,21 @@ namespace scal_func
             //Kahan’s algorithm for the accurate computation of 2 × 2 determinants”
 
             T w = c * d;
-            T e = scal_func::fms(c, d, w);  //e = c * d - w
-            T f = scal_func::fma(a, b, w);  //f = a * b + w 
+            T e = scal_func::fms_a(c, d, w);  //e = c * d - w
+            T f = scal_func::fma_a(a, b, w);  //f = a * b + w 
             T g = f + e;
             return g;
         };
     };
-    force_inline double dot2_ac(double a, double b, double c, double d)
+
+    force_inline double dot2_a(double a, double b, double c, double d)
     {
-        return dot2_ac_impl<double>::eval(a,b,c,d);
+        return dot2_a_impl<double>::eval(a,b,c,d);
     };
-    force_inline float dot2_ac(float a, float b, float c, float d)
+    
+    force_inline float dot2_a(float a, float b, float c, float d)
     {
-        return dot2_ac_impl<float>::eval(a,b,c,d);
+        return dot2_a_impl<float>::eval(a,b,c,d);
     };
 
     //--------------------------------------------------------------------

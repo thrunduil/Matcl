@@ -195,7 +195,7 @@ struct simd_sub_add<T, Bits, nosimd_tag>
 };
 
 template<class T, int Bits>
-struct simd_fma<T, Bits, nosimd_tag>
+struct simd_fma_f<T, Bits, nosimd_tag>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -215,7 +215,7 @@ struct simd_fma<T, Bits, nosimd_tag>
 };
 
 template<class T, int Bits>
-struct simd_fms<T, Bits, nosimd_tag>
+struct simd_fms_f<T, Bits, nosimd_tag>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     

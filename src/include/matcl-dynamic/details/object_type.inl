@@ -231,7 +231,6 @@ void object_type<T>::reset(object_type&& other) &
 };
 
 template<class T>
-force_inline
 object_type<T> object_type<T>::clone() const
 {
     return object_type<T>(m_data.clone(), from_object());
@@ -301,7 +300,6 @@ bool object_type<T>::is_one(const T& arg)
 };
 
 template<class T>
-force_inline
 object_type<T> object_type<T>::make_one()
 {
     return object_type(object_type_traits<T>::make_one((T*)nullptr));
@@ -316,7 +314,6 @@ object_type<T>::operator bool() const
 
 template<class T>
 template<class S>
-force_inline
 object_type<S> object_type<T>::cast() const
 {
     return dynamic::cast<S>(*this);
@@ -324,7 +321,6 @@ object_type<S> object_type<T>::cast() const
 
 template<class T>
 template<class S>
-force_inline
 object_type<S> object_type<T>::convert() const
 {
     return dynamic::convert<S>(*this);
