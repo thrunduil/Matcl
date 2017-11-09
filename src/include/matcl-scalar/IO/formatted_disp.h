@@ -24,6 +24,7 @@
 #include "matcl-scalar/general/fwd_decls.h"
 #include "matcl-core/IO/disp_stream.h"
 #include "matcl-core/options/matcl_options.h"
+#include "matcl-dynamic/object.h"
 
 #include <string>
 

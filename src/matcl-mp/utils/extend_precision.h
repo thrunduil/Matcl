@@ -95,7 +95,7 @@ inline size_t error_exact_log10_r()     { return 3; };      // 1.5 ulp error
 inline size_t error_exact_sqrt()        { return 4; };      // 2 ulp error
 inline size_t error_exact_log2_c()      { return 4; };      // 2 ulp error
 inline size_t error_exact_log10_c()     { return 4; };      // 2 ulp error
-inline size_t error_exact_dot2_ac()     { return 4; };      // 2 ulp error
+inline size_t error_exact_dot2_a()      { return 4; };      // 2 ulp error
 inline size_t error_exact_cot()         { return 8; };      // 4 ulp error
 inline size_t error_exact_coth()        { return 8; };      // 4 ulp error
 inline size_t error_exact_sec()         { return 8; };      // 4 ulp error
@@ -230,9 +230,9 @@ inline precision extend_prec_hypot(precision prec)
     return precision(base);
 }
 
-inline precision extend_prec_dot2_ac(precision prec)
+inline precision extend_prec_dot2_a(precision prec)
 {
-    size_t base = prec + ilogb_u(error_exact_dot2_ac()) + extra_bits();
+    size_t base = prec + ilogb_u(error_exact_dot2_a()) + extra_bits();
     return precision(base);
 }
 

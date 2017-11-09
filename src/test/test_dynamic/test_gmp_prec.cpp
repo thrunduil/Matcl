@@ -29,6 +29,9 @@
 #include "matcl-scalar/lib_functions/func_binary.h"
 #include "matcl-scalar/IO/scalar_io.h"
 
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+
 namespace matcl { namespace test
 {
 
@@ -637,6 +640,10 @@ void gmp_tester_prec::rand_scalar_c_pow_cr(const prec_vec& prec, const max_vec& 
         s2          = Real(matcl::irand() % 20) * 0.5;
         Real sign1  = matcl::irand() < 0 ? -1.0 : 1.0;
         Real sign2  = matcl::irand() < 0 ? -1.0 : 1.0;
+
+        (void)sign1;
+        (void)sign2;
+
         s1          = gmp_tester_prec::rand_scalar(prec, max);
         s1          = mp_complex(sign1 * real(s1), sign1 * real(s1),s1.get_precision());
     }
@@ -1196,8 +1203,8 @@ bool gmp_tester_prec::test_bin_func_c(std::ostream& os, Integer N, precision p,
 
         if (res_re > accuracy || res_im > accuracy)
         {
-            double res_re, res_im;
-            std::tie(res_re, res_im) = test_bin_c<Func>(s3, s2, p, i);
+            double res_re1, res_im1;
+            std::tie(res_re1, res_im1) = test_bin_c<Func>(s3, s2, p, i);
         };
 
         res_max_re      = std::max(res_max_re, res_re);
@@ -1216,6 +1223,8 @@ bool gmp_tester_prec::test_bin_func_c(std::ostream& os, Integer N, precision p,
 
     bool is_add         = std::is_same<Func,Plus_func>::value || std::is_same<Func,Minus_func>::value;
     bool error          =  res_max_re > accuracy || res_max_im > accuracy;
+
+    (void)is_add;
 
     if (error == false)
         return error;
@@ -1301,3 +1310,5 @@ bool gmp_tester_prec::test_scalar_func_c(std::ostream& os, Integer N, precision 
 };
 
 }};
+
+#pragma warning(pop)

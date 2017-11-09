@@ -27,7 +27,7 @@ namespace matcl
 {
 
 force_inline
-double simd::fma(const double& x, const double& y, const double& z)
+double simd::fma_f(const double& x, const double& y, const double& z)
 {
     using simd_type = matcl::simd::default_simd_type<double>::type;
 
@@ -35,12 +35,12 @@ double simd::fma(const double& x, const double& y, const double& z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fma(xs, ys, zs);
+    simd_type ret = fma_f(xs, ys, zs);
     return ret.get<0>();
 };
 
 force_inline
-float simd::fma(const float& x, const float& y, const float& z)
+float simd::fma_f(const float& x, const float& y, const float& z)
 {
     using simd_type = matcl::simd::default_simd_type<float>::type;
 
@@ -48,12 +48,12 @@ float simd::fma(const float& x, const float& y, const float& z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fma(xs, ys, zs);
+    simd_type ret = fma_f(xs, ys, zs);
     return ret.get<0>();
 }
 
 force_inline
-double simd::fms(const double& x, const double& y, const double& z)
+double simd::fms_f(const double& x, const double& y, const double& z)
 {
     using simd_type = matcl::simd::default_simd_type<double>::type;
 
@@ -61,12 +61,12 @@ double simd::fms(const double& x, const double& y, const double& z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fms(xs, ys, zs);
+    simd_type ret = fms_f(xs, ys, zs);
     return ret.get<0>();
 }
 
 force_inline
-float simd::fms(const float& x, const float& y, const float& z)
+float simd::fms_f(const float& x, const float& y, const float& z)
 {
     using simd_type = matcl::simd::default_simd_type<float>::type;
 
@@ -74,7 +74,7 @@ float simd::fms(const float& x, const float& y, const float& z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fms(xs, ys, zs);
+    simd_type ret = fms_f(xs, ys, zs);
     return ret.get<0>();
 }
 

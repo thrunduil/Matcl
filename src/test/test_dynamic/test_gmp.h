@@ -628,12 +628,14 @@ struct Factorial_func : Allow_complex
     static auto eval(const T1& a1, Args&& ... args) 
         -> decltype(factorial<T1>(Integer()))
     {
+        (void)a1;
         return factorial<T1>(21);
     };
     template<class T1, class ... Args>
     static auto eval(const dynamic::object_type<T1>& a1, Args&& ... args) 
         -> decltype(dynamic::factorial<dynamic::object_type<T1>>(Integer()))
     {
+        (void)a1;
         return dynamic::factorial<dynamic::object_type<T1>>(21);
     };
     template<class ... Args>
@@ -652,12 +654,14 @@ struct Double_factorial_func : Allow_complex
     static auto eval(const T1& a1, Args&& ... args) 
         -> decltype(double_factorial<T1>(Integer()))
     {
+        (void)a1;
         return double_factorial<T1>(21);
     };
     template<class T1, class ... Args>
     static auto eval(const dynamic::object_type<T1>& a1, Args&& ... args) 
         -> decltype(dynamic::double_factorial<dynamic::object_type<T1>>(Integer()))
     {
+        (void)a1;
         return dynamic::double_factorial<dynamic::object_type<T1>>(21);
     };
     template<class ... Args>
@@ -676,6 +680,7 @@ struct Binomial_coefficient_func : Allow_complex
     static auto eval(const T1& a1, Args&& ... args) 
         -> decltype(binomial_coefficient<T1>(Integer(),Integer()))
     {
+        (void)a1;
         return binomial_coefficient<T1>(21,15);
     };
 
@@ -683,6 +688,7 @@ struct Binomial_coefficient_func : Allow_complex
     static auto eval(const dynamic::object_type<T1>& a1, Args&& ... args) 
         -> decltype(dynamic::binomial_coefficient<const dynamic::object_type<T1>>(Integer(),Integer()))
     {
+        (void)a1;
         return dynamic::binomial_coefficient<const dynamic::object_type<T1>>(21,15);
     };
     template<class ... Args>
@@ -1559,7 +1565,7 @@ struct Ldexp3p_func_t : Allow_complex
     static std::string name() { return "ldexp +3"; };
 
     template<class T1, class ... Args>
-    static auto eval(const T1& a1, Args&& ... args) 
+    static auto eval(const T1& a1, Args&& ... ) 
         -> decltype(ldexp(a1, Integer()))
     {
         return ldexp(a1, 3);
@@ -1571,7 +1577,7 @@ struct Ldexp3m_func_t : Allow_complex
     static std::string name() { return "ldexp -3"; };
 
     template<class T1, class ... Args>
-    static auto eval(const T1& a1, Args&& ... args) 
+    static auto eval(const T1& a1, Args&& ... ) 
         -> decltype(ldexp(a1, Integer()))
     {
         return ldexp(a1, -3);
@@ -1583,7 +1589,7 @@ struct Scalbn3p_func_t : Allow_complex
     static std::string name() { return "scalbn +3"; };
 
     template<class T1, class ... Args>
-    static auto eval(const T1& a1, Args&& ... args) 
+    static auto eval(const T1& a1, Args&& ... ) 
         -> decltype(scalbn(a1, Integer()))
     {
         return scalbn(a1, 3);
@@ -1609,7 +1615,7 @@ struct Frexp_func_t : Notcomplex_func
     static std::string name() { return "frexp"; };
 
     template<class T1, class ... Args>
-    static auto eval(const T1& a1, Args&& ... args) 
+    static auto eval(const T1& a1, Args&& ... ) 
         -> decltype(frexp(a1, std::declval<Integer&>()))
     {
         Integer exp;
@@ -1642,7 +1648,7 @@ struct Modf_frac_func_t : Notcomplex_func
     static std::string name() { return "modf frac"; };
 
     template<class T1, class ... Args>
-    static auto eval(const T1& a1, Args&& ... args) 
+    static auto eval(const T1& a1, Args&& ... ) 
         -> typename modf_return_type<T1>::type
     {
         using Ret   = typename modf_return_type<T1>::type;
@@ -1658,7 +1664,7 @@ struct Modf_int_func_t : Notcomplex_func
     static std::string name() { return "modf int"; };
 
     template<class T1, class ... Args>
-    static auto eval(const T1& a1, Args&& ... args) 
+    static auto eval(const T1& a1, Args&& ... ) 
         -> typename modf_return_type<T1>::type
     {
         using Ret   = typename modf_return_type<T1>::type;

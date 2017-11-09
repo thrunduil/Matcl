@@ -315,7 +315,6 @@ struct eval_scalar_func_unary_complex
         auto res_matcl      = eval_fun_matcl(s);
         auto res_std        = eval_fun_std(s);
         mp_complex res_ext  = eval_fun_mp(mp_complex(s, prec), prec);
-        Real tmp            = abs(res_ext).cast_float();
 
         // ignore underflows
         if (abs(res_std) < min_normal<Type>() && abs(res_matcl) < min_normal<Type>())
@@ -376,6 +375,8 @@ template<class Type, class Func>
 void scal_accuracy_tester::test_unary_func(formatted_disp& os, Integer N, Real max, Real& matcl_ulp,
             Real& std_ulp)
 {
+    (void)os;
+
     std::vector<Type> scalars;
     
     for (Integer i = 0; i < 10*N; ++i)
@@ -417,6 +418,8 @@ template<class Type, class Func>
 void scal_accuracy_tester::test_unary_compl_func(formatted_disp& os, Integer N, Real max_re, 
                 Real max_im, Real& matcl_ulp, Real& std_ulp)
 {
+    (void)os;
+
     using compl_type    = typename details::complex_type<Type>::type;
 
     std::vector<compl_type> scalars;

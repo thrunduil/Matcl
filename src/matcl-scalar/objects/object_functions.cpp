@@ -255,25 +255,41 @@ object dynamic::copysign(const object& x, const object& y)
     return ret;
 };
 
-object dynamic::fma(const object& a, const object& b, const object& c)
+object dynamic::fma_f(const object& a, const object& b, const object& c)
 {
-    using func  = functions::fma;
+    using func  = functions::fma_f;
     object ret;
     eval_function::eval(func::eval(), ret, a, b, c);
     return ret;
 }
 
-object dynamic::fms(const object& a, const object& b, const object& c)
+object dynamic::fma_a(const object& a, const object& b, const object& c)
 {
-    using func  = functions::fms;
+    using func  = functions::fma_a;
     object ret;
     eval_function::eval(func::eval(), ret, a, b, c);
     return ret;
 }
 
-object dynamic::dot2_ac(const object& a, const object& b, const object& c, const object& d)
+object dynamic::fms_f(const object& a, const object& b, const object& c)
 {
-    using func  = functions::dot2_ac;
+    using func  = functions::fms_f;
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b, c);
+    return ret;
+}
+
+object dynamic::fms_a(const object& a, const object& b, const object& c)
+{
+    using func  = functions::fms_a;
+    object ret;
+    eval_function::eval(func::eval(), ret, a, b, c);
+    return ret;
+}
+
+object dynamic::dot2_a(const object& a, const object& b, const object& c, const object& d)
+{
+    using func  = functions::dot2_a;
     object ret;
     eval_function::eval(func::eval(), ret, a, b, c, d);
     return ret;

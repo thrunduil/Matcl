@@ -92,6 +92,7 @@ std::istream& dynamic::operator>>(std::istream& is, Type& t)
     std::string s;
     char c;
     is >> c;
+    
     if(c == '\'')
     {
         is.get(buf, '\'');

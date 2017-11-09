@@ -138,9 +138,11 @@ MATCL_REGISTER_BIN_FUNC(float_distance_1, matcl::float_distance, Float, Integer,
 MATCL_REGISTER_BIN_FUNC(float_distance_2, matcl::float_distance, Float, Float, mdyf::float_distance)
 MATCL_REGISTER_BIN_FUNC(float_distance_3, matcl::float_distance, Float, Real, mdyf::float_distance)
 
-MATCL_REGISTER_3_FUNC(fma, matcl::fma, Float, Float, Float, mdyf::fma)
-MATCL_REGISTER_3_FUNC(fms, matcl::fma, Float, Float, Float, mdyf::fms)
-MATCL_REGISTER_4_FUNC(dot2_ac, matcl::dot2_ac, Float, Float, Float, Float, mdyf::dot2_ac)
+MATCL_REGISTER_3_FUNC(fma_f, matcl::fma_f, Float, Float, Float, mdyf::fma_f)
+MATCL_REGISTER_3_FUNC(fms_f, matcl::fms_f, Float, Float, Float, mdyf::fms_f)
+MATCL_REGISTER_3_FUNC(fma_a, matcl::fma_a, Float, Float, Float, mdyf::fma_a)
+MATCL_REGISTER_3_FUNC(fms_a, matcl::fms_a, Float, Float, Float, mdyf::fms_a)
+MATCL_REGISTER_4_FUNC(dot2_a, matcl::dot2_a, Float, Float, Float, Float, mdyf::dot2_a)
 
 MATCL_REGISTER_BIN_FUNC(f_pow_1, matcl::pow, Float, Float, mdyf::pow)
 MATCL_REGISTER_BIN_FUNC(f_pow_2, matcl::pow, Float, Integer, mdyf::pow)

@@ -813,8 +813,8 @@ struct recover_nan_mult
 
         if (recalc) 
         {
-            mp_float r_re2  = dot2_ac(a_re, b_re, -a_im, b_im, sp);
-            mp_float r_im2  = dot2_ac(a_re, b_im,  a_im, b_re, sp);
+            mp_float r_re2  = dot2_a(a_re, b_re, -a_im, b_im, sp);
+            mp_float r_im2  = dot2_a(a_re, b_im,  a_im, b_re, sp);
             r_re2           = mul(constants::mp_inf(sp), r_re2, p);
             r_im2           = mul(constants::mp_inf(sp), r_im2, p);
 
@@ -831,8 +831,8 @@ mp_complex details::mul_impl(const mp_complex& a, const mp_complex& b, precision
 {
     p               = mmd::result_prec(p, get_precision(a), get_precision(b));
 
-    mp_float r_re   = dot2_ac(real(a), real(b), -imag(a), imag(b), p);
-    mp_float r_im   = dot2_ac(real(a), imag(b),  imag(a), real(b), p);
+    mp_float r_re   = dot2_a(real(a), real(b), -imag(a), imag(b), p);
+    mp_float r_im   = dot2_a(real(a), imag(b),  imag(a), real(b), p);
 
     if (is_nan(r_re) == true && is_nan(r_im) == true)
         return recover_nan_mult<mp_complex>::eval(a, b, r_re, r_im);
@@ -858,8 +858,8 @@ mp_complex details::mul_impl(Real a, const mp_complex& b, precision p)
 mp_complex details::mul_impl(const mp_complex& a, const Complex& b, precision p)
 {
     p               = mmd::result_prec(p, get_precision(a), get_precision(b));
-    mp_float r_re   = dot2_ac(real(a), real(b), -imag(a), imag(b), p);
-    mp_float r_im   = dot2_ac(real(a), imag(b),  imag(a), real(b), p);
+    mp_float r_re   = dot2_a(real(a), real(b), -imag(a), imag(b), p);
+    mp_float r_im   = dot2_a(real(a), imag(b),  imag(a), real(b), p);
 
     if (is_nan(r_re) == true && is_nan(r_im) == true)
         return recover_nan_mult<Complex>::eval(a, b, r_re, r_im);
@@ -1165,8 +1165,8 @@ struct div_complex_complex_helper
             mp_float a_re2  = copysign(is_inf(a_re) ? one : zero, a_re);
             mp_float a_im2  = copysign(is_inf(a_im) ? one : zero, a_im);            
 
-            mp_float ret_re = inf * dot2_ac(a_re2, b_re, a_im2, b_im, sp);
-            mp_float ret_im = inf * dot2_ac(a_im2, b_re, -a_re2, b_im, sp);
+            mp_float ret_re = inf * dot2_a(a_re2, b_re, a_im2, b_im, sp);
+            mp_float ret_im = inf * dot2_a(a_im2, b_re, -a_re2, b_im, sp);
 
             return mp_complex(ret_re, ret_im, p);
         }
@@ -1180,8 +1180,8 @@ struct div_complex_complex_helper
 
             mp_float b_re2  = copysign(is_inf(b_re) ? one : zero, b_re);
             mp_float b_im2  = copysign(is_inf(b_im) ? one : zero, b_im);
-            mp_float ret_re = zero * dot2_ac(a_re, b_re2, a_im, b_im2, sp);
-            mp_float ret_im = zero * dot2_ac(a_im, b_re2, -a_re, b_im2, sp);
+            mp_float ret_re = zero * dot2_a(a_re, b_re2, a_im, b_im2, sp);
+            mp_float ret_im = zero * dot2_a(a_im, b_re2, -a_re, b_im2, sp);
 
             return mp_complex(ret_re, ret_im, p);
         }
@@ -1225,12 +1225,12 @@ struct div_complex_complex_helper
         {
             //in a_re * b_re + a_im * b_im there are no cancelations
             r_re                = mul(a_re, b_re, ip) + mul(a_im, b_im, ip);    //1 ulp
-            r_im                = dot2_ac(a_re, -b_im, a_im, b_re, ip);         //1 ulp            
+            r_im                = dot2_a(a_re, -b_im, a_im, b_re, ip);          //1 ulp            
         }
         else
         {
             //in -a_re * b_im + a_im * b_re there are no cancelations
-            r_re                = dot2_ac(a_re, b_re, a_im, b_im, ip);          //1 ulp
+            r_re                = dot2_a(a_re, b_re, a_im, b_im, ip);           //1 ulp
             r_im                = mul(a_im, b_re, ip) - mul(a_re, b_im, ip);    //1 ulp
         };
         

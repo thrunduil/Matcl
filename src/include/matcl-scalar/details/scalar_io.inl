@@ -66,14 +66,16 @@ template<class T> inline
 typename details::enable_if_matcl_scalar<T,std::ostream&>::type
 operator<<(std::ostream& os, const T& A)
 {
-    return details::saveload_scalar_helper::eval_save(os, A);
+    details::saveload_scalar_helper::eval_save(os, A);
+    return os;
 };
 
 template<class T> inline
 typename details::enable_if_matcl_scalar<T,std::istream&>::type
 operator>>(std::istream& is, T& A)
 {
-    return details::saveload_scalar_helper::eval_load(is, A);
+    details::saveload_scalar_helper::eval_load(is, A);
+    return is;
 };
 
 template<class S, class Enable> 

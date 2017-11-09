@@ -227,21 +227,33 @@ const function_name& functions::fpclassify::eval()
     return f;
 };
 
-const function_name& functions::fma::eval()
+const function_name& functions::fma_f::eval()
 {
-    static function_name f("fma");
+    static function_name f("fma_f");
     return f;
 };
 
-const function_name& functions::fms::eval()
+const function_name& functions::fms_f::eval()
 {
-    static function_name f("fms");
+    static function_name f("fms_f");
     return f;
 };
 
-const function_name& functions::dot2_ac::eval()
+const function_name& functions::fma_a::eval()
 {
-    static function_name f("dot2_ac");
+    static function_name f("fma_a");
+    return f;
+};
+
+const function_name& functions::fms_a::eval()
+{
+    static function_name f("fms_a");
+    return f;
+};
+
+const function_name& functions::dot2_a::eval()
+{
+    static function_name f("dot2_a");
     return f;
 };
 

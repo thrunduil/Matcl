@@ -136,7 +136,7 @@ void gmp_object_tester::make()
 
 void gmp_object_tester::test_cons()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -154,7 +154,7 @@ void gmp_object_tester::test_cons()
 };
 void gmp_object_tester::test_cons_val()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -173,7 +173,7 @@ void gmp_object_tester::test_cons_val()
 
 void gmp_object_tester::test_object_func()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -192,7 +192,7 @@ void gmp_object_tester::test_object_func()
 
 void gmp_object_tester::test_object_func_val()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -211,7 +211,7 @@ void gmp_object_tester::test_object_func_val()
 
 void gmp_object_tester::test_func_compare()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -230,7 +230,7 @@ void gmp_object_tester::test_func_compare()
 
 void gmp_object_tester::test_func_unify()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -249,7 +249,7 @@ void gmp_object_tester::test_func_unify()
 
 void gmp_object_tester::test_func_uminus()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -268,7 +268,7 @@ void gmp_object_tester::test_func_uminus()
 
 void gmp_object_tester::test_func_uminus_val()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -287,7 +287,7 @@ void gmp_object_tester::test_func_uminus_val()
 
 void gmp_object_tester::test_func_reim()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -306,7 +306,7 @@ void gmp_object_tester::test_func_reim()
 
 void gmp_object_tester::test_func_is()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -325,7 +325,7 @@ void gmp_object_tester::test_func_is()
 
 void gmp_object_tester::test_func_next()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -344,7 +344,7 @@ void gmp_object_tester::test_func_next()
 
 void gmp_object_tester::test_func_sign()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -363,7 +363,7 @@ void gmp_object_tester::test_func_sign()
 
 void gmp_object_tester::test_func_eps()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -382,7 +382,7 @@ void gmp_object_tester::test_func_eps()
 
 void gmp_object_tester::test_func_reim_val()
 {
-    bool res;
+    bool res = false;
 
     try
     {
@@ -1058,6 +1058,13 @@ double gmp_object_tester::test_compare_1(mdy::Type t1, mdy::Type t2, const type2
         bool res4 = (bool)(lhs > rhs);
         bool res5 = (bool)(lhs <= rhs);
         bool res6 = (bool)(lhs >= rhs);
+
+        (void)res1;
+        (void)res2;
+        (void)res3;
+        (void)res4;
+        (void)res5;
+        (void)res6;
     }
     catch(std::exception& ex)
     {

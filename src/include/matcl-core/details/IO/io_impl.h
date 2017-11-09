@@ -102,6 +102,8 @@ struct MATCL_CORE_EXPORT stream_helpers
 
 	static Integer  maxwidth(const integer_dense &);
 
+    // if this read returns false, then return value 'val' need not be
+    // initialized, additionally failbit is set
 	static bool     read(std::istream&, Integer& val);
     static bool     read(std::istream&, Float& val);
     static bool     read(std::istream&, Real& val);

@@ -89,13 +89,21 @@ struct MATCL_DYN_EXPORT is_real         { static const function_name& eval(); };
 struct MATCL_DYN_EXPORT fpclassify      { static const function_name& eval(); };    
 
 // return fused multiply add (a*b + c)
-struct MATCL_DYN_EXPORT fma             { static const function_name& eval(); };
+struct MATCL_DYN_EXPORT fma_f           { static const function_name& eval(); };
 
 // return fused multiply subtract (a*b - c)
-struct MATCL_DYN_EXPORT fms             { static const function_name& eval(); };
+struct MATCL_DYN_EXPORT fms_f           { static const function_name& eval(); };
 
-// form a*b + c*d accurately
-struct MATCL_DYN_EXPORT dot2_ac         { static const function_name& eval(); };
+// return fused multiply add (a*b + c); only one rounding is allowed
+struct MATCL_DYN_EXPORT fma_a           { static const function_name& eval(); };
+
+// return fused multiply subtract (a*b - c); only one rounding is allowed
+struct MATCL_DYN_EXPORT fms_a           { static const function_name& eval(); };
+
+// form a*b + c*d accurately; this function uses FMA instruction;
+// if this instruction is not available, then this function can be
+// very slow
+struct MATCL_DYN_EXPORT dot2_a          { static const function_name& eval(); };
 
 // element by element multiplication
 struct MATCL_DYN_EXPORT elem_mul        { static const function_name& eval(); }; 

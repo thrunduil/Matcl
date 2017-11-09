@@ -29,6 +29,7 @@
 
 #pragma warning(push)
 #pragma warning(disable:4800) // forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning(disable:4127) // conditional expression is constant
 
 namespace matcl { namespace result_of
 {
@@ -131,6 +132,7 @@ struct construct<T1, T2, false>
 {
     static T1 eval(const T2& val)
     {
+        (void)val;
         return T1();
     };
 };
@@ -151,6 +153,7 @@ struct construct_convert_func<T1, T2, false>
 
     static Ret eval(const T2& val)
     {
+        (void)val;
         return Ret();
     };
 };
@@ -170,7 +173,7 @@ struct construct_convert_member<T1, T2, false>
 {
     using Ret = object_type<T1>;
 
-    static Ret eval(const T2& val)
+    static Ret eval(const T2&)
     {
         return Ret();
     };
@@ -343,6 +346,8 @@ struct eval_assign_val_impl<T1, T2, false>
 {
     static double eval(Integer code, const T1& s1, const T2& s2)
     {
+        (void)code;
+
         using type_1    = mdy::object_type<T1>;
         using type_2    = mdy::object_type<T2>;
 
@@ -878,6 +883,7 @@ struct eval_signbit : eval_scalars_1<eval_signbit>
         bool res1_3         = (bool)signbit(lhs);
 
         bool is_nan_1       = matcl::is_nan(s1);
+        (void)is_nan_1;
 
         if (res1_1 != res1_2)
             res += 1;
@@ -920,6 +926,7 @@ struct eval_isign : eval_scalars_1<eval_isign>
         auto res1_3         = isign(lhs);
 
         bool is_nan_1       = matcl::is_nan(s1);
+        (void)is_nan_1;
 
         if (res1_1 != res1_2)
             res += 1;

@@ -136,7 +136,7 @@ struct simd_sub_add<double, 128, sse_tag>
 };
 
 template<>
-struct simd_fma<double, 128, sse_tag>
+struct simd_fma_f<double, 128, sse_tag>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -152,7 +152,7 @@ struct simd_fma<double, 128, sse_tag>
 };
 
 template<>
-struct simd_fms<double, 128, sse_tag>
+struct simd_fms_f<double, 128, sse_tag>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
