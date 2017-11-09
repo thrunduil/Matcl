@@ -35,8 +35,7 @@ namespace matcl { namespace test
 
 void test::test_fma()
 {
-    test_twofold(false).make_fma<float>();
-    test_twofold(false).make_fma<double>();    
+    test_twofold(false).make_fma();
 };
 
 void test::test_double()
@@ -46,6 +45,16 @@ void test::test_double()
 
     test_twofold(true).make_binary();
     test_twofold(false).make_binary();
+};
+
+void test::test_io()
+{
+    test_twofold(false).make_io();
+};
+
+void test::test_error()
+{
+    test_twofold(false).make_error();
 };
 
 test_twofold::test_twofold(bool normalized)
@@ -62,10 +71,75 @@ void test_twofold::make_binary()
     test_functions_bin<double>();
 };
 
-template<class T>
 void test_twofold::make_fma()
 {
-    test_functions_fma<T>();
+    test_functions_fma<double>();
+    test_functions_fma<float>();
+};
+
+void test_twofold::make_io()
+{
+    test_functions_io<double>();
+};
+
+void test_twofold::make_error()
+{
+    twofold x   = twofold(1.0, 0.0);
+
+    double e    = matcl::constants::eps();
+    double e2   = e * e;
+
+    bool ok     = true;
+
+    for (int mult = 1; mult < 100; ++mult)
+    {
+        ok  &= make_error(twofold::normalize_fast(1.0, e2 - e/2.0), mult);    
+
+        ok  &= make_error(twofold::normalize_fast(1.0, 0.0), mult);
+        ok  &= make_error(twofold::normalize_fast(1.0, e2), mult);
+        ok  &= make_error(twofold::normalize_fast(1.0, -e2), mult);
+        ok  &= make_error(twofold::normalize_fast(1.0, e/2.0 - e2), mult);
+        ok  &= make_error(twofold::normalize_fast(1.0, e2 - e/2.0), mult);    
+
+        ok  &= make_error(twofold::normalize_fast(-1.0, 0.0), mult);
+        ok  &= make_error(twofold::normalize_fast(-1.0, e2), mult);
+        ok  &= make_error(twofold::normalize_fast(-1.0, -e2), mult);
+        ok  &= make_error(twofold::normalize_fast(-1.0, e2 - e/2.0), mult);
+        ok  &= make_error(twofold::normalize_fast(-1.0, e/2.0 - e2), mult);
+    };
+
+    if (ok == true)
+        out_stream << "error: OK" << "\n";
+    else
+        out_stream << "error: FAIL" << "\n";
+};
+
+bool test_twofold::make_error(const twofold& x, int mult)
+{
+    double e    = eps(x) * mult;
+
+    twofold x1  = x + e;
+    twofold x2  = x - e;
+
+    double d1   = float_distance(x, x1);
+    double d2   = float_distance(x, x2);
+    double d3   = float_distance(x1, x);
+    double d4   = float_distance(x2, x);
+    double d5   = float_distance(x1, x2);
+    double d6   = float_distance(x2, x1);
+    double d7   = float_distance(x1, x1);
+    double d8   = float_distance(x2, x2);
+
+    if (d1 != mult || d2 != mult || d3 != mult || d4 != mult)
+        return false;
+
+    if (d5 != 2*mult || d6 != 2*mult)
+        return false;
+
+    if (d7 != 0 || d8 != 0)
+        return false;
+
+    return true;
 };
 
 template<class T>
@@ -118,6 +192,44 @@ void test_twofold::test_functions()
                 (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 0.5);
     test_function<T, T2, TMP, test_functions::Func_sqrt_2>
                 (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 2.0);
+};
+
+template<class T>
+void test_twofold::test_functions_io()
+{
+    int N   = get_N();
+
+    using T2    = twofold;
+
+    std::vector<T2> in;
+    std::vector<T2> out;
+
+    in.resize(N);
+    out.resize(N);
+
+    T2* ptr_in          = in.data();
+    T2* ptr_out         = out.data();
+
+    for (int i = 0; i < N; ++i)
+        ptr_in[i]   = rand_scalar<T2>::make(m_normalized, false);
+
+    std::string header  = get_header<T>();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",    align_type::right, 15);
+    dm.add_column("t double",   align_type::left, 5);
+    dm.add_column("t(TF)/t(D)", align_type::left, 5);
+    dm.add_column("ulp error",  align_type::left, 5);
+    dm.add_column("status",     align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function_io<T, T2, test_functions::Func_save_load>
+                (dm, N, 1, ptr_in, ptr_out, 0.0);
 };
 
 template<class T>
@@ -327,6 +439,21 @@ void test_twofold::test_function(formatted_disp& fd, int size, int n_rep,
     bool ok1    = test_equal(size, out, out_gen, max_dist, d1);
     bool ok2    = test_constraints_1<Func>(size, out, in);
     bool ok     = ok1 && ok2;
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t1, t2/t1, d1, status);
+};
+
+template<class T, class T2, class Func>
+void test_twofold::test_function_io(formatted_disp& fd, int size, int n_rep, 
+                    const T2* in, T2* out, double max_dist)
+{
+    double t1   = test_function_base<T, T2, Func>(size, n_rep, in, out);
+    double t2   = test_function_twofold<T2, Func>(size, n_rep, in, out);
+
+    double d1;
+    bool ok1    = test_equal(size, out, in, max_dist, d1);
+    bool ok     = ok1;
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t1, t2/t1, d1, status);
@@ -621,6 +748,24 @@ bool test_twofold::test_equal(int size, const T2* res, const TMP* res_gen, doubl
     return eq;
 }
 
+template<class T2>
+bool test_twofold::test_equal(int size, const T2* res, const T2* res_gen, double max_dist, double& dist)
+{
+    bool eq         = true;
+    dist            = 0.0;
+
+    double loc_dist;
+
+    for (int i = 0; i < size; ++i)
+    {
+        bool tmp    = test_equal(res[i], res_gen[i], max_dist, loc_dist);
+        eq          = eq && tmp;
+        dist        = std::max(dist, loc_dist);
+    };
+
+    return eq;
+}
+
 template<class T, class TMP>
 bool test_twofold::test_equal_fma(int size, const T* res, const TMP* res_gen, double max_dist, double& dist)
 {
@@ -687,7 +832,7 @@ struct required_precision_test_fma<double>
 {
     static int eval()
     {
-        return 1 * 52 + 1;
+        return (int)precision::precision_double();
     }
 };
 
@@ -727,7 +872,39 @@ bool test_twofold::test_equal(const T2& res, const TMP& res_gen, double max_dist
 
     if (dist > max_dist)
     {
-        std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        return false;
+    }
+    else
+        return true;
+}
+
+template<class T2>
+bool test_twofold::test_equal(const T2& res, const T2& res_gen, double max_dist, double& dist)
+{
+    dist = 0.0;
+
+    precision req_p = precision(required_precision_test<T2>::eval());
+
+    if (res.value == res_gen.value && res.error == res_gen.error)
+        return true;
+
+    // twofold does not handle INV/NAN values correctly, when res is not finite
+    // then true result can still be finite
+    if (res.is_finite() == false)
+        return true;
+    
+    dist = float_distance(res_gen, res);
+
+    if (is_nan(dist) == true)
+    {
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        return false;
+    };
+
+    if (dist > max_dist)
+    {
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
         return false;
     }
     else
@@ -760,7 +937,7 @@ bool test_twofold::test_equal_fma(const T& res, const TMP& res_gen, double max_d
 
     if (dist > max_dist)
     {
-        std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
         return false;
     }
     else

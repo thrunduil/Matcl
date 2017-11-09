@@ -23,6 +23,8 @@
 #include "matcl-core/config.h"
 #include "matcl-mp/matcl_mp.h"
 
+#include <iomanip>
+
 namespace test_functions
 {
 
@@ -756,6 +758,27 @@ struct Func_fma
     static std::string name()
     { 
         return "fma"; 
+    };
+};
+
+struct Func_save_load
+{
+    template<class T>    
+    static T eval(const T& x1)
+    {
+        std::ostringstream os;
+        os << std::setprecision(16) << x1;
+
+        std::istringstream is(os.str());
+        T x2;
+        is >> x2;
+
+        return x2;
+    }
+
+    static std::string name()
+    { 
+        return "save_load"; 
     };
 };
 

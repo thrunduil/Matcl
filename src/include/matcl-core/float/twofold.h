@@ -31,8 +31,8 @@ namespace matcl
 //-----------------------------------------------------------------------
 
 // Twofold is a representation of a double precition floating point number
-// z as z = value + error, where |error| <= ulp(|value|)/2 (in case of ties
-// we also require proper rounding, such that fl(value + error) = value). 
+// z as z = value + error, where |error| <= ulp(|value|)/2 and fl(value + error)
+//  = value. 
 // Functions defined for twofold type delivers nearly two times higher 
 // accuracy, then corresponding functions defined for double type. 
 //    
@@ -68,7 +68,7 @@ class twofold
         explicit twofold(const double& val);
 
         // set value to val and error to err; val and err must be normalized
-        // i.e. |err| <= ulp(|val|)/2
+        // i.e. |err| <= ulp(|val|)/2 and fl(val + err) = val.
         twofold(const double& val, const double &err);
 
         // construct normalized twofold number representing val + err; it is 
@@ -162,6 +162,21 @@ twofold sqrt(const twofold& a);
 
 // absolute value of a; result is exact
 twofold abs(const twofold& a);
+
+//-----------------------------------------------------------------------
+//                      ERROR RELATED FUNCTIONS
+//-----------------------------------------------------------------------
+// return number of distinct properly rounded representations between x and
+// y; if one of arguments is NaN, then NaN is returned;
+// the result is always a signed integer value stored in double type
+MATCL_CORE_EXPORT
+double  float_distance(const twofold& x, const twofold& y);
+
+// return epsilon value eps, i.e positive distance from abs(xr) to the next
+// larger in magnitude properly rounded twofold number, where xr is a properly
+// rounded x; rounding is (implicitly) performed according to quadruple precision
+MATCL_CORE_EXPORT
+double  eps(const twofold& x);
 
 //-----------------------------------------------------------------------
 //                      IO FUNCTIONS
