@@ -41,7 +41,9 @@ int main(int argc, const char* argv[])
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
         };
-                        
+        
+        matcl::test::test_error();
+        matcl::test::test_io();
         matcl::test::test_double();
         matcl::test::test_fma();
 

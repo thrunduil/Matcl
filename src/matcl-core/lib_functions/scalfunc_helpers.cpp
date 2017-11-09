@@ -327,4 +327,14 @@ float scal_func::fma_dekker(float x, float y, float z)
     return matcl::fma_dekker(x, y, z);
 }
 
+float scal_func::float_distance(float x, float y)
+{
+    return std::abs(ignore_errors::float_distance(x, y));
+};
+
+double scal_func::float_distance(double x, double y)
+{
+    return std::abs(ignore_errors::float_distance(x, y));
+}
+
 }}};

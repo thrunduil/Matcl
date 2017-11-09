@@ -27,6 +27,77 @@
 namespace matcl
 {
 
+//-----------------------------------------------------------------------
+//                      ERROR RELATED FUNCTIONS
+//-----------------------------------------------------------------------
+
+double matcl::eps(const twofold& x)
+{
+    namespace mrds = matcl::raw::details::scal_func;
+
+    double e = mrds::eps(x.value) * matcl::constants::eps();
+    return e;
+};
+
+double matcl::float_distance(const twofold& x, const twofold& y)
+{
+    namespace mrds = matcl::raw::details::scal_func;
+
+    if (x.value == y.value && x.error == y.error)
+        return 0.0;
+
+    double d_err_1;
+    double d_err_2;
+
+    double d1   = mrds::float_distance(x.value, y.value);    
+    double eps  = matcl::constants::eps();
+
+    if (d1 > 1.0)
+        return d1 / eps;
+
+    double d    = d1/eps;
+
+    if (x.error == 0.0)
+    {
+        d_err_1 = 0;
+    }
+    else
+    {
+        double e1   = mrds::eps(x.value);
+        d_err_1     = mrds::float_distance(e1, e1 + mrds::abs(x.error));
+
+        if (x.error < 0.0)
+            d_err_1 = -d_err_1;
+    }
+
+    if (y.error == 0.0)
+    {
+        d_err_2 = 0;
+    }
+    else
+    {
+        double e2   = mrds::eps(y.value);
+        d_err_2     = mrds::float_distance(e2, e2 + mrds::abs(y.error));
+
+        if (y.error < 0.0)
+            d_err_2 = -d_err_2;
+    }    
+
+    if (d1 == 0.0)
+        return mrds::abs(d_err_1 - d_err_2);
+
+    if (x.value < y.value)
+        d       = d + (d_err_2 - d_err_1);
+    else
+        d       = d + (d_err_1 - d_err_2);
+
+    return mrds::abs(d);
+};
+
+//-----------------------------------------------------------------------
+//                      IO FUNCTIONS
+//-----------------------------------------------------------------------
+
 std::ostream& matcl::operator<<(std::ostream& os, const twofold& x)
 {
     os << "{";

@@ -31,6 +31,8 @@ namespace matcl { namespace test
 
 void test_fma();
 void test_double();
+void test_io();
+void test_error();
 
 class test_twofold
 {
@@ -40,21 +42,27 @@ class test_twofold
     public:
         test_twofold(bool normalized);
 
-        template<class T>
         void    make_fma();
-
         void    make_binary();
         void    make_unary();
+        void    make_io();
+
+        void    make_error();
 
     private:
         int     get_N() const;
         int     get_M() const;
         
+        bool    make_error(const twofold& x, int mult);
+
         template<class T>
         std::string get_header() const;
 
         template<class T>
         void    test_functions();
+
+        template<class T>
+        void    test_functions_io();
 
         template<class T>
         void    test_functions_bin();
@@ -74,6 +82,10 @@ class test_twofold
         void    test_function(formatted_disp& fd, int size, int n_rep, const T2* in, 
                     T2* out, TMP* out_gen, double max_dist);
 
+        template<class T, class T2, class Func>
+        void    test_function_io(formatted_disp& fd, int size, int n_rep, const T2* in, 
+                    T2* out, double max_dist);
+
         template<class T, class T2, class TMP, class Func>
         void    test_function_bin(formatted_disp& fd, int size, int n_rep, const T2* in_1, 
                     const T2* in_2, T2* out, TMP* out_gen, double max_dist);
@@ -85,8 +97,14 @@ class test_twofold
         template<class T2, class TMP>
         bool    test_equal(int size, const T2* res, const TMP* res_gen, double max_dist, double& dist);
 
+        template<class T2>
+        bool    test_equal(int size, const T2* res, const T2* res_gen, double max_dist, double& dist);
+
         template<class T2, class TMP>
         bool    test_equal(const T2& res, const TMP& res_gen, double max_dist, double& dist);
+
+        template<class T2>
+        bool    test_equal(const T2& res, const T2& res_gen, double max_dist, double& dist);
 
         template<class T, class TMP>
         bool    test_equal_fma(int size, const T* res, const TMP* res_gen, double max_dist, double& dist);

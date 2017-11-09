@@ -24,14 +24,6 @@
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-scalar/details/func_unary.inl"
 
-namespace matcl { namespace raw { namespace details { namespace scal_func
-{
-
-MATCL_SCALAR_EXPORT float   float_distance(float x, float y);
-MATCL_SCALAR_EXPORT double  float_distance(double x, double y);
-
-}}}}
-
 namespace matcl { namespace details
 {
 

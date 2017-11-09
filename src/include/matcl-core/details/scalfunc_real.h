@@ -128,6 +128,9 @@ namespace scal_func
     float MATCL_CORE_EXPORT          fma_dekker(float x, float y, float z);
     double MATCL_CORE_EXPORT         fma_dekker(double x, double y, double z);
 
+    float MATCL_CORE_EXPORT         float_distance(float x, float y);
+    double MATCL_CORE_EXPORT        float_distance(double x, double y);
+
     Float_complex               log1p(const Float_complex&);
     Complex                     log1p(const Complex&);
     Float_complex               log(const Float_complex&);

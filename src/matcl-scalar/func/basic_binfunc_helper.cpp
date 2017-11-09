@@ -47,21 +47,6 @@ namespace matcl { namespace raw { namespace details { namespace scal_func
     }
 };};}}
 
-namespace matcl { namespace raw { namespace details
-{
-
-float scal_func::float_distance(float x, float y)
-{
-    return std::abs(ignore_errors::float_distance(x, y));
-};
-
-double scal_func::float_distance(double x, double y)
-{
-    return std::abs(ignore_errors::float_distance(x, y));
-}
-
-}}}
-
 namespace matcl { namespace details
 {
 
