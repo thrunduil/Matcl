@@ -43,8 +43,8 @@ int main(int argc, const char* argv[])
             set_logger(log);
         };
 
-        matcl::test::test_performance_complex();
         matcl::test::test_performance_real();        
+        matcl::test::test_performance_complex();        
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

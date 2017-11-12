@@ -40,7 +40,7 @@ simd<double, 256, sse_tag>::simd(float val)
 {}
 
 force_inline
-simd<double, 256, sse_tag>::simd(const double& val)    
+simd<double, 256, sse_tag>::simd(double val)    
 {
     data[0] = simd_half(val); 
     data[1] = simd_half(val);
@@ -75,29 +75,49 @@ simd<double, 256, sse_tag>::simd(const impl_type& v)
 };
 
 force_inline
+simd<double, 256, sse_tag>::simd(const simd<double, 256, nosimd_tag>& s)
+{
+    std::true_type aligned;
+
+    data[0] = simd_half::load(s.data + 0, aligned);
+    data[1] = simd_half::load(s.data + 1, aligned);
+}
+
+force_inline
+simd<double, 256, sse_tag>::simd(const simd<double, 256, avx_tag>& s)
+{
+    data[0] = s.extract_low();
+    data[1] = s.extract_high();
+}
+
+force_inline
 double simd<double, 256, sse_tag>::get(int pos) const
 { 
-    return data[0].data.m128d_f64[pos] ; 
+    return get_raw_ptr()[pos] ; 
 };
 
-template<int Pos>
 force_inline
-double simd<double, 256, sse_tag>::get() const
+double simd<double, 256, sse_tag>::first() const
 { 
-    return data[0].data.m128d_f64[Pos]; 
+    return data[0].first();
 };
 
 force_inline
 void simd<double, 256, sse_tag>::set(int pos, double val)
 { 
-    data[0].data.m128d_f64[pos] = val; 
+    get_raw_ptr()[pos] = val; 
 };
 
-template<int Pos>
 force_inline
-void simd<double, 256, sse_tag>::set(double val)
+const double* simd<double, 256, sse_tag>::get_raw_ptr() const
 { 
-    data[0].data.m128d_f64[Pos] = val; 
+    return reinterpret_cast<const double*>(&data); 
+};
+
+force_inline
+double* simd<double, 256, sse_tag>::get_raw_ptr()
+{ 
+    return reinterpret_cast<double*>(&data); 
 };
 
 force_inline simd<double, 256, sse_tag>::simd_half
@@ -118,6 +138,33 @@ simd<double, 256, sse_tag> simd<double, 256, sse_tag>::zero()
     simd<double, 256, sse_tag> ret;
     ret.data[0] = simd_half::zero();
     ret.data[1] = simd_half::zero();
+    return ret;
+}
+
+force_inline
+simd<double, 256, sse_tag> simd<double, 256, sse_tag>::minus_zero()
+{
+    simd<double, 256, sse_tag> ret;
+    ret.data[0] = simd_half::minus_zero();
+    ret.data[1] = simd_half::minus_zero();
+    return ret;
+}
+
+force_inline
+simd<double, 256, sse_tag> simd<double, 256, sse_tag>::one()
+{
+    simd<double, 256, sse_tag> ret;
+    ret.data[0] = simd_half::one();
+    ret.data[1] = simd_half::one();
+    return ret;
+}
+
+force_inline
+simd<double, 256, sse_tag> simd<double, 256, sse_tag>::minus_one()
+{
+    simd<double, 256, sse_tag> ret;
+    ret.data[0] = simd_half::minus_one();
+    ret.data[1] = simd_half::minus_one();
     return ret;
 }
 
@@ -169,22 +216,59 @@ force_inline void simd<double, 256, sse_tag>::store(double* arr, std::false_type
     data[1].store(arr + 2, not_aligned);
 };
 
+force_inline simd<float, 128, sse_tag>
+simd<double, 256, sse_tag>::cast_to_float() const
+{
+    return simd_float(data[0].cast_to_float(), data[1].cast_to_float());
+}
+
 template<int Step>
 force_inline
 void simd<double, 256, sse_tag>::scatter(double* arr) const
 {
+    const double* this_data  = get_raw_ptr();
+
     //no scatter intrinsic
-    arr[0*Step] = get<0>();
-    arr[1*Step] = get<1>();
-    arr[2*Step] = get<2>();
-    arr[3*Step] = get<3>();
+    arr[0*Step] = this_data[0];
+    arr[1*Step] = this_data[1];
+    arr[2*Step] = this_data[2];
+    arr[3*Step] = this_data[3];
 };
+
+force_inline simd<double, 256, sse_tag>& 
+simd<double, 256, sse_tag>::operator+=(const simd& x)
+{
+    *this = *this + x;
+    return *this;
+}
+
+force_inline simd<double, 256, sse_tag>& 
+simd<double, 256, sse_tag>::operator-=(const simd& x)
+{
+    *this = *this - x;
+    return *this;
+}
+
+force_inline simd<double, 256, sse_tag>& 
+simd<double, 256, sse_tag>::operator*=(const simd& x)
+{
+    *this = *this * x;
+    return *this;
+}
+
+force_inline simd<double, 256, sse_tag>& 
+simd<double, 256, sse_tag>::operator/=(const simd& x)
+{
+    *this = *this / x;
+    return *this;
+}
 
 //-------------------------------------------------------------------
 //                          SSE2 SINGLE
 //-------------------------------------------------------------------
+
 force_inline
-simd<float, 256, sse_tag>::simd(const float& val) 
+simd<float, 256, sse_tag>::simd(float val) 
 {
     data[0] = simd_half(val); 
     data[1] = simd_half(val);
@@ -219,29 +303,49 @@ simd<float, 256, sse_tag>::simd(const simd_half& lo, const simd_half& hi)
 }
 
 force_inline
+simd<float, 256, sse_tag>::simd(const simd<float, 256, nosimd_tag>& s)
+{
+    std::true_type aligned;
+
+    data[0] = simd_half::load(s.data + 0, aligned);
+    data[1] = simd_half::load(s.data + 1, aligned);
+}
+
+force_inline
+simd<float, 256, sse_tag>::simd(const simd<float, 256, avx_tag>& s)
+{
+    data[0] = s.extract_low();
+    data[1] = s.extract_high();
+}
+
+force_inline
 float simd<float, 256, sse_tag>::get(int pos) const  
 { 
-    return data[0].data.m128_f32[pos] ; 
+    return get_raw_ptr()[pos] ; 
 };
 
-template<int Pos>
 force_inline
-float simd<float, 256, sse_tag>::get() const
+float simd<float, 256, sse_tag>::first() const
 { 
-    return data[0].data.m128_f32[Pos]; 
+    return data[0].first();
 };
 
 force_inline
 void simd<float, 256, sse_tag>::set(int pos, float val)
 { 
-    data[0].data.m128_f32[pos] = val; 
+    get_raw_ptr()[pos] = val; 
 };
 
-template<int Pos>
 force_inline
-void simd<float, 256, sse_tag>::set(float val)
+const float* simd<float, 256, sse_tag>::get_raw_ptr() const
 { 
-    data[0].data.m128_f32[Pos] = val; 
+    return reinterpret_cast<const float*>(&data); 
+};
+
+force_inline
+float* simd<float, 256, sse_tag>::get_raw_ptr()
+{ 
+    return reinterpret_cast<float*>(&data); 
 };
 
 force_inline simd<float, 256, sse_tag>::simd_half
@@ -256,12 +360,51 @@ simd<float, 256, sse_tag>::extract_high() const
     return data[1];
 }
 
+force_inline simd<double, 256, sse_tag>
+simd<float, 256, sse_tag>::cast_low_to_double() const
+{
+    return simd_double(data[0].cast_low_to_double(), data[0].cast_high_to_double());
+}
+
+force_inline simd<double, 256, sse_tag>
+simd<float, 256, sse_tag>::cast_high_to_double() const
+{
+    return simd_double(data[1].cast_low_to_double(), data[1].cast_high_to_double());
+}
+
 force_inline
 simd<float, 256, sse_tag> simd<float, 256, sse_tag>::zero()
 {
     simd<float, 256, sse_tag> ret;
     ret.data[0] = simd_half::zero();
     ret.data[1] = simd_half::zero();
+    return ret;
+}
+
+force_inline
+simd<float, 256, sse_tag> simd<float, 256, sse_tag>::minus_zero()
+{
+    simd<float, 256, sse_tag> ret;
+    ret.data[0] = simd_half::minus_zero();
+    ret.data[1] = simd_half::minus_zero();
+    return ret;
+}
+
+force_inline
+simd<float, 256, sse_tag> simd<float, 256, sse_tag>::one()
+{
+    simd<float, 256, sse_tag> ret;
+    ret.data[0] = simd_half::one();
+    ret.data[1] = simd_half::one();
+    return ret;
+}
+
+force_inline
+simd<float, 256, sse_tag> simd<float, 256, sse_tag>::minus_one()
+{
+    simd<float, 256, sse_tag> ret;
+    ret.data[0] = simd_half::minus_one();
+    ret.data[1] = simd_half::minus_one();
     return ret;
 }
 
@@ -318,15 +461,45 @@ template<int Step>
 force_inline
 void simd<float, 256, sse_tag>::scatter(float* arr) const
 {
+    const float* this_data  = get_raw_ptr();
+
     //no scatter intrinsic
-    arr[0*Step] = get<0>();
-    arr[1*Step] = get<1>();
-    arr[2*Step] = get<2>();
-    arr[3*Step] = get<3>();
-    arr[4*Step] = get<4>();
-    arr[5*Step] = get<5>();
-    arr[6*Step] = get<6>();
-    arr[7*Step] = get<7>();
+    arr[0*Step] = this_data[0];
+    arr[1*Step] = this_data[1];
+    arr[2*Step] = this_data[2];
+    arr[3*Step] = this_data[3];
+    arr[4*Step] = this_data[4];
+    arr[5*Step] = this_data[5];
+    arr[6*Step] = this_data[6];
+    arr[7*Step] = this_data[7];
 };
+
+force_inline simd<float, 256, sse_tag>& 
+simd<float, 256, sse_tag>::operator+=(const simd& x)
+{
+    *this = *this + x;
+    return *this;
+}
+
+force_inline simd<float, 256, sse_tag>& 
+simd<float, 256, sse_tag>::operator-=(const simd& x)
+{
+    *this = *this - x;
+    return *this;
+}
+
+force_inline simd<float, 256, sse_tag>& 
+simd<float, 256, sse_tag>::operator*=(const simd& x)
+{
+    *this = *this * x;
+    return *this;
+}
+
+force_inline simd<float, 256, sse_tag>& 
+simd<float, 256, sse_tag>::operator/=(const simd& x)
+{
+    *this = *this / x;
+    return *this;
+}
 
 }}

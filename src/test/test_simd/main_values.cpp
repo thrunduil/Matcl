@@ -43,8 +43,8 @@ int main(int argc, const char* argv[])
             set_logger(log);
         };
                 
-        matcl::test::test_values_complex();
-        matcl::test::test_values_real();        
+        matcl::test::test_values_real();
+        matcl::test::test_values_complex();        
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

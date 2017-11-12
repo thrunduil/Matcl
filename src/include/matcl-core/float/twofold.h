@@ -21,6 +21,8 @@
 #pragma once
 
 #include "matcl-core/config.h"
+#include "matcl-core/details/mpl.h"
+
 #include <iostream>
 
 namespace matcl
@@ -54,39 +56,50 @@ namespace matcl
 // bits)
 
 // representation of a floating point number as value + error
+template<class Float_type>
 class twofold
 {    
     public:
-        double  value;
-        double  error;
+        // type of underlying floating point type
+        using float_type    = Float_type;
+
+        struct uninitialized{};
+
+    public:
+        Float_type  value;
+        Float_type  error;
 
     public:
         // set value and error to 0.0
         twofold();
 
+        // create uninitialized twofold value
+        twofold(uninitialized);
+
         // set value to val and error to 0.0
-        explicit twofold(const double& val);
+        explicit twofold(const Float_type& val);
 
         // set value to val and error to err; val and err must be normalized
         // i.e. |err| <= ulp(|val|)/2 and fl(val + err) = val.
-        twofold(const double& val, const double &err);
+        twofold(const Float_type& val, const Float_type &err);
 
+    public:
         // construct normalized twofold number representing val + err; it is 
         // required, that |err| <= |val|
-        static twofold  normalize_fast(const double& val, const double& err);
+        static twofold      normalize_fast(const Float_type& val, const Float_type& err);
 
         // construct normalized twofold number representing val + err;
         // val and err can be any numbers; this is the slowes normalization
         // function
-        static twofold  normalize(const double& val, const double& err);
+        static twofold      normalize(const Float_type& val, const Float_type& err);
 
         // return value + error (with is equal to value due to normalization
         // requirement)
-        const double&   sum() const;
+        const Float_type&   sum() const;
 
         // return true if both value and error are finite (e.g. not INF and not NAN)
         // only finite values are meaningful (see GENERAL INFO for details)
-        bool            is_finite() const;
+        bool                is_finite() const;
 };
 
 //-----------------------------------------------------------------------
@@ -94,74 +107,96 @@ class twofold
 //-----------------------------------------------------------------------
 
 // evaluate a + b for arbitrary a and b; result is exact
-twofold twofold_plus(double a, double b);
+template<class Float_type>
+twofold<Float_type> twofold_plus(const Float_type& a, const Float_type& b);
 
 // evaluate a + b, provided |a| >= |b|; this function is faster
 // than twofold_plus; result is exact
-twofold twofold_plus_sorted(double a, double b);
+template<class Float_type>
+twofold<Float_type> twofold_plus_sorted(const Float_type& a, const Float_type& b);
 
 // evaluate a - b for arbitrary a and b; result is exact
-twofold twofold_minus(double a, double b);
+template<class Float_type>
+twofold<Float_type> twofold_minus(const Float_type& a, const Float_type& b);
 
 // evaluate a - b, provided |a| >= |b|; this function is faster
 // than twofold_minus; result is exact
-twofold twofold_minus_sorted(double a, double b);
+template<class Float_type>
+twofold<Float_type> twofold_minus_sorted(const Float_type& a, const Float_type& b);
 
 // evaluate a * b; result is exact
-twofold twofold_mult(double a, double b);
+template<class Float_type>
+twofold<Float_type> twofold_mult(const Float_type& a, const Float_type& b);
 
 // evaluate a / b; result is strict
-twofold twofold_div(double a, double b);
+template<class Float_type>
+twofold<Float_type> twofold_div(const Float_type& a, const Float_type& b);
 
 // square root of a; result is strict
-twofold twofold_sqrt(double a);
+template<class Float_type>
+twofold<Float_type> twofold_sqrt(const Float_type& a);
 
 // evaluate a + b; result need not be strict
-twofold operator+(const twofold& a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator+(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
 // evaluate a + b; result is strict
-twofold operator+(const twofold& a, double b);
+template<class Float_type>
+twofold<Float_type> operator+(const twofold<Float_type>& a, const Float_type& b);
 
 // evaluate a + b; result is strict
-twofold operator+(double a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator+(const Float_type& a, const twofold<Float_type>& b);
 
 // evaluate a - b; result need not be strict
-twofold operator-(const twofold& a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator-(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
 // evaluate a - b; result is strict
-twofold operator-(const twofold& a, double b);
+template<class Float_type>
+twofold<Float_type> operator-(const twofold<Float_type>& a, const Float_type& b);
 
 // evaluate a - b; result is strict
-twofold operator-(double a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator-(const Float_type& a, const twofold<Float_type>& b);
 
 // evaluate -a; result is exact
-twofold operator-(const twofold& a);
+template<class Float_type>
+twofold<Float_type> operator-(const twofold<Float_type>& a);
 
 // evaluate a * b; result need not be strict
-twofold operator*(const twofold& a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator*(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
 // evaluate a * b; result is strict
-twofold operator*(const twofold& a, double b);
+template<class Float_type>
+twofold<Float_type> operator*(const twofold<Float_type>& a, const Float_type& b);
 
 // evaluate a * b; result is strict
-twofold operator*(double a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator*(const Float_type& a, const twofold<Float_type>& b);
 
 // evaluate a / b; result need not be strict
-twofold operator/(const twofold& a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator/(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
 // evaluate a / b
-twofold operator/(const twofold& a, double b);
+template<class Float_type>
+twofold<Float_type> operator/(const twofold<Float_type>& a, const Float_type& b);
 
 // evaluate a / b; result need not be strict, but maximum relative
 // forward error does not exceed 4 ulp (ulp calculated as if precision
 // was doubled)
-twofold operator/(double a, const twofold& b);
+template<class Float_type>
+twofold<Float_type> operator/(const Float_type& a, const twofold<Float_type>& b);
 
 // square root of a; result need not be strict
-twofold sqrt(const twofold& a);
+template<class Float_type>
+twofold<Float_type> sqrt(const twofold<Float_type>& a);
 
 // absolute value of a; result is exact
-twofold abs(const twofold& a);
+template<class Float_type>
+twofold<Float_type> abs(const twofold<Float_type>& a);
 
 //-----------------------------------------------------------------------
 //                      ERROR RELATED FUNCTIONS
@@ -169,41 +204,25 @@ twofold abs(const twofold& a);
 // return number of distinct properly rounded representations between x and
 // y; if one of arguments is NaN, then NaN is returned;
 // the result is always a signed integer value stored in double type
-MATCL_CORE_EXPORT
-double  float_distance(const twofold& x, const twofold& y);
+template<class Float_type>
+Float_type  float_distance(const twofold<Float_type>& x, const twofold<Float_type>& y);
 
 // return epsilon value eps, i.e positive distance from abs(xr) to the next
 // larger in magnitude properly rounded twofold number, where xr is a properly
 // rounded x; rounding is (implicitly) performed according to quadruple precision
-MATCL_CORE_EXPORT
-double  eps(const twofold& x);
+template<class Float_type>
+Float_type  eps(const twofold<Float_type>& x);
 
 //-----------------------------------------------------------------------
 //                      IO FUNCTIONS
 //-----------------------------------------------------------------------
 // save to stream
-MATCL_CORE_EXPORT
-std::ostream& operator<<(std::ostream& os, const twofold& x);
+template<class Float_type>
+std::ostream& operator<<(std::ostream& os, const twofold<Float_type>& x);
 
 // load from stream
-MATCL_CORE_EXPORT
-std::istream& operator>>(std::istream& os, twofold& x);
-
-//-----------------------------------------------------------------------
-//                   COMPATIBILITY FUNCTIONS
-//-----------------------------------------------------------------------
-// evaluate a * b using the Veltkamp/Dekker algorithm; result is exact; 
-// this function is equivalent to twofold_mult and is called by twofold_mult
-// and other functions, when FMA instruction is not available
-twofold twofold_mult_dekker(double a, double b);
-
-// evaluate x * y + z with one rounding using the Veltkamp/Dekker algorithm
-// for double precision arguments and double arithmetics for single precision
-// arguments; 
-// this function is equivalent to FMA instruction and is called by twofold's
-// function, when FMA instruction is not available
-double  fma_dekker(double x, double y, double z);
-float   fma_dekker(float x, float y, float z);
+template<class Float_type>
+std::istream& operator>>(std::istream& os, twofold<Float_type>& x);
 
 }
 

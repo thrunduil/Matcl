@@ -99,12 +99,18 @@ struct simd_compl_mult<double, 256, avx_tag>
 
         simd_type res;
 
+        value_type* res_ptr         = res.get_raw_ptr();
+        const value_type* xy_ptr    = xy.get_raw_ptr();
+        const value_type* x_ptr     = x.get_raw_ptr();
+        const value_type* y_ptr     = y.get_raw_ptr();
+
         for (int i = 0; i < vec_size; ++i)
         {
-            double r_re     = real(xy.get(i));
-            double r_im     = imag(xy.get(i));
-            value_type res2 = mult_impl::eval(x.get(i), y.get(i), r_re, r_im);
-            res.set(i, res2);
+            double r_re     = real(xy_ptr[i]);
+            double r_im     = imag(xy_ptr[i]);
+
+            value_type res2 = mult_impl::eval(x_ptr[i], y_ptr[i], r_re, r_im);
+            res_ptr[i]      = res2;
         };
 
         return res;
@@ -219,10 +225,14 @@ struct simd_compl_div<double, 256, avx_tag>
 
         simd_type res;
 
+        value_type* res_ptr         = res.get_raw_ptr();
+        const value_type* x_ptr     = x.get_raw_ptr();
+        const value_type* y_ptr     = y.get_raw_ptr();
+
         for (int i = 0; i < vec_size; ++i)
         {
-            value_type res2 = div_impl::eval(x.get(i), y.get(i));
-            res.set(i, res2);
+            value_type res2 = div_impl::eval(x_ptr[i], y_ptr[i]);
+            res_ptr[i]      = res2;
         };
 
         return res;
@@ -236,10 +246,14 @@ struct simd_compl_div<double, 256, avx_tag>
 
         simd_type res;
 
+        value_type* res_ptr         = res.get_raw_ptr();
+        const double* x_ptr         = x.get_raw_ptr();
+        const value_type* y_ptr     = y.get_raw_ptr();
+
         for (int i = 0; i < vec_size; ++i)
         {
-            value_type res2 = div_impl::eval(x.get(2*i), y.get(i));
-            res.set(i, res2);
+            value_type res2 = div_impl::eval(x_ptr[2*i], y_ptr[i]);
+            res_ptr[i]      = res2;
         };
 
         return res;
@@ -273,13 +287,14 @@ struct simd_compl_minus<double, 256, avx_tag>
 template<>
 struct simd_compl_uminus<double, 256, avx_tag>
 {
-    using simd_type         = simd_compl<double, 256, avx_tag>;
+    using simd_type     = simd_compl<double, 256, avx_tag>;
+    using simd_real     = simd<double, 256, avx_tag>;
 
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        double Z = -0.0;
-        return _mm256_xor_pd(x.data.data, _mm256_broadcast_sd(&Z));
+        const simd_real mzero = simd_real::minus_zero();
+        return _mm256_xor_pd(x.data.data, mzero.data);
     };
 };
 
@@ -297,7 +312,7 @@ struct simd_compl_sum_all<double, 256, avx_tag>
         simd_half x2    = x.extract_high();
         simd_half res   = x1 + x2;
 
-        return res.get<0>();
+        return res.first();
     };
 };
 

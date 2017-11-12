@@ -34,11 +34,13 @@ struct rand_scalar_base
     static int      rand_pow(int min_exp, int max_exp);
 };
 
-template<>
-struct rand_scalar<twofold> : rand_scalar_base
+template<class Float_type>
+struct rand_scalar<twofold<Float_type>> : rand_scalar_base
 {
-    static twofold  make(bool normalized, bool second_of_sum);    
-    static double   rand_mult(bool normalized);    
+    using twofold   = twofold<Float_type>;
+
+    static twofold      make(bool normalized, bool second_of_sum);    
+    static Float_type   rand_mult(bool normalized);    
 };
 
 template<>
@@ -47,6 +49,7 @@ struct rand_scalar<double> : rand_scalar_base
     static double   make(bool second_of_sum);
     static double   make_value(bool second_of_sum);
     static double   rand_scale(bool second_of_sum);
+    static double   rand();
 };
 
 template<>
@@ -55,6 +58,36 @@ struct rand_scalar<float> : rand_scalar_base
     static float    make(bool second_of_sum);
     static float    make_value(bool second_of_sum);
     static float    rand_scale(bool second_of_sum);
+    static float    rand();
+};
+
+//--------------------------------------------------------------------------
+//                         twofold
+//--------------------------------------------------------------------------
+template<class Float_type>
+twofold<Float_type> 
+rand_scalar<twofold<Float_type>>::make(bool normalized, bool sec_od_sum)
+{
+    Float_type val  = rand_scalar<Float_type>::make_value(sec_od_sum);
+
+    Float_type err  = rand_scalar<Float_type>::rand();
+    Float_type mult = rand_mult(normalized);
+
+    return twofold::normalize(val, err * mult * val);
+};
+
+template<class Float_type>
+Float_type rand_scalar<twofold<Float_type>>::rand_mult(bool normalized)
+{
+    if (normalized == true)
+        return std::numeric_limits<Float_type>::epsilon()/2;
+
+    Float_type one  = Float_type(1.0);
+    int pow         = rand_pow(-20, -1);
+    Float_type max  = std::ldexp(one, pow);
+    Float_type mult = rand_scalar<Float_type>::rand() * max;
+
+    return mult;
 };
 
 }};

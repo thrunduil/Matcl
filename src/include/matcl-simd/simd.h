@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-simd/config.h"
+#include "matcl-simd/simd_fwd.h"
 #include "matcl-simd/simd_general.h"
 #include "matcl-simd/func/simd_func.h"
 #include "matcl-simd/arch/simd_impl.inl"

@@ -107,7 +107,7 @@ struct simd_sum_all<T, 256, sse_tag>
     force_inline
     static T eval(const simd_type& x)
     {
-        return sum_all(x.data[0]) + sum_all(x.data[1]);
+        return sum_all(x.data[0] + x.data[1]);
     };
 };
 
@@ -122,6 +122,7 @@ struct simd_sub_add<T, 256, sse_tag>
         return simd_type(sub_add(x.data[0], y.data[0]), sub_add(x.data[1], y.data[1]));
     };
 };
+
 template<class T>
 struct simd_fma_f<T, 256, sse_tag>
 {
@@ -149,6 +150,32 @@ struct simd_fms_f<T, 256, sse_tag>
 };
 
 template<class T>
+struct simd_fma_a<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        return simd_type(fma_a(x.data[0], y.data[0], z.data[0]), 
+                         fma_a(x.data[1], y.data[1], z.data[1]));
+    };
+};
+
+template<class T>
+struct simd_fms_a<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        return simd_type(fms_a(x.data[0], y.data[0], z.data[0]), 
+                         fms_a(x.data[1], y.data[1], z.data[1]));
+    };
+};
+
+template<class T>
 struct simd_abs<T, 256, sse_tag>
 {
     using simd_type = simd<T, 256, sse_tag>;
@@ -157,6 +184,58 @@ struct simd_abs<T, 256, sse_tag>
     static simd_type eval(const simd_type& x)
     {
         return simd_type(abs(x.data[0]), abs(x.data[1]));
+    };
+};
+
+template<class T>
+struct simd_bitwise_or<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(bitwise_or(x.data[0], y.data[0]), 
+                         bitwise_or(x.data[1], y.data[1]));
+    };
+};
+
+template<class T>
+struct simd_bitwise_xor<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(bitwise_xor(x.data[0], y.data[0]), 
+                         bitwise_xor(x.data[1], y.data[1]));
+    };
+};
+
+template<class T>
+struct simd_bitwise_and<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(bitwise_and(x.data[0], y.data[0]), 
+                         bitwise_and(x.data[1], y.data[1]));
+    };
+};
+
+template<class T>
+struct simd_bitwise_andnot<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(bitwise_andnot(x.data[0], y.data[0]), 
+                         bitwise_andnot(x.data[1], y.data[1]));
     };
 };
 

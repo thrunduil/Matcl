@@ -31,6 +31,7 @@ namespace matcl { namespace simd
 //-------------------------------------------------------------------
 //                          AVX DOUBLE
 //-------------------------------------------------------------------
+
 // vector of four double precision scalars
 template<>
 class alignas(32) simd<double, 256, avx_tag>
@@ -44,6 +45,9 @@ class alignas(32) simd<double, 256, avx_tag>
 
         // type of vector storing half of elements
         using simd_half     = simd<double, 128, sse_tag>;
+
+        // simd type storing float values
+        using simd_float   = simd<float, 128, sse_tag>;
 
     public:
         // number of elements in the vector
@@ -65,7 +69,7 @@ class alignas(32) simd<double, 256, avx_tag>
         explicit simd(float val);
 
         // construct vector with all elements equal to val
-        explicit simd(const double& val);
+        explicit simd(double val);
 
         // construct vector with first two elements and last two elements
         // copied from lo_hi
@@ -81,10 +85,27 @@ class alignas(32) simd<double, 256, avx_tag>
         // construct from representation
         simd(const impl_type& v);
 
+        // conversion between simd types
+        explicit simd(const simd<double, 256, nosimd_tag>& s);
+        explicit simd(const simd<double, 256, sse_tag>& s);
+
+        // copy constructor
+        simd(const simd<double, 256, avx_tag>& s) = default;
+
     public:
-        // connstruct vector with all elements set to zero
+        // connstruct vector with all elements set to 0.0
         static simd     zero();
 
+        // connstruct vector with all elements set to -0.0
+        static simd     minus_zero();
+
+        // connstruct vector with all elements set to 1.0
+        static simd     one();
+
+        // connstruct vector with all elements set to -1.0
+        static simd     minus_one();
+
+    public:
         // construct vector with all elements equal to arr[0]
         static simd     broadcast(const double* arr);
 
@@ -108,27 +129,44 @@ class alignas(32) simd<double, 256, avx_tag>
         // get i-th element from the vector; pos is 0-based
         double          get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        double          get() const;
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        double          first() const;
 
         // set i-th element of the vector; pos is 0-based
         void            set(int pos, double val);
 
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void            set(double val);
+        // return pointer to the first element in the vector
+        const double*   get_raw_ptr() const;
+        double*         get_raw_ptr();
 
         // return simd storing first two elements
         simd_half       extract_low() const;
 
         // return simd storing last two elements
         simd_half       extract_high() const;
+
+        // cast elements to float
+        simd_float      cast_to_float() const;
+
+    public:
+        // plus assign operator
+        simd&           operator+=(const simd& x);
+
+        // minus assign operator
+        simd&           operator-=(const simd& x);
+
+        // multiply assign operator
+        simd&           operator*=(const simd& x);
+
+        // divide assign operator
+        simd&           operator/=(const simd& x);
 };
 
 //-------------------------------------------------------------------
 //                          AVX FLOAT
 //-------------------------------------------------------------------
+
 // vector of eight single precision scalars
 template<>
 class alignas(32) simd<float, 256, avx_tag>
@@ -142,6 +180,9 @@ class alignas(32) simd<float, 256, avx_tag>
 
         // type of vector storing half of elements
         using simd_half     = simd<float, 128, sse_tag>;
+
+        // simd type of the same kind storing double values
+        using simd_double   = simd<double, 256, avx_tag>;
 
     public:
         // number of elements in the vector
@@ -157,7 +198,7 @@ class alignas(32) simd<float, 256, avx_tag>
         simd() = default;
 
         // construct vector with all elements equal to val
-        explicit simd(const float& val);
+        explicit simd(float val);
 
         // construct vector with first four elements and last four elements
         // copied from lo_hi
@@ -173,10 +214,27 @@ class alignas(32) simd<float, 256, avx_tag>
         // and last four elements copied from hi
         simd(const simd_half& lo, const simd_half& hi);
 
+        // conversion between simd types
+        explicit simd(const simd<float, 256, nosimd_tag>& s);
+        explicit simd(const simd<float, 256, sse_tag>& s);
+
+        // copy constructor
+        simd(const simd<float, 256, avx_tag>& s) = default;
+
     public:
-        // connstruct vector with all elements set to zero
+        // connstruct vector with all elements set to 0.0
         static simd     zero();
 
+        // connstruct vector with all elements set to -0.0
+        static simd     minus_zero();
+
+        // connstruct vector with all elements set to 1.0
+        static simd     one();
+
+        // connstruct vector with all elements set to -1.0
+        static simd     minus_one();
+
+    public:
         // construct vector with all elements equal to arr[0]
         static simd     broadcast(const float* arr);
 
@@ -200,22 +258,41 @@ class alignas(32) simd<float, 256, avx_tag>
         // get i-th element from the vector; pos is 0-based
         float           get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        float           get() const;
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        float           first() const;
 
         // set i-th element of the vector; pos is 0-based
         void            set(int pos, float val);
 
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void            set(float val);
+        // return pointer to the first element in the vector
+        const float*    get_raw_ptr() const;
+        float*          get_raw_ptr();
 
         // return simd storing first four elements
         simd_half       extract_low() const;
 
         // return simd storing last four elements
         simd_half       extract_high() const;
+
+        // cast the first four elements to double
+        simd_double     cast_low_to_double() const;
+
+        // cast the last four elements to double
+        simd_double     cast_high_to_double() const;
+
+    public:
+        // plus assign operator
+        simd&           operator+=(const simd& x);
+
+        // minus assign operator
+        simd&           operator-=(const simd& x);
+
+        // multiply assign operator
+        simd&           operator*=(const simd& x);
+
+        // divide assign operator
+        simd&           operator/=(const simd& x);
 };
 
 }}

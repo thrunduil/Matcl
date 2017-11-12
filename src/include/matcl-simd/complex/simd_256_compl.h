@@ -30,6 +30,7 @@ namespace matcl { namespace simd
 //-------------------------------------------------------------------
 //                          DOUBLE COMPLEX
 //-------------------------------------------------------------------
+
 // vector of two double precision complex scalars
 template<class Simd_tag>
 class alignas(32) simd_compl<double, 256, Simd_tag>
@@ -49,6 +50,9 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
 
         // type of vector storing half of elements
         using simd_half     = simd_compl<double, 128, simd_half_tag>;
+
+        // simd type storing float values
+        using simd_float   = simd_compl<float, 128, simd_half_tag>;
 
     public:
         // number of elements in the vector
@@ -97,6 +101,13 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         // construct from representation
         simd_compl(const impl_type& v);
 
+        // conversion between simd types
+        template<class Tag>
+        explicit simd_compl(const simd_compl<double, 256, Tag>& s);
+
+        // copy constructor
+        simd_compl(const simd_compl<double, 256, Simd_tag>& s) = default;
+
     public:
         // connstruct vector with all elements set to zero
         static simd_compl   zero();
@@ -130,27 +141,46 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         // get i-th element from the vector; pos is 0-based
         simd_double_complex get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        simd_double_complex get() const;
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        simd_double_complex first() const;
 
         // set i-th element of the vector; pos is 0-based
         void                set(int pos, const simd_double_complex& val);
 
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void                set(const simd_double_complex& val);
+        // return pointer to the first element in the vector
+        const simd_double_complex*
+                            get_raw_ptr() const;
+        simd_double_complex*
+                            get_raw_ptr();
 
         // return simd storing first element
         simd_half           extract_low() const;
 
         // return simd storing last element
         simd_half           extract_high() const;
+
+        // cast elements to float complex
+        simd_float          cast_to_float() const;
+
+    public:
+        // plus assign operator
+        simd_compl&         operator+=(const simd_compl& x);
+
+        // minus assign operator
+        simd_compl&         operator-=(const simd_compl& x);
+
+        // multiply assign operator
+        simd_compl&         operator*=(const simd_compl& x);
+
+        // divide assign operator
+        simd_compl&         operator/=(const simd_compl& x);
 };
 
 //-------------------------------------------------------------------
 //                          FLOAT COMPLEX
 //-------------------------------------------------------------------
+
 // vector of four single precision complex scalars
 template<class Simd_tag>
 class alignas(32) simd_compl<float, 256, Simd_tag>
@@ -170,6 +200,9 @@ class alignas(32) simd_compl<float, 256, Simd_tag>
 
         // type of vector storing half of elements
         using simd_half     = simd_compl<float, 128, simd_half_tag>;
+
+        // simd type of the same kind storing double complex values
+        using simd_double   = simd_compl<double, 256, Simd_tag>;
 
     public:
         // number of elements in the vector
@@ -209,8 +242,14 @@ class alignas(32) simd_compl<float, 256, Simd_tag>
         simd_compl(const simd_half& lo, const simd_half& hi);
 
         // construct from representation
-        force_inline
         simd_compl(const impl_type& v);
+
+        // conversion between simd types
+        template<class Tag>
+        explicit simd_compl(const simd_compl<float, 256, Tag>& s);
+
+        // copy constructor
+        simd_compl(const simd_compl<float, 256, Simd_tag>& s) = default;
 
     public:
         // connstruct vector with all elements set to zero
@@ -241,22 +280,43 @@ class alignas(32) simd_compl<float, 256, Simd_tag>
         // get i-th element from the vector; pos is 0-based
         simd_single_complex get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        simd_single_complex get() const;
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        simd_single_complex first() const;
 
         // set i-th element of the vector; pos is 0-based
         void                set(int pos, const simd_single_complex& val);
 
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void                set(const simd_single_complex& val);
+        // return pointer to the first element in the vector
+        const simd_single_complex*
+                            get_raw_ptr() const;
+        simd_single_complex*
+                            get_raw_ptr();
 
         // return simd storing first two elements
         simd_half           extract_low() const;
 
         // return simd storing last two elements
         simd_half           extract_high() const;
+
+        // cast the first four elements to double
+        simd_double         cast_low_to_double() const;
+
+        // cast the last four elements to double
+        simd_double         cast_high_to_double() const;
+
+    public:
+        // plus assign operator
+        simd_compl&         operator+=(const simd_compl& x);
+
+        // minus assign operator
+        simd_compl&         operator-=(const simd_compl& x);
+
+        // multiply assign operator
+        simd_compl&         operator*=(const simd_compl& x);
+
+        // divide assign operator
+        simd_compl&         operator/=(const simd_compl& x);
 };
 
 }}

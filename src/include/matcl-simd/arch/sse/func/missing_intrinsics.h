@@ -21,35 +21,26 @@
 #pragma once
 
 #include "matcl-simd/arch/simd_impl.h"
-#include "matcl-simd/complex/simd_complex.h"
 
-namespace matcl { namespace simd
+namespace matcl { namespace simd { namespace missing
 {
 
-template<>
-struct default_simd_type<simd_double_complex>
-{ 
-    using type = simd_compl<double, 256, avx_tag>; 
-};
-
-template<>
-struct default_simd_type<simd_single_complex>
-{ 
-    using type = simd_compl<float, 256, avx_tag>; 
-};
-
-
+// move the upper double-precision (64-bit) floating-point element from b
+// to the lower element of dst, and copy the upper element from a to the
+// upper element of dst.
 //
-template<>
-struct default_simd_type_size<simd_double_complex, 256>
+// Operation
+//      dst[63:0]   := b[127:64]]
+//      dst[127:64] := a[127:64]
+force_inline
+__m128d mm_movehl_pd(__m128d a, __m128d b)
 {
-    using type = simd_compl<double, 256, avx_tag>; 
+    __m128 as   = _mm_castpd_ps(a);
+    __m128 bs   = _mm_castpd_ps(b);
+    __m128 rs   = _mm_movehl_ps(as, bs);
+    __m128d r   = _mm_castps_pd(rs);
+
+    return r;
 };
 
-template<>
-struct default_simd_type_size<simd_single_complex, 256>
-{
-    using type = simd_compl<float, 256, avx_tag>; 
-};
-
-}}
+}}}

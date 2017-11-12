@@ -23,6 +23,7 @@
 #include "matcl-simd/arch/simd_impl.h"
 #include "matcl-simd/func/simd_func_def.h"
 #include "matcl-simd/arch/avx/helpers.h"
+#include "matcl-core/details/float/fma_dekker_simd.inl"
 
 namespace matcl { namespace simd
 {
@@ -100,8 +101,8 @@ struct simd_uminus<float, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        float Z = -0.0f;
-        return _mm256_xor_ps(x.data, _mm256_broadcast_ss(&Z));
+        const simd_type mzero = simd_type::minus_zero();
+        return _mm256_xor_ps(x.data, mzero.data);
     };
 };
 
@@ -113,7 +114,7 @@ struct simd_sum_all<float, 256, avx_tag>
     force_inline
     static float eval(const simd_type& x)
     {
-        float s = sum_all(x.extract_low()) + sum_all(x.extract_high());
+        float s = sum_all(x.extract_low() + x.extract_high());
         return s;
     };
 };
@@ -164,6 +165,38 @@ struct simd_fms_f<float, 256, avx_tag>
 };
 
 template<>
+struct simd_fma_a<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm256_fmadd_ps( x.data, y.data, z.data);
+        #else
+            return fma_dekker_simd(x, y, z);
+        #endif
+    };
+};
+
+template<>
+struct simd_fms_a<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm256_fmsub_ps( x.data, y.data, z.data);
+        #else
+            return fma_dekker_simd(x, y, -z);
+        #endif
+    };
+};
+
+template<>
 struct simd_abs<float, 256, avx_tag>
 {
     using simd_type = simd<float, 256, avx_tag>;
@@ -171,8 +204,56 @@ struct simd_abs<float, 256, avx_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        const __m256 sign_mask = _mm256_set1_ps(-0.f); // -0.f = 1 << 31
-        return _mm256_andnot_ps(sign_mask, x.data);
+        const simd_type mzero = simd_type::minus_zero();
+        return _mm256_andnot_ps(mzero.data, x.data);
+    };
+};
+
+template<>
+struct simd_bitwise_or<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm256_or_ps(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_bitwise_xor<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm256_xor_ps(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_bitwise_and<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm256_and_ps(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_bitwise_andnot<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm256_andnot_ps(x.data, y.data);
     };
 };
 

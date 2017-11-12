@@ -27,6 +27,56 @@
 namespace matcl { namespace simd
 {
 
+namespace details
+{
+
+template<class T>
+struct get_unit_type{};
+
+template<>
+struct get_unit_type<float>
+{
+    using type = uint32_t;
+};
+
+template<>
+struct get_unit_type<double>
+{
+    using type = uint64_t;
+};
+
+template<class T>
+constexpr T eps_inv() { return T(1) / std::numeric_limits<T>::epsilon(); };
+
+};
+
+template<class T>
+struct simd_bool_base;
+
+template<>
+struct simd_bool_base<float>
+{
+    force_inline
+    static float get_val_true()
+    {
+        return true_value<float>::get();
+    };
+
+    static constexpr float val_false    = 0.0f;
+};
+
+template<>
+struct simd_bool_base<double>
+{
+    force_inline
+    static double get_val_true()
+    {
+        return true_value<double>::get();
+    };
+
+    static constexpr double val_false   = 0.0;
+};
+
 template<class T, int Bits>
 struct simd_reverse<T, Bits, nosimd_tag>
 {
@@ -208,7 +258,7 @@ struct simd_fma_f<T, Bits, nosimd_tag>
         simd_type res;
 
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = x.data[i] * y.data[i] + z.data[i];
+            res.data[i] = scalar_func::fma_f(x.data[i], y.data[i], z.data[i]);
 
         return res;
     };
@@ -228,7 +278,47 @@ struct simd_fms_f<T, Bits, nosimd_tag>
         simd_type res;
 
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = x.data[i] * y.data[i] - z.data[i];
+            res.data[i] = scalar_func::fms_f(x.data[i], y.data[i], z.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_fma_a<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = scalar_func::fma_a(x.data[i], y.data[i], z.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_fms_a<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = scalar_func::fms_a(x.data[i], y.data[i], z.data[i]);
 
         return res;
     };
@@ -249,6 +339,138 @@ struct simd_abs<T, Bits, nosimd_tag>
 
         for (int i = 0; i < vector_size; ++i)
             res.data[i] = std::abs(x.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_bitwise_or<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T bitwise_or(const T& x, const T& y)
+    {
+        using uint_type     = details::get_unit_type<T>::type;
+
+        const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
+        const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
+
+        uint_type res   = (*xi) | (*yi);
+
+        return *reinterpret_cast<const T*>(&res);
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = bitwise_or(x.data[i], y.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_bitwise_xor<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T bitwise_xor(const T& x, const T& y)
+    {
+        using uint_type     = details::get_unit_type<T>::type;
+
+        const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
+        const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
+
+        uint_type res   = (*xi) ^ (*yi);
+
+        return *reinterpret_cast<const T*>(&res);
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = bitwise_xor(x.data[i], y.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_bitwise_and<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T bitwise_and(const T& x, const T& y)
+    {
+        using uint_type     = details::get_unit_type<T>::type;
+
+        const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
+        const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
+
+        uint_type res   = (*xi) & (*yi);
+
+        return *reinterpret_cast<const T*>(&res);
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = bitwise_and(x.data[i], y.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_bitwise_andnot<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T bitwise_andnot(const T& x, const T& y)
+    {
+        using uint_type     = details::get_unit_type<T>::type;
+
+        const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
+        const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
+
+        uint_type res   = (~(*xi)) & (*yi);
+
+        return *reinterpret_cast<const T*>(&res);
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = bitwise_andnot(x.data[i], y.data[i]);
 
         return res;
     };
@@ -326,11 +548,9 @@ struct simd_round<T, Bits, nosimd_tag>
     static simd_type eval(const simd_type& x)
     {
         simd_type res;
-
-        ::fesetround(FE_TONEAREST);
         
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = std::nearbyint(x.data[i]);
+            res.data[i] = matcl::simd::scalar_func::round(x.data[i]);
 
         return res;
     };
@@ -396,35 +616,8 @@ struct simd_trunc<T, Bits, nosimd_tag>
     };
 };
 
-template<class T>
-struct simd_cmp_base;
-
-template<>
-struct simd_cmp_base<float>
-{
-    force_inline
-    static float get_val_true()
-    {
-        return true_value<float>::get();
-    };
-
-    static constexpr float val_false    = 0.0f;
-};
-
-template<>
-struct simd_cmp_base<double>
-{
-    force_inline
-    static double get_val_true()
-    {
-        return true_value<double>::get();
-    };
-
-    static constexpr double val_false   = 0.0;
-};
-
 template<class T, int Bits>
-struct simd_eeq<T, Bits, nosimd_tag> : simd_cmp_base<T>
+struct simd_eeq<T, Bits, nosimd_tag> : simd_bool_base<T>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -446,7 +639,7 @@ struct simd_eeq<T, Bits, nosimd_tag> : simd_cmp_base<T>
 };
 
 template<class T, int Bits>
-struct simd_neq<T, Bits, nosimd_tag> : simd_cmp_base<T>
+struct simd_neq<T, Bits, nosimd_tag> : simd_bool_base<T>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -468,7 +661,7 @@ struct simd_neq<T, Bits, nosimd_tag> : simd_cmp_base<T>
 };
 
 template<class T, int Bits>
-struct simd_lt<T, Bits, nosimd_tag> : simd_cmp_base<T>
+struct simd_lt<T, Bits, nosimd_tag> : simd_bool_base<T>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -480,19 +673,28 @@ struct simd_lt<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
-        T val_true  = get_val_true();
+        const T val_true  = get_val_true();
 
-        // do not use comparison operators; 
-        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = std::isless(x.data[i], y.data[i]) ? val_true : val_false;
+            res.data[i] = compare(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
+
+    force_inline
+    static bool compare(const T& x, const T& y)
+    {
+        // we cannot inline this code by hand; VS in this case will change
+        // x <= y to !(x > y), which is clearly wrong; on the other hand
+        // function std::islessequal is very slow;
+        // this dummy function seems to force VS to generate correct code,
+        // but still far from optimal
+        return x < y;
+    }
 };
 
 template<class T, int Bits>
-struct simd_gt<T, Bits, nosimd_tag> : simd_cmp_base<T>
+struct simd_gt<T, Bits, nosimd_tag> : simd_bool_base<T>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -504,19 +706,28 @@ struct simd_gt<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
-        T val_true  = get_val_true();
+        const T val_true  = get_val_true();
 
-        // do not use comparison operators; 
-        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = std::isgreater(x.data[i], y.data[i]) ? val_true : val_false;
+            res.data[i] = compare(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
+
+    force_inline
+    static bool compare(const T& x, const T& y)
+    {
+        // we cannot inline this code by hand; VS in this case will change
+        // x <= y to !(x > y), which is clearly wrong; on the other hand
+        // function std::islessequal is very slow;
+        // this dummy function seems to force VS to generate correct code,
+        // but still far from optimal
+        return x > y;
+    }
 };
 
 template<class T, int Bits>
-struct simd_leq<T, Bits, nosimd_tag> : simd_cmp_base<T>
+struct simd_leq<T, Bits, nosimd_tag> : simd_bool_base<T>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -528,19 +739,28 @@ struct simd_leq<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
-        T val_true  = get_val_true();
+        const T val_true  = get_val_true();
 
-        // do not use comparison operators; 
-        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = std::islessequal(x.data[i], y.data[i]) ? val_true : val_false;
+            res.data[i] = compare(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
+
+    force_inline
+    static bool compare(const T& x, const T& y)
+    {
+        // we cannot inline this code by hand; VS in this case will change
+        // x <= y to !(x > y), which is clearly wrong; on the other hand
+        // function std::islessequal is very slow;
+        // this dummy function seems to force VS to generate correct code,
+        // but still far from optimal
+        return x <= y;
+    }
 };
 
 template<class T, int Bits>
-struct simd_geq<T, Bits, nosimd_tag> : simd_cmp_base<T>
+struct simd_geq<T, Bits, nosimd_tag> : simd_bool_base<T>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -552,15 +772,24 @@ struct simd_geq<T, Bits, nosimd_tag> : simd_cmp_base<T>
     {
         simd_type res;
 
-        T val_true  = get_val_true();
+        const T val_true  = get_val_true();
 
-        // do not use comparison operators; 
-        // for example VS likes to change x <= y to !(x > y), which is clearly wrong
         for (int i = 0; i < vector_size; ++i)
-            res.data[i] = std::isgreaterequal(x.data[i], y.data[i]) ? val_true : val_false;
+            res.data[i] = compare(x.data[i], y.data[i]) ? val_true : val_false;
 
         return res;
     };
+
+    force_inline
+    static bool compare(const T& x, const T& y)
+    {
+        // we cannot inline this code by hand; VS in this case will change
+        // x <= y to !(x > y), which is clearly wrong; on the other hand
+        // function std::islessequal is very slow;
+        // this dummy function seems to force VS to generate correct code,
+        // but still far from optimal
+        return x >= y;
+    }
 };
 
 template<class T, int Bits>
@@ -592,7 +821,7 @@ struct simd_any<T, Bits, nosimd_tag>
 
     force_inline
     static bool eval(const simd_type& x)
-    {
+    {        
         bool res = true;
         for (int i = 0; i < vector_size; ++i)
             res &= (x.data[i] == T());

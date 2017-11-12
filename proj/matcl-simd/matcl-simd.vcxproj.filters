@@ -66,9 +66,6 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_256.h">
       <Filter>Source Files\include\arch\nosimd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h">
-      <Filter>Source Files\include\complex</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_256_compl.h">
       <Filter>Source Files\include\complex</Filter>
     </ClInclude>
@@ -162,9 +159,6 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_complex_impl.h">
       <Filter>Source Files\include\arch\avx</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_complex_impl.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_complex_impl.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
@@ -182,6 +176,21 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\complex\recover_nan.h">
       <Filter>Source Files\include\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h">
+      <Filter>Source Files\include\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_complex_impl.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\missing_intrinsics.h">
+      <Filter>Source Files\include\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\helpers.h">
+      <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

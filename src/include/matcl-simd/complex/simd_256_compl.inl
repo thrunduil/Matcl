@@ -95,6 +95,13 @@ simd_compl<double, 256, Simd_tag>::simd_compl(double re_0, double im_0, double r
 {};
 
 template<class Simd_tag>
+template<class Tag>
+force_inline
+simd_compl<double, 256, Simd_tag>::simd_compl(const simd_compl<double, 256, Tag>& s)
+    : data(s.data)
+{}
+
+template<class Simd_tag>
 force_inline
 simd_compl<double, 256, Simd_tag> simd_compl<double, 256, Simd_tag>::zero()
 {
@@ -102,29 +109,29 @@ simd_compl<double, 256, Simd_tag> simd_compl<double, 256, Simd_tag>::zero()
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<double, 256, Simd_tag> simd_compl<double, 256, Simd_tag>::broadcast(const simd_double_complex* arr)
+force_inline simd_compl<double, 256, Simd_tag> 
+simd_compl<double, 256, Simd_tag>::broadcast(const simd_double_complex* arr)
 {
     return simd_compl(arr[0]);
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<double, 256, Simd_tag> simd_compl<double, 256, Simd_tag>::broadcast(const simd_double_complex& arr)
+force_inline simd_compl<double, 256, Simd_tag> 
+simd_compl<double, 256, Simd_tag>::broadcast(const simd_double_complex& arr)
 {
     return simd_compl(arr);
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<double, 256, Simd_tag> simd_compl<double, 256, Simd_tag>::broadcast(const double* arr)
+force_inline simd_compl<double, 256, Simd_tag>
+simd_compl<double, 256, Simd_tag>::broadcast(const double* arr)
 {
     return simd_compl(arr[0]);
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<double, 256, Simd_tag> simd_compl<double, 256, Simd_tag>::broadcast(const double& arr)
+force_inline simd_compl<double, 256, Simd_tag>
+simd_compl<double, 256, Simd_tag>::broadcast(const double& arr)
 {
     return simd_compl(arr);
 }
@@ -161,33 +168,48 @@ template<class Simd_tag>
 force_inline
 simd_double_complex simd_compl<double, 256, Simd_tag>::get(int pos) const
 {
-    return simd_double_complex(data.get(pos*2), data.get(pos*2 + 1));
+    const simd_double_complex* ptr  = this->get_raw_ptr();
+    return simd_double_complex(ptr[pos]);
 };
 
 template<class Simd_tag>
-template<int Pos>
 force_inline
-simd_double_complex simd_compl<double, 256, Simd_tag>::get() const
+simd_double_complex simd_compl<double, 256, Simd_tag>::first() const
 {
-    return simd_double_complex(data.get<Pos*2>(), data.get<Pos*2 + 1>());
+    return simd_double_complex(get_raw_ptr()[0]);
 };
 
 template<class Simd_tag>
 force_inline
 void simd_compl<double, 256, Simd_tag>::set(int pos, const simd_double_complex& val)
 {
-    data.set(pos*2, real(val));
-    data.set(pos*2 + 1, imag(val));
+    simd_double_complex* ptr    = this->get_raw_ptr();
+    ptr[pos]                    = val;
 };
 
 template<class Simd_tag>
-template<int Pos>
 force_inline
-void simd_compl<double, 256, Simd_tag>::set(const simd_double_complex& val)
+const simd_double_complex*
+simd_compl<double, 256, Simd_tag>::get_raw_ptr() const
 {
-    data.set<Pos*2>(real(val));
-    data.set<Pos*2 + 1>(imag(val));
-};
+    return reinterpret_cast<const simd_double_complex*>(data.get_raw_ptr());
+}
+
+template<class Simd_tag>
+force_inline
+simd_double_complex*
+simd_compl<double, 256, Simd_tag>::get_raw_ptr()
+{
+    return reinterpret_cast<simd_double_complex*>(data.get_raw_ptr());
+}
+
+template<class Simd_tag>
+force_inline
+typename simd_compl<double, 256, Simd_tag>::simd_float
+simd_compl<double, 256, Simd_tag>::cast_to_float() const
+{
+    return data.cast_to_float();
+}
 
 template<class Simd_tag>
 template<int Step>
@@ -195,12 +217,13 @@ force_inline
 void simd_compl<double, 256, Simd_tag>::scatter(simd_double_complex* arr0) const
 {
     //no scatter intrinsic
-    double* arr = (double*) arr0;
+    double* arr         = (double*) arr0;
+    const double* ptr   = data.get_raw_ptr();
 
-    arr[0*Step*2]      = data.get<0>();
-    arr[0*Step*2+1]    = data.get<1>();
-    arr[1*Step*2]      = data.get<2>();
-    arr[1*Step*2+1]    = data.get<3>();
+    arr[0*Step*2]       = ptr[0];
+    arr[0*Step*2+1]     = ptr[1];
+    arr[1*Step*2]       = ptr[2];
+    arr[1*Step*2+1]     = ptr[3];
 };
 
 template<class Simd_tag>
@@ -215,6 +238,38 @@ force_inline typename simd_compl<double, 256, Simd_tag>::simd_half
 simd_compl<double, 256, Simd_tag>::extract_high() const
 {
     return data.extract_high();
+}
+
+template<class Simd_tag>
+force_inline simd_compl<double, 256, Simd_tag>& 
+simd_compl<double, 256, Simd_tag>::operator+=(const simd_compl& x)
+{
+    *this = *this + x;
+    return *this;
+}
+
+template<class Simd_tag>
+force_inline simd_compl<double, 256, Simd_tag>& 
+simd_compl<double, 256, Simd_tag>::operator-=(const simd_compl& x)
+{
+    *this = *this - x;
+    return *this;
+}
+
+template<class Simd_tag>
+force_inline simd_compl<double, 256, Simd_tag>& 
+simd_compl<double, 256, Simd_tag>::operator*=(const simd_compl& x)
+{
+    *this = *this * x;
+    return *this;
+}
+
+template<class Simd_tag>
+force_inline simd_compl<double, 256, Simd_tag>& 
+simd_compl<double, 256, Simd_tag>::operator/=(const simd_compl& x)
+{
+    *this = *this / x;
+    return *this;
 }
 
 //-------------------------------------------------------------------
@@ -271,6 +326,13 @@ simd_compl<float, 256, Simd_tag>::simd_compl(float re_0, float im_0, float re_1,
 {};
 
 template<class Simd_tag>
+template<class Tag>
+force_inline
+simd_compl<float, 256, Simd_tag>::simd_compl(const simd_compl<float, 256, Tag>& s)
+    : data(s.data)
+{}
+
+template<class Simd_tag>
 force_inline
 simd_compl<float, 256, Simd_tag> simd_compl<float, 256, Simd_tag>::zero()
 {
@@ -278,29 +340,29 @@ simd_compl<float, 256, Simd_tag> simd_compl<float, 256, Simd_tag>::zero()
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<float, 256, Simd_tag> simd_compl<float, 256, Simd_tag>::broadcast(const simd_single_complex* arr)
+force_inline simd_compl<float, 256, Simd_tag>
+simd_compl<float, 256, Simd_tag>::broadcast(const simd_single_complex* arr)
 {
     return simd_compl(arr[0]);
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<float, 256, Simd_tag> simd_compl<float, 256, Simd_tag>::broadcast(const simd_single_complex& arr)
+force_inline simd_compl<float, 256, Simd_tag>
+simd_compl<float, 256, Simd_tag>::broadcast(const simd_single_complex& arr)
 {
     return simd_compl(arr);
 };
 
 template<class Simd_tag>
-force_inline
-simd_compl<float, 256, Simd_tag> simd_compl<float, 256, Simd_tag>::broadcast(const float* arr)
+force_inline simd_compl<float, 256, Simd_tag>
+simd_compl<float, 256, Simd_tag>::broadcast(const float* arr)
 {
     return simd_compl(arr[0]);
 }
 
 template<class Simd_tag>
-force_inline
-simd_compl<float, 256, Simd_tag> simd_compl<float, 256, Simd_tag>::broadcast(const float& arr)
+force_inline simd_compl<float, 256, Simd_tag>
+simd_compl<float, 256, Simd_tag>::broadcast(const float& arr)
 {
     return simd_compl(arr);
 };
@@ -337,32 +399,39 @@ template<class Simd_tag>
 force_inline
 simd_single_complex simd_compl<float, 256, Simd_tag>::get(int pos) const
 {
-    return simd_single_complex(data.get(pos*2), data.get(pos*2 + 1));
+    const simd_single_complex* ptr  = this->get_raw_ptr();
+    return simd_single_complex(ptr[pos]);
 };
 
 template<class Simd_tag>
-template<int Pos>
 force_inline
-simd_single_complex simd_compl<float, 256, Simd_tag>::get() const
+simd_single_complex simd_compl<float, 256, Simd_tag>::first() const
 {
-    return simd_single_complex(data.get<Pos*2>(), data.get<Pos*2 + 1>());
+    return simd_single_complex(get_raw_ptr()[0]);
 };
+
+template<class Simd_tag>
+force_inline
+const simd_single_complex*
+simd_compl<float, 256, Simd_tag>::get_raw_ptr() const
+{
+    return reinterpret_cast<const simd_single_complex*>(data.get_raw_ptr());
+}
+
+template<class Simd_tag>
+force_inline
+simd_single_complex*
+simd_compl<float, 256, Simd_tag>::get_raw_ptr()
+{
+    return reinterpret_cast<simd_single_complex*>(data.get_raw_ptr());
+}
 
 template<class Simd_tag>
 force_inline
 void simd_compl<float, 256, Simd_tag>::set(int pos, const simd_single_complex& val)
 {
-    data.set(pos*2, real(val));
-    data.set(pos*2 + 1, imag(val));
-};
-
-template<class Simd_tag>
-template<int Pos>
-force_inline
-void simd_compl<float, 256, Simd_tag>::set(const simd_single_complex& val)
-{
-    data.set<Pos*2>(real(val));
-    data.set<Pos*2 + 1>(imag(val));
+    simd_single_complex* ptr    = this->get_raw_ptr();
+    ptr[pos]                    = val;
 };
 
 template<class Simd_tag>
@@ -370,17 +439,18 @@ template<int Step>
 force_inline
 void simd_compl<float, 256, Simd_tag>::scatter(simd_single_complex* arr0) const
 {
-    float* arr      = (float*)arr0;
+    float* arr          = (float*)arr0;
+    const float* ptr    = data.get_raw_ptr();
 
     //no scatter intrinsic
-    arr[0*Step*2]      = data.get<0>();
-    arr[0*Step*2+1]    = data.get<1>();
-    arr[1*Step*2]      = data.get<2>();
-    arr[1*Step*2+1]    = data.get<3>();
-    arr[2*Step*2]      = data.get<4>();
-    arr[2*Step*2+1]    = data.get<5>();
-    arr[3*Step*2]      = data.get<6>();
-    arr[3*Step*2+1]    = data.get<7>();
+    arr[0*Step*2]      = ptr[0];
+    arr[0*Step*2+1]    = ptr[1];
+    arr[1*Step*2]      = ptr[2];
+    arr[1*Step*2+1]    = ptr[3];
+    arr[2*Step*2]      = ptr[4];
+    arr[2*Step*2+1]    = ptr[5];
+    arr[3*Step*2]      = ptr[6];
+    arr[3*Step*2+1]    = ptr[7];
 };
 
 template<class Simd_tag>
@@ -395,6 +465,52 @@ force_inline typename simd_compl<float, 256, Simd_tag>::simd_half
 simd_compl<float, 256, Simd_tag>::extract_high() const
 {
     return data.extract_high();
+}
+
+template<class Simd_tag>
+force_inline simd_compl<double, 256, Simd_tag>
+simd_compl<float, 256, Simd_tag>::cast_low_to_double() const
+{
+    return data.cast_low_to_double();
+}
+
+template<class Simd_tag>
+force_inline simd_compl<double, 256, Simd_tag>
+simd_compl<float, 256, Simd_tag>::cast_high_to_double() const
+{
+    return data.cast_high_to_double();
+}
+
+template<class Simd_tag>
+force_inline simd_compl<float, 256, Simd_tag>& 
+simd_compl<float, 256, Simd_tag>::operator+=(const simd_compl& x)
+{
+    *this = *this + x;
+    return *this;
+}
+
+template<class Simd_tag>
+force_inline simd_compl<float, 256, Simd_tag>& 
+simd_compl<float, 256, Simd_tag>::operator-=(const simd_compl& x)
+{
+    *this = *this - x;
+    return *this;
+}
+
+template<class Simd_tag>
+force_inline simd_compl<float, 256, Simd_tag>& 
+simd_compl<float, 256, Simd_tag>::operator*=(const simd_compl& x)
+{
+    *this = *this * x;
+    return *this;
+}
+
+template<class Simd_tag>
+force_inline simd_compl<float, 256, Simd_tag>& 
+simd_compl<float, 256, Simd_tag>::operator/=(const simd_compl& x)
+{
+    *this = *this / x;
+    return *this;
 }
 
 }}

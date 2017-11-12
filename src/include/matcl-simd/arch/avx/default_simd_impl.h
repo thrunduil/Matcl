@@ -37,4 +37,17 @@ struct default_simd_type<float>
     using type = simd<float, 256, avx_tag>; 
 };
 
+//
+template<>
+struct default_simd_type_size<double, 256>
+{
+    using type = simd<double, 256, avx_tag>; 
+};
+
+template<>
+struct default_simd_type_size<float, 256>
+{
+    using type = simd<float, 256, avx_tag>; 
+};
+
 }}

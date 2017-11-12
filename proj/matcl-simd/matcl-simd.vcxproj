@@ -40,11 +40,13 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_complex_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\missing_intrinsics.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_double_128_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_float_128_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_256_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_256_func_compl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_float_128_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_256.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\complex\recover_nan.h" />
@@ -63,6 +65,7 @@
     <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_general.h" />
   </ItemGroup>
   <ItemGroup>

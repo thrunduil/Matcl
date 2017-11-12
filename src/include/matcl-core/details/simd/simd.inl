@@ -36,7 +36,7 @@ double simd::fma_f(const double& x, const double& y, const double& z)
     simd_type zs(z);
 
     simd_type ret = fma_f(xs, ys, zs);
-    return ret.get<0>();
+    return ret.first();
 };
 
 force_inline
@@ -49,7 +49,7 @@ float simd::fma_f(const float& x, const float& y, const float& z)
     simd_type zs(z);
 
     simd_type ret = fma_f(xs, ys, zs);
-    return ret.get<0>();
+    return ret.first();
 }
 
 force_inline
@@ -62,7 +62,7 @@ double simd::fms_f(const double& x, const double& y, const double& z)
     simd_type zs(z);
 
     simd_type ret = fms_f(xs, ys, zs);
-    return ret.get<0>();
+    return ret.first();
 }
 
 force_inline
@@ -75,7 +75,7 @@ float simd::fms_f(const float& x, const float& y, const float& z)
     simd_type zs(z);
 
     simd_type ret = fms_f(xs, ys, zs);
-    return ret.get<0>();
+    return ret.first();
 }
 
 }

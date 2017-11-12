@@ -22,6 +22,7 @@
 
 #include "matcl-simd/config.h"
 #include "matcl-simd/simd_general.h"
+#include "matcl-simd/default_simd.h"
 
 namespace matcl { namespace simd
 {
@@ -29,6 +30,7 @@ namespace matcl { namespace simd
 //-------------------------------------------------------------------
 //                          GENERIC DOUBLE
 //-------------------------------------------------------------------
+
 // vector of two double precision scalars
 template<>
 class alignas(16) simd<double, 128, nosimd_tag>
@@ -44,6 +46,9 @@ class alignas(16) simd<double, 128, nosimd_tag>
         // number of elements in the vector
         static const int 
         vector_size         = sizeof(impl_type) / sizeof(value_type);    
+
+        // simd type of the same kind storing float values
+        using simd_float   = simd<float, 128, nosimd_tag>;
 
     public:
         // internal representation
@@ -65,13 +70,33 @@ class alignas(16) simd<double, 128, nosimd_tag>
         // set the first element in the vector to v1 and the second element to v2
         simd(double v1, double v2);
 
+        // construct vector with first element copied from lo
+        // and last element copied from hi; only lower part of lo and hi is used
+        simd(const simd& lo, const simd& hi);
+
         // construct from representation
         simd(const impl_type& v);
 
+        // conversion between simd types
+        explicit simd(const simd<double, 128, sse_tag>& s);
+
+        // copy constructor
+        simd(const simd<double, 128, nosimd_tag>& s) = default;
+
     public:
-        // connstruct vector with all elements set to zero
+        // connstruct vector with all elements set to 0.0
         static simd     zero();
 
+        // connstruct vector with all elements set to -0.0
+        static simd     minus_zero();
+
+        // connstruct vector with all elements set to 1.0
+        static simd     one();
+
+        // connstruct vector with all elements set to -1.0
+        static simd     minus_one();
+
+    public:
         // construct vector with all elements equal to arr[0]
         static simd     broadcast(const double* arr);
 
@@ -102,17 +127,42 @@ class alignas(16) simd<double, 128, nosimd_tag>
         template<int Pos>
         double          get() const;
 
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        double          first() const;
+
         // set i-th element of the vector; pos is 0-based
         void            set(int pos, double val);
+
+        // return pointer to the first element in the vector
+        const double*   get_raw_ptr() const;
+        double*         get_raw_ptr();
 
         // set i-th element of the vector; Pos is 0-based
         template<int Pos>
         void            set(double val);
+
+        // cast elements to float complex and store the result in the lower part
+        simd_float      cast_to_float() const;
+
+    public:
+        // plus assign operator
+        simd&           operator+=(const simd& x);
+
+        // minus assign operator
+        simd&           operator-=(const simd& x);
+
+        // multiply assign operator
+        simd&           operator*=(const simd& x);
+
+        // divide assign operator
+        simd&           operator/=(const simd& x);
 };
 
 //-------------------------------------------------------------------
 //                          GENERIC FLOAT
 //-------------------------------------------------------------------
+
 // vector of four single precision scalars
 template<>
 class alignas(16) simd<float, 128, nosimd_tag>
@@ -123,6 +173,12 @@ class alignas(16) simd<float, 128, nosimd_tag>
 
         // type of stored elements
         using value_type    = float;
+
+        // simd type of the same kind storing double values
+        using simd_double   = simd<double, 128, nosimd_tag>;
+
+        // simd type storing 4 double values
+        using simd_double_2 = simd<double, 256, nosimd_tag>;
 
     public:
         // number of elements in the vector
@@ -143,13 +199,34 @@ class alignas(16) simd<float, 128, nosimd_tag>
         // construct vector with i-th element set to vi
         simd(float v0, float v1, float v2, float v3);
 
+        // construct vector with first two elements copied from lo
+        // and last two elements copied from hi; only lower part of lo and
+        // hi is used
+        simd(const simd& lo, const simd& hi);
+
         // construct from representation
         simd(const impl_type& v);
 
+        // conversion between simd types
+        explicit simd(const simd<float, 128, sse_tag>& s);
+
+        // copy constructor
+        simd(const simd<float, 128, nosimd_tag>& s) = default;
+
     public:
-        // connstruct vector with all elements set to zero
+        // connstruct vector with all elements set to 0.0
         static simd     zero();
 
+        // connstruct vector with all elements set to -0.0
+        static simd     minus_zero();
+
+        // connstruct vector with all elements set to 1.0
+        static simd     one();
+
+        // connstruct vector with all elements set to -1.0
+        static simd     minus_one();
+
+    public:
         // construct vector with all elements equal to arr[0]
         static simd     broadcast(const float* arr);
 
@@ -163,6 +240,15 @@ class alignas(16) simd<float, 128, nosimd_tag>
 
         // set the first element in the vector to v and set 0 to all other elements
         static simd     set_lower(float v);
+
+        // cast the first two elements to double
+        simd_double     cast_low_to_double() const;
+
+        // cast the last two elements to double
+        simd_double     cast_high_to_double() const;
+
+        // cast all elements to double
+        simd_double_2   cast_to_double() const;
 
     public:
         // store elements in arr; arr must have length at least vector_size
@@ -180,12 +266,33 @@ class alignas(16) simd<float, 128, nosimd_tag>
         template<int Pos>
         float           get() const;
 
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        float           first() const;
+
         // set i-th element of the vector; pos is 0-based
         void            set(int pos, float val);
 
         // set i-th element of the vector; Pos is 0-based
         template<int Pos>
         void            set(float val);
+
+        // return pointer to the first element in the vector
+        const float*    get_raw_ptr() const;
+        float*          get_raw_ptr();
+
+    public:
+        // plus assign operator
+        simd&           operator+=(const simd& x);
+
+        // minus assign operator
+        simd&           operator-=(const simd& x);
+
+        // multiply assign operator
+        simd&           operator*=(const simd& x);
+
+        // divide assign operator
+        simd&           operator/=(const simd& x);
 };
 
 }}

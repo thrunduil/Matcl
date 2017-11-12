@@ -20,36 +20,22 @@
 
 #pragma once
 
-#include "matcl-simd/arch/simd_impl.h"
-#include "matcl-simd/complex/simd_complex.h"
+#include "matcl-core/config.h"
+#include "matcl-simd/simd_fwd.h"
 
-namespace matcl { namespace simd
+namespace matcl { namespace details
 {
 
-template<>
-struct default_simd_type<simd_double_complex>
-{ 
-    using type = simd_compl<double, 256, avx_tag>; 
-};
-
-template<>
-struct default_simd_type<simd_single_complex>
-{ 
-    using type = simd_compl<float, 256, avx_tag>; 
-};
-
-
-//
-template<>
-struct default_simd_type_size<simd_double_complex, 256>
+template<class T>
+struct is_simd_type
 {
-    using type = simd_compl<double, 256, avx_tag>; 
+    static const bool value = false;
 };
 
-template<>
-struct default_simd_type_size<simd_single_complex, 256>
+template<class T, int Bits, class Tag>
+struct is_simd_type<matcl::simd::simd<T, Bits, Tag>>
 {
-    using type = simd_compl<float, 256, avx_tag>; 
+    static const bool value = true;
 };
 
 }}
