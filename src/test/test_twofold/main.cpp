@@ -20,6 +20,7 @@
 
 #include "test_twofold.h"
 #include "test_twofold_simd.h"
+#include "test_poly.h"
 #include "matcl-core/IO/logger.h"
 #include "matcl-core/float/twofold.h"
 
@@ -43,6 +44,9 @@ int main(int argc, const char* argv[])
             set_logger(log);
         };
 
+        matcl::test::test_poly();
+        //TODO
+        /*
         matcl::test::test_error();
         matcl::test::test_error_simd();
         
@@ -52,6 +56,7 @@ int main(int argc, const char* argv[])
         matcl::test::test_functions();                
         matcl::test::test_fma();
         matcl::test::test_functions_simd();
+        */
 
         std::cout << "\n";
         std::cout << "finished" << "\n";
