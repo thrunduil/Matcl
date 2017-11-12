@@ -63,6 +63,7 @@
     <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_def.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h" />
@@ -78,6 +79,7 @@
     <None Include="..\..\src\include\matcl-simd\arch\sse\simd_256.inl" />
     <None Include="..\..\src\include\matcl-simd\complex\simd_128_compl.inl" />
     <None Include="..\..\src\include\matcl-simd\complex\simd_256_compl.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl" />
     <None Include="..\..\src\include\matcl-simd\func\simd_func.inl" />
     <None Include="..\..\src\include\matcl-simd\func\simd_func_complex.inl" />
   </ItemGroup>

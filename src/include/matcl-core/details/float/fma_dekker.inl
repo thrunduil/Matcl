@@ -34,7 +34,7 @@ namespace matcl { namespace details
 //  http://proval.lri.fr/gallery/Dekker.en.html)
 template<class T>
 inline
-void twofold_mult_dekker_double(T x, T y, T& xy, T& err)
+void twofold_mult_dekker_double(const T& x, const T& y, T& xy, T& err)
 {
     xy          = x * y;
 
