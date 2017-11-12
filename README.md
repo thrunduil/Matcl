@@ -103,6 +103,11 @@ registers these functions for objects.
 Library also defines new IO functions, timing functions, and
 random number generators.
 
+## matcl-simd
+
+Higher level abstraction of single instruction, multiple data (SIMD) instructions
+for single and double precision floating point numbers and complex numbers.
+
 ## Licence
 
 Copyright (C) 2017  Paweł Kowal
