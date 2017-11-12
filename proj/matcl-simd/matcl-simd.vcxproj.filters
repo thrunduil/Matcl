@@ -46,6 +46,9 @@
     <Filter Include="Source Files\include\arch\nosimd\func_complex">
       <UniqueIdentifier>{c25f53a1-606d-45d0-a647-cec3db092fb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\poly">
+      <UniqueIdentifier>{468ea40b-3fa4-4024-a8d3-0a95ba7c8c07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-simd\config.h">
@@ -192,6 +195,9 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\helpers.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h">
+      <Filter>Source Files\include\poly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\arch\sse\simd_128.inl">
@@ -226,6 +232,9 @@
     </None>
     <None Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_double_128_func.h">
       <Filter>Source Files\include\arch\sse\func_complex</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl">
+      <Filter>Source Files\include\details</Filter>
     </None>
   </ItemGroup>
 </Project>
