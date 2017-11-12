@@ -23,6 +23,7 @@
 #include "matcl-core/config.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-core/general/machine.h"
+#include "matcl-core/float/float_binary_rep.h"
 
 #if MATCL_ARCHITECTURE_HAS_FMA
     #include "matcl-core/details/simd/simd.h"
@@ -457,7 +458,7 @@ namespace scal_func
     force_inline bool signbit(const float& x)
     {
         //return std::signbit(x);
-        return reinterpret_cast<const double_binary_rep*>(&x)->sign != 0;
+        return reinterpret_cast<const float_binary_rep*>(&x)->sign != 0;
     };
     force_inline bool signbit(const double& x)
     {

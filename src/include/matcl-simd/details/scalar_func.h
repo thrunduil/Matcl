@@ -20,22 +20,89 @@
 
 #pragma once
 
-// implementation of missing simd functions
-
+#include "matcl-core/float/fma_dekker.h"
 #include <cmath>
 
 namespace matcl { namespace simd { namespace scalar_func
 {
 
-inline float round(float f)     { return std::round(f); };
-inline float floor(float f)     { return std::floor(f); };
-inline float ceil(float f)      { return std::ceil(f); };
-inline float trunc(float f)     { return std::trunc(f); };
+template<class T>
+struct round_impl
+{
+    force_inline
+    static T eval(T x)
+    {
+        // std::round has wrong tie rule (we require round to even in case
+        // of ties); std::nearbyint is very slow;
+        // the following code uses the property, that y := |x| + 1/eps has
+        // correct least significant digit
 
-inline double round(double f)   { return std::round(f); };
-inline double floor(double f)   { return std::floor(f); };
-inline double ceil(double f)    { return std::ceil(f); };
-inline double trunc(double f)   { return std::trunc(f); };
+        const T einv = details::eps_inv<T>();
+
+        if (x > 0)
+        {
+            T tmp = x + einv;
+            return tmp - einv;
+        }
+        else
+        {
+            T tmp = x - einv;
+            return tmp + einv;
+        };
+    };
+};
+
+// implementation of missing simd functions
+
+force_inline float floor(float f)     { return std::floor(f); };
+force_inline float ceil(float f)      { return std::ceil(f); };
+force_inline float trunc(float f)     { return std::trunc(f); };
+force_inline float round(float f)     { return round_impl<float>::eval(f); };
+
+force_inline double floor(double f)   { return std::floor(f); };
+force_inline double ceil(double f)    { return std::ceil(f); };
+force_inline double trunc(double f)   { return std::trunc(f); };
+force_inline double round(double f)   { return round_impl<double>::eval(f); };
+
+force_inline float fma_f(float x, float y, float z)
+{
+    return x * y + z;
+};
+
+force_inline float fms_f(float x, float y, float z)
+{
+    return x * y - z;
+};
+
+force_inline double fma_f(double x, double y, double z)
+{
+    return x * y + z;
+};
+
+force_inline double fms_f(double x, double y, double z)
+{
+    return x * y - z;
+};
+
+force_inline float fma_a(float x, float y, float z)
+{
+    return fma_dekker(x, y, z);
+}
+
+force_inline float fms_a(float x, float y, float z)
+{
+    return fma_dekker(x, y, -z);
+}
+
+force_inline double fma_a(double x, double y, double z)
+{
+    return fma_dekker(x, y, z);
+}
+
+force_inline double fms_a(double x, double y, double z)
+{
+    return fma_dekker(x, y, -z);
+}
 
 }}}
 

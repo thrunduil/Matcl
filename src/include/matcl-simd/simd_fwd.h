@@ -26,51 +26,37 @@
 namespace matcl { namespace simd
 {
 
-namespace md = matcl::details;
-
 // no simd instructions tag
-struct nosimd_tag{};
+struct nosimd_tag;
 
 // sse instructions tag
-struct sse_tag{};
+struct sse_tag;
 
 // avx instructions tag
-struct avx_tag{};
+struct avx_tag;
 
 // simd type storing elements of type Val of total size Bits in bits
 // using instruction set determined by Simd_tag
 template<class Val, int Bits, class Simd_tag>
-class simd
-{
-    static_assert(md::dependent_false<Val>::value, "unsupported simd type");
-};
+class simd;
 
 // simd type storing elements of complex type with real type Val of total size
 // Bits in bits, using instruction set determined by Simd_tag
 template<class Val, int Bits, class Simd_tag>
-class simd_compl
-{
-    static_assert(md::dependent_false<Val>::value, "unsupported simd_compl type");
-};
+class simd_compl;
 
 // number of elements stored in given simd type
 template<class Simd_type>
-struct vector_size
-{
-    static const int value = 1;
-};
+struct vector_size;
 
-template<class Val, int Bits, class Simd_tag>
-struct vector_size<simd<Val, Bits, Simd_tag>>
-{
-    static const int value = simd<Val, Bits, Simd_tag>::vector_size;
-};
+// simd type for storing values of given type with maximum size
+template<class V>
+struct default_simd_type;
 
-template<class Val, int Bits, class Simd_tag>
-struct vector_size<simd_compl<Val, Bits, Simd_tag>>
-{
-    static const int value = simd_compl<Val, Bits, Simd_tag>::vector_size;
-};
+// simd type for storing values of given type with given register size
+// (allowed values for Bits are 128 and 256)
+template<class V, int Bits>
+struct default_simd_type_size;
 
 }}
 

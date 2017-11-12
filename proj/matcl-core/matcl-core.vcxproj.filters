@@ -252,6 +252,15 @@
     <ClInclude Include="..\..\src\include\matcl-core\float\float_binary_rep.h">
       <Filter>Source Files\include\float</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\float\twofold_base_functions.h">
+      <Filter>Source Files\include\details\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\float\fma_dekker.h">
+      <Filter>Source Files\include\float</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\details\float\helpers.h">
+      <Filter>Source Files\include\details\float</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
@@ -297,6 +306,12 @@
       <Filter>Source Files\include\details\float</Filter>
     </None>
     <None Include="..\..\src\include\matcl-core\details\float\float_binary_rep.inl">
+      <Filter>Source Files\include\details\float</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\float\fma_dekker.inl">
+      <Filter>Source Files\include\details\float</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\float\fma_dekker_simd.inl">
       <Filter>Source Files\include\details\float</Filter>
     </None>
   </ItemGroup>
@@ -395,6 +410,9 @@
       <Filter>Source Files\src\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\lib_functions\twofold.cpp">
+      <Filter>Source Files\src\lib_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\fma_dekker.cpp">
       <Filter>Source Files\src\lib_functions</Filter>
     </ClCompile>
   </ItemGroup>

@@ -46,6 +46,110 @@ struct make_zero<ms::simd<T,Bits, Tag>>
 template<class T>
 inline T reverse(const T& x)    { return x; };
 
+template<class T>
+struct test_cast
+{};
+
+template<int Bits, class Tag>
+struct test_cast<ms::simd<float, Bits, Tag>>
+{
+    using simd_type = ms::simd<float, Bits, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_double = typename simd_type::simd_double;
+        simd_double xd_l = x.cast_low_to_double();
+        simd_double xd_h = x.cast_high_to_double();
+
+        return simd_type(xd_l.cast_to_float(), xd_h.cast_to_float());
+    }
+};
+
+template<int Bits, class Tag>
+struct test_cast<ms::simd<double, Bits, Tag>>
+{
+    using simd_type = ms::simd<double, Bits, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_float = typename simd_type::simd_float;
+        simd_float xf = x.cast_to_float();
+
+        return simd_type(xf.cast_low_to_double(), xf.cast_high_to_double());
+    };
+};
+
+template<class Tag>
+struct test_cast<ms::simd<double, 128, Tag>>
+{
+    using simd_type = ms::simd<double, 128, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_float = typename simd_type::simd_float;
+        simd_float xf = x.cast_to_float();
+
+        return simd_type(xf.cast_low_to_double());
+    };
+};
+
+template<class Tag>
+struct test_cast<ms::simd<double, 256, Tag>>
+{
+    using simd_type = ms::simd<double, 256, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_float = typename simd_type::simd_float;
+        simd_float xf = x.cast_to_float();
+
+        return simd_type(xf.cast_to_double());
+    };
+};
+
+template<int Bits, class Tag>
+struct test_cast<ms::simd_compl<float, Bits, Tag>>
+{
+    using simd_type = ms::simd_compl<float, Bits, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_double = typename simd_type::simd_double;
+        simd_double xd_l = x.cast_low_to_double();
+        simd_double xd_h = x.cast_high_to_double();
+
+        return simd_type(xd_l.cast_to_float(), xd_h.cast_to_float());
+    }
+};
+
+template<class Tag>
+struct test_cast<ms::simd_compl<double, 128, Tag>>
+{
+    using simd_type = ms::simd_compl<double, 128, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_float = typename simd_type::simd_float;
+        simd_float xf = x.cast_to_float();
+
+        return simd_type(xf.cast_low_to_double());
+    };
+};
+
+template<class Tag>
+struct test_cast<ms::simd_compl<double, 256, Tag>>
+{
+    using simd_type = ms::simd_compl<double, 256, Tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_float = typename simd_type::simd_float;
+        simd_float xf = x.cast_to_float();
+
+        return simd_type(xf.cast_to_double());
+    };
+};
+
 struct Func_reverse
 {    
     template<class T>    
@@ -57,6 +161,20 @@ struct Func_reverse
     static std::string name()
     { 
         return "reverse"; 
+    };
+};
+
+struct Func_cast
+{    
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return test_cast<T>::eval(x); 
+    }
+
+    static std::string name()
+    { 
+        return "cast"; 
     };
 };
 
@@ -141,6 +259,20 @@ struct Func_abs
     static std::string name()
     { 
         return "abs"; 
+    };
+};
+
+struct Func_signbit_base
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return bitwise_or(signbit_base(x), T::one()); 
+    }
+
+    static std::string name()
+    { 
+        return "sign_base"; 
     };
 };
 
@@ -480,6 +612,20 @@ struct Func_fma_f
     };
 };
 
+struct Func_fma_a
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2, const T& x3)
+    { 
+        return fma_a(x1, x2, x3); 
+    }
+
+    static std::string name()
+    { 
+        return "fma_a"; 
+    };
+};
+
 struct Func_fms_f
 {
     template<class T>    
@@ -491,6 +637,76 @@ struct Func_fms_f
     static std::string name()
     { 
         return "fms_f"; 
+    };
+};
+
+struct Func_fms_a
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2, const T& x3)
+    { 
+        return fms_a(x1, x2, x3); 
+    }
+
+    static std::string name()
+    { 
+        return "fms_a"; 
+    };
+};
+
+struct Func_bit_or
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2)
+    { 
+        return bitwise_or(x1, x2); 
+    }
+    
+    static std::string name()
+    { 
+        return "bit_or"; 
+    };
+};
+
+struct Func_bit_xor
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2)
+    { 
+        return bitwise_xor(x1, x2); 
+    }
+    
+    static std::string name()
+    { 
+        return "bit_xor"; 
+    };
+};
+
+struct Func_bit_and
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2)
+    { 
+        return bitwise_and(x1, x2); 
+    }
+    
+    static std::string name()
+    { 
+        return "bit_and"; 
+    };
+};
+
+struct Func_bit_andnot
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2)
+    { 
+        return bitwise_andnot(x1, x2); 
+    }
+    
+    static std::string name()
+    { 
+        return "bit_andnot"; 
     };
 };
 

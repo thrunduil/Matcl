@@ -22,6 +22,8 @@
 
 #include "matcl-simd/arch/simd_impl.h"
 #include "matcl-simd/complex/simd_complex.h"
+#include "matcl-simd/default_simd_complex.h"
+#include "matcl-simd/details/helpers.h"
 
 namespace matcl { namespace simd
 {
@@ -29,6 +31,7 @@ namespace matcl { namespace simd
 //-------------------------------------------------------------------
 //                          DOUBLE COMPLEX
 //-------------------------------------------------------------------
+
 // vector of one double precision complex scalar
 template<class Simd_tag>
 class alignas(16) simd_compl<double, 128, Simd_tag>
@@ -39,6 +42,9 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
 
         // type of stored elements
         using value_type    = simd_double_complex;
+
+        // simd type of the same kind storing single precision values
+        using simd_float    = simd_compl<float, 128, Simd_tag>;
 
         // type of real and imaginary part of stored elements
         using real_type     = double;
@@ -77,6 +83,13 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
         // construct from representation
         simd_compl(const impl_type& v);
 
+        // conversion between simd types
+        template<class Tag>
+        explicit simd_compl(const simd_compl<double, 128, Tag>& s);
+
+        // copy constructor
+        simd_compl(const simd_compl<double, 128, Simd_tag>& s) = default;
+
     public:
         // connstruct vector with all elements set to zero
         static simd_compl   zero();
@@ -110,21 +123,40 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
         // get i-th element from the vector; pos is 0-based
         simd_double_complex get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        simd_double_complex get() const;
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        simd_double_complex first() const;
 
         // set i-th element of the vector; pos is 0-based
         void                set(int pos, const simd_double_complex& val);
 
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void                set(const simd_double_complex& val);
+        // return pointer to the first element in the vector
+        const simd_double_complex*
+                            get_raw_ptr() const;
+        simd_double_complex*
+                            get_raw_ptr();
+
+        // cast elements to float complex and store the result in the lower part
+        simd_float          cast_to_float() const;
+
+    public:
+        // plus assign operator
+        simd_compl&         operator+=(const simd_compl& x);
+
+        // minus assign operator
+        simd_compl&         operator-=(const simd_compl& x);
+
+        // multiply assign operator
+        simd_compl&         operator*=(const simd_compl& x);
+
+        // divide assign operator
+        simd_compl&         operator/=(const simd_compl& x);
 };
 
 //-------------------------------------------------------------------
 //                          FLOAT COMPLEX
 //-------------------------------------------------------------------
+
 // vector of two single precision complex scalars
 template<class Simd_tag>
 class alignas(16) simd_compl<float, 128, Simd_tag>
@@ -138,6 +170,13 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
 
         // type of real and imaginary part of stored elements
         using real_type     = float;
+
+        // simd type of the same kind storing double complex values
+        using simd_double   = simd_compl<double, 128, Simd_tag>;
+
+        // simd type storing 2 double complex values
+        using simd_double_2 = typename details::simd_compl_from_real
+                                <typename impl_type::simd_double_2>::type;
 
     public:
         // number of elements in the vector
@@ -164,11 +203,22 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         // construct vector with i-th element set to vi
         simd_compl(const simd_single_complex& v0, const simd_single_complex& v1);
 
+        // construct vector with first element copied from lo
+        // and last element copied from hi; only lower part of lo and hi is used
+        simd_compl(const simd_compl& lo, const simd_compl& hi);
+
         // construct vector with i-th element set to complex(re_i, im_i)
         simd_compl(float re_0, float im_0, float re_1, float im_1);
 
         // construct from representation
         simd_compl(const impl_type& v);
+
+        // conversion between simd types
+        template<class Tag>
+        explicit simd_compl(const simd_compl<float, 128, Tag>& s);
+
+        // copy constructor
+        simd_compl(const simd_compl<float, 128, Simd_tag>& s) = default;
 
     public:
         // connstruct vector with all elements set to zero
@@ -203,16 +253,40 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         // get i-th element from the vector; pos is 0-based
         simd_single_complex get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        simd_single_complex get() const;
+        // return the first element in the vector; equivalent to get(0), 
+        // but possibly faster
+        simd_single_complex first() const;
 
         // set i-th element of the vector; pos is 0-based
         void                set(int pos, const simd_single_complex& val);
 
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void                set(const simd_single_complex& val);
+        // return pointer to the first element in the vector
+        const simd_single_complex*
+                            get_raw_ptr() const;
+        simd_single_complex*
+                            get_raw_ptr();
+
+        // cast the first four elements to double
+        simd_double         cast_low_to_double() const;
+
+        // cast the last four elements to double
+        simd_double         cast_high_to_double() const;
+
+        // cast all elements to double
+        simd_double_2       cast_to_double() const;
+
+    public:
+        // plus assign operator
+        simd_compl&         operator+=(const simd_compl& x);
+
+        // minus assign operator
+        simd_compl&         operator-=(const simd_compl& x);
+
+        // multiply assign operator
+        simd_compl&         operator*=(const simd_compl& x);
+
+        // divide assign operator
+        simd_compl&         operator/=(const simd_compl& x);
 };
 
 }}

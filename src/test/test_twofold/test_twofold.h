@@ -30,30 +30,29 @@ namespace matcl { namespace test
 {
 
 void test_fma();
-void test_double();
+void test_functions();
 void test_io();
 void test_error();
 
 class test_twofold
 {
-    private:
-        bool    m_normalized;
-
     public:
-        test_twofold(bool normalized);
-
         void    make_fma();
         void    make_binary();
         void    make_unary();
         void    make_io();
-
         void    make_error();
 
     private:
-        int     get_N() const;
-        int     get_M() const;
-        
-        bool    make_error(const twofold& x, int mult);
+        int     get_size() const;
+        int     get_size_perf() const;
+        int     get_num_rep() const;
+
+        template<class Float_type>
+        void    make_error_type();
+
+        template<class Simd_type>
+        bool    make_error(const twofold<Simd_type>& x, int mult);
 
         template<class T>
         std::string get_header() const;
@@ -71,27 +70,31 @@ class test_twofold
         void    test_functions_fma();
 
         template<class T, class T2, class TMP>
-        void    test_functions_bin(formatted_disp& fd, int size, int n_rep, T2* in_1, 
+        void    test_functions_bin(formatted_disp& fd, int size, T2* in_1, 
                     T2* in_2, T2* out, TMP* out_gen);
 
         template<class T, class T2, class TMP>
-        void    test_functions_sum_bin(formatted_disp& fd, int size, int n_rep, T2* in_1, 
+        void    test_functions_sum_bin(formatted_disp& fd, int size, T2* in_1, 
+                    T2* in_2, T2* out, TMP* out_gen);
+
+        template<class T, class T2, class TMP>
+        void    test_functions_sum_bin_sort(formatted_disp& fd, int size, T2* in_1, 
                     T2* in_2, T2* out, TMP* out_gen);
 
         template<class T, class T2, class TMP, class Func>
-        void    test_function(formatted_disp& fd, int size, int n_rep, const T2* in, 
+        void    test_function(formatted_disp& fd, int size, const T2* in, 
                     T2* out, TMP* out_gen, double max_dist);
 
         template<class T, class T2, class Func>
-        void    test_function_io(formatted_disp& fd, int size, int n_rep, const T2* in, 
+        void    test_function_io(formatted_disp& fd, int size, const T2* in, 
                     T2* out, double max_dist);
 
         template<class T, class T2, class TMP, class Func>
-        void    test_function_bin(formatted_disp& fd, int size, int n_rep, const T2* in_1, 
+        void    test_function_bin(formatted_disp& fd, int size, const T2* in_1, 
                     const T2* in_2, T2* out, TMP* out_gen, double max_dist);
 
         template<class T, class TMP, class Func>
-        void    test_function_fma(formatted_disp& fd, int size, int n_rep, const T* in_1, 
+        void    test_function_fma(formatted_disp& fd, int size, const T* in_1, 
                     const T* in_2, const T* in_3, T* out, TMP* out_gen, double max_dist);
 
         template<class T2, class TMP>

@@ -30,32 +30,24 @@ namespace matcl
 //-----------------------------------------------------------------------
 //                      ERROR RELATED FUNCTIONS
 //-----------------------------------------------------------------------
-
-double matcl::eps(const twofold& x)
-{
-    namespace mrds = matcl::raw::details::scal_func;
-
-    double e = mrds::eps(x.value) * matcl::constants::eps();
-    return e;
-};
-
-double matcl::float_distance(const twofold& x, const twofold& y)
+template<class T>
+T details::func_float_distance<T, false>::eval(const twofold<T>& x, const twofold<T>& y)
 {
     namespace mrds = matcl::raw::details::scal_func;
 
     if (x.value == y.value && x.error == y.error)
         return 0.0;
 
-    double d_err_1;
-    double d_err_2;
+    T d_err_1;
+    T d_err_2;
 
-    double d1   = mrds::float_distance(x.value, y.value);    
-    double eps  = matcl::constants::eps();
+    T d1   = mrds::float_distance(x.value, y.value);    
+    T eps  = matcl::constants::eps<T>();
 
     if (d1 > 1.0)
         return d1 / eps;
 
-    double d    = d1/eps;
+    T d    = d1/eps;
 
     if (x.error == 0.0)
     {
@@ -63,7 +55,7 @@ double matcl::float_distance(const twofold& x, const twofold& y)
     }
     else
     {
-        double e1   = mrds::eps(x.value);
+        T e1        = mrds::eps(x.value);
         d_err_1     = mrds::float_distance(e1, e1 + mrds::abs(x.error));
 
         if (x.error < 0.0)
@@ -76,7 +68,7 @@ double matcl::float_distance(const twofold& x, const twofold& y)
     }
     else
     {
-        double e2   = mrds::eps(y.value);
+        T e2        = mrds::eps(y.value);
         d_err_2     = mrds::float_distance(e2, e2 + mrds::abs(y.error));
 
         if (y.error < 0.0)
@@ -98,7 +90,8 @@ double matcl::float_distance(const twofold& x, const twofold& y)
 //                      IO FUNCTIONS
 //-----------------------------------------------------------------------
 
-std::ostream& matcl::operator<<(std::ostream& os, const twofold& x)
+template<class T>
+void details::func_save<T, false>::eval(std::ostream& os, const twofold<T>& x)
 {
     os << "{";
     
@@ -107,11 +100,10 @@ std::ostream& matcl::operator<<(std::ostream& os, const twofold& x)
     
     details::saveload_scalar_helper::eval_save(os, x.error);
     os << "}";
-
-    return os;
 };
 
-std::istream& matcl::operator>>(std::istream& is, twofold& v)
+template<class T>
+void details::func_load<T, false>::eval(std::istream& is, twofold<T>& v)
 {
     char c  = 0;
 
@@ -124,18 +116,18 @@ std::istream& matcl::operator>>(std::istream& is, twofold& v)
             break;
     }
 
-    v = twofold(std::numeric_limits<double>::quiet_NaN());
+    v = twofold<T>(std::numeric_limits<T>::quiet_NaN());
 
     if (is.good() == false)
-        return is;
+        return;
 
-    double val, err;
+    T val, err;
 
     if (c != '{')
     {
         // this is an error
         is.setstate(std::ios::failbit);
-        return is;
+        return;
     }
 
     char sep    = ' ';
@@ -155,18 +147,24 @@ std::istream& matcl::operator>>(std::istream& is, twofold& v)
     {
         // this is an error
         is.setstate(std::ios::failbit);
-        return is;
+        return;
     }
 
     if (ok == false)
     {
         is.setstate(std::ios::failbit);
-        return is;
+        return;
     };
 
-    v   = twofold(val, err);
-    return is;
+    v   = twofold<T>(val, err);
 };
 
+template MATCL_CORE_EXPORT std::ostream& matcl::operator<<(std::ostream& os, const twofold<double>& x);
+template MATCL_CORE_EXPORT std::istream& matcl::operator>>(std::istream& is, twofold<double>& v);
+template MATCL_CORE_EXPORT std::ostream& matcl::operator<<(std::ostream& os, const twofold<float>& x);
+template MATCL_CORE_EXPORT std::istream& matcl::operator>>(std::istream& is, twofold<float>& v);
+
+template MATCL_CORE_EXPORT double float_distance(const twofold<double>& x, const twofold<double>& y);
+template MATCL_CORE_EXPORT float float_distance(const twofold<float>& x, const twofold<float>& y);
 
 }

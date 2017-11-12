@@ -66,7 +66,7 @@ void test_simd_compl::make_binary()
     test_functions_bin<Float_complex>();    
 };
 
-int test_simd_compl::get_N() const
+int test_simd_compl::get_size() const
 {
     #ifdef _DEBUG
         int N   = 1000;
@@ -84,16 +84,21 @@ int test_simd_compl::get_N() const
         return N;
 };
 
-int test_simd_compl::get_M() const
+int test_simd_compl::get_size_perf() const
+{
+    return 1000;
+}
+
+int test_simd_compl::get_num_rep() const
 {
     #ifdef _DEBUG
-        int M   = 100;
-    #else
         int M   = 1000;
+    #else
+        int M   = 10000;
     #endif
 
     if (m_test_values == true)
-        return 1;
+        return M/10;
     else
         return M;
 }
@@ -101,8 +106,7 @@ int test_simd_compl::get_M() const
 template<class T>
 void test_simd_compl::test_functions()
 {
-    int N   = get_N();
-    int M   = get_M();
+    int N   = get_size();
 
     std::vector<T> in;
     std::vector<T> out;
@@ -137,11 +141,12 @@ void test_simd_compl::test_functions()
 
     dm.disp_header();
 
-    test_function<T, test_functions::Func_uminus>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function<T, test_functions::Func_conj>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function<T, test_functions::Func_uminus>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function<T, test_functions::Func_conj>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
 
-    test_function_block<T, test_functions::Func_any_nan>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function_block<T, test_functions::Func_reverse>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true);    
+    test_function_block<T, test_functions::Func_any_nan>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function_block<T, test_functions::Func_reverse>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);    
+    test_function_block<T, test_functions::Func_cast>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);    
 
     using TR    = typename ms::details::real_type<T>::type;
 
@@ -150,7 +155,7 @@ void test_simd_compl::test_functions()
     for (int i = 0; i < N; ++i)
         ptr_in[i]   = T(std::abs(real(ptr_in[i])) / TR(8), std::abs(imag(ptr_in[i])) / TR(8));
     
-    test_function_block<T, test_functions::Func_sum_all>(dm, N, M, ptr_in, ptr_out, ptr_out_gen, true); 
+    test_function_block<T, test_functions::Func_sum_all>(dm, N, ptr_in, ptr_out, ptr_out_gen, true); 
 };
 
 template<class T>
@@ -158,8 +163,7 @@ void test_simd_compl::test_functions_bin()
 {
     using TR    = typename ms::details::real_type<T>::type;
 
-    int N   = get_N();
-    int M   = get_M();
+    int N   = get_size();
 
     std::vector<T> in_1;
     std::vector<T> in_2;
@@ -204,26 +208,26 @@ void test_simd_compl::test_functions_bin()
     TR* ptr_in_2r = (TR*)ptr_in_2;
 
     test_function_bin<T, test_functions::Func_mult>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
     test_function_bin<T, test_functions::Func_div>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
     test_function_bin<T, test_functions::Func_plus>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
     test_function_bin<T, test_functions::Func_minus>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
 
     test_function_bin_RC<T, test_functions::Func_mult_RC, TR>
-        (dm, N, M, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
+        (dm, N, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 1.0, true);
     test_function_bin_RC<T, test_functions::Func_div_RC, TR>
-        (dm, N, M, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
+        (dm, N, ptr_in_1r, ptr_in_2, ptr_out, ptr_out_gen, 10.0, false);
     test_function_bin_CR<T, test_functions::Func_mult_CR, TR>
-        (dm, N, M, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
+        (dm, N, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
     test_function_bin_CR<T, test_functions::Func_div_CR, TR>
-        (dm, N, M, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
+        (dm, N, ptr_in_1, ptr_in_2r, ptr_out, ptr_out_gen, 1.0, true);
 };
 
 template<class T, class Func>
-void test_simd_compl::test_function(formatted_disp& fd, int size, int n_rep, 
+void test_simd_compl::test_function(formatted_disp& fd, int size, 
                                      const T* in, T* out, T* out_gen, bool test_componentwise)
 {
     using TR    = typename ms::details::real_type<T>::type;
@@ -232,21 +236,21 @@ void test_simd_compl::test_function(formatted_disp& fd, int size, int n_rep,
     bool v1, v2, v3, v4, v5;
     double d1, d2, d3, d4, d5;
 
-    t0  = test_function_simd<T, ms::simd_compl<TR, 128, ms::nosimd_tag>, Func>(size, n_rep, in, out_gen);
+    t0  = test_function_simd<T, ms::simd_compl<TR, 128, ms::nosimd_tag>, Func>(size, 1, in, out_gen);
 
-    t1  = test_function_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>(size, n_rep, in, out);
+    t1  = test_function_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>(size, 1, in, out);
     v1  = test_equal(size, out, out_gen, 1.0, d1, test_componentwise);
 
-    t2  = test_function_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>(size, n_rep, in, out);
+    t2  = test_function_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>(size, 1, in, out);
     v2  = test_equal(size, out, out_gen, 1.0, d2, test_componentwise);
 
-    t3  = test_function_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>(size, n_rep, in, out);    
+    t3  = test_function_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>(size, 1, in, out);    
     v3  = test_equal(size, out, out_gen, 1.0, d3, test_componentwise);
 
-    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>(size, n_rep, in, out);
+    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>(size, 1, in, out);
     v4  = test_equal(size, out, out_gen, 1.0, d4, test_componentwise);
 
-    t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>(size, n_rep, in, out);    
+    t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>(size, 1, in, out);    
     v5  = test_equal(size, out, out_gen, 1.0, d5, test_componentwise);
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
@@ -257,11 +261,27 @@ void test_simd_compl::test_function(formatted_disp& fd, int size, int n_rep,
     d           = std::max(d, d5);
     std::string status = make_status(ok, d);
 
-    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_simd<T, ms::simd_compl<TR, 128, ms::nosimd_tag>, Func>
+                (N, M, in, out_gen);
+    t1  = test_function_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                (N, M, in, out);
+    t2  = test_function_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
+                (N, M, in, out);
+    t3  = test_function_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
+                (N, M, in, out);    
+    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
+                (N, M, in, out);
+    t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+                (N, M, in, out);    
+
+    fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
 };
 
 template<class T, class Func>
-void test_simd_compl::test_function_block(formatted_disp& fd, int size, int n_rep, 
+void test_simd_compl::test_function_block(formatted_disp& fd, int size, 
                                 const T* in, T* out, T* out_gen, bool test_componentwise)
 {
     using TR    = typename ms::details::real_type<T>::type;
@@ -270,17 +290,22 @@ void test_simd_compl::test_function_block(formatted_disp& fd, int size, int n_re
     bool v1, v3, v4;
     double d1, d3, d4;
 
-    t0  = test_function_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>(size, n_rep, in, out_gen);
+    t0  = test_function_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+            (size, 1, in, out_gen);
 
-    t1  = test_function_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>(size, n_rep, in, out);    
+    t1  = test_function_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
+            (size, 1, in, out);    
     v1  = test_equal(size, out, out_gen, 4.0, d1, test_componentwise);
 
-    t2  = test_function_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>(size, n_rep, in, out_gen);
+    t2  = test_function_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
+            (size, 1, in, out_gen);
 
-    t3  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>(size, n_rep, in, out);
+    t3  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
+            (size, 1, in, out);
     v3  = test_equal(size, out, out_gen, 4.0, d3, test_componentwise);
 
-    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>(size, n_rep, in, out);    
+    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+            (size, 1, in, out);    
     v4  = test_equal(size, out, out_gen, 4.0, d4, test_componentwise);
 
     bool ok = v1 && v3 && v4;
@@ -289,11 +314,25 @@ void test_simd_compl::test_function_block(formatted_disp& fd, int size, int n_re
     d           = std::max(d, d4);
     std::string status = make_status(ok, d);
 
-    fd.disp_row(Func::name(), t0, t0/t0, t2/t2, t1/t0, t3/t2, t4/t2, status);
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                (N, M, in, out_gen);
+    t1  = test_function_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
+                (N, M, in, out);    
+    t2  = test_function_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
+                (N, M, in, out_gen);
+    t3  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
+                (N, M, in, out);
+    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+                (N, M, in, out);    
+
+    fd.disp_row(Func::name(), t0, t0/t0, t2/t2, t0/t1, t2/t3, t2/t4, status);
 };
 
 template<class T, class Func>
-void test_simd_compl::test_function_bin(formatted_disp& fd, int size, int n_rep, 
+void test_simd_compl::test_function_bin(formatted_disp& fd, int size, 
                                     const T* in_1, const T* in_2, T* out, T* out_gen, 
                                     double max_dist, bool test_componentwise)
 {
@@ -304,26 +343,26 @@ void test_simd_compl::test_function_bin(formatted_disp& fd, int size, int n_rep,
     double d1, d2, d3, d4, d5;
 
     t0  = test_function_bin_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out_gen);
+                                    (size, 1, in_1, in_2, out_gen);
 
     t1  = test_function_bin_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v1  = test_equal(size, out, out_gen, max_dist, d1, test_componentwise);
 
     t2  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v2  = test_equal(size, out, out_gen, max_dist, d2, test_componentwise);
 
     t3  = test_function_bin_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);    
+                                    (size, 1, in_1, in_2, out);    
     v3  = test_equal(size, out, out_gen, max_dist, d3, test_componentwise);
 
     t4  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen,max_dist, d4, test_componentwise);
 
     t5  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);    
+                                    (size, 1, in_1, in_2, out);    
     v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
@@ -333,12 +372,28 @@ void test_simd_compl::test_function_bin(formatted_disp& fd, int size, int n_rep,
     d           = std::max(d, d4);
     d           = std::max(d, d5);
 
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_bin_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out_gen);
+    t1  = test_function_bin_simd<T, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t2  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t3  = test_function_bin_simd<T, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
+                                    (N, M, in_1, in_2, out);    
+    t4  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t5  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+                                    (N, M, in_1, in_2, out);    
+
     std::string status = make_status(ok, d);
-    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+    fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
 };
 
 template<class T, class Func, class TR>
-void test_simd_compl::test_function_bin_RC(formatted_disp& fd, int size, int n_rep, 
+void test_simd_compl::test_function_bin_RC(formatted_disp& fd, int size, 
                                     const TR* in_1, const T* in_2, T* out, T* out_gen, 
                                     double max_dist, bool test_componentwise)
 {
@@ -347,26 +402,26 @@ void test_simd_compl::test_function_bin_RC(formatted_disp& fd, int size, int n_r
     double d1, d2, d3, d4, d5;
 
     t0  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out_gen);
+                                    (size, 1, in_1, in_2, out_gen);
 
     t1  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v1  = test_equal(size, out, out_gen, max_dist, d1, test_componentwise);
 
     t2  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v2  = test_equal(size, out, out_gen, max_dist, d2, test_componentwise);
 
     t3  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);    
+                                    (size, 1, in_1, in_2, out);    
     v3  = test_equal(size, out, out_gen, max_dist, d3, test_componentwise);
 
     t4  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen,max_dist, d4, test_componentwise);
 
     t5  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);    
+                                    (size, 1, in_1, in_2, out);    
     v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
@@ -376,12 +431,28 @@ void test_simd_compl::test_function_bin_RC(formatted_disp& fd, int size, int n_r
     d           = std::max(d, d4);
     d           = std::max(d, d5);
 
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out_gen);
+    t1  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t2  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t3  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
+                                    (N, M, in_1, in_2, out);    
+    t4  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t5  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+                                    (N, M, in_1, in_2, out);    
+
     std::string status = make_status(ok, d);
-    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+    fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
 };
 
 template<class T, class Func, class TR>
-void test_simd_compl::test_function_bin_CR(formatted_disp& fd, int size, int n_rep, 
+void test_simd_compl::test_function_bin_CR(formatted_disp& fd, int size,
                                     const T* in_1, const TR* in_2, T* out, T* out_gen, 
                                     double max_dist, bool test_componentwise)
 {
@@ -390,26 +461,26 @@ void test_simd_compl::test_function_bin_CR(formatted_disp& fd, int size, int n_r
     double d1, d2, d3, d4, d5;
 
     t0  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out_gen);
+                                    (size, 1, in_1, in_2, out_gen);
 
     t1  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v1  = test_equal(size, out, out_gen, max_dist, d1, test_componentwise);
 
     t2  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v2  = test_equal(size, out, out_gen, max_dist, d2, test_componentwise);
 
     t3  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);    
+                                    (size, 1, in_1, in_2, out);    
     v3  = test_equal(size, out, out_gen, max_dist, d3, test_componentwise);
 
     t4  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);
+                                    (size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen,max_dist, d4, test_componentwise);
 
     t5  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
-                                    (size, n_rep, in_1, in_2, out);    
+                                    (size, 1, in_1, in_2, out);    
     v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
@@ -419,8 +490,24 @@ void test_simd_compl::test_function_bin_CR(formatted_disp& fd, int size, int n_r
     d           = std::max(d, d4);
     d           = std::max(d, d5);
 
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out_gen);
+    t1  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 128, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t2  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::nosimd_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t3  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 128, simd::sse_tag>, Func>
+                                    (N, M, in_1, in_2, out);    
+    t4  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
+                                    (N, M, in_1, in_2, out);
+    t5  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+                                    (N, M, in_1, in_2, out);    
+
     std::string status = make_status(ok, d);
-    fd.disp_row(Func::name(), t0, t1/t0, t2/t0, t3/t0, t4/t0, t5/t0, status);
+    fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
 };
 
 template<class T, class Simd_type, class Func>
@@ -429,6 +516,9 @@ double test_simd_compl::test_function_simd(int size, int n_rep, const T* in, T* 
     static const int vec_size   = Simd_type::vector_size;
 
     tic();
+
+    using TR        = typename ms::details::real_type<T>::type;
+    volatile TR val = 0;
 
     for(int j = 0; j < n_rep; ++j)
     {
@@ -439,6 +529,8 @@ double test_simd_compl::test_function_simd(int size, int n_rep, const T* in, T* 
 
             res.store(out + i, std::false_type());
         };
+
+        val = real(out[0]);
     };
 
     double t = toc();
@@ -452,6 +544,9 @@ double test_simd_compl::test_function_bin_simd(int size, int n_rep, const T* in1
 
     tic();
 
+    using TR        = typename ms::details::real_type<T>::type;
+    volatile TR val = 0;
+
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i = 0; i < size; i += vec_size)
@@ -463,6 +558,8 @@ double test_simd_compl::test_function_bin_simd(int size, int n_rep, const T* in1
 
             res.store(out + i, std::false_type());
         };
+
+        val += real(out[0]);
     };
 
     double t = toc();
@@ -479,6 +576,8 @@ double test_simd_compl::test_function_bin_simd_RC(int size, int n_rep,
 
     tic();
 
+    volatile TR val = 0;
+
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i1 = 0, i2 = 0; i1 < size; i1 += vec_size, i2 += 2*vec_size)
@@ -490,6 +589,8 @@ double test_simd_compl::test_function_bin_simd_RC(int size, int n_rep,
 
             res.store(out + i1, std::false_type());
         };
+
+        val += real(out[0]);
     };
 
     double t = toc();
@@ -506,6 +607,8 @@ double test_simd_compl::test_function_bin_simd_CR(int size, int n_rep,
 
     tic();
 
+    volatile TR val = 0;
+
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i1 = 0, i2 = 0; i1 < size; i1 += vec_size, i2 += 2*vec_size)
@@ -517,6 +620,8 @@ double test_simd_compl::test_function_bin_simd_CR(int size, int n_rep,
 
             res.store(out + i1, std::false_type());
         };
+
+        val += real(out[0]);
     };
 
     double t = toc();

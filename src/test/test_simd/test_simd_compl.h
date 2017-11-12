@@ -45,8 +45,9 @@ class test_simd_compl
         void    make_unary();
 
     private:
-        int     get_N() const;
-        int     get_M() const;
+        int     get_size() const;
+        int     get_size_perf() const;
+        int     get_num_rep() const;
 
         template<class T>
         bool    test_equal(int size, const T* res, const T* res_gen, double max_dist, double& dist,
@@ -66,23 +67,23 @@ class test_simd_compl
         void    test_functions_bin();
 
         template<class T, class Func>
-        void    test_function(formatted_disp& fd, int size, int n_rep, const T* in, 
+        void    test_function(formatted_disp& fd, int size, const T* in, 
                     T* out, T* out_gen, bool test_componentwise);
 
         template<class T, class Func>
-        void    test_function_block(formatted_disp& fd, int size, int n_rep, const T* in, 
+        void    test_function_block(formatted_disp& fd, int size, const T* in, 
                     T* out, T* out_gen, bool test_componentwise);
 
         template<class T, class Func>
-        void    test_function_bin(formatted_disp& fd, int size, int n_rep, const T* in_1, 
+        void    test_function_bin(formatted_disp& fd, int size, const T* in_1, 
                     const T* in_2, T* out, T* out_gen, double max_dist, bool test_componentwise);
 
         template<class T, class Func, class TR = typename ms::details::real_type<T>::type>
-        void    test_function_bin_RC(formatted_disp& fd, int size, int n_rep, const TR* in_1, 
+        void    test_function_bin_RC(formatted_disp& fd, int size, const TR* in_1, 
                     const T* in_2, T* out, T* out_gen, double max_dist, bool test_componentwise);
 
         template<class T, class Func, class TR = typename ms::details::real_type<T>::type>
-        void    test_function_bin_CR(formatted_disp& fd, int size, int n_rep, const T* in_1, 
+        void    test_function_bin_CR(formatted_disp& fd, int size, const T* in_1, 
                     const TR* in_2, T* out, T* out_gen, double max_dist, bool test_componentwise);
 
         template<class T, class Simd_type, class Func>

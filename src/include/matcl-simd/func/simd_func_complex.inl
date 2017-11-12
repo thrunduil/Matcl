@@ -129,11 +129,12 @@ template<class Val, int Bits, class Simd_tag>
 std::ostream& ms::operator<<(std::ostream& os, const simd_compl<Val, Bits, Simd_tag>& x)
 {
     int vec_size    = simd_compl<Val, Bits, Simd_tag>::vector_size;
+    const Val* ptr  = x.get_raw_ptr();
 
-    os << "{" << x.get(0);
+    os << "{" << ptr[0];
 
     for (int i = 1; i < vec_size; ++i)
-        os << ", " << x.get(i);
+        os << ", " << ptr[i];
 
     os << "}";
 

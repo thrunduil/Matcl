@@ -94,12 +94,18 @@ struct simd_compl_mult<double, 128, sse_tag>
 
         simd_type res;
 
+        value_type* res_ptr         = res.get_raw_ptr();
+        const value_type* xy_ptr    = xy.get_raw_ptr();
+        const value_type* x_ptr     = x.get_raw_ptr();
+        const value_type* y_ptr     = y.get_raw_ptr();
+
         for (int i = 0; i < vec_size; ++i)
         {
-            double r_re     = real(xy.get(i));
-            double r_im     = imag(xy.get(i));
-            value_type res2 = mult_impl::eval(x.get(i), y.get(i), r_re, r_im);
-            res.set(i, res2);
+            double r_re     = real(xy_ptr[i]);
+            double r_im     = imag(xy_ptr[i]);
+
+            value_type res2 = mult_impl::eval(x_ptr[i], y_ptr[i], r_re, r_im);
+            res_ptr[i]      = res2;
         };
 
         return res;
@@ -139,12 +145,9 @@ struct simd_compl_div<double, 128, sse_tag>
         __m128d x_rey  = _mm_mul_pd(x_re, y.data.data);                 // (x.re*b.re, x.re*b.im)  
         __m128d yy     = _mm_mul_pd(y.data.data, y.data.data);          // (y.re*y.re, y.im*y.im)
 
-        #if MATCL_ARCHITECTURE_HAS_SSE3
-            __m128d yy2 = _mm_hadd_pd(yy,yy);                           // (y.re*y.re + y.im*y.im) 
-        #else
-            double s    = yy.m128d_f64[0] + yy.m128d_f64[1];
-            __m128d yy2 = _mm_set1_pd(s);
-        #endif
+        simd_real tmp   = simd_real(yy);
+        double s        = sum_all(tmp);                                 // (y.re*y.re + y.im*y.im) 
+        __m128d yy2     = _mm_set1_pd(s);
 
         #if MATCL_ARCHITECTURE_HAS_FMA
             __m128d n      = _mm_fmsubadd_pd(x_im, y_flip, x_rey);      // (x_im * y_im, x_im * y_re) +/- x_rey
@@ -177,12 +180,9 @@ struct simd_compl_div<double, 128, sse_tag>
         __m128d x_rey  = _mm_mul_pd(x_re, y.data.data);                 // (x.re*b.re, x.re*b.im)  
         __m128d yy     = _mm_mul_pd(y.data.data, y.data.data);          // (y.re*y.re, y.im*y.im)
 
-        #if MATCL_ARCHITECTURE_HAS_SSE3
-            __m128d yy2 = _mm_hadd_pd(yy,yy);                           // (y.re*y.re + y.im*y.im) 
-        #else
-            double s    = yy.m128d_f64[0] + yy.m128d_f64[1];
-            __m128d yy2 = _mm_set1_pd(s);
-        #endif
+        simd_real tmp   = simd_real(yy);
+        double s        = sum_all(tmp);                                 // (y.re*y.re + y.im*y.im) 
+        __m128d yy2     = _mm_set1_pd(s);
 
         __m128d n       = _mm_xor_pd(x_rey, mask);                       // +/- x_rey
         __m128d res     = _mm_div_pd(n, yy2);
@@ -224,10 +224,14 @@ struct simd_compl_div<double, 128, sse_tag>
 
         simd_type res;
 
+        value_type* res_ptr         = res.get_raw_ptr();
+        const value_type* x_ptr     = x.get_raw_ptr();
+        const value_type* y_ptr     = y.get_raw_ptr();
+
         for (int i = 0; i < vec_size; ++i)
         {
-            value_type res2 = div_impl::eval(x.get(i), y.get(i));
-            res.set(i, res2);
+            value_type res2 = div_impl::eval(x_ptr[i], y_ptr[i]);
+            res_ptr[i]      = res2;
         };
 
         return res;
@@ -241,10 +245,14 @@ struct simd_compl_div<double, 128, sse_tag>
 
         simd_type res;
 
+        value_type* res_ptr         = res.get_raw_ptr();
+        const double* x_ptr         = x.get_raw_ptr();
+        const value_type* y_ptr     = y.get_raw_ptr();
+
         for (int i = 0; i < vec_size; ++i)
         {
-            value_type res2 = div_impl::eval(x.get(2*i), y.get(i));
-            res.set(i, res2);
+            value_type res2 = div_impl::eval(x_ptr[2*i], y_ptr[i]);
+            res_ptr[i]      = res2;
         };
 
         return res;
@@ -279,11 +287,13 @@ template<>
 struct simd_compl_uminus<double, 128, sse_tag>
 {
     using simd_type         = simd_compl<double, 128, sse_tag>;
+    using simd_real         = simd<double, 128, sse_tag>;
 
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        return _mm_xor_pd( x.data.data, _mm_set1_pd(-0.0) );
+        const simd_real mzero   = simd_real::minus_zero();
+        return _mm_xor_pd( x.data.data, mzero.data );
     };
 };
 
@@ -295,7 +305,7 @@ struct simd_compl_sum_all<double, 128, sse_tag>
     force_inline
     static simd_double_complex eval(const simd_type& x)
     {
-        return x.get<0>();
+        return x.first();
     };
 };
 

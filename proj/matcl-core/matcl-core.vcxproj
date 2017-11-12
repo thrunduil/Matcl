@@ -22,6 +22,8 @@
     <ClInclude Include="..\..\src\include\matcl-core\config.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\complex_details.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\exception_details.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\float\helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\details\float\twofold_base_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table.h" />
     <ClInclude Include="..\..\src\include\matcl-core\details\hash_table\hash_table_details.h" />
@@ -52,6 +54,7 @@
     <ClInclude Include="..\..\src\include\matcl-core\error\exception_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\error\safe_string_message.h" />
     <ClInclude Include="..\..\src\include\matcl-core\float\float_binary_rep.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\float\fma_dekker.h" />
     <ClInclude Include="..\..\src\include\matcl-core\float\twofold.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\machine.h" />
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h" />
@@ -85,6 +88,8 @@
     <None Include="..\..\src\include\matcl-core\details\alloc.inl" />
     <None Include="..\..\src\include\matcl-core\details\constants.inl" />
     <None Include="..\..\src\include\matcl-core\details\float\float_binary_rep.inl" />
+    <None Include="..\..\src\include\matcl-core\details\float\fma_dekker.inl" />
+    <None Include="..\..\src\include\matcl-core\details\float\fma_dekker_simd.inl" />
     <None Include="..\..\src\include\matcl-core\details\float\twofold.inl" />
     <None Include="..\..\src\include\matcl-core\details\global_objects.inl" />
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl" />
@@ -126,6 +131,7 @@
     <ClCompile Include="..\..\src\matcl-core\IO\printer.cpp" />
     <ClCompile Include="..\..\src\matcl-core\IO\scalar_io.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\constants.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\lib_functions\fma_dekker.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\matfunc_pow.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\scalfunc_helpers.cpp" />
     <ClCompile Include="..\..\src\matcl-core\lib_functions\twofold.cpp" />

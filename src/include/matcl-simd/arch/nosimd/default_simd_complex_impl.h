@@ -35,7 +35,32 @@ struct default_simd_type<simd_double_complex>
 template<>
 struct default_simd_type<simd_single_complex>
 { 
-    using type = simd_compl<float, 64, nosimd_tag>; 
+    using type = simd_compl<float, 128, nosimd_tag>; 
+};
+
+//
+template<>
+struct default_simd_type_size<simd_single_complex, 256>
+{
+    using type = simd_compl<float, 256, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type_size<simd_double_complex, 256>
+{
+    using type = simd_compl<double, 256, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type_size<simd_single_complex, 128>
+{
+    using type = simd_compl<float, 128, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type_size<simd_double_complex, 128>
+{
+    using type = simd_compl<double, 128, nosimd_tag>; 
 };
 
 }}

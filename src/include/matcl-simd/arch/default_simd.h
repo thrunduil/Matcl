@@ -27,5 +27,5 @@
 #elif MATCL_ARCHITECTURE_HAS_SSE2
     #include "matcl-simd/arch/sse/default_simd_impl.h"
 #else
-    #include "matcl-simd/arch/sse/default_simd_impl.h"
+    #include "matcl-simd/arch/nosimd/default_simd_impl.h"
 #endif

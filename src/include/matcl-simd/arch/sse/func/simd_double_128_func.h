@@ -22,6 +22,8 @@
 
 #include "matcl-simd/arch/simd_impl.h"
 #include "matcl-simd/func/simd_func_def.h"
+#include "matcl-simd/arch/sse/func/missing_intrinsics.h"
+#include "matcl-core/details/float/fma_dekker_simd.inl"
 
 namespace matcl { namespace simd
 {
@@ -94,7 +96,8 @@ struct simd_uminus<double, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        return _mm_xor_pd( x.data, _mm_set1_pd(-0.0) );
+        const simd_type mzero = simd_type::minus_zero();
+        return _mm_xor_pd( x.data, mzero.data);
     };
 };
 
@@ -106,13 +109,10 @@ struct simd_sum_all<double, 128, sse_tag>
     force_inline
     static double eval(const simd_type& x)
     {
-        #if MATCL_ARCHITECTURE_HAS_SSE3
-            __m128d s   = _mm_hadd_pd(x.data,x.data);
-            return s.m128d_f64[0];
-        #else
-            double s    = x.get<0>() + x.get<1>();
-            return s;
-        #endif
+        __m128d shuf    = missing::mm_movehl_pd(x.data, x.data);
+        __m128d res     = _mm_add_sd(x.data, shuf);
+
+        return _mm_cvtsd_f64(res);
     };
 };
 
@@ -128,8 +128,12 @@ struct simd_sub_add<double, 128, sse_tag>
             __m128d s   = _mm_addsub_pd(x.data, y.data);
             return s;
         #else
-            double s1   = x.get<0>() - y.get<0>();
-            double s2   = x.get<1>() + y.get<1>();
+            const double* xp = x.get_raw_ptr();
+            const double* yp = y.get_raw_ptr();
+
+            double s1   = xp[0] - yp[0];
+            double s2   = xp[1] + yp[1];
+
             return simd_type(s1, s2);
         #endif
     };
@@ -168,6 +172,38 @@ struct simd_fms_f<double, 128, sse_tag>
 };
 
 template<>
+struct simd_fma_a<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm_fmadd_pd( x.data, y.data, z.data);
+        #else
+            return fma_dekker_simd(x, y, z);
+        #endif
+    };
+};
+
+template<>
+struct simd_fms_a<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm_fmsub_pd( x.data, y.data, z.data);
+        #else
+            return fma_dekker_simd(x, y, -z);
+        #endif
+    };
+};
+
+template<>
 struct simd_abs<double, 128, sse_tag>
 {
     using simd_type = simd<double, 128, sse_tag>;
@@ -175,8 +211,57 @@ struct simd_abs<double, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        const __m128d sign_mask = _mm_set1_pd(-0.); // -0. = 1 << 63
-        return _mm_andnot_pd(sign_mask, x.data);
+        const simd_type mzero = simd_type::minus_zero();
+        return _mm_andnot_pd(mzero.data, x.data);
+    };
+};
+
+template<>
+struct simd_bitwise_or<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm_or_pd(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_bitwise_xor<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm_xor_pd(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_bitwise_and<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return _mm_and_pd(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_bitwise_andnot<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        const simd_type mzero = simd_type::minus_zero();
+        return _mm_andnot_pd(x.data, y.data);
     };
 };
 
@@ -227,8 +312,10 @@ struct simd_round<double, 128, sse_tag>
         #if MATCL_ARCHITECTURE_HAS_SSE41
             return _mm_round_pd(x.data, _MM_FROUND_NINT);
         #else
-            double s1   = scalar_func::round(x.get<0>());
-            double s2   = scalar_func::round(x.get<1>());
+            const double* xp = x.get_raw_ptr();
+
+            double s1   = scalar_func::round(xp[0]);
+            double s2   = scalar_func::round(xp[1]);
 
             return simd_type(s1, s2);
         #endif
@@ -246,8 +333,10 @@ struct simd_floor<double, 128, sse_tag>
         #if MATCL_ARCHITECTURE_HAS_SSE41
             return _mm_round_pd(x.data, _MM_FROUND_FLOOR);
         #else
-            double s1   = scalar_func::floor(x.get<0>());
-            double s2   = scalar_func::floor(x.get<1>());
+            const double* xp = x.get_raw_ptr();
+
+            double s1   = scalar_func::floor(xp[0]);
+            double s2   = scalar_func::floor(xp[1]);
 
             return simd_type(s1, s2);
         #endif
@@ -265,8 +354,10 @@ struct simd_ceil<double, 128, sse_tag>
         #if MATCL_ARCHITECTURE_HAS_SSE41
             return _mm_round_pd(x.data, _MM_FROUND_CEIL);
         #else
-            double s1   = scalar_func::ceil(x.get<0>());
-            double s2   = scalar_func::ceil(x.get<1>());
+            const double* xp = x.get_raw_ptr();
+
+            double s1   = scalar_func::ceil(xp[0]);
+            double s2   = scalar_func::ceil(xp[1]);
 
             return simd_type(s1, s2);
         #endif
@@ -284,8 +375,10 @@ struct simd_trunc<double, 128, sse_tag>
         #if MATCL_ARCHITECTURE_HAS_SSE41
             return _mm_round_pd(x.data, _MM_FROUND_TRUNC);
         #else
-            double s1   = scalar_func::trunc(x.get<0>());
-            double s2   = scalar_func::trunc(x.get<1>());
+            const double* xp = x.get_raw_ptr();
+
+            double s1   = scalar_func::trunc(xp[0]);
+            double s2   = scalar_func::trunc(xp[1]);
 
             return simd_type(s1, s2);
         #endif
@@ -293,7 +386,7 @@ struct simd_trunc<double, 128, sse_tag>
 };
 
 template<>
-struct simd_eeq<double, 128, sse_tag> : simd_cmp_base<double>
+struct simd_eeq<double, 128, sse_tag> : simd_bool_base<double>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -305,7 +398,7 @@ struct simd_eeq<double, 128, sse_tag> : simd_cmp_base<double>
 };
 
 template<>
-struct simd_neq<double, 128, sse_tag> : simd_cmp_base<double>
+struct simd_neq<double, 128, sse_tag> : simd_bool_base<double>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -317,7 +410,7 @@ struct simd_neq<double, 128, sse_tag> : simd_cmp_base<double>
 };
 
 template<>
-struct simd_lt<double, 128, sse_tag> : simd_cmp_base<double>
+struct simd_lt<double, 128, sse_tag> : simd_bool_base<double>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -329,7 +422,7 @@ struct simd_lt<double, 128, sse_tag> : simd_cmp_base<double>
 };
 
 template<>
-struct simd_gt<double, 128, sse_tag> : simd_cmp_base<double>
+struct simd_gt<double, 128, sse_tag> : simd_bool_base<double>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -341,7 +434,7 @@ struct simd_gt<double, 128, sse_tag> : simd_cmp_base<double>
 };
 
 template<>
-struct simd_leq<double, 128, sse_tag> : simd_cmp_base<double>
+struct simd_leq<double, 128, sse_tag> : simd_bool_base<double>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -353,7 +446,7 @@ struct simd_leq<double, 128, sse_tag> : simd_cmp_base<double>
 };
 
 template<>
-struct simd_geq<double, 128, sse_tag> : simd_cmp_base<double>
+struct simd_geq<double, 128, sse_tag> : simd_bool_base<double>
 {
     using simd_type = simd<double, 128, sse_tag>;
 

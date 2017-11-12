@@ -37,4 +37,14 @@ struct simd_half_tag<avx_tag>
     using type = sse_tag;
 };
 
+
+template<class T>
+struct simd_compl_from_real{};
+
+template<class T, int Bits, class Tag>
+struct simd_compl_from_real<simd<T, Bits, Tag>>
+{
+    using type = simd_compl<T, Bits, Tag>;
+};
+
 }}}

@@ -39,10 +39,9 @@ struct false_value
     static T get();
 };
 
-// vector of elements in reverse order
-template<class Val, int Bits, class Simd_tag>
-simd<Val, Bits, Simd_tag> 
-reverse(const simd<Val, Bits, Simd_tag>& x);
+//-----------------------------------------------------------------------
+//                   ARITMETHIC FUNCTIONS
+//-----------------------------------------------------------------------
 
 // vector multiply x * y
 template<class Val, int Bits, class Simd_tag>
@@ -69,11 +68,6 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 operator-(const simd<Val, Bits, Simd_tag>& x);
 
-// absolute value
-template<class Val, int Bits, class Simd_tag>
-simd<Val, Bits, Simd_tag> 
-abs(const simd<Val, Bits, Simd_tag>& x);
-
 // alternatively subtract and add elements in x and y
 // i.e. form [x[0] - y[0], x[1] + y[1], x[2] - y[2], x[3] + y[3], ...]
 template<class Val, int Bits, class Simd_tag>
@@ -94,9 +88,37 @@ simd<Val, Bits, Simd_tag>
 fms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z);
 
+//res = x*y + z; use FMA instruction if available, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+fma_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z);
+
+//res = x*y - z; use FMA instruction if available, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+fms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z);
+
 // sum of all elements stored in the vector x
 template<class Val, int Bits, class Simd_tag>
 Val sum_all(const simd<Val, Bits, Simd_tag>& x);
+
+// absolute value
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+abs(const simd<Val, Bits, Simd_tag>& x);
+
+// square root
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+sqrt(const simd<Val, Bits, Simd_tag>& x);
+
+//-----------------------------------------------------------------------
+//                   COMPARISON FUNCTIONS
+//-----------------------------------------------------------------------
 
 // element by element maximum
 template<class Val, int Bits, class Simd_tag>
@@ -144,12 +166,10 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 geq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
-// square root
-template<class Val, int Bits, class Simd_tag>
-simd<Val, Bits, Simd_tag>  
-sqrt(const simd<Val, Bits, Simd_tag>& x);
-
-// round toward nearest integer
+//-----------------------------------------------------------------------
+//                   ROUNDING FUNCTIONS
+//-----------------------------------------------------------------------
+// round toward nearest integer with ties to even
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 round(const simd<Val, Bits, Simd_tag>& x);
@@ -169,6 +189,9 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 trunc(const simd<Val, Bits, Simd_tag>& x);
 
+//-----------------------------------------------------------------------
+//                   REDUCE FUNCTIONS
+//-----------------------------------------------------------------------
 // return true if at least element in the vector x is NAN
 template<class Val, int Bits, class Simd_tag>
 bool any_nan(const simd<Val, Bits, Simd_tag>& x);
@@ -183,8 +206,55 @@ bool all(const simd<Val, Bits, Simd_tag>& x);
 template<class Val, int Bits, class Simd_tag>
 bool any(const simd<Val, Bits, Simd_tag>& x);
 
-// print content of a vector to a stream
+//-----------------------------------------------------------------------
+//                   BITWISE MANIPULATION
+//-----------------------------------------------------------------------
+// perform bitwise or operation for all elements in vectors x and y
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+bitwise_or(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// perform bitwise and operation for all elements in vectors x and y
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+bitwise_and(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// perform bitwise xor operation for all elements in vectors x and y
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+bitwise_xor(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// perform not(x[i]) and y[i] for all elements in vectors x and y
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+bitwise_andnot(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// test whether the sign of x is negative; return a vector of floating 
+// point numbers containing -0.0 (when sign bit is set) or 0.0 (otherwise)
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+signbit_base(const simd<Val, Bits, Simd_tag>& x);
+
+//-----------------------------------------------------------------------
+//                   MISCELLANEOUS FUNCTIONS
+//-----------------------------------------------------------------------
+
+// vector of elements in reverse order
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+reverse(const simd<Val, Bits, Simd_tag>& x);
+
+//-----------------------------------------------------------------------
+//                   IO FUNCTIONS
+//-----------------------------------------------------------------------
+
+// save to stream
 template<class Val, int Bits, class Simd_tag>
 std::ostream& operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& x);
+
+// load from stream
+template<class Val, int Bits, class Simd_tag>
+std::istream& operator>>(std::istream& is, simd<Val, Bits, Simd_tag>& x);
+
 
 }}

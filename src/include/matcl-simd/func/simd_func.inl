@@ -24,6 +24,7 @@
 #include "matcl-simd/func/simd_func_def.h"
 #include "matcl-simd/arch/simd_func_impl.h"
 #include "matcl-core/float/float_binary_rep.h"
+#include "matcl-core/IO/scalar_io.h"
 
 namespace matcl { namespace simd
 {
@@ -57,6 +58,46 @@ simd<Val, Bits, Simd_tag>
 ms::reverse(const simd<Val, Bits, Simd_tag>& x)
 {
     return simd_reverse<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>
+ms::signbit_base(const simd<Val, Bits, Simd_tag>& x)
+{
+    return bitwise_and(x, simd<Val, Bits, Simd_tag>::minus_zero());
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>
+ms::bitwise_or(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return simd_bitwise_or<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>
+ms::bitwise_and(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return simd_bitwise_and<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>
+ms::bitwise_xor(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return simd_bitwise_xor<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>
+ms::bitwise_andnot(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return simd_bitwise_andnot<Val, Bits, Simd_tag>::eval(x, y);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -131,6 +172,24 @@ ms::fms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y
                        const simd<Val, Bits, Simd_tag>& z)
 {
     return simd_fms_f<Val, Bits, Simd_tag>::eval(x, y, z);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::fma_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z)
+{
+    return simd_fma_a<Val, Bits, Simd_tag>::eval(x, y, z);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::fms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z)
+{
+    return simd_fms_a<Val, Bits, Simd_tag>::eval(x, y, z);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -269,15 +328,95 @@ template<class Val, int Bits, class Simd_tag>
 std::ostream& ms::operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& x)
 {
     int vec_size    = simd<Val, Bits, Simd_tag>::vector_size;
+    const Val* ptr  = x.get_raw_ptr();
 
-    os << "{" << x.get(0);
+    os << "{";
+    
+    matcl::details::saveload_scalar_helper::eval_save(os, ptr[0]);
 
     for (int i = 1; i < vec_size; ++i)
-        os << ", " << x.get(i);
+    {
+        os << ", ";
+        matcl::details::saveload_scalar_helper::eval_save(os, ptr[i]);
+    };
 
     os << "}";
 
-    return os;
+    return os;        
 };
 
+template<class Val, int Bits, class Simd_tag>
+std::istream& ms::operator>>(std::istream& is, simd<Val, Bits, Simd_tag>& v)
+{
+    using simd_type = simd<Val, Bits, Simd_tag>;
+    int vec_size    = simd_type::vector_size;    
+
+    char c  = 0;
+
+    // consume whitespaces
+    while (is)
+    {
+        is.get(c);
+
+        if (c != ' ' && c != '\t'  && c != '\n')
+            break;
+    }
+    
+    Val nan         = std::numeric_limits<Val>::quiet_NaN();    
+    v               = simd_type(nan);
+
+    if (is.good() == false)
+        return is;
+
+    Val* ptr        = v.get_raw_ptr();
+
+    if (c != '{')
+    {
+        // this is an error
+        is.setstate(std::ios::failbit);
+        return is;
+    }
+
+    char sep    = ' ';
+    char fin    = ' ';
+
+    bool ok     = true;
+    
+    ok &= matcl::details::saveload_scalar_helper::eval_load(is, ptr[0]);
+
+    for (int i = 0; i < vec_size; ++i)
+    {
+        is >> sep;
+
+        if (sep != ',')
+        {
+            // this is an error
+            is.setstate(std::ios::failbit);
+            return is;
+        };
+
+        ok &= matcl::details::saveload_scalar_helper::eval_load(is, ptr[i]);
+    };
+
+    is >> fin;
+
+    if (fin != '}')
+    {
+        // this is an error
+        is.setstate(std::ios::failbit);
+        return is;
+    }
+
+    if (ok == false)
+    {
+        is.setstate(std::ios::failbit);
+        return is;
+    };
+
+    return is;
+};
+
+
+template<class Val, int Bits, class Simd_tag>
+std::istream& operator>>(std::istream& os, simd<Val, Bits, Simd_tag>& x);
 }}

@@ -31,6 +31,18 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_reverse{};
 
 template<class Val, int Bits, class Simd_tag>
+struct simd_bitwise_or{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_bitwise_and{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_bitwise_xor{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_bitwise_andnot{};
+
+template<class Val, int Bits, class Simd_tag>
 struct simd_mult{};
 
 template<class Val, int Bits, class Simd_tag>
@@ -56,6 +68,12 @@ struct simd_fma_f{};
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_fms_f{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_fma_a{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_fms_a{};
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_sum_all{};

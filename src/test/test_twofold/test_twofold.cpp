@@ -33,42 +33,54 @@
 namespace matcl { namespace test
 {
 
-void test::test_fma()
+template<class T>
+struct compare_abs_leq{};
+
+template<class T>
+struct compare_abs_leq<twofold<T>>
 {
-    test_twofold(false).make_fma();
+    using twofold_type = twofold<T>;
+
+    static bool eval(const twofold_type& x1, const twofold_type& x2)
+    {
+        if (std::abs(x1.value) >= std::abs(x2.value))
+            return true;
+        else
+            return false;
+    }
 };
 
-void test::test_double()
-{   
-    test_twofold(true).make_unary();
-    test_twofold(false).make_unary();
+void test::test_fma()
+{
+    test_twofold().make_fma();
+};
 
-    test_twofold(true).make_binary();
-    test_twofold(false).make_binary();
+void test::test_functions()
+{       
+    test_twofold().make_binary();        
+    test_twofold().make_unary();    
 };
 
 void test::test_io()
 {
-    test_twofold(false).make_io();
+    test_twofold().make_io();
 };
 
 void test::test_error()
 {
-    test_twofold(false).make_error();
+    test_twofold().make_error();
 };
-
-test_twofold::test_twofold(bool normalized)
-    :m_normalized(normalized)
-{};
 
 void test_twofold::make_unary()
 {
-    test_functions<double>();
+    test_functions<float>();
+    test_functions<double>();    
 };
 
 void test_twofold::make_binary()
 {
     test_functions_bin<double>();
+    test_functions_bin<float>();
 };
 
 void test_twofold::make_fma()
@@ -80,32 +92,45 @@ void test_twofold::make_fma()
 void test_twofold::make_io()
 {
     test_functions_io<double>();
+    test_functions_io<float>();
 };
 
 void test_twofold::make_error()
 {
-    twofold x   = twofold(1.0, 0.0);
+    out_stream << "\n";
 
-    double e    = matcl::constants::eps();
-    double e2   = e * e;
+    make_error_type<double>();
+    make_error_type<float>();
+};
+
+template<class Float_type>
+void test_twofold::make_error_type()
+{
+    using twofold   = twofold<Float_type>;    
+
+    Float_type e    = matcl::constants::eps<Float_type>();
+    Float_type e2   = e * e;
 
     bool ok     = true;
 
+    Float_type one  = Float_type(1.0);
+    Float_type two  = Float_type(2.0);
+
     for (int mult = 1; mult < 100; ++mult)
     {
-        ok  &= make_error(twofold::normalize_fast(1.0, e2 - e/2.0), mult);    
+        ok  &= make_error(twofold::normalize_fast(one, e2 - e/two), mult);    
 
-        ok  &= make_error(twofold::normalize_fast(1.0, 0.0), mult);
-        ok  &= make_error(twofold::normalize_fast(1.0, e2), mult);
-        ok  &= make_error(twofold::normalize_fast(1.0, -e2), mult);
-        ok  &= make_error(twofold::normalize_fast(1.0, e/2.0 - e2), mult);
-        ok  &= make_error(twofold::normalize_fast(1.0, e2 - e/2.0), mult);    
+        ok  &= make_error(twofold::normalize_fast(one, 0.0), mult);
+        ok  &= make_error(twofold::normalize_fast(one, e2), mult);
+        ok  &= make_error(twofold::normalize_fast(one, -e2), mult);
+        ok  &= make_error(twofold::normalize_fast(one, e/two - e2), mult);
+        ok  &= make_error(twofold::normalize_fast(one, e2 - e/two), mult);    
 
-        ok  &= make_error(twofold::normalize_fast(-1.0, 0.0), mult);
-        ok  &= make_error(twofold::normalize_fast(-1.0, e2), mult);
-        ok  &= make_error(twofold::normalize_fast(-1.0, -e2), mult);
-        ok  &= make_error(twofold::normalize_fast(-1.0, e2 - e/2.0), mult);
-        ok  &= make_error(twofold::normalize_fast(-1.0, e/2.0 - e2), mult);
+        ok  &= make_error(twofold::normalize_fast(-one, 0.0), mult);
+        ok  &= make_error(twofold::normalize_fast(-one, e2), mult);
+        ok  &= make_error(twofold::normalize_fast(-one, -e2), mult);
+        ok  &= make_error(twofold::normalize_fast(-one, e2 - e/two), mult);
+        ok  &= make_error(twofold::normalize_fast(-one, e/two - e2), mult);
     };
 
     if (ok == true)
@@ -114,12 +139,15 @@ void test_twofold::make_error()
         out_stream << "error: FAIL" << "\n";
 };
 
-bool test_twofold::make_error(const twofold& x, int mult)
+template<class Float_type>
+bool test_twofold::make_error(const twofold<Float_type>& x, int mult)
 {
-    double e    = eps(x) * mult;
+    using twofold   = twofold<Float_type>;
 
-    twofold x1  = x + e;
-    twofold x2  = x - e;
+    Float_type e    = eps(x) * mult;
+
+    twofold x1      = x + e;
+    twofold x2      = x - e;
 
     double d1   = float_distance(x, x1);
     double d2   = float_distance(x, x2);
@@ -145,10 +173,9 @@ bool test_twofold::make_error(const twofold& x, int mult)
 template<class T>
 void test_twofold::test_functions()
 {
-    int N   = get_N();
-    int M   = get_M();
+    int N   = get_size();
 
-    using T2    = twofold;
+    using T2    = twofold<T>;
     using TMP   = mp_float;
 
     std::vector<T2> in;
@@ -164,7 +191,7 @@ void test_twofold::test_functions()
     TMP* ptr_out_gen    = out_gen.data();
 
     for (int i = 0; i < N; ++i)
-        ptr_in[i]   = rand_scalar<T2>::make(m_normalized, false);
+        ptr_in[i]   = rand_scalar<T2>::make(true, false);
 
     std::string header  = get_header<T>();
 
@@ -182,24 +209,28 @@ void test_twofold::test_functions()
     dm.disp_header();
 
     test_function<T, T2, TMP, test_functions::Func_uminus_2>
-                (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 0.0);
-    test_function<T, T2, TMP, test_functions::Func_sum>
-                (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 0.0);
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 0.0);
     test_function<T, T2, TMP, test_functions::Func_abs>
-                (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 0.0);
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 0.0);
+
+    // twofold sum is much slower; but this is not a bug in
+    // implementation but a problem with this test (versions for
+    // float and twofold are not equivalent)
+    test_function<T, T2, TMP, test_functions::Func_sum<T>>
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 0.0);
 
     test_function<T, T2, TMP, test_functions::Func_sqrt_1>
-                (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 0.5);
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 0.5);
     test_function<T, T2, TMP, test_functions::Func_sqrt_2>
-                (dm, N, M, ptr_in, ptr_out, ptr_out_gen, 2.0);
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 2.0);
 };
 
 template<class T>
 void test_twofold::test_functions_io()
 {
-    int N   = get_N();
+    int N   = get_size();
 
-    using T2    = twofold;
+    using T2    = twofold<T>;
 
     std::vector<T2> in;
     std::vector<T2> out;
@@ -211,7 +242,7 @@ void test_twofold::test_functions_io()
     T2* ptr_out         = out.data();
 
     for (int i = 0; i < N; ++i)
-        ptr_in[i]   = rand_scalar<T2>::make(m_normalized, false);
+        ptr_in[i]   = rand_scalar<T2>::make(true, false);
 
     std::string header  = get_header<T>();
 
@@ -229,7 +260,7 @@ void test_twofold::test_functions_io()
     dm.disp_header();
 
     test_function_io<T, T2, test_functions::Func_save_load>
-                (dm, N, 1, ptr_in, ptr_out, 0.0);
+                (dm, N, ptr_in, ptr_out, 0.0);
 };
 
 template<class T>
@@ -250,10 +281,9 @@ void test_twofold::test_functions_bin()
 
     dm.disp_header();    
 
-    int N   = get_N();
-    int M   = get_M();
+    int N   = get_size();
 
-    using T2    = twofold;
+    using T2    = twofold<T>;
     using TMP   = mp_float;
 
     std::vector<T2> in_1;
@@ -271,8 +301,14 @@ void test_twofold::test_functions_bin()
     T2* ptr_out      = out.data();
     TMP* ptr_out_gen = out_gen.data();
 
-    test_functions_bin<T, T2, TMP>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_functions_sum_bin<T, T2, TMP>(dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_functions_sum_bin_sort<T, T2, TMP>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
+
+    test_functions_sum_bin<T, T2, TMP>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
+
+    test_functions_bin<T, T2, TMP>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);    
 };
 
 template<class T>
@@ -293,10 +329,9 @@ void test_twofold::test_functions_fma()
 
     dm.disp_header();    
 
-    int N   = get_N();
-    int M   = get_M();
+    int N   = get_size();
 
-    using T2    = twofold;
+    using T2    = twofold<T>;
     using TMP   = mp_float;
 
     std::vector<T> in_1;
@@ -333,11 +368,11 @@ void test_twofold::test_functions_fma()
     };
 
     test_function_fma<T, TMP, test_functions::Func_fma>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_in_3, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_in_3, ptr_out, ptr_out_gen, 0.5);
 };
 
 template<class T, class T2, class TMP>
-void test_twofold::test_functions_bin(formatted_disp& dm, int N, int M, 
+void test_twofold::test_functions_bin(formatted_disp& dm, int N, 
                 T2* in_1, T2* in_2, T2* out, TMP* out_gen)
 {
     T2* ptr_in_1     = in_1;
@@ -347,35 +382,35 @@ void test_twofold::test_functions_bin(formatted_disp& dm, int N, int M,
 
     for (int i = 0; i < N; ++i)
     {
-        ptr_in_1[i] = rand_scalar<T2>::make(m_normalized, false);
-        ptr_in_2[i] = rand_scalar<T2>::make(m_normalized, false);
+        ptr_in_1[i] = rand_scalar<T2>::make(true, false);
+        ptr_in_2[i] = rand_scalar<T2>::make(true, false);
     };
 
     test_function_bin<T, T2, TMP, test_functions::Func_mult_11>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_11>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
 
     test_function_bin<T, T2, TMP, test_functions::Func_mult_12>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.5);
     test_function_bin<T, T2, TMP, test_functions::Func_mult_21>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.5);
     test_function_bin<T, T2, TMP, test_functions::Func_mult_22>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_div_12>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_21>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_22>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
 
-    test_function_bin<T, T2, TMP, test_functions::Func_mult_dekker>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
+    test_function_bin<T, T2, TMP, test_functions::Func_mult_dekker<T>>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
 };
 
 template<class T, class T2, class TMP>
-void test_twofold::test_functions_sum_bin(formatted_disp& dm, int N, int M, 
+void test_twofold::test_functions_sum_bin(formatted_disp& dm, int N, 
                 T2* in_1, T2* in_2, T2* out, TMP* out_gen)
 {
     T2* ptr_in_1     = in_1;
@@ -385,8 +420,8 @@ void test_twofold::test_functions_sum_bin(formatted_disp& dm, int N, int M,
 
     for (int i = 0; i < N; ++i)
     {
-        T2 v1       = rand_scalar<T2>::make(m_normalized, false);
-        T2 v2       = rand_scalar<T2>::make(m_normalized, true);
+        T2 v1       = rand_scalar<T2>::make(true, false);
+        T2 v2       = rand_scalar<T2>::make(true, true);
         v2          = v2 * v1;
 
         if (i % 2 == 0)
@@ -402,95 +437,142 @@ void test_twofold::test_functions_sum_bin(formatted_disp& dm, int N, int M,
     };
 
     test_function_bin<T, T2, TMP, test_functions::Func_plus_11>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
-    test_function_bin<T, T2, TMP, test_functions::Func_plus_11_sort>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_11>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
-    test_function_bin<T, T2, TMP, test_functions::Func_minus_11_sort>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);    
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_plus_12>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_plus_21>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_plus_22>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
 
     test_function_bin<T, T2, TMP, test_functions::Func_minus_12>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_21>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_22>
-        (dm, N, M, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+};
+
+template<class T, class T2, class TMP>
+void test_twofold::test_functions_sum_bin_sort(formatted_disp& dm, int N, 
+                T2* in_1, T2* in_2, T2* out, TMP* out_gen)
+{
+    T2* ptr_in_1     = in_1;
+    T2* ptr_in_2     = in_2;
+    T2* ptr_out      = out;
+    TMP* ptr_out_gen = out_gen;
+
+    for (int i = 0; i < N; ++i)
+    {
+        T2 v1       = rand_scalar<T2>::make(true, false);
+        T2 v2       = rand_scalar<T2>::make(true, true);
+        v2          = v2 * v1;
+
+        if (compare_abs_leq<T2>::eval(v1, v2) == true)
+        {
+            ptr_in_1[i] = v1;
+            ptr_in_2[i] = v2;
+        }
+        else
+        {
+            ptr_in_1[i] = v2;
+            ptr_in_2[i] = v1;
+        }
+    };
+
+    test_function_bin<T, T2, TMP, test_functions::Func_plus_11_sort>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
+    test_function_bin<T, T2, TMP, test_functions::Func_minus_11_sort>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);    
 };
 
 template<class T, class T2, class TMP, class Func>
-void test_twofold::test_function(formatted_disp& fd, int size, int n_rep, 
+void test_twofold::test_function(formatted_disp& fd, int size, 
                     const T2* in, T2* out, TMP* out_gen, double max_dist)
 {
-    double t0   = test_function_gen<T2, TMP, Func>(size, 1, in, out_gen);
-    double t1   = test_function_base<T, T2, Func>(size, n_rep, in, out);
-    double t2   = test_function_twofold<T2, Func>(size, n_rep, in, out);
-
-    (void)t0;
+    test_function_gen<T2, TMP, Func>(size, 1, in, out_gen);    
+    test_function_twofold<T2, Func>(size, 1, in, out);
 
     double d1;
     bool ok1    = test_equal(size, out, out_gen, max_dist, d1);
     bool ok2    = test_constraints_1<Func>(size, out, in);
     bool ok     = ok1 && ok2;
 
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    double t2   = test_function_twofold<T2, Func>(N, M, in, out);
+    double t1   = test_function_base<T, T2, Func>(N, M, in, out);
+
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t1, t2/t1, d1, status);
 };
 
 template<class T, class T2, class Func>
-void test_twofold::test_function_io(formatted_disp& fd, int size, int n_rep, 
+void test_twofold::test_function_io(formatted_disp& fd, int size, 
                     const T2* in, T2* out, double max_dist)
 {
-    double t1   = test_function_base<T, T2, Func>(size, n_rep, in, out);
-    double t2   = test_function_twofold<T2, Func>(size, n_rep, in, out);
+    test_function_base<T, T2, Func>(size, 1, in, out);
+    test_function_twofold<T2, Func>(size, 1, in, out);
 
     double d1;
     bool ok1    = test_equal(size, out, in, max_dist, d1);
     bool ok     = ok1;
+
+    int N       = get_size_perf();
+    int M       = 10;
+
+    double t1   = test_function_base<T, T2, Func>(N, M, in, out);
+    double t2   = test_function_twofold<T2, Func>(N, M, in, out);
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t1, t2/t1, d1, status);
 };
 
 template<class T, class T2, class TMP, class Func>
-void test_twofold::test_function_bin(formatted_disp& fd, int size, int n_rep, 
-                const T2* in_1, const T2* in_2, T2* out, TMP* out_gen, double max_dist)
+void test_twofold::test_function_bin(formatted_disp& fd, int size, 
+            const T2* in_1, const T2* in_2, T2* out, TMP* out_gen, double max_dist)
 {
-    double t0   = test_function_bin_gen<T2, TMP, Func>(size, 1, in_1, in_2, out_gen);
-    double t1   = test_function_bin_base<T, T2, Func>(size, n_rep, in_1, in_2, out);
-    double t2   = test_function_bin_twofold<T2, Func>(size, n_rep, in_1, in_2, out);
-
-    (void)t0;
+    test_function_bin_gen<T2, TMP, Func>(size, 1, in_1, in_2, out_gen);
+    test_function_bin_twofold<T2, Func>(size, 1, in_1, in_2, out);
 
     double d1;
     bool ok1    = test_equal(size, out, out_gen, max_dist, d1);
     bool ok2    = test_constraints_2<Func>(size, out, in_1, in_2);
     bool ok     = ok1 && ok2;
 
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    double t1   = test_function_bin_base<T, T2, Func>(N, M, in_1, in_2, out);
+    double t2   = test_function_bin_twofold<T2, Func>(N, M, in_1, in_2, out);
+
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t1, t2/t1, d1, status);
 };
 
 template<class T, class TMP, class Func>
-void test_twofold::test_function_fma(formatted_disp& fd, int size, int n_rep, 
-                const T* in_1, const T* in_2, const T* in_3, T* out, TMP* out_gen, double max_dist)
+void test_twofold::test_function_fma(formatted_disp& fd, int size, 
+                    const T* in_1, const T* in_2, const T* in_3, T* out, 
+                    TMP* out_gen, double max_dist)
 {
-    double t0   = test_function_fma_gen<T, TMP, Func>(size, 1, in_1, in_2, in_3, out_gen);
-    double t1   = test_function_fma_base<T, Func>(size, n_rep, in_1, in_2, in_3, out);
-    double t2   = test_function_fma_twofold<T, Func>(size, n_rep, in_1, in_2, in_3, out);
-
-    (void)t0;
+    test_function_fma_gen<T, TMP, Func>(size, 1, in_1, in_2, in_3, out_gen);
+    test_function_fma_twofold<T, Func>(size, 1, in_1, in_2, in_3, out);
 
     double d1;
     bool ok1    = test_equal_fma(size, out, out_gen, max_dist, d1);
     bool ok     = ok1;
+
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    double t1   = test_function_fma_base<T, Func>
+                        (N, M, in_1, in_2, in_3, out);
+    double t2   = test_function_fma_twofold<T, Func>
+                        (N, M, in_1, in_2, in_3, out);
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t1, t2/t1, d1, status);
@@ -500,9 +582,26 @@ template<class Twofold>
 struct convert_to_mp{};
 
 template<>
-struct convert_to_mp<twofold>
+struct convert_to_mp<twofold<double>>
 {
-    using twofold_type  = twofold;
+    using twofold_type  = twofold<double>;
+
+    static mp_float eval(const twofold_type& x)
+    {
+        precision prec = precision(53 * 3);
+
+        if (matcl::is_finite(x.value) == false)
+            return mp_float(x.value, prec);
+
+        mp_float res    = plus(mp_float(x.value), mp_float(x.error), prec);
+        return res;
+    };
+};
+
+template<>
+struct convert_to_mp<twofold<float>>
+{
+    using twofold_type  = twofold<float>;
 
     static mp_float eval(const twofold_type& x)
     {
@@ -547,7 +646,8 @@ struct convert_to_mp<float>
 };
 
 template<class T2, class TMP, class Func>
-double test_twofold::test_function_gen(int size, int n_rep, const T2* in, TMP* out)
+double test_twofold::test_function_gen(int size, int n_rep, 
+                                    const T2* in, TMP* out)
 {
     tic();
 
@@ -557,8 +657,7 @@ double test_twofold::test_function_gen(int size, int n_rep, const T2* in, TMP* o
         {
             T2 xc       = Func::convert_arg_1(in[i]);
             TMP x       = convert_to_mp<T2>::eval(xc);
-            TMP res     = Func::eval(x);
-            out[i]      = res;
+            out[i]      = Func::eval(x);
         };
     };
 
@@ -567,9 +666,12 @@ double test_twofold::test_function_gen(int size, int n_rep, const T2* in, TMP* o
 };
 
 template<class T, class T2, class Func>
-double test_twofold::test_function_base(int size, int n_rep, const T2* in, T2* out)
+double test_twofold::test_function_base(int size, int n_rep, 
+                                       const T2* in, T2* out)
 {
     tic();
+
+    volatile T val  = 0;
 
     for(int j = 0; j < n_rep; ++j)
     {
@@ -577,6 +679,8 @@ double test_twofold::test_function_base(int size, int n_rep, const T2* in, T2* o
         {
             out[i].value= Func::eval(in[i].value);
         };
+
+        val += out[0].value;
     };
 
     double t = toc();
@@ -584,18 +688,23 @@ double test_twofold::test_function_base(int size, int n_rep, const T2* in, T2* o
 };
 
 template<class T2, class Func>
-double test_twofold::test_function_twofold(int size, int n_rep, const T2* in, T2* out)
+double test_twofold::test_function_twofold(int size, int n_rep, 
+                                          const T2* in, T2* out)
 {
     tic();
+
+    using T = typename T2::float_type;
+
+    volatile T val  = 0;
 
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i = 0; i < size; ++i)
         {
-            T2 x        = in[i];
-            T2 res      = Func::eval(x);
-            out[i]      = res;
+            out[i]      = Func::eval(in[i]);
         };
+
+        val += out[0].value;
     };
 
     double t = toc();
@@ -603,7 +712,8 @@ double test_twofold::test_function_twofold(int size, int n_rep, const T2* in, T2
 };
 
 template<class T2, class TMP, class Func>
-double test_twofold::test_function_bin_gen(int size, int n_rep, const T2* in1, const T2* in2, TMP* out)
+double test_twofold::test_function_bin_gen(int size, int n_rep, 
+                        const T2* in1, const T2* in2, TMP* out)
 {
     tic();
 
@@ -625,9 +735,12 @@ double test_twofold::test_function_bin_gen(int size, int n_rep, const T2* in1, c
 };
 
 template<class T, class T2, class Func>
-double test_twofold::test_function_bin_base(int size, int n_rep, const T2* in1, const T2* in2, T2* out)
+double test_twofold::test_function_bin_base(int size, int n_rep, 
+                        const T2* in1, const T2* in2, T2* out)
 {
     tic();
+
+    volatile T val  = 0;
 
     for(int j = 0; j < n_rep; ++j)
     {
@@ -635,6 +748,8 @@ double test_twofold::test_function_bin_base(int size, int n_rep, const T2* in1, 
         {
             out[i].value = Func::eval(in1[i].value, in2[i].value);
         };
+
+        val += out[0].value;
     };
 
     double t = toc();
@@ -642,19 +757,23 @@ double test_twofold::test_function_bin_base(int size, int n_rep, const T2* in1, 
 };
 
 template<class T2, class Func>
-double test_twofold::test_function_bin_twofold(int size, int n_rep, const T2* in1, const T2* in2, T2* out)
+double test_twofold::test_function_bin_twofold(int size, int n_rep, 
+                                 const T2* in1, const T2* in2, T2* out)
 {
     tic();
+
+    using T = typename T2::float_type;
+
+    volatile T val  = 0;
 
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i = 0; i < size; ++i)
         {
-            T2 x1       = in1[i];
-            T2 x2       = in2[i];
-            T2 res      = Func::eval(x1, x2);
-            out[i]      = res;
+            out[i]      = Func::eval(in1[i], in2[i]);
         };
+
+        val += out[0].value;
     };
 
     double t = toc();
@@ -695,13 +814,16 @@ double test_twofold::test_function_fma_base(int size, int n_rep, const T* in1,
 {
     tic();
 
+    volatile T val  = 0;
+
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i = 0; i < size; ++i)
         {
-            T res   = Func::eval(in1[i], in2[i], in3[i]);
-            out[i]  = res;
+            out[i]  = Func::eval(in1[i], in2[i], in3[i]);
         };
+
+        val += out[0];
     };
 
     double t = toc();
@@ -709,21 +831,21 @@ double test_twofold::test_function_fma_base(int size, int n_rep, const T* in1,
 };
 
 template<class T, class Func>
-double test_twofold::test_function_fma_twofold(int size, int n_rep, const T* in1, 
-                                               const T* in2, const T* in3, T* out)
+double test_twofold::test_function_fma_twofold(int size, int n_rep, 
+                    const T* in1, const T* in2, const T* in3, T* out)
 {
     tic();
+
+    volatile T val  = 0;
 
     for(int j = 0; j < n_rep; ++j)
     {
         for (int i = 0; i < size; ++i)
         {
-            T x1        = in1[i];
-            T x2        = in2[i];
-            T x3        = in3[i];
-            T res       = Func::eval_twofold(x1, x2, x3);
-            out[i]      = res;
+            out[i]      = Func::eval_twofold(in1[i], in2[i], in3[i]);
         };
+
+        val += out[0];
     };
 
     double t = toc();
@@ -731,7 +853,8 @@ double test_twofold::test_function_fma_twofold(int size, int n_rep, const T* in1
 };
 
 template<class T2, class TMP>
-bool test_twofold::test_equal(int size, const T2* res, const TMP* res_gen, double max_dist, double& dist)
+bool test_twofold::test_equal(int size, const T2* res, const TMP* res_gen, 
+                              double max_dist, double& dist)
 {
     bool eq         = true;
     dist            = 0.0;
@@ -749,7 +872,8 @@ bool test_twofold::test_equal(int size, const T2* res, const TMP* res_gen, doubl
 }
 
 template<class T2>
-bool test_twofold::test_equal(int size, const T2* res, const T2* res_gen, double max_dist, double& dist)
+bool test_twofold::test_equal(int size, const T2* res, const T2* res_gen, 
+                              double max_dist, double& dist)
 {
     bool eq         = true;
     dist            = 0.0;
@@ -767,7 +891,8 @@ bool test_twofold::test_equal(int size, const T2* res, const T2* res_gen, double
 }
 
 template<class T, class TMP>
-bool test_twofold::test_equal_fma(int size, const T* res, const TMP* res_gen, double max_dist, double& dist)
+bool test_twofold::test_equal_fma(int size, const T* res, const TMP* res_gen, 
+                                  double max_dist, double& dist)
 {
     bool eq         = true;
     dist            = 0.0;
@@ -799,7 +924,8 @@ bool test_twofold::test_constraints_1(int size, const T2* res, const T2* in)
 }
 
 template<class Func, class T2>
-bool test_twofold::test_constraints_2(int size, const T2* res, const T2* in1, const T2* in2)
+bool test_twofold::test_constraints_2(int size, const T2* res, 
+                                      const T2* in1, const T2* in2)
 {
     bool ok         = true;
 
@@ -816,11 +942,22 @@ template<class T>
 struct required_precision_test{};
 
 template<>
-struct required_precision_test<twofold>
+struct required_precision_test<twofold<double>>
 {
     static int eval()
     {
-        return 2 * 52 + 1;
+        size_t prec = precision::precision_double() * 2 - 1;
+        return (int)prec;
+    }
+};
+
+template<>
+struct required_precision_test<twofold<float>>
+{
+    static int eval()
+    {
+        size_t prec = precision::precision_float() * 2 - 1;
+        return (int)prec;
     }
 };
 
@@ -847,7 +984,8 @@ struct required_precision_test_fma<float>
 };
 
 template<class T2, class TMP>
-bool test_twofold::test_equal(const T2& res, const TMP& res_gen, double max_dist, double& dist)
+bool test_twofold::test_equal(const T2& res, const TMP& res_gen, 
+                              double max_dist, double& dist)
 {
     dist = 0.0;
 
@@ -866,13 +1004,15 @@ bool test_twofold::test_equal(const T2& res, const TMP& res_gen, double max_dist
 
     if (is_nan(dist) == true)
     {
-        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " 
+        //          << res_mp - res_gen << "\n";
         return false;
     };
 
     if (dist > max_dist)
     {
-        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " 
+        //          << res_mp - res_gen << "\n";
         return false;
     }
     else
@@ -880,7 +1020,8 @@ bool test_twofold::test_equal(const T2& res, const TMP& res_gen, double max_dist
 }
 
 template<class T2>
-bool test_twofold::test_equal(const T2& res, const T2& res_gen, double max_dist, double& dist)
+bool test_twofold::test_equal(const T2& res, const T2& res_gen, 
+                              double max_dist, double& dist)
 {
     dist = 0.0;
 
@@ -898,13 +1039,15 @@ bool test_twofold::test_equal(const T2& res, const T2& res_gen, double max_dist,
 
     if (is_nan(dist) == true)
     {
-        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " 
+        //          << res_mp - res_gen << "\n";
         return false;
     };
 
     if (dist > max_dist)
     {
-        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " 
+        //          << res_mp - res_gen << "\n";
         return false;
     }
     else
@@ -912,7 +1055,8 @@ bool test_twofold::test_equal(const T2& res, const T2& res_gen, double max_dist,
 }
 
 template<class T, class TMP>
-bool test_twofold::test_equal_fma(const T& res, const TMP& res_gen, double max_dist, double& dist)
+bool test_twofold::test_equal_fma(const T& res, const TMP& res_gen, 
+                                  double max_dist, double& dist)
 {
     dist = 0.0;
 
@@ -931,13 +1075,15 @@ bool test_twofold::test_equal_fma(const T& res, const TMP& res_gen, double max_d
 
     if (is_nan(dist) == true)
     {
-        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " 
+        //          << res_mp - res_gen << "\n";
         return false;
     };
 
     if (dist > max_dist)
     {
-        //std::cout << dist << " " << res_mp << " " << res_gen << " " << res_mp - res_gen << "\n";
+        //std::cout << dist << " " << res_mp << " " << res_gen << " " 
+        //          << res_mp - res_gen << "\n";
         return false;
     }
     else
@@ -962,7 +1108,8 @@ bool test_twofold::test_constraints_elem_1(const T2& res, const T2& in1)
 }
 
 template<class Func, class T2>
-bool test_twofold::test_constraints_elem_2(const T2& res, const T2& in1, const T2& in2)
+bool test_twofold::test_constraints_elem_2(const T2& res, 
+                               const T2& in1, const T2& in2)
 {
     {
         bool ok = is_normalized(res);
@@ -996,7 +1143,7 @@ bool test_twofold::is_normalized(const T2& res)
     return ok;
 };
 
-int test_twofold::get_N() const
+int test_twofold::get_size() const
 {
     #ifdef _DEBUG
         return 10000;
@@ -1005,25 +1152,25 @@ int test_twofold::get_N() const
     #endif
 };
 
-int test_twofold::get_M() const
+int test_twofold::get_size_perf() const
+{
+    return 1000;
+}
+
+int test_twofold::get_num_rep() const
 {
     #ifdef _DEBUG
-        return 1;
-    #else
         return 100;
+    #else
+        return 100000;
     #endif
+
 }
 
 template<class T>
 std::string test_twofold::get_header() const
 {
     std::string ret;
-
-    if (m_normalized)
-        ret = "normalized ";
-    else
-        ret = "not normalized ";
-
     ret += typeid(T).name();
 
     return ret;

@@ -33,37 +33,17 @@ int rand_scalar_base::rand_pow(int min_exp, int max_exp)
 };
 
 //--------------------------------------------------------------------------
-//                         twofold
-//--------------------------------------------------------------------------
-twofold rand_scalar<twofold>::make(bool normalized, bool sec_od_sum)
-{
-    double val  = rand_scalar<double>::make_value(sec_od_sum);
-
-    double err  = rand();
-    double mult = rand_mult(normalized);
-
-    return twofold::normalize(val, err * mult * val);
-};
-
-double rand_scalar<twofold>::rand_mult(bool normalized)
-{
-    if (normalized == true)
-        return std::numeric_limits<double>::epsilon()/2;
-
-    int pow     = rand_pow(-20, -1);
-    double max  = std::ldexp(1.0, pow);
-    double mult = rand() * max;
-
-    return mult;
-};
-
-//--------------------------------------------------------------------------
 //                         double
 //--------------------------------------------------------------------------
 double rand_scalar<double>::make(bool sec_od_sum)
 {
     double val  = make_value(sec_od_sum);
     return val;
+};
+
+double rand_scalar<double>::rand()
+{
+    return matcl::rand();
 };
 
 double rand_scalar<double>::make_value(bool second_of_sum)
@@ -126,6 +106,11 @@ float rand_scalar<float>::make(bool sec_od_sum)
 {
     float val  = make_value(sec_od_sum);
     return val;
+};
+
+float rand_scalar<float>::rand()
+{
+    return matcl::frand();
 };
 
 float rand_scalar<float>::make_value(bool second_of_sum)

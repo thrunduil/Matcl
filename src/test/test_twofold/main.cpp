@@ -19,6 +19,7 @@
  */
 
 #include "test_twofold.h"
+#include "test_twofold_simd.h"
 #include "matcl-core/IO/logger.h"
 #include "matcl-core/float/twofold.h"
 
@@ -41,11 +42,16 @@ int main(int argc, const char* argv[])
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
         };
-        
+
         matcl::test::test_error();
+        matcl::test::test_error_simd();
+        
         matcl::test::test_io();
-        matcl::test::test_double();
+        matcl::test::test_io_simd();
+
+        matcl::test::test_functions();                
         matcl::test::test_fma();
+        matcl::test::test_functions_simd();
 
         std::cout << "\n";
         std::cout << "finished" << "\n";
