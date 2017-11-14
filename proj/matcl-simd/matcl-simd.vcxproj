@@ -58,6 +58,7 @@
     <ClInclude Include="..\..\src\include\matcl-simd\default_simd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\default_simd_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex.h" />
@@ -80,6 +81,8 @@
     <None Include="..\..\src\include\matcl-simd\complex\simd_128_compl.inl" />
     <None Include="..\..\src\include\matcl-simd\complex\simd_256_compl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_estrin.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_horner.inl" />
     <None Include="..\..\src\include\matcl-simd\func\simd_func.inl" />
     <None Include="..\..\src\include\matcl-simd\func\simd_func_complex.inl" />
   </ItemGroup>

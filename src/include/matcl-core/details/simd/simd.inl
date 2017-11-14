@@ -23,13 +23,13 @@
 #include "matcl-core/details/simd/simd.h"
 #include "matcl-simd/simd.h"
 
-namespace matcl
+namespace matcl { namespace simd
 {
 
 force_inline
-double simd::fma_f(const double& x, const double& y, const double& z)
+double details::fma_f(double x, double y, double z)
 {
-    using simd_type = matcl::simd::default_simd_type<double>::type;
+    using simd_type = matcl::simd::simd<double,128,sse_tag>;
 
     simd_type xs(x);
     simd_type ys(y);
@@ -40,9 +40,9 @@ double simd::fma_f(const double& x, const double& y, const double& z)
 };
 
 force_inline
-float simd::fma_f(const float& x, const float& y, const float& z)
+float details::fma_f(float x, float y, float z)
 {
-    using simd_type = matcl::simd::default_simd_type<float>::type;
+    using simd_type = matcl::simd::simd<float,128,sse_tag>;
 
     simd_type xs(x);
     simd_type ys(y);
@@ -53,9 +53,9 @@ float simd::fma_f(const float& x, const float& y, const float& z)
 }
 
 force_inline
-double simd::fms_f(const double& x, const double& y, const double& z)
+double details::fms_f(double x, double y, double z)
 {
-    using simd_type = matcl::simd::default_simd_type<double>::type;
+    using simd_type = matcl::simd::simd<double,128,sse_tag>;
 
     simd_type xs(x);
     simd_type ys(y);
@@ -66,9 +66,9 @@ double simd::fms_f(const double& x, const double& y, const double& z)
 }
 
 force_inline
-float simd::fms_f(const float& x, const float& y, const float& z)
+float details::fms_f(float x, float y, float z)
 {
-    using simd_type = matcl::simd::default_simd_type<float>::type;
+    using simd_type = matcl::simd::simd<float,128,sse_tag>;
 
     simd_type xs(x);
     simd_type ys(y);
@@ -78,4 +78,4 @@ float simd::fms_f(const float& x, const float& y, const float& z)
     return ret.first();
 }
 
-}
+}}

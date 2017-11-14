@@ -1290,10 +1290,11 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double fma_f(double x, double y, double z)
     {
-        // do not use std::fma, this function is incredibly slow on VS
-
-        #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fma_f(x, y, z);
+        // do not use FMA instruction even if is available
+        // VS has problems with optimizing away casts float/sse 
+        
+        #if MATCL_ARCHITECTURE_HAS_FMA && false
+            return simd::details::fma_f(x, y, z);
         #else
             return x * y + z;
         #endif
@@ -1301,10 +1302,11 @@ namespace scal_func
 
     force_inline float fma_f(float x, float y, float z)
     {
-        // do not use std::fma, this function is incredibly slow on VS
-
-        #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fma_f(x, y, z);
+        // do not use FMA instruction even if is available
+        // VS has problems with optimizing away casts float/sse 
+        
+        #if MATCL_ARCHITECTURE_HAS_FMA && false
+            return simd::details::fma_f(x, y, z);
         #else
             return x * y + z;
         #endif
@@ -1313,20 +1315,22 @@ namespace scal_func
     //--------------------------------------------------------------------
     force_inline double fms_f(double x, double y, double z)
     {
-        // do not use std::fma, this function is incredibly slow on VS
-
-        #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fms_f(x, y, z);
+        // do not use FMA instruction even if is available
+        // VS has problems with optimizing away casts float/sse 
+        
+        #if MATCL_ARCHITECTURE_HAS_FMA && false
+            return simd::details::fms_f(x, y, z);
         #else
             return x * y - z;
         #endif
     };
     force_inline float fms_f(float x, float y, float z)
     {
-        // do not use std::fma, this function is incredibly slow on VS
-
-        #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fms_f(x, y, z);
+        // do not use FMA instruction even if is available
+        // VS has problems with optimizing away casts float/sse 
+        
+        #if MATCL_ARCHITECTURE_HAS_FMA && false
+            return simd::details::fms_f(x, y, z);
         #else
             return x * y - z;
         #endif
@@ -1338,7 +1342,7 @@ namespace scal_func
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fma_f(x, y, z);
+            return simd::details::fma_f(x, y, z);
         #else
             return fma_dekker(x, y, z);
         #endif
@@ -1349,7 +1353,7 @@ namespace scal_func
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fma_f(x, y, z);
+            return simd::details::fma_f(x, y, z);
         #else
             return fma_dekker(x, y, z);
         #endif
@@ -1361,7 +1365,7 @@ namespace scal_func
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fms_f(x, y, z);
+            return simd::details::fms_f(x, y, z);
         #else
             return fma_dekker(x, y, -z);
         #endif
@@ -1371,7 +1375,7 @@ namespace scal_func
         // do not use std::fma, this function is incredibly slow on VS
 
         #if MATCL_ARCHITECTURE_HAS_FMA
-            return simd::fms_f(x, y, z);
+            return simd::details::fms_f(x, y, z);
         #else
             return fma_dekker(x, y, -z);
         #endif
