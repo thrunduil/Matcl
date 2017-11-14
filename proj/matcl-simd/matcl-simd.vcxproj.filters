@@ -49,6 +49,9 @@
     <Filter Include="Source Files\include\poly">
       <UniqueIdentifier>{468ea40b-3fa4-4024-a8d3-0a95ba7c8c07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\details\poly">
+      <UniqueIdentifier>{3db239f4-a75b-4015-9b27-4842a1fc0f50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-simd\config.h">
@@ -74,9 +77,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_impl.h">
       <Filter>Source Files\include\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h">
-      <Filter>Source Files\include\details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_256.h">
       <Filter>Source Files\include\arch\sse</Filter>
@@ -147,9 +147,6 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_float_256_func.h">
       <Filter>Source Files\include\arch\avx\func_complex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
@@ -198,6 +195,15 @@
     <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h">
       <Filter>Source Files\include\poly</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h">
+      <Filter>Source Files\include\details\poly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\arch\sse\simd_128.inl">
@@ -234,7 +240,13 @@
       <Filter>Source Files\include\arch\sse\func_complex</Filter>
     </None>
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl">
-      <Filter>Source Files\include\details</Filter>
+      <Filter>Source Files\include\details\poly</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_estrin.inl">
+      <Filter>Source Files\include\details\poly</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_horner.inl">
+      <Filter>Source Files\include\details\poly</Filter>
     </None>
   </ItemGroup>
 </Project>

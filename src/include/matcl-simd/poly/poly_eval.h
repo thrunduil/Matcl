@@ -29,8 +29,26 @@ namespace matcl { namespace simd
 template<class Float_type, class ... Args>
 Float_type  short_horner(Float_type x, Args ... coef);
 
-template<int Poly_size, class Float_type>
-Float_type  horner(Float_type x, const Float_type* poly);
+template<int Poly_size, class Arg_type, class Coef_type>
+Arg_type    horner(Arg_type x, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    horner(Arg_type x, int poly_size, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    horner_abs(Arg_type x, int poly_size, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    twofold_horner(Arg_type x, int poly_size, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    horner_cond(Arg_type x, int poly_size, const Coef_type* poly);
+
+template<int Poly_size, class Arg_type, class Coef_type>
+Arg_type    estrin(Arg_type x, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    estrin(Arg_type x, int poly_size, const Coef_type* poly);
 
 #if 0
 // evaluate a polynomial at point x using the Horner's scheme
