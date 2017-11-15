@@ -26,7 +26,10 @@
 #include "matcl-core/details/float/helpers.h"
 
 // most of algorithms are modified versions of algorithms
-// from 'Twofold fast arithmetic', E. Latkin, 2014.
+// from:
+//  [1]  "Twofold fast arithmetic", E. Latkin, 2014.
+//  [2]. "Tight and rigourous error bounds for basic building blocks of 
+//       double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
 namespace matcl
 {
 
@@ -57,14 +60,14 @@ template<class Float_type>
 force_inline twofold<Float_type> 
 twofold<Float_type>::normalize_fast(const Float_type& val, const Float_type& err)
 {
-    return twofold_plus_sorted(val, err);
+    return twofold_sum_sorted(val, err);
 }
 
 template<class Float_type>
 force_inline twofold<Float_type>
 twofold<Float_type>::normalize(const Float_type& val, const Float_type& err)
 {
-    return twofold_plus(val, err);
+    return twofold_sum(val, err);
 }
 
 template<class Float_type>
@@ -88,7 +91,7 @@ bool twofold<Float_type>::is_finite() const
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::twofold_plus_sorted(const Float_type& a, const Float_type& b)
+matcl::twofold_sum_sorted(const Float_type& a, const Float_type& b)
 {
     Float_type val  = a + b;
     Float_type b2   = val - a;
@@ -99,7 +102,7 @@ matcl::twofold_plus_sorted(const Float_type& a, const Float_type& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::twofold_plus(const Float_type& a, const Float_type& b)
+matcl::twofold_sum(const Float_type& a, const Float_type& b)
 {
     Float_type val  = a + b;
     Float_type b2   = val - a;
@@ -176,20 +179,28 @@ template<class Float_type>
 force_inline twofold<Float_type> 
 matcl::operator+(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
-    twofold<Float_type> z0  = twofold_plus(a.value, b.value);
-    twofold<Float_type> z1  = twofold_plus(a.error, b.error);
+    // relativ error is bounded by 3u^2/(1-4u) < 4u^2 = 1e^2
+    // where u is unit roundoff in base precision (1/2 eps), this bound need
+    // not be optimal
+    // see "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu
 
-    z1          = z0.error + z1;
-    z1          = z0.value + z1;
+    twofold<Float_type> z0  = twofold_sum(a.value, b.value);
+    twofold<Float_type> z1  = twofold_sum(a.error, b.error);
 
-    return z1;
+    Float_type c            = z0.error + z1.value;
+    twofold<Float_type> v   = twofold_sum_sorted(z0.value, c);
+
+    Float_type w            = z1.error + v.error;
+    twofold<Float_type> r   = twofold_sum_sorted(v.value, w);
+    return r;
 };
 
 template<class Float_type>
 force_inline twofold<Float_type> 
 matcl::operator+(const twofold<Float_type>& a, const Float_type& b)
 {
-    twofold<Float_type> z0  = twofold_plus(a.value, b);
+    twofold<Float_type> z0  = twofold_sum(a.value, b);
     return twofold<Float_type>::normalize_fast(z0.value, a.error + z0.error);
 }
 
@@ -197,7 +208,7 @@ template<class Float_type>
 force_inline twofold<Float_type> 
 matcl::operator+(const Float_type& a, const twofold<Float_type>& b)
 {
-    twofold<Float_type> z0  = twofold_plus(a, b.value);
+    twofold<Float_type> z0  = twofold_sum(a, b.value);
     return twofold<Float_type>::normalize_fast(z0.value, b.error + z0.error);
 }
 
@@ -208,10 +219,12 @@ matcl::operator-(const twofold<Float_type>& a, const twofold<Float_type>& b)
     twofold<Float_type> z0  = twofold_minus(a.value, b.value);
     twofold<Float_type> z1  = twofold_minus(a.error, b.error);
 
-    z1          = z0.error + z1;
-    z1          = z0.value + z1;
+    Float_type c            = z0.error + z1.value;
+    twofold<Float_type> v   = twofold_sum_sorted(z0.value, c);
 
-    return z1;
+    Float_type w            = z1.error + v.error;
+    twofold<Float_type> r   = twofold_sum_sorted(v.value, w);
+    return r;
 };
 
 template<class Float_type>
@@ -241,18 +254,17 @@ template<class Float_type>
 force_inline twofold<Float_type> 
 matcl::operator*(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 6/4 ulp if FMA is available, 7/4 ulp otherwise,
+    // error can be reduced further to 5/4 ulp at the cost of one multiplication
+    // and one addition
     twofold<Float_type> p00 = twofold_mult(a.value, b.value);
 
     Float_type p01  = a.value * b.error;
-    Float_type p10  = a.error * b.value;
-    Float_type p11  = a.error * b.error;
-
-    Float_type val  = p00.value;
-    Float_type err1 = p00.error + p11;
-    Float_type err2 = p01 + p10;
-    Float_type err  = err1 + err2;
-
-    return twofold<Float_type>::normalize_fast(val, err);
+    Float_type err  = fma_f(a.error, b.value, p01);
+    err             = err + p00.error;
+    return twofold<Float_type>::normalize_fast(p00.value, err);
 }
 
 template<class Float_type>
@@ -263,11 +275,19 @@ matcl::operator*(const twofold<Float_type>& a, const Float_type& b)
 
     twofold<Float_type> p00 = twofold_mult(a.value, b);
 
-    Float_type p10  = a.error * b;
-    Float_type val  = p00.value;
-    Float_type err  = p00.error + p10;
-
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 1/2 ulp if FMA is available, 3/4 ulp otherwise, 
+    Float_type val          = p00.value;
+    Float_type err          = fma_f(a.error, b, p00.error);
     return twofold<Float_type>::normalize_fast(val, err);
+
+    // more accurate version of this function, relative error is 3/8 ulp
+    // 1 ulp is enough so we do not use this algorithm
+    //twofold<Float_type> p00 = twofold_mult(a.value, b);
+    //twofold<Float_type> t   = twofold_sum_sorted(p00.value, a.error * b);
+    //twofold<Float_type> z   = twofold_sum_sorted(t.value, t.error + p00.error);
+    //return z;
 }
 
 template<class Float_type>
@@ -281,46 +301,61 @@ template<class Float_type>
 force_inline twofold<Float_type>
 matcl::operator/(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 15/4 ulp
+
+    using twofold_t = matcl::twofold<Float_type>;
     namespace mrd   = matcl::raw::details;
 
-    Float_type z0   = a.value / b.value;
-    Float_type r0   = - details::func_fms_a<Float_type>::eval(z0, b.value, a.value);
-    Float_type r1   = - details::func_fms_a<Float_type>::eval(z0, b.error, a.error);
-    Float_type c0   = r0 + r1;
-    Float_type d0   = b.value + b.error;
-    Float_type z1   = c0 / d0;
+    Float_type val  = a.value / b.value;
+    twofold_t r     = b * val;
+    Float_type pi   = a.value - r.value;
+    Float_type d_l  = a.error - r.error;
+    Float_type d    = pi + d_l;
+    Float_type err  = d / b.value;
 
-    return twofold<Float_type>::normalize_fast(z0, z1);
+    return twofold<Float_type>::normalize_fast(val, err);
 }
 
 template<class Float_type>
 force_inline twofold<Float_type> 
 matcl::operator/(const twofold<Float_type>& a, const Float_type& b)
 {
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 3/4 ulp
+
     namespace mrd   = matcl::raw::details;
+    using twofold_t = twofold<Float_type>;
 
-    Float_type z0   = a.value / b;
-    Float_type r    = - details::func_fms_a<Float_type>::eval(z0, b, a.value);
-    Float_type c    = r + a.error;
-    Float_type z1   = c / b;
-
-    return twofold<Float_type>::normalize_fast(z0, z1);
+    Float_type val  = a.value / b;
+    twofold_t pi    = twofold_mult(val, b);
+    Float_type dh   = a.value - pi.value;
+    Float_type dt   = dh - pi.error;
+    Float_type d    = dt + a.error;
+    Float_type err  = d / b;
+    return twofold<Float_type>::normalize_fast(val, err);
 }
 
 template<class Float_type>
 force_inline twofold<Float_type> 
 matcl::operator/(const Float_type& a, const twofold<Float_type>& b)
 {
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 15/4 ulp
+
+    using twofold_t = matcl::twofold<Float_type>;
     namespace mrd   = matcl::raw::details;
 
-    Float_type z0   = a / b.value;
-    Float_type r0   = - details::func_fms_a<Float_type>::eval(z0, b.value, a);
-    Float_type r1   = - z0 * b.error;
-    Float_type c0   = r0 + r1;
-    Float_type d0   = b.value + b.error;
-    Float_type z1   = c0 / d0;
+    Float_type val  = a / b.value;
+    twofold_t r     = b * val;
+    Float_type pi   = a - r.value;
+    Float_type d    = pi - r.error;
+    Float_type err  = d / b.value;
 
-    return twofold<Float_type>::normalize_fast(z0, z1);
+    return twofold<Float_type>::normalize_fast(val, err);
 }
 
 template<class Float_type>

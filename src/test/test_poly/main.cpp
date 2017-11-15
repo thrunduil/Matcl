@@ -18,8 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "test_twofold.h"
-#include "test_twofold_simd.h"
+#include "test_poly.h"
 #include "matcl-core/IO/logger.h"
 #include "matcl-core/float/twofold.h"
 
@@ -43,15 +42,11 @@ int main(int argc, const char* argv[])
             set_logger(log);
         };
         
-        matcl::test::test_functions();                
-        matcl::test::test_functions_simd();        
-        matcl::test::test_fma();        
-
-        matcl::test::test_error();
-        matcl::test::test_error_simd();
+        matcl::test::test_poly_cond();
+        matcl::test::test_poly();
         
-        matcl::test::test_io();
-        matcl::test::test_io_simd();
+        matcl::test::test_poly_dyn(true);
+        matcl::test::test_poly_dyn(false);        
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

@@ -313,23 +313,18 @@ struct eval_estrin<Trans, 1, Arg, Coef>
 template<class Trans, class Arg, class Coef>
 struct eval_estrin2
 {
-    //TODO
-    static const int max_pow    = 10;
+    static const int max_pow            = 64;
+    static const int horner_threshold   = 16;
 
     force_inline
     static Arg eval(Arg x, int size, const Coef* poly)
     {
+        if (size < horner_threshold)
+            return horner(x, size, poly);
+
         Arg xpow[max_pow];
         xpow[0] = x;
 
-        switch (size)
-        {
-            case 1:
-                return Arg(Trans::eval(poly[0]));
-            case 2:
-                return eval_estrin<Trans, 2, Arg, Coef>::eval_rec(xpow, poly);
-        };        
-        
         int pow, level;
         get_pow_level(size, pow, level);
 
@@ -355,13 +350,8 @@ struct eval_estrin2
 
     static Arg eval_rec(const Arg* xpow, int size, const Coef* poly)
     {        
-        switch (size)
-        {
-            case 1:
-                return Arg(Trans::eval(poly[0]));
-            case 2:
-                return eval_estrin<Trans, 2, Arg, Coef>::eval_rec(xpow, poly);
-        };        
+        if (size < horner_threshold)
+            return horner(xpow[0], size, poly);
         
         int pow, level;
         get_pow_level(size, pow, level);
@@ -385,8 +375,6 @@ struct eval_estrin2
 
     static Arg eval_rec2(const Arg* xpow, int size, int level, const Coef* poly)
     {
-        //this function is recursive and cannot be inlined
-
         switch(level)
         {
             case 0:
@@ -472,8 +460,6 @@ struct eval_estrin2
 
     static void get_pow_level(int size, int& pow, int& level)
     {
-        //TODO
-
         pow     = 2;
         level   = 1;
 
@@ -496,18 +482,18 @@ struct eval_estrin2
 namespace matcl
 {
 
-template<int Poly_size, class Arg, class Coef>
+template<int Poly_size, class Arg_type, class Coef_type>
 force_inline
-Arg simd::estrin(Arg x, const Coef* poly)
+Arg_type simd::estrin(Arg_type x, const Coef_type* poly)
 {
-    return details::eval_estrin<details::trans_id, Poly_size, Arg, Coef>
+    return details::eval_estrin<details::trans_id, Poly_size, Arg_type, Coef_type>
                         ::eval(x, poly);
 }
 
-template<class Arg, class Coef>
-Arg simd::estrin(Arg x, int poly_size, const Coef* poly)
+template<class Arg_type, class Coef_type>
+Arg_type simd::estrin(Arg_type x, int poly_size, const Coef_type* poly)
 {
-    return details::eval_estrin2<details::trans_id, Arg, Coef>
+    return details::eval_estrin2<details::trans_id, Arg_type, Coef_type>
                 ::eval(x, poly_size, poly);
 }
 

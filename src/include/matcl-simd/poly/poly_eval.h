@@ -26,70 +26,137 @@
 namespace matcl { namespace simd
 {
 
-template<class Float_type, class ... Args>
-Float_type  short_horner(Float_type x, Args ... coef);
+//-----------------------------------------------------------------------
+//                      EVALUATION OF POLYNOMIALS
+//-----------------------------------------------------------------------
+// evaluation of a polynomial P(x) = sum_{i = 0}^{N - 1} a_i * x^i
 
-template<int Poly_size, class Arg_type, class Coef_type>
+// Template arguments:
+//  N           - number of coefficients of the polynomial
+//  Arg_type    - floating point type (float, double, or a simd type)
+//  Coef_type   - floating point type of polynomial coefficients,
+//                  this type must be convertible to Arg_type
+
+// evaluate a polynomial at point x using the Horner's scheme
+//      res = small_horner(x, a0, a1, ..., a_N-1)
+// where ai is the i-th coefficientof the polynomial
+//
+// Template arguments:
+//  Arg_type    - floating point type (float, double, or a simd type)
+//  Args...     - floating point type of a polynomial coefficient,
+//                  this type must be convertible to Arg_type
+template<class Arg_type, class ... Args>
+force_inline
+Arg_type    small_horner(Arg_type x, Args ... coef);
+
+// evaluate a polynomial at point x using the Horner's scheme
+// polynomial is represented as an array of size N:
+//      poly = {a_0, a_1, ..., a_{N-1}}
+template<int N, class Arg_type, class Coef_type>
+force_inline
 Arg_type    horner(Arg_type x, const Coef_type* poly);
 
+// evaluate a polynomial at point x using the Horner's scheme
+// polynomial is represented as an array of size N:
+//      poly = {a_0, a_1, ..., a_{N-1}}
 template<class Arg_type, class Coef_type>
-Arg_type    horner(Arg_type x, int poly_size, const Coef_type* poly);
+Arg_type    horner(Arg_type x, int N, const Coef_type* poly);
 
-template<class Arg_type, class Coef_type>
-Arg_type    horner_abs(Arg_type x, int poly_size, const Coef_type* poly);
-
-template<class Arg_type, class Coef_type>
-Arg_type    twofold_horner(Arg_type x, int poly_size, const Coef_type* poly);
-
-template<class Arg_type, class Coef_type>
-Arg_type    horner_cond(Arg_type x, int poly_size, const Coef_type* poly);
-
-template<int Poly_size, class Arg_type, class Coef_type>
+// evaluate a polynomial at point x using the Estrin's scheme
+// polynomial is represented as an array of size N:
+//      poly = {a_0, a_1, ..., a_{N-1}}
+//
+// Note:
+//  this function is generally faster than horner function for 
+//  sufficiently large polynomials (N > 10), but is less accurate
+template<int N, class Arg_type, class Coef_type>
+force_inline
 Arg_type    estrin(Arg_type x, const Coef_type* poly);
 
+// evaluate a polynomial at point x using the Horner's scheme
+// polynomial is represented as an array of size N:
+//      poly = {a_0, a_1, ..., a_{N-1}}
+//
+// Note:
+//  this function can be must faster than horner function for 
+//  sufficiently large polynomials (N > 100), but is less accurate.
 template<class Arg_type, class Coef_type>
-Arg_type    estrin(Arg_type x, int poly_size, const Coef_type* poly);
+Arg_type    estrin(Arg_type x, int N, const Coef_type* poly);
 
-#if 0
-// evaluate a polynomial at point x using the Horner's scheme
-//
-//      res = sum_{i = 0}^{N - 1} a_i * x^i
-//
-// polynomial is represented as an array
+// evaluate a polynomial at point x using the compensated Horner's scheme
+// polynomial is represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
 //
-// Template arguments:
-//  Poly_size   - number of coefficients (N) of the polynomial
-//  Float_type  - floating point type (float, double, or a simd type)
-template<int Poly_size, class Float_type>
-Float_type  horner(const Float_type* poly, Float_type x);
+// Note:
+//  this function is evaluates a polynomial with high accuracy:
+//      |p(x) - p_ap(x)|/|p(x)| <= u + phi * u^2
+// where p(x) is the true value, p_ap(x) is computed, u is the unit
+// roundoff, phi = b(n)*cond(p,x) * u^2, b(n) ~ 4n^2, and cond(p,x) is the
+// condition number of p as returned by horner_apriori_cond function.
+// Thus, if p is not too ill-conditioned, then p_app(x) is calculated with
+// full full accuracy (0.5 ulp error). This function is however more costly,
+// than the horner function (3-8 times slower)
+//
+// References:
+//  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
+//      P. Langlois, N. Louvet, 2006
+template<class Arg_type, class Coef_type>
+Arg_type    compensated_horner(Arg_type x, int N, const Coef_type* poly);
+
+// return the condition number of a polynomial at point x evaluated using
+// the Horner's method. 
+// The relative accuracy of computed polynomial p_ap(x) is given by
+//      |p(x) - p_ap(x)| / |p(x)| <= a(2N) * cond(p, x) * u + O(u^2)
+// where p(x) is the true value, cond(p, x) is returned condition number
+// u is the unit roundoff (half of the machine epsilon), and a(2N) = 2N/(1-2Nu) ~ 2N.
+//
+// The condition number cond(p, x) is given by:
+//      cond(p, x) = sum_{i = 0}^{N - 1} |a_i| * |x|^i / |p(x)| 
+//                := |p|(|x|) / p(x)
+//
+// Note:
+//  this is an a priori bound and so takes no account of the actual rounding
+//  errors that occur, therefore can be too pessimistic.
+template<class Arg_type, class Coef_type>
+Arg_type    horner_apriori_cond(Arg_type x, int N, const Coef_type* poly);
+
+// return the condition number of a polynomial at point x evaluated using
+// the Horner's method as in function horner_apriori_cond; this function
+// additionally returns |p|(|x|) in 'val_abs' argument and p(x) in 'val'
+// argument
+template<class Arg_type, class Coef_type>
+Arg_type    horner_apriori_cond(Arg_type x, int N, const Coef_type* poly,
+                                Arg_type& val, Arg_type& val_abs);
 
 // evaluate a polynomial at point x using the Horner's scheme
-//
-//      res = sum_{i = 0}^{N - 1} |a_i| * x^i
-//
-// coefficients of the polynomial are constructed from absolute values
-// of given polynomial, represented as an array:
+// polynomial is represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
+// this function also returns aposteriori absolute forward error
+// estimator 'error', such that:
+//      |res - p(x) | < 'error'
+// where res is the computed value, p(x) is true value
+template<class Arg_type, class Coef_type>
+Arg_type    horner_and_error(Arg_type x, int N, const Coef_type* poly,
+                Arg_type& error);
+
+// evaluate a polynomial at point x using the compensated Horner's scheme
+// as in case of the function compensated_horner function, but slightly
+// more accurately; polynomial is represented as an array of size N:
+//      poly = {a_0, a_1, ..., a_{N-1}}
+// this function also returns aposteriori absolute forward error
+// estimator 'error', such that:
+//      |res - p(x) | < 'error'
+// where res is the computed value, p(x) is true value
+// if returned value of 'is_exactly_rounded' argument is true, then the
+// result is proven to be correct up to 1/2 ulp.
 //
-// Template arguments:
-//  Poly_size   - number of coefficients (N) of the polynomial
-//  Float_type  - floating point type (float, double, or a simd type)
-template<int Poly_size, class Float_type>
-Float_type  horner_abs(const Float_type* poly, Float_type x);
+// References:
+//  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
+//      P. Langlois, N. Louvet, 2006
+template<class Arg_type, class Coef_type>
+Arg_type    compensated_horner_and_error(Arg_type x, int N, const Coef_type* poly,
+                Arg_type& error, bool& is_exactly_rounded);
 
-template<int Poly_size, class Float_type>
-Float_type  twofold_horner(const Float_type* poly, Float_type x,
-                twofold<Float_type>* err);
-
-// return the condition number of a polynomial at point x; 
-// The relative accuracy of computed polynomial p_app(x) is given by
-//      |p(x) - p_app(x)| / |p(x)| <= cond(p, x) + O(u^2)
-// where p(x) is the true value and cond(p, x) is returned condition number
-template<int Poly_size, class Float_type>
-Float_type  poly_cond(const Float_type* poly, Float_type x);
-
-#endif
 }};
 
 #include "matcl-simd/details/poly/poly_eval.inl"

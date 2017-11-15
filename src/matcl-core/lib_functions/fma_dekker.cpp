@@ -97,7 +97,7 @@ T fma_dekker_double_impl(const T& x, const T& y, const T& z)
     twofold_mult_dekker_double(x, y, xy_val, xy_err);
 
     // form xy_val + z = s_val + s_err
-    twofold<T> s   = twofold_plus(xy_val, z);
+    twofold<T> s   = twofold_sum(xy_val, z);
 
     T res       = xy_err + s.error;
     res         = res + s.value;

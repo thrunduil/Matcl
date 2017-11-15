@@ -64,6 +64,11 @@ namespace matcl { namespace details
             return;
         }
 
+        static void eval_print(std::ostream& os, const T& A)
+        {
+            mr::stream_helpers::write(os, A);
+        };
+
         static bool eval_load(std::istream& is, T& A)
         {
             return mr::stream_helpers::read(is, A);
@@ -89,6 +94,11 @@ namespace matcl { namespace details
             return;
         }
  
+        static void eval_print(std::ostream& os, const T& A)
+        {
+            mr::stream_helpers::write(os, A);
+        };
+
         static bool eval_load(std::istream& is, T& A)
         {
             return mr::stream_helpers::read(is, A);
@@ -116,6 +126,29 @@ namespace matcl { namespace details
         return saveload_scalar_helper_impl<Float_complex>::eval_save(os, A);
     };
 
+    // print
+    void saveload_scalar_helper::eval_print(std::ostream& os, Integer A)
+    {
+        return saveload_scalar_helper_impl<Integer>::eval_print(os, A);
+    };
+    void saveload_scalar_helper::eval_print(std::ostream& os, Float A)
+    {
+        return saveload_scalar_helper_impl<Float>::eval_print(os, A);
+    };
+    void saveload_scalar_helper::eval_print(std::ostream& os, Real A)
+    {
+        return saveload_scalar_helper_impl<Real>::eval_print(os, A);
+    };
+    void saveload_scalar_helper::eval_print(std::ostream& os, const Complex& A)
+    {
+        return saveload_scalar_helper_impl<Complex>::eval_print(os, A);
+    };
+    void saveload_scalar_helper::eval_print(std::ostream& os, const Float_complex& A)
+    {
+        return saveload_scalar_helper_impl<Float_complex>::eval_print(os, A);
+    };
+
+    //load
     bool saveload_scalar_helper::eval_load(std::istream& is, Integer& A)
     {
         return saveload_scalar_helper_impl<Integer>::eval_load(is, A);
@@ -136,12 +169,6 @@ namespace matcl { namespace details
     {
         return saveload_scalar_helper_impl<Float_complex>::eval_load(is, A);
     }
-    /*
-    std::istream& saveload_scalar_helper::eval_load(std::istream& is, Object& A)
-    {
-        return saveload_scalar_helper_impl<Object>::eval_load(is, A);
-    }
-    */
 
     std::string details::to_string_scalar_helper::eval(Integer v)
     {
