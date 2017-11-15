@@ -49,7 +49,7 @@ struct eval_estrin
     static_assert(size2 > 0, "invalid size");
 
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg xpow[max_pow];
         xpow[0] = x;
@@ -75,7 +75,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 8, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg x2      = x * x;
         Arg x4      = x2 * x2;
@@ -110,7 +110,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 7, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg x2      = x * x;
         Arg x4      = x2 * x2;
@@ -144,7 +144,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 6, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg x2      = x * x;
         Arg x4      = x2 * x2;
@@ -177,7 +177,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 5, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {        
         Arg x2      = x * x;
         Arg x4      = x2 * x2;
@@ -208,7 +208,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 4, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg c0   = Arg(Trans::eval(poly[0]));
         Arg c1   = Arg(Trans::eval(poly[1]));
@@ -239,7 +239,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 3, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg c0   = Arg(Trans::eval(poly[0]));
         Arg c1   = Arg(Trans::eval(poly[1]));
@@ -268,7 +268,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 2, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         Arg c0   = Arg(Trans::eval(poly[0]));
         Arg c1   = Arg(Trans::eval(poly[1]));
@@ -291,7 +291,7 @@ template<class Trans, class Arg, class Coef>
 struct eval_estrin<Trans, 1, Arg, Coef>
 {
     force_inline
-    static Arg eval(Arg x, const Coef* poly)
+    static Arg eval(const Arg& x, const Coef* poly)
     {
         (void)x;
         Arg c0   = Arg(Trans::eval(poly[0]));
@@ -317,7 +317,7 @@ struct eval_estrin2
     static const int horner_threshold   = 16;
 
     force_inline
-    static Arg eval(Arg x, int size, const Coef* poly)
+    static Arg eval(const Arg& x, int size, const Coef* poly)
     {
         if (size < horner_threshold)
             return horner(x, size, poly);
@@ -484,14 +484,14 @@ namespace matcl
 
 template<int Poly_size, class Arg_type, class Coef_type>
 force_inline
-Arg_type simd::estrin(Arg_type x, const Coef_type* poly)
+Arg_type simd::estrin(const Arg_type& x, const Coef_type* poly)
 {
     return details::eval_estrin<details::trans_id, Poly_size, Arg_type, Coef_type>
                         ::eval(x, poly);
 }
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::estrin(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::estrin(const Arg_type& x, int poly_size, const Coef_type* poly)
 {
     return details::eval_estrin2<details::trans_id, Arg_type, Coef_type>
                 ::eval(x, poly_size, poly);

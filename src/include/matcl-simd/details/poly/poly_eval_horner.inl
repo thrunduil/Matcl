@@ -37,7 +37,8 @@ template<class Trans, class Arg_type, class Arg1, class ... Args>
 struct eval_small_horner<Trans, Arg_type, Arg1, Args...>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg1 coef1, Args ... coef)
+    static Arg_type eval(const Arg_type& x, const Arg1& coef1, 
+                         const Args& ... coef)
     {
         Arg_type res  = eval_small_horner<Trans, Arg_type, Args...>
                             ::eval(x, coef...);
@@ -51,7 +52,7 @@ template<class Trans, class Arg_type, class Arg1>
 struct eval_small_horner<Trans, Arg_type, Arg1>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg1 coef1)
+    static Arg_type eval(const Arg_type& x, const Arg1& coef1)
     {
         (void)x;
         Arg1 coef_tr    = Trans::eval(coef1);
@@ -66,11 +67,13 @@ template<class Trans, int Poly_size, class Arg_type, class Coef_type>
 struct eval_horner
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res0, 
+                         const Coef_type* poly)
     {
         static const int size_1 = Poly_size/2;
         static const int size_2 = Poly_size - size_1;
 
+        Arg_type res = res0;
         res = eval_horner<Trans, size_1, Arg_type, Coef_type>
                 ::eval(x, res, poly + size_2);
         res = eval_horner<Trans, size_2, Arg_type, Coef_type>
@@ -79,7 +82,7 @@ struct eval_horner
     }
 
     force_inline
-    static Arg_type eval2(Arg_type x, const Coef_type* poly)
+    static Arg_type eval2(const Arg_type& x, const Coef_type* poly)
     {
         Arg_type res    = Arg_type(Trans::eval(poly[Poly_size - 1]));
 
@@ -92,7 +95,8 @@ template<class Trans, class Arg_type, class Coef_type>
 struct eval_horner<Trans, 4, Arg_type, Coef_type>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res, 
+                         const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
@@ -103,7 +107,7 @@ struct eval_horner<Trans, 4, Arg_type, Coef_type>
     }
 
     force_inline
-    static Arg_type eval2(Arg_type x, const Coef_type* poly)
+    static Arg_type eval2(const Arg_type& x, const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
@@ -118,7 +122,8 @@ template<class Trans, class Arg_type, class Coef_type>
 struct eval_horner<Trans, 3, Arg_type, Coef_type>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res, 
+                         const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
@@ -128,7 +133,7 @@ struct eval_horner<Trans, 3, Arg_type, Coef_type>
     }
 
     force_inline
-    static Arg_type eval2(Arg_type x, const Coef_type* poly)
+    static Arg_type eval2(const Arg_type& x, const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
@@ -142,7 +147,8 @@ template<class Trans, class Arg_type, class Coef_type>
 struct eval_horner<Trans, 2, Arg_type, Coef_type>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res, 
+                         const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
@@ -151,7 +157,7 @@ struct eval_horner<Trans, 2, Arg_type, Coef_type>
     }
 
     force_inline
-    static Arg_type eval2(Arg_type x, const Coef_type* poly)
+    static Arg_type eval2(const Arg_type& x, const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
@@ -164,14 +170,15 @@ template<class Trans, class Arg_type, class Coef_type>
 struct eval_horner<Trans, 1, Arg_type, Coef_type>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res, 
+                         const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         return small_horner(x, c0, res);
     }
 
     force_inline
-    static Arg_type eval2(Arg_type x, const Coef_type* poly)
+    static Arg_type eval2(const Arg_type& x, const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
 
@@ -183,7 +190,8 @@ template<class Trans, class Arg_type, class Coef_type>
 struct eval_horner<Trans, 0, Arg_type, Coef_type>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res, 
+                         const Coef_type* poly)
     {
         (void)x;
         (void)poly;
@@ -198,9 +206,11 @@ template<int Poly_size, class Arg_type, class Coef_type>
 struct eval_horner_error
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type abs_x, Arg_type res, 
-                         const Coef_type* poly, Arg_type& mu)
+    static Arg_type eval(const Arg_type& x, const Arg_type& abs_x, 
+                         const Arg_type& res0, const Coef_type* poly, Arg_type& mu)
     {
+        Arg_type res= res0;
+
         Arg_type cl = Arg_type(poly[Poly_size - 1]);
         res         = small_horner(x, cl, res);
 
@@ -216,7 +226,7 @@ template<class Arg_type, class Coef_type>
 struct eval_horner_error<0, Arg_type, Coef_type>
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type abs_x, Arg_type res, 
+    static Arg_type eval(const Arg_type& x, const Arg_type& abs_x, const Arg_type& res, 
                          const Coef_type* poly, Arg_type& mu)
     {
         (void)x;
@@ -236,12 +246,14 @@ struct eval_horner2
     static const int unroll_size    = 8;
 
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, int size, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res0, int size, 
+                         const Coef_type* poly)
     {
         int n1      = size / unroll_size;
         int n2      = size % unroll_size;
 
         const Coef_type* poly_tail   = poly + size;
+        Arg_type res    = res0;
 
         for (int j = 0; j < n1; ++j)
         {
@@ -271,7 +283,7 @@ struct eval_horner_post_cond
     using Trans         = trans_id;
 
     force_inline
-    static Arg_type eval(Arg_type x, int size, const Coef_type* poly,
+    static Arg_type eval(const Arg_type& x, int size, const Coef_type* poly,
                          Arg_type& mu)
     {
         Arg_type abs_x  = details::eval_abs<Arg_type>::eval(x);
@@ -312,11 +324,13 @@ template<class Trans, class Arg_type, class Coef_type>
 struct eval_horner2_compensated
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, int size, const Coef_type* poly)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res0, int size, 
+                         const Coef_type* poly)
     {
         using twofold_type = twofold<Arg_type>;
 
         Arg_type comp   = Arg_type(0.0);
+        Arg_type res    = res0;
 
         for (int i = size - 1; i >= 0; --i)
         {
@@ -340,8 +354,8 @@ template<class Arg_type, class Coef_type>
 struct eval_horner2_compensated_error
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type res, int size, const Coef_type* poly,
-                         Arg_type& res_err, bool& is_exactly_rounded)
+    static Arg_type eval(const Arg_type& x, const Arg_type& res0, int size, 
+                         const Coef_type* poly, Arg_type& res_err, bool& is_exactly_rounded)
     {
         using twofold_type = twofold<Arg_type>;
 
@@ -351,6 +365,7 @@ struct eval_horner2_compensated_error
         Arg_type abs_x      = eval_abs<Arg_type>::eval(x);
         Arg_type comp_b     = Arg_type(0.0);
         Arg_type comp_c     = Arg_type(0.0);
+        Arg_type res        = res0;
 
         for (int i = size - 1; i >= 0; --i)
         {
@@ -407,7 +422,7 @@ struct eval_horner2_compensated_error
     };
 
     force_inline
-    static Arg_type eval_gamma(int k, Arg_type u)
+    static Arg_type eval_gamma(int k, const Arg_type& u)
     {
         Arg_type ku = Arg_type(float(k)) * u;
         Arg_type r  = ku / (Arg_type(1) - ku);
@@ -416,7 +431,7 @@ struct eval_horner2_compensated_error
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type horner_abs(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type horner_abs(const Arg_type& x, int poly_size, const Coef_type* poly)
 {
     Arg_type res = Arg_type(poly[poly_size - 1]);
     res          = details::eval_abs<Arg_type>::eval(res);
@@ -432,7 +447,7 @@ namespace matcl
 
 template<class Arg_type, class ... Args>
 force_inline
-Arg_type simd::small_horner(Arg_type x, Args ... coef)
+Arg_type simd::small_horner(const Arg_type& x, const Args& ... coef)
 {
     return details::eval_small_horner<details::trans_id, Arg_type, Args ...>
                         ::eval(x, coef...);
@@ -440,7 +455,7 @@ Arg_type simd::small_horner(Arg_type x, Args ... coef)
 
 template<int Poly_size, class Arg_type, class Coef_type>
 force_inline
-Arg_type simd::horner(Arg_type x, const Coef_type* poly)
+Arg_type simd::horner(const Arg_type& x, const Coef_type* poly)
 {
     Arg_type res    = Arg_type(poly[Poly_size - 1]);
 
@@ -449,7 +464,7 @@ Arg_type simd::horner(Arg_type x, const Coef_type* poly)
 }
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::horner(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::horner(const Arg_type& x, int poly_size, const Coef_type* poly)
 {
     Arg_type res = Arg_type(poly[poly_size - 1]);
 
@@ -458,7 +473,7 @@ Arg_type simd::horner(Arg_type x, int poly_size, const Coef_type* poly)
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::compensated_horner(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::compensated_horner(const Arg_type& x, int poly_size, const Coef_type* poly)
 {
     Arg_type res = Arg_type(poly[poly_size - 1]);
 
@@ -467,7 +482,7 @@ Arg_type simd::compensated_horner(Arg_type x, int poly_size, const Coef_type* po
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::compensated_horner_and_error(Arg_type x, int N, const Coef_type* poly,
+Arg_type simd::compensated_horner_and_error(const Arg_type& x, int N, const Coef_type* poly,
                 Arg_type& error, bool& is_exactly_rounded)
 {
     Arg_type res = Arg_type(poly[N - 1]);
@@ -477,7 +492,7 @@ Arg_type simd::compensated_horner_and_error(Arg_type x, int N, const Coef_type* 
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::horner_apriori_cond(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::horner_apriori_cond(const Arg_type& x, int poly_size, const Coef_type* poly)
 {
     Arg_type val;
     Arg_type val_abs;
@@ -486,7 +501,7 @@ Arg_type simd::horner_apriori_cond(Arg_type x, int poly_size, const Coef_type* p
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::horner_apriori_cond(Arg_type x, int N, const Coef_type* poly,
+Arg_type simd::horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly,
                                 Arg_type& val, Arg_type& val_abs)
 {
     Arg_type abs_x  = details::eval_abs<Arg_type>::eval(x);
@@ -498,7 +513,7 @@ Arg_type simd::horner_apriori_cond(Arg_type x, int N, const Coef_type* poly,
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::horner_and_error(Arg_type x, int poly_size, const Coef_type* poly,
+Arg_type simd::horner_and_error(const Arg_type& x, int poly_size, const Coef_type* poly,
                                        Arg_type& error)
 {
     Arg_type res = details::eval_horner_post_cond<Arg_type, Coef_type>

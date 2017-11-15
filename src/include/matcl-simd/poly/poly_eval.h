@@ -47,20 +47,20 @@ namespace matcl { namespace simd
 //                  this type must be convertible to Arg_type
 template<class Arg_type, class ... Args>
 force_inline
-Arg_type    small_horner(Arg_type x, Args ... coef);
+Arg_type    small_horner(const Arg_type& x, const Args& ... coef);
 
 // evaluate a polynomial at point x using the Horner's scheme
 // polynomial is represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
 template<int N, class Arg_type, class Coef_type>
 force_inline
-Arg_type    horner(Arg_type x, const Coef_type* poly);
+Arg_type    horner(const Arg_type& x, const Coef_type* poly);
 
 // evaluate a polynomial at point x using the Horner's scheme
 // polynomial is represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
 template<class Arg_type, class Coef_type>
-Arg_type    horner(Arg_type x, int N, const Coef_type* poly);
+Arg_type    horner(const Arg_type& x, int N, const Coef_type* poly);
 
 // evaluate a polynomial at point x using the Estrin's scheme
 // polynomial is represented as an array of size N:
@@ -71,7 +71,7 @@ Arg_type    horner(Arg_type x, int N, const Coef_type* poly);
 //  sufficiently large polynomials (N > 10), but is less accurate
 template<int N, class Arg_type, class Coef_type>
 force_inline
-Arg_type    estrin(Arg_type x, const Coef_type* poly);
+Arg_type    estrin(const Arg_type& x, const Coef_type* poly);
 
 // evaluate a polynomial at point x using the Horner's scheme
 // polynomial is represented as an array of size N:
@@ -81,7 +81,7 @@ Arg_type    estrin(Arg_type x, const Coef_type* poly);
 //  this function can be must faster than horner function for 
 //  sufficiently large polynomials (N > 100), but is less accurate.
 template<class Arg_type, class Coef_type>
-Arg_type    estrin(Arg_type x, int N, const Coef_type* poly);
+Arg_type    estrin(const Arg_type& x, int N, const Coef_type* poly);
 
 // evaluate a polynomial at point x using the compensated Horner's scheme
 // polynomial is represented as an array of size N:
@@ -101,7 +101,7 @@ Arg_type    estrin(Arg_type x, int N, const Coef_type* poly);
 //  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
 //      P. Langlois, N. Louvet, 2006
 template<class Arg_type, class Coef_type>
-Arg_type    compensated_horner(Arg_type x, int N, const Coef_type* poly);
+Arg_type    compensated_horner(const Arg_type& x, int N, const Coef_type* poly);
 
 // return the condition number of a polynomial at point x evaluated using
 // the Horner's method. 
@@ -118,14 +118,14 @@ Arg_type    compensated_horner(Arg_type x, int N, const Coef_type* poly);
 //  this is an a priori bound and so takes no account of the actual rounding
 //  errors that occur, therefore can be too pessimistic.
 template<class Arg_type, class Coef_type>
-Arg_type    horner_apriori_cond(Arg_type x, int N, const Coef_type* poly);
+Arg_type    horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly);
 
 // return the condition number of a polynomial at point x evaluated using
 // the Horner's method as in function horner_apriori_cond; this function
 // additionally returns |p|(|x|) in 'val_abs' argument and p(x) in 'val'
 // argument
 template<class Arg_type, class Coef_type>
-Arg_type    horner_apriori_cond(Arg_type x, int N, const Coef_type* poly,
+Arg_type    horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly,
                                 Arg_type& val, Arg_type& val_abs);
 
 // evaluate a polynomial at point x using the Horner's scheme
@@ -136,7 +136,7 @@ Arg_type    horner_apriori_cond(Arg_type x, int N, const Coef_type* poly,
 //      |res - p(x) | < 'error'
 // where res is the computed value, p(x) is true value
 template<class Arg_type, class Coef_type>
-Arg_type    horner_and_error(Arg_type x, int N, const Coef_type* poly,
+Arg_type    horner_and_error(const Arg_type& x, int N, const Coef_type* poly,
                 Arg_type& error);
 
 // evaluate a polynomial at point x using the compensated Horner's scheme
@@ -154,7 +154,7 @@ Arg_type    horner_and_error(Arg_type x, int N, const Coef_type* poly,
 //  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
 //      P. Langlois, N. Louvet, 2006
 template<class Arg_type, class Coef_type>
-Arg_type    compensated_horner_and_error(Arg_type x, int N, const Coef_type* poly,
+Arg_type    compensated_horner_and_error(const Arg_type& x, int N, const Coef_type* poly,
                 Arg_type& error, bool& is_exactly_rounded);
 
 }};

@@ -39,7 +39,7 @@ template<class Arg_type, class Coef_type>
 struct eval_fma
 {
     force_inline
-    static Arg_type eval(Arg_type x, Arg_type y, Coef_type z)
+    static Arg_type eval(const Arg_type& x, const Arg_type& y, const Coef_type& z)
     {
         return fma_f(x, y, Arg_type(z));
     }
@@ -69,7 +69,7 @@ struct eval_fma<double, double>
 
 template<class T, class TZ>
 force_inline
-T fma(T x, T y, TZ z)
+T fma(const T& x, const T& y, const TZ& z)
 {
     return eval_fma<T, TZ>::eval(x, y, z);
 };
@@ -78,7 +78,7 @@ template<class T>
 struct eval_abs
 {
     force_inline
-    static T eval(T x)
+    static T eval(const T& x)
     {
         return abs(x);
     }
@@ -110,7 +110,7 @@ struct trans_id
 {
     template<class T>
     force_inline
-    static T eval(T arg)
+    static T eval(const T& arg)
     {
         return arg;
     }
@@ -120,7 +120,7 @@ struct trans_abs
 {
     template<class T>
     force_inline
-    static T eval(T arg)
+    static T eval(const T& arg)
     {
         return eval_abs<T>::eval(arg);
     }
@@ -164,7 +164,7 @@ struct eval_lt<matcl::simd::simd<T, Bits, Tag>>
 {
     using simd_type = matcl::simd::simd<T, Bits, Tag>;
 
-    static bool eval(simd_type x, simd_type y)
+    static bool eval(const simd_type& x, const simd_type& y)
     {
         simd_type res = matcl::simd::lt(x, y);
         return all(res);
