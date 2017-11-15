@@ -56,7 +56,7 @@ void test::test_fma()
 };
 
 void test::test_functions()
-{       
+{
     test_twofold().make_binary();        
     test_twofold().make_unary();    
 };
@@ -392,16 +392,16 @@ void test_twofold::test_functions_bin(formatted_disp& dm, int N,
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
 
     test_function_bin<T, T2, TMP, test_functions::Func_mult_12>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.75);
     test_function_bin<T, T2, TMP, test_functions::Func_mult_21>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.75);
     test_function_bin<T, T2, TMP, test_functions::Func_mult_22>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 2.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_div_12>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_21>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_22>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
 
@@ -446,14 +446,14 @@ void test_twofold::test_functions_sum_bin(formatted_disp& dm, int N,
     test_function_bin<T, T2, TMP, test_functions::Func_plus_21>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_plus_22>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_minus_12>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_21>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_22>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
 };
 
 template<class T, class T2, class TMP>

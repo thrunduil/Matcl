@@ -29,33 +29,33 @@ namespace matcl { namespace simd { namespace details
 //-----------------------------------------------------------------------
 //                   SHORT HORNER
 //-----------------------------------------------------------------------
-template<class Trans, class Float_type, class ... Args>
-struct eval_short_horner
+template<class Trans, class Arg_type, class ... Args>
+struct eval_small_horner
 {};
 
-template<class Trans, class Float_type, class Arg1, class ... Args>
-struct eval_short_horner<Trans, Float_type, Arg1, Args...>
+template<class Trans, class Arg_type, class Arg1, class ... Args>
+struct eval_small_horner<Trans, Arg_type, Arg1, Args...>
 {
     force_inline
-    static Float_type eval(Float_type x, Arg1 coef1, Args ... coef)
+    static Arg_type eval(Arg_type x, Arg1 coef1, Args ... coef)
     {
-        Float_type res  = eval_short_horner<Trans, Float_type, Args...>
+        Arg_type res  = eval_small_horner<Trans, Arg_type, Args...>
                             ::eval(x, coef...);
         Arg1 coef_tr    = Trans::eval(coef1);
-        res             = eval_fma<Float_type, Arg1>::eval(res, x, coef_tr);
+        res             = eval_fma<Arg_type, Arg1>::eval(res, x, coef_tr);
         return res;
     }
 };
 
-template<class Trans, class Float_type, class Arg1>
-struct eval_short_horner<Trans, Float_type, Arg1>
+template<class Trans, class Arg_type, class Arg1>
+struct eval_small_horner<Trans, Arg_type, Arg1>
 {
     force_inline
-    static Float_type eval(Float_type x, Arg1 coef1)
+    static Arg_type eval(Arg_type x, Arg1 coef1)
     {
         (void)x;
         Arg1 coef_tr    = Trans::eval(coef1);
-        return Float_type(coef_tr);
+        return Arg_type(coef_tr);
     }
 };
 
@@ -99,7 +99,7 @@ struct eval_horner<Trans, 4, Arg_type, Coef_type>
         Arg_type c2   = Arg_type(Trans::eval(poly[2]));
         Arg_type c3   = Arg_type(Trans::eval(poly[3]));
 
-        return short_horner(x, c0, c1, c2, c3, res);
+        return small_horner(x, c0, c1, c2, c3, res);
     }
 
     force_inline
@@ -110,7 +110,7 @@ struct eval_horner<Trans, 4, Arg_type, Coef_type>
         Arg_type c2   = Arg_type(Trans::eval(poly[2]));
         Arg_type c3   = Arg_type(Trans::eval(poly[3]));
 
-        return short_horner(x, c0, c1, c2, c3);
+        return small_horner(x, c0, c1, c2, c3);
     }
 };
 
@@ -124,7 +124,7 @@ struct eval_horner<Trans, 3, Arg_type, Coef_type>
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
         Arg_type c2   = Arg_type(Trans::eval(poly[2]));
 
-        return short_horner(x, c0, c1, c2, res);
+        return small_horner(x, c0, c1, c2, res);
     }
 
     force_inline
@@ -134,7 +134,7 @@ struct eval_horner<Trans, 3, Arg_type, Coef_type>
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
         Arg_type c2   = Arg_type(Trans::eval(poly[2]));
 
-        return short_horner(x, c0, c1, c2);
+        return small_horner(x, c0, c1, c2);
     }
 };
 
@@ -147,7 +147,7 @@ struct eval_horner<Trans, 2, Arg_type, Coef_type>
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
 
-        return short_horner(x, c0, c1, res);
+        return small_horner(x, c0, c1, res);
     }
 
     force_inline
@@ -156,7 +156,7 @@ struct eval_horner<Trans, 2, Arg_type, Coef_type>
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
         Arg_type c1   = Arg_type(Trans::eval(poly[1]));
 
-        return short_horner(x, c0, c1);
+        return small_horner(x, c0, c1);
     }
 };
 
@@ -167,8 +167,7 @@ struct eval_horner<Trans, 1, Arg_type, Coef_type>
     static Arg_type eval(Arg_type x, Arg_type res, const Coef_type* poly)
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
-
-        return short_horner(x, c0, res);
+        return small_horner(x, c0, res);
     }
 
     force_inline
@@ -176,7 +175,7 @@ struct eval_horner<Trans, 1, Arg_type, Coef_type>
     {
         Arg_type c0   = Arg_type(Trans::eval(poly[0]));
 
-        return short_horner(x, c0);
+        return small_horner(x, c0);
     }
 };
 
@@ -188,6 +187,42 @@ struct eval_horner<Trans, 0, Arg_type, Coef_type>
     {
         (void)x;
         (void)poly;
+        return res;
+    }
+};
+
+//-----------------------------------------------------------------------
+//                   HORNER + ERROR
+//-----------------------------------------------------------------------
+template<int Poly_size, class Arg_type, class Coef_type>
+struct eval_horner_error
+{
+    force_inline
+    static Arg_type eval(Arg_type x, Arg_type abs_x, Arg_type res, 
+                         const Coef_type* poly, Arg_type& mu)
+    {
+        Arg_type cl = Arg_type(poly[Poly_size - 1]);
+        res         = small_horner(x, cl, res);
+
+        Arg_type ar = details::eval_abs<Arg_type>::eval(res);
+        mu          = small_horner(abs_x, ar, mu);
+
+        return eval_horner_error<Poly_size - 1, Arg_type, Coef_type>
+                    ::eval(x, abs_x, res, poly, mu);
+    }
+};
+
+template<class Arg_type, class Coef_type>
+struct eval_horner_error<0, Arg_type, Coef_type>
+{
+    force_inline
+    static Arg_type eval(Arg_type x, Arg_type abs_x, Arg_type res, 
+                         const Coef_type* poly, Arg_type& mu)
+    {
+        (void)x;
+        (void)abs_x;
+        (void)poly;
+        (void)mu;
         return res;
     }
 };
@@ -226,10 +261,55 @@ struct eval_horner2
 };
 
 //-----------------------------------------------------------------------
-//                      HORNER TWOFOLD
+//                      HORNER APOSTERIORI COND
+//-----------------------------------------------------------------------
+template<class Arg_type, class Coef_type>
+struct eval_horner_post_cond
+{
+    static const int unroll_size    = 8;
+
+    using Trans         = trans_id;
+
+    force_inline
+    static Arg_type eval(Arg_type x, int size, const Coef_type* poly,
+                         Arg_type& mu)
+    {
+        Arg_type abs_x  = details::eval_abs<Arg_type>::eval(x);
+        Arg_type res    = Arg_type(poly[size-1]);
+        mu              = details::eval_abs<Arg_type>::eval(res)/Arg_type(2);
+        size            -= 1;
+
+        int n1          = size / unroll_size;
+        int n2          = size % unroll_size;
+
+        const Coef_type* poly_tail   = poly + size;
+
+        for (int j = 0; j < n1; ++j)
+        {
+            poly_tail   = poly_tail - unroll_size;
+            res         = eval_horner_error<unroll_size, Arg_type, Coef_type>
+                                ::eval(x, abs_x, res, poly_tail, mu);            
+        };
+
+        for (int i = n2 - 1; i >= 0; --i)
+        {
+            res         = eval_horner_error<1, Arg_type, Coef_type>
+                                ::eval(x, abs_x, res, poly + i, mu);            
+        }
+
+        Arg_type abs_r  = details::eval_abs<Arg_type>::eval(res);
+        Arg_type u      = details::eval_eps<Arg_type>::eval();
+        mu              = (mu - Arg_type(0.5) * abs_r) * u;
+
+        return res;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                      HORNER COMPENSATED
 //-----------------------------------------------------------------------
 template<class Trans, class Arg_type, class Coef_type>
-struct eval_horner2_twofold
+struct eval_horner2_compensated
 {
     force_inline
     static Arg_type eval(Arg_type x, Arg_type res, int size, const Coef_type* poly)
@@ -242,7 +322,7 @@ struct eval_horner2_twofold
         {
             twofold_type prod   = twofold_mult(res, x);
             Coef_type c         = Trans::eval(poly[i]);
-            twofold_type sum    = twofold_plus(prod.value, Arg_type(c));
+            twofold_type sum    = twofold_sum(prod.value, Arg_type(c));
 
             Arg_type err        = prod.error + sum.error;
             comp                = eval_fma<Arg_type, Arg_type>::eval(comp, x, err);
@@ -253,16 +333,108 @@ struct eval_horner2_twofold
     };
 };
 
+//-----------------------------------------------------------------------
+//                      HORNER COMPENSATED AND ERROR
+//-----------------------------------------------------------------------
+template<class Arg_type, class Coef_type>
+struct eval_horner2_compensated_error
+{
+    force_inline
+    static Arg_type eval(Arg_type x, Arg_type res, int size, const Coef_type* poly,
+                         Arg_type& res_err, bool& is_exactly_rounded)
+    {
+        using twofold_type = twofold<Arg_type>;
+
+        // modified version of the algorithm from "Faithful Polynomial
+        // Evaluation with Compensated Horner Algorithm", P. Langlois, N. Louvet
+
+        Arg_type abs_x      = eval_abs<Arg_type>::eval(x);
+        Arg_type comp_b     = Arg_type(0.0);
+        Arg_type comp_c     = Arg_type(0.0);
+
+        for (int i = size - 1; i >= 0; --i)
+        {
+            // evaluate one term using compensated horner:
+            // [res, err] = res * x + a
+            twofold_type prod   = twofold_mult(res, x);
+            Coef_type c         = poly[i];
+            twofold_type sum    = twofold_sum(prod.value, Arg_type(c));
+            res                 = sum.value;
+            
+            // new coefficient of residual polynomial horner
+            Arg_type err        = prod.error + sum.error;
+
+            // new coefficient of |residual polynomial horner|
+            Arg_type abs_err    = eval_abs<Arg_type>::eval(prod.error)
+                                + eval_abs<Arg_type>::eval(sum.error);
+
+            // evaluate one term of the residual polynomial using horner:
+            comp_c              = eval_fma<Arg_type, Arg_type>
+                                    ::eval(comp_c, x, err);
+
+            // evaluate one term of the |residual polynomial| using horner:
+            comp_b              = eval_fma<Arg_type, Arg_type>
+                                    ::eval(comp_b, abs_x, abs_err);
+        }
+
+        twofold_type sum        = twofold_sum(res, comp_c);
+
+        res         = sum.value;
+        
+        // N is the order of polynomial (the highest power), i.e. N = size - 1
+        // but we have additional term (res)
+        int N       = size;
+
+        Arg_type eps    = eval_eps<Arg_type>::eval();
+        Arg_type u      = eps / Arg_type(2);
+        Arg_type g      = eval_gamma(2 * N - 1, u);
+        Arg_type one    = Arg_type(1);
+        Arg_type N1     = Arg_type(float(N + 1));
+
+        Arg_type a      = (g * comp_b) / (one - N1 * eps);
+
+        res_err         = a + eval_abs<Arg_type>::eval(sum.error);
+        res_err         = res_err / (one - eps);
+
+        Arg_type max_a  = (u / Arg_type(2)) * eval_abs<Arg_type>::eval(res);
+        
+        if (eval_lt<Arg_type>::eval(a, max_a) == true)
+            is_exactly_rounded = true;
+        else
+            is_exactly_rounded = false;
+
+        return res;
+    };
+
+    force_inline
+    static Arg_type eval_gamma(int k, Arg_type u)
+    {
+        Arg_type ku = Arg_type(float(k)) * u;
+        Arg_type r  = ku / (Arg_type(1) - ku);
+        return r;
+    };
+};
+
+template<class Arg_type, class Coef_type>
+Arg_type horner_abs(Arg_type x, int poly_size, const Coef_type* poly)
+{
+    Arg_type res = Arg_type(poly[poly_size - 1]);
+    res          = details::eval_abs<Arg_type>::eval(res);
+
+    return details::eval_horner2<details::trans_abs, Arg_type, Coef_type>
+                ::eval(x, res, poly_size - 1, poly);
+};
+
 }}}
 
 namespace matcl
 {
 
-template<class Float_type, class ... Args>
+template<class Arg_type, class ... Args>
 force_inline
-Float_type simd::short_horner(Float_type x, Args ... coef)
+Arg_type simd::small_horner(Arg_type x, Args ... coef)
 {
-    return details::eval_short_horner<details::trans_id, Float_type, Args ...>
+    return details::eval_small_horner<details::trans_id, Arg_type, Args ...>
                         ::eval(x, coef...);
 };
 
@@ -277,7 +449,6 @@ Arg_type simd::horner(Arg_type x, const Coef_type* poly)
 }
 
 template<class Arg_type, class Coef_type>
-force_inline
 Arg_type simd::horner(Arg_type x, int poly_size, const Coef_type* poly)
 {
     Arg_type res = Arg_type(poly[poly_size - 1]);
@@ -287,35 +458,52 @@ Arg_type simd::horner(Arg_type x, int poly_size, const Coef_type* poly)
 };
 
 template<class Arg_type, class Coef_type>
-force_inline
-Arg_type simd::horner_abs(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::compensated_horner(Arg_type x, int poly_size, const Coef_type* poly)
 {
     Arg_type res = Arg_type(poly[poly_size - 1]);
-    res          = details::eval_abs<Arg_type>::eval(res);
 
-    return details::eval_horner2<details::trans_abs, Arg_type, Coef_type>
+    return details::eval_horner2_compensated<details::trans_id, Arg_type, Coef_type>
                 ::eval(x, res, poly_size - 1, poly);
 };
 
 template<class Arg_type, class Coef_type>
-force_inline
-Arg_type simd::twofold_horner(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::compensated_horner_and_error(Arg_type x, int N, const Coef_type* poly,
+                Arg_type& error, bool& is_exactly_rounded)
 {
-    Arg_type res = Arg_type(poly[poly_size - 1]);
-
-    return details::eval_horner2_twofold<details::trans_id, Arg_type, Coef_type>
-                ::eval(x, res, poly_size - 1, poly);
+    Arg_type res = Arg_type(poly[N - 1]);
+    res          = details::eval_horner2_compensated_error<Arg_type, Coef_type>
+                    ::eval(x, res, N - 1, poly, error, is_exactly_rounded);
+    return res;
 };
 
 template<class Arg_type, class Coef_type>
-Arg_type simd::horner_cond(Arg_type x, int poly_size, const Coef_type* poly)
+Arg_type simd::horner_apriori_cond(Arg_type x, int poly_size, const Coef_type* poly)
+{
+    Arg_type val;
+    Arg_type val_abs;
+
+    return horner_apriori_cond(x, poly_size, poly, val, val_abs);
+};
+
+template<class Arg_type, class Coef_type>
+Arg_type simd::horner_apriori_cond(Arg_type x, int N, const Coef_type* poly,
+                                Arg_type& val, Arg_type& val_abs)
 {
     Arg_type abs_x  = details::eval_abs<Arg_type>::eval(x);
-    Arg_type num    = horner_abs(abs_x, poly_size, poly);
-    Arg_type den    = horner(x, poly_size, poly);    
-    Arg_type aden   = details::eval_abs<Arg_type>::eval(den);
+    val_abs         = details::horner_abs(abs_x, N, poly);
+    val             = horner(x, N, poly);    
+    Arg_type aval   = details::eval_abs<Arg_type>::eval(val);
 
-    return num / aden;
+    return val_abs / aval;
+};
+
+template<class Arg_type, class Coef_type>
+Arg_type simd::horner_and_error(Arg_type x, int poly_size, const Coef_type* poly,
+                                       Arg_type& error)
+{
+    Arg_type res = details::eval_horner_post_cond<Arg_type, Coef_type>
+                    ::eval(x, poly_size, poly, error);
+    return res;
 };
 
 }

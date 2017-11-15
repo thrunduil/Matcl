@@ -77,6 +77,7 @@ T fma(T x, T y, TZ z)
 template<class T>
 struct eval_abs
 {
+    force_inline
     static T eval(T x)
     {
         return abs(x);
@@ -86,6 +87,7 @@ struct eval_abs
 template<>
 struct eval_abs<float>
 {
+    force_inline
     static float eval(float x)
     {
         namespace mrds = matcl::raw::details::scal_func;
@@ -96,6 +98,7 @@ struct eval_abs<float>
 template<>
 struct eval_abs<double>
 {
+    force_inline
     static double eval(double x)
     {
         namespace mrds = matcl::raw::details::scal_func;
@@ -121,6 +124,51 @@ struct trans_abs
     {
         return eval_abs<T>::eval(arg);
     }
+};
+
+template<class T>
+struct eval_eps
+{
+    force_inline
+    static T eval()
+    {
+        return std::numeric_limits<T>::epsilon();
+    }
+};
+
+template<class T, int Bits, class Tag>
+struct eval_eps<matcl::simd::simd<T, Bits, Tag>>
+{
+    using simd_type = matcl::simd::simd<T, Bits, Tag>;
+
+    force_inline
+    static simd_type eval()
+    {
+        T e = eval_eps<T>::eval();
+        return simd_type(e);
+    }
+};
+
+template<class T>
+struct eval_lt
+{
+    force_inline
+    static bool eval(T x, T y)
+    {
+        return x < y;
+    }
+};
+
+template<class T, int Bits, class Tag>
+struct eval_lt<matcl::simd::simd<T, Bits, Tag>>
+{
+    using simd_type = matcl::simd::simd<T, Bits, Tag>;
+
+    static bool eval(simd_type x, simd_type y)
+    {
+        simd_type res = matcl::simd::lt(x, y);
+        return all(res);
+    };
 };
 
 }}}

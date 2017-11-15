@@ -332,12 +332,12 @@ std::ostream& ms::operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& 
 
     os << "{";
     
-    matcl::details::saveload_scalar_helper::eval_save(os, ptr[0]);
+    matcl::details::saveload_scalar_helper::eval_print(os, ptr[0]);
 
     for (int i = 1; i < vec_size; ++i)
     {
         os << ", ";
-        matcl::details::saveload_scalar_helper::eval_save(os, ptr[i]);
+        matcl::details::saveload_scalar_helper::eval_print(os, ptr[i]);
     };
 
     os << "}";

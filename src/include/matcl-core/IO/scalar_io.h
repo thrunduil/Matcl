@@ -30,11 +30,19 @@ namespace matcl { namespace details
 
 struct MATCL_CORE_EXPORT saveload_scalar_helper
 {
+    // save value to stream with full precision
     static void eval_save(std::ostream& os, Integer A);
     static void eval_save(std::ostream& os, Float A);
     static void eval_save(std::ostream& os, Real A);
     static void eval_save(std::ostream& os, const Complex& A);
     static void eval_save(std::ostream& os, const Float_complex& A);
+
+    // save value to stream with current precision
+    static void eval_print(std::ostream& os, Integer A);
+    static void eval_print(std::ostream& os, Float A);
+    static void eval_print(std::ostream& os, Real A);
+    static void eval_print(std::ostream& os, const Complex& A);
+    static void eval_print(std::ostream& os, const Float_complex& A);
 
     // return true if read succeed, otherwise return value 'A'
     // need not be initialized and failbit is set
