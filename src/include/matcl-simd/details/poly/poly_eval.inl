@@ -20,22 +20,5 @@
 
 #pragma once
 
-#include "matcl-core/config.h"
-#include "matcl-core/memory/global_objects.h"
-
-namespace matcl { namespace simd { namespace details
-{
-
-// return x * y + z; use FMA instruction if available, otherwise
-// evaluate according to definition (with two roundings)
-inline double fma_f(double x, double y, double z);
-inline float  fma_f(float x, float y, float z);
-
-// return x * y - z; use FMA instruction if available, otherwise
-// evaluate according to definition (with two roundings) 
-inline double fms_f(double x, double y, double z);
-inline float  fms_f(float x, float y, float z);
-
-}}}
-
-#include "matcl-core/details/simd/simd.inl"
+#include "matcl-simd/details/poly/poly_eval_estrin.inl"
+#include "matcl-simd/details/poly/poly_eval_horner.inl"

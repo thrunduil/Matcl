@@ -67,8 +67,8 @@ get_value(const matcl::simd::simd<TB, Bits, Tag>& x)
 
 
 // missing functions
-inline mp_float twofold_plus(const mp_float& a, const mp_float& b)         { return a + b; };
-inline mp_float twofold_plus_sorted(const mp_float& a, const mp_float& b)  { return a + b; };
+inline mp_float twofold_sum(const mp_float& a, const mp_float& b)          { return a + b; };
+inline mp_float twofold_sum_sorted(const mp_float& a, const mp_float& b)   { return a + b; };
 inline mp_float twofold_minus(const mp_float& a, const mp_float& b)        { return a - b; };
 inline mp_float twofold_mult(const mp_float& a, const mp_float& b)         { return a * b; };
 inline mp_float twofold_mult_dekker(const mp_float& a, const mp_float& b)  { return a * b; };
@@ -106,8 +106,8 @@ mp_float twofold_minus_sorted(const mp_float& a, const mp_float& b)
 };
 
 // double
-inline double twofold_plus(double a, double b)         { return a + b; };
-inline double twofold_plus_sorted(double a, double b)  { return a + b; };
+inline double twofold_sum(double a, double b)          { return a + b; };
+inline double twofold_sum_sorted(double a, double b)   { return a + b; };
 inline double twofold_minus(double a, double b)        { return a - b; };
 inline double twofold_mult(double a, double b)         { return a * b; };
 inline double twofold_mult_dekker(double a, double b)  { return a * b; };
@@ -148,14 +148,14 @@ twofold_mult_dekker(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd:
 
 template<class T, int Bits, class Tag>
 matcl::simd::simd<T, Bits, Tag>
-twofold_plus(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
+twofold_sum(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
 { 
     return a + b; 
 };
 
 template<class T, int Bits, class Tag>
 matcl::simd::simd<T, Bits, Tag>
-twofold_plus_sorted(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
+twofold_sum_sorted(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
 { 
     return a + b; 
 };
@@ -188,8 +188,8 @@ double twofold_minus_sorted(double a, double b)
 };
 
 //float
-inline float twofold_plus(float a, float b)         { return a + b; };
-inline float twofold_plus_sorted(float a, float b)  { return a + b; };
+inline float twofold_sum(float a, float b)         { return a + b; };
+inline float twofold_sum_sorted(float a, float b)  { return a + b; };
 inline float twofold_minus(float a, float b)        { return a - b; };
 inline float twofold_mult(float a, float b)         { return a * b; };
 inline float twofold_mult_dekker(float a, float b)  { return a * b; };
@@ -206,25 +206,25 @@ inline float twofold_minus_sorted(float a, float b)
 
 template<class Float>
 force_inline
-twofold<Float> twofold_plus(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_sum(const twofold<Float>& a, const twofold<Float>& b)
 { 
-    return matcl::twofold_plus(a.value, b.value); 
+    return matcl::twofold_sum(a.value, b.value); 
 };
 
 template<class Float>
 force_inline
-twofold<Float> twofold_plus_sorted(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_sum_sorted(const twofold<Float>& a, const twofold<Float>& b)
 { 
-    return matcl::twofold_plus_sorted(a.value, b.value); 
+    return matcl::twofold_sum_sorted(a.value, b.value); 
 };
 
 template<class T, int Bits, class Tag>
 force_inline
 twofold<matcl::simd::simd<T, Bits, Tag>> 
-twofold_plus_sorted(const twofold<matcl::simd::simd<T, Bits, Tag>>& a, 
+twofold_sum_sorted(const twofold<matcl::simd::simd<T, Bits, Tag>>& a, 
                      const twofold<matcl::simd::simd<T, Bits, Tag>>& b)
 { 
-    return matcl::twofold_plus_sorted(a.value, b.value); 
+    return matcl::twofold_sum_sorted(a.value, b.value); 
 };
 
 template<class Float>
@@ -394,7 +394,7 @@ struct Func_plus_11
     template<class T>    
     static T eval(const T& x1, const T& x2)
     {
-        return twofold_plus(x1, x2);
+        return twofold_sum(x1, x2);
     }
 
     template<class T2>
@@ -420,7 +420,7 @@ struct Func_plus_11_sort
     template<class T>    
     static T eval(const T& x1, const T& x2)
     {
-        return twofold_plus_sorted(x1, x2);
+        return twofold_sum_sorted(x1, x2);
     }
 
     template<class T2>
