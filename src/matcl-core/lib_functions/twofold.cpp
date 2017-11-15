@@ -95,10 +95,10 @@ void details::func_save<T, false>::eval(std::ostream& os, const twofold<T>& x)
 {
     os << "{";
     
-    details::saveload_scalar_helper::eval_save(os, x.value);
+    details::saveload_scalar_helper::eval_print(os, x.value);
     os << ", ";
     
-    details::saveload_scalar_helper::eval_save(os, x.error);
+    details::saveload_scalar_helper::eval_print(os, x.error);
     os << "}";
 };
 

@@ -48,21 +48,21 @@ struct object_interface : matcl::details::object_interface_impl
         return v.disp(p, w, at, value_pos);
     };
 
-    void write(const dynamic::object& v, std::ostream& os) const
+    void write(const dynamic::object& v, std::ostream& os) const override
     {
         os << v;
     }
 
-    void read(dynamic::object& v, std::istream& is) const
+    void read(dynamic::object& v, std::istream& is) const override
     {
         is >> v;
     }
 
-    void read_type(dynamic::Type& ty, std::istream& is) const
+    void read_type(dynamic::Type& ty, std::istream& is) const override
     {
         is >> ty;
     }
-    void write_type(const dynamic::Type& ty, std::ostream& os) const
+    void write_type(const dynamic::Type& ty, std::ostream& os) const override
     {
         os << ty;
     }

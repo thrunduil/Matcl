@@ -787,8 +787,8 @@ void disp_stream_impl::do_preparse_labels(const disp_stream* user, Integer mr, I
     m_column_labels = std::vector<std::string>();
     m_row_labels    = std::vector<std::string>();
 
-    //m_row_labels.resize(mr);
-    //m_column_labels.resize(mc);
+    m_row_labels.reserve(mr);
+    m_column_labels.reserve(mc);
 
     it.begin_col_headers();
     for (Integer i = 0; i < mc; ++i)

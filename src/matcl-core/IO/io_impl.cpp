@@ -25,6 +25,7 @@
 #include "matcl-core/details/integer.h"
 #include "matcl-core/IO/scalar_io.h"
 #include "matcl-core/details/object_interface.h"
+#include "matcl-core/details/scalfunc_real.h"
 
 #include <iomanip>
 #include "boost/io/ios_state.hpp"
@@ -533,9 +534,11 @@ void stream_helpers::write(std::ostream& os, Integer x)
 
 void stream_helpers::write(std::ostream& os, Real val)
 {
-    if (std::isfinite(val) == false)
+    namespace mrds = matcl::raw::details::scal_func;
+
+    if (mrds::finite(val) == false)
     {
-        if (std::isinf(val))
+        if (mrds::isinf(val))
         {
             if (val < 0)
                 os << "-Inf";
@@ -547,17 +550,17 @@ void stream_helpers::write(std::ostream& os, Real val)
     }
     else
     {
-        int precision = std::numeric_limits<Real>::max_digits10;
-        //std::streamsize old_prec    = os.precision();
-        os << std::setprecision(precision) << std::scientific << val;
+        os << val;
     };
 }
 
 void stream_helpers::write(std::ostream& os, Float val)
 {
-    if (std::isfinite(val) == false)
+    namespace mrds = matcl::raw::details::scal_func;
+
+    if (mrds::finite(val) == false)
     {
-        if (std::isinf(val))
+        if (mrds::isinf(val))
         {
             if (val < 0)
                 os << "-Inf";
@@ -569,8 +572,7 @@ void stream_helpers::write(std::ostream& os, Float val)
     }
     else
     {
-        int precision = std::numeric_limits<Float>::max_digits10;
-        os << std::setprecision(precision) << std::scientific << val;
+        os << val;
     };
 };
 
