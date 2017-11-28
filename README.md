@@ -110,6 +110,4 @@ for single and double precision floating point numbers and complex numbers.
 
 ## Licence
 
-Copyright (C) 2017  Paweł Kowal
-
 This library is published under GPL licence.
