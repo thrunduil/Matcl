@@ -30,6 +30,7 @@
 namespace matcl { namespace test
 {
 
+double test_iaca(double x);
 void test_poly();
 void test_poly_cond();
 void test_poly_dyn(bool pow2);
@@ -225,8 +226,8 @@ struct Func_horn_twofold
     force_inline
     static TS eval(const TS& arg)
     {
-        TS res   = simd::compensated_horner<TS, T>(arg, Poly::size, Poly::polynomial);
-        return res;
+        auto res   = simd::compensated_horner<TS, T>(arg, Poly::size, Poly::polynomial);
+        return res.value;
     };
 };
 

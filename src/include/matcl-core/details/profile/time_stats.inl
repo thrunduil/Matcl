@@ -20,30 +20,67 @@
 
 #pragma once
 
-#include "matcl-scalar/config.h"
-#include "matcl-core/matrix/scalar_types.h"
-#include "matcl-core/profile/timer.h"
+#include "matcl-core/profile/time_stats.h"
+
+#include <algorithm>
 
 namespace matcl
 {
 
-// start global timer
-MATCL_SCALAR_EXPORT 
-void                    tic();
+inline
+time_stats::time_stats()
+{
+    clear();
+}
 
-// stop global timer and return time elapsed from last tic in seconds
-// time is measured with high resolution (less than microsecond)
-MATCL_SCALAR_EXPORT 
-Real                    toc();
+inline
+void time_stats::clear()
+{
+    m_min   = std::numeric_limits<double>::infinity();
+    m_max   = 0.0;
+    m_sum   = 0.0;
+    m_sum2  = 0.0;
+    m_cases = 0.0;
+};
 
-// stop global timer and return time elapsed from last tic in seconds
-// represented as string
-MATCL_SCALAR_EXPORT 
-std::string             tocstr();
+inline
+void time_stats::report(double t)
+{
+    m_min   = std::min(m_min, t);
+    m_max   = std::max(m_max, t);
+    m_sum   += t;
+    m_sum2  += t*t;
+    m_cases += 1.0;
+}
 
-// stop global timer; calculatr time elapsed from last tic in seconds
-// and print elapsed time on global_output_stream
-MATCL_SCALAR_EXPORT 
-void                    tocdisp();
+inline
+double time_stats::mean() const
+{
+    return m_sum / m_cases;
+}
+
+inline
+double time_stats::std() const
+{
+    return std::sqrt(this->variance());
+}
+
+inline
+double time_stats::variance() const
+{
+    return m_sum2 / m_cases - std::pow(m_sum / m_cases, 2);
+}
+
+inline
+double time_stats::minimum() const
+{
+    return m_min;
+}
+
+inline
+double time_stats::maximum() const
+{
+    return m_max;
+}
 
 };

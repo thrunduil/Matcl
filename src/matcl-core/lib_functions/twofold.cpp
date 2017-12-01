@@ -42,7 +42,7 @@ T details::func_float_distance<T, false>::eval(const twofold<T>& x, const twofol
     T d_err_2;
 
     T d1   = mrds::float_distance(x.value, y.value);    
-    T eps  = matcl::constants::eps<T>();
+    T eps  = matcl::constants::eps<T>() * T(0.5);
 
     if (d1 > 1.0)
         return d1 / eps;
@@ -55,7 +55,7 @@ T details::func_float_distance<T, false>::eval(const twofold<T>& x, const twofol
     }
     else
     {
-        T e1        = mrds::eps(x.value);
+        T e1        = mrds::eps(x.value) * T(0.5);
         d_err_1     = mrds::float_distance(e1, e1 + mrds::abs(x.error));
 
         if (x.error < 0.0)
@@ -68,7 +68,7 @@ T details::func_float_distance<T, false>::eval(const twofold<T>& x, const twofol
     }
     else
     {
-        T e2        = mrds::eps(y.value);
+        T e2        = mrds::eps(y.value) * T(0.5);
         d_err_2     = mrds::float_distance(e2, e2 + mrds::abs(y.error));
 
         if (y.error < 0.0)
