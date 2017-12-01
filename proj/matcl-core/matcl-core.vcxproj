@@ -81,6 +81,9 @@
     <ClInclude Include="..\..\src\include\matcl-core\options\optional.h" />
     <ClInclude Include="..\..\src\include\matcl-core\options\options_disp.h" />
     <ClInclude Include="..\..\src\include\matcl-core\options\option_validators.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\profile\benchmark.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\profile\timer.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\profile\time_stats.h" />
     <ClInclude Include="..\..\src\matcl-core\base\malloc.h" />
     <ClInclude Include="..\..\src\matcl-core\IO\out_stream_initializer.h" />
   </ItemGroup>
@@ -99,6 +102,8 @@
     <None Include="..\..\src\include\matcl-core\details\options\matcl_options_impl.inl" />
     <None Include="..\..\src\include\matcl-core\details\options\optional.inl" />
     <None Include="..\..\src\include\matcl-core\details\options\option_validators.inl" />
+    <None Include="..\..\src\include\matcl-core\details\profile\benchmark.inl" />
+    <None Include="..\..\src\include\matcl-core\details\profile\time_stats.inl" />
     <None Include="..\..\src\include\matcl-core\details\refptr.inl" />
     <None Include="..\..\src\include\matcl-core\details\simd\simd.inl" />
     <None Include="..\..\src\include\matcl-core\details\thread.inl" />
@@ -137,6 +142,9 @@
     <ClCompile Include="..\..\src\matcl-core\lib_functions\twofold.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\profile\benchmark.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\profile\timer.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\profile\time_stats.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4BE517FA-056D-4070-91EC-C33F3274AE38}</ProjectGuid>

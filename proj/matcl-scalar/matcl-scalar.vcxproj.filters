@@ -75,9 +75,6 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalar_gen_details.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\timer.h">
-      <Filter>Source Files\include\lib_functions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\utils.h">
       <Filter>Source Files\include\lib_functions</Filter>
     </ClInclude>
@@ -181,9 +178,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\utils.cpp">
       <Filter>Source Files\src\lib_functions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-scalar\func\timer.cpp">
-      <Filter>Source Files\src\func</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\combinatorics_helper.cpp">
       <Filter>Source Files\src\func\raw</Filter>

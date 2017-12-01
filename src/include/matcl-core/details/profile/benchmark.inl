@@ -20,30 +20,28 @@
 
 #pragma once
 
-#include "matcl-scalar/config.h"
-#include "matcl-core/matrix/scalar_types.h"
-#include "matcl-core/profile/timer.h"
+#include "matcl-core/profile/benchmark.h"
 
 namespace matcl
 {
 
-// start global timer
-MATCL_SCALAR_EXPORT 
-void                    tic();
+inline
+benchmark::benchmark(const function_ptr& f)
+    :m_func(f)
+{};
 
-// stop global timer and return time elapsed from last tic in seconds
-// time is measured with high resolution (less than microsecond)
-MATCL_SCALAR_EXPORT 
-Real                    toc();
+template<class T>
+inline 
+static void benchmark::use_value(const T& v)
+{
+    size_t addr = *reinterpret_cast<const size_t*>(&v);
+    m_dummy     += addr;
+};
 
-// stop global timer and return time elapsed from last tic in seconds
-// represented as string
-MATCL_SCALAR_EXPORT 
-std::string             tocstr();
-
-// stop global timer; calculatr time elapsed from last tic in seconds
-// and print elapsed time on global_output_stream
-MATCL_SCALAR_EXPORT 
-void                    tocdisp();
+inline 
+void benchmark::report_time(double t)
+{
+    m_stats.report(t);
+};
 
 };

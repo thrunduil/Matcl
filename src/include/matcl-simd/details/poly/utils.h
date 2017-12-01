@@ -42,6 +42,7 @@ struct eval_fma
     static Arg_type eval(const Arg_type& x, const Arg_type& y, const Coef_type& z)
     {
         return fma_f(x, y, Arg_type(z));
+        //return x * y + Arg_type(z);
     }
 };
 
@@ -64,6 +65,9 @@ struct eval_fma<double, double>
     {
         namespace mrds = matcl::raw::details::scal_func;
         return mrds::fma_f(x, y, z);
+
+        //TODO
+        //return fma_f(x, y, z);
     }
 };
 

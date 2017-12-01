@@ -18,32 +18,29 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#pragma once
-
-#include "matcl-scalar/config.h"
-#include "matcl-core/matrix/scalar_types.h"
-#include "matcl-core/profile/timer.h"
+#include "matcl-core/profile/benchmark.h"
 
 namespace matcl
 {
 
-// start global timer
-MATCL_SCALAR_EXPORT 
-void                    tic();
+time_stats benchmark::make(int n_rep)
+{
+    m_stats.clear();
 
-// stop global timer and return time elapsed from last tic in seconds
-// time is measured with high resolution (less than microsecond)
-MATCL_SCALAR_EXPORT 
-Real                    toc();
+    for (int i = 0; i < n_rep; ++i)
+    {
+        m_time.tic();
 
-// stop global timer and return time elapsed from last tic in seconds
-// represented as string
-MATCL_SCALAR_EXPORT 
-std::string             tocstr();
+        m_func->eval();
+                
+        double t = m_time.toc();
+        report_time(t);
+    };
 
-// stop global timer; calculatr time elapsed from last tic in seconds
-// and print elapsed time on global_output_stream
-MATCL_SCALAR_EXPORT 
-void                    tocdisp();
+    return m_stats;
+};
+
+volatile 
+size_t benchmark::m_dummy = 0;
 
 };

@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-scalar/lib_functions/timer.h"
+#include "matcl-core/profile/timer.h"
 #include "matcl-core/IO/output_stream.h"
 
 #include <iostream>
@@ -58,7 +58,7 @@ namespace matcl
 
 void details::timer_base::init()
 {
-    tic_started = false;
+    tic_started     = false;
 };
 
 void details::timer_base::tic(void)
@@ -74,6 +74,9 @@ void details::timer_base::tic(void)
 
 Real details::timer_base::toc(void)
 {
+    // timer needs not to be adjusted; timer overhead is of order
+    // few nanoseconds, but time resolution is in miliseconds
+
     #ifndef __unix__
         Real t;
         Integer_64 toc_int64, fr_int64;
@@ -84,6 +87,7 @@ Real details::timer_base::toc(void)
             QueryPerformanceCounter((LARGE_INTEGER*) &toc_int64);
             QueryPerformanceFrequency((LARGE_INTEGER*) &fr_int64);
             t = (double) (toc_int64 - tic_int64) / (double) fr_int64;
+
             return t;
         }
         else
@@ -103,7 +107,7 @@ Real details::timer_base::toc(void)
             --dSec;
         }
 
-        return MicrosecsToSecs( 1000000 * dSec + dUSec );
+        return MicrosecsToSecs( 1000000 * dSec + dUSec ) - timer_overhead;
     #endif
 }
 

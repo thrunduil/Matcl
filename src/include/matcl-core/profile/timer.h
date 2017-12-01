@@ -20,7 +20,7 @@
 
 #pragma once 
 
-#include "matcl-scalar/config.h"
+#include "matcl-core/config.h"
 #include "matcl-core/matrix/scalar_types.h"
 
 #include <string>
@@ -35,7 +35,7 @@ namespace matcl
 namespace details
 {
 
-struct MATCL_SCALAR_EXPORT timer_base
+struct MATCL_CORE_EXPORT timer_base
 {
     bool            tic_started;
     Integer_64      tic_int64;
@@ -43,7 +43,7 @@ struct MATCL_SCALAR_EXPORT timer_base
     #ifdef __unix__
       struct timeb  tic_timeb;
     #endif
-
+    
     void            init();
     void            tic();
     Real            toc();
@@ -55,7 +55,7 @@ struct MATCL_SCALAR_EXPORT timer_base
 };
 
 // calculate elapsed time
-class MATCL_SCALAR_EXPORT timer : private details::timer_base
+class MATCL_CORE_EXPORT timer : private details::timer_base
 {
     public:
         // create timer object; in order to start counting time call tic()
@@ -65,6 +65,7 @@ class MATCL_SCALAR_EXPORT timer : private details::timer_base
         using details::timer_base::tic;
         
         // finish timer; return elapsed time is seconds from last call to tic()
+        // time is measured with high resolution (less than microsecond)
         using details::timer_base::toc;
 
         // finish timer; return elapsed time as string is seconds from last

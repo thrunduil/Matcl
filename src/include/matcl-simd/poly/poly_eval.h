@@ -37,6 +37,14 @@ namespace matcl { namespace simd
 //  Coef_type   - floating point type of polynomial coefficients,
 //                  this type must be convertible to Arg_type
 
+// Notation:
+//  u is the unit roundoff (half of the machine epsilon)
+//  gam(k) = k/(1-ku)
+
+//-----------------------------------------------------------------------
+//                      HORNER SCHEME
+//-----------------------------------------------------------------------
+
 // evaluate a polynomial at point x using the Horner's scheme
 //      res = small_horner(x, a0, a1, ..., a_N-1)
 // where ai is the i-th coefficientof the polynomial
@@ -62,6 +70,69 @@ Arg_type    horner(const Arg_type& x, const Coef_type* poly);
 template<class Arg_type, class Coef_type>
 Arg_type    horner(const Arg_type& x, int N, const Coef_type* poly);
 
+// evaluate a polynomial at point x using the Horner's scheme
+// polynomial is represented as an array of size N:
+//      poly = {a_0, a_1, ..., a_{N-1}}
+// this function also returns aposteriori absolute forward error
+// estimator 'error', such that:
+//      |res - p(x) | <= 'error'
+// where res is the computed value, p(x) is true value
+template<class Arg_type, class Coef_type>
+Arg_type    horner_and_error(const Arg_type& x, int N, const Coef_type* poly,
+                Arg_type& error);
+
+// return a priori condition number of a polynomial at point x evaluated using
+// the Horner's method. 
+// The relative accuracy of computed polynomial p_ap(x) is given by
+//      |p(x) - p_ap(x)| / |p(x)| <= a(2N-2) * cond(p, x) * u + O(u^2)
+// where p(x) is the true value, cond(p, x) is returned condition number.
+//
+// The condition number cond(p, x) is given by:
+//      cond(p, x) = (sum_{i = 0}^{N - 1} |a_i| * |x|^i) / |p(x)| 
+//                := |p|(|x|) / p(x)
+//
+// optionally, the function returns value of the polynomial p(x) returned in 'val'
+// argument, value of |p|(|x|) returned in 'abs_val' argument
+//
+// Note:
+//  This is a priori bound and so takes no account of the actual rounding
+//  errors that occur, therefore can be too pessimistic. Additionally, in denominator
+//  computed value of p_ap(x) is used as an approximation of true value p(x).
+template<class Arg_type, class Coef_type>
+Arg_type    horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly,
+                Arg_type& val, Arg_type& abs_val);
+
+// return aposteriori condition number of a polynomial at point x evaluated using
+// the Horner's method defined as 
+//      |p(x) - p_ap(x)| / |p(x)| <= post_cond(p, x) * u
+// where p(x) is the true value, post_cond(p, x) is returned condition number.
+//
+// The condition number post_cond(p, x) is calculated using the horner_and_error
+// function.
+//
+// optionally, the function returns computed value of the polynomial p_app(x) 
+// returned in 'val' argument and estimated error, such that |p(x) - p_ap(x)| <= error
+// in 'err' argument.
+//
+// Note:
+//  This condition number of more accurate than condition number returned by
+//  horner_apriori_cond, since it takes into account actual rounding errors.
+//  The function may return negative condition number if computed value p_app is very
+//  inaccurate, i.e. when |p_app(x)| < err.
+template<class Arg_type, class Coef_type>
+Arg_type    horner_aposteriori_cond(const Arg_type& x, int N, const Coef_type* poly);
+
+template<class Arg_type, class Coef_type>
+Arg_type    horner_aposteriori_cond(const Arg_type& x, int N, const Coef_type* poly,
+                Arg_type& val, Arg_type& err);
+
+//-----------------------------------------------------------------------
+//                      ESTRIN SCHEME
+//-----------------------------------------------------------------------
+
 // evaluate a polynomial at point x using the Estrin's scheme
 // polynomial is represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
@@ -83,79 +154,77 @@ Arg_type    estrin(const Arg_type& x, const Coef_type* poly);
 template<class Arg_type, class Coef_type>
 Arg_type    estrin(const Arg_type& x, int N, const Coef_type* poly);
 
+//-----------------------------------------------------------------------
+//                      COMPENSATED HORNER
+//-----------------------------------------------------------------------
+
 // evaluate a polynomial at point x using the compensated Horner's scheme
 // polynomial is represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
+// return twofold number r + e = p(x)
 //
 // Note:
 //  this function is evaluates a polynomial with high accuracy:
-//      |p(x) - p_ap(x)|/|p(x)| <= u + phi * u^2
-// where p(x) is the true value, p_ap(x) is computed, u is the unit
-// roundoff, phi = b(n)*cond(p,x) * u^2, b(n) ~ 4n^2, and cond(p,x) is the
-// condition number of p as returned by horner_apriori_cond function.
-// Thus, if p is not too ill-conditioned, then p_app(x) is calculated with
-// full full accuracy (0.5 ulp error). This function is however more costly,
-// than the horner function (3-8 times slower)
+//      |p(x) - r|/|p(x)|       <= u + a(2N-2)^2 * cond(p,x) * u^2
+//      |p(x) - (r + e)|/|p(x)| <= a(2N-2)^2 * cond(p,x) * u^2
+// where p(x) is the true value, cond(p,x) is the condition number of p as
+// returned by horner_apriori_cond function.
+// Thus, if p is not too ill-conditioned, then p(x) is calculated with nearly 
+// full accuracy. This function is however more costly, than the  horner 
+// function (3-8 times slower)
 //
 // References:
 //  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
 //      P. Langlois, N. Louvet, 2006
 template<class Arg_type, class Coef_type>
-Arg_type    compensated_horner(const Arg_type& x, int N, const Coef_type* poly);
-
-// return the condition number of a polynomial at point x evaluated using
-// the Horner's method. 
-// The relative accuracy of computed polynomial p_ap(x) is given by
-//      |p(x) - p_ap(x)| / |p(x)| <= a(2N) * cond(p, x) * u + O(u^2)
-// where p(x) is the true value, cond(p, x) is returned condition number
-// u is the unit roundoff (half of the machine epsilon), and a(2N) = 2N/(1-2Nu) ~ 2N.
-//
-// The condition number cond(p, x) is given by:
-//      cond(p, x) = sum_{i = 0}^{N - 1} |a_i| * |x|^i / |p(x)| 
-//                := |p|(|x|) / p(x)
-//
-// Note:
-//  this is an a priori bound and so takes no account of the actual rounding
-//  errors that occur, therefore can be too pessimistic.
-template<class Arg_type, class Coef_type>
-Arg_type    horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly);
-
-// return the condition number of a polynomial at point x evaluated using
-// the Horner's method as in function horner_apriori_cond; this function
-// additionally returns |p|(|x|) in 'val_abs' argument and p(x) in 'val'
-// argument
-template<class Arg_type, class Coef_type>
-Arg_type    horner_apriori_cond(const Arg_type& x, int N, const Coef_type* poly,
-                                Arg_type& val, Arg_type& val_abs);
-
-// evaluate a polynomial at point x using the Horner's scheme
-// polynomial is represented as an array of size N:
-//      poly = {a_0, a_1, ..., a_{N-1}}
-// this function also returns aposteriori absolute forward error
-// estimator 'error', such that:
-//      |res - p(x) | < 'error'
-// where res is the computed value, p(x) is true value
-template<class Arg_type, class Coef_type>
-Arg_type    horner_and_error(const Arg_type& x, int N, const Coef_type* poly,
-                Arg_type& error);
+twofold<Arg_type>
+            compensated_horner(const Arg_type& x, int N, const Coef_type* poly);
 
 // evaluate a polynomial at point x using the compensated Horner's scheme
-// as in case of the function compensated_horner function, but slightly
-// more accurately; polynomial is represented as an array of size N:
+// polynomial is represented as an array of size N with twofold arguments:
+//      poly = {a_0, a_1, ..., a_{N-1}}
+// return twofold number r + e = p(x)
+//
+// Note:
+//  this function is evaluates a polynomial with high accuracy:
+//      |p(x) - r|/|p(x)|       <= u + a((N-1)c) * cond(p,x) * u^2
+//      |p(x) - (r + e)|/|p(x)| <= a((N-1)c) * cond(p,x) * u^2
+// where p(x) is the true value, cond(p,x) is the condition number of p as
+// returned by horner_apriori_cond function, and c = 10 if x is a twofold
+// number and c = 6 otherwise.
+// Thus, if p is not too ill-conditioned, then p(x) is calculated with nearly 
+// full accuracy. This function is however more costly, than the  horner 
+// function (3-8 times slower) TODO
+//
+// References:
+//  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
+//      P. Langlois, N. Louvet, 2006
+template<class Arg_type, class Coef_type>
+twofold<Arg_type>
+            compensated_horner(const twofold<Arg_type>& x, int N, const twofold<Coef_type>* poly);
+
+template<class Arg_type, class Coef_type>
+twofold<Arg_type>
+            compensated_horner(const Arg_type& x, int N, const twofold<Coef_type>* poly);
+
+// evaluate a polynomial at point x using the compensated Horner's scheme
+// as in case of the function compensated_horner function; polynomial is 
+// represented as an array of size N:
 //      poly = {a_0, a_1, ..., a_{N-1}}
 // this function also returns aposteriori absolute forward error
 // estimator 'error', such that:
-//      |res - p(x) | < 'error'
+//      |res - p(x) | <= 'error'
 // where res is the computed value, p(x) is true value
-// if returned value of 'is_exactly_rounded' argument is true, then the
-// result is proven to be correct up to 1/2 ulp.
+// if returned value of 'is_faithfully_rounded' argument is true, then the
+// result is proven to be one of two floating point value closest to true
+// value.
 //
 // References:
 //  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,
 //      P. Langlois, N. Louvet, 2006
 template<class Arg_type, class Coef_type>
 Arg_type    compensated_horner_and_error(const Arg_type& x, int N, const Coef_type* poly,
-                Arg_type& error, bool& is_exactly_rounded);
+                Arg_type& error, bool& is_faithfully_rounded);
 
 }};
 

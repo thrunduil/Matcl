@@ -67,6 +67,15 @@
     <Filter Include="Source Files\include\details\float">
       <UniqueIdentifier>{348d87f4-32b6-4693-a2c5-dbf01bf697c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\profile">
+      <UniqueIdentifier>{541b4282-4c00-4e8d-8c32-58a7f66343b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\profile">
+      <UniqueIdentifier>{d4893d09-e9c5-4ce2-a881-529145c807e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\profile">
+      <UniqueIdentifier>{43ad82b9-8484-4357-9108-be7748de647f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-core\general\fwd_decls.h">
@@ -261,6 +270,15 @@
     <ClInclude Include="..\..\src\include\matcl-core\details\float\helpers.h">
       <Filter>Source Files\include\details\float</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\profile\benchmark.h">
+      <Filter>Source Files\include\profile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\profile\time_stats.h">
+      <Filter>Source Files\include\profile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-core\profile\timer.h">
+      <Filter>Source Files\include\profile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-core\details\hash_table\hash_equal.inl">
@@ -313,6 +331,12 @@
     </None>
     <None Include="..\..\src\include\matcl-core\details\float\fma_dekker_simd.inl">
       <Filter>Source Files\include\details\float</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\profile\time_stats.inl">
+      <Filter>Source Files\include\details\profile</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-core\details\profile\benchmark.inl">
+      <Filter>Source Files\include\details\profile</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +438,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-core\lib_functions\fma_dekker.cpp">
       <Filter>Source Files\src\lib_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\profile\time_stats.cpp">
+      <Filter>Source Files\src\profile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\profile\benchmark.cpp">
+      <Filter>Source Files\src\profile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-core\profile\timer.cpp">
+      <Filter>Source Files\src\profile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

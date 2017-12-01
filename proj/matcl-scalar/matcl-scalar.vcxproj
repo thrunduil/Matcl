@@ -37,7 +37,6 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\manip.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\scalar_gen.h" />
-    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\timer.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\matcl_scalar.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\object.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\objects\object_functions.h" />
@@ -67,7 +66,6 @@
     <ClCompile Include="..\..\src\matcl-scalar\func\basic_binfunc_helper.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\combinatorics_helper.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\func\raw\rand.cpp" />
-    <ClCompile Include="..\..\src\matcl-scalar\func\timer.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp_stream.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp" />
