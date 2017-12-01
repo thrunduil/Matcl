@@ -1,7 +1,7 @@
 ﻿# MATCL - Matrix Computation Library
 
 Matrix computation and linear algebra library written in C++.
-Currently only a small part of this library is publicly available.
+This library is a part of the Morfa project. See morfalang.org.
 
 ## matcl-core
 
@@ -109,7 +109,5 @@ Higher level abstraction of single instruction, multiple data (SIMD) instruction
 for single and double precision floating point numbers and complex numbers.
 
 ## Licence
-
-Copyright (C) 2017  Paweł Kowal
 
 This library is published under GPL licence.
