@@ -664,20 +664,6 @@ matcl::inv(const S& m)
 };
 
 template<class S, class Enable>
-bool matcl::is_scalar_true(const S& m)
-{
-    using SP = typename md::promote_scalar<S>::type;
-    return mrd::is_true_helper<SP>::eval(m);
-}
-
-template<class S, class Enable>
-bool matcl::is_scalar_false(const S& m)
-{
-    using SP = typename md::promote_scalar<S>::type;
-    return mrd::is_false_helper<SP>::eval(m);
-}
-
-template<class S, class Enable>
 typename md::bool_or_object<S>::type
 matcl::signbit(const S& m)
 {
