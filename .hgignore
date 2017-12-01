@@ -16,3 +16,7 @@ src_quadprog/*
 *.opendb
 *.tlog
 */log_*.txt
+*.ipch
+*.vspx
+*.db-shm
+*.db-wal
