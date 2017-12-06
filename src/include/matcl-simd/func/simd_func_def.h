@@ -43,6 +43,12 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_bitwise_andnot{};
 
 template<class Val, int Bits, class Simd_tag>
+struct simd_shift_left{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_shift_right{};
+
+template<class Val, int Bits, class Simd_tag>
 struct simd_mult{};
 
 template<class Val, int Bits, class Simd_tag>
@@ -76,6 +82,18 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_fms_a{};
 
 template<class Val, int Bits, class Simd_tag>
+struct simd_fnma_f{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_fnms_f{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_fnma_a{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_fnms_a{};
+
+template<class Val, int Bits, class Simd_tag>
 struct simd_sum_all{};
 
 template<class Val, int Bits, class Simd_tag>
@@ -103,6 +121,9 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_geq{};
 
 template<class Val, int Bits, class Simd_tag>
+struct simd_is_nan{};
+
+template<class Val, int Bits, class Simd_tag>
 struct simd_sqrt{};
 
 template<class Val, int Bits, class Simd_tag>
@@ -125,5 +146,11 @@ struct simd_any{};
 
 template<class Val, int Bits, class Simd_tag>
 struct simd_all{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_pow2k{};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_if_then_else{};
 
 }}

@@ -43,4 +43,31 @@ __m128d mm_movehl_pd(__m128d a, __m128d b)
     return r;
 };
 
+// move the upper two 32-bit elements from b to the lower element of dst, 
+// and copy the upper two 32-bits elements from a to the upper element of dst.
+//
+// Operation
+//      dst[63:0]   := b[127:64]]
+//      dst[127:64] := a[127:64]
+force_inline
+__m128i mm_movehl_epi32(__m128i a, __m128i b)
+{
+    __m128 as   = _mm_castsi128_ps(a);
+    __m128 bs   = _mm_castsi128_ps(b);
+    __m128 rs   = _mm_movehl_ps(as, bs);
+    __m128i r   = _mm_castps_si128(rs);
+
+    return r;
+};
+
+// store the upper 64-bit integer element of a into memory.
+//
+// Operation
+//      MEM[mem_addr+63:mem_addr] := a[127:64]
+force_inline
+void mm_storeh_epi64 (__m128i* mem_addr, __m128i a)
+{
+    _mm_storeh_pi((__m64 *)mem_addr, _mm_castsi128_ps(a));
+}
+
 }}}

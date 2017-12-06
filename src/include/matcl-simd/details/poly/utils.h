@@ -65,9 +65,6 @@ struct eval_fma<double, double>
     {
         namespace mrds = matcl::raw::details::scal_func;
         return mrds::fma_f(x, y, z);
-
-        //TODO
-        //return fma_f(x, y, z);
     }
 };
 

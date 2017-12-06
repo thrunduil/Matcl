@@ -186,9 +186,9 @@ simd_compl<double, 128, Simd_tag>::get_raw_ptr()
 template<class Simd_tag>
 force_inline
 simd_compl<float, 128, Simd_tag>
-simd_compl<double, 128, Simd_tag>::cast_to_float() const
+simd_compl<double, 128, Simd_tag>::convert_to_float() const
 {
-    return data.cast_to_float();
+    return data.convert_to_float();
 };
 
 template<class Simd_tag>
@@ -387,23 +387,23 @@ simd_compl<float, 128, Simd_tag>::get_raw_ptr()
 
 template<class Simd_tag>
 force_inline simd_compl<double, 128, Simd_tag>
-simd_compl<float, 128, Simd_tag>::cast_low_to_double() const
+simd_compl<float, 128, Simd_tag>::convert_low_to_double() const
 {
-    return data.cast_low_to_double();
+    return data.convert_low_to_double();
 }
 
 template<class Simd_tag>
 force_inline simd_compl<double, 128, Simd_tag>
-simd_compl<float, 128, Simd_tag>::cast_high_to_double() const
+simd_compl<float, 128, Simd_tag>::convert_high_to_double() const
 {
-    return data.cast_high_to_double();
+    return data.convert_high_to_double();
 }
 
 template<class Simd_tag>
-force_inline typename simd_compl<float, 128, Simd_tag>::simd_double_2
-simd_compl<float, 128, Simd_tag>::cast_to_double() const
+force_inline typename simd_compl<float, 128, Simd_tag>::simd_256_double
+simd_compl<float, 128, Simd_tag>::convert_to_double() const
 {
-    return data.cast_to_double();
+    return data.convert_to_double();
 }
 
 template<class Simd_tag>

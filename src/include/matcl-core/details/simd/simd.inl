@@ -35,7 +35,7 @@ double details::fma_f(double x, double y, double z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fma_f(xs, ys, zs);
+    simd_type ret	= fma_f(xs, ys, zs);
     return ret.first();
 };
 
@@ -48,7 +48,7 @@ float details::fma_f(float x, float y, float z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fma_f(xs, ys, zs);
+    simd_type ret	= fma_f(xs, ys, zs);
     return ret.first();
 }
 
@@ -61,7 +61,7 @@ double details::fms_f(double x, double y, double z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fms_f(xs, ys, zs);
+    simd_type ret	= fms_f(xs, ys, zs);
     return ret.first();
 }
 
@@ -74,7 +74,7 @@ float details::fms_f(float x, float y, float z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret = fms_f(xs, ys, zs);
+    simd_type ret	= fms_f(xs, ys, zs);
     return ret.first();
 }
 

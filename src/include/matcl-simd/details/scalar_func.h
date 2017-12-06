@@ -26,6 +26,22 @@
 namespace matcl { namespace simd { namespace scalar_func
 {
 
+template<class T> struct integer_type{};
+template<>        struct integer_type<float>    { using type = int32_t;};
+template<>        struct integer_type<double>   { using type = int64_t;};
+
+template<class T>
+struct is_signed_impl
+{
+    using int_type  = typename integer_type<T>::type;
+
+    static bool eval(const T& x)
+    {
+        int_type xi     = *reinterpret_cast<const int_type*>(&x);
+        return xi < 0;
+    }
+};
+
 template<class T>
 struct round_impl
 {
@@ -34,21 +50,15 @@ struct round_impl
     {
         // std::round has wrong tie rule (we require round to even in case
         // of ties); std::nearbyint is very slow;
-        // the following code uses the property, that y := |x| + 1/eps has
-        // correct least significant digit
 
         const T einv = details::eps_inv<T>();
-
-        if (x > 0)
-        {
-            T tmp = x + einv;
-            return tmp - einv;
-        }
-        else
-        {
-            T tmp = x - einv;
-            return tmp + einv;
-        };
+        
+        T xa        = std::abs(x);
+        T tmp       = xa + einv;
+        tmp         = tmp - einv;
+        T resa      = (xa < einv) ? tmp : xa;
+        bool sign   = is_signed_impl<T>::eval(x);
+        return sign ? -resa : resa;
     };
 };
 
@@ -64,6 +74,9 @@ force_inline double ceil(double f)    { return std::ceil(f); };
 force_inline double trunc(double f)   { return std::trunc(f); };
 force_inline double round(double f)   { return round_impl<double>::eval(f); };
 
+force_inline bool is_nan(double f)   { return f != f; }
+force_inline bool is_nan(float f)    { return f != f; }
+
 force_inline float fma_f(float x, float y, float z)
 {
     return x * y + z;
@@ -72,6 +85,16 @@ force_inline float fma_f(float x, float y, float z)
 force_inline float fms_f(float x, float y, float z)
 {
     return x * y - z;
+};
+
+force_inline float fnma_f(float x, float y, float z)
+{
+    return z - x * y;
+};
+
+force_inline float fnms_f(float x, float y, float z)
+{
+    return -(x * y + z);
 };
 
 force_inline double fma_f(double x, double y, double z)
@@ -84,6 +107,16 @@ force_inline double fms_f(double x, double y, double z)
     return x * y - z;
 };
 
+force_inline double fnma_f(double x, double y, double z)
+{
+    return z - x * y;
+};
+
+force_inline double fnms_f(double x, double y, double z)
+{
+    return -(x * y + z);
+};
+
 force_inline float fma_a(float x, float y, float z)
 {
     return fma_dekker(x, y, z);
@@ -94,6 +127,16 @@ force_inline float fms_a(float x, float y, float z)
     return fma_dekker(x, y, -z);
 }
 
+force_inline float fnma_a(float x, float y, float z)
+{
+    return fma_dekker(-x, y, z);
+}
+
+force_inline float fnms_a(float x, float y, float z)
+{
+    return -fma_dekker(x, y, z);
+}
+
 force_inline double fma_a(double x, double y, double z)
 {
     return fma_dekker(x, y, z);
@@ -102,6 +145,16 @@ force_inline double fma_a(double x, double y, double z)
 force_inline double fms_a(double x, double y, double z)
 {
     return fma_dekker(x, y, -z);
+}
+
+force_inline double fnma_a(double x, double y, double z)
+{
+    return fma_dekker(-x, y, z);
+}
+
+force_inline double fnms_a(double x, double y, double z)
+{
+    return -fma_dekker(x, y, z);
 }
 
 }}}

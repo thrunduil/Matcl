@@ -88,6 +88,20 @@ simd<Val, Bits, Simd_tag>
 fms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z);
 
+//res = -x*y + z; use FMA instruction if available, otherwise
+// evaluate according to definition (with two roundings)
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+fnma_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z);
+
+//res = -x*y - z; use FMA instruction if available, otherwise
+// evaluate according to definition (with two roundings)
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+fnms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z);
+
 //res = x*y + z; use FMA instruction if available, otherwise
 // this function is evaluated as using (slow) Dekker's algorithm
 template<class Val, int Bits, class Simd_tag>
@@ -100,6 +114,20 @@ fma_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y,
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 fms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z);
+
+//res = -x*y + z; use FMA instruction if available, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+fnma_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z);
+
+//res = -x*y - z; use FMA instruction if available, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+fnms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z);
 
 // sum of all elements stored in the vector x
@@ -166,6 +194,12 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 geq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
+// test x for NaN values; return a vector of floating point numbers containing
+// true_value or false_value
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+is_nan(const simd<Val, Bits, Simd_tag>& x);
+
 //-----------------------------------------------------------------------
 //                   ROUNDING FUNCTIONS
 //-----------------------------------------------------------------------
@@ -229,11 +263,57 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 bitwise_andnot(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 
+// shift left all elements; floating point type is implicitely casted to unsigned
+// integer type of the same tyme, then shift is performed and result is casted to
+// floating point type
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+shift_left(const simd<Val, Bits, Simd_tag>& x, unsigned int count);
+
+// shift right all elements; floating point type is implicitely casted to unsigned
+// integer type of the same tyme, then shift is performed and result is casted to
+// floating point type
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+shift_right(const simd<Val, Bits, Simd_tag>& x, unsigned int count);
+
 // test whether the sign of x is negative; return a vector of floating 
 // point numbers containing -0.0 (when sign bit is set) or 0.0 (otherwise)
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 signbit_base(const simd<Val, Bits, Simd_tag>& x);
+
+//-----------------------------------------------------------------------
+//                   CONDITIONAL FUNCTIONS
+//-----------------------------------------------------------------------
+// evaluate test ? NaN : val_false;
+// test must be a vector of floating point numbers containing true_value or false_value
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+if_nan_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false);
+
+// evaluate test ? 0.0 : val_false;
+// test must be a vector of floating point numbers containing true_value or false_value
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+if_zero_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false);
+
+// evaluate test ? val_true : val_false;
+// test must be a vector of floating point numbers containing true_value or false_value
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_true,
+             const simd<Val, Bits, Simd_tag>& val_false);
+
+//-----------------------------------------------------------------------
+//                   MATHEMATICAL FUNCTIONS
+//-----------------------------------------------------------------------
+// return 2^k; k must represent an integer; TODO
+// no checks are performed
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+//pow2k(const simd<Val, Bits, Simd_tag>& k);
+pow2k(const simd<int64_t, Bits, Simd_tag>& k);
 
 //-----------------------------------------------------------------------
 //                   MISCELLANEOUS FUNCTIONS
@@ -255,6 +335,5 @@ std::ostream& operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& x);
 // load from stream
 template<class Val, int Bits, class Simd_tag>
 std::istream& operator>>(std::istream& is, simd<Val, Bits, Simd_tag>& x);
-
 
 }}

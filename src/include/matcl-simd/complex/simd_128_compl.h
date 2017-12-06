@@ -109,12 +109,14 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
         // construct vector with elements copied from arr; arr must have length
         // at least vector_size
         static simd_compl   load(const simd_double_complex* arr, std::true_type aligned);
-        static simd_compl   load(const simd_double_complex* arr, std::false_type not_aligned);
+        static simd_compl   load(const simd_double_complex* arr, 
+                                std::false_type not_aligned = std::false_type());
 
     public:
         // store elements in arr; arr must have length at least vector_size
         void                store(simd_double_complex* arr, std::true_type aligned) const;
-        void                store(simd_double_complex* arr, std::false_type not_aligned) const;
+        void                store(simd_double_complex* arr, 
+                                std::false_type not_aligned = std::false_type()) const;
 
         //store elements with in array with stepping (Step = 1,-1 is not optimized)
         template<int Step>
@@ -136,8 +138,8 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
         simd_double_complex*
                             get_raw_ptr();
 
-        // cast elements to float complex and store the result in the lower part
-        simd_float          cast_to_float() const;
+        // convert elements to float complex and store the result in the lower part
+        simd_float          convert_to_float() const;
 
     public:
         // plus assign operator
@@ -172,11 +174,11 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         using real_type     = float;
 
         // simd type of the same kind storing double complex values
-        using simd_double   = simd_compl<double, 128, Simd_tag>;
+        using simd_128_double = simd_compl<double, 128, Simd_tag>;
 
         // simd type storing 2 double complex values
-        using simd_double_2 = typename details::simd_compl_from_real
-                                <typename impl_type::simd_double_2>::type;
+        using simd_256_double = typename details::simd_compl_from_real
+                                <typename impl_type::simd_256_double>::type;
 
     public:
         // number of elements in the vector
@@ -239,12 +241,14 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         // construct vector with elements copied from arr; arr must have length
         // at least vector_size
         static simd_compl   load(const simd_single_complex* arr, std::true_type aligned);
-        static simd_compl   load(const simd_single_complex* arr, std::false_type not_aligned);
+        static simd_compl   load(const simd_single_complex* arr, 
+                                std::false_type not_aligned = std::false_type());
 
     public:
         // store elements in arr; arr must have length at least vector_size
         void                store(simd_single_complex* arr, std::true_type aligned) const;
-        void                store(simd_single_complex* arr, std::false_type not_aligned) const;
+        void                store(simd_single_complex* arr, 
+                                std::false_type not_aligned = std::false_type()) const;
 
         //store elements with in array with stepping (Step = 1,-1 is not optimized)
         template<int Step>
@@ -266,14 +270,14 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         simd_single_complex*
                             get_raw_ptr();
 
-        // cast the first four elements to double
-        simd_double         cast_low_to_double() const;
+        // convert the first four elements to double
+        simd_128_double     convert_low_to_double() const;
 
-        // cast the last four elements to double
-        simd_double         cast_high_to_double() const;
+        // convert the last four elements to double
+        simd_128_double     convert_high_to_double() const;
 
-        // cast all elements to double
-        simd_double_2       cast_to_double() const;
+        // convert all elements to double
+        simd_256_double     convert_to_double() const;
 
     public:
         // plus assign operator

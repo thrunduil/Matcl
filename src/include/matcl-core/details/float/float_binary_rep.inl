@@ -58,37 +58,37 @@ force_inline double matcl::hex_double(const uint64_t& val)
 //-----------------------------------------------------------------------
 force_inline
 double_decoder::double_decoder(const double* val)
-    :m_value(val)
+    :float_value(val)
 {};
 
 force_inline
 const double& double_decoder::value() const
 { 
-    return *m_value;
+    return *float_value;
 }
 
 force_inline
 const double_binary_rep& double_decoder::get_representation() const
 {
-    return *m_rep;
+    return *ieee_754;
 };
 
 force_inline
 int double_decoder::get_exponent() const
 { 
-    return int(m_rep->exponent) - double_binary_rep::bias; 
+    return int(ieee_754->exponent) - double_binary_rep::bias; 
 };
 
 force_inline
 size_t double_decoder::get_raw_exponent() const
 { 
-    return m_rep->exponent; 
+    return ieee_754->exponent; 
 };
 
 force_inline
 size_t double_decoder::get_sign() const
 { 
-    return m_rep->sign; 
+    return ieee_754->sign; 
 };
 
 //-----------------------------------------------------------------------
@@ -96,37 +96,37 @@ size_t double_decoder::get_sign() const
 //-----------------------------------------------------------------------
 force_inline
 float_decoder::float_decoder(const float* val)
-    :m_value(val)
+    :float_value(val)
 {};
 
 force_inline
 const float& float_decoder::value() const
 { 
-    return *m_value;
+    return *float_value;
 }
 
 force_inline
 const float_binary_rep& float_decoder::get_representation() const
 {
-    return *m_rep;
+    return *ieee_754;
 };
 
 force_inline
 int float_decoder::get_exponent() const
 { 
-    return int(m_rep->exponent) - double_binary_rep::bias; 
+    return int(ieee_754->exponent) - double_binary_rep::bias; 
 };
 
 force_inline
 size_t float_decoder::get_raw_exponent() const
 { 
-    return m_rep->exponent; 
+    return ieee_754->exponent; 
 };
 
 force_inline
 size_t float_decoder::get_sign() const
 { 
-    return m_rep->sign; 
+    return ieee_754->sign; 
 };
 
 }

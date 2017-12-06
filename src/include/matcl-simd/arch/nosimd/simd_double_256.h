@@ -44,8 +44,20 @@ class alignas(32) simd<double, 256, nosimd_tag>
         // type of vector storing half of elements
         using simd_half     = simd<double, 128, nosimd_tag>;
 
-        // simd type storing float values
-        using simd_float   = simd<float, 128, nosimd_tag>;
+        // simd type storing float values of size 128 bits
+        using simd_128_float = simd<float, 128, nosimd_tag>;
+
+        // simd type storing 32-bit integers of size 128 bits
+        using simd_128_int32 = simd<int32_t, 128, nosimd_tag>;
+
+        // simd type storing float values of size 256 bits
+        using simd_256_float = simd<float, 256, nosimd_tag>;
+
+        // simd type storing 32-bit integers of size 256 bits
+        using simd_256_int32 = simd<int32_t, 256, nosimd_tag>;
+
+        // simd type storing 64-bit integers of size 256 bits
+        using simd_256_int64 = simd<int64_t, 256, nosimd_tag>;
 
     public:
         // number of elements in the vector
@@ -113,12 +125,20 @@ class alignas(32) simd<double, 256, nosimd_tag>
         // construct vector with elements copied from arr; arr must have length
         // at least vector_size
         static simd     load(const double* arr, std::true_type aligned);
-        static simd     load(const double* arr, std::false_type not_aligned);
+        static simd     load(const double* arr, std::false_type not_aligned = std::false_type());
+
+        // gather double-precision (64-bit) floating-point elements from memory using 
+        // 32-bit indices, i.e. i-th element of resulting vector is arr[ind[i]]
+        static simd     gather(const double* arr, const simd_128_int32& ind);
+
+        // gather double-precision (64-bit) floating-point elements from memory using 
+        // 64-bit indices, i.e. i-th element of resulting vector is arr[ind[i]]
+        static simd     gather(const double* arr, const simd_256_int64& ind);
 
     public:
         // store elements in arr; arr must have length at least vector_size
         void            store(double* arr, std::true_type aligned) const;
-        void            store(double* arr, std::false_type not_aligned) const;
+        void            store(double* arr, std::false_type not_aligned = std::false_type()) const;
 
         // store elements with in array with stepping (Step = 1,-1 is not optimized)
         template<int Step>
@@ -152,148 +172,22 @@ class alignas(32) simd<double, 256, nosimd_tag>
         // return simd storing last two elements
         simd_half       extract_high() const;
 
-        // cast elements to float
-        simd_float      cast_to_float() const;
-
     public:
-        // plus assign operator
-        simd&           operator+=(const simd& x);
+        // convert elements to float
+        simd_128_float  convert_to_float() const;
 
-        // minus assign operator
-        simd&           operator-=(const simd& x);
+        // convert elements to int32_t, rounding is performed according
+        // to current rounding mode (usually round to nearest ties to even)
+        simd_128_int32  convert_to_int32() const;
 
-        // multiply assign operator
-        simd&           operator*=(const simd& x);
+        // reinterpret cast to vector of floats of the same kind
+        simd_256_float  reinterpret_as_float() const;
 
-        // divide assign operator
-        simd&           operator/=(const simd& x);
-};
+        // reinterpret cast to vector of int32 of the same kind
+        simd_256_int32  reinterpret_as_int32() const;
 
-//-------------------------------------------------------------------
-//                          GENERAL FLOAT
-//-------------------------------------------------------------------
-
-// vector of eight single precision scalars
-template<>
-class alignas(32) simd<float, 256, nosimd_tag>
-{
-    public:
-        // implementation type
-        using impl_type     = float[8];
-
-        // type of stored elements
-        using value_type    = float;
-
-        // type of vector storing half of elements
-        using simd_half     = simd<float, 128, nosimd_tag>;
-
-        // simd type of the same kind storing double values
-        using simd_double   = simd<double, 256, nosimd_tag>;
-
-    public:
-        // number of elements in the vector
-        static const int 
-        vector_size         = sizeof(impl_type) / sizeof(value_type);    
-
-    public:
-        // internal representation
-        impl_type           data;
-
-    public:
-        // construct uninitialized vector
-        simd() = default;
-
-        // construct vector with all elements equal to val
-        explicit simd(float val);
-
-        // construct vector with first four elements and last four elements
-        // copied from lo_hi
-        explicit simd(const simd_half& lo_hi);
-
-        // construct vector with i-th element set to vi
-        simd(float v0, float v1, float v2, float v3, float v4, float v5, float v6, float v7);
-
-        // construct from representation
-        simd(const impl_type& v);
-
-        // construct vector with first four elements copied from lo
-        // and last four elements copied from hi
-        simd(const simd_half& lo, const simd_half& hi);
-
-        // conversion between simd types
-        explicit simd(const simd<float, 256, sse_tag>& s);
-        explicit simd(const simd<float, 256, avx_tag>& s);
-
-        // copy constructor
-        simd(const simd<float, 256, nosimd_tag>& s) = default;
-
-    public:
-        // connstruct vector with all elements set to 0.0
-        static simd     zero();
-
-        // connstruct vector with all elements set to -0.0
-        static simd     minus_zero();
-
-        // connstruct vector with all elements set to 1.0
-        static simd     one();
-
-        // connstruct vector with all elements set to -1.0
-        static simd     minus_one();
-
-    public:
-        // construct vector with all elements equal to arr[0]
-        static simd     broadcast(const float* arr);
-
-        // construct vector with all elements equal to arr
-        static simd     broadcast(const float& arr);
-
-        // construct vector with elements copied from arr; arr must have length
-        // at least vector_size
-        static simd     load(const float* arr, std::true_type aligned);
-        static simd     load(const float* arr, std::false_type not_aligned);
-
-    public:
-        // store elements in arr; arr must have length at least vector_size
-        void            store(float* arr, std::true_type aligned) const;
-        void            store(float* arr, std::false_type not_aligned) const;
-
-        //store elements with in array with stepping (Step = 1,-1 is not optimized)
-        template<int Step>
-        void            scatter(float* arr) const;
-
-        // get i-th element from the vector; pos is 0-based
-        float           get(int pos) const;
-
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        float           get() const;
-
-        // return the first element in the vector; equivalent to get(0), 
-        // but possibly faster
-        float           first() const;
-
-        // set i-th element of the vector; pos is 0-based
-        void            set(int pos, float val);
-
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void            set(float val);
-
-        // return pointer to the first element in the vector
-        const float*    get_raw_ptr() const;
-        float*          get_raw_ptr();
-
-        // return simd storing first four elements
-        simd_half       extract_low() const;
-
-        // return simd storing last four elements
-        simd_half       extract_high() const;
-
-        // cast the first four elements to double
-        simd_double     cast_low_to_double() const;
-
-        // cast the last four elements to double
-        simd_double     cast_high_to_double() const;
+        // reinterpret cast to vector of int64 of the same kind
+        simd_256_int64  reinterpret_as_int64() const;
 
     public:
         // plus assign operator

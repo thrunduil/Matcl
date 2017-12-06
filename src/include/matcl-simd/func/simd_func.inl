@@ -102,6 +102,22 @@ ms::bitwise_andnot(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Sim
 
 template<class Val, int Bits, class Simd_tag>
 force_inline
+simd<Val, Bits, Simd_tag>  
+ms::shift_left(const simd<Val, Bits, Simd_tag>& x, unsigned int count)
+{
+    return simd_shift_left<Val, Bits, Simd_tag>::eval(x, count);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>  
+ms::shift_right(const simd<Val, Bits, Simd_tag>& x, unsigned int count)
+{
+    return simd_shift_right<Val, Bits, Simd_tag>::eval(x, count);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
 simd<Val, Bits, Simd_tag> 
 ms::operator*(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 {
@@ -177,6 +193,24 @@ ms::fms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag> 
+ms::fnma_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z)
+{
+    return simd_fnma_f<Val, Bits, Simd_tag>::eval(x, y, z);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::fnms_f(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z)
+{
+    return simd_fnms_f<Val, Bits, Simd_tag>::eval(x, y, z);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
 ms::fma_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z)
 {
@@ -190,6 +224,24 @@ ms::fms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y
                        const simd<Val, Bits, Simd_tag>& z)
 {
     return simd_fms_a<Val, Bits, Simd_tag>::eval(x, y, z);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::fnma_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z)
+{
+    return simd_fnma_a<Val, Bits, Simd_tag>::eval(x, y, z);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::fnms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd<Val, Bits, Simd_tag>& z)
+{
+    return simd_fnms_a<Val, Bits, Simd_tag>::eval(x, y, z);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -266,6 +318,14 @@ ms::geq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag>  
+ms::is_nan(const simd<Val, Bits, Simd_tag>& x)
+{
+    return simd_is_nan<Val, Bits, Simd_tag>::eval(x);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>  
 ms::sqrt(const simd<Val, Bits, Simd_tag>& x)
 {
     return simd_sqrt<Val, Bits, Simd_tag>::eval(x);
@@ -324,6 +384,53 @@ any(const simd<Val, Bits, Simd_tag>& x)
     return simd_any<Val, Bits, Simd_tag>::eval(x);
 };
 
+//-----------------------------------------------------------------------
+//                   CONDITIONAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+if_nan_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false)
+{
+    return bitwise_or(val_false, test);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+if_zero_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false)
+{
+    return bitwise_andnot(test, val_false);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_true,
+             const simd<Val, Bits, Simd_tag>& val_false)
+{
+    return simd_if_then_else<Val, Bits, Simd_tag>::eval(test, val_true, val_false);
+}
+
+//-----------------------------------------------------------------------
+//                   MATHEMATICAL FUNCTIONS
+//-----------------------------------------------------------------------
+/*
+TODO
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::pow2k(const simd<Val, Bits, Simd_tag>& k)
+{
+    return simd_pow2k<Val, Bits, Simd_tag>::eval(k);
+};
+*/
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::pow2k(const simd<int64_t, Bits, Simd_tag>& k)
+{
+    return simd_pow2k<Val, Bits, Simd_tag>::eval(k);
+};
+
+//-----------------------------------------------------------------------
+//                   IO FUNCTIONS
+//-----------------------------------------------------------------------
 template<class Val, int Bits, class Simd_tag>
 std::ostream& ms::operator<<(std::ostream& os, const simd<Val, Bits, Simd_tag>& x)
 {
@@ -416,7 +523,4 @@ std::istream& ms::operator>>(std::istream& is, simd<Val, Bits, Simd_tag>& v)
     return is;
 };
 
-
-template<class Val, int Bits, class Simd_tag>
-std::istream& operator>>(std::istream& os, simd<Val, Bits, Simd_tag>& x);
 }}

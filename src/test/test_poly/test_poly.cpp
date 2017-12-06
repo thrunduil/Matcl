@@ -27,9 +27,6 @@
 #include "matcl-scalar/lib_functions/func_unary.h"
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 
-//TODO
-#include <iacaMarks.h>
-
 // we are calling horner for mp_float type
 #pragma warning(disable :4714) // __forceinline not inlined
 
@@ -713,33 +710,6 @@ bool test_polynomials::test_equal_ulp(T res1, const mp_float& res2, double max_e
     bool ok = (dist <= max_err);
     return ok;
 
-};
-
-//TODO
-__declspec(noinline)
-double test::test_iaca(double x)
-{
-    double poly[] = {1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24., 1.0/120., 1.0/720., 1.0/5040.,
-                    1./40320., 1.0/362880., 1.0/3628800., 1.0/39916800.};
-
-    static const int size = sizeof(poly)/sizeof(double);
-    //using simd_type = matcl::simd::simd<double, 128, simd::sse_tag>;
-    using simd_type = double;
-
-    std::cout << "start" << "\n";
-    volatile double tmp = 0;
-
-    IACA_VC64_START
-    tmp             += 1.0;
-    simd_type xs    = simd_type(x);
-    simd_type z     = simd::horner<size>(xs, poly);
-    //double res    = z.first();
-    double res      = z;
-    tmp             += 2.0;
-    IACA_VC64_END
-
-    std::cout << res << "\n";
-    return res;
 };
 
 }}

@@ -164,6 +164,38 @@ struct simd_fms_f<double, 256, avx_tag>
 };
 
 template<>
+struct simd_fnma_f<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm256_fnmadd_pd( x.data, y.data, z.data);
+        #else
+            return z - x * y;
+        #endif
+    };
+};
+
+template<>
+struct simd_fnms_f<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm256_fnmsub_pd( x.data, y.data, z.data);
+        #else
+            return -(x * y + z);
+        #endif
+    };
+};
+
+template<>
 struct simd_fma_a<double, 256, avx_tag>
 {
     using simd_type = simd<double, 256, avx_tag>;
@@ -191,6 +223,38 @@ struct simd_fms_a<double, 256, avx_tag>
             return _mm256_fmsub_pd( x.data, y.data, z.data);
         #else
             return fma_dekker_simd(x, y, -z);
+        #endif
+    };
+};
+
+template<>
+struct simd_fnma_a<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm256_fnmadd_pd( x.data, y.data, z.data);
+        #else
+            return fma_dekker_simd(-x, y, z);
+        #endif
+    };
+};
+
+template<>
+struct simd_fnms_a<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm256_fnmsub_pd( x.data, y.data, z.data);
+        #else
+            return -fma_dekker_simd(x, y, z);
         #endif
     };
 };
@@ -253,6 +317,64 @@ struct simd_bitwise_andnot<double, 256, avx_tag>
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
         return _mm256_andnot_pd(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_shift_left<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        #if MATCL_ARCHITECTURE_HAS_AVX2
+            // cast to integer
+            __m256i val_i   = _mm256_castpd_si256(x.data);
+
+            // shift packed 64-bit integers in a left 
+            __m256i res_i   = _mm256_slli_epi64(val_i, y);
+
+            //cast to double
+            __m256d res_d   = _mm256_castsi256_pd(res_i);
+            return res_d;
+        #else
+            using simd_half = simd_type::simd_half;
+
+            simd_half hi    = shift_left(x.extract_high(), y);
+            simd_half lo    = shift_left(x.extract_low(), y);
+
+            return simd_type(lo, hi);
+        #endif
+    };
+};
+
+template<>
+struct simd_shift_right<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        #if MATCL_ARCHITECTURE_HAS_AVX2
+            // cast to integer
+            __m256i val_i   = _mm256_castpd_si256(x.data);
+
+            // shift packed 64-bit integers in a right 
+            __m256i res_i   = _mm256_srli_epi64(val_i, y);
+
+            //cast to double
+            __m256d res_d   = _mm256_castsi256_pd(res_i);
+            return res_d;
+        #else
+            using simd_half = simd_type::simd_half;
+
+            simd_half hi    = shift_right(x.extract_high(), y);
+            simd_half lo    = shift_right(x.extract_low(), y);
+
+            return simd_type(lo, hi);
+        #endif
     };
 };
 
@@ -428,6 +550,19 @@ struct simd_any_nan<double, 256, avx_tag>
 };
 
 template<>
+struct simd_is_nan<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        __m256d nt  = _mm256_cmp_pd(x.data, x.data, _CMP_NEQ_UQ);
+        return nt;
+    };
+};
+
+template<>
 struct simd_any<double, 256, avx_tag>
 {
     using simd_type = simd<double, 256, avx_tag>;
@@ -450,6 +585,50 @@ struct simd_all<double, 256, avx_tag>
     {
         int res     = _mm256_movemask_pd(x.data);
         return res == 15;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   MATHEMATICAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<>
+struct simd_pow2k<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+    using simd_int  = simd<int32_t, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& k)
+    {
+        // 2^52
+        const double pow2_52    = 4503599627370496.0;
+
+        // bias in exponent
+        const double bias       = 1023.0;
+
+        // put k + bias in least significant bits
+        simd_type k2            = k + simd_type(bias + pow2_52);
+
+        // shift left 52 places to get into exponent field
+        simd_type pow2k         = shift_left(k2, 52);
+
+        return pow2k;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   CONDITIONAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<>
+struct simd_if_then_else<double, 256, avx_tag>
+{
+    using simd_type = simd<double, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& test, const simd_type& val_true,
+                          const simd_type& val_false)
+    {
+        return _mm256_blendv_pd(val_false.data, val_true.data, test.data);
     };
 };
 

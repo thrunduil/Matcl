@@ -30,7 +30,6 @@
 namespace matcl { namespace test
 {
 
-double test_iaca(double x);
 void test_poly();
 void test_poly_cond();
 void test_poly_dyn(bool pow2);
