@@ -58,10 +58,10 @@ struct test_cast<ms::simd<float, Bits, Tag>>
     static simd_type eval(const simd_type& x)
     {
         using simd_double = typename simd_type::simd_double;
-        simd_double xd_l = x.cast_low_to_double();
-        simd_double xd_h = x.cast_high_to_double();
+        simd_double xd_l = x.convert_low_to_double();
+        simd_double xd_h = x.convert_high_to_double();
 
-        return simd_type(xd_l.cast_to_float(), xd_h.cast_to_float());
+        return simd_type(xd_l.convert_to_float(), xd_h.convert_to_float());
     }
 };
 
@@ -87,9 +87,9 @@ struct test_cast<ms::simd<double, 128, Tag>>
     static simd_type eval(const simd_type& x)
     {
         using simd_float = typename simd_type::simd_float;
-        simd_float xf = x.cast_to_float();
+        simd_float xf = x.convert_to_float();
 
-        return simd_type(xf.cast_low_to_double());
+        return simd_type(xf.convert_low_to_double());
     };
 };
 
@@ -101,9 +101,9 @@ struct test_cast<ms::simd<double, 256, Tag>>
     static simd_type eval(const simd_type& x)
     {
         using simd_float = typename simd_type::simd_float;
-        simd_float xf = x.cast_to_float();
+        simd_float xf = x.convert_to_float();
 
-        return simd_type(xf.cast_to_double());
+        return simd_type(xf.convert_to_double());
     };
 };
 
@@ -115,10 +115,10 @@ struct test_cast<ms::simd_compl<float, Bits, Tag>>
     static simd_type eval(const simd_type& x)
     {
         using simd_double = typename simd_type::simd_double;
-        simd_double xd_l = x.cast_low_to_double();
-        simd_double xd_h = x.cast_high_to_double();
+        simd_double xd_l = x.convert_low_to_double();
+        simd_double xd_h = x.convert_high_to_double();
 
-        return simd_type(xd_l.cast_to_float(), xd_h.cast_to_float());
+        return simd_type(xd_l.convert_to_float(), xd_h.convert_to_float());
     }
 };
 
@@ -130,9 +130,9 @@ struct test_cast<ms::simd_compl<double, 128, Tag>>
     static simd_type eval(const simd_type& x)
     {
         using simd_float = typename simd_type::simd_float;
-        simd_float xf = x.cast_to_float();
+        simd_float xf = x.convert_to_float();
 
-        return simd_type(xf.cast_low_to_double());
+        return simd_type(xf.convert_low_to_double());
     };
 };
 
@@ -144,9 +144,9 @@ struct test_cast<ms::simd_compl<double, 256, Tag>>
     static simd_type eval(const simd_type& x)
     {
         using simd_float = typename simd_type::simd_float;
-        simd_float xf = x.cast_to_float();
+        simd_float xf = x.convert_to_float();
 
-        return simd_type(xf.cast_to_double());
+        return simd_type(xf.convert_to_double());
     };
 };
 
@@ -626,6 +626,34 @@ struct Func_fma_a
     };
 };
 
+struct Func_fnma_f
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2, const T& x3)
+    { 
+        return fnma_f(x1, x2, x3); 
+    }
+
+    static std::string name()
+    { 
+        return "fnma_f"; 
+    };
+};
+
+struct Func_fnma_a
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2, const T& x3)
+    { 
+        return fnma_a(x1, x2, x3); 
+    }
+
+    static std::string name()
+    { 
+        return "fnma_a"; 
+    };
+};
+
 struct Func_fms_f
 {
     template<class T>    
@@ -651,6 +679,34 @@ struct Func_fms_a
     static std::string name()
     { 
         return "fms_a"; 
+    };
+};
+
+struct Func_fnms_f
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2, const T& x3)
+    { 
+        return fnms_f(x1, x2, x3); 
+    }
+
+    static std::string name()
+    { 
+        return "fnms_f"; 
+    };
+};
+
+struct Func_fnms_a
+{
+    template<class T>    
+    force_inline static T eval(const T& x1, const T& x2, const T& x3)
+    { 
+        return fnms_a(x1, x2, x3); 
+    }
+
+    static std::string name()
+    { 
+        return "fnms_a"; 
     };
 };
 

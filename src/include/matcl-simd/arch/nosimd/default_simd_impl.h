@@ -38,6 +38,18 @@ struct default_simd_type<float>
 };
 
 template<>
+struct default_simd_type<int32_t>
+{ 
+    using type = simd<int32_t, 128, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type<int64_t>
+{ 
+    using type = simd<int64_t, 128, nosimd_tag>; 
+};
+
+template<>
 struct default_simd_type_size<float, 256>
 {
     using type = simd<float, 256, nosimd_tag>; 
@@ -50,6 +62,18 @@ struct default_simd_type_size<double, 256>
 };
 
 template<>
+struct default_simd_type_size<int32_t, 256>
+{
+    using type = simd<int32_t, 256, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type_size<int64_t, 256>
+{
+    using type = simd<int64_t, 256, nosimd_tag>; 
+};
+
+template<>
 struct default_simd_type_size<float, 128>
 {
     using type = simd<float, 128, nosimd_tag>; 
@@ -59,6 +83,18 @@ template<>
 struct default_simd_type_size<double, 128>
 {
     using type = simd<double, 128, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type_size<int32_t, 128>
+{
+    using type = simd<int32_t, 128, nosimd_tag>; 
+};
+
+template<>
+struct default_simd_type_size<int64_t, 128>
+{
+    using type = simd<int32_t, 128, nosimd_tag>; 
 };
 
 }}

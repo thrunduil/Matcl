@@ -27,19 +27,29 @@ namespace matcl { namespace simd
 
 template simd<float, 128, nosimd_tag>;
 template simd<double, 128, nosimd_tag>;
+template simd<int32_t, 128, nosimd_tag>;
+template simd<int64_t, 128, nosimd_tag>;
+
 template simd_compl<float, 128, nosimd_tag>;
 template simd_compl<double, 128, nosimd_tag>;
 
 template simd<float, 256, nosimd_tag>;
 template simd<double, 256, nosimd_tag>;
+template simd<int32_t, 256, nosimd_tag>;
+template simd<int64_t, 256, nosimd_tag>;
+
 template simd_compl<float, 256, nosimd_tag>;
 template simd_compl<double, 256, nosimd_tag>;
 
 template void simd<float, 128, nosimd_tag>::scatter<2>(float*) const;
 template void simd<double, 128, nosimd_tag>::scatter<2>(double*) const;
+template void simd<int32_t, 128, nosimd_tag>::scatter<2>(int32_t*) const;
+template void simd<int64_t, 128, nosimd_tag>::scatter<2>(int64_t*) const;
 
 template void simd<float, 256, nosimd_tag>::scatter<2>(float*) const;
 template void simd<double, 256, nosimd_tag>::scatter<2>(double*) const;
+template void simd<int32_t, 256, nosimd_tag>::scatter<2>(int32_t*) const;
+template void simd<int64_t, 256, nosimd_tag>::scatter<2>(int64_t*) const;
 
 template void simd_compl<float, 128, nosimd_tag>::scatter<2>(simd_single_complex*) const;
 template void simd_compl<double, 128, nosimd_tag>::scatter<2>(simd_double_complex*) const;
@@ -50,23 +60,32 @@ template void simd_compl<double, 256, nosimd_tag>::scatter<2>(simd_double_comple
 #if MATCL_ARCHITECTURE_HAS_SSE2
     template simd<float, 128, sse_tag>;
     template simd<double, 128, sse_tag>;
+    template simd<int32_t, 128, sse_tag>;
+    template simd<int64_t, 128, sse_tag>;
+
     template simd_compl<float, 128, sse_tag>;
     template simd_compl<double, 128, sse_tag>;
 
     template simd<float, 256, sse_tag>;
     template simd<double, 256, sse_tag>;
+    template simd<int32_t, 256, sse_tag>;
+    template simd<int64_t, 256, sse_tag>;
+
     template simd_compl<float, 256, sse_tag>;
     template simd_compl<double, 256, sse_tag>;
 
     template void simd<float, 128, sse_tag>::scatter<2>(float*) const;
     template void simd<double, 128, sse_tag>::scatter<2>(double*) const;
+    template void simd<int32_t, 128, sse_tag>::scatter<2>(int32_t*) const;
+    template void simd<int64_t, 128, sse_tag>::scatter<2>(int64_t*) const;
 
     template void simd<float, 256, sse_tag>::scatter<2>(float*) const;
     template void simd<double, 256, sse_tag>::scatter<2>(double*) const;
+    template void simd<int32_t, 256, sse_tag>::scatter<2>(int32_t*) const;
+    template void simd<int64_t, 256, sse_tag>::scatter<2>(int64_t*) const;
 
     template void simd_compl<float, 128, sse_tag>::scatter<2>(simd_single_complex*) const;
     template void simd_compl<double, 128, sse_tag>::scatter<2>(simd_double_complex*) const;
-
     template void simd_compl<float, 256, sse_tag>::scatter<2>(simd_single_complex*) const;
     template void simd_compl<double, 256, sse_tag>::scatter<2>(simd_double_complex*) const;
 #endif
@@ -74,11 +93,16 @@ template void simd_compl<double, 256, nosimd_tag>::scatter<2>(simd_double_comple
 #if MATCL_ARCHITECTURE_HAS_AVX
     template simd<float, 256, avx_tag>;
     template simd<double, 256, avx_tag>;
+    template simd<int32_t, 256, avx_tag>;
+    template simd<int64_t, 256, avx_tag>;
+
     template simd_compl<float, 256, avx_tag>;
     template simd_compl<double, 256, avx_tag>;
 
     template void simd<float, 256, avx_tag>::scatter<2>(float*) const;
     template void simd<double, 256, avx_tag>::scatter<2>(double*) const;
+    template void simd<int32_t, 256, avx_tag>::scatter<2>(int32_t*) const;
+    template void simd<int64_t, 256, avx_tag>::scatter<2>(int64_t*) const;
 
     template void simd_compl<float, 256, avx_tag>::scatter<2>(simd_single_complex*) const;
     template void simd_compl<double, 256, avx_tag>::scatter<2>(simd_double_complex*) const;

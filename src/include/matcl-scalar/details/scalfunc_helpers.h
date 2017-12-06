@@ -4533,7 +4533,7 @@ template<class T>
 struct fma_a_helper
 {
     force_inline
-    static T eval(const T& a, const T& b, const T& c)
+    static T eval(T a, T b, T c)
     {
         return scal_func::fma_a(a, b, c);
     }
@@ -4555,7 +4555,7 @@ template<class T>
 struct fms_a_helper
 {
     force_inline
-    static T eval(const T& a, const T& b, const T& c)
+    static T eval(T a, T b, T c)
     {
         return scal_func::fms_a(a, b, c);
     }
@@ -4586,7 +4586,8 @@ struct dot2_a_helper
 template<>
 struct dot2_a_helper<dynamic::object>
 {
-    static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, const dynamic::object& c, const dynamic::object& d)
+    static dynamic::object eval(const dynamic::object& a, const dynamic::object& b, 
+								const dynamic::object& c, const dynamic::object& d)
     {
         return dynamic::dot2_a(a, b, c, d);
     }

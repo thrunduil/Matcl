@@ -155,6 +155,69 @@ fms_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>&
     return x * y - z;
 };
 
+// evaluate -x*y + z
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+fnma_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+                       const simd_compl<Val, Bits, Simd_tag>& z)
+{
+    return z - x * y;
+};
+
+// evaluate -x * y + z, where x is a real vector; see operator* for definition
+// of x * y, where x is a real vector and y is a complex vector
+template<class Val, int Bits, class Simd_tag>
+simd_compl<Val, Bits, Simd_tag>
+fnma_f(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+                       const simd_compl<Val, Bits, Simd_tag>& z)
+{
+    return z - x * y;
+};
+
+// evaluate -x * y + z, where y is a real vector; see operator* for definition
+// of x * y, where y is a real vector and x is a complex vector
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+fnma_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd_compl<Val, Bits, Simd_tag>& z)
+{
+    return z - x * y;
+};
+
+// evaluate -x * y - z
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+fnms_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+                       const simd_compl<Val, Bits, Simd_tag>& z)
+{
+    return -(x * y + z);
+};
+
+// evaluate -x * y - z, where x is a real vector; see operator* for definition
+// of x * y, where x is a real vector and y is a complex vector
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+fnms_f(const simd<Val, Bits, Simd_tag>& x, const simd_compl<Val, Bits, Simd_tag>& y, 
+                       const simd_compl<Val, Bits, Simd_tag>& z)
+{
+    return -(x * y + z);
+};
+
+// evaluate -x * y - z, where y is a real vector; see operator* for definition
+// of x * y, where y is a real vector and x is a complex vector
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd_compl<Val, Bits, Simd_tag>
+fnms_f(const simd_compl<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
+                       const simd_compl<Val, Bits, Simd_tag>& z)
+{
+    return -(x * y + z);
+};
+
 // return true if at least element in the vector x is +INF
 template<class Val, int Bits, class Simd_tag>
 bool

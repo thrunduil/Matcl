@@ -149,6 +149,33 @@ struct simd_fms_f<T, 256, sse_tag>
     };
 };
 
+//
+template<class T>
+struct simd_fnma_f<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        return simd_type(fnma_f(x.data[0], y.data[0], z.data[0]), 
+                         fnma_f(x.data[1], y.data[1], z.data[1]));
+    };
+};
+
+template<class T>
+struct simd_fnms_f<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        return simd_type(fnms_f(x.data[0], y.data[0], z.data[0]), 
+                         fnms_f(x.data[1], y.data[1], z.data[1]));
+    };
+};
+
 template<class T>
 struct simd_fma_a<T, 256, sse_tag>
 {
@@ -172,6 +199,33 @@ struct simd_fms_a<T, 256, sse_tag>
     {
         return simd_type(fms_a(x.data[0], y.data[0], z.data[0]), 
                          fms_a(x.data[1], y.data[1], z.data[1]));
+    };
+};
+
+//
+template<class T>
+struct simd_fnma_a<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        return simd_type(fnma_a(x.data[0], y.data[0], z.data[0]), 
+                         fnma_a(x.data[1], y.data[1], z.data[1]));
+    };
+};
+
+template<class T>
+struct simd_fnms_a<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        return simd_type(fnms_a(x.data[0], y.data[0], z.data[0]), 
+                         fnms_a(x.data[1], y.data[1], z.data[1]));
     };
 };
 
@@ -236,6 +290,32 @@ struct simd_bitwise_andnot<T, 256, sse_tag>
     {
         return simd_type(bitwise_andnot(x.data[0], y.data[0]), 
                          bitwise_andnot(x.data[1], y.data[1]));
+    };
+};
+
+template<class T>
+struct simd_shift_left<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        return simd_type(shift_left(x.data[0], y), 
+                         shift_left(x.data[1], y));
+    };
+};
+
+template<class T>
+struct simd_shift_right<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        return simd_type(shift_right(x.data[0], y), 
+                         shift_right(x.data[1], y));
     };
 };
 
@@ -411,6 +491,18 @@ struct simd_any_nan<T, 256, sse_tag>
 };
 
 template<class T>
+struct simd_is_nan<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        return simd_type(is_nan(x.extract_low()), is_nan(x.extract_high()));
+    };
+};
+
+template<class T>
 struct simd_any<T, 256, sse_tag>
 {
     using simd_type = simd<T, 256, sse_tag>;
@@ -437,6 +529,38 @@ struct simd_all<T, 256, sse_tag>
         bool b2 = all(x.extract_high());
 
         return b1 && b2;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   MATHEMATICAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<class T>
+struct simd_pow2k<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& k)
+    {
+        return simd_type(pow2k(x.extract_low()), pow2k(x.extract_high()));
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   CONDITIONAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<class T>
+struct simd_if_then_else<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& test, const simd_type& val_true,
+                          const simd_type& val_false)
+    {
+        return simd_type(if_then_else(test.data[0], val_true.data[0], val_false.data[0]),
+                         if_then_else(test.data[1], val_true.data[1], val_false.data[1]));
     };
 };
 

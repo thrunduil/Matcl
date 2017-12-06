@@ -31,16 +31,16 @@ namespace details
 {
 
 template<class T>
-struct get_unit_type{};
+struct get_uint_type{};
 
 template<>
-struct get_unit_type<float>
+struct get_uint_type<float>
 {
     using type = uint32_t;
 };
 
 template<>
-struct get_unit_type<double>
+struct get_uint_type<double>
 {
     using type = uint64_t;
 };
@@ -284,6 +284,47 @@ struct simd_fms_f<T, Bits, nosimd_tag>
     };
 };
 
+//
+template<class T, int Bits>
+struct simd_fnma_f<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = scalar_func::fnma_f(x.data[i], y.data[i], z.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_fnms_f<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = scalar_func::fnms_f(x.data[i], y.data[i], z.data[i]);
+
+        return res;
+    };
+};
+
 template<class T, int Bits>
 struct simd_fma_a<T, Bits, nosimd_tag>
 {
@@ -324,6 +365,47 @@ struct simd_fms_a<T, Bits, nosimd_tag>
     };
 };
 
+//
+template<class T, int Bits>
+struct simd_fnma_a<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = scalar_func::fnma_a(x.data[i], y.data[i], z.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_fnms_a<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = scalar_func::fnms_a(x.data[i], y.data[i], z.data[i]);
+
+        return res;
+    };
+};
+
 template<class T, int Bits>
 struct simd_abs<T, Bits, nosimd_tag>
 {
@@ -355,7 +437,7 @@ struct simd_bitwise_or<T, Bits, nosimd_tag>
     force_inline
     static T bitwise_or(const T& x, const T& y)
     {
-        using uint_type     = details::get_unit_type<T>::type;
+        using uint_type     = details::get_uint_type<T>::type;
 
         const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
         const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -388,7 +470,7 @@ struct simd_bitwise_xor<T, Bits, nosimd_tag>
     force_inline
     static T bitwise_xor(const T& x, const T& y)
     {
-        using uint_type     = details::get_unit_type<T>::type;
+        using uint_type     = details::get_uint_type<T>::type;
 
         const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
         const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -421,7 +503,7 @@ struct simd_bitwise_and<T, Bits, nosimd_tag>
     force_inline
     static T bitwise_and(const T& x, const T& y)
     {
-        using uint_type     = details::get_unit_type<T>::type;
+        using uint_type     = details::get_uint_type<T>::type;
 
         const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
         const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -454,7 +536,7 @@ struct simd_bitwise_andnot<T, Bits, nosimd_tag>
     force_inline
     static T bitwise_andnot(const T& x, const T& y)
     {
-        using uint_type     = details::get_unit_type<T>::type;
+        using uint_type     = details::get_uint_type<T>::type;
 
         const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
         const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -471,6 +553,68 @@ struct simd_bitwise_andnot<T, Bits, nosimd_tag>
 
         for (int i = 0; i < vector_size; ++i)
             res.data[i] = bitwise_andnot(x.data[i], y.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_shift_left<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T shift_left(const T& x, unsigned int y)
+    {
+        using uint_type     = details::get_uint_type<T>::type;
+
+        const uint_type* xi = reinterpret_cast<const uint_type*>(&x);
+        uint_type res       = (*xi) << y;
+
+        return *reinterpret_cast<const T*>(&res);
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = shift_left(x.data[i], y);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_shift_right<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T shift_right(const T& x, unsigned int y)
+    {
+        using uint_type     = details::get_uint_type<T>::type;
+
+        const uint_type* xi = reinterpret_cast<const uint_type*>(&x);
+        uint_type res       = (*xi) >> y;
+
+        return *reinterpret_cast<const T*>(&res);
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = shift_right(x.data[i], y);
 
         return res;
     };
@@ -805,7 +949,29 @@ struct simd_any_nan<T, Bits, nosimd_tag>
     {
         bool res = false;
         for (int i = 0; i < vector_size; ++i)
-            res |= matcl::is_nan(x.data[i]);
+            res |= matcl::simd::scalar_func::is_nan(x.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_is_nan<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        simd_type res;
+
+        const T val_true  = get_val_true();
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = matcl::simd::scalar_func::is_nan(x.data[i]) ? val_true : val_false;
 
         return res;
     };
@@ -846,6 +1012,59 @@ struct simd_all<T, Bits, nosimd_tag>
             res |= (x.data[i] == T());
 
         return !res;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   MATHEMATICAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<class T, int Bits>
+struct simd_pow2k<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& k)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = matcl::simd::scalar_func::pow2k(x.data[i]);
+
+        return res;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   CONDITIONAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<class T, int Bits>
+struct simd_if_then_else<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    T if_then_else(T test, T val_true, T val_false)
+    {
+        return (test == T())? : val_false : val_true;
+    };
+
+    force_inline
+    static simd_type eval(const simd_type& test, const simd_type& val_true,
+                          const simd_type& val_false)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = if_then_else(test.data[i], val_true.data[i], val_false.data[i]);
+
+        return res;
     };
 };
 

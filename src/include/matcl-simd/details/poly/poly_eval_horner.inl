@@ -40,7 +40,7 @@ struct eval_small_horner<Trans, Arg_type, Arg1, Args...>
     static Arg_type eval(const Arg_type& x, const Arg1& coef1, 
                          const Args& ... coef)
     {
-        Arg_type res  = eval_small_horner<Trans, Arg_type, Args...>
+        Arg_type res    = eval_small_horner<Trans, Arg_type, Args...>
                             ::eval(x, coef...);
         Arg1 coef_tr    = Trans::eval(coef1);
         res             = eval_fma<Arg_type, Arg1>::eval(res, x, coef_tr);

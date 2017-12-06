@@ -39,12 +39,12 @@ matcl::fma_dekker_simd(const simd::simd<float, 128, simd::sse_tag>& x,
                 const simd::simd<float, 128, simd::sse_tag>& z)
 {
     using simd_float    = simd::simd<float, 128, simd::sse_tag>;
-    using simd_double   = simd_float::simd_double_2;
+    using simd_double   = simd_float::simd_256_double;
 
     //for floats we can use double arithmetics
-    simd_double xd      = x.cast_to_double();
-    simd_double yd      = y.cast_to_double();
-    simd_double zd      = z.cast_to_double();
+    simd_double xd      = x.convert_to_double();
+    simd_double yd      = y.convert_to_double();
+    simd_double zd      = z.convert_to_double();
 
     // res is exact
     simd_double res     = xd * yd;
@@ -53,7 +53,7 @@ matcl::fma_dekker_simd(const simd::simd<float, 128, simd::sse_tag>& x,
     res                 = res + zd;
 
     // almost 0.5 ulp error in single precision
-    simd_float resf     = res.cast_to_float();
+    simd_float resf     = res.convert_to_float();
     return resf;
 }
 
@@ -72,12 +72,12 @@ matcl::fma_dekker_simd(const simd::simd<float, 256, simd::avx_tag>& x,
     using simd_half     = simd_float::simd_half;
 
     //for floats we can use double arithmetics
-    simd_double xd_l    = x.cast_low_to_double();
-    simd_double xd_h    = x.cast_high_to_double();
-    simd_double yd_l    = y.cast_low_to_double();
-    simd_double yd_h    = y.cast_high_to_double();
-    simd_double zd_l    = z.cast_low_to_double();
-    simd_double zd_h    = z.cast_high_to_double();
+    simd_double xd_l    = x.convert_low_to_double();
+    simd_double xd_h    = x.convert_high_to_double();
+    simd_double yd_l    = y.convert_low_to_double();
+    simd_double yd_h    = y.convert_high_to_double();
+    simd_double zd_l    = z.convert_low_to_double();
+    simd_double zd_h    = z.convert_high_to_double();
 
     // res is exact
     simd_double res_l   = xd_l * yd_l;
@@ -88,8 +88,8 @@ matcl::fma_dekker_simd(const simd::simd<float, 256, simd::avx_tag>& x,
     res_h               = res_h + zd_h;
 
     // almost 0.5 ulp error in single precision
-    simd_half resf_l    = res_l.cast_to_float();
-    simd_half resf_h    = res_h.cast_to_float();
+    simd_half resf_l    = res_l.convert_to_float();
+    simd_half resf_h    = res_h.convert_to_float();
     
     return simd_float(resf_l, resf_h);
 };

@@ -559,6 +559,8 @@ void test_simd::test_functions_bin()
     test_function_bin<T, test_functions::Func_bit_or>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_bit_xor>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_bit_andnot>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+
+    //TODO: shifts
 };
 
 template<class T>
@@ -615,6 +617,11 @@ void test_simd::test_functions_3()
     test_function_3<T, test_functions::Func_fma_f>(dm, N, ptr_in_1, ptr_in_2, 
                                                  ptr_in_3, ptr_out, ptr_out_gen);
 
+    test_function_3<T, test_functions::Func_fnma_a>(dm, N, ptr_in_1, ptr_in_2, 
+                                                 ptr_in_3, ptr_out, ptr_out_gen);
+    test_function_3<T, test_functions::Func_fnma_f>(dm, N, ptr_in_1, ptr_in_2, 
+                                                 ptr_in_3, ptr_out, ptr_out_gen);
+
     for (int i = 0; i < N; ++i)
     {
         // avoid large round-off errors
@@ -624,6 +631,11 @@ void test_simd::test_functions_3()
     test_function_3<T, test_functions::Func_fms_f>(dm, N, ptr_in_1, ptr_in_2, 
                                                  ptr_in_3, ptr_out, ptr_out_gen);
     test_function_3<T, test_functions::Func_fms_a>(dm, N, ptr_in_1, ptr_in_2, 
+                                                 ptr_in_3, ptr_out, ptr_out_gen);
+
+    test_function_3<T, test_functions::Func_fnms_f>(dm, N, ptr_in_1, ptr_in_2, 
+                                                 ptr_in_3, ptr_out, ptr_out_gen);
+    test_function_3<T, test_functions::Func_fnms_a>(dm, N, ptr_in_1, ptr_in_2, 
                                                  ptr_in_3, ptr_out, ptr_out_gen);
 };
 

@@ -171,6 +171,39 @@ struct simd_fms_f<double, 128, sse_tag>
     };
 };
 
+//
+template<>
+struct simd_fnma_f<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm_fnmadd_pd( x.data, y.data, z.data);
+        #else
+            return z - x * y;
+        #endif
+    };
+};
+
+template<>
+struct simd_fnms_f<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm_fnmsub_pd( x.data, y.data, z.data);
+        #else
+            return -(x * y + z);
+        #endif
+    };
+};
+
 template<>
 struct simd_fma_a<double, 128, sse_tag>
 {
@@ -199,6 +232,39 @@ struct simd_fms_a<double, 128, sse_tag>
             return _mm_fmsub_pd( x.data, y.data, z.data);
         #else
             return fma_dekker_simd(x, y, -z);
+        #endif
+    };
+};
+
+//
+template<>
+struct simd_fnma_a<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm_fnmadd_pd( x.data, y.data, z.data);
+        #else
+            return fma_dekker_simd(-x, y, z);
+        #endif
+    };
+};
+
+template<>
+struct simd_fnms_a<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y, const simd_type& z)
+    {
+        #if MATCL_ARCHITECTURE_HAS_FMA
+            return _mm_fnmsub_pd( x.data, y.data, z.data);
+        #else
+            return -fma_dekker_simd(x, y, z);
         #endif
     };
 };
@@ -262,6 +328,46 @@ struct simd_bitwise_andnot<double, 128, sse_tag>
     {
         const simd_type mzero = simd_type::minus_zero();
         return _mm_andnot_pd(x.data, y.data);
+    };
+};
+
+template<>
+struct simd_shift_left<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        // cast to integer
+        __m128i val_i   = _mm_castpd_si128(x.data);
+
+        // shift packed 64-bit integers in a left 
+        __m128i res_i   = _mm_slli_epi64(val_i, y);
+
+        //cast to double
+        __m128d res_d   = _mm_castsi128_pd(res_i);
+        return res_d;
+    };
+};
+
+template<>
+struct simd_shift_right<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, unsigned int y)
+    {
+        // cast to integer
+        __m128i val_i   = _mm_castpd_si128(x.data);
+
+        // shift packed 64-bit integers in a left 
+        __m128i res_i   = _mm_srli_epi64(val_i, y);
+
+        //cast to double
+        __m128d res_d   = _mm_castsi128_pd(res_i);
+        return res_d;
     };
 };
 
@@ -473,6 +579,19 @@ struct simd_any_nan<double, 128, sse_tag>
 };
 
 template<>
+struct simd_is_nan<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        __m128d nt  = _mm_cmp_pd(x.data, x.data, _CMP_NEQ_UQ);
+        return nt;
+    };
+};
+
+template<>
 struct simd_any<double, 128, sse_tag>
 {
     using simd_type = simd<double, 128, sse_tag>;
@@ -495,6 +614,67 @@ struct simd_all<double, 128, sse_tag>
     {
         int res     = _mm_movemask_pd(x.data);
         return res == 3;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   MATHEMATICAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<>
+struct simd_pow2k<double, 128, sse_tag>
+{
+    using simd_type     = simd<double, 128, sse_tag>;
+    using simd_int32    = simd<int32_t, 128, sse_tag>;
+    using simd_int64    = simd<int64_t, 128, sse_tag>;
+
+    /*
+    force_inline
+    static simd_type eval(const simd_type& k)
+    {
+        // 2^52
+        const double pow2_52    = 4503599627370496.0;
+
+        // bias in exponent
+        const double bias       = 1023.0;
+
+        // put k + bias in least significant bits
+        simd_type k2            = k + simd_type(bias + pow2_52);
+
+        // shift left 52 places to get into exponent field
+        simd_type pow2k         = shift_left(k2, 52);
+
+        return pow2k;
+    };
+    */
+
+    force_inline
+    static simd_type eval(const simd_int64& k)
+    {
+        simd_int64 ik       = k + simd_int64(1023);
+        ik                  = shift_left(ik, 52);
+        simd_type res       = ik.reinterpret_as_double();
+        return res;
+    };
+};
+
+//-----------------------------------------------------------------------
+//                   CONDITIONAL FUNCTIONS
+//-----------------------------------------------------------------------
+template<>
+struct simd_if_then_else<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& test, const simd_type& val_true,
+                          const simd_type& val_false)
+    {
+        #if MATCL_ARCHITECTURE_HAS_SSE41
+            return _mm_blendv_pd(val_false.data, val_true.data, test.data);
+        #else
+            return _mm_or_pd( _mm_and_pd(test.data, val_true.data), 
+                              _mm_andnot_pd(test.data, val_false.data));
+        #endif  
     };
 };
 

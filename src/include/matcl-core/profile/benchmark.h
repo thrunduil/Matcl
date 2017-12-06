@@ -43,7 +43,7 @@ struct benchmark_function
     virtual void    eval() = 0;
 };
 
-// TODO
+// test execution time of a function
 class MATCL_CORE_EXPORT benchmark
 {
     public:
@@ -59,10 +59,15 @@ class MATCL_CORE_EXPORT benchmark
         size_t          m_dummy;
 
     public:
+        // create benchmark object for a function f
         benchmark(const function_ptr& f);
 
+        // run tests, function will be executed n_rep times
         time_stats  make(int n_rep);
 
+        // function implementing a test should call this function in order
+        // to suppress optimizations by the compiler (i.e. unsued value 
+        // optimizations)
         template<class T>
         static void use_value(const T& v);
 
