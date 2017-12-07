@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-simd/arch/simd_impl.h"
+#include "matcl-simd/details/arch/simd_impl.h"
 #include "matcl-simd/complex/simd_complex.h"
 #include "matcl-simd/default_simd_complex.h"
 #include "matcl-simd/details/helpers.h"

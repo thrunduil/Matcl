@@ -57,9 +57,8 @@ struct test_cast<ms::simd<float, Bits, Tag>>
 
     static simd_type eval(const simd_type& x)
     {
-        using simd_double = typename simd_type::simd_double;
-        simd_double xd_l = x.convert_low_to_double();
-        simd_double xd_h = x.convert_high_to_double();
+        auto xd_l = x.convert_low_to_double();
+        auto xd_h = x.convert_high_to_double();
 
         return simd_type(xd_l.convert_to_float(), xd_h.convert_to_float());
     }
@@ -86,8 +85,7 @@ struct test_cast<ms::simd<double, 128, Tag>>
 
     static simd_type eval(const simd_type& x)
     {
-        using simd_float = typename simd_type::simd_float;
-        simd_float xf = x.convert_to_float();
+        auto xf = x.convert_to_float();
 
         return simd_type(xf.convert_low_to_double());
     };
@@ -100,8 +98,7 @@ struct test_cast<ms::simd<double, 256, Tag>>
 
     static simd_type eval(const simd_type& x)
     {
-        using simd_float = typename simd_type::simd_float;
-        simd_float xf = x.convert_to_float();
+        auto xf = x.convert_to_float();
 
         return simd_type(xf.convert_to_double());
     };
@@ -114,9 +111,8 @@ struct test_cast<ms::simd_compl<float, Bits, Tag>>
 
     static simd_type eval(const simd_type& x)
     {
-        using simd_double = typename simd_type::simd_double;
-        simd_double xd_l = x.convert_low_to_double();
-        simd_double xd_h = x.convert_high_to_double();
+        auto xd_l = x.convert_low_to_double();
+        auto xd_h = x.convert_high_to_double();
 
         return simd_type(xd_l.convert_to_float(), xd_h.convert_to_float());
     }

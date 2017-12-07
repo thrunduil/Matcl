@@ -73,4 +73,3 @@ struct vector_size<simd_compl<Val, Bits, Simd_tag>>
 };
 
 }}
-
