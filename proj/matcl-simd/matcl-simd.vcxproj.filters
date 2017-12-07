@@ -25,169 +25,55 @@
     <Filter Include="Source Files\include\details">
       <UniqueIdentifier>{e5b29bb1-c02d-4b38-9ecc-1757d31be641}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\include\func">
-      <UniqueIdentifier>{7f17ddda-f492-446b-9297-7050587c85e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\include\arch\sse\func">
-      <UniqueIdentifier>{78108bee-2b2d-4e3e-8289-9f8a1c40a1db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\include\arch\sse\func_complex">
-      <UniqueIdentifier>{bce1b3d8-da49-4254-a21c-5b8161ddc567}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\include\arch\avx\func">
-      <UniqueIdentifier>{fe760482-0066-4a2c-a870-96da7b9d1eac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\include\arch\avx\func_complex">
-      <UniqueIdentifier>{1a748464-0083-404c-9f15-c496f85c53d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\include\arch\nosimd\func">
-      <UniqueIdentifier>{c3fdbf3e-a00e-489a-bf31-f0a57f209b15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\include\arch\nosimd\func_complex">
-      <UniqueIdentifier>{c25f53a1-606d-45d0-a647-cec3db092fb8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\include\poly">
       <UniqueIdentifier>{468ea40b-3fa4-4024-a8d3-0a95ba7c8c07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\details\arch">
+      <UniqueIdentifier>{f3205651-e6f1-4919-9ca8-c745c650e5fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\avx">
+      <UniqueIdentifier>{c5ea52d5-3b80-496c-91c6-2ec70666145b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\avx\func">
+      <UniqueIdentifier>{4b695928-84d7-4ac1-96ff-cebe23aebf88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\avx\func_complex">
+      <UniqueIdentifier>{b702e424-3c85-43e4-a0fc-2f28bf933a11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\nosimd">
+      <UniqueIdentifier>{1b819ab9-c009-4315-a59d-29cf1ffa7533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\nosimd\func">
+      <UniqueIdentifier>{7763a9a5-8848-4d81-9358-be0693beb3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\nosimd\func_complex">
+      <UniqueIdentifier>{d6c551a6-5908-4084-8808-f09f883ad11c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\sse">
+      <UniqueIdentifier>{c60ded4a-6b1a-43b1-82e7-1a361ea0476f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\sse\func">
+      <UniqueIdentifier>{983da473-4815-4a67-ab43-b97fdb3292fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\sse\func_complex">
+      <UniqueIdentifier>{2c12e2b9-07e4-4d57-af89-4d8bb8a20e37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\complex">
+      <UniqueIdentifier>{82f3786d-c69b-4ebc-b609-376d2c25b5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\func">
+      <UniqueIdentifier>{ae7a6a35-90be-42d7-80a7-f0755a6b1e87}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\include\details\poly">
-      <UniqueIdentifier>{3db239f4-a75b-4015-9b27-4842a1fc0f50}</UniqueIdentifier>
+      <UniqueIdentifier>{92aaf66a-e646-4989-9e44-aac0906c5c7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\func\general_impl">
+      <UniqueIdentifier>{cf76a9c1-efff-4d6c-a5a3-293d4b8c781f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-simd\config.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\simd.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_256_compl.h">
-      <Filter>Source Files\include\complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_impl.h">
-      <Filter>Source Files\include\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex.h">
-      <Filter>Source Files\include\complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_general.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex_impl.h">
-      <Filter>Source Files\include\complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\default_simd.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\default_simd.h">
-      <Filter>Source Files\include\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_impl.h">
-      <Filter>Source Files\include\arch\avx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_impl.h">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_impl.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func.h">
-      <Filter>Source Files\include\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex.h">
-      <Filter>Source Files\include\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_func_impl.h">
-      <Filter>Source Files\include\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_double_128_func.h">
-      <Filter>Source Files\include\arch\sse\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_def.h">
-      <Filter>Source Files\include\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_float_128_func.h">
-      <Filter>Source Files\include\arch\sse\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\simd_func_complex_impl.h">
-      <Filter>Source Files\include\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\func\simd_func_complex_def.h">
-      <Filter>Source Files\include\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_float_128_func.h">
-      <Filter>Source Files\include\arch\sse\func_complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_double_256_func.h">
-      <Filter>Source Files\include\arch\avx\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_float_256_func.h">
-      <Filter>Source Files\include\arch\avx\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\helpers.h">
-      <Filter>Source Files\include\arch\avx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_double_256_func.h">
-      <Filter>Source Files\include\arch\avx\func_complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func_complex\simd_float_256_func.h">
-      <Filter>Source Files\include\arch\avx\func_complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\default_simd_complex.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\default_simd_complex.h">
-      <Filter>Source Files\include\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\default_simd_complex_impl.h">
-      <Filter>Source Files\include\arch\avx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\default_simd_complex_impl.h">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\func\simd_func.h">
-      <Filter>Source Files\include\arch\nosimd\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_256_func.h">
-      <Filter>Source Files\include\arch\sse\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\func_complex\simd_compl_func.h">
-      <Filter>Source Files\include\arch\nosimd\func_complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_256_func_compl.h">
-      <Filter>Source Files\include\arch\sse\func_complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\recover_nan.h">
-      <Filter>Source Files\include\complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h">
-      <Filter>Source Files\include\complex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\default_simd_complex_impl.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\missing_intrinsics.h">
-      <Filter>Source Files\include\arch\sse\func</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\helpers.h">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h">
       <Filter>Source Files\include\poly</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h">
-      <Filter>Source Files\include\details\poly</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h">
-      <Filter>Source Files\include\details</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h">
-      <Filter>Source Files\include\details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_double_256.h">
       <Filter>Source Files\include\arch\avx</Filter>
@@ -195,13 +81,46 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_float_256.h">
       <Filter>Source Files\include\arch\avx</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_int32_256.h">
+      <Filter>Source Files\include\arch\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_int64_256.h">
+      <Filter>Source Files\include\arch\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_64.h">
+      <Filter>Source Files\include\arch\sse</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_128.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_float_128.h">
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_256.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_256.h">
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_float_128.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_float_256.h">
@@ -210,76 +129,235 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int32_128.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_int32_256.h">
-      <Filter>Source Files\include\arch\avx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int32_256.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int64_128.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int64_256.h">
       <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_int64_256.h">
-      <Filter>Source Files\include\arch\avx</Filter>
+    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h">
+      <Filter>Source Files\include\complex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_int32_128_func.h">
-      <Filter>Source Files\include\arch\sse\func</Filter>
+    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_256_compl.h">
+      <Filter>Source Files\include\complex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_int32_256_func.h">
-      <Filter>Source Files\include\arch\avx\func</Filter>
+    <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_complex.h">
+      <Filter>Source Files\include\complex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\func\simd_int64_256_func.h">
-      <Filter>Source Files\include\arch\avx\func</Filter>
+    <ClInclude Include="..\..\src\include\matcl-simd\config.h">
+      <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\func\simd_int64_128_func.h">
-      <Filter>Source Files\include\arch\sse\func</Filter>
+    <ClInclude Include="..\..\src\include\matcl-simd\default_simd.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_general.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_complex.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_impl.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_func_complex_impl.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_func_impl.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_impl.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\default_simd_complex_impl.h">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\default_simd_impl.h">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\func\simd_func.h">
+      <Filter>Source Files\include\details\arch\nosimd\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\func_complex\simd_compl_func.h">
+      <Filter>Source Files\include\details\arch\nosimd\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\default_simd_complex_impl.h">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\default_simd_impl.h">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\missing_intrinsics.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_256_func.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_double_128_func.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_float_128_func.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_int32_128_func.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_int64_128_func.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_256_func_compl.h">
+      <Filter>Source Files\include\details\arch\sse\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_double_128_func.h">
+      <Filter>Source Files\include\details\arch\sse\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_float_128_func.h">
+      <Filter>Source Files\include\details\arch\sse\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\complex\recover_nan.h">
+      <Filter>Source Files\include\details\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\complex\simd_complex_impl.h">
+      <Filter>Source Files\include\details\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\func\simd_func_complex_def.h">
+      <Filter>Source Files\include\details\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\func\simd_func_def.h">
+      <Filter>Source Files\include\details\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h">
+      <Filter>Source Files\include\details\poly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\default_simd_complex_impl.h">
+      <Filter>Source Files\include\details\arch\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\default_simd_impl.h">
+      <Filter>Source Files\include\details\arch\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\helpers.h">
+      <Filter>Source Files\include\details\arch\avx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func\simd_double_256_func.h">
+      <Filter>Source Files\include\details\arch\avx\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func\simd_float_256_func.h">
+      <Filter>Source Files\include\details\arch\avx\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func\simd_int32_256_func.h">
+      <Filter>Source Files\include\details\arch\avx\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func\simd_int64_256_func.h">
+      <Filter>Source Files\include\details\arch\avx\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func_complex\simd_double_256_func.h">
+      <Filter>Source Files\include\details\arch\avx\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func_complex\simd_float_256_func.h">
+      <Filter>Source Files\include\details\arch\avx\func_complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\func\general_impl\simd_exp.h">
+      <Filter>Source Files\include\details\func\general_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\func\undefined_func_int.h">
+      <Filter>Source Files\include\details\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\func\general_defs.h">
+      <Filter>Source Files\include\details\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\complex\default_simd_complex.h">
+      <Filter>Source Files\include\details\complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\basic_complex_functions.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\basic_functions.h">
+      <Filter>Source Files\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-simd\complex\simd_128_compl.inl">
-      <Filter>Source Files\include\complex</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\simd_impl.inl">
+      <Filter>Source Files\include\details\arch</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\complex\simd_256_compl.inl">
-      <Filter>Source Files\include\complex</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_double_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\arch\simd_impl.inl">
-      <Filter>Source Files\include\arch</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_double_256.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\func\simd_func.inl">
-      <Filter>Source Files\include\func</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_float_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\func\simd_func_complex.inl">
-      <Filter>Source Files\include\func</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_float_256.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\func_complex\simd_double_128_func.h">
-      <Filter>Source Files\include\arch\sse\func_complex</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int32_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int32_256.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int64_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int64_256.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_double_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_double_256.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_float_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_float_256.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int32_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int32_256.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int64_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int64_256.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\complex\simd_128_compl.inl">
+      <Filter>Source Files\include\details\complex</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\complex\simd_256_compl.inl">
+      <Filter>Source Files\include\details\complex</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\func\simd_func.inl">
+      <Filter>Source Files\include\details\func</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\func\simd_func_complex.inl">
+      <Filter>Source Files\include\details\func</Filter>
     </None>
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl">
       <Filter>Source Files\include\details\poly</Filter>
@@ -290,65 +368,17 @@
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_horner.inl">
       <Filter>Source Files\include\details\poly</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\arch\avx\simd_double_256.inl">
-      <Filter>Source Files\include\arch\avx</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\avx\simd_double_256.inl">
+      <Filter>Source Files\include\details\arch\avx</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\arch\avx\simd_float_256.inl">
-      <Filter>Source Files\include\arch\avx</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\avx\simd_float_256.inl">
+      <Filter>Source Files\include\details\arch\avx</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_double_128.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\avx\simd_int32_256.inl">
+      <Filter>Source Files\include\details\arch\avx</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_float_128.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_double_256.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_float_256.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_int32_128.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_128.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_128.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_128.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\avx\simd_int32_256.inl">
-      <Filter>Source Files\include\arch\avx</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_256.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_256.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_256.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_int32_256.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_int64_128.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_128.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_256.inl">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\sse\simd_int64_256.inl">
-      <Filter>Source Files\include\arch\sse</Filter>
-    </None>
-    <None Include="..\..\src\include\matcl-simd\arch\avx\simd_int64_256.inl">
-      <Filter>Source Files\include\arch\avx</Filter>
+    <None Include="..\..\src\include\matcl-simd\details\arch\avx\simd_int64_256.inl">
+      <Filter>Source Files\include\details\arch\avx</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -37,5 +37,5 @@ struct default_simd_type_size
 }}
 
 // specialize default_simd_type type for given type and given architecture
-#include "matcl-simd/arch/default_simd.h"
+#include "matcl-simd/details/arch/default_simd.h"
 

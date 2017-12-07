@@ -35,8 +35,8 @@ int main(int argc, const char* argv[])
 
     using log_ptr   = std::shared_ptr<std::ofstream>;
 
-    //TODO: is_nan, pow2k, shift_left, shift_right, if_nan_else, if_zero_else, if_then_else
-    // casts, gather, extract_low, extract_high
+    //TODO: is_nan, pow2k, shift_left, shift_right, _arithmetic, if_nan_else, if_zero_else, if_then_else
+    // casts, gather, extract_low, extract_high, bitwise_not
     try
     {         
         {

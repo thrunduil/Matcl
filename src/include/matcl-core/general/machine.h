@@ -47,6 +47,12 @@
     #define MATCL_ARCHITECTURE_HAS_SSE41 1
 #endif
 
+// set value of this macro to 1 if SSE4.2 instruction set is available and 0
+// otherwise
+#ifndef MATCL_ARCHITECTURE_HAS_SSE42
+    #define MATCL_ARCHITECTURE_HAS_SSE42 1
+#endif
+
 // set value of this macro to 1 if AVX instruction set is available and 0
 // otherwise
 #ifndef MATCL_ARCHITECTURE_HAS_AVX

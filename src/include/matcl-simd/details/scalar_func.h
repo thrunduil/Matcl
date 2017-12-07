@@ -158,4 +158,3 @@ force_inline double fnms_a(double x, double y, double z)
 }
 
 }}}
-

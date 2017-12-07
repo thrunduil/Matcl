@@ -171,6 +171,16 @@ class alignas(16) simd<int64_t, 128, nosimd_tag>
 
         // reinterpret cast to vector of int32 of the same kind
         simd_128_int32  reinterpret_as_int32() const;
+
+    public:
+        // plus assign operator
+        simd&           operator+=(const simd& x);
+
+        // minus assign operator
+        simd&           operator-=(const simd& x);
+
+        // multiply assign operator
+        simd&           operator*=(const simd& x);
 };
 
 }}
