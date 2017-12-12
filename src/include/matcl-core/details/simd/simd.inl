@@ -26,6 +26,8 @@
 namespace matcl { namespace simd
 {
 
+#if MATCL_ARCHITECTURE_HAS_FMA
+
 force_inline
 double details::fma_f(double x, double y, double z)
 {
@@ -35,7 +37,7 @@ double details::fma_f(double x, double y, double z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret	= fma_f(xs, ys, zs);
+    simd_type ret   = simd_type(_mm_fmadd_sd( xs.data, ys.data, zs.data));
     return ret.first();
 };
 
@@ -48,7 +50,7 @@ float details::fma_f(float x, float y, float z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret	= fma_f(xs, ys, zs);
+    simd_type ret   = simd_type(_mm_fmadd_ss( xs.data, ys.data, zs.data));
     return ret.first();
 }
 
@@ -61,7 +63,7 @@ double details::fms_f(double x, double y, double z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret	= fms_f(xs, ys, zs);
+    simd_type ret   = simd_type(_mm_fmsub_sd( xs.data, ys.data, zs.data));
     return ret.first();
 }
 
@@ -74,8 +76,62 @@ float details::fms_f(float x, float y, float z)
     simd_type ys(y);
     simd_type zs(z);
 
-    simd_type ret	= fms_f(xs, ys, zs);
+    simd_type ret   = simd_type(_mm_fmsub_ss( xs.data, ys.data, zs.data));
     return ret.first();
 }
+
+force_inline
+double details::fnma_f(double x, double y, double z)
+{
+    using simd_type = matcl::simd::simd<double,128,sse_tag>;
+
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
+
+    simd_type ret   = simd_type(_mm_fnmadd_pd( xs.data, ys.data, zs.data));
+    return ret.first();
+};
+
+force_inline
+float details::fnma_f(float x, float y, float z)
+{
+    using simd_type = matcl::simd::simd<float,128,sse_tag>;
+
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
+
+    simd_type ret   = simd_type(_mm_fnmadd_ss( xs.data, ys.data, zs.data));
+    return ret.first();
+}
+
+force_inline
+double details::fnms_f(double x, double y, double z)
+{
+    using simd_type = matcl::simd::simd<double,128,sse_tag>;
+
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
+
+    simd_type ret   = simd_type(_mm_fnmsub_sd( xs.data, ys.data, zs.data));
+    return ret.first();
+}
+
+force_inline
+float details::fnms_f(float x, float y, float z)
+{
+    using simd_type = matcl::simd::simd<float,128,sse_tag>;
+
+    simd_type xs(x);
+    simd_type ys(y);
+    simd_type zs(z);
+
+    simd_type ret   = simd_type(_mm_fnmsub_ss( xs.data, ys.data, zs.data));
+    return ret.first();
+}
+
+#endif
 
 }}

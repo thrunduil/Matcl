@@ -20,4 +20,32 @@
 
 #pragma once
 
-#include "matcl-simd/details/func/general_impl/simd_exp.h"
+#include "matcl-simd/simd_general.h"
+#include "matcl-simd/details/func/simd_func_def.h"
+
+namespace matcl { namespace simd { namespace details
+{
+
+template<int Bits, class Simd_tag>
+struct simd_signbit_base<float, Bits, Simd_tag>
+{
+    using simd_type = simd<float, Bits, Simd_tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        return bitwise_and(x, simd_type::minus_zero());
+    };
+};
+
+template<int Bits, class Simd_tag>
+struct simd_signbit_base<double, Bits, Simd_tag>
+{
+    using simd_type = simd<double, Bits, Simd_tag>;
+
+    static simd_type eval(const simd_type& x)
+    {
+        return bitwise_and(x, simd_type::minus_zero());
+    };
+};
+
+}}}

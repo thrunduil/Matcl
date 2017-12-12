@@ -22,8 +22,8 @@
 
 #include "matcl-simd/simd.h"
 
-#include "matcl-simd/func/simd_func_complex.h"
+#include "matcl-simd/basic_complex_functions.h"
 #include "matcl-simd/details/complex/simd_complex_impl.h"
 #include "matcl-simd/details/func/simd_func_complex.inl"
-#include "matcl-simd/details/default_simd_complex.h"
+#include "matcl-simd/details/complex/default_simd_complex.h"
 

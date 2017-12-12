@@ -44,20 +44,30 @@ class alignas(16) simd<float, 128, sse_tag>
         // type of stored elements
         using value_type    = float;
 
-        // simd type storing double values of size 128 bits
-        using simd_128_double = simd<double, 128, sse_tag>;
+        // simd tag
+        using simd_tag      = sse_tag;
+
+        // number of bits
+        static const int
+        number_bits         = 128;
+
+        // simd type of the same size storing float values
+        using simd_float    = simd<float, 128, sse_tag>;
+
+        // simd type of the same size storing double values
+        using simd_double   = simd<double, 128, sse_tag>;
+
+        // simd type of the same size storing int32_t values
+        using simd_int32    = simd<int32_t, 128, sse_tag>;
+
+        // simd type of the same size storing int64_t values
+        using simd_int64    = simd<int64_t, 128, sse_tag>;
 
         // simd type storing double values of size 256 bits
-        using simd_256_double = typename default_simd_type_size<double, 256>::type;
-
-        // simd type storing 32-bit integers of size 128 bits
-        using simd_128_int32 = simd<int32_t, 128, sse_tag>;
-
-        // simd type storing 64-bit integers of size 128 bits
-        using simd_128_int64 = simd<int64_t, 128, sse_tag>;
+        using simd_double_2 = typename default_simd_type_size<double, 256>::type;
 
         // simd type storing 64-bit integers of size 256 bits
-        using simd_256_int64 = typename default_simd_type_size<int64_t, 256>::type;
+        using simd_int64_2  = typename default_simd_type_size<int64_t, 256>::type;
         
     public:
         // number of elements in the vector
@@ -89,6 +99,10 @@ class alignas(16) simd<float, 128, sse_tag>
         // conversion between simd types
         explicit simd(const simd<float, 128, nosimd_tag>& s);        
 
+        // conversion form simd scalar; set all elements to s.first()
+        explicit simd(const simd<float, 128, scalar_sse_tag>& s);        
+        explicit simd(const simd<float, 128, scalar_nosimd_tag>& s);
+
         // copy constructor
         simd(const simd<float, 128, sse_tag>& s) = default;
 
@@ -119,12 +133,12 @@ class alignas(16) simd<float, 128, sse_tag>
 
         // gather singe-precision (32-bit) floating-point elements from memory using 
         // 32-bit indices, i.e. i-th element of resulting vector is arr[ind[i]]
-        static simd     gather(const float* arr, const simd_128_int32& ind);
+        static simd     gather(const float* arr, const simd_int32& ind);
 
         // gather two singe-precision (32-bit) floating-point elements from memory using 
         // 64-bit indices, i.e. i-th element of resulting vector is arr[ind[i]];
-        // last two elements are the same as the first two elements
-        static simd     gather(const float* arr, const simd_128_int64& ind);
+        // last two elements are set to zero
+        static simd     gather(const float* arr, const simd_int64& ind);
 
         // set the first element in the vector to v and set 0 to all other elements
         static simd     set_lower(float v);
@@ -160,26 +174,26 @@ class alignas(16) simd<float, 128, sse_tag>
 
     public:
         // cast the first two elements to double
-        simd_128_double convert_low_to_double() const;
+        simd_double     convert_low_to_double() const;
 
         // cast the last two elements to double
-        simd_128_double convert_high_to_double() const;
+        simd_double     convert_high_to_double() const;
 
         // cast all elements to double
-        simd_256_double convert_to_double() const;
+        simd_double_2   convert_to_double() const;
 
         // convert elements to int32_t, rounding is performed according
         // to current rounding mode (usually round to nearest ties to even)
-        simd_128_int32  convert_to_int32() const;
+        simd_int32      convert_to_int32() const;
 
         // reinterpret cast to vector of double of the same kind
-        simd_128_double reinterpret_as_double() const;
+        simd_double     reinterpret_as_double() const;
 
         // reinterpret cast to vector of int32 of the same kind
-        simd_128_int32  reinterpret_as_int32() const;
+        simd_int32      reinterpret_as_int32() const;
 
         // reinterpret cast to vector of int64 of the same kind
-        simd_128_int64  reinterpret_as_int64() const;
+        simd_int64      reinterpret_as_int64() const;
 
     public:
         // plus assign operator

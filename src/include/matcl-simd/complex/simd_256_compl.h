@@ -45,6 +45,13 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         // type of stored elements
         using value_type    = simd_double_complex;
 
+        // simd tag
+        using simd_tag      = Simd_tag;
+
+        // number of bits
+        static const int
+        number_bits         = 256;
+
         // type of real and imaginary part of stored elements
         using real_type     = double;
 
@@ -68,7 +75,10 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         simd_compl() = default;
 
         // construct vector with all elements equal to complex(re, 0)
-        explicit simd_compl(Integer re);
+        explicit simd_compl(int32_t re);
+
+        // construct vector with all elements equal to complex(re, 0)
+        explicit simd_compl(int64_t re);
 
         // construct vector with all elements equal to complex(re, 0)
         explicit simd_compl(float re);

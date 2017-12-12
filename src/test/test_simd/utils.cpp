@@ -80,6 +80,12 @@ float rand_scalar<float>::rand_scale()
     return val;
 };
 
+int32_t rand_scalar<int32_t>::make(bool testing_values)
+{
+    (void)testing_values;
+    return irand();
+};
+
 double rand_scalar<double>::make(bool testing_values)
 {
     if (testing_values)
@@ -136,6 +142,12 @@ double rand_scalar<double>::rand_scale()
 
     double val      = sign * std::ldexp(1.0, pow);
     return val;
+};
+
+int64_t rand_scalar<int64_t>::make(bool testing_values)
+{
+    (void)testing_values;
+    return int64_t(irand()) * int64_t(irand());
 };
 
 Complex rand_scalar<Complex>::make(bool testing_values)

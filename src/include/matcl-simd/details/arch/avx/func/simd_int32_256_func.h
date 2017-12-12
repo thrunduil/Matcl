@@ -474,8 +474,8 @@ struct simd_if_then_else<int32_t, 256, avx_tag>
     static simd_type eval(const simd_type& test, const simd_type& val_true,
                           const simd_type& val_false)
     {
-        return if_then_else(test.reinterpret_as_float(), val_false.reinterpret_as_float(),
-                            val_true.reinterpret_as_float()).reinterpret_as_int32();
+        return if_then_else(test.reinterpret_as_float(), val_true.reinterpret_as_float(),
+                            val_false.reinterpret_as_float()).reinterpret_as_int32();
     };
 };
 

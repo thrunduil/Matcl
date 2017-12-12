@@ -82,19 +82,6 @@ simd<float, 256, nosimd_tag>::simd(float v1, float v2, float v3, float v4, float
 }
 
 force_inline
-simd<float, 256, nosimd_tag>::simd(const impl_type& v)
-{
-    data[0] = v[0];
-    data[1] = v[1];
-    data[2] = v[2];
-    data[3] = v[3];
-    data[4] = v[4];
-    data[5] = v[5];
-    data[6] = v[6];
-    data[7] = v[7];
-};
-
-force_inline
 simd<float, 256, nosimd_tag>::simd(const simd<float, 256, sse_tag>& s)
 {
     s.store(data, std::true_type());
@@ -105,6 +92,16 @@ simd<float, 256, nosimd_tag>::simd(const simd<float, 256, avx_tag>& s)
 {
     s.store(data, std::true_type());
 }
+
+force_inline
+simd<float, 256, nosimd_tag>::simd(const simd<float, 128, scalar_sse_tag>& s)
+    :simd(s.first())
+{}
+
+force_inline
+simd<float, 256, nosimd_tag>::simd(const simd<float, 128, scalar_nosimd_tag>& s)
+    :simd(s.first())
+{}
 
 force_inline
 float simd<float, 256, nosimd_tag>::get(int pos) const  
@@ -118,24 +115,10 @@ float simd<float, 256, nosimd_tag>::first() const
     return data[0]; 
 };
 
-template<int Pos>
-force_inline
-float simd<float, 256, nosimd_tag>::get() const  
-{ 
-    return data[Pos]; 
-};
-
 force_inline
 void simd<float, 256, nosimd_tag>::set(int pos, float val)
 { 
     data[pos] = val; 
-};
-
-template<int Pos>
-force_inline
-void simd<float, 256, nosimd_tag>::set(float val)
-{ 
-    data[Pos] = val; 
 };
 
 force_inline
@@ -267,7 +250,7 @@ simd<float, 256, nosimd_tag>::load(const float* arr, std::false_type not_aligned
 };
 
 force_inline simd<float, 256, nosimd_tag> 
-simd<float, 256, nosimd_tag>::gather(const float* arr, const simd_256_int32& ind)
+simd<float, 256, nosimd_tag>::gather(const float* arr, const simd_int32& ind)
 {
     simd<float, 256, nosimd_tag> ret;
 
@@ -284,7 +267,7 @@ simd<float, 256, nosimd_tag>::gather(const float* arr, const simd_256_int32& ind
 }
 
 force_inline simd<float, 256, nosimd_tag> 
-simd<float, 256, nosimd_tag>::gather(const float* arr, const simd_256_int64& ind)
+simd<float, 256, nosimd_tag>::gather(const float* arr, const simd_int64& ind)
 {
     simd<float, 256, nosimd_tag> ret;
 
@@ -293,10 +276,10 @@ simd<float, 256, nosimd_tag>::gather(const float* arr, const simd_256_int64& ind
     ret.data[2] = arr[ind.data[2]];
     ret.data[3] = arr[ind.data[3]];
 
-    ret.data[4] = ret.data[0];
-    ret.data[5] = ret.data[1];
-    ret.data[6] = ret.data[2];
-    ret.data[7] = ret.data[3];
+    ret.data[4] = 0.0f;
+    ret.data[5] = 0.0f;
+    ret.data[6] = 0.0f;
+    ret.data[7] = 0.0f;
 
     return ret;
 }
@@ -367,10 +350,10 @@ force_inline simd<double, 256, nosimd_tag>
 simd<float, 256, nosimd_tag>::convert_low_to_double() const
 {
     simd<double, 256, nosimd_tag> res;
-    res.data[0] = data[0];
-    res.data[1] = data[1];
-    res.data[2] = data[2];
-    res.data[3] = data[3];
+    res.data[0] = scalar_func::convert_float_double(data[0]);
+    res.data[1] = scalar_func::convert_float_double(data[1]);
+    res.data[2] = scalar_func::convert_float_double(data[2]);
+    res.data[3] = scalar_func::convert_float_double(data[3]);
 
     return res;
 };
@@ -379,10 +362,10 @@ force_inline simd<double, 256, nosimd_tag>
 simd<float, 256, nosimd_tag>::convert_high_to_double() const
 {
     simd<double, 256, nosimd_tag> res;
-    res.data[0] = data[4];
-    res.data[1] = data[5];
-    res.data[2] = data[6];
-    res.data[3] = data[7];
+    res.data[0] = scalar_func::convert_float_double(data[4]);
+    res.data[1] = scalar_func::convert_float_double(data[5]);
+    res.data[2] = scalar_func::convert_float_double(data[6]);
+    res.data[3] = scalar_func::convert_float_double(data[7]);
 
     return res;
 }
@@ -391,14 +374,14 @@ force_inline simd<int32_t, 256, nosimd_tag>
 simd<float, 256, nosimd_tag>::convert_to_int32() const
 {
     simd<int32_t, 256, nosimd_tag> res;
-    res.data[0] = int32_t(data[0]);
-    res.data[1] = int32_t(data[1]);
-    res.data[2] = int32_t(data[2]);
-    res.data[3] = int32_t(data[3]);
-    res.data[4] = int32_t(data[4]);
-    res.data[5] = int32_t(data[5]);
-    res.data[6] = int32_t(data[6]);
-    res.data[7] = int32_t(data[7]);
+    res.data[0] = scalar_func::convert_float_int32(data[0]);
+    res.data[1] = scalar_func::convert_float_int32(data[1]);
+    res.data[2] = scalar_func::convert_float_int32(data[2]);
+    res.data[3] = scalar_func::convert_float_int32(data[3]);
+    res.data[4] = scalar_func::convert_float_int32(data[4]);
+    res.data[5] = scalar_func::convert_float_int32(data[5]);
+    res.data[6] = scalar_func::convert_float_int32(data[6]);
+    res.data[7] = scalar_func::convert_float_int32(data[7]);
 
     return res;
 }
@@ -406,19 +389,19 @@ simd<float, 256, nosimd_tag>::convert_to_int32() const
 force_inline simd<int64_t, 256, nosimd_tag>
 simd<float, 256, nosimd_tag>::reinterpret_as_int64() const
 {
-    return *reinterpret_cast<const simd_256_int64*>(this);
+    return *reinterpret_cast<const simd_int64*>(this);
 }
 
 force_inline simd<double, 256, nosimd_tag>
 simd<float, 256, nosimd_tag>::reinterpret_as_double() const
 {
-    return *reinterpret_cast<const simd_256_double*>(this);
+    return *reinterpret_cast<const simd_double*>(this);
 }
 
 force_inline simd<int32_t, 256, nosimd_tag>
 simd<float, 256, nosimd_tag>::reinterpret_as_int32() const
 {
-    return *reinterpret_cast<const simd_256_int32*>(this);
+    return *reinterpret_cast<const simd_int32*>(this);
 }
 
 template<int Step>

@@ -31,15 +31,22 @@
     <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_256.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_256.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_double_128.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_float_128.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_int32_128.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_int64_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_256.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_64.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_float_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_float_256.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int32_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int32_256.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int64_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_int64_256.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_double_128.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_float_128.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_int32_128.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_int64_128.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\basic_complex_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\basic_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\complex\simd_128_compl.h" />
@@ -56,19 +63,25 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func_complex\simd_double_256_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func_complex\simd_float_256_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\math\math_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_complex.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_scalar.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\default_simd_complex_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\default_simd_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\default_simd_scalar_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\func\simd_128_scalar_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\func\simd_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\func_complex\simd_compl_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\math\math_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_func_complex_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_func_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\default_simd_complex_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\default_simd_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\default_simd_scalar_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\missing_intrinsics.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_128_scalar_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_256_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_double_128_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_float_128_func.h" />
@@ -77,22 +90,26 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_256_func_compl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_double_128_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_float_128_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\math\math_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\complex\default_simd_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\complex\recover_nan.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\complex\simd_complex_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\func\general_defs.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\func\undefined_func_int.h" />
-    <ClInclude Include="..\..\src\include\matcl-simd\details\func\general_impl\simd_exp.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\func\simd_func_complex_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\func\simd_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\general_defs.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_exp.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\simd_math_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\math_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_general.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_math.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\details\arch\avx\simd_double_256.inl" />
@@ -107,6 +124,10 @@
     <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int32_256.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int64_128.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_int64_256.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_double_128.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_float_128.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_int32_128.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_int64_128.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\simd_impl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_double_128.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_double_256.inl" />
@@ -116,13 +137,23 @@
     <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int32_256.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int64_128.inl" />
     <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_int64_256.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_double_128.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_float_128.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_int32_128.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_int64_128.inl" />
     <None Include="..\..\src\include\matcl-simd\details\complex\simd_128_compl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\complex\simd_256_compl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\func\simd_func.inl" />
     <None Include="..\..\src\include\matcl-simd\details\func\simd_func_complex.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\math\math_func_impl.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\math\math_functions.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\math\math_func_scalar_impl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl" />
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_estrin.inl" />
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_horner.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_exp.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{18102545-1797-4A67-8D54-E64826B582C8}</ProjectGuid>
@@ -140,19 +171,19 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />

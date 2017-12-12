@@ -57,22 +57,23 @@ simd<int32_t, 128, nosimd_tag>::simd(const simd& lo, const simd& hi)
 }
 
 force_inline
-simd<int32_t, 128, nosimd_tag>::simd(const impl_type& v)
-{
-    data[0] = v[0];
-    data[1] = v[1];
-    data[2] = v[2];
-    data[3] = v[3];
-};
-
-force_inline
 simd<int32_t, 128, nosimd_tag>::simd(const simd<int32_t, 128, sse_tag>& s)
 {
     s.store(data, std::true_type());
 }
 
 force_inline
-simd<int32_t, 128, nosimd_tag> simd<int32_t, 128, nosimd_tag>::broadcast(const int32_t* arr)
+simd<int32_t, 128, nosimd_tag>::simd(const simd<int32_t, 128, scalar_sse_tag>& s)
+    :simd(s.first())
+{};
+
+force_inline
+simd<int32_t, 128, nosimd_tag>::simd(const simd<int32_t, 128, scalar_nosimd_tag>& s)
+    :simd(s.first())
+{}
+
+force_inline simd<int32_t, 128, nosimd_tag> 
+simd<int32_t, 128, nosimd_tag>::broadcast(const int32_t* arr)
 {
     simd<int32_t, 128, nosimd_tag> ret;
 
@@ -84,8 +85,8 @@ simd<int32_t, 128, nosimd_tag> simd<int32_t, 128, nosimd_tag>::broadcast(const i
     return ret;
 };
 
-force_inline
-simd<int32_t, 128, nosimd_tag> simd<int32_t, 128, nosimd_tag>::broadcast(const int32_t& arr)
+force_inline simd<int32_t, 128, nosimd_tag> 
+simd<int32_t, 128, nosimd_tag>::broadcast(const int32_t& arr)
 { 
     simd<int32_t, 128, nosimd_tag> ret;
 
@@ -109,24 +110,10 @@ int32_t simd<int32_t, 128, nosimd_tag>::first() const
     return data[0]; 
 };
 
-template<int Pos>
-force_inline
-int32_t simd<int32_t, 128, nosimd_tag>::get() const
-{ 
-    return data[Pos]; 
-};
-
 force_inline
 void simd<int32_t, 128, nosimd_tag>::set(int pos, int32_t val)
 { 
     data[pos] = val; 
-};
-
-template<int Pos>
-force_inline
-void simd<int32_t, 128, nosimd_tag>::set(int32_t val)
-{ 
-    data[Pos] = val; 
 };
 
 force_inline
@@ -209,7 +196,7 @@ simd<int32_t, 128, nosimd_tag>::load(const int32_t* arr, std::false_type not_ali
 };
 
 force_inline simd<int32_t, 128, nosimd_tag>
-simd<int32_t, 128, nosimd_tag>::gather(const int32_t* arr, const simd_128_int32& ind)
+simd<int32_t, 128, nosimd_tag>::gather(const int32_t* arr, const simd_int32& ind)
 {
     simd<int32_t, 128, nosimd_tag> ret;
 
@@ -222,15 +209,15 @@ simd<int32_t, 128, nosimd_tag>::gather(const int32_t* arr, const simd_128_int32&
 }
 
 force_inline simd<int32_t, 128, nosimd_tag> 
-simd<int32_t, 128, nosimd_tag>::gather(const int32_t* arr, const simd_128_int64& ind)
+simd<int32_t, 128, nosimd_tag>::gather(const int32_t* arr, const simd_int64& ind)
 {
     simd<int32_t, 128, nosimd_tag> ret;
 
     ret.data[0] = arr[ind.data[0]];
     ret.data[1] = arr[ind.data[1]];
 
-    ret.data[2] = ret.data[0];
-    ret.data[3] = ret.data[1];
+    ret.data[2] = 0;
+    ret.data[3] = 0;
 
     return ret;
 }
@@ -253,8 +240,8 @@ simd<int32_t, 128, nosimd_tag>::convert_low_to_int64() const
 {
     simd<int64_t, 128, nosimd_tag> ret;
 
-    ret.data[0] = data[0];
-    ret.data[1] = data[1];
+    ret.data[0] = scalar_func::convert_int32_int64(data[0]);
+    ret.data[1] = scalar_func::convert_int32_int64(data[1]);
 
     return ret;
 };
@@ -264,8 +251,8 @@ simd<int32_t, 128, nosimd_tag>::convert_high_to_int64() const
 {
     simd<int64_t, 128, nosimd_tag> ret;
 
-    ret.data[0] = data[2];
-    ret.data[1] = data[3];
+    ret.data[0] = scalar_func::convert_int32_int64(data[2]);
+    ret.data[1] = scalar_func::convert_int32_int64(data[3]);
 
     return ret;
 };
@@ -276,10 +263,10 @@ simd<int32_t, 128, nosimd_tag>::convert_to_int64() const
 {
     simd<int64_t, 256, nosimd_tag> ret;
 
-    ret.data[0] = data[0];
-    ret.data[1] = data[1];
-    ret.data[2] = data[2];
-    ret.data[3] = data[3];
+    ret.data[0] = scalar_func::convert_int32_int64(data[0]);
+    ret.data[1] = scalar_func::convert_int32_int64(data[1]);
+    ret.data[2] = scalar_func::convert_int32_int64(data[2]);
+    ret.data[3] = scalar_func::convert_int32_int64(data[3]);
 
     return ret;
 };
@@ -289,8 +276,8 @@ simd<int32_t, 128, nosimd_tag>::convert_low_to_double() const
 {
     simd<double, 128, nosimd_tag> ret;
 
-    ret.data[0] = data[0];
-    ret.data[1] = data[1];
+    ret.data[0] = scalar_func::convert_int32_double(data[0]);
+    ret.data[1] = scalar_func::convert_int32_double(data[1]);
 
     return ret;
 };
@@ -300,8 +287,8 @@ simd<int32_t, 128, nosimd_tag>::convert_high_to_double() const
 {
     simd<double, 128, nosimd_tag> ret;
 
-    ret.data[0] = data[2];
-    ret.data[1] = data[3];
+    ret.data[0] = scalar_func::convert_int32_double(data[2]);
+    ret.data[1] = scalar_func::convert_int32_double(data[3]);
 
     return ret;
 };
@@ -312,10 +299,10 @@ simd<int32_t, 128, nosimd_tag>::convert_to_double() const
 {
     simd<double, 256, nosimd_tag> ret;
 
-    ret.data[0] = data[0];
-    ret.data[1] = data[1];
-    ret.data[2] = data[2];
-    ret.data[3] = data[3];
+    ret.data[0] = scalar_func::convert_int32_double(data[0]);
+    ret.data[1] = scalar_func::convert_int32_double(data[1]);
+    ret.data[2] = scalar_func::convert_int32_double(data[2]);
+    ret.data[3] = scalar_func::convert_int32_double(data[3]);
 
     return ret;
 };
@@ -326,10 +313,10 @@ simd<int32_t, 128, nosimd_tag>::convert_to_float() const
 {
     simd<float, 128, nosimd_tag> ret;
 
-    ret.data[0] = float(data[0]);
-    ret.data[1] = float(data[1]);
-    ret.data[2] = float(data[2]);
-    ret.data[3] = float(data[3]);
+    ret.data[0] = scalar_func::convert_int32_float(data[0]);
+    ret.data[1] = scalar_func::convert_int32_float(data[1]);
+    ret.data[2] = scalar_func::convert_int32_float(data[2]);
+    ret.data[3] = scalar_func::convert_int32_float(data[3]);
 
     return ret;
 };
@@ -337,19 +324,19 @@ simd<int32_t, 128, nosimd_tag>::convert_to_float() const
 force_inline simd<float, 128, nosimd_tag>
 simd<int32_t, 128, nosimd_tag>::reinterpret_as_float() const
 {
-    return *reinterpret_cast<const simd_128_float*>(this);
+    return *reinterpret_cast<const simd_float*>(this);
 }
 
 force_inline simd<int64_t, 128, nosimd_tag>
 simd<int32_t, 128, nosimd_tag>::reinterpret_as_int64() const
 {
-    return *reinterpret_cast<const simd_128_int64*>(this);
+    return *reinterpret_cast<const simd_int64*>(this);
 }
 
 force_inline simd<double, 128, nosimd_tag>
 simd<int32_t, 128, nosimd_tag>::reinterpret_as_double() const
 {
-    return *reinterpret_cast<const simd_128_double*>(this);
+    return *reinterpret_cast<const simd_double*>(this);
 }
 
 force_inline simd<int32_t, 128, nosimd_tag> 

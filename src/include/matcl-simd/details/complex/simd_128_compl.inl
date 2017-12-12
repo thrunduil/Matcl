@@ -38,7 +38,13 @@ simd_compl<double, 128, Simd_tag>::simd_compl(const impl_type& v)
 
 template<class Simd_tag>
 force_inline
-simd_compl<double, 128, Simd_tag>::simd_compl(Integer re)
+simd_compl<double, 128, Simd_tag>::simd_compl(int32_t re)
+    : data(impl_type::set_lower(double(re)))
+{};
+
+template<class Simd_tag>
+force_inline
+simd_compl<double, 128, Simd_tag>::simd_compl(int64_t re)
     : data(impl_type::set_lower(double(re)))
 {};
 
@@ -400,7 +406,7 @@ simd_compl<float, 128, Simd_tag>::convert_high_to_double() const
 }
 
 template<class Simd_tag>
-force_inline typename simd_compl<float, 128, Simd_tag>::simd_256_double
+force_inline typename simd_compl<float, 128, Simd_tag>::simd_double_2
 simd_compl<float, 128, Simd_tag>::convert_to_double() const
 {
     return data.convert_to_double();

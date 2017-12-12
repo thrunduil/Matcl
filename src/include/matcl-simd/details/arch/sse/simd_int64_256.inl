@@ -86,6 +86,16 @@ simd<int64_t, 256, sse_tag>::simd(const simd<int64_t, 256, avx_tag>& s)
 }
 
 force_inline
+simd<int64_t, 256, sse_tag>::simd(const simd<int64_t, 128, scalar_sse_tag>& s)
+    :simd(simd_half(s))
+{}
+
+force_inline
+simd<int64_t, 256, sse_tag>::simd(const simd<int64_t, 128, scalar_nosimd_tag>& s)
+    :simd(s.first())
+{}
+
+force_inline
 int64_t simd<int64_t, 256, sse_tag>::get(int pos) const
 { 
     return get_raw_ptr()[pos] ; 
@@ -173,7 +183,7 @@ simd<int64_t, 256, sse_tag>::load(const int64_t* arr, std::false_type not_aligne
 };
 
 force_inline simd<int64_t, 256, sse_tag> 
-simd<int64_t, 256, sse_tag>::gather(const int64_t* arr, const simd_128_int32& ind)
+simd<int64_t, 256, sse_tag>::gather(const int64_t* arr, const simd_int32_half& ind)
 {
     simd<int64_t, 256, sse_tag> ret;
     ret.data[0] = simd_half::gather(arr, ind);
@@ -182,14 +192,19 @@ simd<int64_t, 256, sse_tag>::gather(const int64_t* arr, const simd_128_int32& in
 }
 
 force_inline simd<int64_t, 256, sse_tag> 
-simd<int64_t, 256, sse_tag>::gather(const int64_t* arr, const simd_256_int64& ind)
+simd<int64_t, 256, sse_tag>::gather(const int64_t* arr, const simd_int32& ind)
+{
+    return gather(arr,ind.extract_low());
+}
+
+force_inline simd<int64_t, 256, sse_tag> 
+simd<int64_t, 256, sse_tag>::gather(const int64_t* arr, const simd_int64& ind)
 {
     simd<int64_t, 128, sse_tag> ret_lo, ret_hi;
     ret_lo  = simd_half::gather(arr, ind.extract_low());
     ret_hi  = simd_half::gather(arr, ind.extract_high());
 
-    simd<int64_t, 128, sse_tag> ret_1(ret_lo, ret_hi);
-    return simd(ret_1, ret_1);
+    return simd(ret_lo, ret_hi);
 }
 
 force_inline simd<int64_t, 256, sse_tag> 
@@ -227,25 +242,25 @@ simd<int64_t, 256, sse_tag>::store(int64_t* arr, std::false_type not_aligned) co
 force_inline simd<int32_t, 128, sse_tag>
 simd<int64_t, 256, sse_tag>::convert_to_int32() const
 {
-    return simd_128_int32(data[0].convert_to_int32(), data[1].convert_to_int32());
+    return simd_int32_half(data[0].convert_to_int32(), data[1].convert_to_int32());
 }
 
 force_inline simd<double, 256, sse_tag>
 simd<int64_t, 256, sse_tag>::reinterpret_as_double() const
 {
-    return *reinterpret_cast<const simd_256_double*>(this);
+    return *reinterpret_cast<const simd_double*>(this);
 }
 
 force_inline simd<float, 256, sse_tag>
 simd<int64_t, 256, sse_tag>::reinterpret_as_float() const
 {
-    return *reinterpret_cast<const simd_256_float*>(this);
+    return *reinterpret_cast<const simd_float*>(this);
 }
 
 force_inline simd<int32_t, 256, sse_tag>
 simd<int64_t, 256, sse_tag>::reinterpret_as_int32() const
 {
-    return *reinterpret_cast<const simd_256_int32*>(this);
+    return *reinterpret_cast<const simd_int32*>(this);
 }
 
 template<int Step>

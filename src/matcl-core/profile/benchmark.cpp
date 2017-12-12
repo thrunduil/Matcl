@@ -27,6 +27,9 @@ time_stats benchmark::make(int n_rep)
 {
     m_stats.clear();
 
+    m_func->eval();
+    m_func->eval();
+
     for (int i = 0; i < n_rep; ++i)
     {
         m_time.tic();

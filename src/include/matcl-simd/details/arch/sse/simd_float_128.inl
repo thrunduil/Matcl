@@ -33,7 +33,7 @@ struct cast_to_double_impl
     force_inline
     static Ret eval(const simd_type& s)
     {
-        return Ret(s.cast_low_to_double(), s.cast_high_to_double());
+        return Ret(s.convert_low_to_double(), s.convert_high_to_double());
     };
 };
 
@@ -82,6 +82,16 @@ simd<float, 128, sse_tag>::simd(const simd& lo, const simd& hi)
 force_inline
 simd<float, 128, sse_tag>::simd(const simd<float, 128, nosimd_tag>& s)
     : data(_mm_load_ps(s.data))
+{};
+
+force_inline
+simd<float, 128, sse_tag>::simd(const simd<float, 128, scalar_sse_tag>& s)
+    : data(_mm_shuffle_ps(s.data, s.data, 0))
+{};
+
+force_inline
+simd<float, 128, sse_tag>::simd(const simd<float, 128, scalar_nosimd_tag>& s)
+    : simd(s.first())
 {};
 
 force_inline
@@ -166,7 +176,7 @@ simd<float, 128, sse_tag>::load(const float* arr, std::false_type not_aligned)
 };
 
 force_inline simd<float, 128, sse_tag>
-simd<float, 128, sse_tag>::gather(const float* arr, const simd_128_int32& ind)
+simd<float, 128, sse_tag>::gather(const float* arr, const simd_int32& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm_i32gather_ps(arr, ind.data, 4);
@@ -183,7 +193,7 @@ simd<float, 128, sse_tag>::gather(const float* arr, const simd_128_int32& ind)
 }
 
 force_inline simd<float, 128, sse_tag> 
-simd<float, 128, sse_tag>::gather(const float* arr, const simd_128_int64& ind)
+simd<float, 128, sse_tag>::gather(const float* arr, const simd_int64& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return simd(_mm_i64gather_ps(arr, ind.data, 4));
@@ -195,7 +205,7 @@ simd<float, 128, sse_tag>::gather(const float* arr, const simd_128_int64& ind)
         for (int i = 0; i < vector_size/2; ++i)
             res_ptr[i]  = arr[ind_ptr[i]];
 
-        return simd(res, res);
+        return simd(res, simd::zero());
     #endif        
 }
 
@@ -233,10 +243,10 @@ simd<float, 128, sse_tag>::convert_high_to_double() const
 };
 
 force_inline
-typename simd<float, 128, sse_tag>::simd_256_double
+typename simd<float, 128, sse_tag>::simd_double_2
 simd<float, 128, sse_tag>::convert_to_double() const
 {
-    return details::cast_to_double_impl<simd_256_double>::eval(data);    
+    return details::cast_to_double_impl<simd_double_2>::eval(data);    
 };
 
 force_inline simd<double, 128, sse_tag>

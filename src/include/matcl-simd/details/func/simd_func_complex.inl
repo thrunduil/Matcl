@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-simd/func/simd_func_complex.h"
+#include "matcl-simd/basic_complex_functions.h"
 #include "matcl-simd/details/func/simd_func_complex_def.h"
 #include "matcl-simd/details/arch/simd_func_complex_impl.h"
 

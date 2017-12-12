@@ -36,7 +36,13 @@ simd_compl<double, 256, Simd_tag>::simd_compl(const impl_type& v)
 
 template<class Simd_tag>
 force_inline
-simd_compl<double, 256, Simd_tag>::simd_compl(Integer re)
+simd_compl<double, 256, Simd_tag>::simd_compl(int32_t re)
+    :simd_compl(double(re))
+{};
+
+template<class Simd_tag>
+force_inline
+simd_compl<double, 256, Simd_tag>::simd_compl(int64_t re)
     :simd_compl(double(re))
 {};
 

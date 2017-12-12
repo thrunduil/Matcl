@@ -22,7 +22,7 @@
 
 #include "matcl-simd/details/arch/simd_impl.h"
 #include "matcl-simd/complex/simd_complex.h"
-#include "matcl-simd/default_simd_complex.h"
+#include "matcl-simd/details/complex/default_simd_complex.h"
 #include "matcl-simd/details/helpers.h"
 
 namespace matcl { namespace simd
@@ -42,6 +42,13 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
 
         // type of stored elements
         using value_type    = simd_double_complex;
+
+        // simd tag
+        using simd_tag      = Simd_tag;
+
+        // number of bits
+        static const int
+        number_bits         = 128;
 
         // simd type of the same kind storing single precision values
         using simd_float    = simd_compl<float, 128, Simd_tag>;
@@ -63,7 +70,10 @@ class alignas(16) simd_compl<double, 128, Simd_tag>
         simd_compl() = default;
 
         // construct vector storing complex(re, 0)
-        explicit simd_compl(Integer re);
+        explicit simd_compl(int32_t re);
+
+        // construct vector storing complex(re, 0)
+        explicit simd_compl(int64_t re);
 
         // construct vector storing complex(re, 0)
         explicit simd_compl(float re);
@@ -174,11 +184,11 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
         using real_type     = float;
 
         // simd type of the same kind storing double complex values
-        using simd_128_double = simd_compl<double, 128, Simd_tag>;
+        using simd_double   = simd_compl<double, 128, Simd_tag>;
 
         // simd type storing 2 double complex values
-        using simd_256_double = typename details::simd_compl_from_real
-                                <typename impl_type::simd_256_double>::type;
+        using simd_double_2 = typename details::simd_compl_from_real
+                                <typename impl_type::simd_double_2>::type;
 
     public:
         // number of elements in the vector
@@ -271,13 +281,13 @@ class alignas(16) simd_compl<float, 128, Simd_tag>
                             get_raw_ptr();
 
         // convert the first four elements to double
-        simd_128_double     convert_low_to_double() const;
+        simd_double         convert_low_to_double() const;
 
         // convert the last four elements to double
-        simd_128_double     convert_high_to_double() const;
+        simd_double         convert_high_to_double() const;
 
         // convert all elements to double
-        simd_256_double     convert_to_double() const;
+        simd_double_2       convert_to_double() const;
 
     public:
         // plus assign operator

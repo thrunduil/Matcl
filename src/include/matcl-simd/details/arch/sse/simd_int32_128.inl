@@ -34,7 +34,7 @@ struct cast_int32_int64_impl
     force_inline
     static Ret eval(const simd_type& s)
     {
-        return Ret(s.cast_low_to_int64(), s.cast_high_to_int64());
+        return Ret(s.convert_low_to_int64(), s.convert_high_to_int64());
     };
 };
 
@@ -63,7 +63,7 @@ struct cast_int32_double_impl
     force_inline
     static Ret eval(const simd_type& s)
     {
-        return Ret(s.cast_low_to_double(), s.cast_high_to_double());
+        return Ret(s.convert_low_to_double(), s.convert_high_to_double());
     };
 };
 
@@ -116,6 +116,16 @@ simd<int32_t, 128, sse_tag>::simd(const simd& lo, const simd& hi)
 force_inline
 simd<int32_t, 128, sse_tag>::simd(const simd<int32_t, 128, nosimd_tag>& s)
     : data(_mm_load_si128((const __m128i*)s.data))
+{};
+
+force_inline
+simd<int32_t, 128, sse_tag>::simd(const simd<int32_t, 128, scalar_sse_tag>& s)
+    : data(_mm_shuffle_epi32(s.data, 0))
+{};
+
+force_inline
+simd<int32_t, 128, sse_tag>::simd(const simd<int32_t, 128, scalar_nosimd_tag>& s)
+    : simd(s.first())
 {};
 
 force_inline simd<int32_t, 128, sse_tag> 
@@ -194,7 +204,7 @@ simd<int32_t, 128, sse_tag>::load(const int32_t* arr, std::false_type not_aligne
 };
 
 force_inline simd<int32_t, 128, sse_tag>
-simd<int32_t, 128, sse_tag>::gather(const int32_t* arr, const simd_128_int32& ind)
+simd<int32_t, 128, sse_tag>::gather(const int32_t* arr, const simd_int32& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm_i32gather_epi32(arr, ind.data, 4);
@@ -211,7 +221,7 @@ simd<int32_t, 128, sse_tag>::gather(const int32_t* arr, const simd_128_int32& in
 }
 
 force_inline simd<int32_t, 128, sse_tag>
-simd<int32_t, 128, sse_tag>::gather(const int32_t* arr, const simd_128_int64& ind)
+simd<int32_t, 128, sse_tag>::gather(const int32_t* arr, const simd_int64& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return simd(_mm_i64gather_epi32(arr, ind.data, 4));
@@ -223,7 +233,7 @@ simd<int32_t, 128, sse_tag>::gather(const int32_t* arr, const simd_128_int64& in
         for (int i = 0; i < vector_size/2; ++i)
             res_ptr[i]  = arr[ind_ptr[i]];
 
-        return simd(res, res);
+        return simd(res, simd::zero());
     #endif
 }
 
@@ -285,10 +295,10 @@ simd<int32_t, 128, sse_tag>::convert_high_to_int64() const
 };
 
 force_inline
-typename simd<int32_t, 128, sse_tag>::simd_256_int64
+typename simd<int32_t, 128, sse_tag>::simd_int64_2
 simd<int32_t, 128, sse_tag>::convert_to_int64() const
 {
-    return details::cast_int32_int64_impl<simd_256_int64>::eval(data);    
+    return details::cast_int32_int64_impl<simd_int64_2>::eval(data);    
 };
 
 force_inline simd<float, 128, sse_tag>
@@ -310,10 +320,10 @@ simd<int32_t, 128, sse_tag>::convert_high_to_double() const
     return _mm_cvtepi32_pd(hi.data);
 };
 
-force_inline typename simd<int32_t, 128, sse_tag>::simd_256_double
+force_inline typename simd<int32_t, 128, sse_tag>::simd_double_2
 simd<int32_t, 128, sse_tag>::convert_to_double() const
 {
-    return details::cast_int32_double_impl<simd_256_double>::eval(data);
+    return details::cast_int32_double_impl<simd_double_2>::eval(data);
 };
 
 force_inline simd<double, 128, sse_tag>

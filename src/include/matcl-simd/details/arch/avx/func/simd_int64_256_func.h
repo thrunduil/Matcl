@@ -326,7 +326,7 @@ struct simd_shift_right_arithmetic<int64_t, 256, avx_tag>
                 __m256i sra3 = _mm256_srli_epi64(sra2, 32);
 
                 // mask for high part containing only sign
-                __m128i mask = _mm_setr_epi32(0,-1,0,-1);
+                __m256i mask = _mm256_setr_epi32(0,-1,0,-1, 0,-1,0,-1);
 
                 return  if_then_else(simd_32(mask), simd_32(sign), simd_32(sra3))
                                 .reinterpret_as_int64();
@@ -528,8 +528,8 @@ struct simd_if_then_else<int64_t, 256, avx_tag>
     static simd_type eval(const simd_type& test, const simd_type& val_true,
                           const simd_type& val_false)
     {
-        return if_then_else(test.reinterpret_as_double(), val_false.reinterpret_as_double(),
-                            val_true.reinterpret_as_double()).reinterpret_as_int64();
+        return if_then_else(test.reinterpret_as_double(), val_true.reinterpret_as_double(),
+                            val_false.reinterpret_as_double()).reinterpret_as_int64();
     };
 };
 

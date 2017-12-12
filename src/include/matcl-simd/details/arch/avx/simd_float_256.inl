@@ -65,6 +65,21 @@ simd<float, 256, avx_tag>::simd(const simd<float, 256, sse_tag>& s)
 {}
 
 force_inline
+simd<float, 256, avx_tag>::simd(const simd<float, 128, scalar_sse_tag>& s)
+{
+    #if MATCL_ARCHITECTURE_HAS_AVX2
+        data = _mm256_broadcastss_ps(s.data);
+    #else
+        data = _mm256_set1_ps(s.first());
+    #endif
+}
+
+force_inline
+simd<float, 256, avx_tag>::simd(const simd<float, 128, scalar_nosimd_tag>& s)
+    :simd(s.first())
+{}
+
+force_inline
 float simd<float, 256, avx_tag>::get(int pos) const  
 { 
     return get_raw_ptr()[pos] ; 
@@ -147,7 +162,7 @@ simd<float, 256, avx_tag>::load(const float* arr, std::false_type not_aligned)
 };
 
 force_inline simd<float, 256, avx_tag> 
-simd<float, 256, avx_tag>::gather(const float* arr, const simd_256_int32& ind)
+simd<float, 256, avx_tag>::gather(const float* arr, const simd_int32& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm256_i32gather_ps(arr, ind.data, 4);
@@ -164,10 +179,10 @@ simd<float, 256, avx_tag>::gather(const float* arr, const simd_256_int32& ind)
 }
 
 force_inline simd<float, 256, avx_tag> 
-simd<float, 256, avx_tag>::gather(const float* arr, const simd_256_int64& ind)
+simd<float, 256, avx_tag>::gather(const float* arr, const simd_int64& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
-        return simd(_mm256_i64gather_ps(arr, ind.data, 4));
+        return simd(simd_half(_mm256_i64gather_ps(arr, ind.data, 4)), simd_half::zero());
     #else
         simd_half res;
         float* res_ptr          = res.get_raw_ptr();
@@ -176,7 +191,7 @@ simd<float, 256, avx_tag>::gather(const float* arr, const simd_256_int64& ind)
         for (int i = 0; i < vector_size/2; ++i)
             res_ptr[i]  = arr[ind_ptr[i]];
 
-        return simd(res, res);
+        return simd(res, simd_half::zero());
     #endif    
 }
 

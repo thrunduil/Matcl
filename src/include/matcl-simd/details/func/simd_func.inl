@@ -40,9 +40,23 @@ float true_value<float>::get()
 
 template<>
 force_inline
+int32_t true_value<int32_t>::get()
+{
+    return 0xFFFFFFFF;
+};
+
+template<>
+force_inline
 double true_value<double>::get()
 {
     return matcl::hex_double(0xFFFFFFFFFFFFFFFF);
+};
+
+template<>
+force_inline
+int64_t true_value<int64_t>::get()
+{
+    return 0xFFFFFFFFFFFFFFFF;
 };
 
 template<class T>
@@ -65,7 +79,7 @@ force_inline
 simd<Val, Bits, Simd_tag>
 ms::signbit_base(const simd<Val, Bits, Simd_tag>& x)
 {
-    return bitwise_and(x, simd<Val, Bits, Simd_tag>::minus_zero());
+    return details::simd_signbit_base<Val, Bits, Simd_tag>::eval(x);    
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -168,6 +182,47 @@ template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag> 
 ms::operator-(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_uminus<Val, Bits, Simd_tag>::eval(x);
+};
+
+//
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::mult(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return details::simd_mult<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::div(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return details::simd_div<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::plus(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return details::simd_plus<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::minus(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return details::simd_minus<Val, Bits, Simd_tag>::eval(x, y);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag> 
+ms::uminus(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_uminus<Val, Bits, Simd_tag>::eval(x);
 };
@@ -424,37 +479,6 @@ if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_t
 {
     return details::simd_if_then_else<Val, Bits, Simd_tag>::eval(test, val_true, val_false);
 }
-
-//-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<class Val, int Bits, class Simd_tag>
-force_inline simd<Val, Bits, Simd_tag> 
-ms::pow2k(const simd<Val, Bits, Simd_tag>& k)
-{
-    return details::simd_pow2k<Val, Bits, Simd_tag>::eval(k);
-};
-
-template<int Bits, class Simd_tag>
-force_inline simd<float, Bits, Simd_tag> 
-ms::pow2ki(const simd<int32_t, Bits, Simd_tag>& k)
-{
-    return details::simd_pow2k<float, Bits, Simd_tag>::eval_i(k);
-};
-
-template<int Bits, class Simd_tag>
-force_inline simd<double, Bits, Simd_tag> 
-ms::pow2ki(const simd<int64_t, Bits, Simd_tag>& k)
-{
-    return details::simd_pow2k<double, Bits, Simd_tag>::eval_i(k);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline simd<Val, Bits, Simd_tag> 
-ms::exp(const simd<Val, Bits, Simd_tag>& x)
-{
-    return details::simd_exp<Val, Bits, Simd_tag>::eval(x);
-};
 
 //-----------------------------------------------------------------------
 //                   IO FUNCTIONS
