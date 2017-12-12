@@ -630,16 +630,16 @@ struct simd_pow2k<float, 256, avx_tag>
     static simd_type eval(const simd_type& k)
     {
         // 2^23
-        const double pow2_23    = 8388608.0;
+        const float pow2_23     = 8388608.0f;
 
         // bias in exponent
-        const double bias       = 127.0;
+        const float bias        = 127.0f;
 
         // put k + bias in least significant bits
         simd_type k2            = k + simd_type(bias + pow2_23);
 
         // shift left 52 places to get into exponent field
-        simd_type pow2k         = shift_left(k2, 52);
+        simd_type pow2k         = shift_left(k2, 23);
 
         return pow2k;
     };

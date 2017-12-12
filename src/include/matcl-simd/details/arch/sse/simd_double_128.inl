@@ -31,8 +31,13 @@ namespace matcl { namespace simd
 //-------------------------------------------------------------------
 
 force_inline
-simd<double, 128, sse_tag>::simd(Integer val)
+simd<double, 128, sse_tag>::simd(int32_t val)
     : data(_mm_set1_pd(val)) 
+{}
+
+force_inline
+simd<double, 128, sse_tag>::simd(int64_t val)
+    : data(_mm_set1_pd(double(val))) 
 {}
 
 force_inline
@@ -63,6 +68,16 @@ simd<double, 128, sse_tag>::simd(const impl_type& v)
 force_inline
 simd<double, 128, sse_tag>::simd(const simd<double, 128, nosimd_tag>& s)
     : data(_mm_load_pd(s.data))
+{};
+
+force_inline
+simd<double, 128, sse_tag>::simd(const simd<double, 128, scalar_sse_tag>& s)
+    :data(_mm_shuffle_pd(s.data, s.data, 0))
+{};
+
+force_inline
+simd<double, 128, sse_tag>::simd(const simd<double, 128, scalar_nosimd_tag>& s)
+    : simd(s.first())
 {};
 
 force_inline
@@ -196,7 +211,7 @@ simd<double, 128, sse_tag>::load(const double* arr, std::false_type not_aligned)
 };
 
 force_inline simd<double, 128, sse_tag> 
-simd<double, 128, sse_tag>::gather(const double* arr, const simd_128_int32& ind)
+simd<double, 128, sse_tag>::gather(const double* arr, const simd_int32& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm_i32gather_pd(arr, ind.data, 8);
@@ -213,7 +228,7 @@ simd<double, 128, sse_tag>::gather(const double* arr, const simd_128_int32& ind)
 }
 
 force_inline simd<double, 128, sse_tag> 
-simd<double, 128, sse_tag>::gather(const double* arr, const simd_128_int64& ind)
+simd<double, 128, sse_tag>::gather(const double* arr, const simd_int64& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm_i64gather_pd(arr, ind.data, 8);

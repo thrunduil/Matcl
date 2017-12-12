@@ -39,7 +39,7 @@ matcl::fma_dekker_simd(const simd::simd<float, 128, simd::sse_tag>& x,
                 const simd::simd<float, 128, simd::sse_tag>& z)
 {
     using simd_float    = simd::simd<float, 128, simd::sse_tag>;
-    using simd_double   = simd_float::simd_256_double;
+    using simd_double   = simd_float::simd_double_2;
 
     //for floats we can use double arithmetics
     simd_double xd      = x.convert_to_double();

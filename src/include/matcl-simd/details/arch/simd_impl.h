@@ -27,6 +27,11 @@
 #include "matcl-simd/arch/nosimd/simd_int32_128.h"
 #include "matcl-simd/arch/nosimd/simd_int64_128.h"
 
+#include "matcl-simd/arch/nosimd/simd_scalar_float_128.h"
+#include "matcl-simd/arch/nosimd/simd_scalar_double_128.h"
+#include "matcl-simd/arch/nosimd/simd_scalar_int32_128.h"
+#include "matcl-simd/arch/nosimd/simd_scalar_int64_128.h"
+
 #include "matcl-simd/arch/nosimd/simd_float_256.h"
 #include "matcl-simd/arch/nosimd/simd_double_256.h"
 #include "matcl-simd/arch/nosimd/simd_int32_256.h"
@@ -43,7 +48,10 @@
     #include "matcl-simd/arch/sse/simd_int32_256.h"
     #include "matcl-simd/arch/sse/simd_int64_256.h"
 
-    #include "matcl-simd/arch/sse/simd_double_64.h"
+    #include "matcl-simd/arch/sse/simd_scalar_double_128.h"
+    #include "matcl-simd/arch/sse/simd_scalar_float_128.h"
+    #include "matcl-simd/arch/sse/simd_scalar_int32_128.h"
+    #include "matcl-simd/arch/sse/simd_scalar_int64_128.h"
 #endif
 
 #if MATCL_ARCHITECTURE_HAS_AVX

@@ -68,6 +68,31 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 operator-(const simd<Val, Bits, Simd_tag>& x);
 
+// vector multiply x * y; equivalent to operator*
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+mult(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// vector division x / y; equivalent to operator/
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+div(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// vector add x + y; equivalent to operator+
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+plus(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// vector subtract x - y; equivalent to operator-
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+minus(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
+// vector unary minus x; equivalent to unary operator-
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+uminus(const simd<Val, Bits, Simd_tag>& x);
+
 // alternatively subtract and add elements in x and y
 // i.e. form [x[0] - y[0], x[1] + y[1], x[2] - y[2], x[3] + y[3], ...]
 template<class Val, int Bits, class Simd_tag>
@@ -316,16 +341,6 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_true,
              const simd<Val, Bits, Simd_tag>& val_false);
-
-//-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-// return 2^k; k must represent an integer; TODO
-// no checks are performed
-template<class Val, int Bits, class Simd_tag>
-simd<Val, Bits, Simd_tag> 
-//pow2k(const simd<Val, Bits, Simd_tag>& k);
-pow2k(const simd<int64_t, Bits, Simd_tag>& k);
 
 //-----------------------------------------------------------------------
 //                   MISCELLANEOUS FUNCTIONS

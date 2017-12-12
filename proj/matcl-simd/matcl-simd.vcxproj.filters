@@ -67,8 +67,26 @@
     <Filter Include="Source Files\include\details\poly">
       <UniqueIdentifier>{92aaf66a-e646-4989-9e44-aac0906c5c7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\include\details\func\general_impl">
-      <UniqueIdentifier>{cf76a9c1-efff-4d6c-a5a3-293d4b8c781f}</UniqueIdentifier>
+    <Filter Include="Source Files\include\details\math">
+      <UniqueIdentifier>{deda422d-7220-402e-8e2b-32b47877f579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\math\impl">
+      <UniqueIdentifier>{cd4498d8-c188-4529-8b60-0a7e1e1f65d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{d396338d-5105-4665-abbf-58d92144f87b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\math">
+      <UniqueIdentifier>{d30da5ff-8e2a-404d-a2a8-6dcf60289e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\nosimd\math">
+      <UniqueIdentifier>{0cc833d1-7e51-4b74-b5f4-318824ff7f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\sse\math">
+      <UniqueIdentifier>{f0f816ef-5d29-4996-b9ef-266a29011af9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\arch\avx\math">
+      <UniqueIdentifier>{4bad689a-2473-4664-bf70-dc12784335b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -86,33 +104,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\avx\simd_int64_256.h">
       <Filter>Source Files\include\arch\avx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_128.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_256.h">
-      <Filter>Source Files\include\arch\nosimd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_64.h">
-      <Filter>Source Files\include\arch\sse</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_double_128.h">
       <Filter>Source Files\include\arch\sse</Filter>
@@ -175,9 +166,6 @@
       <Filter>Source Files\include\details\arch</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_complex.h">
-      <Filter>Source Files\include\details\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_impl.h">
       <Filter>Source Files\include\details\arch</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\simd_func_complex_impl.h">
@@ -276,12 +264,6 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\func_complex\simd_float_256_func.h">
       <Filter>Source Files\include\details\arch\avx\func_complex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\func\general_impl\simd_exp.h">
-      <Filter>Source Files\include\details\func\general_impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-simd\details\func\undefined_func_int.h">
-      <Filter>Source Files\include\details\func</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\details\func\general_defs.h">
       <Filter>Source Files\include\details\func</Filter>
     </ClInclude>
@@ -293,6 +275,93 @@
     </ClInclude>
     <ClInclude Include="..\..\src\include\matcl-simd\basic_functions.h">
       <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\math_functions.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\simd_math.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\general_defs.h">
+      <Filter>Source Files\include\details\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\simd_math_func_def.h">
+      <Filter>Source Files\include\details\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_exp.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\default_simd_scalar.h">
+      <Filter>Source Files\include\details\arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\default_simd_scalar_impl.h">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_double_128.h">
+      <Filter>Source Files\include\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_float_128.h">
+      <Filter>Source Files\include\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_int32_128.h">
+      <Filter>Source Files\include\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\sse\simd_scalar_int64_128.h">
+      <Filter>Source Files\include\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func\simd_128_scalar_func.h">
+      <Filter>Source Files\include\details\arch\sse\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\default_simd_scalar_impl.h">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\func\simd_128_scalar_func.h">
+      <Filter>Source Files\include\details\arch\nosimd\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_double_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_float_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int32_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_int64_256.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_double_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_float_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_int32_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\arch\nosimd\simd_scalar_int64_128.h">
+      <Filter>Source Files\include\arch\nosimd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\nosimd\math\math_impl.h">
+      <Filter>Source Files\include\details\arch\nosimd\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\math\math_impl.h">
+      <Filter>Source Files\include\details\arch\sse\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\math\math_impl.h">
+      <Filter>Source Files\include\details\arch\avx\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -380,5 +449,43 @@
     <None Include="..\..\src\include\matcl-simd\details\arch\avx\simd_int64_256.inl">
       <Filter>Source Files\include\details\arch\avx</Filter>
     </None>
+    <None Include="..\..\src\include\matcl-simd\details\math\math_functions.inl">
+      <Filter>Source Files\include\details\math</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\math\math_func_impl.inl">
+      <Filter>Source Files\include\details\math</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\math\math_func_scalar_impl.inl">
+      <Filter>Source Files\include\details\math</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_double_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_float_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_int32_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_int64_128.inl">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_double_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_float_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_int32_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_int64_128.inl">
+      <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_exp.cpp">
+      <Filter>Source Files\src\math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

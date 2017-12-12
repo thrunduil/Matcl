@@ -66,6 +66,21 @@ simd<int32_t, 256, avx_tag>::simd(const simd<int32_t, 256, sse_tag>& s)
 {}
 
 force_inline
+simd<int32_t, 256, avx_tag>::simd(const simd<int32_t, 128, scalar_sse_tag>& s)
+{
+    #if MATCL_ARCHITECTURE_HAS_AVX2
+        data = _mm256_broadcastd_epi32(s.data);
+    #else
+        data = _mm256_set1_epi32(s.first());
+    #endif
+}
+
+force_inline
+simd<int32_t, 256, avx_tag>::simd(const simd<int32_t, 128, scalar_nosimd_tag>& s)
+    :simd(s.first())
+{}
+
+force_inline
 int32_t simd<int32_t, 256, avx_tag>::get(int pos) const  
 { 
     return get_raw_ptr()[pos] ; 
@@ -142,7 +157,7 @@ simd<int32_t, 256, avx_tag>::load(const int32_t* arr, std::false_type not_aligne
 };
 
 force_inline simd<int32_t, 256, avx_tag> 
-simd<int32_t, 256, avx_tag>::gather(const int32_t* arr, const simd_256_int32& ind)
+simd<int32_t, 256, avx_tag>::gather(const int32_t* arr, const simd_int32& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm256_i32gather_epi32(arr, ind.data, 4);
@@ -159,10 +174,10 @@ simd<int32_t, 256, avx_tag>::gather(const int32_t* arr, const simd_256_int32& in
 }
 
 force_inline simd<int32_t, 256, avx_tag> 
-simd<int32_t, 256, avx_tag>::gather(const int32_t* arr, const simd_256_int64& ind)
+simd<int32_t, 256, avx_tag>::gather(const int32_t* arr, const simd_int64& ind)
 {
     #if MATCL_ARCHITECTURE_HAS_AVX2
-        return simd(_mm256_i64gather_epi32(arr, ind.data, 4));
+        return simd(simd_half(_mm256_i64gather_epi32(arr, ind.data, 4)), simd_half::zero());
     #else
         simd_half res;
         int32_t* res_ptr        = res.get_raw_ptr();
@@ -171,7 +186,7 @@ simd<int32_t, 256, avx_tag>::gather(const int32_t* arr, const simd_256_int64& in
         for (int i = 0; i < vector_size/2; ++i)
             res_ptr[i]  = arr[ind_ptr[i]];
 
-        return simd(res, res);
+        return simd(res, simd_half::zero());
     #endif
 }
 
@@ -208,7 +223,7 @@ simd<int32_t, 256, avx_tag>::convert_low_to_int64() const
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm256_cvtepi32_epi64(lo.data);
     #else
-        return simd_256_int64(lo.convert_low_to_int64(), lo.convert_high_to_int64());
+        return simd_int64(lo.convert_low_to_int64(), lo.convert_high_to_int64());
     #endif
 };
 
@@ -220,7 +235,7 @@ simd<int32_t, 256, avx_tag>::convert_high_to_int64() const
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm256_cvtepi32_epi64(hi.data);
     #else
-        return simd_256_int64(hi.convert_low_to_int64(), hi.convert_high_to_int64());
+        return simd_int64(hi.convert_low_to_int64(), hi.convert_high_to_int64());
     #endif
 };
 

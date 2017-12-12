@@ -28,6 +28,7 @@
 #include "matcl-scalar/lib_functions/func_binary.h"
 
 #include "matcl-core/profile/benchmark.h"
+#include "matcl-simd/simd_math.h"
 
 #include <iostream>
 #include <fstream>
@@ -87,18 +88,19 @@ struct exp_twofold_impl
 twofold<double> exp_twofold_impl::poly[size];
 double exp_twofold_impl::dum_init = initialize();
 
+template<class T>
 struct Func_exp : public benchmark_function
 {
     int             m_N;
-    const double*   m_arr;
+    const T*        m_arr;
 
-    Func_exp(int n, const double* arr) 
+    Func_exp(int n, const T* arr) 
         : m_N(n), m_arr(arr)
     {};
 
     void eval() override
     {
-        double z    = 0.0;
+        T z         = T();
 
         for (int i = 0; i <m_N; ++i)
         {
@@ -109,24 +111,28 @@ struct Func_exp : public benchmark_function
     };
 };
 
+template<class T>
 struct Func_exp2 : public benchmark_function
 {
     int             m_N;
-    const double*   m_arr;
+    const T*        m_arr;
 
-    Func_exp2(int n, const double* arr) 
+    Func_exp2(int n, const T* arr) 
         : m_N(n), m_arr(arr)
     {};
 
     void eval() override
-    {
-        double z        = 0.0;
-        using simd_type = simd::simd<double, 128, simd::sse_tag>;
+    {        
+        //using simd_type = simd::simd<T, 256, simd::avx_tag>;
+        //static const int vector_size = simd_type::vector_size;
 
-        for (int i = 0; i <m_N; ++i)
+        //simd_type z     = simd_type::zero();
+        T z             = T();
+
+        for (int i = 0; i < m_N; i += 1)
         {
-            simd_type x = simd_type::broadcast(m_arr[i]);
-            z       += simd::exp(x).first();        
+            //simd_type x = simd_type::load(m_arr + i);
+            z           += simd::exp(m_arr[i]);
         };
 
         benchmark::use_value(z);
@@ -161,24 +167,46 @@ int main(int argc, const char* argv[])
     (void)argv;
 
     using log_ptr   = std::shared_ptr<std::ofstream>;
+    
+    //matcl::simd::details::exp_table_double::generate_lookup_table(std::cout, 4);
 
+    {
+        double d1   = hex_double(0x4340000000000000ll);
+        float f2    = hex_float(0x4b800000);
+
+        mp_float d2     = mp_float(d1);
+        mp_float d3     = mp_float(f2);
+
+        std::cout << d2.to_string(precision(20)) << "\n";
+        std::cout << d3.to_string(precision(20)) << "\n";
+    }
+
+    {
+        precision prec      = precision(53*4);
+        mp_float log2       = constants::mp_ln2(prec);
+        mp_float ln2_hi     = mp_float(log2, precision(35));
+        mp_float ln2_lo     = log2 - ln2_hi;
+
+        std::cout << ln2_hi.to_string(precision(20)) << "\n";
+        std::cout << ln2_lo.to_string(precision(20)) << "\n";
+    }
     if (1)
     {
-        int N       = 30000;
+        int N       = 50000;
         int M       = 3000;
 
         using func_ptr  = benchmark::function_ptr;
 
-        std::vector<double> x;
+        std::vector<float> x;
         x.reserve(N);
 
         for (int i = 0; i < N; ++i)
-            x.push_back(matcl::randn());
+            x.push_back(matcl::frandn());
 
-        const double* ptr_x = x.data();
+        const float* ptr_x = x.data();
 
-        benchmark b1    = benchmark(func_ptr(new Func_exp(N, ptr_x)));
-        benchmark b3    = benchmark(func_ptr(new Func_exp2(N, ptr_x)));
+        benchmark b1    = benchmark(func_ptr(new Func_exp<float>(N, ptr_x)));
+        benchmark b3    = benchmark(func_ptr(new Func_exp2<float>(N, ptr_x)));
 	    //benchmark b4    = benchmark(func_ptr(new Func_exp3(N, ptr_x)));
         //benchmark b5    = benchmark(func_ptr(new Func_exp_twofold(N, ptr_x)));
 
@@ -252,7 +280,7 @@ int main(int argc, const char* argv[])
             N       = N / 10;
         #endif
 
-        std::vector<double> x;
+        std::vector<float> x;
         x.reserve(N);
 
         double val_log2 = 0.693147180559945309417232121458176;
@@ -266,20 +294,21 @@ int main(int argc, const char* argv[])
         {
             //double mult     = 1.0/256.0/2.0;
             //double mult     = val_log2/2.0;
-            x.push_back((1.0 - 2.0*matcl::rand()) * 700.0);
+            //x.push_back((1.0 - 2.0*matcl::rand()) * 700.0);
+            x.push_back((1.0f - 2.0f*matcl::frand()) * 80.0f);
             //x.push_back((1.0 - 2.0*matcl::rand()) * mult);
             //x.push_back(-(start + i*step));
             //x.push_back(matcl::rand());
         };
 
         precision prec      = precision(53*4);
-        precision prec_d    = precision::precision_double();
+        precision prec_d    = precision::precision_float();
 
         double max_dif = 0;
         for (int i = 0; i < N; ++i)
         {
             //x[i]          = val_log2/2;
-            double res1     = simd::exp(x[i]);
+            float res1      = simd::exp(x[i]);
             mp_float res2   = exp(mp_float(x[i], prec));
 
             double dif      = ulp_distance(res2, mp_float(res1), prec_d).cast_float();

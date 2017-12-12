@@ -570,13 +570,13 @@ struct simd_pow2k<T, 256, sse_tag>
     force_inline
     static simd_type eval(const simd_type& k)
     {
-        return simd_type(pow2k(x.extract_low()), pow2k(x.extract_high()));
+        return simd_type(pow2k(k.extract_low()), pow2k(k.extract_high()));
     };
 
     force_inline
     static simd_type eval_i(const simd_int& k)
     {
-        return simd_type(pow2ki(x.extract_low()), pow2ki(x.extract_high()));
+        return simd_type(pow2ki(k.extract_low()), pow2ki(k.extract_high()));
     };
 };
 

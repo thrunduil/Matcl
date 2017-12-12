@@ -22,6 +22,9 @@
 #include "test_simd.h"
 #include "test_simd_compl.h"
 #include "matcl-core/IO/logger.h"
+#include "test_simd_int.h"
+#include "test_simd_scalar.h"
+#include "test_simd_scalar_int.h"
 
 #include <iostream>
 #include <fstream>
@@ -44,6 +47,9 @@ int main(int argc, const char* argv[])
         };
                 
         matcl::test::test_values_real();
+        matcl::test::test_values_int();
+        matcl::test::test_values_real_scalar();
+        matcl::test::test_values_int_scalar();
         matcl::test::test_values_complex();        
 
         std::cout << "\n";

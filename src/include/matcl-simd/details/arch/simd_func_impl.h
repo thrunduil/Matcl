@@ -23,6 +23,7 @@
 #include "matcl-simd/config.h"
 
 #include "matcl-simd/details/arch/nosimd/func/simd_func.h"
+#include "matcl-simd/details/arch/nosimd/func/simd_128_scalar_func.h"
 
 #if MATCL_ARCHITECTURE_HAS_SSE2
     #include "matcl-simd/details/arch/sse/func/simd_float_128_func.h"
@@ -31,6 +32,7 @@
     #include "matcl-simd/details/arch/sse/func/simd_int64_128_func.h"
 
     #include "matcl-simd/details/arch/sse/func/simd_256_func.h"
+    #include "matcl-simd/details/arch/sse/func/simd_128_scalar_func.h"
 #endif
 
 #if MATCL_ARCHITECTURE_HAS_AVX
@@ -39,6 +41,3 @@
     #include "matcl-simd/details/arch/avx/func/simd_int32_256_func.h"
     #include "matcl-simd/details/arch/avx/func/simd_int64_256_func.h"
 #endif
-
-#include "matcl-simd/details/func/undefined_func_int.h"
-#include "matcl-simd/details/func/general_defs.h"

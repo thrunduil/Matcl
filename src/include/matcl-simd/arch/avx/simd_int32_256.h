@@ -43,20 +43,39 @@ class alignas(32) simd<int32_t, 256, avx_tag>
         // type of stored elements
         using value_type    = int32_t;
 
+        // simd tag
+        using simd_tag      = avx_tag;
+
+        // number of bits
+        static const int
+        number_bits         = 256;
+
         // type of vector storing half of elements
         using simd_half     = simd<int32_t, 128, sse_tag>;
 
-        // simd type storing 32-bit integers of size 256 bits
-        using simd_256_int32 = simd<int32_t, 256, avx_tag>;
+        // simd type of the same size storing float values
+        using simd_float    = simd<float, 256, avx_tag>;
 
-        // simd type storing 64-bit integers of size 256 bits
-        using simd_256_int64 = simd<int64_t, 256, avx_tag>;
+        // simd type of the same size storing double values
+        using simd_double   = simd<double, 256, avx_tag>;
 
-        // simd type storing float values of size 256 bits
-        using simd_256_float  = simd<float, 256, avx_tag>;
+        // simd type of the same size storing int32_t values
+        using simd_int32    = simd<int32_t, 256, avx_tag>;
 
-        // simd type storing double values of size 256 bits
-        using simd_256_double = simd<double, 256, avx_tag>;
+        // simd type of the same size storing int64_t values
+        using simd_int64    = simd<int64_t, 256, avx_tag>;
+
+        // simd type storing half of elements of float type
+        using simd_float_half   = simd<float, 128, sse_tag>;
+
+        // simd type storing half of elements of double type
+        using simd_double_half  = simd<double, 128, sse_tag>;
+
+        // simd type storing half of elements of int32_t type
+        using simd_int32_half   = simd<int32_t, 128, sse_tag>;
+
+        // simd type storing half of elements of int64_t type
+        using simd_int64_half   = simd<int64_t, 128, sse_tag>;
 
     public:
         // number of elements in the vector
@@ -93,6 +112,10 @@ class alignas(32) simd<int32_t, 256, avx_tag>
         explicit simd(const simd<int32_t, 256, nosimd_tag>& s);
         explicit simd(const simd<int32_t, 256, sse_tag>& s);
 
+        // conversion form simd scalar; set all elements to s.first()
+        explicit simd(const simd<int32_t, 128, scalar_sse_tag>& s);
+        explicit simd(const simd<int32_t, 128, scalar_nosimd_tag>& s);
+
         // copy constructor
         simd(const simd<int32_t, 256, avx_tag>& s) = default;
 
@@ -120,12 +143,12 @@ class alignas(32) simd<int32_t, 256, avx_tag>
 
         // gather 32-bit integer elements from memory using 32-bit indices, 
         // i.e. i-th element of resulting vector is arr[ind[i]]
-        static simd     gather(const int32_t* arr, const simd_256_int32& ind);
+        static simd     gather(const int32_t* arr, const simd_int32& ind);
 
         // gather 32-bit floating-point elements from memory using 64-bit indices, 
         // i.e. i-th element of resulting vector is arr[ind[i]];
-        // last four elements are the same as the first four elements
-        static simd     gather(const int32_t* arr, const simd_256_int64& ind);
+        // last four elements are set to zero
+        static simd     gather(const int32_t* arr, const simd_int64& ind);
 
     public:
         // store elements in arr; arr must have length at least vector_size
@@ -158,28 +181,28 @@ class alignas(32) simd<int32_t, 256, avx_tag>
 
     public:
         // convert the first four elements to int64_t
-        simd_256_int64  convert_low_to_int64() const;
+        simd_int64      convert_low_to_int64() const;
 
         // convert the last four elements to int64_t
-        simd_256_int64  convert_high_to_int64() const;
+        simd_int64      convert_high_to_int64() const;
 
         // convert elements to float
-        simd_256_float  convert_to_float() const;
+        simd_float      convert_to_float() const;
 
         // convert the first four elements to double
-        simd_256_double convert_low_to_double() const;
+        simd_double     convert_low_to_double() const;
 
         // convert the last four elements to double
-        simd_256_double convert_high_to_double() const;
+        simd_double     convert_high_to_double() const;
 
         // reinterpret cast to vector of double of the same kind
-        simd_256_double reinterpret_as_double() const;
+        simd_double     reinterpret_as_double() const;
 
         // reinterpret cast to vector of float of the same kind
-        simd_256_float  reinterpret_as_float() const;
+        simd_float      reinterpret_as_float() const;
 
         // reinterpret cast to vector of int64 of the same kind
-        simd_256_int64  reinterpret_as_int64() const;
+        simd_int64      reinterpret_as_int64() const;
 
     public:
         // plus assign operator

@@ -42,23 +42,30 @@ class alignas(16) simd<int32_t, 128, nosimd_tag>
         // type of stored elements
         using value_type    = int32_t;
 
-        // simd type storing 32-bit integers of size 128 bits
-        using simd_128_int32 = simd<int32_t, 128, nosimd_tag>;
+        // simd tag
+        using simd_tag      = nosimd_tag;
 
-        // simd type storing 64-bit integers of size 128 bits
-        using simd_128_int64 = simd<int64_t, 128, nosimd_tag>;
+        // number of bits
+        static const int
+        number_bits         = 128;
 
-        // simd type storing float values of size 128 bits
-        using simd_128_float  = simd<float, 128, nosimd_tag>;
+        // simd type of the same size storing float values
+        using simd_float    = simd<float, 128, nosimd_tag>;
 
-        // simd type storing double values of size 128 bits
-        using simd_128_double = simd<double, 128, nosimd_tag>;
+        // simd type of the same size storing double values
+        using simd_double   = simd<double, 128, nosimd_tag>;
+
+        // simd type of the same size storing int32_t values
+        using simd_int32    = simd<int32_t, 128, nosimd_tag>;
+
+        // simd type of the same size storing int64_t values
+        using simd_int64    = simd<int64_t, 128, nosimd_tag>;
 
         // simd type storing double values of size 256 bits
-        using simd_256_double = simd<double, 256, nosimd_tag>;
+        using simd_double_2 = simd<double, 256, nosimd_tag>;
 
         // simd type storing 64-bit integers of size 256 bits
-        using simd_256_int64 = simd<int64_t, 256, nosimd_tag>;
+        using simd_int64_2  = simd<int64_t, 256, nosimd_tag>;
 
     public:
         // number of elements in the vector
@@ -84,11 +91,12 @@ class alignas(16) simd<int32_t, 128, nosimd_tag>
         // hi is used
         simd(const simd& lo, const simd& hi);
 
-        // construct from representation
-        simd(const impl_type& v);
-
         // conversion between simd types
         explicit simd(const simd<int32_t, 128, sse_tag>& s);
+
+        // conversion form simd scalar; set all elements to s.first()
+        explicit simd(const simd<int32_t, 128, scalar_sse_tag>& s);
+        explicit simd(const simd<int32_t, 128, scalar_nosimd_tag>& s);
 
         // copy constructor
         simd(const simd<int32_t, 128, nosimd_tag>& s) = default;
@@ -117,12 +125,12 @@ class alignas(16) simd<int32_t, 128, nosimd_tag>
 
         // gather 32-bit integer elements from memory using 32-bit indices, 
         // i.e. i-th element of resulting vector is arr[ind[i]]
-        static simd     gather(const int32_t* arr, const simd_128_int32& ind);
+        static simd     gather(const int32_t* arr, const simd_int32& ind);
 
         // gather 32-bit integer elements from memory using 64-bit indices, 
         // i.e. i-th element of resulting vector is arr[ind[i]];
-        // last two elements are the same as the first two elements
-        static simd     gather(const int32_t* arr, const simd_128_int64& ind);
+        // last two elements are set to zero
+        static simd     gather(const int32_t* arr, const simd_int64& ind);
 
         // set the first element in the vector to v and set 0 to all other elements
         static simd     set_lower(int32_t v);
@@ -139,20 +147,12 @@ class alignas(16) simd<int32_t, 128, nosimd_tag>
         // get i-th element from the vector; pos is 0-based
         int32_t         get(int pos) const;
 
-        // get i-th element from the vector; Pos is 0-based
-        template<int Pos>
-        int32_t         get() const;
-
         // return the first element in the vector; equivalent to get(0), 
         // but possibly faster
         int32_t         first() const;
 
         // set i-th element of the vector; pos is 0-based
         void            set(int pos, int32_t val);
-
-        // set i-th element of the vector; Pos is 0-based
-        template<int Pos>
-        void            set(int32_t val);
 
         // return pointer to the first element in the vector
         const int32_t*  get_raw_ptr() const;
@@ -166,34 +166,34 @@ class alignas(16) simd<int32_t, 128, nosimd_tag>
 
     public:
         // convert the first two elements to int64_t
-        simd_128_int64  convert_low_to_int64() const;
+        simd_int64      convert_low_to_int64() const;
 
         // convert the last two elements to int64_t
-        simd_128_int64  convert_high_to_int64() const;
+        simd_int64      convert_high_to_int64() const;
 
         // convert all elements to int64_t
-        simd_256_int64  convert_to_int64() const;
+        simd_int64_2    convert_to_int64() const;
 
         // convert elements to float
-        simd_128_float  convert_to_float() const;
+        simd_float      convert_to_float() const;
 
         // convert the first four elements to double
-        simd_128_double convert_low_to_double() const;
+        simd_double     convert_low_to_double() const;
 
         // convert the last four elements to double
-        simd_128_double convert_high_to_double() const;
+        simd_double     convert_high_to_double() const;
 
         // convert all elements to double
-        simd_256_double convert_to_double() const;
+        simd_double_2   convert_to_double() const;
 
         // reinterpret cast to vector of double of the same kind
-        simd_128_double reinterpret_as_double() const;
+        simd_double     reinterpret_as_double() const;
 
         // reinterpret cast to vector of float of the same kind
-        simd_128_float  reinterpret_as_float() const;
+        simd_float      reinterpret_as_float() const;
 
         // reinterpret cast to vector of int64 of the same kind
-        simd_128_int64  reinterpret_as_int64() const;
+        simd_int64      reinterpret_as_int64() const;
 
     public:
         // plus assign operator

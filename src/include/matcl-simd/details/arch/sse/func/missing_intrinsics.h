@@ -77,6 +77,20 @@ __m128i mm_movehl_epi32(__m128i a, __m128i b)
     return r;
 };
 
+// duplicate the low 64-bit integer element from a, and store the results in dst.
+//
+// Operation
+//      tmp[63:0] := a[63:0]
+//      tmp[127:64] := a[63:0]
+force_inline
+__m128i mm_movedup_epi64(__m128i a)
+{
+    __m128d as  = _mm_castsi128_pd(a);
+    __m128d r   = _mm_movedup_pd(as);
+
+    return _mm_castpd_si128(r);
+};
+
 // store the upper 64-bit integer element of a into memory.
 //
 // Operation

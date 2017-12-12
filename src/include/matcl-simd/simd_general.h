@@ -37,6 +37,12 @@ struct sse_tag{};
 // avx instructions tag
 struct avx_tag{};
 
+// sse instructions tag for vectors containing one value
+struct scalar_sse_tag{};
+
+// no simd instructions tag for vectors containing one value
+struct scalar_nosimd_tag{};
+
 // simd type storing elements of type Val of total size Bits in bits
 // using instruction set determined by Simd_tag
 template<class Val, int Bits, class Simd_tag>

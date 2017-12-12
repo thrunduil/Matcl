@@ -20,6 +20,9 @@
 
 #include "test_simd_config.h"
 #include "test_simd.h"
+#include "test_simd_int.h"
+#include "test_simd_scalar.h"
+#include "test_simd_scalar_int.h"
 #include "test_simd_compl.h"
 #include "matcl-core/IO/logger.h"
 
@@ -35,8 +38,6 @@ int main(int argc, const char* argv[])
 
     using log_ptr   = std::shared_ptr<std::ofstream>;
 
-    //TODO: is_nan, pow2k, shift_left, shift_right, _arithmetic, if_nan_else, if_zero_else, if_then_else
-    // casts, gather, extract_low, extract_high, bitwise_not
     try
     {         
         {
@@ -44,9 +45,13 @@ int main(int argc, const char* argv[])
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
         };
+        
+        matcl::test::test_performance_complex();  
 
-        matcl::test::test_performance_real();        
-        matcl::test::test_performance_complex();        
+        matcl::test::test_performance_real_scalar(); 
+        matcl::test::test_performance_int_scalar();               
+        matcl::test::test_performance_int();
+        matcl::test::test_performance_real();              
 
         std::cout << "\n";
         std::cout << "finished" << "\n";
