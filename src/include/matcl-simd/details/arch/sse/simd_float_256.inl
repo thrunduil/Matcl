@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/sse/simd_float_256.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -132,6 +135,19 @@ simd<float, 256, sse_tag>::extract_high() const
     return data[1];
 }
 
+template<int I1, int I2, int I3, int I4, int I5, int I6, int I7, int I8>
+force_inline simd<float, 256, sse_tag>
+simd<float, 256, sse_tag>::select() const
+{
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3 && I5 == 4 && I6 == 5 && I7 == 6 && I8 == 7) 
+        return *this;
+
+    simd<float, 256, sse_tag> ret;
+    ret.data[0] = simd_half::combine<I1, I2, I3, I4>(data[0], data[1]);
+    ret.data[1] = simd_half::combine<I5, I6, I7, I8>(data[0], data[1]);
+    return ret;
+};
+
 force_inline simd<double, 256, sse_tag>
 simd<float, 256, sse_tag>::convert_low_to_double() const
 {
@@ -149,6 +165,43 @@ simd<float, 256, sse_tag>::convert_to_int32() const
 {
     return simd_int32(data[0].convert_to_int32(), data[1].convert_to_int32());
 }
+
+force_inline simd<int64_t, 256, sse_tag>
+simd<float, 256, sse_tag>::convert_low_to_int64() const
+{
+    // intrinsic is not available
+    
+    simd_int64 ret;
+
+    const float* ptr    = this->get_raw_ptr();
+    int64_t* ptr_ret    = ret.get_raw_ptr();
+
+    ptr_ret[0]          = scalar_func::convert_float_int64(ptr[0]);
+    ptr_ret[1]          = scalar_func::convert_float_int64(ptr[1]);
+    ptr_ret[2]          = scalar_func::convert_float_int64(ptr[2]);
+    ptr_ret[3]          = scalar_func::convert_float_int64(ptr[3]);
+
+    return ret;
+};
+
+force_inline
+simd<int64_t, 256, sse_tag>
+simd<float, 256, sse_tag>::convert_high_to_int64() const
+{
+    // intrinsic is not available
+    
+    simd_int64 ret;
+
+    const float* ptr    = this->get_raw_ptr();
+    int64_t* ptr_ret    = ret.get_raw_ptr();
+
+    ptr_ret[0]          = scalar_func::convert_float_int64(ptr[4]);
+    ptr_ret[1]          = scalar_func::convert_float_int64(ptr[5]);
+    ptr_ret[2]          = scalar_func::convert_float_int64(ptr[6]);
+    ptr_ret[3]          = scalar_func::convert_float_int64(ptr[7]);
+
+    return ret;
+};
 
 force_inline simd<double, 256, sse_tag>
 simd<float, 256, sse_tag>::reinterpret_as_double() const
@@ -322,3 +375,5 @@ simd<float, 256, sse_tag>::operator/=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_256_func_compl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_double_128_func.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\func_complex\simd_float_128_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\math\math_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\complex\default_simd_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\complex\recover_nan.h" />
@@ -100,11 +101,17 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\general_defs.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_exp.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_log.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_math_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\simd_math_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_mat_func.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\math_functions.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\math_functions_scalar.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval_twofold.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_complex.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd_fwd.h" />
@@ -151,6 +158,7 @@
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval.inl" />
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_estrin.inl" />
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_horner.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_twofold.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-simd\math\simd_exp.cpp" />

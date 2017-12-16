@@ -23,7 +23,6 @@
 #include "matcl-simd/details/arch/simd_impl.h"
 #include "matcl-simd/details/func/simd_func_def.h"
 #include "matcl-simd/simd.h"
-#include "matcl-simd/simd_math.h"
 
 namespace matcl { namespace simd { namespace details
 {
@@ -526,29 +525,6 @@ struct simd_all<T, Bits, scalar_nosimd_tag>
     static bool eval(const simd_type& x)
     {
         return !(x.data == T());
-    };
-};
-
-//-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<class T, int Bits>
-struct simd_pow2k<T, Bits, scalar_nosimd_tag>
-{
-    using simd_type = simd<T, Bits, scalar_nosimd_tag>;
-    using int_type  = typename details::get_int_type<T>::type;
-    using simd_int  = simd<int_type, Bits, scalar_nosimd_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        return simd_type(matcl::simd::scalar_func::pow2k(k.data));
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int& k)
-    {
-        return simd_type(matcl::simd::scalar_func::pow2ki(k.data));
     };
 };
 

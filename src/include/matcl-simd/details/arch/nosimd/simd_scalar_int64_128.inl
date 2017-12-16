@@ -79,6 +79,20 @@ simd<int64_t, 128, scalar_nosimd_tag>::convert_to_int32() const
     return simd<int32_t, 128, scalar_nosimd_tag>(scalar_func::convert_int64_int32(data));
 };
 
+force_inline
+simd<float, 128, scalar_nosimd_tag>
+simd<int64_t, 128, scalar_nosimd_tag>::convert_to_float() const
+{
+    return simd<float, 128, scalar_nosimd_tag>(scalar_func::convert_int64_float(data));
+};
+
+force_inline
+simd<double, 128, scalar_nosimd_tag>
+simd<int64_t, 128, scalar_nosimd_tag>::convert_to_double() const
+{
+    return simd<double, 128, scalar_nosimd_tag>(scalar_func::convert_int64_double(data));
+};
+
 force_inline simd<int32_t, 128, scalar_nosimd_tag>
 simd<int64_t, 128, scalar_nosimd_tag>::reinterpret_as_int32() const
 {

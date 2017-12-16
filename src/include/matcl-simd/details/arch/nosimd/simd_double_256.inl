@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/nosimd/simd_double_256.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -143,6 +146,27 @@ simd<double, 256, nosimd_tag>::extract_high() const
 {
     return simd_half(data[2], data[3]);
 }
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<double, 256, nosimd_tag>
+simd<double, 256, nosimd_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 3, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 3, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3) 
+        return *this;
+
+    simd<double, 256, nosimd_tag> ret;
+    ret.data[0] = data[I1];
+    ret.data[1] = data[I2];
+    ret.data[2] = data[I3];
+    ret.data[3] = data[I4];
+
+    return ret;
+};
 
 force_inline
 simd<double, 256, nosimd_tag> simd<double, 256, nosimd_tag>::zero()
@@ -326,6 +350,19 @@ simd<double, 256, nosimd_tag>::convert_to_int32() const
     return res;
 };
 
+force_inline simd<int64_t, 256, nosimd_tag> 
+simd<double, 256, nosimd_tag>::convert_to_int64() const
+{
+    simd<int64_t, 256, nosimd_tag> res;
+
+    res.data[0] = scalar_func::convert_double_int64(data[0]);
+    res.data[1] = scalar_func::convert_double_int64(data[1]);
+    res.data[2] = scalar_func::convert_double_int64(data[2]);
+    res.data[3] = scalar_func::convert_double_int64(data[3]);
+
+    return res;
+};
+
 force_inline simd<int64_t, 256, nosimd_tag>
 simd<double, 256, nosimd_tag>::reinterpret_as_int64() const
 {
@@ -383,3 +420,5 @@ simd<double, 256, nosimd_tag>::operator/=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

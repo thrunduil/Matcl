@@ -38,7 +38,8 @@ namespace matcl { namespace test
 namespace ms = matcl::simd;
 
 void test::test_performance_real_scalar()
-{        
+{   
+    test_simd_scalar(false).make_unary_math();
     test_simd_scalar(false).make_unary();
     test_simd_scalar(false).make_unary_int();
     test_simd_scalar(false).make_ternary();
@@ -47,8 +48,9 @@ void test::test_performance_real_scalar()
 
 void test::test_values_real_scalar()
 {
-    test_simd_scalar(true).make_ternary();    
+    test_simd_scalar(true).make_unary_math();
     test_simd_scalar(true).make_unary();
+    test_simd_scalar(true).make_ternary();        
     test_simd_scalar(false).make_unary_int();
     test_simd_scalar(true).make_binary();        
 };
@@ -103,6 +105,12 @@ void test_simd_scalar::make_unary()
     test_functions<float>();    
 };
 
+void test_simd_scalar::make_unary_math()
+{
+    test_functions_math<double>();
+    test_functions_math<float>();    
+};
+
 void test_simd_scalar::make_unary_int()
 {
     test_functions_int<double>();
@@ -135,6 +143,29 @@ double test_simd_scalar::test_function_simd(int size, int n_rep, const T* in, T*
             Simd_type x     = Simd_type::broadcast(in + i);
             Simd_type res   = Func::eval(x);
             out[i]          = res.first();
+        };
+
+        val += out[0];
+    };
+
+    double t = toc();
+    return t;
+};
+
+template<class T, class Func>
+double test_simd_scalar::test_function_std(int size, int n_rep, const T* in, T* out)
+{
+    tic();
+
+    volatile T val = 0;
+
+    for(int j = 0; j < n_rep; ++j)
+    {
+        for (int i = 0; i < size; i += 1)
+        {
+            T x     = in[i];
+            T res   = Func::eval_base(x);
+            out[i]  = res;
         };
 
         val += out[0];
@@ -269,6 +300,38 @@ void test_simd_scalar::test_function(formatted_disp& fd, int size, const T* in, 
     int M       = get_num_rep();
 
     t0  = test_function_simd<T, ms::simd<T, 128, ms::scalar_nosimd_tag>, Func>(N, M, in, out_gen);
+    t1  = test_function_simd<T, simd::simd<T, 128, simd::scalar_nosimd_tag>, Func>(N, M, in, out);
+    t2  = test_function_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(N, M, in, out);    
+    t3  = test_function_simd<T, simd::simd<T, 128, simd::scalar_sse_tag>, Func>(N, M, in, out);
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, status);
+};
+
+template<class T, class Func>
+void test_simd_scalar::test_function_math(formatted_disp& fd, int size, const T* in, T* out, T* out_gen)
+{
+    double t0, t1, t2, t3;
+    bool v1, v2, v3;
+    double d1, d2, d3;
+
+    t0  = test_function_std<T, Func>(size, 1, in, out_gen);
+
+    t1  = test_function_simd<T, simd::simd<T, 128, simd::scalar_nosimd_tag>, Func>(size, 1, in, out);
+    v1  = test_equal(size, out, out_gen, 1.0, d1);
+
+    t2  = test_function_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(size, 1, in, out);    
+    v2  = test_equal(size, out, out_gen, 1.0, d2);
+
+    t3  = test_function_simd<T, simd::simd<T, 128, simd::scalar_sse_tag>, Func>(size, 1, in, out);    
+    v3  = test_equal(size, out, out_gen, 1.0, d3);
+
+    bool ok = v1 && v2 && v3;
+
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_std<T, Func>(N, M, in, out_gen);
     t1  = test_function_simd<T, simd::simd<T, 128, simd::scalar_nosimd_tag>, Func>(N, M, in, out);
     t2  = test_function_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(N, M, in, out);    
     t3  = test_function_simd<T, simd::simd<T, 128, simd::scalar_sse_tag>, Func>(N, M, in, out);
@@ -499,13 +562,12 @@ void test_simd_scalar::test_functions()
     test_function<T, test_functions::Func_trunc>(dm, N, ptr_in, ptr_out, ptr_out_gen);
     test_function<T, test_functions::Func_uminus>(dm, N, ptr_in, ptr_out, ptr_out_gen);
 
-    test_function<T, test_functions::Func_sqrt>(dm, N, ptr_in, ptr_out, ptr_out_gen);
-    test_function<T, test_functions::Func_exp>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_bit_not>(dm, N, ptr_in, ptr_out, ptr_out_gen);
     test_function<T, test_functions::Func_is_nan>(dm, N, ptr_in, ptr_out, ptr_out_gen);
 
     test_function<T, test_functions::Func_scal_cast>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
-    test_function<T, test_functions::Func_scal_cast_int>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function<T, test_functions::Func_scal_cast_int32>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function<T, test_functions::Func_scal_cast_int64>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_shift_left>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_shift_left2>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_shift_right>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
@@ -524,6 +586,54 @@ void test_simd_scalar::test_functions()
         ptr_in[i]   = std::abs(ptr_in[i]) / T(8);
     
     test_function_block<T, test_functions::Func_sum_all>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+};
+
+template<class T>
+void test_simd_scalar::test_functions_math()
+{
+    int N   = get_size();
+
+    std::vector<T> in;
+    std::vector<T> out;
+    std::vector<T> out_gen;
+
+    in.resize(N);
+    out.resize(N);
+    out_gen.resize(N);
+
+    T* ptr_in       = in.data();
+    T* ptr_out      = out.data();
+    T* ptr_out_gen  = out_gen.data();
+
+    for (int i = 0; i < N; ++i)
+        ptr_in[i]   = rand_scalar<T>::make(m_test_values);
+
+    std::string header  = m_instr_tag + " " + typeid(T).name();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",        align_type::right, 10);
+    dm.add_column("base",           align_type::left, 5);
+    dm.add_column("128 scal no",    align_type::left, 5);
+    dm.add_column("128 sse",        align_type::left, 5);
+    dm.add_column("128 scal sse",   align_type::left, 5);
+    dm.add_column("status",         align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function_math<T, test_functions::Func_exp>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function<T, test_functions::Func_fraction>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function<T, test_functions::Func_iexponent>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function<T, test_functions::Func_exponent>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+
+    for (int i = 0; i < N; ++i)
+        ptr_in[i]   = std::abs(ptr_in[i]);
+    
+    test_function<T, test_functions::Func_sqrt>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_math<T, test_functions::Func_log>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
 };
 
 template<class T>

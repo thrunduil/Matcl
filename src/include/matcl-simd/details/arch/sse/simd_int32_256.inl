@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/sse/simd_int32_256.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -132,6 +135,19 @@ simd<int32_t, 256, sse_tag>::extract_high() const
 {
     return data[1];
 }
+
+template<int I1, int I2, int I3, int I4, int I5, int I6, int I7, int I8>
+force_inline simd<int32_t, 256, sse_tag>
+simd<int32_t, 256, sse_tag>::select() const
+{
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3 && I5 == 4 && I6 == 5 && I7 == 6 && I8 == 7) 
+        return *this;
+
+    simd<int32_t, 256, sse_tag> ret;
+    ret.data[0] = simd_half::combine<I1, I2, I3, I4>(data[0], data[1]);
+    ret.data[1] = simd_half::combine<I5, I6, I7, I8>(data[0], data[1]);
+    return ret;
+};
 
 force_inline simd<int64_t, 256, sse_tag>
 simd<int32_t, 256, sse_tag>::convert_low_to_int64() const
@@ -319,3 +335,5 @@ simd<int32_t, 256, sse_tag>::operator*=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

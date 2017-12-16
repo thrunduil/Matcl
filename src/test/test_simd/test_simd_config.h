@@ -18,6 +18,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#pragma once
+
 #ifdef MATCL_TEST_SIMD_FMA
     #define MATCL_ARCHITECTURE_HAS_SSE2 1
     #define MATCL_ARCHITECTURE_HAS_SSE3 1

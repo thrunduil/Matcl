@@ -22,6 +22,7 @@
 
 #include "test_poly.h"
 #include "matcl-simd/poly/poly_eval.h"
+#include "matcl-simd/poly/poly_eval_twofold.h"
 
 #include "matcl-scalar/lib_functions/utils.h"
 #include "matcl-scalar/lib_functions/func_unary.h"
@@ -143,7 +144,9 @@ struct test_function<T, T, Func>
 
 void test::test_poly()
 {
-    formatted_disp dm;
+    out_stream << "\n" << "testing polynomials with compile time size" << "\n";
+
+    formatted_disp dm;    
 
     dm.set_row_label("type",    align_type::right, 10);
     dm.add_column("horn 1",     align_type::left, 5);
@@ -162,6 +165,8 @@ void test::test_poly()
 void test::test_poly_cond()
 {
     formatted_disp dm;
+
+    out_stream << "\n" << "testing poly condition numbers" << "\n";
 
     dm.set_row_label("type",    align_type::right, 10);
     dm.add_column("base",       align_type::left, 5);

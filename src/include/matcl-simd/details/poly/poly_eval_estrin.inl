@@ -38,7 +38,7 @@ struct get_estrin_max_size
 //                   ESTRIN
 //-----------------------------------------------------------------------
 
-template<class Trans, int Poly_size, class Arg, class Coef>
+template<int Poly_size, class Arg, class Coef>
 struct eval_estrin
 {
     static const int log2       = eval_log2(Poly_size);
@@ -57,260 +57,364 @@ struct eval_estrin
         for (int i = 1; i < max_pow; ++i)
             xpow[i] = xpow[i-1] * xpow[i-1];
 
-        return fma(eval_estrin<Trans, size2, Arg, Coef>::eval_rec(xpow, poly + size1), 
+        return fma(eval_estrin<size2, Arg, Coef>::eval_rec(xpow, poly + size1), 
                        xpow[max_pow-1], 
-                       eval_estrin<Trans, size1, Arg, Coef>::eval_rec(xpow, poly));
+                       eval_estrin<size1, Arg, Coef>::eval_rec(xpow, poly));
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        return fma(eval_estrin<Trans, size2, Arg, Coef>::eval_rec(xpow, poly + size1), 
+        return fma(eval_estrin<size2, Arg, Coef>::eval_rec(xpow, poly + size1), 
                        xpow[max_pow-1], 
-                       eval_estrin<Trans, size1, Arg, Coef>::eval_rec(xpow, poly));
+                       eval_estrin<size1, Arg, Coef>::eval_rec(xpow, poly));
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 8, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<9, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
-        Arg x2      = x * x;
-        Arg x4      = x2 * x2;
-        Arg xpow[3] = {x, x2, x4};
+        Arg x2  = x * x;
+        Arg x4  = x2 * x2;
+
+        Arg p11 = broadcast<Arg>::eval(poly + 8);
+        Arg p12 = broadcast<Arg>::eval(poly + 5);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
         
-        return eval_rec(xpow, poly);
+        p11     = fma(p11, x, broadcast<Arg>::eval(poly + 7));
+        p12     = fma(p12, x, broadcast<Arg>::eval(poly + 4));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
+
+        p11     = fma(p11, x, broadcast<Arg>::eval(poly + 6));
+
+        Arg p2  = fma(p21, x2, p22);
+        Arg p1  = fma(p11, x2, p12);
+        
+        Arg p   = fma(p1, x4, p2);
+
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-        Arg c3   = Arg(Trans::eval(poly[3]));
-        Arg c4   = Arg(Trans::eval(poly[4]));
-        Arg c5   = Arg(Trans::eval(poly[5]));
-        Arg c6   = Arg(Trans::eval(poly[6]));
-        Arg c7   = Arg(Trans::eval(poly[7]));
+        Arg x   = xpow[0];
+        Arg x2  = xpow[1];
+        Arg x4  = xpow[2];
 
-        Arg x    = xpow[0];
-        Arg x2   = xpow[1];
-        Arg x4   = xpow[2];
+        Arg p11 = broadcast<Arg>::eval(poly + 8);
+        Arg p12 = broadcast<Arg>::eval(poly + 5);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
+        
+        p11     = fma(p11, x, broadcast<Arg>::eval(poly + 7));
+        p12     = fma(p12, x, broadcast<Arg>::eval(poly + 4));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
 
-        return fma(fma(fma(c7, x, c6), x2, fma(c5, x, c4)), 
-                   x4, 
-                   fma(fma(c3, x, c2), x2, fma(c1, x, c0)));
+        p11     = fma(p11, x, broadcast<Arg>::eval(poly + 6));
+
+        Arg p2  = fma(p21, x2, p22);
+        Arg p1  = fma(p11, x2, p12);
+        
+        Arg p   = fma(p1, x4, p2);
+        return p;
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 7, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<8, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
-        Arg x2      = x * x;
-        Arg x4      = x2 * x2;
-        Arg xpow[3] = {x, x2, x4};
+        Arg x2  = x * x;
+        Arg x4  = x2 * x2;
+
+        Arg p11 = broadcast<Arg>::eval(poly + 7);
+        Arg p12 = broadcast<Arg>::eval(poly + 5);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
         
-        return eval_rec(xpow, poly);
+        p11     = fma(p11, x, broadcast<Arg>::eval(poly + 6));
+        p12     = fma(p12, x, broadcast<Arg>::eval(poly + 4));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
+
+        Arg p1  = fma(p11, x2, p12);
+        Arg p2  = fma(p21, x2, p22);
+
+        Arg p   = fma(p1, x4, p2);
+
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-        Arg c3   = Arg(Trans::eval(poly[3]));
-        Arg c4   = Arg(Trans::eval(poly[4]));
-        Arg c5   = Arg(Trans::eval(poly[5]));
-        Arg c6   = Arg(Trans::eval(poly[6]));
+        Arg x   = xpow[0];
+        Arg x2  = xpow[1];
+        Arg x4  = xpow[2];
 
-        Arg x    = xpow[0];
-        Arg x2   = xpow[1];
-        Arg x4   = xpow[2];
+        Arg p11 = broadcast<Arg>::eval(poly + 7);
+        Arg p12 = broadcast<Arg>::eval(poly + 5);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
+        
+        p11     = fma(p11, x, broadcast<Arg>::eval(poly + 6));
+        p12     = fma(p12, x, broadcast<Arg>::eval(poly + 4));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
 
-        return fma(fma(c6, x2, fma(c5, x, c4)), 
-                   x4, 
-                   fma(fma(c3, x, c2), x2, fma(c1, x, c0)));
+        Arg p1  = fma(p11, x2, p12);
+        Arg p2  = fma(p21, x2, p22);
+
+        Arg p   = fma(p1, x4, p2);
+        return p;
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 6, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<7, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
-        Arg x2      = x * x;
-        Arg x4      = x2 * x2;
-        Arg xpow[3] = {x, x2, x4};
+        Arg x2  = x * x;
+        Arg x4  = x2 * x2;
+
+        Arg p1  = broadcast<Arg>::eval(poly + 6);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
         
-        return eval_rec(xpow, poly);
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 5));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
+
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 4));
+
+        Arg p2  = fma(p21, x2, p22);
+        Arg p   = fma(p1, x4, p2);
+
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-        Arg c3   = Arg(Trans::eval(poly[3]));
-        Arg c4   = Arg(Trans::eval(poly[4]));
-        Arg c5   = Arg(Trans::eval(poly[5]));
+        Arg x   = xpow[0];
+        Arg x2  = xpow[1];
+        Arg x4  = xpow[2];
 
-        Arg x    = xpow[0];
-        Arg x2   = xpow[1];
-        Arg x4   = xpow[2];
+        Arg p1  = broadcast<Arg>::eval(poly + 6);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 5));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
 
-        return fma(fma(c5, x, c4), 
-                   x4, 
-                   fma(fma(c3, x, c2), x2, fma(c1, x, c0)));
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 4));
+
+        Arg p2  = fma(p21, x2, p22);
+        Arg p   = fma(p1, x4, p2);
+        return p;
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 5, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<6, Arg, Coef>
+{
+    force_inline
+    static Arg eval(const Arg& x, const Coef* poly)
+    {
+        Arg x2  = x * x;
+        Arg x4  = x2 * x2;
+
+        Arg p1  = broadcast<Arg>::eval(poly + 5);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1,  x, broadcast<Arg>::eval(poly + 4));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
+
+        Arg p2  = fma(p21, x2, p22);
+        Arg p   = fma(p1, x4, p2);
+
+        return p;
+    }
+
+    force_inline
+    static Arg eval_rec(const Arg* xpow, const Coef* poly)
+    {
+        Arg x   = xpow[0];
+        Arg x2  = xpow[1];
+        Arg x4  = xpow[2];
+
+        Arg p1  = broadcast<Arg>::eval(poly + 5);
+        Arg p21 = broadcast<Arg>::eval(poly + 3);
+        Arg p22 = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 4));
+        p21     = fma(p21, x, broadcast<Arg>::eval(poly + 2));
+        p22     = fma(p22, x, broadcast<Arg>::eval(poly + 0));
+
+        Arg p2  = fma(p21, x2, p22);
+        Arg p   = fma(p1, x4, p2);
+
+        return p;
+    }
+};
+
+template<class Arg, class Coef>
+struct eval_estrin<5, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {        
-        Arg x2      = x * x;
-        Arg x4      = x2 * x2;
-        Arg xpow[3] = {x, x2, x4};
-        Arg res     = eval_rec(xpow, poly);
+        Arg x2  = x * x;
 
-        return res;
+        Arg p1  = broadcast<Arg>::eval(poly + 4);
+        Arg p2  = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 3));
+        p2      = fma(p2, x, broadcast<Arg>::eval(poly + 0));
+
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 2));
+
+        Arg p   = fma(p1, x2, p2);
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-        Arg c3   = Arg(Trans::eval(poly[3]));
-        Arg c4   = Arg(Trans::eval(poly[4]));
+        Arg x   = xpow[0];
+        Arg x2  = xpow[1];
 
-        Arg x    = xpow[0];
-        Arg x2   = xpow[1];
-        Arg x4   = xpow[2];
+        Arg p1  = broadcast<Arg>::eval(poly + 4);
+        Arg p2  = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 3));
+        p2      = fma(p2, x, broadcast<Arg>::eval(poly + 0));
 
-        return fma(c4, x4, fma(fma(c3, x, c2), x2, fma(c1, x, c0)));
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 2));
+
+        Arg p   = fma(p1, x2, p2);
+        return p;
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 4, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<4, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-        Arg c3   = Arg(Trans::eval(poly[3]));
+        Arg x2  = x * x;
 
-        Arg x2   = x * x;
+        Arg p1  = broadcast<Arg>::eval(poly + 3);
+        Arg p2  = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 2));        
+        p2      = fma(p2, x, broadcast<Arg>::eval(poly + 0));
 
-        return fma(fma(c3, x, c2), x2, fma(c1, x, c0));
+        Arg p   = fma(p1, x2, p2);
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-        Arg c3   = Arg(Trans::eval(poly[3]));
+        Arg x   = xpow[0];
+        Arg x2  = xpow[1];
 
-        Arg x    = xpow[0];
-        Arg x2   = xpow[1];
+        Arg p1  = broadcast<Arg>::eval(poly + 3);
+        Arg p2  = broadcast<Arg>::eval(poly + 1);
+        
+        p1      = fma(p1, x, broadcast<Arg>::eval(poly + 2));        
+        p2      = fma(p2, x, broadcast<Arg>::eval(poly + 0));
 
-        return fma(fma(c3, x, c2), x2, fma(c1, x, c0));
+        Arg p   = fma(p1, x2, p2);
+        return p;
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 3, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<3, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-
-        Arg x2   = x * x;
-
-        return fma(c2, x2, fma(c1, x, c0));
+        Arg p   = broadcast<Arg>::eval(poly + 2);
+        p       = fma(p, x, broadcast<Arg>::eval(poly + 1));
+        p       = fma(p, x, broadcast<Arg>::eval(poly + 0));
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-        Arg c2   = Arg(Trans::eval(poly[2]));
-
         Arg x    = xpow[0];
-        Arg x2   = xpow[1];
 
-        return fma(c2, x2, fma(c1, x, c0));
+        Arg p   = broadcast<Arg>::eval(poly + 2);
+        p       = fma(p, x, broadcast<Arg>::eval(poly + 1));
+        p       = fma(p, x, broadcast<Arg>::eval(poly + 0));
+        return p;
+
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 2, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<2, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
-
-        return fma(c1, x, c0);
+        Arg p   = broadcast<Arg>::eval(poly + 1);
+        p       = fma(p, x, broadcast<Arg>::eval(poly + 0));
+        return p;
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
         Arg x    = xpow[0];
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        Arg c1   = Arg(Trans::eval(poly[1]));
 
-        return fma(c1, x, c0);
+        Arg p   = broadcast<Arg>::eval(poly + 1);
+        p       = fma(p, x, broadcast<Arg>::eval(poly + 0));
+        return p;
     }
 };
 
-template<class Trans, class Arg, class Coef>
-struct eval_estrin<Trans, 1, Arg, Coef>
+template<class Arg, class Coef>
+struct eval_estrin<1, Arg, Coef>
 {
     force_inline
     static Arg eval(const Arg& x, const Coef* poly)
     {
         (void)x;
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        return c0;
+        return broadcast<Arg>::eval(poly + 0);
     }
 
     force_inline
     static Arg eval_rec(const Arg* xpow, const Coef* poly)
     {
         (void)xpow;
-        Arg c0   = Arg(Trans::eval(poly[0]));
-        return c0;
+        return broadcast<Arg>::eval(poly + 0);
     }
 };
 
 //-----------------------------------------------------------------------
 //                      ESTRIN DYNAMIC
 //-----------------------------------------------------------------------
-template<class Trans, class Arg, class Coef>
+template<class Arg, class Coef>
 struct eval_estrin2
 {
     static const int max_pow            = 64;
@@ -336,15 +440,15 @@ struct eval_estrin2
 
         if (size1 == size2)
         {
-            return fma(eval_estrin2<Trans, Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly + size1), 
+            return fma(eval_estrin2<Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly + size1), 
                        xpow[level], 
-                       eval_estrin2<Trans, Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
+                       eval_estrin2<Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
         }
         else
         {
-            return fma(eval_estrin2<Trans, Arg, Coef>::eval_rec(xpow, size2, poly + size1), 
+            return fma(eval_estrin2<Arg, Coef>::eval_rec(xpow, size2, poly + size1), 
                        xpow[level], 
-                       eval_estrin2<Trans, Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
+                       eval_estrin2<Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
         };
     }
 
@@ -361,15 +465,15 @@ struct eval_estrin2
 
         if (size1 == size2)
         {
-            return fma(eval_estrin2<Trans, Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly + size1), 
+            return fma(eval_estrin2<Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly + size1), 
                        xpow[level], 
-                       eval_estrin2<Trans, Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
+                       eval_estrin2<Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
         }
         else
         {
-            return fma(eval_estrin2<Trans, Arg, Coef>::eval_rec(xpow, size2, poly + size1), 
+            return fma(eval_estrin2<Arg, Coef>::eval_rec(xpow, size2, poly + size1), 
                        xpow[level], 
-                       eval_estrin2<Trans, Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
+                       eval_estrin2<Arg, Coef>::eval_rec2(xpow, size1, level - 1, poly));
         };
     }
 
@@ -378,15 +482,15 @@ struct eval_estrin2
         switch(level)
         {
             case 0:
-                return eval_estrin<Trans, 2, Arg, Coef>::eval_rec(xpow, poly);
+                return eval_estrin<2, Arg, Coef>::eval_rec(xpow, poly);
             case 1:
-                return eval_estrin<Trans, 4, Arg, Coef>::eval_rec(xpow, poly);
+                return eval_estrin<4, Arg, Coef>::eval_rec(xpow, poly);
             case 2:
-                return eval_estrin<Trans, 8, Arg, Coef>::eval_rec(xpow, poly);
+                return eval_estrin<8, Arg, Coef>::eval_rec(xpow, poly);
             case 3:
-                return eval_estrin<Trans, 16, Arg, Coef>::eval_rec(xpow, poly);
+                return eval_estrin<16, Arg, Coef>::eval_rec(xpow, poly);
             case 4:
-                return eval_estrin<Trans, 32, Arg, Coef>::eval_rec(xpow, poly);
+                return eval_estrin<32, Arg, Coef>::eval_rec(xpow, poly);
 
             case 5:
             {
@@ -397,7 +501,7 @@ struct eval_estrin2
 
                 for (int i = 1; i >= 0; --i)
                 {
-                    r[i]    = eval_estrin<Trans, 32, Arg, Coef>::eval_rec(xpow, p);
+                    r[i]    = eval_estrin<32, Arg, Coef>::eval_rec(xpow, p);
                     p       = p + size_part;
                 }
 
@@ -413,7 +517,7 @@ struct eval_estrin2
 
                 for (int i = 3; i >= 0; --i)
                 {
-                    r[i]    = eval_estrin<Trans, 32, Arg, Coef>::eval_rec(xpow, p);
+                    r[i]    = eval_estrin<32, Arg, Coef>::eval_rec(xpow, p);
                     p       = p + size_part;
                 }
 
@@ -431,7 +535,7 @@ struct eval_estrin2
 
                 for (int i = 7; i >= 0; --i)
                 {
-                    r[i]    = eval_estrin<Trans, 32, Arg, Coef>::eval_rec(xpow, p);
+                    r[i]    = eval_estrin<32, Arg, Coef>::eval_rec(xpow, p);
                     p       = p + size_part;
                 }
 
@@ -449,10 +553,10 @@ struct eval_estrin2
 
         int size_half   = size/2;
 
-        Arg r1  = eval_estrin2<Trans, Arg, Coef>
+        Arg r1  = eval_estrin2<Arg, Coef>
                     ::eval_rec2(xpow, size_half, level - 1, poly + size_half);
 
-        Arg r2  = eval_estrin2<Trans, Arg, Coef>
+        Arg r2  = eval_estrin2<Arg, Coef>
                     ::eval_rec2(xpow, size_half, level - 1, poly);
 
         return fma(r1, xpow[level], r2);
@@ -486,14 +590,14 @@ template<int Poly_size, class Arg_type, class Coef_type>
 force_inline
 Arg_type simd::estrin(const Arg_type& x, const Coef_type* poly)
 {
-    return details::eval_estrin<details::trans_id, Poly_size, Arg_type, Coef_type>
+    return details::eval_estrin<Poly_size, Arg_type, Coef_type>
                         ::eval(x, poly);
 }
 
 template<class Arg_type, class Coef_type>
 Arg_type simd::estrin(const Arg_type& x, int poly_size, const Coef_type* poly)
 {
-    return details::eval_estrin2<details::trans_id, Arg_type, Coef_type>
+    return details::eval_estrin2<Arg_type, Coef_type>
                 ::eval(x, poly_size, poly);
 }
 

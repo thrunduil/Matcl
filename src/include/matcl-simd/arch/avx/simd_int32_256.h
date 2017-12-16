@@ -179,6 +179,11 @@ class alignas(32) simd<int32_t, 256, avx_tag>
         // return simd storing last four elements
         simd_half       extract_high() const;
 
+        // create a vector with elemens [x[I1], x[I2], x[I3], I[I4], ...], where x is 
+        // this vector, Ik is a 0-based index
+        template<int I1, int I2, int I3, int I4, int I5, int I6, int I7, int I8>
+        simd            select() const;
+
     public:
         // convert the first four elements to int64_t
         simd_int64      convert_low_to_int64() const;

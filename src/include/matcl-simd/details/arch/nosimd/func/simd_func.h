@@ -27,18 +27,6 @@
 namespace matcl { namespace simd { namespace details
 {
 
-template<class T>   struct get_uint_type{};
-template<>          struct get_uint_type<float>     {   using type = uint32_t; };
-template<>          struct get_uint_type<int32_t>   {   using type = uint32_t; };
-template<>          struct get_uint_type<double>    {   using type = uint64_t; };
-template<>          struct get_uint_type<int64_t>   {   using type = uint64_t; };
-
-template<class T>   struct get_int_type{};
-template<>          struct get_int_type<float>      {   using type = int32_t; };
-template<>          struct get_int_type<int32_t>    {   using type = int32_t; };
-template<>          struct get_int_type<double>     {   using type = int64_t; };
-template<>          struct get_int_type<int64_t>    {   using type = int64_t; };
-
 template<class T>
 constexpr T eps_inv() { return T(1) / std::numeric_limits<T>::epsilon(); };
 
@@ -950,42 +938,6 @@ struct simd_all<T, Bits, nosimd_tag>
             res |= (x.data[i] == T());
 
         return !res;
-    };
-};
-
-//-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<class T, int Bits>
-struct simd_pow2k<T, Bits, nosimd_tag>
-{
-    using simd_type = simd<T, Bits, nosimd_tag>;
-    using int_type  = typename details::get_int_type<T>::type;
-    using simd_int  = simd<int_type, Bits, nosimd_tag>;
-
-    static const int 
-    vector_size     = simd_type::vector_size;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        simd_type res;
-
-        for (int i = 0; i < vector_size; ++i)
-            res.data[i] = matcl::simd::scalar_func::pow2k(k.data[i]);
-
-        return res;
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int& k)
-    {
-        simd_type res;
-
-        for (int i = 0; i < vector_size; ++i)
-            res.data[i] = matcl::simd::scalar_func::pow2ki(k.data[i]);
-
-        return res;
     };
 };
 

@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/avx/simd_double_256.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -136,6 +139,47 @@ simd<double, 256, avx_tag>::extract_high() const
 {
     return _mm256_extractf128_pd(data, 1);
 }
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<double, 256, avx_tag>
+simd<double, 256, avx_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 3, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 3, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3) 
+        return data;
+
+    if (I1 <= 1 && I2 <= 1 && I3 > 1 && I4 > 1) 
+    {
+        // no exchange of data between low and high half
+
+        static const int ind0   = I1 + (I2 << 1) + ((I3 - 1) << 2) + ((I4 - 1) << 3);
+        static const int ind    = (ind0 < 0) ? 0 : ind0;
+        return _mm256_shuffle_pd (data, data, ind);
+    }
+
+    // general case
+
+    #if MATCL_ARCHITECTURE_HAS_AVX2
+        static const int ind   = I1 + (I2 << 2) + (I3 << 4) + (I4 << 6);
+
+        __m256i datai   = _mm256_castpd_si256(data);
+        __m256i reti    = _mm256_permute4x64_epi64(datai, ind);
+        __m256d ret     = _mm256_castsi256_pd(reti);
+        return ret;
+    #else
+        simd_half lo        = this->extract_low();
+        simd_half hi        = this->extract_high();
+
+        simd_half res_lo    = simd_half::combine<I1, I2>(lo, hi);
+        simd_half res_hi    = simd_half::combine<I3, I4>(lo, hi);
+
+        return simd(res_lo, res_hi);
+    #endif
+};
 
 force_inline
 simd<double, 256, avx_tag> simd<double, 256, avx_tag>::zero()
@@ -254,6 +298,20 @@ simd<double, 256, avx_tag>::convert_to_int32() const
     return _mm256_cvtpd_epi32(data);
 };
 
+force_inline simd<int64_t, 256, avx_tag> 
+simd<double, 256, avx_tag>::convert_to_int64() const
+{
+    simd<int64_t, 256, avx_tag> ret;
+
+    int64_t* ret_ptr    = ret.get_raw_ptr();
+    const double* ptr   = this->get_raw_ptr();
+
+    for (int i = 0; i < vector_size; ++i)
+        ret_ptr[i]      = scalar_func::convert_double_int64(ptr[i]);
+    
+    return ret;
+};
+
 force_inline simd<float, 256, avx_tag> 
 simd<double, 256, avx_tag>::reinterpret_as_float() const
 {
@@ -314,3 +372,5 @@ simd<double, 256, avx_tag>::operator/=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

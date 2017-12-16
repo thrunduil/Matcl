@@ -22,4 +22,5 @@
 
 #include "matcl-simd/simd.h"
 #include "matcl-simd/math_functions.h"
+#include "matcl-simd/math_functions_scalar.h"
 #include "matcl-simd/details/math/math_functions.inl"

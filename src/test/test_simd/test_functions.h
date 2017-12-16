@@ -30,6 +30,60 @@ namespace test_functions
 namespace ms = matcl::simd;
 
 template<class T>
+struct convert{};
+
+template<int Bits, class Tag>
+struct convert<ms::simd<float, Bits, Tag>>
+{
+    using simd_ret = ms::simd<float, Bits, Tag>;
+
+    template<class Arg>
+    static simd_ret eval(const Arg& x)
+    {
+        return x.convert_to_float();
+    }
+};
+
+template<int Bits, class Tag>
+struct convert<ms::simd<double, Bits, Tag>>
+{
+    using simd_ret = ms::simd<double, Bits, Tag>;
+
+    template<class Arg>
+    static simd_ret eval(const Arg& x)
+    {
+        return x.convert_to_double();
+    }
+};
+
+template<class T>
+struct cast{};
+
+template<int Bits, class Tag>
+struct cast<ms::simd<float, Bits, Tag>>
+{
+    using simd_ret = ms::simd<float, Bits, Tag>;
+
+    template<class Arg>
+    static simd_ret eval(const Arg& x)
+    {
+        return x.reinterpret_as_float();
+    }
+};
+
+template<int Bits, class Tag>
+struct cast<ms::simd<double, Bits, Tag>>
+{
+    using simd_ret = ms::simd<double, Bits, Tag>;
+
+    template<class Arg>
+    static simd_ret eval(const Arg& x)
+    {
+        return x.reinterpret_as_double();
+    }
+};
+
+template<class T>
 struct make_zero{};
 
 template<class T, int Bits, class Tag>
@@ -68,10 +122,17 @@ struct test_cast<ms::simd<float, Bits, Tag>>
         return simd_type(xd_l.convert_to_float(), xd_h.convert_to_float());
     }
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
         return xi.convert_to_float();
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xd_l = x.convert_low_to_int64();
+        auto xd_h = x.convert_high_to_int64();
+
+        return simd_type(xd_l.convert_to_float(), xd_h.convert_to_float());
     }
 };
 
@@ -86,9 +147,14 @@ struct test_scal_cast<ms::simd<float, Bits, Tag>>
         return xd.convert_to_float();
     }
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
+        return xi.convert_to_float();
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xi = x.convert_to_int64();
         return xi.convert_to_float();
     }
 };
@@ -106,9 +172,14 @@ struct test_cast<ms::simd<double, Bits, Tag>>
         return simd_type(xf.cast_low_to_double(), xf.cast_high_to_double());
     };
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
+        return xdi.convert_to_double();
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xi = x.convert_to_int64();
         return xdi.convert_to_double();
     }
 };
@@ -125,9 +196,14 @@ struct test_scal_cast<ms::simd<double, Bits, Tag>>
         return xf.convert_to_double();
     };
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
+        return xi.convert_to_double();
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xi = x.convert_to_int64();
         return xi.convert_to_double();
     }
 };
@@ -144,10 +220,15 @@ struct test_scal_cast<ms::simd<double, Bits, ms::sse_tag>>
         return xf.convert_low_to_double();
     };
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
         return xi.convert_low_to_double();
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xi = x.convert_to_int64();
+        return xi.convert_to_double();
     }
 };
 
@@ -163,10 +244,15 @@ struct test_cast<ms::simd<double, 128, Tag>>
         return simd_type(xf.convert_low_to_double());
     };
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
         return xi.convert_low_to_double();
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xi = x.convert_to_int64();
+        return xi.convert_to_double();
     }
 };
 
@@ -182,10 +268,15 @@ struct test_cast<ms::simd<double, 256, Tag>>
         return simd_type(xf.convert_to_double());
     };
 
-    static simd_type eval_int(const simd_type& x)
+    static simd_type eval_int32(const simd_type& x)
     {
         auto xi = x.convert_to_int32();
         return simd_type(xi.convert_low_to_double(), xi.convert_high_to_double());
+    }
+    static simd_type eval_int64(const simd_type& x)
+    {
+        auto xi = x.convert_to_int64();
+        return xi.convert_to_double();
     }
 };
 
@@ -285,32 +376,6 @@ struct test_scal_cast<ms::simd<int32_t, Bits, Tag>>
 };
 
 template<int Bits, class Tag>
-struct test_cast<ms::simd<int64_t, Bits, Tag>>
-{
-    using simd_type = ms::simd<int64_t, Bits, Tag>;
-
-    static simd_type eval(const simd_type& x)
-    {
-        using simd_int32 = typename simd_type::simd_int32;
-        simd_int32 xf = x.cast_to_int32();
-
-        return simd_type(xf.cast_low_to_int64(), xf.cast_high_to_int64());
-    };
-
-    static simd_type eval_float(const simd_type& x)
-    {
-        // no conversion int64 <->float>
-        return x;
-    }
-
-    static simd_type eval_double(const simd_type& x)
-    {
-        // no conversion int64 <->float>
-        return x;
-    }
-};
-
-template<int Bits, class Tag>
 struct test_scal_cast<ms::simd<int64_t, Bits, Tag>>
 {
     using simd_type = ms::simd<int64_t, Bits, Tag>;
@@ -325,14 +390,14 @@ struct test_scal_cast<ms::simd<int64_t, Bits, Tag>>
 
     static simd_type eval_float(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xf = x.convert_to_float();
+        return xf.convert_to_int64();
     }
 
     static simd_type eval_double(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xd = x.convert_to_double();
+        return xd.convert_to_int64();
     }
 };
 
@@ -351,14 +416,14 @@ struct test_scal_cast<ms::simd<int64_t, Bits, ms::sse_tag>>
 
     static simd_type eval_float(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xf = x.convert_to_float();
+        return xf.convert_low_to_int64();
     }
 
     static simd_type eval_double(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xd = x.convert_to_double();
+        return xd.convert_to_int64();
     }
 };
 
@@ -376,14 +441,14 @@ struct test_cast<ms::simd<int64_t, 128, Tag>>
 
     static simd_type eval_float(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xf = x.convert_to_float();
+        return simd_type(xf.convert_low_to_int64());
     }
 
     static simd_type eval_double(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xd = x.convert_to_double();
+        return xd.convert_to_int64();
     }
 };
 
@@ -407,8 +472,8 @@ struct test_cast<ms::simd<int64_t, 256, Tag>>
 
     static simd_type eval_double(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xd = x.convert_to_double();
+        return xd.convert_to_int64();
     }
 };
 
@@ -510,31 +575,59 @@ struct Func_scal_cast_double
     };
 };
 
-struct Func_cast_int
+struct Func_cast_int32
 {    
     template<class T>    
     force_inline static T eval(const T& x)
     { 
-        return test_cast<T>::eval_int(x); 
+        return test_cast<T>::eval_int32(x); 
     }
 
     static std::string name()
     { 
-        return "cast_int"; 
+        return "cast_int32"; 
     };
 };
 
-struct Func_scal_cast_int
+struct Func_cast_int64
 {    
     template<class T>    
     force_inline static T eval(const T& x)
     { 
-        return test_scal_cast<T>::eval_int(x); 
+        return test_cast<T>::eval_int64(x); 
     }
 
     static std::string name()
     { 
-        return "scal_cast_int"; 
+        return "cast_int64"; 
+    };
+};
+
+struct Func_scal_cast_int32
+{    
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return test_scal_cast<T>::eval_int32(x); 
+    }
+
+    static std::string name()
+    { 
+        return "scal_cast_int32"; 
+    };
+};
+
+struct Func_scal_cast_int64
+{    
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return test_scal_cast<T>::eval_int64(x); 
+    }
+
+    static std::string name()
+    { 
+        return "scal_cast_int64"; 
     };
 };
 
@@ -966,9 +1059,77 @@ struct Func_exp
         return exp(x); 
     }
 
+    template<class T>    
+    force_inline static T eval_base(const T& x)
+    { 
+        return std::exp(x); 
+    }
+
     static std::string name()
     { 
         return "exp"; 
+    };
+};
+
+struct Func_log
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return log(x); 
+    }
+
+    template<class T>    
+    force_inline static T eval_base(const T& x)
+    { 
+        return std::log(x); 
+    }
+
+    static std::string name()
+    { 
+        return "log"; 
+    };
+};
+
+struct Func_fraction
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return fraction(x); 
+    }
+
+    static std::string name()
+    { 
+        return "fraction"; 
+    };
+};
+
+struct Func_iexponent
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return cast<T>::eval(iexponent(x)); 
+    }
+
+    static std::string name()
+    { 
+        return "iexponent"; 
+    };
+};
+
+struct Func_exponent
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return exponent(x); 
+    }
+
+    static std::string name()
+    { 
+        return "exponent"; 
     };
 };
 

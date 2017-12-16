@@ -97,4 +97,6 @@ struct default_simd_type_size<int64_t, 128>
     using type = simd<int32_t, 128, nosimd_tag>; 
 };
 
+using maximum_tag = nosimd_tag;
+
 }}

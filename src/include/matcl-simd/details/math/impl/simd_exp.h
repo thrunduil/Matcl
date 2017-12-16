@@ -86,6 +86,7 @@ struct simd_exp<double, Bits, Simd_tag>
         const simd_type M       = simd_type(double(L));
         const simd_type M_inv   = simd_type(1.0 / L);
         const simd_type max_k   = simd_type(1022);
+        const simd_type max_l   = simd_type(double(L/2));
 
         //-----------------------------------------------------------------
         //                      reduction
@@ -95,10 +96,13 @@ struct simd_exp<double, Bits, Simd_tag>
         x               = fnma_f(kl, log2_lo, x);   // x - k*LL
 
         simd_type k     = round(M_inv * kl);
-        simd_type l     = fnma_f(k, M, kl);         // kl - k*M
+        simd_type l     = fnma_f(k, M, kl);         // kl - k*M        
+        l               = min(l, max_l);
 
         bool normal     = all(leq(abs(k), max_k));
         
+        simd_type mult  = simd_type::gather(exp_table_double::lookup_table, l.convert_to_int32());
+
         //-----------------------------------------------------------------
         //                      approximation
         //-----------------------------------------------------------------
@@ -117,23 +121,21 @@ struct simd_exp<double, Bits, Simd_tag>
         if (normal == false)
             return process_overflows(a, p, k, l);
 
-        // res = (c + 1) * exp(M_inv * l) * 2^k
-        simd_type mult  = simd_type::gather(exp_table_double::lookup_table, l.convert_to_int32());
+        simd_type powk  = pow2k(k);
+
+        // res = (p + 1) * exp(M_inv * l) * 2^k        
         simd_type c     = fma_f(p, mult, mult);
-        
-        c               = c * pow2k(k);
+        c               = c * powk;
 
         return c;
     };
 
     static simd_type process_overflows(simd_type a, simd_type p, simd_type k, simd_type l)
-    {
-        const simd_type max_l   = simd_type(double(L/2));
+    {        
         const simd_type val_inf = simd_type(std::numeric_limits<double>::infinity());
         const simd_type max_a   = simd_type(1000.0);
         const simd_type min_a   = simd_type(-1000.0);
-
-        l               = min(l, max_l);
+        
         simd_type k1    = round(k * simd_type(0.5));
         simd_type k2    = k - k1;
 
@@ -162,10 +164,10 @@ struct simd_exp<float, Bits, Simd_tag>
         const simd_type one      = simd_type::one();
         const simd_type inv_log2 = simd_type(1.442695040888963407359924681001f);
 
-        // high part of log(2)/L stored with precision 16 bits
+        // high part of log(2) stored with precision 16 bits
         const simd_type log2_hi  = simd_type(0.693145751953125f);
 
-        // low part of log(2)/L
+        // low part of log(2)
         const simd_type log2_lo  = simd_type(1.4286068203094172321e-06f);
 
         const simd_type max_k   = simd_type(126.f);

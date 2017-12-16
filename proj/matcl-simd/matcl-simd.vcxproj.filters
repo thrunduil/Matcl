@@ -363,6 +363,27 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\arch\avx\math\math_impl.h">
       <Filter>Source Files\include\details\arch\avx\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_math_impl.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_mat_func.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\utils.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_log.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval_twofold.h">
+      <Filter>Source Files\include\poly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\arch\sse\helpers.h">
+      <Filter>Source Files\include\details\arch\sse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\math_functions_scalar.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\details\arch\simd_impl.inl">
@@ -481,6 +502,9 @@
     </None>
     <None Include="..\..\src\include\matcl-simd\details\arch\nosimd\simd_scalar_int64_128.inl">
       <Filter>Source Files\include\details\arch\nosimd</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_twofold.inl">
+      <Filter>Source Files\include\details\poly</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

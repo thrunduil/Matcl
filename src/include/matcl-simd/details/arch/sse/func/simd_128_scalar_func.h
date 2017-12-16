@@ -583,49 +583,6 @@ struct simd_all<T, 128, scalar_sse_tag>
 };
 
 //-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<>
-struct simd_pow2k<float, 128, scalar_sse_tag>
-{
-    using simd_type     = simd<float, 128, scalar_sse_tag>;
-    using simd_int32    = simd<int32_t, 128, scalar_sse_tag>;
-    using simd_int64    = simd<int64_t, 128, scalar_sse_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        return simd_type(pow2k(k.as_vector()));
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int32& k)
-    {
-        return simd_type(pow2ki(k.as_vector()));
-    };
-};
-
-template<>
-struct simd_pow2k<double, 128, scalar_sse_tag>
-{
-    using simd_type     = simd<double, 128, scalar_sse_tag>;
-    using simd_int32    = simd<int32_t, 128, scalar_sse_tag>;
-    using simd_int64    = simd<int64_t, 128, scalar_sse_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        return simd_type(pow2k(k.as_vector()));
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int64& k)
-    {
-        return simd_type(pow2ki(k.as_vector()));
-    };
-};
-
-//-----------------------------------------------------------------------
 //                   CONDITIONAL FUNCTIONS
 //-----------------------------------------------------------------------
 template<class T>

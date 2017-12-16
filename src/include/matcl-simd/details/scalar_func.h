@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-core/float/fma_dekker.h"
+#include "matcl-simd/details/utils.h"
 #include <cmath>
 
 namespace matcl { namespace simd { namespace scalar_func
@@ -100,121 +101,50 @@ struct trunc_impl
 };
 
 //-------------------------------------------------------------------
-//                         pow2k
-//-------------------------------------------------------------------
-struct pow2k_impl_double
-{
-    force_inline
-    static double eval(double k)
-    {
-        // 2^52
-        const double pow2_52    = 4503599627370496.0;
-
-        // bias in exponent
-        const double bias       = 1023.0;
-
-        // put k + bias in least significant bits
-        double k2               = k + (bias + pow2_52);
-
-        // shift left 52 places to get into exponent field
-        int64_t pow2k_i         = reinterpret_cast<int64_t&>(k2) << 52;
-
-        return reinterpret_cast<double&>(pow2k_i);
-    };
-};
-
-struct pow2k_impl_float
-{
-    force_inline
-    static float eval(float k)
-    {
-        // 2^23
-        const float pow2_23     = 8388608.0f;
-
-        // bias in exponent
-        const float bias        = 127.0f;
-
-        // put k + bias in least significant bits
-        float k2                = k + (bias + pow2_23);
-
-        // shift left 52 places to get into exponent field
-        int32_t pow2k_i         = reinterpret_cast<int32_t&>(k2) << 23;
-
-        return reinterpret_cast<float&>(pow2k_i);
-    };
-};
-
-struct pow2ki_impl_double
-{
-    force_inline
-    static double eval(int64_t k)
-    {
-        int64_t ik          = k + int64_t(1023);
-        ik                  = ik << 52;
-
-        return reinterpret_cast<double&>(ik);
-    };
-};
-
-struct pow2ki_impl_float
-{
-    force_inline
-    static float eval(int32_t k)
-    {
-        int32_t ik          = k + int32_t(127);
-        ik                  = ik << 23;
-
-        return reinterpret_cast<float&>(ik);
-    };
-};
-
-//-------------------------------------------------------------------
 //                         missing scalar functions
 //-------------------------------------------------------------------
 
-force_inline float floor(float f)     { return std::floor(f); };
-force_inline float ceil(float f)      { return std::ceil(f); };
-force_inline float trunc(float f)     { return trunc_impl<float>::eval(f); };
-force_inline float round(float f)     { return round_impl<float>::eval(f); };
+force_inline float floor(float f)       { return std::floor(f); };
+force_inline float ceil(float f)        { return std::ceil(f); };
+force_inline float trunc(float f)       { return trunc_impl<float>::eval(f); };
+force_inline float round(float f)       { return round_impl<float>::eval(f); };
 
-force_inline double floor(double f)   { return std::floor(f); };
-force_inline double ceil(double f)    { return std::ceil(f); };
-force_inline double trunc(double f)   { return trunc_impl<double>::eval(f); };
-force_inline double round(double f)   { return round_impl<double>::eval(f); };
+force_inline double floor(double f)     { return std::floor(f); };
+force_inline double ceil(double f)      { return std::ceil(f); };
+force_inline double trunc(double f)     { return trunc_impl<double>::eval(f); };
+force_inline double round(double f)     { return round_impl<double>::eval(f); };
 
-force_inline int32_t floor(int32_t f) { return f; };
-force_inline int32_t ceil(int32_t f)  { return f; };
-force_inline int32_t trunc(int32_t f) { return f; };
-force_inline int32_t round(int32_t f) { return f; };
+force_inline int32_t floor(int32_t f)   { return f; };
+force_inline int32_t ceil(int32_t f)    { return f; };
+force_inline int32_t trunc(int32_t f)   { return f; };
+force_inline int32_t round(int32_t f)   { return f; };
 
-force_inline int64_t floor(int64_t f) { return f; };
-force_inline int64_t ceil(int64_t f)  { return f; };
-force_inline int64_t trunc(int64_t f) { return f; };
-force_inline int64_t round(int64_t f) { return f; };
+force_inline int64_t floor(int64_t f)   { return f; };
+force_inline int64_t ceil(int64_t f)    { return f; };
+force_inline int64_t trunc(int64_t f)   { return f; };
+force_inline int64_t round(int64_t f)   { return f; };
 
-force_inline bool is_nan(double f)    { return f != f; }
-force_inline bool is_nan(float f)     { return f != f; }
-
-force_inline double pow2k(double f)   { return pow2k_impl_double::eval(f); }
-force_inline float pow2k(float f)     { return pow2k_impl_float::eval(f); }
-
-force_inline double pow2ki(int64_t f) { return pow2ki_impl_double::eval(f); }
-force_inline float pow2ki(int32_t f)  { return pow2ki_impl_float::eval(f); }
+force_inline bool is_nan(double f)      { return f != f; }
+force_inline bool is_nan(float f)       { return f != f; }
 
 //-------------------------------------------------------------------
 //                         convertions
 //-------------------------------------------------------------------
 force_inline float      convert_double_float(double x)      { return (float)x; };
 force_inline int32_t    convert_double_int32(double x)      { return (int32_t)round(x); };
+force_inline int64_t    convert_double_int64(double x)      { return (int64_t)round(x); };
 
 force_inline double     convert_float_double(float x)       { return (double)x; };
 force_inline int32_t    convert_float_int32(float x)        { return (int32_t)round(x); };
+force_inline int64_t    convert_float_int64(float x)        { return (int64_t)round(x); };
 
 force_inline int64_t    convert_int32_int64(int32_t x)      { return (int64_t)x; }
 force_inline double     convert_int32_double(int32_t x)     { return (double)x; }
 force_inline float      convert_int32_float(int32_t x)      { return (float)x; }
 
 force_inline int32_t    convert_int64_int32(int64_t x)      { return (int32_t)x; }
+force_inline double     convert_int64_double(int64_t x)     { return (double)x; }
+force_inline float      convert_int64_float(int64_t x)      { return (float)x; }
 
 //-------------------------------------------------------------------
 //                         fma
@@ -307,7 +237,7 @@ template<class T>
 force_inline
 T bitwise_or(const T& x, const T& y)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
 
     const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
     const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -321,7 +251,7 @@ template<class T>
 force_inline
 T bitwise_xor(const T& x, const T& y)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
 
     const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
     const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -335,7 +265,7 @@ template<class T>
 force_inline
 T bitwise_and(const T& x, const T& y)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
 
     const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
     const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -349,7 +279,7 @@ template<class T>
 force_inline
 T bitwise_andnot(const T& x, const T& y)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
 
     const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
     const uint_type* yi   = reinterpret_cast<const uint_type*>(&y);
@@ -363,7 +293,7 @@ template<class T>
 force_inline
 T bitwise_not(const T& x)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
 
     const uint_type* xi   = reinterpret_cast<const uint_type*>(&x);
 
@@ -376,7 +306,7 @@ template<class T>
 force_inline
 T shift_left(const T& x, unsigned int y)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
         
     static const 
     unsigned max_shift  = sizeof(uint_type) * 8;
@@ -392,7 +322,7 @@ template<class T>
 force_inline
 T shift_right(const T& x, unsigned int y)
 {
-    using uint_type     = details::get_uint_type<T>::type;
+    using uint_type     = details::unsigned_integer_type<T>::type;
 
     static const 
     unsigned max_shift  = sizeof(uint_type) * 8;
@@ -408,7 +338,7 @@ template<class T>
 force_inline
 T shift_right_arithmetic(const T& x, unsigned int y)
 {
-    using int_type      = details::get_int_type<T>::type;
+    using int_type      = details::integer_type<T>::type;
 
     static const 
     unsigned max_shift  = sizeof(int_type) * 8 - 1;

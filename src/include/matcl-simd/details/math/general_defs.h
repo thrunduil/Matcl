@@ -21,3 +21,5 @@
 #pragma once
 
 #include "matcl-simd/details/math/impl/simd_exp.h"
+#include "matcl-simd/details/math/impl/simd_log.h"
+#include "matcl-simd/details/math/impl/simd_math_impl.h"

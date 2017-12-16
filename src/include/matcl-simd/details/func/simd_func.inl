@@ -436,21 +436,21 @@ ms::trunc(const simd<Val, Bits, Simd_tag>& x)
 
 template<class Val, int Bits, class Simd_tag>
 force_inline bool
-any_nan(const simd<Val, Bits, Simd_tag>& x)
+ms::any_nan(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_any_nan<Val, Bits, Simd_tag>::eval(x);
 };
 
 template<class Val, int Bits, class Simd_tag>
 force_inline bool
-all(const simd<Val, Bits, Simd_tag>& x)
+ms::all(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_all<Val, Bits, Simd_tag>::eval(x);
 };
 
 template<class Val, int Bits, class Simd_tag>
 force_inline bool
-any(const simd<Val, Bits, Simd_tag>& x)
+ms::any(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_any<Val, Bits, Simd_tag>::eval(x);
 };
@@ -460,24 +460,65 @@ any(const simd<Val, Bits, Simd_tag>& x)
 //-----------------------------------------------------------------------
 template<class Val, int Bits, class Simd_tag>
 force_inline simd<Val, Bits, Simd_tag> 
-if_nan_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false)
+ms::if_nan_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false)
 {
     return bitwise_or(val_false, test);
 }
 
 template<class Val, int Bits, class Simd_tag>
 force_inline simd<Val, Bits, Simd_tag> 
-if_zero_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false)
+ms::if_zero_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_false)
 {
     return bitwise_andnot(test, val_false);
 }
 
 template<class Val, int Bits, class Simd_tag>
 force_inline simd<Val, Bits, Simd_tag> 
-if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_true,
+ms::if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_true,
              const simd<Val, Bits, Simd_tag>& val_false)
 {
     return details::simd_if_then_else<Val, Bits, Simd_tag>::eval(test, val_true, val_false);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::if_add(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& x,
+             const simd<Val, Bits, Simd_tag>& y)
+{
+    return x + bitwise_and(test, y);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::if_sub(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& x,
+             const simd<Val, Bits, Simd_tag>& y)
+{
+    return x - bitwise_and(test, y);
+}
+
+//-----------------------------------------------------------------------
+//                   LOGICAL FUNCTIONS
+//-----------------------------------------------------------------------
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::operator &&(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return bitwise_and(x, y);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::operator ||(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return bitwise_or(x, y);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::operator !(const simd<Val, Bits, Simd_tag>& x)
+{
+    return bitwise_not(x);
 }
 
 //-----------------------------------------------------------------------

@@ -23,6 +23,9 @@
 #include "matcl-simd/arch/sse/simd_int64_128.h"
 #include "matcl-simd/details/arch/sse/func/missing_intrinsics.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -97,8 +100,38 @@ simd<int64_t, 128, sse_tag>::convert_to_int32() const
     int32_t* res_ptr    = res.get_raw_ptr();
     const int64_t* ptr  = this->get_raw_ptr();
 
-    res_ptr[0]  = int32_t(ptr[0]);
-    res_ptr[1]  = int32_t(ptr[1]);
+    res_ptr[0]  = scalar_func::convert_int64_int32(ptr[0]);
+    res_ptr[1]  = scalar_func::convert_int64_int32(ptr[1]);
+
+    return res;
+};
+
+force_inline simd<double, 128, sse_tag>
+simd<int64_t, 128, sse_tag>::convert_to_double() const
+{
+    // no SIMD intrinsic
+    simd_double res;
+
+    double* res_ptr     = res.get_raw_ptr();
+    const int64_t* ptr  = this->get_raw_ptr();
+
+    res_ptr[0]  = scalar_func::convert_int64_double(ptr[0]);
+    res_ptr[1]  = scalar_func::convert_int64_double(ptr[1]);
+
+    return res;
+};
+
+force_inline simd<float, 128, sse_tag>
+simd<int64_t, 128, sse_tag>::convert_to_float() const
+{
+    // no SIMD intrinsic
+    simd_float res          = simd_float::zero();
+
+    float* res_ptr      = res.get_raw_ptr();
+    const int64_t* ptr  = this->get_raw_ptr();
+
+    res_ptr[0]  = scalar_func::convert_int64_float(ptr[0]);
+    res_ptr[1]  = scalar_func::convert_int64_float(ptr[1]);
 
     return res;
 };
@@ -131,6 +164,69 @@ force_inline simd<int64_t, 128, sse_tag>
 simd<int64_t, 128, sse_tag>::extract_high() const
 {
     return missing::mm_movehl_epi32(data, data);
+}
+
+template<int I1, int I2>
+force_inline simd<int64_t, 128, sse_tag>  
+simd<int64_t, 128, sse_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 1, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 1, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1)
+        return data;
+
+    static const int ind    = I1 + (I2 << 1);
+    return missing::mm_shuffle_epi64<ind>(data, data);
+}
+
+template<int I1, int I2>
+force_inline simd<int64_t, 128, sse_tag>  
+simd<int64_t, 128, sse_tag>::combine(const simd& x, const simd& y)
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+
+    if (I1 <= 1 && I2 <= 1)
+    {
+        //only elements from x vector
+
+        static const int I1_s   = std::min(I1, 1);
+        static const int I2_s   = std::min(I2, 1);
+
+        return x.select<I1_s, I2_s>();
+    }
+
+    if (I1 >= 2 && I2 >= 2)
+    {
+        //only elements from y vector
+
+        static const int I1_s   = std::max(I1 - 2, 0);
+        static const int I2_s   = std::max(I2 - 2, 0);
+
+        return y.select<I1_s, I2_s>();
+    }
+
+    if (I1 <= 1)
+    {
+        // first element from x, second from y
+
+        static const int I1_s   = std::min(I1, 1);
+        static const int I2_s   = std::max(I2, 2);
+
+        static const int ind   = I1_s + ((I2_s - 2) << 1);
+        return missing::mm_shuffle_epi64<ind>(x.data, y.data);
+    }
+    else
+    {
+        // first element from y, second from x
+
+        static const int I1_s   = std::max(I1, 2);
+        static const int I2_s   = std::min(I2, 1);
+
+        static const int ind    = (I1_s - 2) + (I2_s << 1);
+        return missing::mm_shuffle_epi64<ind>(y.data, x.data);
+    };
 }
 
 force_inline
@@ -275,3 +371,5 @@ simd<int64_t, 128, sse_tag>::operator*=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

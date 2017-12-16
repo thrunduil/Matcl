@@ -123,6 +123,14 @@ simd<int32_t, 256, avx_tag>::extract_high() const
     return _mm256_extractf128_si256(data, 1);
 }
 
+template<int I1, int I2, int I3, int I4, int I5, int I6, int I7, int I8>
+force_inline simd<int32_t, 256, avx_tag>
+simd<int32_t, 256, avx_tag>::select() const
+{
+    return this->reinterpret_as_float().select<I1, I2, I3, I4, I5, I6, I7, I8>()
+                    .reinterpret_as_int32();
+}
+
 force_inline
 simd<int32_t, 256, avx_tag> simd<int32_t, 256, avx_tag>::zero()
 {

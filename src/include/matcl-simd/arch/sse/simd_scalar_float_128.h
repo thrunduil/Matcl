@@ -164,6 +164,10 @@ class alignas(16) simd<float, 128, scalar_sse_tag>
         // to current rounding mode (usually round to nearest ties to even)
         simd_int32      convert_to_int32() const;
 
+        // convert elements to int64_t, rounding is performed according
+        // to current rounding mode (usually round to nearest ties to even)
+        simd_int64      convert_to_int64() const;
+
         // reinterpret cast to vector of double of the same kind
         simd_double     reinterpret_as_double() const;
 

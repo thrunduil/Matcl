@@ -21,6 +21,10 @@
 #pragma once
 
 #include "matcl-simd/arch/sse/simd_float_128.h"
+#include "matcl-simd/details/arch/sse/helpers.h"
+
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
 
 namespace matcl { namespace simd { namespace details
 {
@@ -249,6 +253,57 @@ simd<float, 128, sse_tag>::convert_to_double() const
     return details::cast_to_double_impl<simd_double_2>::eval(data);    
 };
 
+force_inline
+simd<int64_t, 128, sse_tag>
+simd<float, 128, sse_tag>::convert_low_to_int64() const
+{
+    //SIMD intrinsic not available
+    simd<int64_t, 128, sse_tag> ret;
+
+    const float* ptr    = this->get_raw_ptr();
+    int64_t* ret_ptr    = ret.get_raw_ptr();
+
+    ret_ptr[0]  = scalar_func::convert_float_int64(ptr[0]);
+    ret_ptr[1]  = scalar_func::convert_float_int64(ptr[1]);
+
+    return ret;
+};
+
+force_inline
+simd<int64_t, 128, sse_tag>
+simd<float, 128, sse_tag>::convert_high_to_int64() const
+{
+    //SIMD intrinsic not available
+    simd<int64_t, 128, sse_tag> ret;
+
+    const float* ptr    = this->get_raw_ptr();
+    int64_t* ret_ptr    = ret.get_raw_ptr();
+
+    ret_ptr[0]  = scalar_func::convert_float_int64(ptr[2]);
+    ret_ptr[1]  = scalar_func::convert_float_int64(ptr[3]);
+
+    return ret;
+
+};
+
+force_inline
+typename simd<float, 128, sse_tag>::simd_int64_2
+simd<float, 128, sse_tag>::convert_to_int64() const
+{
+    //SIMD intrinsic not available
+    simd_int64_2 ret;
+
+    const float* ptr    = this->get_raw_ptr();
+    int64_t* ret_ptr    = ret.get_raw_ptr();
+
+    ret_ptr[0]  = scalar_func::convert_float_int64(ptr[0]);
+    ret_ptr[1]  = scalar_func::convert_float_int64(ptr[1]);
+    ret_ptr[2]  = scalar_func::convert_float_int64(ptr[2]);
+    ret_ptr[3]  = scalar_func::convert_float_int64(ptr[3]);
+
+    return ret;
+};
+
 force_inline simd<double, 128, sse_tag>
 simd<float, 128, sse_tag>::reinterpret_as_double() const
 {
@@ -283,6 +338,109 @@ force_inline simd<float, 128, sse_tag>
 simd<float, 128, sse_tag>::extract_high() const
 {
     return _mm_movehl_ps(data, data);
+}
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<float, 128, sse_tag>  
+simd<float, 128, sse_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 3, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 3, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3)
+        return data;
+
+    static const int ind    = I1 + (I2 << 2) + (I3 << 4) + (I4 << 6);
+    return _mm_shuffle_ps(data, data, ind);
+}
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<float, 128, sse_tag>  
+simd<float, 128, sse_tag>::combine(const simd& x, const simd& y)
+{
+    static_assert(I1 >= 0 && I1 <= 7, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 7, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 7, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 7, "invalid index in select function");
+
+    if (I1 <= 3 && I2 <= 3 && I3 <= 3 && I4 <= 3)
+    {
+        //only elements from x vector
+
+        static const int I1_s   = std::min(I1, 3);
+        static const int I2_s   = std::min(I2, 3);
+        static const int I3_s   = std::min(I3, 3);
+        static const int I4_s   = std::min(I4, 3);
+
+        return x.select<I1_s, I2_s, I3_s, I4_s>();
+    }
+
+    if (I1 >= 4 && I2 >= 4 && I3 >= 4 && I4 >= 4)
+    {
+        //only elements from y vector
+
+        static const int I1_s   = std::max(I1 - 4, 0);
+        static const int I2_s   = std::max(I2 - 4, 0);
+        static const int I3_s   = std::max(I3 - 4, 0);
+        static const int I4_s   = std::max(I4 - 4, 0);
+
+        return y.select<I1_s, I2_s, I3_s, I4_s>();
+    }
+
+    if (I1 == 0 && I2 == 4 && I3 == 1 && I4 == 5)
+        return _mm_unpacklo_ps (x.data, y.data);
+
+    if (I1 == 4 && I2 == 0 && I3 == 5 && I4 == 1)
+        return _mm_unpacklo_ps (y.data, x.data);
+
+    if (I1 == 2 && I2 == 6 && I3 == 3 && I4 == 7)
+        return _mm_unpackhi_ps (x.data, y.data);
+
+    if (I1 == 6 && I2 == 2 && I3 == 7 && I4 == 3)
+        return _mm_unpackhi_ps (y.data, x.data);
+
+    if (I1 <= 3 && I2 <= 3 && I3 >= 4 && I4 >= 4)
+    {
+        // first two elements from x, last two from y
+
+        static const int I3_s   = std::max(I3 - 4, 0);
+        static const int I4_s   = std::max(I4 - 4, 0);
+
+        static const int ind = I1 + (I2 << 2) + (I3_s << 4) + (I4_s << 6);
+        return _mm_shuffle_ps(x.data, y.data, ind);
+    }
+
+    if (I1 >= 4 && I2 >= 4 && I3 <= 3 && I4 <= 3)
+    {
+        // first two elements from y, last two from x
+
+        static const int I1_s   = std::max(I1 - 4, 0);
+        static const int I2_s   = std::max(I2 - 4, 0);
+
+        static const int ind = I1_s + (I2_s << 2) + (I3 << 4) + (I4 << 6);
+        return _mm_shuffle_ps(y.data, x.data, ind);
+    }
+
+    static const bool is_cont_x = ((I1 == 0 || I1 >= 4) && (I2 == 1 || I2 >= 4) && (I3 == 2 || I3 >= 4) &&
+                                    (I4 == 3 || I4 >= 4));
+    static const bool is_cont_y = ((I1 <= 3 || I1 == 4) && (I2 <= 3 || I2 == 5) && (I3 <= 3 || I3 == 6) &&
+                                    (I4 <= 3 || I4 == 7));
+
+    simd x_perm = is_cont_x ? x : x.select<std::min(I1, 3), std::min(I2, 3), std::min(I3, 3), std::min(I4,2)>();
+    simd y_perm = is_cont_y ? x : y.select<std::max(I1-4, 0), std::max(I2-4, 0), std::max(I3-4, 0), 
+                                           std::max(I4-4,0)>();
+
+
+    // use if_then_else
+
+    using simd_int  = simd<int32_t, 128, sse_tag>;
+
+    simd_int cond   = details::vector_4_int<(I1 == 0) ? -1 : 0, (I2 == 1) ? -1 : 0,
+                                            (I3 == 2) ? -1 : 0, (I4 == 3) ? -1 : 0>();        
+         
+    return if_then_else(cond.reinterpret_as_float(), x_perm, y_perm);
 }
 
 template<int Step>
@@ -327,3 +485,5 @@ simd<float, 128, sse_tag>::operator/=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

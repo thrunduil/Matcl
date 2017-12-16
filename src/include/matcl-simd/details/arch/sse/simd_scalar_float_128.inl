@@ -200,6 +200,13 @@ simd<float, 128, scalar_sse_tag>::convert_to_int32() const
     return _mm_cvtps_epi32(data);
 };
 
+force_inline
+simd<int64_t, 128, scalar_sse_tag>
+simd<float, 128, scalar_sse_tag>::convert_to_int64() const
+{
+    return simd<int64_t, 128, scalar_sse_tag>(scalar_func::convert_float_int64(first()));
+};
+
 force_inline simd<float, 128, sse_tag>
 simd<float, 128, scalar_sse_tag>::as_vector() const
 {
