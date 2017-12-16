@@ -157,6 +157,12 @@ class alignas(int64_t) simd<int64_t, 128, scalar_nosimd_tag>
         // convert elements to int32_t and store the result in the lower part
         simd_int32      convert_to_int32() const;
 
+        // convert elements to double
+        simd_double     convert_to_double() const;
+
+        // convert elements to float and store the result in the lower part
+        simd_float      convert_to_float() const;
+
         // reinterpret cast to vector of double of the same kind
         simd_double     reinterpret_as_double() const;
 

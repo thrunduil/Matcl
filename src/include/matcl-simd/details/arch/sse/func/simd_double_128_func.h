@@ -642,44 +642,6 @@ struct simd_all<double, 128, sse_tag>
 };
 
 //-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<>
-struct simd_pow2k<double, 128, sse_tag>
-{
-    using simd_type     = simd<double, 128, sse_tag>;
-    using simd_int32    = simd<int32_t, 128, sse_tag>;
-    using simd_int64    = simd<int64_t, 128, sse_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        // 2^52
-        const double pow2_52    = 4503599627370496.0;
-
-        // bias in exponent
-        const double bias       = 1023.0;
-
-        // put k + bias in least significant bits
-        simd_type k2            = k + simd_type(bias + pow2_52);
-
-        // shift left 52 places to get into exponent field
-        simd_type pow2k         = shift_left(k2, 52);
-
-        return pow2k;
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int64& k)
-    {
-        simd_int64 ik       = k + simd_int64(1023);
-        ik                  = shift_left(ik, 52);
-        simd_type res       = ik.reinterpret_as_double();
-        return res;
-    };
-};
-
-//-----------------------------------------------------------------------
 //                   CONDITIONAL FUNCTIONS
 //-----------------------------------------------------------------------
 template<>

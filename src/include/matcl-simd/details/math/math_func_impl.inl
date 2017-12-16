@@ -53,9 +53,37 @@ ms::pow2ki(const simd<int64_t, Bits, Simd_tag>& k)
 
 template<class Val, int Bits, class Simd_tag>
 force_inline simd<Val, Bits, Simd_tag> 
+ms::fraction(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_fraction<Val, Bits, Simd_tag>::eval(x);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<typename details::integer_type<Val>::type, Bits, Simd_tag> 
+ms::iexponent(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_exponent<Val, Bits, Simd_tag>::eval_i(x);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::exponent(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_exponent<Val, Bits, Simd_tag>::eval(x);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
 ms::exp(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_exp<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::log(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_log<Val, Bits, Simd_tag>::eval(x);
 };
 
 }}

@@ -618,43 +618,6 @@ struct simd_all<float, 256, avx_tag>
 };
 
 //-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<>
-struct simd_pow2k<float, 256, avx_tag>
-{
-    using simd_type = simd<float, 256, avx_tag>;
-    using simd_int  = simd<int32_t, 256, avx_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        // 2^23
-        const float pow2_23     = 8388608.0f;
-
-        // bias in exponent
-        const float bias        = 127.0f;
-
-        // put k + bias in least significant bits
-        simd_type k2            = k + simd_type(bias + pow2_23);
-
-        // shift left 52 places to get into exponent field
-        simd_type pow2k         = shift_left(k2, 23);
-
-        return pow2k;
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int& k)
-    {
-        simd_int ik         = k + simd_int(127);
-        ik                  = shift_left(ik, 23);
-        simd_type res       = ik.reinterpret_as_float();
-        return res;
-    };
-};
-
-//-----------------------------------------------------------------------
 //                   CONDITIONAL FUNCTIONS
 //-----------------------------------------------------------------------
 template<>

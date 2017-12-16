@@ -74,4 +74,6 @@ struct default_simd_type_size<int64_t, 256>
     using type = simd<int64_t, 256, avx_tag>; 
 };
 
+using maximum_tag = avx_tag;
+
 }}

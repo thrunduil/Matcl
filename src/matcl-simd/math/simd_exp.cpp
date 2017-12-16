@@ -65,8 +65,6 @@ void exp_table_double::generate_lookup_table(std::ostream& os, int num_values_in
         {
             os << ", ";
         }
-
-        //table[l]        = x.cast_float();
     }
 
     return;

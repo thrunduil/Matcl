@@ -30,5 +30,8 @@
     #define MATCL_USE_MATCL_COMPLEX 0
 #endif
 
+// enable this macro in order to define functions generating lookup tables
+//#define MATCL_SIMD_GENERATE_TABLES
+
 // machine dependent parameters
 #include "matcl-core/general/machine.h"

@@ -163,12 +163,16 @@ class alignas(double) simd<double, 128, scalar_nosimd_tag>
         double*         get_raw_ptr();
 
     public:
-        // cast elements to float and store the result in the lower part
+        // convert elements to float and store the result in the lower part
         simd_float      convert_to_float() const;
 
         // convert elements to int32_t, rounding is performed according
         // to current rounding mode (usually round to nearest ties to even)
         simd_int32      convert_to_int32() const;
+
+        // convert elements to int64_t, rounding is performed according
+        // to current rounding mode (usually round to nearest ties to even)
+        simd_int64      convert_to_int64() const;
 
         // reinterpret cast to vector of floats of the same kind
         simd_float      reinterpret_as_float() const;

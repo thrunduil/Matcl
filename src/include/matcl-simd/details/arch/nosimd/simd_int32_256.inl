@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/nosimd/simd_int32_256.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -143,6 +146,35 @@ simd<int32_t, 256, nosimd_tag>::extract_high() const
 {
     return simd_half(data[4], data[5], data[6], data[7]);
 }
+
+template<int I1, int I2, int I3, int I4, int I5, int I6, int I7, int I8>
+force_inline simd<int32_t, 256, nosimd_tag>
+simd<int32_t, 256, nosimd_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 7, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 7, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 7, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 7, "invalid index in select function");
+    static_assert(I5 >= 0 && I5 <= 7, "invalid index in select function");
+    static_assert(I6 >= 0 && I6 <= 7, "invalid index in select function");
+    static_assert(I7 >= 0 && I7 <= 7, "invalid index in select function");
+    static_assert(I8 >= 0 && I8 <= 7, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3 && I5 == 4 && I6 == 5 && I7 == 6 && I8 == 7) 
+        return *this;
+
+    simd<int32_t, 256, nosimd_tag> ret;
+    ret.data[0] = data[I1];
+    ret.data[1] = data[I2];
+    ret.data[2] = data[I3];
+    ret.data[3] = data[I4];
+    ret.data[4] = data[I5];
+    ret.data[5] = data[I6];
+    ret.data[6] = data[I7];
+    ret.data[7] = data[I8];
+
+    return ret;
+};
 
 force_inline
 simd<int32_t, 256, nosimd_tag> simd<int32_t, 256, nosimd_tag>::zero()
@@ -446,3 +478,5 @@ simd<int32_t, 256, nosimd_tag>::operator*=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

@@ -173,13 +173,27 @@ class alignas(16) simd<double, 128, sse_tag>
         // return simd storing last element
         simd            extract_high() const;
 
+        // create a vector with elemens [x[I1], x[I2]], where x is this vector, 
+        // Ik is a 0-based index
+        template<int I1, int I2>
+        simd            select() const;
+
+        // create a vector with elements [z[I1], z[I2]], where z = [x, y] is the
+        // concatenated vector of x and y, Ik is a 0-based index
+        template<int I1, int I2>
+        static simd     combine(const simd& x, const simd& y);
+
     public:
-        // cast elements to float and store the result in the lower part
+        // convert elements to float and store the result in the lower part
         simd_float      convert_to_float() const;
 
         // convert elements to int32_t, rounding is performed according
         // to current rounding mode (usually round to nearest ties to even)
         simd_int32      convert_to_int32() const;
+
+        // convert elements to int64_t, rounding is performed according
+        // to current rounding mode (usually round to nearest ties to even)
+        simd_int64      convert_to_int64() const;
 
         // reinterpret cast to vector of floats of the same kind
         simd_float      reinterpret_as_float() const;

@@ -172,5 +172,77 @@ struct eval_lt<matcl::simd::simd<T, Bits, Tag>>
     };
 };
 
+template<class Arg>
+struct broadcast
+{
+    template<class Coef>
+    force_inline
+    static Arg eval(const Coef* arr)
+    {
+        return Arg::broadcast(arr);
+    }
+
+    template<class Coef>
+    force_inline
+    static Arg eval(const Coef& arr)
+    {
+        return Arg(arr);
+    }
+
+    force_inline
+    static Arg eval(const Arg& arr)
+    {
+        return arr;
+    }
+};
+
+template<>
+struct broadcast<double>
+{
+    template<class Coef>
+    force_inline
+    static double eval(const Coef* arr)
+    {
+        return double(arr[0]);
+    }
+
+    template<class Coef>
+    force_inline
+    static double eval(const Coef& arr)
+    {
+        return double(arr);
+    }
+
+    force_inline
+    static double eval(const double& arr)
+    {
+        return arr;
+    }
+};
+
+template<>
+struct broadcast<float>
+{
+    template<class Coef>
+    force_inline
+    static float eval(const Coef* arr)
+    {
+        return float(arr[0]);
+    }
+
+    template<class Coef>
+    force_inline
+    static float eval(const Coef& arr)
+    {
+        return float(arr);
+    }
+
+    force_inline
+    static float eval(const float& arr)
+    {
+        return float(arr);
+    }
+};
+
 }}}
 

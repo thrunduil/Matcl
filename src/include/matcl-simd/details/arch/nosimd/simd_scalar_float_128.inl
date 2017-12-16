@@ -156,6 +156,13 @@ simd<float, 128, scalar_nosimd_tag>::convert_to_double() const
 };
 
 force_inline
+simd<int64_t, 128, scalar_nosimd_tag>
+simd<float, 128, scalar_nosimd_tag>::convert_to_int64() const
+{
+    return simd<int64_t, 128, scalar_nosimd_tag>(scalar_func::convert_float_int64(data));
+};
+
+force_inline
 simd<int32_t, 128, scalar_nosimd_tag>
 simd<float, 128, scalar_nosimd_tag>::convert_to_int32() const
 {

@@ -23,6 +23,10 @@
 #include "matcl-core/config.h"
 #include "matcl-simd/simd.h"
 
+namespace matcl { namespace raw { namespace details { namespace scal_func
+{
+}}}}
+
 namespace matcl { namespace details
 {
 

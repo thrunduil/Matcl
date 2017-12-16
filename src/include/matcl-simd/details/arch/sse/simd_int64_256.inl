@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/sse/simd_int64_256.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -137,6 +140,19 @@ simd<int64_t, 256, sse_tag>::extract_high() const
     return data[1];
 }
 
+template<int I1, int I2, int I3, int I4>
+force_inline simd<int64_t, 256, sse_tag>
+simd<int64_t, 256, sse_tag>::select() const
+{
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3) 
+        return *this;
+
+    simd<int64_t, 256, sse_tag> ret;
+    ret.data[0] = simd_half::combine<I1, I2>(data[0], data[1]);
+    ret.data[1] = simd_half::combine<I3, I3>(data[0], data[1]);
+    return ret;
+};
+
 force_inline
 simd<int64_t, 256, sse_tag> simd<int64_t, 256, sse_tag>::zero()
 {
@@ -245,6 +261,35 @@ simd<int64_t, 256, sse_tag>::convert_to_int32() const
     return simd_int32_half(data[0].convert_to_int32(), data[1].convert_to_int32());
 }
 
+force_inline simd<double, 256, sse_tag> 
+simd<int64_t, 256, sse_tag>::convert_to_double() const
+{
+    simd<double, 256, sse_tag> ret;
+
+    double* ret_ptr     = ret.get_raw_ptr();
+    const int64_t* ptr  = this->get_raw_ptr();
+
+    for (int i = 0; i < vector_size; ++i)
+        ret_ptr[i]      = scalar_func::convert_int64_double(ptr[i]);
+    
+    return ret;
+};
+
+force_inline simd<float, 128, sse_tag> 
+simd<int64_t, 256, sse_tag>::convert_to_float() const
+{
+    // SIMD intrinsic not available
+    simd<float, 128, sse_tag>  res;
+
+    float* res_ptr      = res.get_raw_ptr();
+    const int64_t* ptr  = this->get_raw_ptr();
+
+    for (int i = 0; i < vector_size; ++i)
+        res_ptr[i]  = scalar_func::convert_int64_float(ptr[i]);
+
+    return res;
+};
+
 force_inline simd<double, 256, sse_tag>
 simd<int64_t, 256, sse_tag>::reinterpret_as_double() const
 {
@@ -298,3 +343,5 @@ simd<int64_t, 256, sse_tag>::operator*=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

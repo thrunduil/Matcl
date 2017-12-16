@@ -22,6 +22,9 @@
 
 #include "matcl-simd/arch/nosimd/simd_int32_128.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -357,6 +360,27 @@ simd<int32_t, 128, nosimd_tag>::extract_high() const
     return ret;
 }
 
+template<int I1, int I2, int I3, int I4>
+force_inline simd<int32_t, 128, nosimd_tag>  
+simd<int32_t, 128, nosimd_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 3, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 3, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3)
+        return *this;
+
+    simd<int32_t, 128, nosimd_tag> ret;
+    ret.data[0] = data[I1];
+    ret.data[1] = data[I2];
+    ret.data[2] = data[I3];
+    ret.data[3] = data[I4];
+
+    return ret;
+}
+
 force_inline void 
 simd<int32_t, 128, nosimd_tag>::store(int32_t* arr, std::true_type aligned) const
 {
@@ -410,3 +434,5 @@ simd<int32_t, 128, nosimd_tag>::operator*=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

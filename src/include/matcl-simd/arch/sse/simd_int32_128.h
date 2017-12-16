@@ -169,6 +169,16 @@ class alignas(16) simd<int32_t, 128, sse_tag>
         // return simd storing last two elements
         simd            extract_high() const;
 
+        // create a vector with elemens [x[I1], x[I2], x[I3], x[I4]], where
+        // x is this vector, Ik is a 0-based index
+        template<int I1, int I2, int I3, int I4>
+        simd            select() const;
+
+        // create a vector with elements [z[I1], z[I2], [I3], z[I4]], where 
+        // z = [x, y] is the concatenated vector of x and y, Ik is a 0-based index
+        template<int I1, int I2, int I3, int I4>
+        static simd     combine(const simd& x, const simd& y);
+
     public:
         // convert the first two elements to int64_t
         simd_int64      convert_low_to_int64() const;

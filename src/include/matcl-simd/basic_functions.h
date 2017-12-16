@@ -293,22 +293,22 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 bitwise_not(const simd<Val, Bits, Simd_tag>& x);
 
-// shift left all elements; floating point type is implicitely casted to unsigned
-// integer type of the same tyme, then shift is performed and result is casted to
-// floating point type
+// perform shift left for all elements; floating point type is implicitely casted
+// to unsigned integer type of the same tyme, then shift is performed and result is
+// casted to floating point type
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 shift_left(const simd<Val, Bits, Simd_tag>& x, unsigned int count);
 
-// (logical) shift right all elements; floating point type is implicitely casted
-// to unsigned integer type of the same tyme, then shift is performed and result
+// perform (logical) shift right for all elements; floating point type is implicitely
+// casted to unsigned integer type of the same tyme, then shift is performed and result
 // is casted to floating point type
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 shift_right(const simd<Val, Bits, Simd_tag>& x, unsigned int count);
 
-// arithmetic shift right all elements; floating point type is implicitely casted
-// to signed integer type of the same tyme, then shift is performed and result
+// perform arithmetic shift right for all elements; floating point type is implicitely
+// casted to signed integer type of the same tyme, then shift is performed and result
 // is casted to floating point type
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
@@ -319,6 +319,28 @@ shift_right_arithmetic(const simd<Val, Bits, Simd_tag>& x, unsigned int count);
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 signbit_base(const simd<Val, Bits, Simd_tag>& x);
+
+//-----------------------------------------------------------------------
+//                   LOGICAL FUNCTIONS
+//-----------------------------------------------------------------------
+
+// perform logical and operation for all elements in vectors x and y; x and y
+// must contain true_value or false_value
+template<class Val, int Bits, class Tag> 
+simd<Val, Bits, Tag>
+operator &&(const simd<Val, Bits, Tag>& x, const simd<Val, Bits, Tag>& y);
+
+// perform logical or operation for all elements in vectors x and y; x and y
+// must contain true_value or false_value
+template<class Val, int Bits, class Tag> 
+simd<Val, Bits, Tag>
+operator ||(const simd<Val, Bits, Tag>& x, const simd<Val, Bits, Tag>& y);
+
+// perform logical negation operation for all elements in a vector x; 
+// x must contain true_value or false_value
+template<class Val, int Bits, class Tag> 
+simd<Val, Bits, Tag>
+operator !(const simd<Val, Bits, Tag>& x);
 
 //-----------------------------------------------------------------------
 //                   CONDITIONAL FUNCTIONS
@@ -341,6 +363,20 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 if_then_else(const simd<Val, Bits, Simd_tag>& test, const simd<Val, Bits, Simd_tag>& val_true,
              const simd<Val, Bits, Simd_tag>& val_false);
+
+// evaluate test ? x + y : x;
+// test must be a vector of floating point numbers containing true_value or false_value
+template<class Val, int Bits, class Tag> 
+simd<Val, Bits, Tag>
+if_add(const simd<Val, Bits, Tag>& test, const simd<Val, Bits, Tag>& x, 
+       const simd<Val, Bits, Tag>& y);
+
+// evaluate test ? x - y : x;
+// test must be a vector of floating point numbers containing true_value or false_value
+template<class Val, int Bits, class Tag> 
+simd<Val, Bits, Tag>
+if_sub(const simd<Val, Bits, Tag>& test, const simd<Val, Bits, Tag>& x, 
+       const simd<Val, Bits, Tag>& y);
 
 //-----------------------------------------------------------------------
 //                   MISCELLANEOUS FUNCTIONS

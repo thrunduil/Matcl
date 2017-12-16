@@ -81,7 +81,22 @@ simd<int64_t, 128, scalar_sse_tag>::set_lower(int64_t v)
 force_inline simd<int32_t, 128, scalar_sse_tag>
 simd<int64_t, 128, scalar_sse_tag>::convert_to_int32() const
 {
-    return simd<int32_t, 128, scalar_sse_tag>((int32_t)first());
+    int32_t val = scalar_func::convert_int64_int32(first());
+    return simd<int32_t, 128, scalar_sse_tag>(val);
+};
+
+force_inline simd<double, 128, scalar_sse_tag> 
+simd<int64_t, 128, scalar_sse_tag>::convert_to_double() const
+{
+    double val = scalar_func::convert_int64_double(first());
+    return simd<double, 128, scalar_sse_tag>(val);
+};
+
+force_inline simd<float, 128, scalar_sse_tag> 
+simd<int64_t, 128, scalar_sse_tag>::convert_to_float() const
+{
+    float val = scalar_func::convert_int64_float(first());
+    return simd<float, 128, scalar_sse_tag>(val);
 };
 
 force_inline simd<double, 128, scalar_sse_tag>

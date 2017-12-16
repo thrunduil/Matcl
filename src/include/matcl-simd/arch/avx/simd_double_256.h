@@ -194,6 +194,11 @@ class alignas(32) simd<double, 256, avx_tag>
         // return simd storing last two elements
         simd_half       extract_high() const;
 
+        // create a vector with elemens [x[I1], x[I2], x[I3], I[I4]], where x is 
+        // this vector, Ik is a 0-based index
+        template<int I1, int I2, int I3, int I4>
+        simd            select() const;
+
     public:
         // convert elements to float
         simd_float_half convert_to_float() const;
@@ -201,6 +206,10 @@ class alignas(32) simd<double, 256, avx_tag>
         // convert elements to int32_t, rounding is performed according
         // to current rounding mode (usually round to nearest ties to even)
         simd_int32_half convert_to_int32() const;
+
+        // convert elements to int32_t, rounding is performed according
+        // to current rounding mode (usually round to nearest ties to even)
+        simd_int64      convert_to_int64() const;
 
         // reinterpret cast to vector of floats of the same kind
         simd_float      reinterpret_as_float() const;

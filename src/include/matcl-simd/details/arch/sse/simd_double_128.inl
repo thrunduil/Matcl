@@ -23,6 +23,11 @@
 #include "matcl-simd/arch/sse/simd_double_128.h"
 #include "matcl-simd/details/arch/sse/func/missing_intrinsics.h"
 
+#include <algorithm>
+
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -111,6 +116,20 @@ simd<double, 128, sse_tag>::convert_to_int32() const
     return _mm_cvtpd_epi32(data);
 };
 
+force_inline simd<int64_t, 128, sse_tag> 
+simd<double, 128, sse_tag>::convert_to_int64() const
+{
+    simd<int64_t, 128, sse_tag> ret;
+
+    int64_t* ret_ptr    = ret.get_raw_ptr();
+    const double* ptr   = this->get_raw_ptr();
+
+    for (int i = 0; i < vector_size; ++i)
+        ret_ptr[i]      = scalar_func::convert_double_int64(ptr[i]);
+    
+    return ret;
+};
+
 force_inline simd<float, 128, sse_tag>
 simd<double, 128, sse_tag>::reinterpret_as_float() const
 {
@@ -139,6 +158,71 @@ force_inline simd<double, 128, sse_tag>
 simd<double, 128, sse_tag>::extract_high() const
 {
     return missing::mm_movehl_pd(data, data);
+}
+
+template<int I1, int I2>
+force_inline simd<double, 128, sse_tag>  
+simd<double, 128, sse_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 1, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 1, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1)
+        return data;
+
+    static const int ind0   = I1 + (I2 << 1);
+    static const int ind    = (ind0 < 0) ? 0 : ind0;
+
+    return _mm_shuffle_pd(data, data, ind);
+}
+
+template<int I1, int I2>
+force_inline simd<double, 128, sse_tag>  
+simd<double, 128, sse_tag>::combine(const simd& x, const simd& y)
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+
+    if (I1 <= 1 && I2 <= 1)
+    {
+        //only elements from x vector
+
+        static const int I1_s   = std::min(I1, 1);
+        static const int I2_s   = std::min(I2, 1);
+
+        return x.select<I1_s, I2_s>();
+    }
+
+    if (I1 >= 2 && I2 >= 2)
+    {
+        //only elements from y vector
+
+        static const int I1_s   = std::max(I1 - 2, 0);
+        static const int I2_s   = std::max(I2 - 2, 0);
+
+        return y.select<I1_s, I2_s>();
+    }
+
+    if (I1 <= 1)
+    {
+        // first element from x, second from y
+
+        static const int I1_s   = std::min(I1, 1);
+        static const int I2_s   = std::max(I2, 2);
+
+        static const int ind   = I1_s + ((I2_s - 2) << 1);
+        return _mm_shuffle_pd(x.data, y.data, ind);
+    }
+    else
+    {
+        // first element from y, second from x
+
+        static const int I1_s   = std::max(I1, 2);
+        static const int I2_s   = std::min(I2, 1);
+
+        static const int ind    = (I1_s - 2) + (I2_s << 1);
+        return _mm_shuffle_pd(y.data, x.data, ind);
+    };
 }
 
 force_inline
@@ -296,3 +380,5 @@ simd<double, 128, sse_tag>::operator/=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

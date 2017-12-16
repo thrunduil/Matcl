@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\test\test_simd\main_values.cpp" />
     <ClCompile Include="..\..\..\src\test\test_simd\test_simd.cpp" />
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_accuracy.cpp" />
     <ClCompile Include="..\..\..\src\test\test_simd\test_simd_compile.cpp" />
     <ClCompile Include="..\..\..\src\test\test_simd\test_simd_compl.cpp" />
     <ClCompile Include="..\..\..\src\test\test_simd\test_simd_int.cpp" />
@@ -30,7 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\test\test_simd\test_functions.h" />
+    <ClInclude Include="..\..\..\src\test\test_simd\test_functions_accuracy.h" />
     <ClInclude Include="..\..\..\src\test\test_simd\test_simd.h" />
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd_accuracy.h" />
     <ClInclude Include="..\..\..\src\test\test_simd\test_simd_compl.h" />
     <ClInclude Include="..\..\..\src\test\test_simd\test_simd_config.h" />
     <ClInclude Include="..\..\..\src\test\test_simd\test_simd_int.h" />
@@ -45,6 +48,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\matcl-dynamic\matcl-dynamic.vcxproj">
       <Project>{87be42f1-96bb-43d6-a8a8-9b5d8510bfe8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl-mp\matcl-mp.vcxproj">
+      <Project>{72527908-9492-4017-ab00-f4b9c91565ac}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\matcl-scalar\matcl-scalar.vcxproj">
       <Project>{16dbdfff-845b-4087-b27b-b39631d7f63e}</Project>

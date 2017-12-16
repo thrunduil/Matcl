@@ -22,6 +22,7 @@
 #include "matcl-core/IO/logger.h"
 #include "matcl-core/float/twofold.h"
 #include "matcl-simd/poly/poly_eval.h"
+#include "matcl-simd/poly/poly_eval_twofold.h"
 #include "matcl-scalar/lib_functions/utils.h"
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 #include "matcl-scalar/lib_functions/func_unary.h"
@@ -29,6 +30,7 @@
 
 #include "matcl-core/profile/benchmark.h"
 #include "matcl-simd/simd_math.h"
+
 
 #include <iostream>
 #include <fstream>
@@ -40,6 +42,16 @@ constexpr int64_t fact(int64_t v)
 {
     return (v == 1) ? v : v * fact(v-1);
 };
+
+force_inline
+float log_impl(float x0)
+{
+    using simd_type     = simd::simd<float, 256, simd::avx_tag>;
+    simd_type x         = simd_type(x0);
+    simd_type res       = simd::log(x);
+
+    return res.first();
+}
 
 struct exp_twofold_impl
 {
@@ -112,6 +124,29 @@ struct Func_exp : public benchmark_function
 };
 
 template<class T>
+struct Func_log : public benchmark_function
+{
+    int             m_N;
+    const T*        m_arr;
+
+    Func_log(int n, const T* arr) 
+        : m_N(n), m_arr(arr)
+    {};
+
+    void eval() override
+    {
+        T z         = T();
+
+        for (int i = 0; i <m_N; ++i)
+        {
+            z       += std::log(m_arr[i]);        
+        };
+
+        benchmark::use_value(z);
+    };
+};
+
+template<class T>
 struct Func_exp2 : public benchmark_function
 {
     int             m_N;
@@ -123,16 +158,45 @@ struct Func_exp2 : public benchmark_function
 
     void eval() override
     {        
-        //using simd_type = simd::simd<T, 256, simd::avx_tag>;
-        //static const int vector_size = simd_type::vector_size;
+        using simd_type = simd::simd<T, 256, simd::avx_tag>;
+        static const int vector_size = simd_type::vector_size;
 
-        //simd_type z     = simd_type::zero();
-        T z             = T();
+        simd_type z     = simd_type::zero();
+        //T z             = T();
 
-        for (int i = 0; i < m_N; i += 1)
+        for (int i = 0; i < m_N; i += vector_size)
         {
-            //simd_type x = simd_type::load(m_arr + i);
-            z           += simd::exp(m_arr[i]);
+            simd_type x = simd_type::load(m_arr + i);
+            z           += simd::exp(x);
+            //z           += simd::exp(m_arr[i]);
+        };
+
+        benchmark::use_value(z);
+    };
+};
+
+template<class T>
+struct Func_log2 : public benchmark_function
+{
+    int             m_N;
+    const T*        m_arr;
+
+    Func_log2(int n, const T* arr) 
+        : m_N(n), m_arr(arr)
+    {};
+
+    void eval() override
+    {        
+        using simd_type = simd::simd<T, 256, simd::avx_tag>;
+        static const int vector_size = simd_type::vector_size;
+
+        simd_type z     = simd_type::zero();
+        //T z             = T();
+
+        for (int i = 0; i < m_N; i += vector_size)
+        {
+            simd_type x = simd_type::load(m_arr + i);
+            z           += simd::log(x);
         };
 
         benchmark::use_value(z);
@@ -170,30 +234,15 @@ int main(int argc, const char* argv[])
     
     //matcl::simd::details::exp_table_double::generate_lookup_table(std::cout, 4);
 
-    {
-        double d1   = hex_double(0x4340000000000000ll);
-        float f2    = hex_float(0x4b800000);
-
-        mp_float d2     = mp_float(d1);
-        mp_float d3     = mp_float(f2);
-
-        std::cout << d2.to_string(precision(20)) << "\n";
-        std::cout << d3.to_string(precision(20)) << "\n";
-    }
-
-    {
-        precision prec      = precision(53*4);
-        mp_float log2       = constants::mp_ln2(prec);
-        mp_float ln2_hi     = mp_float(log2, precision(35));
-        mp_float ln2_lo     = log2 - ln2_hi;
-
-        std::cout << ln2_hi.to_string(precision(20)) << "\n";
-        std::cout << ln2_lo.to_string(precision(20)) << "\n";
-    }
-    if (1)
+    if (0)
     {
         int N       = 50000;
         int M       = 3000;
+
+        #if (_DEBUG)
+            N       = N / 10;
+            M       = M / 10;
+        #endif
 
         using func_ptr  = benchmark::function_ptr;
 
@@ -201,12 +250,16 @@ int main(int argc, const char* argv[])
         x.reserve(N);
 
         for (int i = 0; i < N; ++i)
-            x.push_back(matcl::frandn());
+            x.push_back(abs(matcl::frandn()));
 
         const float* ptr_x = x.data();
 
-        benchmark b1    = benchmark(func_ptr(new Func_exp<float>(N, ptr_x)));
-        benchmark b3    = benchmark(func_ptr(new Func_exp2<float>(N, ptr_x)));
+        benchmark b1    = benchmark(func_ptr(new Func_log<float>(N, ptr_x)));
+        benchmark b3    = benchmark(func_ptr(new Func_log2<float>(N, ptr_x)));
+
+        //benchmark b1    = benchmark(func_ptr(new Func_exp<double>(N, ptr_x)));
+        //benchmark b3    = benchmark(func_ptr(new Func_exp2<double>(N, ptr_x)));
+
 	    //benchmark b4    = benchmark(func_ptr(new Func_exp3(N, ptr_x)));
         //benchmark b5    = benchmark(func_ptr(new Func_exp_twofold(N, ptr_x)));
 
@@ -215,62 +268,15 @@ int main(int argc, const char* argv[])
         //time_stats s4   = b4.make(M);        		
         //time_stats s5   = b5.make(M);
 
-        std::cout << "exp : " << s1 << "\n";
-        std::cout << "exp2: " << s3 << "\n";
+        std::cout << "log std: " << s1 << "\n";
+        std::cout << "log imp: " << s3 << "\n";
 		//std::cout << "exp3: " << s4 << "\n";
         //std::cout << "twof: " << s5 << "\n";
         std::cout << "r e2: " << s1/s3 << "\n";
 		//std::cout << "r e3: " << s1/s4 << "\n";
         //std::cout << "r tf: " << s1/s5 << "\n";
-
+        std::cout << "\n";
     };
-
-    if (0)
-    {
-        double max_a        = double(709.78271289338399684324569237317);
-        double min_a        = double(-709.08956571282405153382846025171);
-        double max_a1       = std::nextafter(max_a, 1000.0);
-        double max_a2       = std::nextafter(max_a, -1000.0);
-        double min_a1       = std::nextafter(min_a, 1000.0);
-        double min_a2       = std::nextafter(min_a, -1000.0);
-
-        double e1           = simd::exp(std::numeric_limits<double>::quiet_NaN());
-        double e2           = simd::exp(std::numeric_limits<double>::infinity());
-        double e3           = simd::exp(-std::numeric_limits<double>::infinity());
-        double e4           = simd::exp(710.0);
-        double e5           = simd::exp(-710.0);                
-        double e6           = simd::exp(708.0);
-        double e7           = simd::exp(-708.0);
-
-        double e10          = simd::exp(min_a2);
-        double e11          = simd::exp(min_a);
-        double e12          = simd::exp(min_a1);
-        double e13          = simd::exp(max_a2);
-        double e14          = simd::exp(max_a);
-        double e15          = simd::exp(max_a1);
-
-        std::cout << std::exp(min_a2) << "\n";
-        std::cout << std::exp(min_a) << "\n";
-        std::cout << std::exp(min_a1) << "\n";
-        std::cout << std::exp(max_a2) << "\n";
-        std::cout << std::exp(max_a) << "\n";
-        std::cout << std::exp(max_a1) << "\n";
-
-        std::cout << e1 << "\n";
-        std::cout << e2 << "\n";
-        std::cout << e3 << "\n";
-        std::cout << e4 << "\n";
-        std::cout << e5 << "\n";
-        std::cout << e6 << "\n";
-        std::cout << e7 << "\n";
-
-        std::cout << e10 << "\n";
-        std::cout << e11 << "\n";
-        std::cout << e12 << "\n";
-        std::cout << e13 << "\n";
-        std::cout << e14 << "\n";
-        std::cout << e15 << "\n";
-    }
 
     if (1)
     {
@@ -285,38 +291,50 @@ int main(int argc, const char* argv[])
 
         double val_log2 = 0.693147180559945309417232121458176;
         double step     = val_log2 / 1024 / 1024;
-        double start    = step * 89600000;
+        double start    = 0.0;
         step            = step / 256;
         (void)val_log2;
         (void)start;
 
+        float scal_den  = std::numeric_limits<float>::denorm_min() * 1.0e4f;
         for (int i = 0; i < N; ++i)
         {
             //double mult     = 1.0/256.0/2.0;
             //double mult     = val_log2/2.0;
-            //x.push_back((1.0 - 2.0*matcl::rand()) * 700.0);
-            x.push_back((1.0f - 2.0f*matcl::frand()) * 80.0f);
+            //x.push_back((1.0 - 2.0*matcl::rand()) * 5.0);
+            //x.push_back((1.0f - 2.0f*matcl::frand()) * 80.0f);
             //x.push_back((1.0 - 2.0*matcl::rand()) * mult);
             //x.push_back(-(start + i*step));
-            //x.push_back(matcl::rand());
+            x.push_back(std::abs(matcl::frand()) * scal_den);
+
+            //x.push_back(matcl::frand() * 0.66666666f + 0.6666666666f);
         };
 
-        precision prec      = precision(53*4);
+        precision prec      = precision(53*2);
         precision prec_d    = precision::precision_float();
+
+        x[0]                = 9.601e-39f;
 
         double max_dif = 0;
         for (int i = 0; i < N; ++i)
         {
             //x[i]          = val_log2/2;
-            float res1      = simd::exp(x[i]);
-            mp_float res2   = exp(mp_float(x[i], prec));
+            float res1      = log_impl(x[i]);
+            //double res1   = std::log(x[i]);
+
+            //mp_float y    = mp_float(x[i], prec) - mp_float(1.0);
+            //mp_float y2   = y * y;
+            mp_float xm1    = mp_float(x[i], prec) - 1.0;
+
+            //mp_float res2   = (log(mp_float(x[i], prec))/xm1 - 1.0)/ xm1;
+            mp_float res2   = log(mp_float(x[i], prec));
 
             double dif      = ulp_distance(res2, mp_float(res1), prec_d).cast_float();
 
             if (dif > max_dif)
             {
-                std::cout << dif - 1.0 << " " << i << " " << x[i] << " " << res2 << " " << res1 - res2 << "\n";
-                simd::exp(x[i]);
+                std::cout << dif - 1.0 << " " << i << " " << x[i] << " " << res2.to_string(precision(20)) << " " << res1 - res2 << "\n";
+                log_impl(x[i]);
                 max_dif = dif;
             };
         };
@@ -325,16 +343,17 @@ int main(int argc, const char* argv[])
     try
     {         
         {
-            std::string log_file_name   = std::string("log_test_twofold.txt");
+            std::string log_file_name   = std::string("log_test_poly.txt");
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
         };
         
-        matcl::test::test_poly_cond();
-        matcl::test::test_poly();
+        matcl::test::test_poly();        
         
         matcl::test::test_poly_dyn(true);
         matcl::test::test_poly_dyn(false);        
+
+        matcl::test::test_poly_cond();        
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

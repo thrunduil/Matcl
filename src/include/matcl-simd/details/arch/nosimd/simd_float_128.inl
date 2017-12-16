@@ -23,6 +23,9 @@
 #include "matcl-simd/arch/nosimd/simd_float_128.h"
 #include "matcl-simd/details/scalar_func.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd
 {
 
@@ -298,6 +301,44 @@ simd<float, 128, nosimd_tag>::convert_to_int32() const
     return ret;
 };
 
+force_inline
+simd<int64_t, 128, nosimd_tag>
+simd<float, 128, nosimd_tag>::convert_low_to_int64() const
+{
+    simd<int64_t, 128, nosimd_tag> ret;
+
+    ret.data[0] = scalar_func::convert_float_int64(data[0]);
+    ret.data[1] = scalar_func::convert_float_int64(data[1]);
+
+    return ret;
+};
+
+force_inline
+simd<int64_t, 128, nosimd_tag>
+simd<float, 128, nosimd_tag>::convert_high_to_int64() const
+{
+    simd<int64_t, 128, nosimd_tag> ret;
+
+    ret.data[0] = scalar_func::convert_float_int64(data[2]);
+    ret.data[1] = scalar_func::convert_float_int64(data[3]);
+
+    return ret;
+};
+
+force_inline
+simd<int64_t, 256, nosimd_tag>
+simd<float, 128, nosimd_tag>::convert_to_int64() const
+{
+    simd<int64_t, 256, nosimd_tag> ret;
+
+    ret.data[0] = scalar_func::convert_float_int64(data[0]);
+    ret.data[1] = scalar_func::convert_float_int64(data[1]);
+    ret.data[2] = scalar_func::convert_float_int64(data[2]);
+    ret.data[3] = scalar_func::convert_float_int64(data[3]);
+
+    return ret;
+};
+
 force_inline simd<int32_t, 128, nosimd_tag>
 simd<float, 128, nosimd_tag>::reinterpret_as_int32() const
 {
@@ -330,6 +371,45 @@ simd<float, 128, nosimd_tag>::extract_high() const
     ret.data[1] = data[3];
     ret.data[2] = data[2];
     ret.data[3] = data[3];
+
+    return ret;
+}
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<float, 128, nosimd_tag>  
+simd<float, 128, nosimd_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 3, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 3, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3)
+        return *this;
+
+    simd<float, 128, nosimd_tag> ret;
+    ret.data[0] = data[I1];
+    ret.data[1] = data[I2];
+    ret.data[2] = data[I3];
+    ret.data[3] = data[I4];
+
+    return ret;
+}
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<float, 128, nosimd_tag>  
+simd<float, 128, nosimd_tag>::combine(const simd& x, const simd& y)
+{
+    static_assert(I1 >= 0 && I1 <= 7, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 7, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 7, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 7, "invalid index in select function");
+
+    simd<float, 128, nosimd_tag> ret;
+    ret.data[0] = (I1 <= 3) ? x.data[I1] : y.data[I1 - 4];
+    ret.data[1] = (I2 <= 3) ? x.data[I2] : y.data[I2 - 4];
+    ret.data[2] = (I3 <= 3) ? x.data[I3] : y.data[I3 - 4];
+    ret.data[3] = (I4 <= 3) ? x.data[I4] : y.data[I4 - 4];
 
     return ret;
 }
@@ -395,3 +475,5 @@ simd<float, 128, nosimd_tag>::operator/=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

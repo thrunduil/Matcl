@@ -28,7 +28,7 @@ namespace matcl { namespace simd { namespace details
 // Generate a constant vector of 8 integers stored in memory,
 // load as __m256
 template <int I0, int I1, int I2, int I3, int I4, int I5, int I6, int I7>
-static inline __m256i vector_8_int() 
+static force_inline __m256i vector_8_int() 
 {
     using m256_int8     = union 
                         { 

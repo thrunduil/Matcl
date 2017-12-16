@@ -23,6 +23,9 @@
 #include "matcl-simd/arch/sse/simd_int32_128.h"
 #include "matcl-simd/details/arch/sse/func/missing_intrinsics.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4127) // conditional expression is constant
+
 namespace matcl { namespace simd { namespace details
 {
 
@@ -356,6 +359,49 @@ simd<int32_t, 128, sse_tag>::extract_high() const
     return missing::mm_movehl_epi32(data, data);
 }
 
+template<int I1, int I2, int I3, int I4>
+force_inline simd<int32_t, 128, sse_tag>  
+simd<int32_t, 128, sse_tag>::select() const
+{
+    static_assert(I1 >= 0 && I1 <= 3, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 3, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 3, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 3, "invalid index in select function");
+
+    if (I1 == 0 && I2 == 1 && I3 == 2 && I4 == 3)
+        return data;
+
+    static const int ind    = I1 + (I2 << 2) + (I3 << 4) + (I4 << 6);
+    return _mm_shuffle_epi32(data, ind);
+}
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<int32_t, 128, nosimd_tag>  
+simd<int32_t, 128, nosimd_tag>::combine(const simd& x, const simd& y)
+{
+    static_assert(I1 >= 0 && I1 <= 7, "invalid index in select function");
+    static_assert(I2 >= 0 && I2 <= 7, "invalid index in select function");
+    static_assert(I3 >= 0 && I3 <= 7, "invalid index in select function");
+    static_assert(I4 >= 0 && I4 <= 7, "invalid index in select function");
+
+    simd<int32_t, 128, nosimd_tag> ret;
+    ret.data[0] = (I1 <= 3) ? x.data[I1] : y.data[I1 - 4];
+    ret.data[1] = (I2 <= 3) ? x.data[I2] : y.data[I2 - 4];
+    ret.data[2] = (I3 <= 3) ? x.data[I3] : y.data[I3 - 4];
+    ret.data[3] = (I4 <= 3) ? x.data[I4] : y.data[I4 - 4];
+
+    return ret;
+}
+
+template<int I1, int I2, int I3, int I4>
+force_inline simd<int32_t, 128, sse_tag>  
+simd<int32_t, 128, sse_tag>::combine(const simd& x, const simd& y)
+{
+    using simd_float = simd<float, 128, sse_tag>;
+    return simd_float::combine<I1,I2,I3,I4>(x.reinterpret_as_float(),
+                    y.reinterpret_as_float()).reinterpret_as_int32();
+}
+
 template<int Step>
 force_inline
 void simd<int32_t, 128, sse_tag>::scatter(int32_t* arr) const
@@ -391,3 +437,5 @@ simd<int32_t, 128, sse_tag>::operator*=(const simd& x)
 }
 
 }}
+
+#pragma warning(pop)

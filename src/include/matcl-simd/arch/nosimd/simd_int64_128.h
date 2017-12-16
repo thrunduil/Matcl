@@ -159,9 +159,25 @@ class alignas(16) simd<int64_t, 128, nosimd_tag>
         // return simd storing last element
         simd            extract_high() const;
 
+        // create a vector with elemens [x[I1], x[I2]], where x is this vector, 
+        // Ik is a 0-based index
+        template<int I1, int I2>
+        simd            select() const;
+
+        // create a vector with elements [z[I1], z[I2]], where z = [x, y] is the
+        // concatenated vector of x and y, Ik is a 0-based index
+        template<int I1, int I2>
+        static simd     combine(const simd& x, const simd& y);
+
     public:
         // convert elements to int32_t and store the result in the lower part
         simd_int32      convert_to_int32() const;
+
+        // convert elements to double
+        simd_double     convert_to_double() const;
+
+        // convert elements to float and store the result in the lower part
+        simd_float      convert_to_float() const;
 
         // reinterpret cast to vector of double of the same kind
         simd_double     reinterpret_as_double() const;

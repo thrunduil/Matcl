@@ -24,6 +24,7 @@
 #include "test_simd_scalar.h"
 #include "test_simd_scalar_int.h"
 #include "test_simd_compl.h"
+#include "test_simd_accuracy.h"
 #include "matcl-core/IO/logger.h"
 
 #include <iostream>
@@ -44,14 +45,20 @@ int main(int argc, const char* argv[])
             std::string log_file_name   = std::string("log_test_simd_") + MATCL_TEST_SIMD_TAG + ".txt";
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
-        };
-        
-        matcl::test::test_performance_complex();  
+        };               
+
+        //TODO: test select, combine
+
+        matcl::test::test_performance_real();
+        matcl::test::test_performance_int();
 
         matcl::test::test_performance_real_scalar(); 
         matcl::test::test_performance_int_scalar();               
-        matcl::test::test_performance_int();
-        matcl::test::test_performance_real();              
+        
+        matcl::test::set_rand_denormals(false);
+        matcl::test::test_math_accuracy(); 
+
+        matcl::test::test_performance_complex();  
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

@@ -558,29 +558,6 @@ struct simd_all<T, 256, sse_tag>
 };
 
 //-----------------------------------------------------------------------
-//                   MATHEMATICAL FUNCTIONS
-//-----------------------------------------------------------------------
-template<class T>
-struct simd_pow2k<T, 256, sse_tag>
-{
-    using simd_type = simd<T, 256, sse_tag>;
-    using int_type  = typename details::get_int_type<T>::type;
-    using simd_int  = simd<int_type, 256, sse_tag>;
-
-    force_inline
-    static simd_type eval(const simd_type& k)
-    {
-        return simd_type(pow2k(k.extract_low()), pow2k(k.extract_high()));
-    };
-
-    force_inline
-    static simd_type eval_i(const simd_int& k)
-    {
-        return simd_type(pow2ki(k.extract_low()), pow2ki(k.extract_high()));
-    };
-};
-
-//-----------------------------------------------------------------------
 //                   CONDITIONAL FUNCTIONS
 //-----------------------------------------------------------------------
 template<class T>
