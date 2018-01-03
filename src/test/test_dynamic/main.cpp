@@ -67,9 +67,9 @@ int main(int argc, const char* argv[])
 
         example_object();
 
-        matcl::test::test_gmp_bin();
-        matcl::test::test_gmp();                        
-        matcl::test::test_gmp_object();                     
+        matcl::test::test_gmp_object();
+        matcl::test::test_gmp();
+        matcl::test::test_gmp_bin();        
 
         matcl::test::test_dynamic test;
         test.make();  

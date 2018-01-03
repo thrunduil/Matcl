@@ -123,7 +123,7 @@ class MATCL_MP_EXPORT mp_float
         // point values; prec gives precision in bits; if prec = 0 then
         // default precision is used; result is rounded to nearest if 
         // rounding is required
-        mp_float(Integer val, precision prec = precision(0));        
+        mp_float(Integer val, precision prec = precision(0));
         mp_float(Float val, precision prec = precision(0));
         mp_float(Real val, precision prec = precision(0));
         mp_float(long double val, precision prec = precision(0));
@@ -188,6 +188,16 @@ class MATCL_MP_EXPORT mp_float
         // return string representation of this value with n significant 
         // digits; if n = 0 then convert with the maximum available digits
         std::string     to_string(precision n = precision(0)) const;
+
+        // return string representation of this value in binary format with
+        // n digits in the mantisa; if n = 0 then convert with the maximum 
+        // available digits
+        std::string     to_string_binary(precision n = precision(0)) const;
+
+        // return string representation of this value in hex format with n 
+        // n digits in the mantisa; if n = 0 then convert with the maximum 
+        // available digits
+        std::string     to_string_hex(precision n = precision(0)) const;
 
         // return string representation of this value using format string
         // see MPFR documentation for format description

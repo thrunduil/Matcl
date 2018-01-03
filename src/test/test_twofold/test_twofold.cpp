@@ -109,7 +109,7 @@ void test_twofold::make_error_type()
     using twofold   = twofold<Float_type>;    
 
     Float_type e    = matcl::constants::eps<Float_type>();
-    Float_type e2   = e * e;
+    Float_type e2   = e * e * Float_type(0.5);
 
     bool ok     = true;
 
@@ -118,8 +118,6 @@ void test_twofold::make_error_type()
 
     for (int mult = 1; mult < 100; ++mult)
     {
-        ok  &= make_error(twofold::normalize_fast(one, e2 - e/two), mult);    
-
         ok  &= make_error(twofold::normalize_fast(one, 0.0), mult);
         ok  &= make_error(twofold::normalize_fast(one, e2), mult);
         ok  &= make_error(twofold::normalize_fast(one, -e2), mult);
@@ -220,9 +218,9 @@ void test_twofold::test_functions()
                 (dm, N, ptr_in, ptr_out, ptr_out_gen, 0.0);
 
     test_function<T, T2, TMP, test_functions::Func_sqrt_1>
-                (dm, N, ptr_in, ptr_out, ptr_out_gen, 0.5);
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 1.0);
     test_function<T, T2, TMP, test_functions::Func_sqrt_2>
-                (dm, N, ptr_in, ptr_out, ptr_out_gen, 2.0);
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 4.0);
 };
 
 template<class T>
@@ -389,21 +387,21 @@ void test_twofold::test_functions_bin(formatted_disp& dm, int N,
     test_function_bin<T, T2, TMP, test_functions::Func_mult_11>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_11>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_mult_12>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.75);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 3.0);
     test_function_bin<T, T2, TMP, test_functions::Func_mult_21>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.75);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 3.0);
     test_function_bin<T, T2, TMP, test_functions::Func_mult_22>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 2.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 7.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_div_12>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 15.0);
     test_function_bin<T, T2, TMP, test_functions::Func_div_21>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
-    test_function_bin<T, T2, TMP, test_functions::Func_div_22>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 4.0);
+    test_function_bin<T, T2, TMP, test_functions::Func_div_22>
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 15.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_mult_dekker<T>>
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
@@ -442,18 +440,18 @@ void test_twofold::test_functions_sum_bin(formatted_disp& dm, int N,
         (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_plus_12>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 2.0);
     test_function_bin<T, T2, TMP, test_functions::Func_plus_21>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 2.0);
     test_function_bin<T, T2, TMP, test_functions::Func_plus_22>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 3.0);
 
     test_function_bin<T, T2, TMP, test_functions::Func_minus_12>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 2.0);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_21>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 0.5);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 2.0);
     test_function_bin<T, T2, TMP, test_functions::Func_minus_22>
-        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 1.0);
+        (dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen, 3.0);
 };
 
 template<class T, class T2, class TMP>
@@ -946,7 +944,7 @@ struct required_precision_test<twofold<double>>
 {
     static int eval()
     {
-        size_t prec = precision::precision_double() * 2 - 1;
+        size_t prec = precision::precision_double() * 2;
         return (int)prec;
     }
 };
@@ -956,7 +954,7 @@ struct required_precision_test<twofold<float>>
 {
     static int eval()
     {
-        size_t prec = precision::precision_float() * 2 - 1;
+        size_t prec = precision::precision_float() * 2;
         return (int)prec;
     }
 };
@@ -989,7 +987,7 @@ bool test_twofold::test_equal(const T2& res, const TMP& res_gen,
 {
     dist = 0.0;
 
-    precision req_p = precision(required_precision_test<T2>::eval());
+    precision req_p2 = precision(required_precision_test<T2>::eval());
     TMP res_mp      = convert_to_mp<T2>::eval(res);
 
     if (res_mp == res_gen)
@@ -1000,7 +998,8 @@ bool test_twofold::test_equal(const T2& res, const TMP& res_gen,
     if (is_finite(res_mp) == false)
         return true;
     
-    dist = ulp_distance(res_gen, res_mp, req_p).cast_float();
+    // measure distance in unit roundoff for given precision
+    dist = ulp_distance(res_gen, res_mp, req_p2 + 1).cast_float();
 
     if (is_nan(dist) == true)
     {
@@ -1024,8 +1023,6 @@ bool test_twofold::test_equal(const T2& res, const T2& res_gen,
                               double max_dist, double& dist)
 {
     dist = 0.0;
-
-    precision req_p = precision(required_precision_test<T2>::eval());
 
     if (res.value == res_gen.value && res.error == res_gen.error)
         return true;
@@ -1060,7 +1057,7 @@ bool test_twofold::test_equal_fma(const T& res, const TMP& res_gen,
 {
     dist = 0.0;
 
-    precision req_p = precision(required_precision_test_fma<T>::eval());
+    precision req_p2 = precision(required_precision_test_fma<T>::eval());
     TMP res_mp      = convert_to_mp<T>::eval(res);
 
     if (res_mp == res_gen)
@@ -1071,7 +1068,7 @@ bool test_twofold::test_equal_fma(const T& res, const TMP& res_gen,
     if (is_finite(res_mp) == false)
         return true;
     
-    dist = ulp_distance(res_gen, res_mp, req_p).cast_float();
+    dist = ulp_distance(res_gen, res_mp, req_p2).cast_float();
 
     if (is_nan(dist) == true)
     {

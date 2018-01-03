@@ -46,6 +46,22 @@ struct rand_scalar<double>
 };
 
 template<>
+struct rand_scalar<int32_t>
+{
+    static int32_t  make(bool testing_values);
+    //static int32_t  make_special();
+    //static int32_t  rand_scale();
+};
+
+template<>
+struct rand_scalar<int64_t>
+{
+    static int64_t  make(bool testing_values);
+    //static int64_t  make_special();
+    //static int64_t  rand_scale();
+};
+
+template<>
 struct rand_scalar<Float_complex>
 {
     static Float_complex    make(bool testing_values);

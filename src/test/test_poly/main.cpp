@@ -20,12 +20,9 @@
 
 #include "test_poly.h"
 #include "matcl-core/IO/logger.h"
-#include "matcl-core/float/twofold.h"
-
-#include <iostream>
-#include <fstream>
 
 using namespace matcl;
+namespace ms = matcl :: simd;
 
 int main(int argc, const char* argv[])
 {
@@ -33,20 +30,21 @@ int main(int argc, const char* argv[])
     (void)argv;
 
     using log_ptr   = std::shared_ptr<std::ofstream>;
-
+    
     try
     {         
         {
-            std::string log_file_name   = std::string("log_test_twofold.txt");
+            std::string log_file_name   = std::string("log_test_poly.txt");
             log_ptr log = log_ptr(new std::ofstream(log_file_name));
             set_logger(log);
         };
         
-        matcl::test::test_poly_cond();
-        matcl::test::test_poly();
+        matcl::test::test_poly();        
         
         matcl::test::test_poly_dyn(true);
         matcl::test::test_poly_dyn(false);        
+
+        matcl::test::test_poly_cond();        
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

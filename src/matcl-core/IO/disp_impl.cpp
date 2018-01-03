@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/details/IO/disp_impl.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/IO/disp_stream_impl.h"
 #include "matcl-core/matrix/matrix_traits.h"
 #include "matcl-core/IO/disp_data_provider.h"

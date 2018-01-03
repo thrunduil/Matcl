@@ -22,6 +22,7 @@
 
 #include "matcl-core/config.h"
 #include "matcl-core/general/fwd_decls.h"
+#include "matcl-core/details/exception_details.h"
 #include "matcl-core/IO/output_stream.h"
 #include "matcl-core/IO/disp_stream.h"
 
@@ -78,6 +79,8 @@ class MATCL_CORE_EXPORT printer
         void                disp_elem(Integer elem_width, const std::string& s, 
                                 align_type at, Integer value_pos);
         void                disp_elem(Integer elem_width, Integer r, align_type at, 
+                                Integer value_pos);
+        void                disp_elem(Integer elem_width, Integer_64 r, align_type at, 
                                 Integer value_pos);
         void                disp_elem(Integer elem_width, Real r, align_type at, 
                                 Integer value_pos);

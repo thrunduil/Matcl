@@ -23,6 +23,10 @@
 #include "matcl-core/config.h"
 #include "matcl-simd/simd.h"
 
+namespace matcl { namespace raw { namespace details { namespace scal_func
+{
+}}}}
+
 namespace matcl { namespace details
 {
 
@@ -240,7 +244,7 @@ struct func_eps<float, false>
     {
         namespace mrds = matcl::raw::details::scal_func;
 
-        float e = mrds::eps(x.value) * matcl::constants::eps<float>();
+        float e = mrds::eps(x.value) * matcl::constants::eps<float>() * 0.5f;
         return e;
     };
 };
@@ -252,7 +256,7 @@ struct func_eps<double, false>
     {
         namespace mrds = matcl::raw::details::scal_func;
 
-        double e = mrds::eps(x.value) * matcl::constants::eps();
+        double e = mrds::eps(x.value) * matcl::constants::eps() * 0.5;
         return e;
     };
 };

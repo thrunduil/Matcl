@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/archive.h"
 #include "matcl-core/IO/serialize.h"
 #include "matcl-core/memory/alloc.h"

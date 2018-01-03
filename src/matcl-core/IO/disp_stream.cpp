@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/IO/disp_stream.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/IO/disp_stream_impl.h"
 #include "matcl-core/error/exception_classes.h"
 #include "matcl-core/details/integer.h"

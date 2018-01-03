@@ -22,6 +22,7 @@
 
 #include "test_poly.h"
 #include "matcl-simd/poly/poly_eval.h"
+#include "matcl-simd/poly/poly_eval_twofold.h"
 
 #include "matcl-scalar/lib_functions/utils.h"
 #include "matcl-scalar/lib_functions/func_unary.h"
@@ -143,7 +144,9 @@ struct test_function<T, T, Func>
 
 void test::test_poly()
 {
-    formatted_disp dm;
+    out_stream << "\n" << "testing polynomials with compile time size" << "\n";
+
+    formatted_disp dm;    
 
     dm.set_row_label("type",    align_type::right, 10);
     dm.add_column("horn 1",     align_type::left, 5);
@@ -162,6 +165,8 @@ void test::test_poly()
 void test::test_poly_cond()
 {
     formatted_disp dm;
+
+    out_stream << "\n" << "testing poly condition numbers" << "\n";
 
     dm.set_row_label("type",    align_type::right, 10);
     dm.add_column("base",       align_type::left, 5);
@@ -571,6 +576,8 @@ bool test_polynomials::test_equal_cond(int size, const T* x, const T* res1, cons
         T cond1     = simd::horner_apriori_cond(x[i], Poly::get_size(), Poly::polynomial)
                     * T(2) * Poly::get_size();
 
+        T cond2     = simd::horner_aposteriori_cond(x[i], Poly::get_size(), Poly::polynomial);
+        /*
         T mu;
         T res       = simd::horner_and_error(x[i], Poly::get_size(), Poly::polynomial, mu);
         T u         = constants::eps<T>()/T(2);
@@ -578,6 +585,7 @@ bool test_polynomials::test_equal_cond(int size, const T* x, const T* res1, cons
         T cond2     = mu / T(abs(res2[i].cast_float()));
         
         (void)res;
+        */
 
         if (cond1 < cond2 && std::isfinite(cond2))
         {  
@@ -706,6 +714,7 @@ bool test_polynomials::test_equal_ulp(T res1, const mp_float& res2, double max_e
 
     bool ok = (dist <= max_err);
     return ok;
+
 };
 
 }}

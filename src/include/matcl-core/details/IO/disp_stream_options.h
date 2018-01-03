@@ -19,6 +19,7 @@
  */
 
 #pragma once
+
 #include "matcl-core/IO/disp_stream.h"
 #include "matcl-core/options/matcl_options.h"
 

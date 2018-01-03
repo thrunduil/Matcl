@@ -347,8 +347,8 @@ struct mul_helper<complex<T>,complex<S>>
 
         if (recalc) 
         {
-            r_re = constants::inf<real_type>() * ms::fms_f(a_re, b_re, - a_im * b_im );
-            r_im = constants::inf<real_type>() * ms::fma_f(a_re, b_im,   a_im * b_re );
+            r_re = constants::inf<real_type>() * ms::fms_f(a_re, b_re, a_im * b_im );
+            r_im = constants::inf<real_type>() * ms::fma_f(a_re, b_im, a_im * b_re );
         }
 
         return return_type(r_re, r_im);
@@ -466,7 +466,7 @@ struct div_helper<complex<T>,complex<S>>
             ret_re      = ms::fma_f(a_im, r, a_re) * t;
 
             //ret_im    = (a_im - a_re * r) * t;
-            ret_im      = ms::fma_f(-a_re, r, a_im) * t;		    
+            ret_im      = ms::fnma_f(a_re, r, a_im) * t;		    
         }
         else
         {
@@ -474,7 +474,7 @@ struct div_helper<complex<T>,complex<S>>
             ret_re      = ms::fma_f(b_im, a_im/b_re, a_re) * t;
 
             //ret_im    = (a_im - b_im * (a_re/b_re)) * t;
-            ret_im      = ms::fma_f(-b_im, a_re/b_re, a_im) * t;		    
+            ret_im      = ms::fnma_f(-b_im, a_re/b_re, a_im) * t;		    
         }
 
         return;

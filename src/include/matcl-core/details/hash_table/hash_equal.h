@@ -21,8 +21,6 @@
 
 #pragma once
 
-#include "matcl-core/memory/global_objects.h"
-
 namespace matcl { namespace details
 {
 

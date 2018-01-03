@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -81,6 +81,9 @@
     <ClInclude Include="..\..\src\include\matcl-core\options\optional.h" />
     <ClInclude Include="..\..\src\include\matcl-core\options\options_disp.h" />
     <ClInclude Include="..\..\src\include\matcl-core\options\option_validators.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\profile\benchmark.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\profile\timer.h" />
+    <ClInclude Include="..\..\src\include\matcl-core\profile\time_stats.h" />
     <ClInclude Include="..\..\src\matcl-core\base\malloc.h" />
     <ClInclude Include="..\..\src\matcl-core\IO\out_stream_initializer.h" />
   </ItemGroup>
@@ -99,6 +102,8 @@
     <None Include="..\..\src\include\matcl-core\details\options\matcl_options_impl.inl" />
     <None Include="..\..\src\include\matcl-core\details\options\optional.inl" />
     <None Include="..\..\src\include\matcl-core\details\options\option_validators.inl" />
+    <None Include="..\..\src\include\matcl-core\details\profile\benchmark.inl" />
+    <None Include="..\..\src\include\matcl-core\details\profile\time_stats.inl" />
     <None Include="..\..\src\include\matcl-core\details\refptr.inl" />
     <None Include="..\..\src\include\matcl-core\details\simd\simd.inl" />
     <None Include="..\..\src\include\matcl-core\details\thread.inl" />
@@ -137,6 +142,9 @@
     <ClCompile Include="..\..\src\matcl-core\lib_functions\twofold.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\complex_type.cpp" />
     <ClCompile Include="..\..\src\matcl-core\matrix\matrix_traits.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\profile\benchmark.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\profile\timer.cpp" />
+    <ClCompile Include="..\..\src\matcl-core\profile\time_stats.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4BE517FA-056D-4070-91EC-C33F3274AE38}</ProjectGuid>
@@ -150,23 +158,24 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

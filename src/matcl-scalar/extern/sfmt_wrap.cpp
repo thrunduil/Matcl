@@ -21,6 +21,7 @@
 #include "matcl-scalar/lib_functions/scalar_gen.h"
 #include "matcl-core/memory/alloc.h"
 #include "matcl-core/general/thread.h"
+#include "matcl-core/memory/global_objects.h"
 
 #include "sfmt_wrap.h"
 

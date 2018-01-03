@@ -229,7 +229,7 @@ Type type_table::make_reference_type(Type t)
 MATCL_THREAD_LOCAL static 
 type_table_cache* g_inst = new type_table_cache();
 
-inline type_table_cache* type_table::get_cache()
+type_table_cache* type_table::get_cache()
 {
     return g_inst;
 };

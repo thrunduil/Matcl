@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/scalfunc_real.h"
 #include "matcl-core/details/scalfunc_complex.h"
 #include "matcl-core/error/exception_classes.h"

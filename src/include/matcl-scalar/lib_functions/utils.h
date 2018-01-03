@@ -20,8 +20,9 @@
 
 #pragma once
 
+#include "matcl-scalar/config.h"
 #include "matcl-core/matrix/scalar_types.h"
-#include "matcl-scalar/lib_functions/timer.h"
+#include "matcl-core/profile/timer.h"
 
 namespace matcl
 {
@@ -31,6 +32,7 @@ MATCL_SCALAR_EXPORT
 void                    tic();
 
 // stop global timer and return time elapsed from last tic in seconds
+// time is measured with high resolution (less than microsecond)
 MATCL_SCALAR_EXPORT 
 Real                    toc();
 

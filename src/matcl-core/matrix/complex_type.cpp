@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/matrix/complex_type.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/archive.h"
 #include "matcl-core/matrix/scalar_types.h"
 

@@ -89,7 +89,7 @@ namespace matcl { namespace impl                        \
 struct fun##_functor                                    \
 {                                                       \
     template<class T>                                   \
-    auto operator()(T) -> decltype(fun<T>());           \
+    auto operator()(T) -> decltype(matcl::template fun<T>());\
                                                         \
     auto operator()(...) -> false_type;                 \
 };                                                      \

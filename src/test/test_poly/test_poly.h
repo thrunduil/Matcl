@@ -24,8 +24,32 @@
 #include "matcl-scalar/IO/formatted_disp.h"
 #include "matcl-core/float/twofold.h"
 #include "matcl-mp/matcl_mp.h"
+#include "matcl-simd/details/poly/utils.h"
 
 #include <string>
+
+namespace matcl { namespace simd { namespace details
+{
+
+template<>
+struct broadcast<mp_float>
+{
+    template<class Coef>
+    force_inline
+    static mp_float eval(const Coef* arr)
+    {
+        return mp_float(arr[0]);
+    }
+
+    template<class Coef>
+    force_inline
+    static mp_float eval(const Coef& arr)
+    {
+        return mp_float(arr);
+    }
+};
+
+}}}
 
 namespace matcl { namespace test
 {
@@ -225,8 +249,8 @@ struct Func_horn_twofold
     force_inline
     static TS eval(const TS& arg)
     {
-        TS res   = simd::compensated_horner<TS, T>(arg, Poly::size, Poly::polynomial);
-        return res;
+        auto res   = simd::compensated_horner<TS, T>(arg, Poly::size, Poly::polynomial);
+        return res.value;
     };
 };
 
