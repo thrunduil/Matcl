@@ -104,4 +104,14 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 log(const simd<Val, Bits, Simd_tag>& x);
 
+// return the sine function of x in radians
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+sin(const simd<Val, Bits, Simd_tag>& x);
+
+// return the cosine function of x in radians
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+cos(const simd<Val, Bits, Simd_tag>& x);
+
 }}

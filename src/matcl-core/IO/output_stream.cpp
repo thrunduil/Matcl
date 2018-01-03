@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/IO/output_stream.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/logger.h"
 #include "matcl-core/memory/alloc.h"
 

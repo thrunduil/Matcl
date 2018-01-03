@@ -155,7 +155,7 @@ void test_simd_compl::test_functions()
     for (int i = 0; i < N; ++i)
         ptr_in[i]   = T(std::abs(real(ptr_in[i])) / TR(8), std::abs(imag(ptr_in[i])) / TR(8));
     
-    test_function_block<T, test_functions::Func_sum_all>(dm, N, ptr_in, ptr_out, ptr_out_gen, true); 
+    test_function_block<T, test_functions::Func_hor_sum>(dm, N, ptr_in, ptr_out, ptr_out_gen, true); 
 };
 
 template<class T>
@@ -250,8 +250,14 @@ void test_simd_compl::test_function(formatted_disp& fd, int size,
     t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>(size, 1, in, out);
     v4  = test_equal(size, out, out_gen, 1.0, d4, test_componentwise);
 
-    t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>(size, 1, in, out);    
-    v5  = test_equal(size, out, out_gen, 1.0, d5, test_componentwise);
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>(size, 1, in, out);    
+        v5  = test_equal(size, out, out_gen, 1.0, d5, test_componentwise);
+    #else
+        t5  = t0;
+        v5  = true;
+        d5  = 0;
+    #endif
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
     double d    = d1;
@@ -274,8 +280,13 @@ void test_simd_compl::test_function(formatted_disp& fd, int size,
                 (N, M, in, out);    
     t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
                 (N, M, in, out);
-    t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                 (N, M, in, out);    
+    #else
+        t5  = t0;
+    #endif
 
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
 };
@@ -304,9 +315,15 @@ void test_simd_compl::test_function_block(formatted_disp& fd, int size,
             (size, 1, in, out);
     v3  = test_equal(size, out, out_gen, 4.0, d3, test_componentwise);
 
-    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
-            (size, 1, in, out);    
-    v4  = test_equal(size, out, out_gen, 4.0, d4, test_componentwise);
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+                (size, 1, in, out);    
+        v4  = test_equal(size, out, out_gen, 4.0, d4, test_componentwise);
+    #else
+        t4  = t0;
+        v4  = true;
+        d4  = 0;
+    #endif
 
     bool ok = v1 && v3 && v4;
     double d    = d1;
@@ -325,8 +342,13 @@ void test_simd_compl::test_function_block(formatted_disp& fd, int size,
                 (N, M, in, out_gen);
     t3  = test_function_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
                 (N, M, in, out);
-    t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t4  = test_function_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                 (N, M, in, out);    
+    #else
+        t4  = t0;
+    #endif
 
     fd.disp_row(Func::name(), t0, t0/t0, t2/t2, t0/t1, t2/t3, t2/t4, status);
 };
@@ -361,9 +383,15 @@ void test_simd_compl::test_function_bin(formatted_disp& fd, int size,
                                     (size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen,max_dist, d4, test_componentwise);
 
-    t5  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                                     (size, 1, in_1, in_2, out);    
-    v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
+        v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
+    #else
+        t5  = t0;
+        v5  = true;
+        d5  = 0;
+    #endif
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
     double d    = d1;
@@ -385,8 +413,13 @@ void test_simd_compl::test_function_bin(formatted_disp& fd, int size,
                                     (N, M, in_1, in_2, out);    
     t4  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
                                     (N, M, in_1, in_2, out);
-    t5  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd<T, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                                     (N, M, in_1, in_2, out);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status = make_status(ok, d);
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
@@ -420,9 +453,15 @@ void test_simd_compl::test_function_bin_RC(formatted_disp& fd, int size,
                                     (size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen,max_dist, d4, test_componentwise);
 
-    t5  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                                     (size, 1, in_1, in_2, out);    
-    v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
+        v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
+    #else
+        t5  = t0;
+        v5  = true;
+        d5  = 0;
+    #endif
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
     double d    = d1;
@@ -444,8 +483,13 @@ void test_simd_compl::test_function_bin_RC(formatted_disp& fd, int size,
                                     (N, M, in_1, in_2, out);    
     t4  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
                                     (N, M, in_1, in_2, out);
-    t5  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd_RC<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                                     (N, M, in_1, in_2, out);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status = make_status(ok, d);
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
@@ -479,9 +523,15 @@ void test_simd_compl::test_function_bin_CR(formatted_disp& fd, int size,
                                     (size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen,max_dist, d4, test_componentwise);
 
-    t5  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                                     (size, 1, in_1, in_2, out);    
-    v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
+        v5  = test_equal(size, out, out_gen, max_dist, d5, test_componentwise);
+    #else
+        t5  = t0;
+        v5  = true;
+        d5  = 0;
+    #endif
 
     bool ok     = v1 && v2 && v3 && v4 && v5;
     double d    = d1;
@@ -503,8 +553,13 @@ void test_simd_compl::test_function_bin_CR(formatted_disp& fd, int size,
                                     (N, M, in_1, in_2, out);    
     t4  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::sse_tag>, Func>
                                     (N, M, in_1, in_2, out);
-    t5  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd_CR<T, TR, simd::simd_compl<TR, 256, simd::avx_tag>, Func>
                                     (N, M, in_1, in_2, out);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status = make_status(ok, d);
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);

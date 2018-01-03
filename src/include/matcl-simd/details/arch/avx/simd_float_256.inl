@@ -168,7 +168,8 @@ simd<float, 256, avx_tag>::select() const
         {
             // the same pattern in low and high half
 
-            static const int ind = I1 + (I2 << 2) + (I3 << 4) + (I4 << 6);
+            static const int ind0 = I1 + (I2 << 2) + (I3 << 4) + (I4 << 6);
+            static const int ind  = std::min(std::max(ind0, 0), 255);
             return _mm256_shuffle_ps(data, data, ind);
         }
 

@@ -102,7 +102,7 @@ struct simd_uminus<float, 128, sse_tag>
 };
 
 template<>
-struct simd_sum_all<float, 128, sse_tag>
+struct simd_horizontal_sum<float, 128, sse_tag>
 {
     using simd_type = simd<float, 128, sse_tag>;
 
@@ -113,6 +113,40 @@ struct simd_sum_all<float, 128, sse_tag>
         __m128 sums     = _mm_add_ps(x.data, xp);
         xp              = _mm_movehl_ps(xp, sums);
         sums            = _mm_add_ss(sums, xp);
+
+        return _mm_cvtss_f32(sums);
+    };
+};
+
+template<>
+struct simd_horizontal_min<float, 128, sse_tag>
+{
+    using simd_type = simd<float, 128, sse_tag>;
+
+    force_inline
+    static float eval(const simd_type& x)
+    {
+        __m128 xp       = _mm_shuffle_ps(x.data, x.data, _MM_SHUFFLE(2, 3, 0, 1));
+        __m128 sums     = _mm_min_ps(x.data, xp);
+        xp              = _mm_movehl_ps(xp, sums);
+        sums            = _mm_min_ss(sums, xp);
+
+        return _mm_cvtss_f32(sums);
+    };
+};
+
+template<>
+struct simd_horizontal_max<float, 128, sse_tag>
+{
+    using simd_type = simd<float, 128, sse_tag>;
+
+    force_inline
+    static float eval(const simd_type& x)
+    {
+        __m128 xp       = _mm_shuffle_ps(x.data, x.data, _MM_SHUFFLE(2, 3, 0, 1));
+        __m128 sums     = _mm_max_ps(x.data, xp);
+        xp              = _mm_movehl_ps(xp, sums);
+        sums            = _mm_max_ss(sums, xp);
 
         return _mm_cvtss_f32(sums);
     };
@@ -605,7 +639,7 @@ struct simd_any_nan<float, 128, sse_tag>
     force_inline
     static bool eval(const simd_type& x)
     {
-        __m128 nt   = _mm_cmp_ps(x.data, x.data, _CMP_NEQ_UQ);
+        __m128 nt   = _mm_cmpneq_ps(x.data, x.data);
         int res     = _mm_movemask_ps(nt);
 
         return res != 0;
@@ -620,8 +654,31 @@ struct simd_is_nan<float, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        __m128 nt   = _mm_cmp_ps(x.data, x.data, _CMP_NEQ_UQ);
+        __m128 nt   = _mm_cmpneq_ps(x.data, x.data);
         return nt;
+    };
+};
+
+template<>
+struct simd_is_finite<float, 128, sse_tag>
+{
+    using simd_type = simd<float, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_int  = simd<int32_t, 128, sse_tag>;
+
+        simd_int xi     = x.reinterpret_as_int32();
+
+        // mask selecting all bits in the exponent
+        simd_int mask   = simd_int(0x7F800000);
+
+        xi              = bitwise_and(xi, mask);
+
+        // return true if at least one bit in the exponent is not set
+        simd_int res    = neq(xi, mask);
+        return res.reinterpret_as_float();
     };
 };
 

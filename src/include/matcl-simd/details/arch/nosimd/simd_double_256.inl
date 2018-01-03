@@ -83,22 +83,26 @@ simd<double, 256, nosimd_tag>::simd(const simd_half& lo_hi)
     data[3] = lo_hi.data[1];
 }
 
-force_inline
-simd<double, 256, nosimd_tag>::simd(const simd<double, 256, sse_tag>& s)
-{
-    s.store(data, std::true_type());
-}
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    force_inline
+    simd<double, 256, nosimd_tag>::simd(const simd<double, 256, sse_tag>& s)
+    {
+        s.store(data, std::true_type());
+    }
 
-force_inline
-simd<double, 256, nosimd_tag>::simd(const simd<double, 256, avx_tag>& s)
-{
-    s.store(data, std::true_type());
-}
+    force_inline
+    simd<double, 256, nosimd_tag>::simd(const simd<double, 128, scalar_sse_tag>& s)
+        :simd(s.first())
+    {}
+#endif
 
-force_inline
-simd<double, 256, nosimd_tag>::simd(const simd<double, 128, scalar_sse_tag>& s)
-    :simd(s.first())
-{}
+#if MATCL_ARCHITECTURE_HAS_AVX
+    force_inline
+    simd<double, 256, nosimd_tag>::simd(const simd<double, 256, avx_tag>& s)
+    {
+        s.store(data, std::true_type());
+    }
+#endif
 
 force_inline
 simd<double, 256, nosimd_tag>::simd(const simd<double, 128, scalar_nosimd_tag>& s)

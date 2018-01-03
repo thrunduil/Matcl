@@ -102,7 +102,7 @@ struct simd_uminus<double, 128, sse_tag>
 };
 
 template<>
-struct simd_sum_all<double, 128, sse_tag>
+struct simd_horizontal_sum<double, 128, sse_tag>
 {
     using simd_type = simd<double, 128, sse_tag>;
 
@@ -111,6 +111,36 @@ struct simd_sum_all<double, 128, sse_tag>
     {
         __m128d shuf    = missing::mm_movehl_pd(x.data, x.data);
         __m128d res     = _mm_add_sd(x.data, shuf);
+
+        return _mm_cvtsd_f64(res);
+    };
+};
+
+template<>
+struct simd_horizontal_min<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static double eval(const simd_type& x)
+    {
+        __m128d shuf    = missing::mm_movehl_pd(x.data, x.data);
+        __m128d res     = _mm_min_sd(x.data, shuf);
+
+        return _mm_cvtsd_f64(res);
+    };
+};
+
+template<>
+struct simd_horizontal_max<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static double eval(const simd_type& x)
+    {
+        __m128d shuf    = missing::mm_movehl_pd(x.data, x.data);
+        __m128d res     = _mm_max_sd(x.data, shuf);
 
         return _mm_cvtsd_f64(res);
     };
@@ -595,7 +625,7 @@ struct simd_any_nan<double, 128, sse_tag>
     force_inline
     static bool eval(const simd_type& x)
     {
-        __m128d nt  = _mm_cmp_pd(x.data, x.data, _CMP_NEQ_UQ);
+        __m128d nt  = _mm_cmpneq_pd(x.data, x.data);
         int res     = _mm_movemask_pd(nt);
 
         return res != 0;
@@ -610,8 +640,31 @@ struct simd_is_nan<double, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x)
     {
-        __m128d nt  = _mm_cmp_pd(x.data, x.data, _CMP_NEQ_UQ);
+        __m128d nt  = _mm_cmpneq_pd(x.data, x.data);
         return nt;
+    };
+};
+
+template<>
+struct simd_is_finite<double, 128, sse_tag>
+{
+    using simd_type = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_int  = simd<int64_t, 128, sse_tag>;
+
+        simd_int xi     = x.reinterpret_as_int64();
+
+        // mask selecting all bits in the exponent
+        simd_int mask   = simd_int(0x7FF0000000000000ll);
+
+        xi              = bitwise_and(xi, mask);
+
+        // return true if at least one bit in the exponent is not set
+        simd_int res    = neq(xi, mask);
+        return res.reinterpret_as_double();
     };
 };
 

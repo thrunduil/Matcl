@@ -95,7 +95,7 @@ force_inline
 int64_t simd<int64_t, 256, avx_tag>::first() const
 { 
     __m128i ds  = _mm256_castsi256_si128(data);
-    return _mm_cvtsi128_si64(ds);
+    return missing::mm_cvtsi128_si64(ds);
 };
 
 force_inline

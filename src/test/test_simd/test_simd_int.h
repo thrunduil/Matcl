@@ -45,6 +45,8 @@ class test_simd_int
         void    make_ternary();
         void    make_binary();
         void    make_unary();
+        void    make_select();
+        void    make_combine();
         void    make_unary_int();
 
     private:
@@ -60,6 +62,12 @@ class test_simd_int
 
         template<class T>
         void    test_functions();
+
+        template<class T>
+        void    test_functions_select();
+
+        template<class T>
+        void    test_functions_combine();
 
         template<class T>
         void    test_functions_int();
@@ -80,6 +88,10 @@ class test_simd_int
 
         template<class T, class Func>
         void    test_function_bin(formatted_disp& fd, int size, const T* in_1, 
+                    const T* in_2, T* out, T* out_gen);
+
+        template<class T, class Func>
+        void    test_function_combine(formatted_disp& fd, int size, const T* in_1, 
                     const T* in_2, T* out, T* out_gen);
 
         template<class T, class Func>

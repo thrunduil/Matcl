@@ -91,4 +91,12 @@ float   exp(float x);
 double  log(double x);
 float   log(float x);
 
+// return the sine function of x in radians
+double  sin(double x);
+float   sin(float x);
+
+// return the sine function of x in radians
+double  cos(double x);
+float   cos(float x);
+
 }}

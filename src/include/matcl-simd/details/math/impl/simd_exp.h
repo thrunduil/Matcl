@@ -26,19 +26,13 @@
 namespace matcl { namespace simd { namespace details
 {
 
-struct exp_table_double
+struct MATCL_SIMD_EXPORT exp_table_double
 {
     // lookup table size
     static const int L  = 256;
 
     // polynomial coefficients
-    static constexpr double exp_poly[4] 
-        =   {
-                9.999999999999965009454977779701013e-01,
-                5.000000000000029158791378197294776e-01,
-                1.666666819398565427110017699653142e-01,
-                4.166666666666664815314859891569042e-02,
-            };
+    static const double exp_poly[4];
 
     // precomputed values of exp(i * log(2) / L)
     static double lookup_table_arr[L + 1];
@@ -49,20 +43,28 @@ struct exp_table_double
         // generate lookup table parameters
         static void generate_lookup_table(std::ostream& os, int num_values_in_row);
     #endif
+
+    template<class Arg>
+    force_inline
+    static Arg eval(const Arg& x)
+    {
+        return estrin<4>(x, exp_table_double::exp_poly);
+    };
 };
 
-struct exp_table_float
+struct MATCL_SIMD_EXPORT exp_table_float
 {
     // polynomial coefficients
-    static constexpr float exp_poly[6] 
-        =   {
-                1.000000010627969261079092395130339e+00f,
-                4.999999812480395306960342830781873e-01f,
-                1.666650621954377493093332051884339e-01f,
-                4.166713620577822464861187854099253e-02f,
-                8.369068563162737202515194738801366e-03f,
-                1.388887298908941589713690426191312e-03f,
-            };
+    static const float exp_poly[6];
+
+    template<class Arg>
+    force_inline
+    static Arg eval(const Arg& x)
+    {
+        Arg p   =  estrin<6>(x, exp_table_float::exp_poly);
+        p       = fma_f(p, x, Arg(1));
+        return p;
+    };
 };
 
 template<int Bits, class Simd_tag>
@@ -91,6 +93,10 @@ struct simd_exp<double, Bits, Simd_tag>
         //-----------------------------------------------------------------
         //                      reduction
         //-----------------------------------------------------------------
+
+        // this reduction scheme will produce inaccurate d = a - k*inv_log2, when a is close
+        // to k*inv_log2 (worst case for 7804143460206699 x 2^?49), but then d ~ 0 and 
+        // result exp(d) ~ 1 is accurate
         simd_type kl    = round(inv_log2 * a);
         simd_type x     = fnma_f(kl, log2_hi, a);   // a - k*LH; exact for |kl| < 2^18
         x               = fnma_f(kl, log2_lo, x);   // x - k*LL
@@ -108,11 +114,7 @@ struct simd_exp<double, Bits, Simd_tag>
         //-----------------------------------------------------------------
         // remez of (exp(x) - 1)/x on [-log(2)/L/2, log(2)/L/2]
         
-        simd_type p     = simd_type::broadcast(exp_table_double::exp_poly+3);
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_double::exp_poly+2));
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_double::exp_poly+1));
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_double::exp_poly+0));
-        
+        simd_type p     = exp_table_double::eval(x);
         p               = p * x;
 
         //-----------------------------------------------------------------
@@ -186,14 +188,7 @@ struct simd_exp<float, Bits, Simd_tag>
         //-----------------------------------------------------------------
         // remez of (exp(x) - 1)/x on [-log(2)/2, log(2)/2]
         
-        simd_type p     = simd_type::broadcast(exp_table_float::exp_poly+5);
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_float::exp_poly+4));
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_float::exp_poly+3));
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_float::exp_poly+2));
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_float::exp_poly+1));
-        p               = fma_f(p, x, simd_type::broadcast(exp_table_float::exp_poly+0));
-        
-        p               = fma_f(p, x, one);
+        simd_type p     = exp_table_float::eval(x);
 
         //-----------------------------------------------------------------
         //                      finalization

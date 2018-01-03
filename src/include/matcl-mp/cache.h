@@ -24,6 +24,7 @@
 #include "matcl-mp/mp_float.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/memory/alloc.h"
+#include "matcl-core/memory/global_objects.h"
 
 #include <map>
 

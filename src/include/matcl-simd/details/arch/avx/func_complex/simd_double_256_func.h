@@ -294,7 +294,7 @@ struct simd_compl_uminus<double, 256, avx_tag>
 };
 
 template<>
-struct simd_compl_sum_all<double, 256, avx_tag>
+struct simd_compl_horizontal_sum<double, 256, avx_tag>
 {
     using simd_type = simd_compl<double, 256, avx_tag>;
 

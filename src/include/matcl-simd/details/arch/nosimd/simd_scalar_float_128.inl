@@ -33,18 +33,20 @@ simd<float, 128, scalar_nosimd_tag>::simd(float val)
     :data(val)
 {}
 
-force_inline
-simd<float, 128, scalar_nosimd_tag>::simd(const simd<float, 128, sse_tag>& s)
-    :data(s.first())
-{}
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    force_inline
+    simd<float, 128, scalar_nosimd_tag>::simd(const simd<float, 128, sse_tag>& s)
+        :data(s.first())
+    {}
+
+    force_inline
+    simd<float, 128, scalar_nosimd_tag>::simd(const simd<float, 128, scalar_sse_tag>& s)
+        :data(s.first())
+    {}
+#endif
 
 force_inline
 simd<float, 128, scalar_nosimd_tag>::simd(const simd<float, 128, nosimd_tag>& s)
-    :data(s.first())
-{}
-
-force_inline
-simd<float, 128, scalar_nosimd_tag>::simd(const simd<float, 128, scalar_sse_tag>& s)
     :data(s.first())
 {}
 

@@ -495,7 +495,9 @@ void test_simd_scalar_int::test_functions()
     for (int i = 0; i < N; ++i)
         ptr_in[i]   = std::abs(ptr_in[i]) / T(8);
     
-    test_function_block<T, test_functions::Func_sum_all>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_hor_sum>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_hor_min>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_hor_max>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
 };
 
 template<class T>
@@ -604,8 +606,6 @@ void test_simd_scalar_int::test_functions_bin()
 
     dm.disp_header();
 
-    test_function_bin<T, test_functions::Func_eeq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, test_functions::Func_neq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_leq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_geq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_lt>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
@@ -624,6 +624,14 @@ void test_simd_scalar_int::test_functions_bin()
 
     test_function_bin<T, test_functions::Func_if_zero_else>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_if_nan_else>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+
+    for (int i = 0; i < N; i += 3)
+    {
+        ptr_in_2[i] = ptr_in_1[i];
+    };
+
+    test_function_bin<T, test_functions::Func_eeq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_neq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
 };
 
 template<class T>

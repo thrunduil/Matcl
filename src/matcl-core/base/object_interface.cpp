@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/object_interface.h"
 
 namespace matcl { namespace details

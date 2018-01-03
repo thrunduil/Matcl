@@ -41,22 +41,24 @@ struct cast_int32_int64_impl
     };
 };
 
-template<>
-struct cast_int32_int64_impl<simd<int64_t, 256, matcl::simd::avx_tag>>
-{
-    using Ret       = simd<int64_t,256, matcl::simd::avx_tag>;
-    using simd_type = simd<int32_t, 128, matcl::simd::sse_tag>;
-
-    force_inline
-    static Ret eval(const simd_type& s)
+#if MATCL_ARCHITECTURE_HAS_AVX
+    template<>
+    struct cast_int32_int64_impl<simd<int64_t, 256, matcl::simd::avx_tag>>
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX2
-            return _mm256_cvtepi32_epi64(s.data);
-        #else
-            return Ret(s.convert_low_to_int64(), s.convert_high_to_int64());
-        #endif
+        using Ret       = simd<int64_t,256, matcl::simd::avx_tag>;
+        using simd_type = simd<int32_t, 128, matcl::simd::sse_tag>;
+
+        force_inline
+        static Ret eval(const simd_type& s)
+        {
+            #if MATCL_ARCHITECTURE_HAS_AVX2
+                return _mm256_cvtepi32_epi64(s.data);
+            #else      
+                return Ret(s.convert_low_to_int64(), s.convert_high_to_int64());
+            #endif
+        };
     };
-};
+#endif
 
 template<class Ret>
 struct cast_int32_double_impl
@@ -70,22 +72,24 @@ struct cast_int32_double_impl
     };
 };
 
-template<>
-struct cast_int32_double_impl<simd<double, 256, matcl::simd::avx_tag>>
-{
-    using Ret       = simd<double,256, matcl::simd::avx_tag>;
-    using simd_type = simd<int32_t, 128, matcl::simd::sse_tag>;
-
-    force_inline
-    static Ret eval(const simd_type& s)
+#if MATCL_ARCHITECTURE_HAS_AVX
+    template<>
+    struct cast_int32_double_impl<simd<double, 256, matcl::simd::avx_tag>>
     {
-        #if MATCL_ARCHITECTURE_HAS_AVX2
-            return _mm256_cvtepi32_pd(s.data);
-        #else
-            return Ret(s.convert_low_to_double(), s.convert_high_to_double());
-        #endif
+        using Ret       = simd<double,256, matcl::simd::avx_tag>;
+        using simd_type = simd<int32_t, 128, matcl::simd::sse_tag>;
+
+        force_inline
+        static Ret eval(const simd_type& s)
+        {
+            #if MATCL_ARCHITECTURE_HAS_AVX2
+                return _mm256_cvtepi32_pd(s.data);
+            #else
+                return Ret(s.convert_low_to_double(), s.convert_high_to_double());
+            #endif
+        };
     };
-};
+#endif
 
 }}};
 
@@ -267,14 +271,11 @@ simd<int32_t, 128, sse_tag>::convert_low_to_int64() const
     #if MATCL_ARCHITECTURE_HAS_SSE41
         return _mm_cvtepi32_epi64(data);
     #else
-        simd<int64_t, 128, sse_tag> res;
-        int64_t* res_ptr    = res.get_raw_ptr();
-        const int32_t* ptr  = this->get_raw_ptr();
+        // sign bit
+        __m128i sign = _mm_srai_epi32(data, 31);
 
-        res_ptr[0]  = int64_t(ptr[0]);
-        res_ptr[1]  = int64_t(ptr[1]);
-
-        return res;
+        // interleave with sign extensions
+        return _mm_unpacklo_epi32(data, sign);
     #endif
 };
 
@@ -286,14 +287,11 @@ simd<int32_t, 128, sse_tag>::convert_high_to_int64() const
         __m128i hi = missing::mm_movehl_epi32(data, data);
         return _mm_cvtepi32_epi64(hi);
     #else
-        simd<int64_t, 128, sse_tag> res;
-        int64_t* res_ptr    = res.get_raw_ptr();
-        const int32_t* ptr  = this->get_raw_ptr();
+        // sign bit
+        __m128i sign = _mm_srai_epi32(data, 31);
 
-        res_ptr[0]  = int64_t(ptr[2]);
-        res_ptr[1]  = int64_t(ptr[3]);
-
-        return res;
+        // interleave with sign extensions
+        return _mm_unpackhi_epi32(data, sign);
     #endif
 };
 
@@ -373,24 +371,6 @@ simd<int32_t, 128, sse_tag>::select() const
 
     static const int ind    = I1 + (I2 << 2) + (I3 << 4) + (I4 << 6);
     return _mm_shuffle_epi32(data, ind);
-}
-
-template<int I1, int I2, int I3, int I4>
-force_inline simd<int32_t, 128, nosimd_tag>  
-simd<int32_t, 128, nosimd_tag>::combine(const simd& x, const simd& y)
-{
-    static_assert(I1 >= 0 && I1 <= 7, "invalid index in select function");
-    static_assert(I2 >= 0 && I2 <= 7, "invalid index in select function");
-    static_assert(I3 >= 0 && I3 <= 7, "invalid index in select function");
-    static_assert(I4 >= 0 && I4 <= 7, "invalid index in select function");
-
-    simd<int32_t, 128, nosimd_tag> ret;
-    ret.data[0] = (I1 <= 3) ? x.data[I1] : y.data[I1 - 4];
-    ret.data[1] = (I2 <= 3) ? x.data[I2] : y.data[I2 - 4];
-    ret.data[2] = (I3 <= 3) ? x.data[I3] : y.data[I3 - 4];
-    ret.data[3] = (I4 <= 3) ? x.data[I4] : y.data[I4 - 4];
-
-    return ret;
 }
 
 template<int I1, int I2, int I3, int I4>

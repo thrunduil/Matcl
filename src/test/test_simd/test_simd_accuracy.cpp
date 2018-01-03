@@ -76,6 +76,8 @@ void simd_accuracy_tester::test_unary(int N)
 
     test_unary_func<Type>(dm, func::Func_exp<Type>(),N);
     test_unary_func<Type>(dm, func::Func_log<Type>(),N);
+    test_unary_func<Type>(dm, func::Func_sin<Type>(),N);
+    test_unary_func<Type>(dm, func::Func_cos<Type>(),N);
 
     out_stream << "\n";
 };

@@ -384,6 +384,21 @@
     <ClInclude Include="..\..\src\include\matcl-simd\math_functions_scalar.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\other_functions.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\payne_hanek.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_helpers.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_double.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_float.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\details\arch\simd_impl.inl">
@@ -506,9 +521,24 @@
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_twofold.inl">
       <Filter>Source Files\include\details\poly</Filter>
     </None>
+    <None Include="..\..\src\include\matcl-simd\details\func\other_functions.inl">
+      <Filter>Source Files\include\details\func</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-simd\details\math\impl\payne_hanek.inl">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-simd\math\simd_exp.cpp">
+      <Filter>Source Files\src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-simd\math\payne_hanek.cpp">
+      <Filter>Source Files\src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_sincos.cpp">
+      <Filter>Source Files\src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_log.cpp">
       <Filter>Source Files\src\math</Filter>
     </ClCompile>
   </ItemGroup>

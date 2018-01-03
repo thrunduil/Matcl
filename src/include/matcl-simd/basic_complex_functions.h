@@ -90,7 +90,7 @@ operator-(const simd_compl<Val, Bits, Simd_tag>& x);
 // sum of all elements stored in the vector x
 template<class Val, int Bits, class Simd_tag>
 typename simd_compl<Val, Bits, Simd_tag>::value_type
-sum_all(const simd_compl<Val, Bits, Simd_tag>& x);
+horizontal_sum(const simd_compl<Val, Bits, Simd_tag>& x);
 
 // evaluate x*y + z
 template<class Val, int Bits, class Simd_tag>

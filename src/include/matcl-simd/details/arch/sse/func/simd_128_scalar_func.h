@@ -128,7 +128,31 @@ struct simd_uminus<T, 128, scalar_sse_tag>
 };
 
 template<class T>
-struct simd_sum_all<T, 128, scalar_sse_tag>
+struct simd_horizontal_sum<T, 128, scalar_sse_tag>
+{
+    using simd_type = simd<T, 128, scalar_sse_tag>;
+
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        return x.first();
+    };
+};
+
+template<class T>
+struct simd_horizontal_min<T, 128, scalar_sse_tag>
+{
+    using simd_type = simd<T, 128, scalar_sse_tag>;
+
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        return x.first();
+    };
+};
+
+template<class T>
+struct simd_horizontal_max<T, 128, scalar_sse_tag>
 {
     using simd_type = simd<T, 128, scalar_sse_tag>;
 
@@ -541,8 +565,7 @@ struct simd_any_nan<T, 128, scalar_sse_tag>
     force_inline
     static bool eval(const simd_type& x)
     {
-        auto res = is_nan(x.as_vector());
-        return res.first() != 0;
+        return any(is_nan(x));
     };
 };
 
@@ -559,6 +582,18 @@ struct simd_is_nan<T, 128, scalar_sse_tag>
 };
 
 template<class T>
+struct simd_is_finite<T, 128, scalar_sse_tag>
+{
+    using simd_type = simd<T, 128, scalar_sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        return simd_type(is_finite(x.as_vector()));
+    };
+};
+
+template<class T>
 struct simd_any<T, 128, scalar_sse_tag>
 {
     using simd_type = simd<T, 128, scalar_sse_tag>;
@@ -566,8 +601,53 @@ struct simd_any<T, 128, scalar_sse_tag>
     force_inline
     static bool eval(const simd_type& x)
     {
-        return x.first() != 0;
+        return all(x);
     };
+};
+
+template<class T>
+struct make_mask_helper{};
+
+template<>
+struct make_mask_helper<double>
+{
+    force_inline
+    static int eval(const __m128d& x)
+    {
+        return _mm_movemask_pd(x);
+    }
+};
+
+template<>
+struct make_mask_helper<float>
+{
+    force_inline
+    static int eval(const __m128& x)
+    {
+        return _mm_movemask_ps(x);
+    }
+};
+
+template<>
+struct make_mask_helper<int32_t>
+{
+    force_inline
+    static int eval(const __m128i x)
+    {
+        __m128 xf = _mm_castsi128_ps(x);
+        return _mm_movemask_ps(xf);
+    }
+};
+
+template<>
+struct make_mask_helper<int64_t>
+{
+    force_inline
+    static int eval(const __m128i x)
+    {
+        __m128d xd = _mm_castsi128_pd(x);
+        return _mm_movemask_pd(xd);
+    }
 };
 
 template<class T>
@@ -578,7 +658,8 @@ struct simd_all<T, 128, scalar_sse_tag>
     force_inline
     static bool eval(const simd_type& x)
     {
-        return x.first() != 0;
+        int mask    = make_mask_helper<T>::eval(x.data);
+        return mask & 1;
     };
 };
 

@@ -86,4 +86,18 @@ ms::log(const simd<Val, Bits, Simd_tag>& x)
     return details::simd_log<Val, Bits, Simd_tag>::eval(x);
 };
 
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::sin(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_sincos<Val, Bits, Simd_tag>::eval_sin(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::cos(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_sincos<Val, Bits, Simd_tag>::eval_cos(x);
+};
+
 }}

@@ -23,6 +23,7 @@
 #include "test_simd_config.h"
 #include "matcl-core/config.h"
 #include "matcl-simd/math_functions.h"
+#include "matcl-mp/matcl_mp.h"
 
 namespace test_functions
 {
@@ -466,8 +467,8 @@ struct test_cast<ms::simd<int64_t, 256, Tag>>
 
     static simd_type eval_float(const simd_type& x)
     {
-        // no conversion int64 <->float>
-        return x;
+        auto xf = x.convert_to_float();
+        return simd_type(xf.convert_to_int64());
     }
 
     static simd_type eval_double(const simd_type& x)
@@ -698,6 +699,20 @@ struct Func_is_nan
     static std::string name()
     { 
         return "is_nan"; 
+    };
+};
+
+struct Func_is_finite
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return is_finite(x); 
+    }
+
+    static std::string name()
+    { 
+        return "is_finite"; 
     };
 };
 
@@ -1023,17 +1038,45 @@ struct Func_signbit_base
     };
 };
 
-struct Func_sum_all
+struct Func_hor_sum
 {
     template<class T>    
     force_inline static T eval(const T& x) 
     { 
-        return T(sum_all(x)); 
+        return T(horizontal_sum(x)); 
     }
 
     static std::string name()
     { 
-        return "sum_all"; 
+        return "hor_sum"; 
+    };
+};
+
+struct Func_hor_min
+{
+    template<class T>    
+    force_inline static T eval(const T& x) 
+    { 
+        return T(horizontal_min(x)); 
+    }
+
+    static std::string name()
+    { 
+        return "hor_min"; 
+    };
+};
+
+struct Func_hor_max
+{
+    template<class T>    
+    force_inline static T eval(const T& x) 
+    { 
+        return T(horizontal_max(x)); 
+    }
+
+    static std::string name()
+    { 
+        return "hor_max"; 
     };
 };
 
@@ -1065,9 +1108,64 @@ struct Func_exp
         return std::exp(x); 
     }
 
+    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    { 
+        return exp(x); 
+    }
+
     static std::string name()
     { 
         return "exp"; 
+    };
+};
+
+struct Func_sin
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return sin(x); 
+    }
+
+    template<class T>    
+    force_inline static T eval_base(const T& x)
+    { 
+        return std::sin(x); 
+    }
+
+    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    { 
+        return sin(x); 
+    }
+
+    static std::string name()
+    { 
+        return "sin"; 
+    };
+};
+
+struct Func_cos
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return cos(x); 
+    }
+
+    template<class T>    
+    force_inline static T eval_base(const T& x)
+    { 
+        return std::cos(x); 
+    }
+
+    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    { 
+        return cos(x); 
+    }
+
+    static std::string name()
+    { 
+        return "cos"; 
     };
 };
 
@@ -1083,6 +1181,11 @@ struct Func_log
     force_inline static T eval_base(const T& x)
     { 
         return std::log(x); 
+    }
+
+    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    { 
+        return log(x); 
     }
 
     static std::string name()
@@ -1637,6 +1740,893 @@ struct Func_if_nan_else
     static std::string name()
     { 
         return "if_nan_else"; 
+    };
+};
+
+struct Func_select_1
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<0,1,2,3>(); 
+    }
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<0,1,2,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<0,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<0,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<0,1,2,3,4,5,6,7>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<0,1,2,3,4,5,6,7>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<0,1,2,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<0,1,2,3>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 1"; 
+    };
+};
+
+struct Func_select_2
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<7,6,5,4,3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<7,6,5,4,3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<3,2,1,0>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 2"; 
+    };
+};
+
+struct Func_select_3
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<2,3,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<2,3,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<4,5,6,7,0,1,2,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<4,5,6,7,0,1,2,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<2,3,0,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<2,3,0,1>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 3"; 
+    };
+};
+
+struct Func_select_4
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<0,1,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<0,1,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<0,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<0,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<0,1,2,3,3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<0,1,2,3,3,2,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<0,1,1,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<0,1,1,0>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 4"; 
+    };
+};
+
+struct Func_select_5
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<2,3,3,2>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<2,3,3,2>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<1,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<1,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<4,5,6,7,7,6,5,4>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<4,5,6,7,7,6,5,4>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<2,3,3,2>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<2,3,3,2>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 5"; 
+    };
+};
+
+struct Func_select_6
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<1,0,2,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<1,0,2,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<1,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<1,1>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<3,2,1,0,4,5,6,7>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<3,2,1,0,4,5,6,7>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<0,1,3,2>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<0,1,3,2>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 6"; 
+    };
+};
+
+struct Func_select_7
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x)
+    { 
+        return x.select<1,1,2,2>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x)
+    { 
+        return x.select<1,1,2,2>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x)
+    { 
+        return x.select<0,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x)
+    { 
+        return x.select<0,0>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 256, Tag> eval(const ms::simd<float, 256, Tag>& x)
+    { 
+        return x.select<2,2,3,3,6,6,7,7>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 256, Tag> eval(const ms::simd<int32_t, 256, Tag>& x)
+    { 
+        return x.select<2,2,3,3,6,6,7,7>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 256, Tag> eval(const ms::simd<double, 256, Tag>& x)
+    { 
+        return x.select<1,1,3,3>(); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 256, Tag> eval(const ms::simd<int64_t, 256, Tag>& x)
+    { 
+        return x.select<1,1,3,3>(); 
+    }
+
+    static std::string name()
+    { 
+        return "select 7"; 
+    };
+};
+
+struct Func_combine_1
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<0,1,0,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<0,1,0,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<0,0>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<0,0>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 1"; 
+    };
+};
+
+struct Func_combine_2
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<5,6,5,7>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<5,6,5,7>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<0,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<0,1>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 2"; 
+    };
+};
+
+struct Func_combine_3
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<0,1,7,6>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<0,1,7,6>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<0,2>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<0,2>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 3"; 
+    };
+};
+
+struct Func_combine_4
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<7,6,0,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<7,6,0,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<1,0>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<1,0>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 4"; 
+    };
+};
+
+struct Func_combine_5
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<0,4,1,5>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<0,4,1,5>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<1,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<1,1>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 5"; 
+    };
+};
+
+struct Func_combine_6
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<4,0,5,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<4,0,5,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<1,2>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<1,2>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 6"; 
+    };
+};
+
+struct Func_combine_7
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<2,6,3,7>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<2,6,3,7>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<1,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<1,3>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 7"; 
+    };
+};
+
+struct Func_combine_8
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<6,2,7,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<6,2,7,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<0,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<0,3>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 8"; 
+    };
+};
+
+struct Func_combine_9
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<3,2,7,6>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<3,2,7,6>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<2,0>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<2,0>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 9"; 
+    };
+};
+
+struct Func_combine_10
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<7,6,3,2>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<7,6,3,2>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<2,1>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<2,1>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 10"; 
+    };
+};
+
+struct Func_combine_11
+{
+    template<class Tag>    
+    force_inline static 
+    ms::simd<float, 128, Tag> eval(const ms::simd<float, 128, Tag>& x, 
+                                  const ms::simd<float, 128, Tag>& y)
+    { 
+        return ms::simd<float, 128, Tag>::combine<0,4,7,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int32_t, 128, Tag> eval(const ms::simd<int32_t, 128, Tag>& x, 
+                                  const ms::simd<int32_t, 128, Tag>& y)
+    { 
+        return ms::simd<int32_t, 128, Tag>::combine<0,4,7,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<double, 128, Tag> eval(const ms::simd<double, 128, Tag>& x, 
+                                  const ms::simd<double, 128, Tag>& y)
+    { 
+        return ms::simd<double, 128, Tag>::combine<2,3>(x, y); 
+    }
+
+    template<class Tag>    
+    force_inline static 
+    ms::simd<int64_t, 128, Tag> eval(const ms::simd<int64_t, 128, Tag>& x, 
+                                  const ms::simd<int64_t, 128, Tag>& y)
+    { 
+        return ms::simd<int64_t, 128, Tag>::combine<2,3>(x, y); 
+    }
+
+    static std::string name()
+    { 
+        return "combine 11"; 
     };
 };
 

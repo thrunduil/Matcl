@@ -47,6 +47,6 @@ template<class Val, int Bits, class Simd_tag>
 struct simd_compl_uminus{};
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_compl_sum_all{};
+struct simd_compl_horizontal_sum{};
 
 }}}

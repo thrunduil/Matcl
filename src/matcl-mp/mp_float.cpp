@@ -400,7 +400,7 @@ bool mp_float::can_cast_int(round_mode rm) const
     };
 };
 
-// digits10 = floor(bits*log[10](2))
+// digits10 = ceil(bits*log[10](2))
 precision mp_float::digits10_to_bits(precision d)
 {
     const double LOG2_10 = 3.3219280948873624;
@@ -413,7 +413,7 @@ precision mp_float::bits_to_digits10(precision b)
 {
     const double LOG10_2 = 0.30102999566398119;
 
-    return precision(size_t(std::floor( double(b) * LOG10_2 )));
+    return precision(size_t(std::ceil( double(b) * LOG10_2 )));
 }
 
 precision mp_float::get_precision() const
@@ -471,11 +471,37 @@ precision mp_float::min_allowed_precision()
 
 std::string mp_float::to_string(precision n) const
 {
-    size_t digits           = (n > 0) ? n : 1 + bits_to_digits10(this->get_precision());
+    std::ostringstream format;    
+
+    if (n > 0)
+    {
+        format << "%." << n << "RNg";
+    }
+    else
+    {
+        format << "%." << "Re";
+    }
+
+    return to_string(format.str());
+};
+
+std::string mp_float::to_string_binary(precision n) const
+{
+    size_t digits           = (n > 0) ? n : this->get_precision() - 1;
 
     std::ostringstream format;    
     
-    format << "%." << digits << "RNg";
+    format << "%." << digits << "RNb";
+
+    return to_string(format.str());
+};
+
+std::string mp_float::to_string_hex(precision n) const
+{
+    size_t digits           = (n > 0) ? n : (this->get_precision() - 1) / 4;
+
+    std::ostringstream format;        
+    format << "%." << digits << "RNa";
 
     return to_string(format.str());
 };
@@ -504,8 +530,7 @@ std::string mp_float::to_string(const std::string& format) const
 void mp_float::serialize(oarchive_impl & ar, unsigned int version) const
 {
     precision prec      = this->get_precision();
-    precision n         = precision(bits_to_digits10(prec) + 2);
-    std::string str     = to_string(n);    
+    std::string str     = to_string();    
 
     (void)version;
     ar << (size_t)prec;

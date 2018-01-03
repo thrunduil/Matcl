@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/IO/disp_data_provider.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/IO/printer.h"
 
 namespace matcl

@@ -51,6 +51,9 @@ class alignas(16) simd<int32_t, 128, scalar_sse_tag>
         static const int
         number_bits         = 128;
 
+        // type of vector storing half of elements
+        using simd_half     = simd<int32_t, 128, scalar_sse_tag>;
+
         // simd type of the same size storing float values
         using simd_float    = simd<float, 128, scalar_sse_tag>;
 

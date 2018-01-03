@@ -100,14 +100,38 @@ struct simd_uminus<T, 256, sse_tag>
 };
 
 template<class T>
-struct simd_sum_all<T, 256, sse_tag>
+struct simd_horizontal_sum<T, 256, sse_tag>
 {
     using simd_type = simd<T, 256, sse_tag>;
 
     force_inline
     static T eval(const simd_type& x)
     {
-        return sum_all(x.data[0] + x.data[1]);
+        return horizontal_sum(x.data[0] + x.data[1]);
+    };
+};
+
+template<class T>
+struct simd_horizontal_min<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        return horizontal_min(min(x.data[0], x.data[1]));
+    };
+};
+
+template<class T>
+struct simd_horizontal_max<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        return horizontal_max(max(x.data[0], x.data[1]));
     };
 };
 
@@ -524,6 +548,18 @@ struct simd_is_nan<T, 256, sse_tag>
     static simd_type eval(const simd_type& x)
     {
         return simd_type(is_nan(x.extract_low()), is_nan(x.extract_high()));
+    };
+};
+
+template<class T>
+struct simd_is_finite<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        return simd_type(is_finite(x.extract_low()), is_finite(x.extract_high()));
     };
 };
 

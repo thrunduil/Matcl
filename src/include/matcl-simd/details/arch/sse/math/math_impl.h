@@ -267,4 +267,57 @@ struct simd_fraction<T, 128, scalar_sse_tag>
     };
 };
 
+//-----------------------------------------------------------------------
+//                          sin
+//-----------------------------------------------------------------------
+template<>
+struct simd_sincos<double, 256, sse_tag>
+{
+    using simd_type     = simd<double, 256, sse_tag>;
+    using simd_half     = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval_sin(const simd_type& a)
+    {
+        simd_half v1    = sin(a.extract_low());
+        simd_half v2    = sin(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+
+    force_inline
+    static simd_type eval_cos(const simd_type& a)
+    {
+        simd_half v1    = cos(a.extract_low());
+        simd_half v2    = cos(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+};
+
+template<>
+struct simd_sincos<float, 256, sse_tag>
+{
+    using simd_type     = simd<float, 256, sse_tag>;
+    using simd_half     = simd<float, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval_sin(const simd_type& a)
+    {
+        simd_half v1    = sin(a.extract_low());
+        simd_half v2    = sin(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+
+    force_inline
+    static simd_type eval_cos(const simd_type& a)
+    {
+        simd_half v1    = cos(a.extract_low());
+        simd_half v2    = cos(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+};
+
 }}}

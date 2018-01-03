@@ -100,6 +100,48 @@ struct trunc_impl
     };
 };
 
+template<class T>
+struct is_finite_impl
+{};
+
+template<>
+struct is_finite_impl<double>
+{
+    force_inline
+    static double eval(const double& x)
+    {
+        int64_t xi      = reinterpret_cast<const int64_t&>(x);
+
+        // mask selecting all bits in the exponent
+        int64_t mask    = 0x7FF0000000000000ll;
+
+        xi              = xi & mask;
+
+        // return true if at least one bit in the exponent is not set
+        bool res        = (xi != mask);
+        return (res == true) ? true_value<double>::get() : 0.0;
+    }
+};
+
+template<>
+struct is_finite_impl<float>
+{
+    force_inline
+    static float eval(const float& x)
+    {
+        int32_t xi      = reinterpret_cast<const int32_t&>(x);
+
+        // mask selecting all bits in the exponent
+        int32_t mask    = 0x7F800000;
+
+        xi              = xi & mask;
+
+        // return true if at least one bit in the exponent is not set
+        bool res        = (xi != mask);
+        return (res == true) ? true_value<float>::get() : 0.0f;
+    }
+};
+
 //-------------------------------------------------------------------
 //                         missing scalar functions
 //-------------------------------------------------------------------
@@ -126,6 +168,9 @@ force_inline int64_t round(int64_t f)   { return f; };
 
 force_inline bool is_nan(double f)      { return f != f; }
 force_inline bool is_nan(float f)       { return f != f; }
+
+force_inline bool is_finite(double f)   { return is_finite_impl<double>::eval(f); };
+force_inline bool is_finite(float f)    { return is_finite_impl<float>::eval(f); };
 
 //-------------------------------------------------------------------
 //                         convertions

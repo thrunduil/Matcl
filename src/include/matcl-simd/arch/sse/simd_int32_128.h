@@ -51,6 +51,9 @@ class alignas(16) simd<int32_t, 128, sse_tag>
         static const int
         number_bits         = 128;
 
+        // type of vector storing half of elements
+        using simd_half     = simd<int32_t, 128, sse_tag>;
+
         // simd type of the same size storing float values
         using simd_float    = simd<float, 128, sse_tag>;
 
@@ -64,10 +67,10 @@ class alignas(16) simd<int32_t, 128, sse_tag>
         using simd_int64    = simd<int64_t, 128, sse_tag>;
 
         // simd type storing double values of size 256 bits
-        using simd_double_2 = typename default_simd_type_size<double, 256>::type;
+        using simd_double_2 = typename default_simd_bit_size<double, 256>::type;
 
         // simd type storing 64-bit integers of size 256 bits
-        using simd_int64_2  = typename default_simd_type_size<int64_t, 256>::type;
+        using simd_int64_2  = typename default_simd_bit_size<int64_t, 256>::type;
 
     public:
         // number of elements in the vector

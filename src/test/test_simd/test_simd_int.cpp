@@ -37,7 +37,9 @@ namespace matcl { namespace test
 namespace ms = matcl::simd;
 
 void test::test_performance_int()
-{              
+{   
+    test_simd_int(false).make_combine();
+    test_simd_int(false).make_select();
     test_simd_int(false).make_unary();
     test_simd_int(false).make_unary_int();
     test_simd_int(false).make_ternary();
@@ -46,6 +48,8 @@ void test::test_performance_int()
 
 void test::test_values_int()
 {
+    test_simd_int(true).make_combine();
+    test_simd_int(true).make_select();
     test_simd_int(true).make_ternary();        
     test_simd_int(true).make_unary_int();
     test_simd_int(true).make_binary();
@@ -83,6 +87,18 @@ void test_simd_int::make_unary()
 {
     test_functions<int32_t>();   
     test_functions<int64_t>();         
+};
+
+void test_simd_int::make_select()
+{
+    test_functions_select<int32_t>();   
+    test_functions_select<int64_t>();         
+};
+
+void test_simd_int::make_combine()
+{
+    test_functions_combine<int32_t>();   
+    test_functions_combine<int64_t>();         
 };
 
 void test_simd_int::make_unary_int()
@@ -258,8 +274,13 @@ void test_simd_int::test_function(formatted_disp& fd, int size, const T* in, T* 
     t4  = test_function_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, 1, in, out);
     v4  = test_equal(size, out, out_gen);
 
-    t5  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in, out);    
-    v5  = test_equal(size, out, out_gen);
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in, out);    
+        v5  = test_equal(size, out, out_gen);
+    #else
+        t5  = t0;
+        v5  = true;
+    #endif
 
     bool ok = v1 && v2 && v3 && v4 && v5;
 
@@ -271,7 +292,12 @@ void test_simd_int::test_function(formatted_disp& fd, int size, const T* in, T* 
     t2  = test_function_simd<T, simd::simd<T, 256, simd::nosimd_tag>, Func>(N, M, in, out);
     t3  = test_function_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(N, M, in, out);    
     t4  = test_function_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(N, M, in, out);
-    t5  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(N, M, in, out);    
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(N, M, in, out);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
@@ -297,8 +323,13 @@ void test_simd_int::test_function_int(formatted_disp& fd, int size, const T_int*
     t4  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::sse_tag>, Func>(size, 1, in, out, func);
     v4  = test_equal(size, out, out_gen);
 
-    t5  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in, out, func);    
-    v5  = test_equal(size, out, out_gen);
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in, out, func);    
+        v5  = test_equal(size, out, out_gen);
+    #else
+        t5  = t0;
+        v5  = true;
+    #endif
 
     bool ok = v1 && v3 && v4 && v5;
 
@@ -310,7 +341,12 @@ void test_simd_int::test_function_int(formatted_disp& fd, int size, const T_int*
     t2  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::nosimd_tag>, Func>(N, M, in, out, func);
     t3  = test_function_simd_int<T, T_int, simd::simd<T, 128, simd::sse_tag>, Func>(N, M, in, out, func);    
     t4  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::sse_tag>, Func>(N, M, in, out, func);
-    t5  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::avx_tag>, Func>(N, M, in, out, func);    
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_simd_int<T, T_int, simd::simd<T, 256, simd::avx_tag>, Func>(N, M, in, out, func);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
@@ -337,8 +373,13 @@ void test_simd_int::test_function_bin(formatted_disp& fd, int size, const T* in_
     t4  = test_function_bin_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, 1, in_1, in_2, out);
     v4  = test_equal(size, out, out_gen);
 
-    t5  = test_function_bin_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in_1, in_2, out);    
-    v5  = test_equal(size, out, out_gen);
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in_1, in_2, out);    
+        v5  = test_equal(size, out, out_gen);
+    #else
+        t5  = t0;
+        v5  = true;
+    #endif
 
     bool ok = v1 && v2 && v3 && v4 && v5;
 
@@ -355,11 +396,47 @@ void test_simd_int::test_function_bin(formatted_disp& fd, int size, const T* in_
                 (N, M, in_1, in_2, out);    
     t4  = test_function_bin_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>
                 (N, M, in_1, in_2, out);
-    t5  = test_function_bin_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_bin_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
                 (N, M, in_1, in_2, out);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
+};
+
+template<class T, class Func>
+void test_simd_int::test_function_combine(formatted_disp& fd, int size, const T* in_1, 
+                                  const T* in_2, T* out, T* out_gen)
+{
+    double t0, t1, t3;
+    bool v1, v3;
+
+    t0  = test_function_bin_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, 1, in_1, in_2, out_gen);
+
+    t1  = test_function_bin_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>(size, 1, in_1, in_2, out);
+    v1  = test_equal(size, out, out_gen);
+
+    t3  = test_function_bin_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>(size, 1, in_1, in_2, out);    
+    v3  = test_equal(size, out, out_gen);
+
+    bool ok = v1 && v3;
+
+    int N       = get_size_perf();
+    int M       = get_num_rep();
+
+    t0  = test_function_bin_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>
+                (N, M, in_1, in_2, out_gen);
+    t1  = test_function_bin_simd<T, simd::simd<T, 128, simd::nosimd_tag>, Func>
+                (N, M, in_1, in_2, out);
+    t3  = test_function_bin_simd<T, simd::simd<T, 128, simd::sse_tag>, Func>
+                (N, M, in_1, in_2, out);    
+
+    std::string status  = (ok == true) ? "OK" : "FAIL"; 
+    fd.disp_row(Func::name(), t0, t0/t1, t0/t3, status);
 };
 
 template<class T, class Func>
@@ -388,9 +465,14 @@ void test_simd_int::test_function_3(formatted_disp& fd, int size, const T* in_1,
                 (size, 1, in_1, in_2, in_3, out);
     v4  = test_equal(size, out, out_gen);
 
-    t5  = test_function_3_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_3_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
                 (size, 1, in_1, in_2, in_3, out);    
-    v5  = test_equal(size, out, out_gen);
+        v5  = test_equal(size, out, out_gen);
+    #else
+        t5  = t0;
+        v5  = true;
+    #endif
 
     bool ok = v1 && v2 && v3 && v4 && v5;
 
@@ -407,8 +489,13 @@ void test_simd_int::test_function_3(formatted_disp& fd, int size, const T* in_1,
                 (N, M, in_1, in_2, in_3, out);    
     t4  = test_function_3_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>
                 (N, M, in_1, in_2, in_3, out);
-    t5  = test_function_3_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t5  = test_function_3_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
                 (N, M, in_1, in_2, in_3, out);    
+    #else
+        t5  = t0;
+    #endif
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t0, t0/t1, t0/t2, t0/t3, t0/t4, t0/t5, status);
@@ -431,8 +518,13 @@ void test_simd_int::test_function_block(formatted_disp& fd, int size, const T* i
     t3  = test_function_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>(size, 1, in, out);
     v3  = test_equal(size, out, out_gen);
 
-    t4  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in, out);    
-    v4  = test_equal(size, out, out_gen);
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t4  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>(size, 1, in, out);    
+        v4  = test_equal(size, out, out_gen);
+    #else
+        t4  = t0;
+        v4  = true;
+    #endif
 
     bool ok = v1 && v3 && v4;
 
@@ -447,8 +539,13 @@ void test_simd_int::test_function_block(formatted_disp& fd, int size, const T* i
                 (N, M, in, out_gen);
     t3  = test_function_simd<T, simd::simd<T, 256, simd::sse_tag>, Func>
                 (N, M, in, out);
-    t4  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
+
+    #if MATCL_ARCHITECTURE_HAS_AVX
+        t4  = test_function_simd<T, simd::simd<T, 256, simd::avx_tag>, Func>
                 (N, M, in, out);    
+    #else
+        t4  = t0;
+    #endif
 
     std::string status  = (ok == true) ? "OK" : "FAIL"; 
     fd.disp_row(Func::name(), t0, t0/t0, t0/t2, t0/t1, t0/t3, t0/t4, status);
@@ -553,7 +650,110 @@ void test_simd_int::test_functions()
     test_function_block<T, test_functions::Func_all>(dm, N, ptr_in, ptr_out, ptr_out_gen);
     test_function_block<T, test_functions::Func_reverse>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
 
-    test_function_block<T, test_functions::Func_sum_all>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_hor_sum>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_hor_min>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_block<T, test_functions::Func_hor_max>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+};
+
+template<class T>
+void test_simd_int::test_functions_select()
+{
+    int N   = get_size();
+
+    std::vector<T> in;
+    std::vector<T> out;
+    std::vector<T> out_gen;
+
+    in.resize(N);
+    out.resize(N);
+    out_gen.resize(N);
+
+    T* ptr_in       = in.data();
+    T* ptr_out      = out.data();
+    T* ptr_out_gen  = out_gen.data();
+
+    for (int i = 0; i < N; ++i)
+        ptr_in[i]   = rand_scalar<T>::make(m_test_values);
+
+    std::string header  = m_instr_tag + " " + typeid(T).name();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",    align_type::right, 10);
+    dm.add_column("nosimd",     align_type::left, 5);
+    dm.add_column("128 no",     align_type::left, 5);
+    dm.add_column("256 no",     align_type::left, 5);
+    dm.add_column("128 sse",    align_type::left, 5);
+    dm.add_column("256 sse",    align_type::left, 5);
+    dm.add_column("256 avx",    align_type::left, 5);
+    dm.add_column("status",     align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function_block<T, test_functions::Func_select_1>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_select_2>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_select_3>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_select_4>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_select_5>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_select_6>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+    test_function_block<T, test_functions::Func_select_7>(dm, N, ptr_in, ptr_out, ptr_out_gen);
+};
+
+template<class T>
+void test_simd_int::test_functions_combine()
+{
+    int N   = get_size();
+
+    std::vector<T> in_1;
+    std::vector<T> in_2;
+    std::vector<T> out;
+    std::vector<T> out_gen;
+
+    in_1.resize(N);
+    in_2.resize(N);
+    out.resize(N);
+    out_gen.resize(N);
+
+    T* ptr_in_1     = in_1.data();
+    T* ptr_in_2     = in_2.data();
+    T* ptr_out      = out.data();
+    T* ptr_out_gen  = out_gen.data();
+
+    for (int i = 0; i < N; ++i)
+    {
+        ptr_in_1[i] = rand_scalar<T>::make(m_test_values);
+        ptr_in_2[i] = rand_scalar<T>::make(m_test_values);
+    };
+
+    std::string header  = m_instr_tag + " " + typeid(T).name();
+
+    disp(" ");
+    disp(header);
+
+    formatted_disp dm;
+
+    dm.set_row_label("func",    align_type::right, 9);
+    dm.add_column("nosimd",     align_type::left, 5);
+    dm.add_column("128 no",     align_type::left, 5);
+    dm.add_column("128 sse",    align_type::left, 5);
+    dm.add_column("status",     align_type::left, 5);
+
+    dm.disp_header();
+
+    test_function_combine<T, test_functions::Func_combine_1>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_2>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_3>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_4>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_5>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_6>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_7>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_8>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_9>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_10>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_combine<T, test_functions::Func_combine_11>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
 };
 
 template<class T>
@@ -659,9 +859,7 @@ void test_simd_int::test_functions_bin()
     dm.add_column("status",     align_type::left, 5);
 
     dm.disp_header();
-
-    test_function_bin<T, test_functions::Func_eeq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
-    test_function_bin<T, test_functions::Func_neq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+        
     test_function_bin<T, test_functions::Func_leq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_geq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_lt>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
@@ -680,6 +878,14 @@ void test_simd_int::test_functions_bin()
 
     test_function_bin<T, test_functions::Func_if_zero_else>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
     test_function_bin<T, test_functions::Func_if_nan_else>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+
+    for (int i = 0; i < N; i += 3)
+    {
+        ptr_in_2[i] = ptr_in_1[i];
+    };
+
+    test_function_bin<T, test_functions::Func_neq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
+    test_function_bin<T, test_functions::Func_eeq>(dm, N, ptr_in_1, ptr_in_2, ptr_out, ptr_out_gen);
 };
 
 template<class T>

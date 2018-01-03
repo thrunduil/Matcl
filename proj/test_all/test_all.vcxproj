@@ -25,6 +25,9 @@
     <ProjectReference Include="..\test_performance\test_performance.vcxproj">
       <Project>{f959582f-0999-4b45-b9a5-93d0a0359472}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\test_poly\test_poly.vcxproj">
+      <Project>{a90e06f0-7cab-49b5-a231-21bbadcccd39}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\test_scal_accuracy\test_scal_accuracy.vcxproj">
       <Project>{bc8af3c6-5a73-4a07-ab6c-594eddebcb63}</Project>
     </ProjectReference>
@@ -40,11 +43,17 @@
     <ProjectReference Include="..\test_simd\no_sse3\test_simd_no_sse3.vcxproj">
       <Project>{47aecd21-674f-4198-959a-14710f09e968}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\test_simd\no_sse4\test_simd_no_sse4.vcxproj">
+    <ProjectReference Include="..\test_simd\no_sse41\test_simd_no_sse41.vcxproj">
+      <Project>{24e92d49-1257-4995-96a5-7095e701d8c9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\test_simd\no_sse42\test_simd_no_sse42.vcxproj">
       <Project>{39938b9d-e03e-4fb0-bdf3-e8cef140c0a1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\test_simd\test_values\test_simd_values.vcxproj">
       <Project>{ffbac419-238f-4938-85ff-b8f8efbc64de}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\test_twofold\test_twofold.vcxproj">
+      <Project>{245e1843-7884-4cc0-807f-6ad248a896fe}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -152,7 +161,8 @@ start /wait $(OutDir)\test_simd_values-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_fma-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx2-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx-$(Platform)-$(Configuration).exe
-start /wait $(OutDir)\test_simd_no_sse4-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse42-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse41-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_no_sse3-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_dynamic-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_scal_accuracy-$(Platform)-$(Configuration).exe
@@ -192,7 +202,8 @@ start /wait $(OutDir)\test_simd_values-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_fma-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx2-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx-$(Platform)-$(Configuration).exe
-start /wait $(OutDir)\test_simd_no_sse4-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse42-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse41-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_no_sse3-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_dynamic-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_scal_accuracy-$(Platform)-$(Configuration).exe
@@ -235,7 +246,8 @@ start /wait $(OutDir)\test_simd_values-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_fma-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx2-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx-$(Platform)-$(Configuration).exe
-start /wait $(OutDir)\test_simd_no_sse4-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse42-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse41-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_no_sse3-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_dynamic-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_scal_accuracy-$(Platform)-$(Configuration).exe
@@ -279,7 +291,8 @@ start /wait $(OutDir)\test_simd_values-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_fma-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx2-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_avx-$(Platform)-$(Configuration).exe
-start /wait $(OutDir)\test_simd_no_sse4-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse42-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_simd_no_sse41-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_simd_no_sse3-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_dynamic-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_scal_accuracy-$(Platform)-$(Configuration).exe

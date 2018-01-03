@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-simd/simd.h"
+#include "matcl-core/details/scalfunc_real.h"
 
 namespace matcl { namespace simd { namespace details
 {
@@ -190,6 +191,12 @@ struct broadcast
     }
 
     force_inline
+    static Arg eval(const Arg* arr)
+    {
+        return arr[0];
+    }
+
+    force_inline
     static Arg eval(const Arg& arr)
     {
         return arr;
@@ -218,6 +225,12 @@ struct broadcast<double>
     {
         return arr;
     }
+
+    force_inline
+    static double eval(const double* arr)
+    {
+        return arr[0];
+    }
 };
 
 template<>
@@ -240,7 +253,13 @@ struct broadcast<float>
     force_inline
     static float eval(const float& arr)
     {
-        return float(arr);
+        return arr;
+    }
+
+    force_inline
+    static float eval(const float* arr)
+    {
+        return arr[0];
     }
 };
 

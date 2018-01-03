@@ -136,7 +136,7 @@ struct simd_abs<int32_t, 128, sse_tag>
 };
 
 template<>
-struct simd_sum_all<int32_t, 128, sse_tag>
+struct simd_horizontal_sum<int32_t, 128, sse_tag>
 {
     using simd_type = simd<int32_t, 128, sse_tag>;
 
@@ -149,6 +149,58 @@ struct simd_sum_all<int32_t, 128, sse_tag>
         sums            = _mm_add_epi32(sums, xp);
 
         return _mm_cvtsi128_si32(sums);
+    };
+};
+
+template<>
+struct simd_horizontal_min<int32_t, 128, sse_tag>
+{
+    using simd_type = simd<int32_t, 128, sse_tag>;
+
+    force_inline
+    static int32_t eval(const simd_type& x)
+    {
+        #if MATCL_ARCHITECTURE_HAS_SSE41
+            __m128i xp      = _mm_shuffle_epi32(x.data, _MM_SHUFFLE(2, 3, 0, 1));
+            __m128i sums    = _mm_min_epi32(x.data, xp);
+            xp              = missing::mm_movehl_epi32(xp, sums);
+            sums            = _mm_min_epi32(sums, xp);
+
+            return _mm_cvtsi128_si32(sums);
+        #else
+            __m128i xp      = _mm_shuffle_epi32(x.data, _MM_SHUFFLE(2, 3, 0, 1));
+            __m128i sums    = missing::mm_min_epi32_sse(x.data, xp);
+            xp              = missing::mm_movehl_epi32(xp, sums);
+            sums            = missing::mm_min_epi32_sse(sums, xp);
+
+            return _mm_cvtsi128_si32(sums);
+        #endif
+    };
+};
+
+template<>
+struct simd_horizontal_max<int32_t, 128, sse_tag>
+{
+    using simd_type = simd<int32_t, 128, sse_tag>;
+
+    force_inline
+    static int32_t eval(const simd_type& x)
+    {
+        #if MATCL_ARCHITECTURE_HAS_SSE41
+            __m128i xp      = _mm_shuffle_epi32(x.data, _MM_SHUFFLE(2, 3, 0, 1));
+            __m128i sums    = _mm_max_epi32(x.data, xp);
+            xp              = missing::mm_movehl_epi32(xp, sums);
+            sums            = _mm_max_epi32(sums, xp);
+
+            return _mm_cvtsi128_si32(sums);
+        #else
+            __m128i xp      = _mm_shuffle_epi32(x.data, _MM_SHUFFLE(2, 3, 0, 1));
+            __m128i sums    = missing::mm_max_epi32_sse(x.data, xp);
+            xp              = missing::mm_movehl_epi32(xp, sums);
+            sums            = missing::mm_max_epi32_sse(sums, xp);
+
+            return _mm_cvtsi128_si32(sums);
+        #endif
     };
 };
 

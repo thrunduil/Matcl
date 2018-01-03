@@ -296,7 +296,7 @@ struct simd_compl_uminus<float, 128, sse_tag>
 };
 
 template<>
-struct simd_compl_sum_all<float, 128, sse_tag>
+struct simd_compl_horizontal_sum<float, 128, sse_tag>
 {
     using simd_type         = simd_compl<float, 128, sse_tag>;
 

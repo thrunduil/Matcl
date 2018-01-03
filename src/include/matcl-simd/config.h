@@ -20,6 +20,19 @@
 
 #pragma once
 
+// export macros
+#ifdef MATCL_SIMD_EXPORTS
+    #define MATCL_SIMD_EXPORT  __declspec(dllexport)
+#else
+    #define MATCL_SIMD_EXPORT  __declspec(dllimport)
+#endif
+
+#ifdef __unix__
+    #undef  MATCL_SIMD_EXPORT
+    #define MATCL_SIMD_EXPORT
+#endif
+
+
 // define MATCL_USE_MATCL_COMPLEX in order to use
 // nondefault complex types; these types must be defined
 // before including simd headers

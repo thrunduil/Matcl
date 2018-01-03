@@ -153,4 +153,48 @@ force_inline double ms::pow2ki(int64_t k)
     return res.first();
 };
 
+force_inline double
+ms::sin(double x)
+{
+    using simd_type     = default_scalar_simd_type<double>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::sin(xs);
+
+    return res.first();
+};
+
+force_inline float
+ms::sin(float x)
+{
+    using simd_type     = default_scalar_simd_type<float>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::sin(xs);
+
+    return res.first();
+};
+
+force_inline double
+ms::cos(double x)
+{
+    using simd_type     = default_scalar_simd_type<double>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::cos(xs);
+
+    return res.first();
+};
+
+force_inline float
+ms::cos(float x)
+{
+    using simd_type     = default_scalar_simd_type<float>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::cos(xs);
+
+    return res.first();
+};
+
 }}

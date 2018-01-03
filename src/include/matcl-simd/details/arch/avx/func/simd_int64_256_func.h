@@ -147,14 +147,40 @@ struct simd_abs<int64_t, 256, avx_tag>
 };
 
 template<>
-struct simd_sum_all<int64_t, 256, avx_tag>
+struct simd_horizontal_sum<int64_t, 256, avx_tag>
 {
     using simd_type = simd<int64_t, 256, avx_tag>;
 
     force_inline
     static int64_t eval(const simd_type& x)
     {
-        int64_t s    = sum_all(x.extract_low() + x.extract_high());
+        int64_t s    = horizontal_sum(x.extract_low() + x.extract_high());
+        return s;
+    };
+};
+
+template<>
+struct simd_horizontal_min<int64_t, 256, avx_tag>
+{
+    using simd_type = simd<int64_t, 256, avx_tag>;
+
+    force_inline
+    static int64_t eval(const simd_type& x)
+    {
+        int64_t s    = horizontal_min(min(x.extract_low(), x.extract_high()));
+        return s;
+    };
+};
+
+template<>
+struct simd_horizontal_max<int64_t, 256, avx_tag>
+{
+    using simd_type = simd<int64_t, 256, avx_tag>;
+
+    force_inline
+    static int64_t eval(const simd_type& x)
+    {
+        int64_t s    = horizontal_max(max(x.extract_low(), x.extract_high()));
         return s;
     };
 };

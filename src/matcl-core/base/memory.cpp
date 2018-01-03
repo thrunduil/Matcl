@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/memory/memory.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/memory/alloc.h"

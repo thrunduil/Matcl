@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/profile/time_stats.h"
+#include "matcl-core/memory/global_objects.h"
 
 #include <iomanip>
 

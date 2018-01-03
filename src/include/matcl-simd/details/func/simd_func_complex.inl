@@ -120,9 +120,9 @@ ms::operator-(const simd_compl<Val, Bits, Simd_tag>& x)
 template<class Val, int Bits, class Simd_tag>
 force_inline
 typename simd_compl<Val, Bits, Simd_tag>::value_type
-ms::sum_all(const simd_compl<Val, Bits, Simd_tag>& x)
+ms::horizontal_sum(const simd_compl<Val, Bits, Simd_tag>& x)
 {
-    return details::simd_compl_sum_all<Val, Bits, Simd_tag>::eval(x);
+    return details::simd_compl_horizontal_sum<Val, Bits, Simd_tag>::eval(x);
 };
 
 template<class Val, int Bits, class Simd_tag>

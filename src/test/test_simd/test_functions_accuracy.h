@@ -119,4 +119,142 @@ struct Func_log : matcl::test_accuracy_function<Val>
     }
 };
 
+template<class Val>
+struct add_pi2_mult
+{};
+
+template<>
+struct add_pi2_mult<double>
+{
+    static void eval(matcl::test_accuracy_function<double>& test)
+    {
+        // worst cases for argument reduction
+        test.add_special_value(std::ldexp(6381956970095103.0, 796));
+
+        int max_k       = (1 << 18);
+
+        matcl::precision prec   = matcl::precision(60);
+        matcl::mp_float pi2     = matcl::constants::mp_pi(prec);
+        
+        for (int i = 0; i < max_k; ++i)
+        {
+            matcl::mp_float xt  = pi2 * matcl::mp_float(i);
+            
+            double xd           = xt.cast_float();
+            test.add_special_value(xd);
+        }
+    }
+};
+
+template<>
+struct add_pi2_mult<float>
+{
+    static void eval(matcl::test_accuracy_function<float>& test)
+    {
+        // worst cases for argument reduction
+        test.add_special_value(std::ldexp(16367173.0f, 72));
+
+        int max_k       = (1 << 18);
+
+        matcl::precision prec   = matcl::precision(60);
+        matcl::mp_float pi2     = matcl::constants::mp_pi(prec);
+        
+        for (int i = 0; i < max_k; ++i)
+        {
+            matcl::mp_float xt  = pi2 * matcl::mp_float(i);
+            
+            float xf            = float(xt.cast_float());
+            test.add_special_value(xf);
+        }
+    }
+};
+
+template<class Val>
+struct Func_sin : matcl::test_accuracy_function<Val>
+{
+    bool m_rand_denormals;
+
+    Func_sin()
+    {
+        m_rand_denormals    = matcl::test::simd_accuracy_tester::rand_denormals();
+
+        Val max     = std::numeric_limits<Val>::max();
+        Val max_1   = Val(411774.0);
+
+        add_log_range(-max, max);
+        add_linear_range(-max_1, max_1);
+
+        add_pi2_mult<Val>::eval(*this);
+    };
+
+    virtual std::string name() const override
+    { 
+        return "sin"; 
+    };
+
+    virtual bool rand_denormals() const override
+    {
+        return m_rand_denormals;
+    }
+    
+    matcl::mp_float eval_mp(const matcl::mp_float& v) const override
+    {
+        return sin(v);
+    }
+
+    Val eval_base(const Val& v) const override
+    {
+        return matcl::simd::sin(v);
+    }
+
+    Val eval_ref(const Val& v) const override
+    {
+        return std::sin(v);
+    }
+};
+
+template<class Val>
+struct Func_cos : matcl::test_accuracy_function<Val>
+{
+    bool m_rand_denormals;
+
+    Func_cos()
+    {
+        m_rand_denormals    = matcl::test::simd_accuracy_tester::rand_denormals();
+
+        Val max     = std::numeric_limits<Val>::max();
+        Val max_1   = Val(411774.0);
+
+        add_log_range(-max, max);
+        add_linear_range(-max_1, max_1);
+
+        add_pi2_mult<Val>::eval(*this);
+    };
+
+    virtual std::string name() const override
+    { 
+        return "cos"; 
+    };
+
+    virtual bool rand_denormals() const override
+    {
+        return m_rand_denormals;
+    }
+    
+    matcl::mp_float eval_mp(const matcl::mp_float& v) const override
+    {
+        return cos(v);
+    }
+
+    Val eval_base(const Val& v) const override
+    {
+        return matcl::simd::cos(v);
+    }
+
+    Val eval_ref(const Val& v) const override
+    {
+        return std::cos(v);
+    }
+};
+
 }

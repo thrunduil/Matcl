@@ -156,8 +156,8 @@ simd<double, 256, avx_tag>::select() const
     {
         // no exchange of data between low and high half
 
-        static const int ind0   = I1 + (I2 << 1) + ((I3 - 1) << 2) + ((I4 - 1) << 3);
-        static const int ind    = (ind0 < 0) ? 0 : ind0;
+        static const int ind0   = I1 + (I2 << 1) + ((I3 - 2) << 2) + ((I4 - 2) << 3);
+        static const int ind    = std::min(std::max(ind0, 0), 15);
         return _mm256_shuffle_pd (data, data, ind);
     }
 

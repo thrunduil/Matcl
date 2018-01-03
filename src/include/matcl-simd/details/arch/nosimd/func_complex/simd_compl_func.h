@@ -264,7 +264,7 @@ struct simd_compl_uminus<T, Bits, nosimd_tag>
 };
 
 template<class T, int Bits>
-struct simd_compl_sum_all<T, Bits, nosimd_tag>
+struct simd_compl_horizontal_sum<T, Bits, nosimd_tag>
 {
     using simd_type     = simd_compl<T, Bits, nosimd_tag>;
     using compl_type    = typename ms::details::complex_type<T>::type;
