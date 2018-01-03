@@ -42,6 +42,13 @@ struct simd_log
 };
 
 template<class Val, int Bits, class Simd_tag>
+struct simd_sincos
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function sin/cos not defined for for given arguments");
+};
+
+template<class Val, int Bits, class Simd_tag>
 struct simd_pow2k
 {
     static_assert(md::dependent_false<Simd_tag>::value, 

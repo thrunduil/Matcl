@@ -41,18 +41,20 @@ struct cast_to_double_impl
     };
 };
 
-template<>
-struct cast_to_double_impl<simd<double,256, matcl::simd::avx_tag>>
-{
-    using Ret       = simd<double,256, matcl::simd::avx_tag>;
-    using simd_type = simd<float,128, matcl::simd::sse_tag>;
-
-    force_inline
-    static Ret eval(const simd_type& s)
+#if MATCL_ARCHITECTURE_HAS_AVX
+    template<>
+    struct cast_to_double_impl<simd<double,256, matcl::simd::avx_tag>>
     {
-        return _mm256_cvtps_pd(s.data);
+        using Ret       = simd<double,256, matcl::simd::avx_tag>;
+        using simd_type = simd<float,128, matcl::simd::sse_tag>;
+
+        force_inline
+        static Ret eval(const simd_type& s)
+        {
+            return _mm256_cvtps_pd(s.data);
+        };
     };
-};
+#endif
 
 }}};
 
@@ -408,7 +410,8 @@ simd<float, 128, sse_tag>::combine(const simd& x, const simd& y)
         static const int I3_s   = std::max(I3 - 4, 0);
         static const int I4_s   = std::max(I4 - 4, 0);
 
-        static const int ind = I1 + (I2 << 2) + (I3_s << 4) + (I4_s << 6);
+        static const int ind0   = I1 + (I2 << 2) + (I3_s << 4) + (I4_s << 6);
+        static const int ind    = std::min(std::max(ind0, 0), 255);
         return _mm_shuffle_ps(x.data, y.data, ind);
     }
 
@@ -419,7 +422,9 @@ simd<float, 128, sse_tag>::combine(const simd& x, const simd& y)
         static const int I1_s   = std::max(I1 - 4, 0);
         static const int I2_s   = std::max(I2 - 4, 0);
 
-        static const int ind = I1_s + (I2_s << 2) + (I3 << 4) + (I4 << 6);
+        static const int ind0   = I1_s + (I2_s << 2) + (I3 << 4) + (I4 << 6);
+        static const int ind    = std::min(std::max(ind0, 0), 255);
+
         return _mm_shuffle_ps(y.data, x.data, ind);
     }
 
@@ -428,8 +433,8 @@ simd<float, 128, sse_tag>::combine(const simd& x, const simd& y)
     static const bool is_cont_y = ((I1 <= 3 || I1 == 4) && (I2 <= 3 || I2 == 5) && (I3 <= 3 || I3 == 6) &&
                                     (I4 <= 3 || I4 == 7));
 
-    simd x_perm = is_cont_x ? x : x.select<std::min(I1, 3), std::min(I2, 3), std::min(I3, 3), std::min(I4,2)>();
-    simd y_perm = is_cont_y ? x : y.select<std::max(I1-4, 0), std::max(I2-4, 0), std::max(I3-4, 0), 
+    simd x_perm = is_cont_x ? x : x.select<std::min(I1, 3), std::min(I2, 3), std::min(I3, 3), std::min(I4,3)>();
+    simd y_perm = is_cont_y ? y : y.select<std::max(I1-4, 0), std::max(I2-4, 0), std::max(I3-4, 0), 
                                            std::max(I4-4,0)>();
 
 
@@ -437,8 +442,8 @@ simd<float, 128, sse_tag>::combine(const simd& x, const simd& y)
 
     using simd_int  = simd<int32_t, 128, sse_tag>;
 
-    simd_int cond   = details::vector_4_int<(I1 == 0) ? -1 : 0, (I2 == 1) ? -1 : 0,
-                                            (I3 == 2) ? -1 : 0, (I4 == 3) ? -1 : 0>();        
+    simd_int cond   = details::vector_4_int<(I1 <= 3) ? -1 : 0, (I2 <= 3) ? -1 : 0,
+                                            (I3 <= 3) ? -1 : 0, (I4 <= 3) ? -1 : 0>();        
          
     return if_then_else(cond.reinterpret_as_float(), x_perm, y_perm);
 }

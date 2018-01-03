@@ -54,6 +54,9 @@ class alignas(16) simd<int64_t, 128, nosimd_tag>
         static const int 
         vector_size         = sizeof(impl_type) / sizeof(value_type);    
 
+        // type of vector storing half of elements
+        using simd_half     = simd<int64_t, 128, nosimd_tag>;
+
         // simd type of the same size storing float values
         using simd_float    = simd<float, 128, nosimd_tag>;
 
@@ -87,11 +90,17 @@ class alignas(16) simd<int64_t, 128, nosimd_tag>
         // and last element copied from hi; only lower part of lo and hi is used
         simd(const simd& lo, const simd& hi);
 
+      #if MATCL_ARCHITECTURE_HAS_SSE2
         // conversion between simd types
         explicit simd(const simd<int64_t, 128, sse_tag>& s);
+      #endif
 
+      #if MATCL_ARCHITECTURE_HAS_SSE2
         // conversion form simd scalar; set all elements to s.first()
         explicit simd(const simd<int64_t, 128, scalar_sse_tag>& s);
+      #endif
+
+        // conversion form simd scalar; set all elements to s.first()
         explicit simd(const simd<int64_t, 128, scalar_nosimd_tag>& s);
 
         // copy constructor

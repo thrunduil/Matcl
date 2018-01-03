@@ -114,6 +114,16 @@ twofold<Float_type> twofold_sum(const Float_type& a, const Float_type& b);
 template<class Float_type>
 twofold<Float_type> twofold_sum_sorted(const Float_type& a, const Float_type& b);
 
+// evaluate a + b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_sum_sorted(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a + b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_sum_sorted(const Float_type& a, const twofold<Float_type>& b);
+
 // evaluate a - b for arbitrary a and b; result is exact
 template<class Float_type>
 twofold<Float_type> twofold_minus(const Float_type& a, const Float_type& b);
@@ -122,6 +132,16 @@ twofold<Float_type> twofold_minus(const Float_type& a, const Float_type& b);
 // than twofold_minus; result is exact
 template<class Float_type>
 twofold<Float_type> twofold_minus_sorted(const Float_type& a, const Float_type& b);
+
+// evaluate a - b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_minus_sorted(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a - b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_minus_sorted(const Float_type& a, const twofold<Float_type>& b);
 
 // evaluate a * b; result is exact
 template<class Float_type>

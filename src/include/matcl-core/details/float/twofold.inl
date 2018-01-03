@@ -205,9 +205,25 @@ matcl::operator+(const twofold<Float_type>& a, const Float_type& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
+matcl::twofold_sum_sorted(const twofold<Float_type>& a, const Float_type& b)
+{
+    twofold<Float_type> z0  = twofold_sum_sorted(a.value, b);
+    return twofold<Float_type>::normalize_fast(z0.value, a.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
 matcl::operator+(const Float_type& a, const twofold<Float_type>& b)
 {
     twofold<Float_type> z0  = twofold_sum(a, b.value);
+    return twofold<Float_type>::normalize_fast(z0.value, b.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_sum_sorted(const Float_type& a, const twofold<Float_type>& b)
+{
+    twofold<Float_type> z0  = twofold_sum_sorted(a, b.value);
     return twofold<Float_type>::normalize_fast(z0.value, b.error + z0.error);
 }
 
@@ -236,9 +252,25 @@ matcl::operator-(const twofold<Float_type>& a, const Float_type& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
+matcl::twofold_minus_sorted(const twofold<Float_type>& a, const Float_type& b)
+{
+    twofold<Float_type> z0  = twofold_minus_sorted(a.value, b);
+    return twofold<Float_type>::normalize_fast(z0.value, a.error + z0.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
 matcl::operator-(const Float_type& a, const twofold<Float_type>& b)
 {
     twofold<Float_type> z0  = twofold_minus(a, b.value);
+    return twofold<Float_type>::normalize_fast(z0.value, z0.error - b.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_minus_sorted(const Float_type& a, const twofold<Float_type>& b)
+{
+    twofold<Float_type> z0  = twofold_minus_sorted(a, b.value);
     return twofold<Float_type>::normalize_fast(z0.value, z0.error - b.error);
 };
 

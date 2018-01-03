@@ -204,7 +204,7 @@ struct simd_uminus<T, Bits, nosimd_tag>
 };
 
 template<class T, int Bits>
-struct simd_sum_all<T, Bits, nosimd_tag>
+struct simd_horizontal_sum<T, Bits, nosimd_tag>
 {
     using simd_type = simd<T, Bits, nosimd_tag>;
     
@@ -218,6 +218,46 @@ struct simd_sum_all<T, Bits, nosimd_tag>
 
         for (int i = 1; i < vector_size; ++i)
             res += x.data[i];
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_horizontal_min<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        T res = x.data[0];
+
+        for (int i = 1; i < vector_size; ++i)
+            res = std::min(res, x.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_horizontal_max<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        T res = x.data[0];
+
+        for (int i = 1; i < vector_size; ++i)
+            res = std::max(res, x.data[i]);
 
         return res;
     };
@@ -898,6 +938,28 @@ struct simd_is_nan<T, Bits, nosimd_tag> : simd_bool_base<T>
 
         for (int i = 0; i < vector_size; ++i)
             res.data[i] = matcl::simd::scalar_func::is_nan(x.data[i]) ? val_true : val_false;
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_is_finite<T, Bits, nosimd_tag> : simd_bool_base<T>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+    
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        simd_type res;
+
+        const T val_true  = get_val_true();
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = matcl::simd::scalar_func::is_finite(x.data[i]) ? val_true : val_false;
 
         return res;
     };

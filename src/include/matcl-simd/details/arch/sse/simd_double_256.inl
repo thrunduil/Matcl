@@ -91,12 +91,14 @@ simd<double, 256, sse_tag>::simd(const simd<double, 256, nosimd_tag>& s)
     data[1] = simd_half::load(s.data + 1, aligned);
 }
 
-force_inline
-simd<double, 256, sse_tag>::simd(const simd<double, 256, avx_tag>& s)
-{
-    data[0] = s.extract_low();
-    data[1] = s.extract_high();
-}
+#if MATCL_ARCHITECTURE_HAS_AVX
+    force_inline
+    simd<double, 256, sse_tag>::simd(const simd<double, 256, avx_tag>& s)
+    {
+        data[0] = s.extract_low();
+        data[1] = s.extract_high();
+    }
+#endif
 
 force_inline
 simd<double, 256, sse_tag>::simd(const simd<double, 128, scalar_sse_tag>& s)
@@ -159,7 +161,7 @@ simd<double, 256, sse_tag>::select() const
 
     simd<double, 256, sse_tag> ret;
     ret.data[0] = simd_half::combine<I1, I2>(data[0], data[1]);
-    ret.data[1] = simd_half::combine<I3, I3>(data[0], data[1]);
+    ret.data[1] = simd_half::combine<I3, I4>(data[0], data[1]);
     return ret;
 };
 

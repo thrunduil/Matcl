@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-core/float/twofold.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/scalfunc_real.h"
 #include "matcl-core/IO/scalar_io.h"
 

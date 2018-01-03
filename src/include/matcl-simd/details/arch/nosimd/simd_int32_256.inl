@@ -84,21 +84,26 @@ simd<int32_t, 256, nosimd_tag>::simd(int32_t v1, int32_t v2, int32_t v3, int32_t
     data[7] = v8;
 }
 
-force_inline
-simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 256, sse_tag>& s)
-{
-    s.store(data, std::true_type());
-}
-force_inline
-simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 256, avx_tag>& s)
-{
-    s.store(data, std::true_type());
-}
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    force_inline
+    simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 256, sse_tag>& s)
+    {
+        s.store(data, std::true_type());
+    }
 
-force_inline
-simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 128, scalar_sse_tag>& s)
-    :simd(s.first())
-{}
+    force_inline
+    simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 128, scalar_sse_tag>& s)
+        :simd(s.first())
+    {}
+#endif
+
+#if MATCL_ARCHITECTURE_HAS_AVX
+    force_inline
+    simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 256, avx_tag>& s)
+    {
+        s.store(data, std::true_type());
+    }
+#endif
 
 force_inline
 simd<int32_t, 256, nosimd_tag>::simd(const simd<int32_t, 128, scalar_nosimd_tag>& s)

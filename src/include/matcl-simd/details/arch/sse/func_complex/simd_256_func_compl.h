@@ -147,14 +147,14 @@ struct simd_compl_uminus<T, 256, sse_tag>
 };
 
 template<class T>
-struct simd_compl_sum_all<T, 256, sse_tag>
+struct simd_compl_horizontal_sum<T, 256, sse_tag>
 {
     using simd_type = simd_compl<T, 256, sse_tag>;
 
     force_inline
     static simd_double_complex eval(const simd_type& x)
     {
-        return sum_all(x.extract_low()) + sum_all(x.extract_high());
+        return horizontal_sum(x.extract_low() + x.extract_high());
     };
 };
 

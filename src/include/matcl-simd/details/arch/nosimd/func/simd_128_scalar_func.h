@@ -100,7 +100,31 @@ struct simd_uminus<T, Bits, scalar_nosimd_tag>
 };
 
 template<class T, int Bits>
-struct simd_sum_all<T, Bits, scalar_nosimd_tag>
+struct simd_horizontal_sum<T, Bits, scalar_nosimd_tag>
+{
+    using simd_type = simd<T, Bits, scalar_nosimd_tag>;
+    
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        return x.first();
+    };
+};
+
+template<class T, int Bits>
+struct simd_horizontal_min<T, Bits, scalar_nosimd_tag>
+{
+    using simd_type = simd<T, Bits, scalar_nosimd_tag>;
+    
+    force_inline
+    static T eval(const simd_type& x)
+    {
+        return x.first();
+    };
+};
+
+template<class T, int Bits>
+struct simd_horizontal_max<T, Bits, scalar_nosimd_tag>
 {
     using simd_type = simd<T, Bits, scalar_nosimd_tag>;
     
@@ -501,6 +525,19 @@ struct simd_is_nan<T, Bits, scalar_nosimd_tag> : simd_bool_base<T>
     {
         T val_true  = get_val_true();
         return simd_type(matcl::simd::scalar_func::is_nan(x.data) ? val_true : val_false);
+    };
+};
+
+template<class T, int Bits>
+struct simd_is_finite<T, Bits, scalar_nosimd_tag> : simd_bool_base<T>
+{
+    using simd_type = simd<T, Bits, scalar_nosimd_tag>;
+    
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        T val_true  = get_val_true();
+        return simd_type(matcl::simd::scalar_func::is_finite(x.data) ? val_true : val_false);
     };
 };
 

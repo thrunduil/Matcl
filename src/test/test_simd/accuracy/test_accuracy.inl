@@ -149,8 +149,11 @@ void test_accuracy_function<Value>::add_log_range_split(Value min, Value max)
 }
 
 template<class Value>
-void test_accuracy_function<Value>::add_linear_range(const Value& min, const Value& max)
+void test_accuracy_function<Value>::add_linear_range(const Value& min0, const Value& max0)
 {
+    Value min   = min0;
+    Value max   = max0;
+
     if (matcl::is_nan(min) == true || matcl::is_nan(max) == true)
         return;
 

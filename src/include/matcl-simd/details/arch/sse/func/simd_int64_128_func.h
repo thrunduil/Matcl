@@ -148,7 +148,7 @@ struct simd_abs<int64_t, 128, sse_tag>
 };
 
 template<>
-struct simd_sum_all<int64_t, 128, sse_tag>
+struct simd_horizontal_sum<int64_t, 128, sse_tag>
 {
     using simd_type = simd<int64_t, 128, sse_tag>;
 
@@ -158,7 +158,37 @@ struct simd_sum_all<int64_t, 128, sse_tag>
         __m128i shuf    = missing::mm_movehl_epi64(x.data, x.data);
         __m128i res     = _mm_add_epi64(x.data, shuf);
 
-        return _mm_cvtsi128_si64(res);
+        return missing::mm_cvtsi128_si64(res);
+    };
+};
+
+template<>
+struct simd_horizontal_min<int64_t, 128, sse_tag>
+{
+    using simd_type = simd<int64_t, 128, sse_tag>;
+
+    force_inline
+    static int64_t eval(const simd_type& x)
+    {
+        __m128i shuf    = missing::mm_movehl_epi64(x.data, x.data);
+        __m128i res     = missing::mm_min_epi64(x.data, shuf);
+
+        return missing::mm_cvtsi128_si64(res);
+    };
+};
+
+template<>
+struct simd_horizontal_max<int64_t, 128, sse_tag>
+{
+    using simd_type = simd<int64_t, 128, sse_tag>;
+
+    force_inline
+    static int64_t eval(const simd_type& x)
+    {
+        __m128i shuf    = missing::mm_movehl_epi64(x.data, x.data);
+        __m128i res     = missing::mm_max_epi64(x.data, shuf);
+
+        return missing::mm_cvtsi128_si64(res);
     };
 };
 
@@ -349,7 +379,11 @@ struct simd_eeq<int64_t, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        return _mm_cmpeq_epi64(x.data, y.data);
+        #if MATCL_ARCHITECTURE_HAS_SSE41
+            return _mm_cmpeq_epi64(x.data, y.data);
+        #else
+            return missing::mm_cmpeq_epi64_sse(x.data, y.data);
+        #endif
     };
 };
 
@@ -361,7 +395,11 @@ struct simd_gt<int64_t, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        return _mm_cmpgt_epi64(x.data, y.data);
+        #if MATCL_ARCHITECTURE_HAS_SSE42
+            return _mm_cmpgt_epi64(x.data, y.data);
+        #else
+            return missing::mm_cmpgt_epi64_sse(x.data, y.data);
+        #endif
     };
 };
 
@@ -421,7 +459,7 @@ struct simd_max<int64_t, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        return if_then_else(gt(x, y), x, y);
+        return missing::mm_max_epi64(x.data, y.data);        
     };
 };
 
@@ -433,7 +471,7 @@ struct simd_min<int64_t, 128, sse_tag>
     force_inline
     static simd_type eval(const simd_type& x, const simd_type& y)
     {
-        return if_then_else(gt(x, y), y, x);
+        return missing::mm_min_epi64(x.data, y.data);
     };
 };
 

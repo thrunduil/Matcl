@@ -794,7 +794,7 @@ double gmp_tester::test_mp_float()
         {
             mp_float z(-123.5);
 
-            if (z.to_string() != "-123.5")
+            if (z.to_string() != "-1.235e+02")
                 res += 1.0;
         };
 

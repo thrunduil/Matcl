@@ -47,18 +47,16 @@ int main(int argc, const char* argv[])
             set_logger(log);
         };               
 
-        //TODO: test select, combine
-
-        matcl::test::test_performance_real();
         matcl::test::test_performance_int();
+        matcl::test::test_performance_real();                
 
         matcl::test::test_performance_real_scalar(); 
-        matcl::test::test_performance_int_scalar();               
-        
-        matcl::test::set_rand_denormals(false);
-        matcl::test::test_math_accuracy(); 
+        matcl::test::test_performance_int_scalar();                      
 
         matcl::test::test_performance_complex();  
+
+        matcl::test::set_rand_denormals(false);
+        matcl::test::test_math_accuracy(); 
 
         std::cout << "\n";
         std::cout << "finished" << "\n";

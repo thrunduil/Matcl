@@ -109,14 +109,40 @@ struct simd_uminus<float, 256, avx_tag>
 };
 
 template<>
-struct simd_sum_all<float, 256, avx_tag>
+struct simd_horizontal_sum<float, 256, avx_tag>
 {
     using simd_type = simd<float, 256, avx_tag>;
 
     force_inline
     static float eval(const simd_type& x)
     {
-        float s = sum_all(x.extract_low() + x.extract_high());
+        float s = horizontal_sum(x.extract_low() + x.extract_high());
+        return s;
+    };
+};
+
+template<>
+struct simd_horizontal_min<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static float eval(const simd_type& x)
+    {
+        float s = horizontal_min(min(x.extract_low(), x.extract_high()));
+        return s;
+    };
+};
+
+template<>
+struct simd_horizontal_max<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static float eval(const simd_type& x)
+    {
+        float s = horizontal_max(max(x.extract_low(), x.extract_high()));
         return s;
     };
 };
@@ -588,6 +614,29 @@ struct simd_is_nan<float, 256, avx_tag>
     {
         __m256 nt   = _mm256_cmp_ps(x.data, x.data, _CMP_NEQ_UQ);
         return nt;
+    };
+};
+
+template<>
+struct simd_is_finite<float, 256, avx_tag>
+{
+    using simd_type = simd<float, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x)
+    {
+        using simd_int  = simd<int32_t, 256, avx_tag>;
+
+        simd_int xi     = x.reinterpret_as_int32();
+
+        // mask selecting all bits in the exponent
+        simd_int mask   = simd_int(0x7F800000);
+
+        xi              = bitwise_and(xi, mask);
+
+        // return true if at least one bit in the exponent is not set
+        simd_int res    = neq(xi, mask);
+        return res.reinterpret_as_float();
     };
 };
 

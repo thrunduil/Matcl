@@ -25,6 +25,7 @@
 #include "matcl-core/details/hash_table/object_table.inl"
 #include "matcl-core/details/hash_table/hash_equal.inl"
 #include "matcl-core/memory/alloc.h"
+#include "matcl-core/memory/global_objects.h"
 
 namespace matcl { namespace dynamic { namespace details
 {

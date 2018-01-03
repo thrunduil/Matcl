@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/error/safe_string_message.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/memory/alloc.h"
 

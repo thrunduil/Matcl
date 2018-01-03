@@ -69,14 +69,6 @@ T false_value<T>::get()
 template<class Val, int Bits, class Simd_tag>
 force_inline
 simd<Val, Bits, Simd_tag>
-ms::reverse(const simd<Val, Bits, Simd_tag>& x)
-{
-    return details::simd_reverse<Val, Bits, Simd_tag>::eval(x);
-};
-
-template<class Val, int Bits, class Simd_tag>
-force_inline
-simd<Val, Bits, Simd_tag>
 ms::signbit_base(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_signbit_base<Val, Bits, Simd_tag>::eval(x);    
@@ -317,9 +309,23 @@ ms::fnms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& 
 
 template<class Val, int Bits, class Simd_tag>
 force_inline
-Val ms::sum_all(const simd<Val, Bits, Simd_tag>& x)
+Val ms::horizontal_sum(const simd<Val, Bits, Simd_tag>& x)
 {
-    return details::simd_sum_all<Val, Bits, Simd_tag>::eval(x);
+    return details::simd_horizontal_sum<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+Val ms::horizontal_min(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_horizontal_min<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+Val ms::horizontal_max(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_horizontal_max<Val, Bits, Simd_tag>::eval(x);
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -392,6 +398,14 @@ simd<Val, Bits, Simd_tag>
 ms::is_nan(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_is_nan<Val, Bits, Simd_tag>::eval(x);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>  
+ms::is_finite(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_is_finite<Val, Bits, Simd_tag>::eval(x);
 }
 
 template<class Val, int Bits, class Simd_tag>
@@ -519,6 +533,25 @@ force_inline simd<Val, Bits, Simd_tag>
 ms::operator !(const simd<Val, Bits, Simd_tag>& x)
 {
     return bitwise_not(x);
+}
+
+//-----------------------------------------------------------------------
+//                   MISCELLANEOUS FUNCTIONS
+//-----------------------------------------------------------------------
+
+template<class Val, int Bits, class Simd_tag>
+force_inline
+simd<Val, Bits, Simd_tag>
+ms::reverse(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_reverse<Val, Bits, Simd_tag>::eval(x);
+};
+
+template<class Val_ret, class Val, int Bits, class Simd_tag>
+force_inline simd<Val_ret, Bits, Simd_tag>
+reinterpret_as(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_reinterpret_as<Val_ret, Val, Bits, Simd_tag>::eval(x);
 }
 
 //-----------------------------------------------------------------------

@@ -52,6 +52,9 @@ class alignas(32) simd<double, 256, sse_tag>
         static const int
         number_bits         = 256;
 
+        // type of vector storing half of elements
+        using simd_half     = simd<double, 128, sse_tag>;
+
         // simd type of the same size storing float values
         using simd_float    = simd<float, 256, sse_tag>;
 
@@ -115,9 +118,13 @@ class alignas(32) simd<double, 256, sse_tag>
         // construct from representation
         simd(const impl_type& v);
 
+      #if MATCL_ARCHITECTURE_HAS_AVX
+        // conversion between simd types
+        explicit simd(const simd<double, 256, avx_tag>& s);
+      #endif
+
         // conversion between simd types
         explicit simd(const simd<double, 256, nosimd_tag>& s);
-        explicit simd(const simd<double, 256, avx_tag>& s);
 
         // conversion form simd scalar; set all elements to s.first()
         explicit simd(const simd<double, 128, scalar_sse_tag>& s);

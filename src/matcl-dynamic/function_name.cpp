@@ -25,6 +25,7 @@
 #include "matcl-core/general/thread.h"
 #include "matcl-core/memory/alloc.h"
 #include "matcl-dynamic/initialization.h"
+#include "matcl-core/memory/global_objects.h"
 
 namespace matcl { namespace dynamic
 {

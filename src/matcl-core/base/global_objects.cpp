@@ -20,9 +20,8 @@
 
 #pragma once
 
-#include "matcl-core/config.h"
-#include "matcl-core/memory/memory.h"
 #include "matcl-core/details/global_objects.inl"
+#include "matcl-core/memory/memory.h"
 #include "matcl-core/details/leak_detector.h"
 #include "matcl-core/IO/out_stream_initializer.h"
 

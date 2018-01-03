@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/profile/timer.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/output_stream.h"
 
 #include <iostream>

@@ -100,9 +100,13 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\func\simd_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\general_defs.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\payne_hanek.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_exp.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_log.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_math_impl.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_float.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_double.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\simd_math_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
@@ -110,6 +114,7 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\math_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\math_functions_scalar.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\other_functions.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\poly\poly_eval_twofold.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\simd.h" />
@@ -150,8 +155,10 @@
     <None Include="..\..\src\include\matcl-simd\details\arch\sse\simd_scalar_int64_128.inl" />
     <None Include="..\..\src\include\matcl-simd\details\complex\simd_128_compl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\complex\simd_256_compl.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\func\other_functions.inl" />
     <None Include="..\..\src\include\matcl-simd\details\func\simd_func.inl" />
     <None Include="..\..\src\include\matcl-simd\details\func\simd_func_complex.inl" />
+    <None Include="..\..\src\include\matcl-simd\details\math\impl\payne_hanek.inl" />
     <None Include="..\..\src\include\matcl-simd\details\math\math_func_impl.inl" />
     <None Include="..\..\src\include\matcl-simd\details\math\math_functions.inl" />
     <None Include="..\..\src\include\matcl-simd\details\math\math_func_scalar_impl.inl" />
@@ -161,7 +168,10 @@
     <None Include="..\..\src\include\matcl-simd\details\poly\poly_eval_twofold.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-simd\math\payne_hanek.cpp" />
     <ClCompile Include="..\..\src\matcl-simd\math\simd_exp.cpp" />
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_log.cpp" />
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_sincos.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{18102545-1797-4A67-8D54-E64826B582C8}</ProjectGuid>
@@ -179,19 +189,21 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -240,7 +252,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SIMD_EXPORTS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -249,6 +261,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
@@ -261,7 +274,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SIMD_EXPORTS;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -270,6 +283,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
@@ -282,7 +296,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SIMD_EXPORTS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -311,7 +325,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src;..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SCALAR_EXPORTS;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1; MATCL_SIMD_EXPORTS;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -325,6 +339,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>

@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/details/IO/disp_stream_options.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/options/options_disp.h"
 
 namespace matcl

@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/options/matcl_options_details.h"
 #include "matcl-core/options/matcl_options.h"
 #include "matcl-core/IO/disp_data_provider.h"

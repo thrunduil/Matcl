@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/details/IO/io_impl.h"
+#include "matcl-core/memory/global_objects.h"
 #include <vector>
 #include "matcl-core/error/exception_classes.h"
 #include "matcl-core/lib_functions/constants.h"
@@ -212,6 +213,26 @@ static bool set_failbit(std::istream &is)
 };
 
 static bool Iread(std::istream &is, Integer &i)
+{
+    int c;
+
+    is >> i;
+
+    if (is.fail() || is.bad()) 
+        return false;
+
+    if (is.eof()) 
+        return true;
+ 
+    c = is.peek();
+        
+    if (c == ' ' || c == '\t' || c == '\n') 
+        return true;
+    
+    return set_failbit(is);
+}
+
+static bool Iread64(std::istream &is, Integer_64 &i)
 {
     int c;
 
@@ -479,6 +500,10 @@ bool stream_helpers::read(std::istream& is,Integer& x)
 {
     return Iread(is,x);
 }
+bool stream_helpers::read(std::istream& is,Integer_64& x)
+{
+    return Iread64(is,x);
+}
 
 bool stream_helpers::read(std::istream& is,Real& x)
 {
@@ -528,6 +553,11 @@ bool stream_helpers::read(std::istream& is, Object& x)
 }
 
 void stream_helpers::write(std::ostream& os, Integer x)
+{
+    os << x;
+}
+
+void stream_helpers::write(std::ostream& os, Integer_64 x)
 {
     os << x;
 }

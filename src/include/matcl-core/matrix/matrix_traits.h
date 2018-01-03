@@ -21,7 +21,6 @@
 #pragma once
 
 #include "matcl-core/config.h"
-#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/isa.h"
 #include "matcl-core/details/type_codes.h"
 

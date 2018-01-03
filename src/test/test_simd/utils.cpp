@@ -147,7 +147,7 @@ double rand_scalar<double>::rand_scale()
 int64_t rand_scalar<int64_t>::make(bool testing_values)
 {
     (void)testing_values;
-    return int64_t(irand()) * int64_t(irand());
+    return int64_t(irand()) * int64_t(irand());    
 };
 
 Complex rand_scalar<Complex>::make(bool testing_values)

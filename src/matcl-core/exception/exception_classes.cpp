@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/error/exception_classes.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/general/thread.h"
 
 #include <iostream>

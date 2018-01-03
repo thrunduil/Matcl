@@ -21,7 +21,6 @@
 #pragma once
 
 #include "matcl-core/config.h"
-#include "matcl-core/memory/global_objects.h"
 
 namespace matcl { namespace simd { namespace details
 {

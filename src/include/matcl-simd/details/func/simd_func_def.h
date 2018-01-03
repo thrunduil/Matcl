@@ -34,6 +34,13 @@ struct simd_reverse
                 "function reverse not defined for for given arguments");
 };
 
+template<class Val_ret, class Val, int Bits, class Simd_tag>
+struct simd_reinterpret_as
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function reinterpret_as not defined for for given arguments");
+};
+
 template<class Val, int Bits, class Simd_tag>
 struct simd_signbit_base
 {
@@ -203,10 +210,24 @@ struct simd_fnms_a
 };
 
 template<class Val, int Bits, class Simd_tag>
-struct simd_sum_all
+struct simd_horizontal_sum
 {
     static_assert(md::dependent_false<Simd_tag>::value, 
-                "function sum_all not defined for for given arguments");
+                "function horizontal_sum not defined for for given arguments");
+};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_horizontal_min
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function horizontal_min not defined for for given arguments");
+};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_horizontal_max
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function horizontal_max not defined for for given arguments");
 };
 
 template<class Val, int Bits, class Simd_tag>
@@ -270,6 +291,13 @@ struct simd_is_nan
 {
     static_assert(md::dependent_false<Simd_tag>::value, 
                 "function is_nan not defined for for given arguments");
+};
+
+template<class Val, int Bits, class Simd_tag>
+struct simd_is_finite
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function is_finite not defined for for given arguments");
 };
 
 template<class Val, int Bits, class Simd_tag>

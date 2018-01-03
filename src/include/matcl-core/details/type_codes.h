@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/val_struct_codes.h"
 
 namespace matcl { namespace details

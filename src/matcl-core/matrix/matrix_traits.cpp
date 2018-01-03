@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/matrix/matrix_traits.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/error/exception_classes.h"
 #include "matcl-core/details/utils.h"
 

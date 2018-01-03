@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/IO/scalar_io.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/details/IO/printer.h"
 #include "matcl-core/details/IO/disp_stream_impl.h"
 #include "matcl-core/details/IO/io_impl.h"
@@ -109,6 +110,10 @@ namespace matcl { namespace details
     {
         return saveload_scalar_helper_impl<Integer>::eval_save(os, A);
     };
+    void saveload_scalar_helper::eval_save(std::ostream& os, Integer_64 A)
+    {
+        return saveload_scalar_helper_impl<Integer_64>::eval_save(os, A);
+    };
     void saveload_scalar_helper::eval_save(std::ostream& os, Float A)
     {
         return saveload_scalar_helper_impl<Float>::eval_save(os, A);
@@ -130,6 +135,10 @@ namespace matcl { namespace details
     void saveload_scalar_helper::eval_print(std::ostream& os, Integer A)
     {
         return saveload_scalar_helper_impl<Integer>::eval_print(os, A);
+    };
+    void saveload_scalar_helper::eval_print(std::ostream& os, Integer_64 A)
+    {
+        return saveload_scalar_helper_impl<Integer_64>::eval_print(os, A);
     };
     void saveload_scalar_helper::eval_print(std::ostream& os, Float A)
     {
@@ -153,6 +162,10 @@ namespace matcl { namespace details
     {
         return saveload_scalar_helper_impl<Integer>::eval_load(is, A);
     }
+    bool saveload_scalar_helper::eval_load(std::istream& is, Integer_64& A)
+    {
+        return saveload_scalar_helper_impl<Integer_64>::eval_load(is, A);
+    }
     bool saveload_scalar_helper::eval_load(std::istream& is, Real& A)
     {
         return saveload_scalar_helper_impl<Real>::eval_load(is, A);
@@ -173,6 +186,10 @@ namespace matcl { namespace details
     std::string details::to_string_scalar_helper::eval(Integer v)
     {
         return to_string_scalar_helper_impl<Integer>::eval(v);
+    };
+    std::string details::to_string_scalar_helper::eval(Integer_64 v)
+    {
+        return to_string_scalar_helper_impl<Integer_64>::eval(v);
     };
     std::string details::to_string_scalar_helper::eval(Float v)
     {

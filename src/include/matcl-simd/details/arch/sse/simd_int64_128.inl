@@ -88,7 +88,7 @@ simd<int64_t, 128, sse_tag> simd<int64_t, 128, sse_tag>::broadcast(const int64_t
 force_inline
 simd<int64_t, 128, sse_tag> simd<int64_t, 128, sse_tag>::set_lower(int64_t v)
 {
-    return _mm_cvtsi64_si128(v);
+    return missing::mm_cvtsi64_si128(v);
 };
 
 force_inline simd<int32_t, 128, sse_tag>
@@ -238,7 +238,7 @@ int64_t simd<int64_t, 128, sse_tag>::get(int pos) const
 force_inline
 int64_t simd<int64_t, 128, sse_tag>::first() const
 { 
-    return _mm_cvtsi128_si64(data); 
+    return missing::mm_cvtsi128_si64(data); 
 };
 
 force_inline

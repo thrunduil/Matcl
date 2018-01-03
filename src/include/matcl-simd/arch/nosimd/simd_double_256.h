@@ -110,13 +110,23 @@ class alignas(32) simd<double, 256, nosimd_tag>
         // construct vector with first two elements copied from lo
         // and last two elements copied from hi
         simd(const simd_half& lo, const simd_half& hi);
-
+        
+      #if MATCL_ARCHITECTURE_HAS_SSE2
         // conversion between simd types
         explicit simd(const simd<double, 256, sse_tag>& s);
-        explicit simd(const simd<double, 256, avx_tag>& s);
+      #endif
 
+      #if MATCL_ARCHITECTURE_HAS_AVX
+        // conversion between simd types
+        explicit simd(const simd<double, 256, avx_tag>& s);
+      #endif
+        
+      #if MATCL_ARCHITECTURE_HAS_SSE2
         // conversion form simd scalar; set all elements to s.first()
         explicit simd(const simd<double, 128, scalar_sse_tag>& s);
+      #endif
+
+        // conversion form simd scalar; set all elements to s.first()
         explicit simd(const simd<double, 128, scalar_nosimd_tag>& s);
 
         // copy constructor

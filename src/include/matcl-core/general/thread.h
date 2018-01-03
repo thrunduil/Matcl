@@ -21,7 +21,6 @@
 #pragma once
 
 #include "matcl-core/config.h"
-#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include <mutex>
 #include <atomic>

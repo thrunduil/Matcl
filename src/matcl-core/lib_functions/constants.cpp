@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/lib_functions/constants.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/matrix_traits.h"
 #include "boost/math/constants/constants.hpp"
 

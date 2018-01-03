@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/profile/benchmark.h"
+#include "matcl-core/memory/global_objects.h"
 
 namespace matcl
 {

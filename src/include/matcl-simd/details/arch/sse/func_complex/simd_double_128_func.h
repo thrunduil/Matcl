@@ -146,7 +146,7 @@ struct simd_compl_div<double, 128, sse_tag>
         __m128d yy     = _mm_mul_pd(y.data.data, y.data.data);          // (y.re*y.re, y.im*y.im)
 
         simd_real tmp   = simd_real(yy);
-        double s        = sum_all(tmp);                                 // (y.re*y.re + y.im*y.im) 
+        double s        = horizontal_sum(tmp);                          // (y.re*y.re + y.im*y.im) 
         __m128d yy2     = _mm_set1_pd(s);
 
         #if MATCL_ARCHITECTURE_HAS_FMA
@@ -181,10 +181,10 @@ struct simd_compl_div<double, 128, sse_tag>
         __m128d yy     = _mm_mul_pd(y.data.data, y.data.data);          // (y.re*y.re, y.im*y.im)
 
         simd_real tmp   = simd_real(yy);
-        double s        = sum_all(tmp);                                 // (y.re*y.re + y.im*y.im) 
+        double s        = horizontal_sum(tmp);                          // (y.re*y.re + y.im*y.im) 
         __m128d yy2     = _mm_set1_pd(s);
 
-        __m128d n       = _mm_xor_pd(x_rey, mask);                       // +/- x_rey
+        __m128d n       = _mm_xor_pd(x_rey, mask);                      // +/- x_rey
         __m128d res     = _mm_div_pd(n, yy2);
 
         if (o1 || o2)
@@ -298,7 +298,7 @@ struct simd_compl_uminus<double, 128, sse_tag>
 };
 
 template<>
-struct simd_compl_sum_all<double, 128, sse_tag>
+struct simd_compl_horizontal_sum<double, 128, sse_tag>
 {
     using simd_type         = simd_compl<double, 128, sse_tag>;
 

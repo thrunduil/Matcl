@@ -58,16 +58,18 @@ simd<int64_t, 128, nosimd_tag>::simd(const simd& lo, const simd& hi)
     data[1] = hi.data[0];
 }
 
-force_inline
-simd<int64_t, 128, nosimd_tag>::simd(const simd<int64_t, 128, sse_tag>& s)
-{
-    s.store(data, std::true_type());
-}
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    force_inline
+    simd<int64_t, 128, nosimd_tag>::simd(const simd<int64_t, 128, sse_tag>& s)
+    {
+        s.store(data, std::true_type());
+    }
 
-force_inline
-simd<int64_t, 128, nosimd_tag>::simd(const simd<int64_t, 128, scalar_sse_tag>& s)
-    :simd(s.first())
-{}
+    force_inline
+    simd<int64_t, 128, nosimd_tag>::simd(const simd<int64_t, 128, scalar_sse_tag>& s)
+        :simd(s.first())
+    {}
+#endif
 
 force_inline
 simd<int64_t, 128, nosimd_tag>::simd(const simd<int64_t, 128, scalar_nosimd_tag>& s)

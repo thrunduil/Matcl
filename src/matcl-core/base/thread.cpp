@@ -18,8 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#pragma once
-
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/general/thread.h"
 
 namespace matcl

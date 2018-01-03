@@ -228,6 +228,7 @@ force_inline simd<int64_t, 256, avx_tag>
 simd<int32_t, 256, avx_tag>::convert_low_to_int64() const
 {
     simd_half lo    = this->extract_low();
+
     #if MATCL_ARCHITECTURE_HAS_AVX2
         return _mm256_cvtepi32_epi64(lo.data);
     #else

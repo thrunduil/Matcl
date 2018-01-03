@@ -155,10 +155,6 @@ simd<Val, Bits, Simd_tag>
 fnms_a(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y, 
                        const simd<Val, Bits, Simd_tag>& z);
 
-// sum of all elements stored in the vector x
-template<class Val, int Bits, class Simd_tag>
-Val sum_all(const simd<Val, Bits, Simd_tag>& x);
-
 // absolute value
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
@@ -168,6 +164,20 @@ abs(const simd<Val, Bits, Simd_tag>& x);
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 sqrt(const simd<Val, Bits, Simd_tag>& x);
+
+// sum of all elements stored in the vector x
+template<class Val, int Bits, class Simd_tag>
+Val horizontal_sum(const simd<Val, Bits, Simd_tag>& x);
+
+// minimum of all elements stored in the vector x; 
+// result is undefined if one of element in the vector is NaN
+template<class Val, int Bits, class Simd_tag>
+Val horizontal_min(const simd<Val, Bits, Simd_tag>& x);
+
+// maximum of all elements stored in the vector x;
+// result is undefined if one of element in the vector is NaN
+template<class Val, int Bits, class Simd_tag>
+Val horizontal_max(const simd<Val, Bits, Simd_tag>& x);
 
 //-----------------------------------------------------------------------
 //                   COMPARISON FUNCTIONS
@@ -224,6 +234,12 @@ geq(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag>  
 is_nan(const simd<Val, Bits, Simd_tag>& x);
+
+// check if elements in the vector x are finite (i.e. neither INF nor NAN); return a vector 
+// of floating point numbers containing true_value or false_value
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag>  
+is_finite(const simd<Val, Bits, Simd_tag>& x);
 
 //-----------------------------------------------------------------------
 //                   ROUNDING FUNCTIONS
@@ -386,6 +402,12 @@ if_sub(const simd<Val, Bits, Tag>& test, const simd<Val, Bits, Tag>& x,
 template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 reverse(const simd<Val, Bits, Simd_tag>& x);
+
+// reinterpret cast to simd type storing elements of type Val_ret of the same kind
+// as x
+template<class Val_ret, class Val, int Bits, class Tag>
+simd<Val_ret, Bits, Tag>
+reinterpret_as(const simd<Val, Bits, Tag>& x);
 
 //-----------------------------------------------------------------------
 //                   IO FUNCTIONS

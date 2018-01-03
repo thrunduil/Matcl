@@ -78,4 +78,15 @@ struct vector_size<simd_compl<Val, Bits, Simd_tag>>
     static const int value = simd_compl<Val, Bits, Simd_tag>::vector_size;
 };
 
+// is_scalar_tag<Tag>::value is true if Tag is one of the scalar simd tags,
+// i.e. scalar_sse_tag or scalar_nosimd_tag
+template<class Tag>
+struct is_scalar_tag                    { static const bool value = false; };
+
+template<>
+struct is_scalar_tag<scalar_sse_tag>    { static const bool value = true; };
+
+template<>
+struct is_scalar_tag<scalar_nosimd_tag> { static const bool value = true; };
+
 }}

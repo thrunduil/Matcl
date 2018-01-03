@@ -1,0 +1,796 @@
+/*
+ *  This file is a part of Matrix Computation Library (MATCL)
+ *
+ *  Copyright (c) Pawe³ Kowal 2017
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+#pragma once
+
+#include "matcl-simd/details/arch/simd_impl.h"
+#include "matcl-simd/details/math/simd_math_func_def.h"
+#include "matcl-simd/poly/poly_eval.h"
+#include "matcl-core/float/twofold.h"
+#include "matcl-simd/details/math/impl/payne_hanek.inl"
+#include "matcl-simd/details/math/impl/simd_sincos_helpers.h"
+
+#pragma warning(push)
+#pragma warning(disable: 4127)  //conditional expression is constant
+
+namespace matcl { namespace simd { namespace details
+{
+
+//-----------------------------------------------------------------------
+//                              FLOAT
+//-----------------------------------------------------------------------
+
+struct MATCL_SIMD_EXPORT simd_sincos_table_float_data
+{
+    static const float poly_sin[3];
+    static const float poly_cos[3];
+    static const float  poly_sincos[3*4];
+
+    static const double poly_sin_double[3];
+    static const double poly_cos_double[3];
+    static const double poly_sincos_double[3*2];
+};
+
+template<int Bits, class Tag>
+struct simd_sincos_table_float
+{
+    using simd_type         = ms::simd<float, Bits, Tag>;
+
+    force_inline
+    static void eval(const simd_type& x, simd_type& p_sin, simd_type& p_cos)
+    {
+        p_sin               = estrin<3>(x, simd_sincos_table_float_data::poly_sin);
+        p_cos               = estrin<3>(x, simd_sincos_table_float_data::poly_cos);
+    };
+
+    template<class Simd_double>
+    force_inline
+    static void eval_double(const Simd_double& x, Simd_double& p_sin, Simd_double& p_cos)
+    {
+        p_sin               = estrin<3>(x, simd_sincos_table_float_data::poly_sin_double);
+        p_cos               = estrin<3>(x, simd_sincos_table_float_data::poly_cos_double);
+    };
+};
+
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    template<>
+    struct simd_sincos_table_float<128, ms::scalar_sse_tag>
+    {
+        using simd_type         = ms::simd<float, 128, ms::scalar_sse_tag>;
+        using simd_double       = ms::simd<double, 128, ms::scalar_sse_tag>;
+        using simd_sse          = ms::simd<float, 128, ms::sse_tag>;    
+        using simd_sse_double   = ms::simd<double, 128, ms::sse_tag>;    
+
+        force_inline
+        static void eval(const simd_type& x, simd_type& p_sin, simd_type& p_cos)
+        {
+            simd_sse x_sse      = x.as_vector();
+            const simd_sse* poly= reinterpret_cast<const simd_sse*>(simd_sincos_table_float_data::poly_sincos);
+            simd_sse p_sincos   = estrin<3>(x_sse, poly);
+            p_sin               = simd_type(p_sincos.first());
+            p_cos               = simd_type(p_sincos.extract_high());
+        };
+
+        force_inline
+        static void eval_double(const simd_double& x, simd_double& p_sin, simd_double& p_cos)
+        {
+            simd_sse_double x_sse       = x.as_vector();
+            const simd_sse_double* poly = reinterpret_cast<const simd_sse_double*>
+                                            (simd_sincos_table_float_data::poly_sincos_double);
+
+            simd_sse_double p_sincos = estrin<3>(x_sse, poly);
+            p_sin                    = simd_double(p_sincos.first());
+            p_cos                    = simd_double(p_sincos.extract_high());
+        };
+    };
+#endif
+
+// reduction scheme valid for |x| < 268435456 * pi/2
+template<int Bits, class Tag>
+struct reduction_CW_float_double
+{};
+
+template<int Bits>
+struct reduction_CW_float_double<Bits, avx_tag>
+{
+    using Tag               = avx_tag;
+    using simd_type         = ms::simd<float, Bits, Tag>;
+    using simd_double       = ms::simd<double, Bits, Tag>;
+    using simd_int          = ms::simd<int32_t, Bits, Tag>;    
+
+    force_inline
+    static simd_type eval(const simd_type& x0, simd_type& xe, simd_int& qi)
+    {
+        simd_double xlo     = x0.convert_low_to_double();
+        simd_double xhi     = x0.convert_high_to_double();
+
+        //---------------------------------------------------------------------------
+        //                              constants
+        //---------------------------------------------------------------------------
+
+        // 2 / pi
+        const simd_double two_by_pi = simd_double(0.63661977236758134307553505349006);
+
+        // pi/2 ~ pi2_1 + pi2_2; pi2_1 is stored with precision 53 - 28
+        // therefore pi2_1 * k is exact for |k| < 2^28 = 268435456;
+        // for |k| < 2^28, d = |k * pi/2 - fl(k * pi/2))|/eps(k*pi/2)
+        // satisfies |d| > 1.5372 * 2^-32  with minimum for 394733961
+
+        const simd_double pi2_1     = simd_double(1.570796310901641845703125);
+        const simd_double pi2_2     = simd_double(1.58932547735281960548080350e-08);
+
+        //---------------------------------------------------------------------------
+        //                              code
+        //---------------------------------------------------------------------------
+        simd_double q_lo    = round(xlo * two_by_pi);
+        simd_double q_hi    = round(xhi * two_by_pi);
+        auto qi_lo          = q_lo.convert_to_int32();
+        auto qi_hi          = q_hi.convert_to_int32();
+        qi                  = simd_int(qi_lo, qi_hi);
+        qi                  = bitwise_and(qi, simd_int(3));
+
+        // Cody-Waite reduction schemes
+
+        // exact
+        simd_double xlo_red1    = fnma_f(q_lo, pi2_1, xlo);
+        simd_double xhi_red1    = fnma_f(q_hi, pi2_1, xhi);
+
+        simd_double xlo_red2    = fnma_f(q_lo, pi2_2, xlo_red1);
+        simd_double xhi_red2    = fnma_f(q_hi, pi2_2, xhi_red1);
+
+        auto xv_lo              = xlo_red2.convert_to_float();
+        auto xv_hi              = xhi_red2.convert_to_float();
+
+        auto xe_lo              = (xlo_red2 - xv_lo.convert_to_double()).convert_to_float();
+        auto xe_hi              = (xhi_red2 - xv_hi.convert_to_double()).convert_to_float();
+
+        simd_type xv            = simd_type(xv_lo, xv_hi);
+        xe                      = simd_type(xe_lo, xe_hi);
+
+        return xv;
+    };
+};
+
+template<>
+struct reduction_CW_float_double<128, sse_tag>
+{
+    using Tag               = sse_tag;
+    using simd_type         = ms::simd<float, 128, Tag>;
+    using simd_double       = typename simd_type::simd_double_2;
+    using simd_int          = ms::simd<int32_t, 128, Tag>;    
+
+    force_inline
+    static simd_type eval(const simd_type& x0, simd_type& xe, simd_int& qi)
+    {
+        simd_double x       = x0.convert_to_double();
+
+        //---------------------------------------------------------------------------
+        //                              constants
+        //---------------------------------------------------------------------------
+
+        // 2 / pi
+        const simd_double two_by_pi = simd_double(0.63661977236758134307553505349006);
+
+        // pi/2 ~ pi2_1 + pi2_2; pi2_1 is stored with precision 53 - 28
+        // therefore pi2_1 * k is exact for |k| < 2^28 = 268435456;
+        // for |k| < 2^28, d = |k * pi/2 - fl(k * pi/2))|/eps(k*pi/2)
+        // satisfies |d| > 1.5372 * 2^-32  with minimum for 394733961
+
+        const simd_double pi2_1     = simd_double(1.570796310901641845703125);
+        const simd_double pi2_2     = simd_double(1.58932547735281960548080350e-08);
+
+        //---------------------------------------------------------------------------
+        //                              code
+        //---------------------------------------------------------------------------
+        simd_double q       = round(x * two_by_pi);
+        qi                  = q.convert_to_int32();
+        qi                  = bitwise_and(qi, simd_int(3));
+
+        // Cody-Waite reduction schemes
+
+        // exact
+        simd_double x_red1  = fnma_f(q, pi2_1, x);
+        simd_double x_red2  = fnma_f(q, pi2_2, x_red1);
+
+        simd_type xv        = x_red2.convert_to_float();
+        xe                  = (x_red2 - xv.convert_to_double()).convert_to_float();
+
+        return xv;
+    };
+};
+
+template<int Bits, class Tag, bool Is_scalar = is_scalar_tag<Tag>::value>
+struct simd_sincos_float
+{
+    using simd_type         = ms::simd<float, Bits, Tag>;
+    using simd_int          = ms::simd<int32_t, Bits, Tag>;    
+
+    template<int Version>
+    static simd_type process_overflow(const simd_type& x)
+    {
+        const simd_type nan_v   = simd_type(std::numeric_limits<float>::quiet_NaN());
+
+        simd_type fin   = ms::is_finite(x);
+        simd_type ret   = eval_with_full_reduction<Version>(x);
+        ret             = ms::if_then_else(fin, ret, nan_v);
+
+        return ret;
+    }
+
+    template<int Version>
+    force_inline
+    static simd_type eval_with_full_reduction(const simd_type& x)
+    {
+        // max_q * pi/2
+        const simd_type max_x   = simd_type(421657428.26631f);
+
+        simd_type in_range      = gt(max_x, abs(x));
+        bool in_range_all       = all(in_range);
+        bool in_range_any       = any(in_range);
+
+        simd_type xv, xe;
+        simd_int q_lo;
+
+        if (in_range_any == true)
+            xv  = reduction_CW_double(x, xe, q_lo); 
+
+        if (in_range_all == false)
+            reduction_full(x, in_range, xv, xe, q_lo);
+
+        simd_type pc, ps;
+        approximation(xv, xe, pc, ps);
+
+        simd_type ret       = simd_sincos_reconstruction<float, Bits,Tag>
+                                ::eval<Version>(q_lo, pc, ps);
+        return ret;
+    }
+
+    // reduction scheme valid for |x| < 161 * pi/2
+    force_inline
+    static simd_type reduction_CW3(const simd_type& x, simd_type& xe, simd_int& qi)
+    {
+        //---------------------------------------------------------------------------
+        //                              constants
+        //---------------------------------------------------------------------------
+
+        // 2 / pi
+        const simd_type two_by_pi   = simd_type(0.63661977236758134307553505349006f);
+
+        // pi/2 ~ pi2_1 + pi2_2 + pi2_3; pi2_1, pi2_2 are stored with precision 24 - 8
+        // therefore pi2_1 * k and pi2_2 * k is exact for |k| <= 2^8 = 256;
+        // for |k| < 161, d = |k * pi/2 - fl(k * pi/2))|/eps(k*pi/2)
+        // satisfies |d| > 1.53 * 2^-8 with minimum for 137
+
+        const simd_type pi2_1       = simd_type(1.57080078125f);
+        const simd_type pi2_2       = simd_type(-4.454399459064006805419921875e-06f);
+        const simd_type pi2_3       = simd_type(-5.5644315544167710640977020375430583953857421875e-11f);
+
+        //---------------------------------------------------------------------------
+        //                              code
+        //---------------------------------------------------------------------------
+
+        simd_type q         = round(x * two_by_pi);
+        qi                  = q.convert_to_int32();
+        qi                  = bitwise_and(qi, simd_int(3));
+
+        // Cody-Waite reduction schemes
+
+        // exact
+        simd_type x_red1    = fnma_f(q, pi2_1, x);        
+
+        // compensated summation is required to obtain exact result; if simple
+        // summation is used, then total error increases by approximately 0.5 ulp
+        simd_type x_red2_v  = fnma_f(q, pi2_2, x_red1);
+        simd_type tmp1      = x_red1 - x_red2_v; 
+
+        // 1 ulp error in q * pi2_3 => err(q * pi2_3) <= (q * pi2_3) * 2^-23
+        // |res| > d * eps(k*pi/2) >= d * (q*pi/2) *2^-24
+        // err(q * pi2_3) / |res| < pi2_3 / d * 4 / pi = 1.1854397e-8 = 0.09944 * eps
+        // this error is not compensated; in most cases this error is much lower
+        simd_type x_red3_v  = fnma_f(q, pi2_3, x_red2_v);
+        simd_type tmp2      = x_red2_v - x_red3_v;
+
+        simd_type x_red2_e  = fnma_f(q, pi2_2, tmp1);
+        simd_type x_red3_e  = fnma_f(q, pi2_3, tmp2);
+
+        // xv need not be exactly rounded => normalization is not required
+        simd_type xv        = x_red3_v;
+        xe                  = x_red2_e + x_red3_e;
+
+        return xv;
+    };
+
+    // reduction scheme valid for |x| < 268435456 * pi/2
+    force_inline
+    static simd_type reduction_CW_double(const simd_type& x, simd_type& xe, simd_int& qi)
+    {
+        return reduction_CW_float_double<Bits, Tag>::eval(x, xe, qi);
+    }    
+
+    force_inline
+    static void reduction_full(const simd_type& x, const simd_type& in_range, simd_type& xv, 
+                            simd_type& xe, simd_int& q_lo)
+    {
+        // 30 bits of accuracy is enough
+        static const 
+        int max_bits            = 30;
+
+        const float* ptr_x      = x.get_raw_ptr();
+        const float* ptr_inr    = in_range.get_raw_ptr();
+
+        float* ptr_xv           = xv.get_raw_ptr();
+        float* ptr_xe           = xe.get_raw_ptr();
+        int* ptr_qlo            = q_lo.get_raw_ptr();
+
+        static const int vec_size   = simd_type::vector_size;
+
+        for (int i = 0; i < vec_size; ++i)
+        {
+            if (ptr_inr[i] == 0)
+            {
+                float value, error;
+                int q           = ms::reduce_pi2_ph_float(ptr_x[i], max_bits, value, error);
+
+                ptr_xv[i]       = value;
+                ptr_xe[i]       = error;
+                ptr_qlo[i]      = q;
+            }
+        };
+    };
+
+    force_inline
+    static void approximation(const simd_type& xv, const simd_type& xe, simd_type& ret_cos, 
+                             simd_type& ret_sin)
+    {
+        const simd_type one     = simd_type::one();
+        const simd_type half    = simd_type(0.5f);
+
+        // h(x)     = (sin(x)/x - one)/(x*x) = -1/6 + x^2/120 + ...
+        // sin(x)   = x^3 * h(x) + x 
+        //          = (xv + xe)^3 * h(xv + xe) + xv + xe
+        //          ~ xv^3 * h(xv) + cos(x) * xe + xv
+        // range    : [-pi/4, pi/4]
+
+        // g(x)     = (cos(x) - one + 1/2*x^2)/ x^4
+        // cos(x)   = x^4 * g(x) - 1/2*x^2 + 1
+        //          ~ xv^4 * g(xv) - 1/2*xv^2 + 1 - sin(x) * xe
+        //          ~ xv^4 * g(xv) - 1/2 * xv^2 - xv * xe + 1
+        // range    : [-pi/4, pi/4]
+
+        simd_type x2        = xv * xv;
+        simd_type x4        = x2 * x2;
+        simd_type x2_half   = half * x2;
+
+        // eval polynomials
+        simd_type p_sin, p_cos;
+        simd_sincos_table_float<Bits, Tag>::eval(x2, p_sin, p_cos);
+
+        // later p_sinv will be multiplied by xv in order to form p_sinv * xv^3
+        // this is just an optimization saving one multiplication
+        simd_type p_sinv    = p_sin * x2;        
+
+        // do not use twofold_mult, we want fast multiply, not fma_a
+        simd_type x2e       = fms_f(xv, xv, x2);
+        simd_type xve       = xv * xe;
+
+        // error compensations
+        simd_type p_sine    = fnma_f(x2_half, xe, xe);
+        simd_type p_cose    = fma_f(half, x2e, xve);
+
+        // form p_sin * x3 + cos(x) * xe + xv ~ p_sin * x3 + (1 - 1/2 x2) * xe
+        simd_type ps        = fma_f(p_sinv, xv, p_sine);
+        ps                  = ps + xv;
+
+        // form p_cos * x4 - (1/2 * x2e + xv * xe), where 1/2 * x2e is error compensation
+        // for the term 1/2 * x2
+        simd_type pc        = fms_f(p_cos, x4, p_cose);
+        pc                  = (pc - x2_half) + one;
+
+        ret_sin             = ps;  
+        ret_cos             = pc;
+    }
+
+    template<int Version>
+    force_inline
+    static simd_type eval_sincos(const simd_type& x)
+    {        
+        // max_q * pi/2
+        const simd_type max_x   = simd_type(252.898f);
+
+        simd_type in_range  = gt(max_x, abs(x));
+        bool in_range_all   = all(in_range);
+
+        if (in_range_all == false)
+            return process_overflow<Version>(x);
+
+        simd_type xe;
+        simd_int qi;
+
+        simd_type xv        = reduction_CW3(x, xe, qi);
+
+        simd_type pc, ps;
+        approximation(xv, xe, pc, ps);
+
+        simd_type ret       = simd_sincos_reconstruction<float, Bits, Tag>
+                                ::eval<Version>(qi, pc, ps);
+        return ret;
+    };
+
+    force_inline
+    static simd_type eval_sin(const simd_type& x)
+    {
+        return eval_sincos<sin_tag>(x);
+    }
+
+    force_inline
+    static simd_type eval_cos(const simd_type& x)
+    {
+        return eval_sincos<cos_tag>(x);
+    }
+};
+
+// for scalars compute in double
+template<int Bits, class Tag>
+struct simd_sincos_float<Bits, Tag, true>
+{
+    using simd_type         = ms::simd<float, Bits, Tag>;
+    using simd_double       = ms::simd<double, Bits, Tag>;
+    using simd_int          = ms::simd<int32_t, Bits, Tag>;    
+
+    template<int Version>
+    static simd_type process_overflow(const simd_double& x)
+    {
+        const simd_double nan_v   = simd_double(std::numeric_limits<double>::quiet_NaN());
+
+        simd_double fin = ms::is_finite(x);
+        simd_double ret = eval_with_full_reduction<Version>(x);
+        ret             = ms::if_then_else(fin, ret, nan_v);
+
+        return ret.convert_to_float();
+    }
+
+    template<int Version>
+    force_inline
+    static simd_double eval_with_full_reduction(const simd_double& x)
+    {
+        simd_double xv;
+        simd_int q_lo;
+
+        reduction_full(x, xv, q_lo);
+
+        simd_double pc, ps;
+        approximation(xv, pc, ps);
+
+        simd_double ret     = simd_sincos_reconstruction<double, Bits, Tag>
+                                ::eval<Version>(q_lo, pc, ps);
+        return ret;
+    }
+
+    // reduction scheme valid for |x| < 268435456 * pi/2
+    force_inline
+    static simd_double reduction_CW3(const simd_double& x, simd_int& qi)
+    {
+        //---------------------------------------------------------------------------
+        //                              constants
+        //---------------------------------------------------------------------------
+
+        // 2 / pi
+        const simd_double two_by_pi = simd_double(0.63661977236758134307553505349006);
+
+        // pi/2 ~ pi2_1 + pi2_2; pi2_1 is stored with precision 53 - 28
+        // therefore pi2_1 * k is exact for |k| < 2^28 = 268435456;
+        // for |k| < 2^28, d = |k * pi/2 - fl(k * pi/2))|/eps(k*pi/2)
+        // satisfies |d| > 1.5372 * 2^-32  with minimum for 394733961
+
+        const simd_double pi2_1     = simd_double(1.570796310901641845703125);
+        const simd_double pi2_2     = simd_double(1.5893254773528196054808035e-08);
+
+        //---------------------------------------------------------------------------
+        //                              code
+        //---------------------------------------------------------------------------
+        simd_double q       = round(x * two_by_pi);
+        qi                  = q.convert_to_int32();
+        qi                  = bitwise_and(qi, simd_int(3));
+
+        // Cody-Waite reduction schemes
+
+        // exact
+        simd_double x_red1  = fnma_f(q, pi2_1, x);
+        simd_double x_red2  = fnma_f(q, pi2_2, x_red1);;
+
+        return x_red2;
+    };
+
+    force_inline
+    static void reduction_full(const simd_double& x, simd_double& xv, simd_int& q_lo)
+    {
+        // 30 bits of accuracy is enough
+        static const 
+        int max_bits    = 30;
+
+        double value;
+        int q           = ms::reduce_pi2_ph_float(x.first(), max_bits, value);
+
+        xv              = simd_double(value);
+        q_lo            = simd_int(q);
+    };
+
+    force_inline
+    static void approximation(const simd_double& xv, simd_double& ret_cos, simd_double& ret_sin)
+    {
+        const simd_double one   = simd_double::one();
+        const simd_double half  = simd_double(0.5);
+
+        // h(x)     = (sin(x)/x - one)/(x*x) = -1/6 + x^2/120 + ...
+        // sin(x)   = x^3 * h(x) + x 
+        // range    : [-pi/4, pi/4]
+
+        // g(x)     = (cos(x) - one + 1/2*x^2)/ x^4
+        // cos(x)   = x^4 * g(x) - 1/2*x^2 + 1
+        // range    : [-pi/4, pi/4]
+
+        simd_double x2      = xv * xv;
+        simd_double x4      = x2 * x2;
+        simd_double x2_half = half * x2;
+
+        // eval polynomials
+        simd_double p_sin, p_cos;
+        simd_sincos_table_float<Bits, Tag>::eval_double(x2, p_sin, p_cos);
+
+        // form p_sin * x3 + xv
+        simd_double p_sinv  = p_sin * x2;        
+        simd_double ps      = fma_f(p_sinv, xv, xv);
+
+        // form p_cos * x4 - 1/2 * x2 + 1
+        simd_double pc      = fms_f(p_cos, x4, x2_half) + one;
+
+        ret_sin             = ps;  
+        ret_cos             = pc;
+    }
+
+    template<int Version>
+    force_inline
+    static simd_type eval_sincos(const simd_type& x)
+    {        
+        // max_q * pi/2
+        const simd_double max_x = simd_double(421657428.26631);
+
+        simd_double xd          = x.convert_to_double();
+
+        simd_double in_range    = gt(max_x, abs(xd));
+        bool in_range_all       = all(in_range);
+
+        if (in_range_all == false)
+            return process_overflow<Version>(xd);
+
+        simd_int qi;
+        simd_double xv      = reduction_CW3(xd, qi);
+
+        simd_double pc, ps;
+        approximation(xv, pc, ps);
+
+        simd_double ret     = simd_sincos_reconstruction<double, Bits, Tag>
+                                ::eval<Version>(qi, pc, ps);
+        return ret.convert_to_float();
+    };
+
+    force_inline
+    static simd_type eval_sin(const simd_type& x)
+    {
+        return eval_sincos<sin_tag>(x);
+    }
+
+    force_inline
+    static simd_type eval_cos(const simd_type& x)
+    {
+        return eval_sincos<cos_tag>(x);
+    }
+};
+
+#if MATCL_ARCHITECTURE_HAS_SSE2 && MATCL_ARCHITECTURE_HAS_AVX
+    // compute in double
+    template<>
+    struct simd_sincos_float<128, sse_tag, false>
+    {
+        static const int Bits   = 128;
+
+        using Tag               = sse_tag;
+        using simd_type         = ms::simd<float, 128, sse_tag>;
+        using simd_double       = ms::simd<double, 256, avx_tag>;
+        using simd_int          = ms::simd<int32_t, 128, sse_tag>;    
+
+        template<int Version>
+        static simd_type process_overflow(const simd_double& x, const simd_double& in_range)
+        {
+            const simd_double nan_v   = simd_double(std::numeric_limits<double>::quiet_NaN());
+
+            simd_double fin = ms::is_finite(x);
+            simd_double ret = eval_with_full_reduction<Version>(x, in_range);
+            ret             = ms::if_then_else(fin, ret, nan_v);
+
+            return ret.convert_to_float();
+        }
+
+        template<int Version>
+        force_inline
+        static simd_double eval_with_full_reduction(const simd_double& x, const simd_double& in_range)
+        {
+            bool in_range_any       = any(in_range);
+
+            simd_double xv;
+            simd_int q_lo;
+
+            if (in_range_any == true)
+                xv  = reduction_CW3(x, q_lo); 
+
+            reduction_full(x, in_range, xv, q_lo);
+
+            simd_double pc, ps;
+            approximation(xv, pc, ps);
+
+            simd_double ret     = simd_sincos_reconstruction<double, 256, avx_tag>
+                                    ::eval<Version>(q_lo, pc, ps);
+            return ret;
+        }
+
+        // reduction scheme valid for |x| < 268435456 * pi/2
+        force_inline
+        static simd_double reduction_CW3(const simd_double& x, simd_int& qi)
+        {
+            //---------------------------------------------------------------------------
+            //                              constants
+            //---------------------------------------------------------------------------
+
+            // 2 / pi
+            const simd_double two_by_pi = simd_double(0.63661977236758134307553505349006);
+
+            // pi/2 ~ pi2_1 + pi2_2; pi2_1 is stored with precision 53 - 28
+            // therefore pi2_1 * k is exact for |k| < 2^28 = 268435456;
+            // for |k| < 2^28, d = |k * pi/2 - fl(k * pi/2))|/eps(k*pi/2)
+            // satisfies |d| > 1.5372 * 2^-32  with minimum for 394733961
+
+            const simd_double pi2_1     = simd_double(1.570796310901641845703125);
+            const simd_double pi2_2     = simd_double(1.5893254773528196054808035e-08);
+
+            //---------------------------------------------------------------------------
+            //                              code
+            //---------------------------------------------------------------------------
+            simd_double q       = round(x * two_by_pi);
+            qi                  = q.convert_to_int32();
+            qi                  = bitwise_and(qi, simd_int(3));
+
+            // Cody-Waite reduction schemes
+
+            // exact
+            simd_double x_red1  = fnma_f(q, pi2_1, x);
+            simd_double x_red2  = fnma_f(q, pi2_2, x_red1);;
+
+            return x_red2;
+        };
+
+        force_inline
+        static void reduction_full(const simd_double& x, const simd_double& in_range, 
+                                    simd_double& xv, simd_int& q_lo)
+        {
+            // 30 bits of accuracy is enough
+            static const 
+            int max_bits            = 30;
+
+            const double* ptr_x     = x.get_raw_ptr();
+            const double* ptr_inr   = in_range.get_raw_ptr();
+
+            double* ptr_xv          = xv.get_raw_ptr();
+            int* ptr_qlo            = q_lo.get_raw_ptr();
+
+            static const int vec_size   = simd_type::vector_size;
+
+            for (int i = 0; i < vec_size; ++i)
+            {
+                if (ptr_inr[i] == 0)
+                {
+                    double value;
+                    int q           = ms::reduce_pi2_ph_float(ptr_x[i], max_bits, value);
+
+                    ptr_xv[i]       = value;
+                    ptr_qlo[i]      = q;
+                }
+            };
+        };
+
+        force_inline
+        static void approximation(const simd_double& xv, simd_double& ret_cos, simd_double& ret_sin)
+        {
+            const simd_double one   = simd_double::one();
+            const simd_double half  = simd_double(0.5);
+
+            // h(x)     = (sin(x)/x - one)/(x*x) = -1/6 + x^2/120 + ...
+            // sin(x)   = x^3 * h(x) + x 
+            // range    : [-pi/4, pi/4]
+
+            // g(x)     = (cos(x) - one + 1/2*x^2)/ x^4
+            // cos(x)   = x^4 * g(x) - 1/2*x^2 + 1
+            // range    : [-pi/4, pi/4]
+
+            simd_double x2      = xv * xv;
+            simd_double x4      = x2 * x2;
+            simd_double x2_half = half * x2;
+
+            // eval polynomials
+            simd_double p_sin, p_cos;
+            simd_sincos_table_float<Bits, Tag>::eval_double(x2, p_sin, p_cos);
+
+            // form p_sin * x3 + xv
+            simd_double p_sinv  = p_sin * x2;        
+            simd_double ps      = fma_f(p_sinv, xv, xv);
+
+            // form p_cos * x4 - 1/2 * x2 + 1
+            simd_double pc      = fms_f(p_cos, x4, x2_half) + one;
+
+            ret_sin             = ps;  
+            ret_cos             = pc;
+        }
+
+        template<int Version>
+        force_inline
+        static simd_type eval_sincos(const simd_type& x)
+        {        
+            // max_q * pi/2
+            const simd_double max_x = simd_double(421657428.26631);
+
+            simd_double xd          = x.convert_to_double();
+
+            simd_double in_range    = gt(max_x, abs(xd));
+            bool in_range_all       = all(in_range);
+
+            if (in_range_all == false)
+                return process_overflow<Version>(xd, in_range);
+
+            simd_int qi;
+            simd_double xv      = reduction_CW3(xd, qi);
+
+            simd_double pc, ps;
+            approximation(xv, pc, ps);
+
+            simd_double ret     = simd_sincos_reconstruction<double, 256, avx_tag>
+                                    ::eval<Version>(qi, pc, ps);
+            return ret.convert_to_float();
+        };
+
+        force_inline
+        static simd_type eval_sin(const simd_type& x)
+        {
+            return eval_sincos<sin_tag>(x);
+        }
+
+        force_inline
+        static simd_type eval_cos(const simd_type& x)
+        {
+            return eval_sincos<cos_tag>(x);
+        }
+    };
+#endif
+
+template<int Bits, class Tag>
+struct simd_sincos<float, Bits, Tag> : public simd_sincos_float<Bits, Tag>
+{};
+
+}}}
+
+#pragma warning(pop)

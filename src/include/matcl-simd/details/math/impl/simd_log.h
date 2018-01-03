@@ -31,59 +31,49 @@ namespace matcl { namespace simd { namespace details
 //                              DOUBLE
 //-----------------------------------------------------------------------
 
+struct MATCL_SIMD_EXPORT simd_log_approx_double_data
+{
+    static const double poly[7];
+    static const double poly_scalar[4*2];
+};
+
 template<int Bits, class Tag>
 struct simd_log_approx_double
 {
     using simd_type     = simd<double, Bits, Tag>;
 
-    static constexpr double poly[]   =  {
-                                            6.66666666666688547299310656675190687e-01L,
-                                            3.99999999987401741406920347834347647e-01L,
-                                            2.85714288669539260936377812250363457e-01L,
-                                            2.22221871825960117598424175414698074e-01L,
-                                            1.81841095988965909080780869966928340e-01L,
-                                            1.53009602706038610316834383087625899e-01L,
-                                            1.49202865515212540004373762442151109e-01L,
-
-                                          };
-
     force_inline
     static simd_type eval(const simd_type& s)
     {        
-        return estrin<7>(s, poly);
+        return estrin<7>(s, simd_log_approx_double_data::poly);
     };
 };
 
-template<>
-struct simd_log_approx_double<128, scalar_sse_tag>
-{
-    using simd_type         = simd<double, 128, scalar_sse_tag>;
-    using simd_type_sse     = simd<double, 128, sse_tag>;
-
-    static constexpr double poly[]  = 
+#if MATCL_ARCHITECTURE_HAS_SSE2
+    template<>
+    struct simd_log_approx_double<128, scalar_sse_tag>
     {
-            3.99999999987401741406920347834347647e-01L, 6.66666666666688547299310656675190687e-01L,
-            2.22221871825960117598424175414698074e-01L, 2.85714288669539260936377812250363457e-01L,
-            1.53009602706038610316834383087625899e-01L, 1.81841095988965909080780869966928340e-01L,
-            0.0                                       , 1.49202865515212540004373762442151109e-01L,
+        using simd_type         = simd<double, 128, scalar_sse_tag>;
+        using simd_type_sse     = simd<double, 128, sse_tag>;    
+
+        force_inline
+        static simd_type eval(const simd_type& s2_0)
+        {        
+            simd_type_sse s2    = s2_0.as_vector();
+            simd_type_sse s4    = s2 * s2;
+
+            const double* poly  = simd_log_approx_double_data::poly_scalar;
+            simd_type_sse p     = simd_type_sse::load(poly + 3 * 2);
+
+            p                   = fma_f(p, s4, simd_type_sse::load(poly + 2 * 2));
+            p                   = fma_f(p, s4, simd_type_sse::load(poly + 1 * 2));
+            p                   = fma_f(p, s4, simd_type_sse::load(poly + 0 * 2));
+
+            p                   = fma_f(s2, p.extract_low(), p.extract_high()); 
+            return simd_type(p);
+        };
     };
-
-    force_inline
-    static simd_type eval(const simd_type& s2_0)
-    {        
-        simd_type_sse s2    = s2_0.as_vector();
-        simd_type_sse s4    = s2 * s2;
-
-        simd_type_sse p     = simd_type_sse::load(poly + 3 * 2);
-
-        p                   = fma_f(p, s4, simd_type_sse::load(poly + 2 * 2));
-        p                   = fma_f(p, s4, simd_type_sse::load(poly + 1 * 2));
-        p                   = fma_f(p, s4, simd_type_sse::load(poly + 0 * 2));
-
-        p                   = fma_f(s2, p.extract_low(), p.extract_high()); 
-        return simd_type(p);
-    };
-};
+#endif
 
 template<int Bits, class Tag> 
 struct simd_log<double, Bits, Tag>
@@ -248,28 +238,21 @@ struct simd_log<double, Bits, Tag>
 //                              FLOAT
 //-----------------------------------------------------------------------
 
+struct MATCL_SIMD_EXPORT simd_log_approx_float_data
+{
+    static const float poly[9];
+    static const float poly_scalar[12];
+};
+
 template<int Bits, class Tag>
 struct simd_log_approx_float
 {
     using simd_type     = simd::simd<float, Bits, Tag>;
 
-    static constexpr float poly[] = 
-        {
-            -5.00000001969598183278064207495559219e-01f,
-            3.33332716385429135870565468876902043e-01f,
-            -2.49998863941982779960396002029673983e-01f,
-            2.00073054372748504562536157172019915e-01f,
-            -1.66759465098372286204627390624499906e-01f,
-            1.40545176272346789443221873134537537e-01f,
-            -1.22505576737375893726817365117891765e-01f,
-            1.37550000113041486713019781724756740e-01f,
-            -1.25948724727867811279422965776243012e-01f,
-        };
-
     force_inline
     static simd_type eval(const simd_type& s)
     {        
-        return estrin<9>(s, poly);
+        return estrin<9>(s, simd_log_approx_float_data::poly);
     };
 };
 
@@ -279,24 +262,6 @@ struct simd_log_approx_float<Bits, scalar_sse_tag>
     using simd_type     = simd<float, Bits, scalar_sse_tag>;
     using simd_base     = simd<float, Bits, sse_tag>;
 
-    static constexpr float poly[] = 
-        {
-            -5.00000001969598183278064207495559219e-01f,
-            3.33332716385429135870565468876902043e-01f,
-            -2.49998863941982779960396002029673983e-01f,
-            2.00073054372748504562536157172019915e-01f,
-
-            -1.66759465098372286204627390624499906e-01f,
-            1.40545176272346789443221873134537537e-01f,
-            -1.22505576737375893726817365117891765e-01f,
-            1.37550000113041486713019781724756740e-01f,
-            
-            -1.25948724727867811279422965776243012e-01f,
-            0.0f,
-            0.0f,
-            0.0f,
-        };
-
     force_inline
     static simd_type eval(const simd_type& x0)
     {   
@@ -304,12 +269,12 @@ struct simd_log_approx_float<Bits, scalar_sse_tag>
         simd_base x2    = x * x;
         simd_base x4    = x2 * x2;
 
-        simd_base p1    = simd_base::load(poly + 8);
-        simd_base p2    = simd_base::load(poly + 2);
+        simd_base p1    = simd_base::load(simd_log_approx_float_data::poly_scalar + 8);
+        simd_base p2    = simd_base::load(simd_log_approx_float_data::poly_scalar + 2);
 
-        p1              = fma_f(p1, x2, simd_base::load(poly + 6));
-        p2              = fma_f(p2, x2, simd_base::load(poly + 0));
-        p1              = fma_f(p1, x2, simd_base::load(poly + 4));
+        p1              = fma_f(p1, x2, simd_base::load(simd_log_approx_float_data::poly_scalar + 6));
+        p2              = fma_f(p2, x2, simd_base::load(simd_log_approx_float_data::poly_scalar + 0));
+        p1              = fma_f(p1, x2, simd_base::load(simd_log_approx_float_data::poly_scalar + 4));
         simd_base p     = fma_f(p1, x4, p2);
 
         simd_base pl    = p;
