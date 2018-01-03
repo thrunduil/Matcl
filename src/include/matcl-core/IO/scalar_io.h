@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "matcl-core/memory/global_objects.h"
 #include "matcl-scalar/IO/scalar_io.h"
 #include "matcl-core/options/options_disp.h"
 #include "matcl-core/IO/base_io.h"
@@ -32,6 +31,7 @@ struct MATCL_CORE_EXPORT saveload_scalar_helper
 {
     // save value to stream with full precision
     static void eval_save(std::ostream& os, Integer A);
+    static void eval_save(std::ostream& os, Integer_64 A);
     static void eval_save(std::ostream& os, Float A);
     static void eval_save(std::ostream& os, Real A);
     static void eval_save(std::ostream& os, const Complex& A);
@@ -39,6 +39,7 @@ struct MATCL_CORE_EXPORT saveload_scalar_helper
 
     // save value to stream with current precision
     static void eval_print(std::ostream& os, Integer A);
+    static void eval_print(std::ostream& os, Integer_64 A);
     static void eval_print(std::ostream& os, Float A);
     static void eval_print(std::ostream& os, Real A);
     static void eval_print(std::ostream& os, const Complex& A);
@@ -47,6 +48,7 @@ struct MATCL_CORE_EXPORT saveload_scalar_helper
     // return true if read succeed, otherwise return value 'A'
     // need not be initialized and failbit is set
     static bool eval_load(std::istream& is, Integer& A);
+    static bool eval_load(std::istream& is, Integer_64& A);
     static bool eval_load(std::istream& is, Float& A);
     static bool eval_load(std::istream& is, Real& A);
     static bool eval_load(std::istream& is, Complex& A);
@@ -56,6 +58,7 @@ struct MATCL_CORE_EXPORT saveload_scalar_helper
 struct MATCL_CORE_EXPORT to_string_scalar_helper
 {
     static std::string eval(Integer v);
+    static std::string eval(Integer_64 v);
     static std::string eval(Float v);
     static std::string eval(Real v);
     static std::string eval(const Complex& v);

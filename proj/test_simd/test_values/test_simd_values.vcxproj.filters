@@ -15,6 +15,21 @@
     <ClCompile Include="..\..\..\src\test\test_simd\test_simd_compl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_int.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_compile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_scalar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_scalar_int.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_simd\test_simd_accuracy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\test\test_simd\main_values.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,6 +51,21 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\test\test_simd\twofold.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd_int.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd_scalar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd_scalar_int.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_simd\test_functions_accuracy.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_simd\test_simd_accuracy.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

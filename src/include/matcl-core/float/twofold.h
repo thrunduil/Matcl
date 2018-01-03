@@ -50,10 +50,9 @@ namespace matcl
 // x = value + error with true result is res, then if value + error = res 
 // (evaluated exactly), then the result is called exact. For all functions the
 // following error bound is satified:
-//      |res - value - error| <= k * ulp(|res|)
-// for some small k (at most 4), where ulp(|res|) is the unit in the last place
-// assuming precision two times higher than double precision (i.e. 105 bits, when
-// double precision is 53 bits). If k = 1/2, then a function is called strict.
+//      |res - value - error|/|res| <= k * u^2
+// for some small k (at most 16), where u is the unit roundoff (u = 2^-53 for 
+// double precision)
 
 // representation of a floating point number as value + error
 template<class Float_type>
@@ -115,6 +114,16 @@ twofold<Float_type> twofold_sum(const Float_type& a, const Float_type& b);
 template<class Float_type>
 twofold<Float_type> twofold_sum_sorted(const Float_type& a, const Float_type& b);
 
+// evaluate a + b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_sum_sorted(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a + b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_sum_sorted(const Float_type& a, const twofold<Float_type>& b);
+
 // evaluate a - b for arbitrary a and b; result is exact
 template<class Float_type>
 twofold<Float_type> twofold_minus(const Float_type& a, const Float_type& b);
@@ -124,41 +133,49 @@ twofold<Float_type> twofold_minus(const Float_type& a, const Float_type& b);
 template<class Float_type>
 twofold<Float_type> twofold_minus_sorted(const Float_type& a, const Float_type& b);
 
+// evaluate a - b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_minus_sorted(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a - b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_minus_sorted(const Float_type& a, const twofold<Float_type>& b);
+
 // evaluate a * b; result is exact
 template<class Float_type>
 twofold<Float_type> twofold_mult(const Float_type& a, const Float_type& b);
 
-// evaluate a / b; result is strict
+// evaluate a / b; relative forward error does not exceed 1 * u^2
 template<class Float_type>
 twofold<Float_type> twofold_div(const Float_type& a, const Float_type& b);
 
-// square root of a; result is strict
+// square root of a; relative forward error does not exceed 1 * u^2
 template<class Float_type>
 twofold<Float_type> twofold_sqrt(const Float_type& a);
 
-// evaluate a + b; maximum relative forward error (k) does not exceed 1 ulp
-// (ulp calculated as if precision was doubled)
+// evaluate a + b; relative forward error does not exceed 3 * u^2
 template<class Float_type>
 twofold<Float_type> operator+(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
-// evaluate a + b; result is strict
+// evaluate a + b; relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> operator+(const twofold<Float_type>& a, const Float_type& b);
 
-// evaluate a + b; result is strict
+// evaluate a + b; relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> operator+(const Float_type& a, const twofold<Float_type>& b);
 
-// evaluate a - b; maximum relative forward error (k) does not exceed 1 ulp
-// (ulp calculated as if precision was doubled)
+// evaluate a - b; relative forward error does not exceed 3 * u^2
 template<class Float_type>
 twofold<Float_type> operator-(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
-// evaluate a - b; result is strict
+// evaluate a - b; relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> operator-(const twofold<Float_type>& a, const Float_type& b);
 
-// evaluate a - b; result is strict
+// evaluate a - b; relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> operator-(const Float_type& a, const twofold<Float_type>& b);
 
@@ -166,40 +183,34 @@ twofold<Float_type> operator-(const Float_type& a, const twofold<Float_type>& b)
 template<class Float_type>
 twofold<Float_type> operator-(const twofold<Float_type>& a);
 
-// evaluate a * b; maximum relative forward error (k) does not
-// exceed 7/4 ulp (ulp calculated as if precision was doubled)
+// evaluate a * b; relative forward error does not exceed 7 * u^2
+// (6 u^2 if FMA instruction is available)
 template<class Float_type>
 twofold<Float_type> operator*(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
-// evaluate a * b; result is strict if FMA instruction is available,
-// otherwise maximum relative forward error (k) does not exceed 3/4 ulp
-// (ulp calculated as if precision was doubled)
+// evaluate a * b;  relative forward error does not exceed 3 * u^2
+// (2 u^2 if FMA instruction is available)
 template<class Float_type>
 twofold<Float_type> operator*(const twofold<Float_type>& a, const Float_type& b);
 
-// evaluate a * b; result is strict if FMA instruction is available,
-// otherwise maximum relative forward error (k) does not exceed 3/4 ulp
-// (ulp calculated as if precision was doubled)
+// evaluate a * b; relative forward error does not exceed 3 * u^2
+// (2 u^2 if FMA instruction is available)
 template<class Float_type>
 twofold<Float_type> operator*(const Float_type& a, const twofold<Float_type>& b);
 
-// evaluate a / b; maximum relative forward error (k) does not exceed 4 ulp
-// (ulp calculated as if precision was doubled)
+// evaluate a / b; relative forward error does not exceed 15 * u^2
 template<class Float_type>
 twofold<Float_type> operator/(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
-// evaluate a / b; relative forward error does not exceed 1 ulp (ulp calculated
-// as if precision was doubled)
+// evaluate a / b; relative forward error does not exceed 4 * u^2
 template<class Float_type>
 twofold<Float_type> operator/(const twofold<Float_type>& a, const Float_type& b);
 
-// evaluate a / b; result need not be strict, but maximum relative
-// forward error does not exceed 4 ulp (ulp calculated as if precision
-// was doubled)
+// evaluate a / b; relative forward error does not exceed 15 * u^2
 template<class Float_type>
 twofold<Float_type> operator/(const Float_type& a, const twofold<Float_type>& b);
 
-// square root of a; result need not be strict
+// square root of a; relative forward error does not exceed 4 * u^2
 template<class Float_type>
 twofold<Float_type> sqrt(const twofold<Float_type>& a);
 
@@ -219,6 +230,7 @@ Float_type  float_distance(const twofold<Float_type>& x, const twofold<Float_typ
 // return epsilon value eps, i.e positive distance from abs(xr) to the next
 // larger in magnitude properly rounded twofold number, where xr is a properly
 // rounded x; rounding is (implicitly) performed according to quadruple precision
+// (i.e. for double, precision is 106 bits and eps(1) = 2^(1-106) )
 template<class Float_type>
 Float_type  eps(const twofold<Float_type>& x);
 

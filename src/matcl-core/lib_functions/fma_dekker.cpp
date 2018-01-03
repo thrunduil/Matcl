@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-core/float/fma_dekker.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/float/twofold.h"
 #include "matcl-simd/simd.h"
 

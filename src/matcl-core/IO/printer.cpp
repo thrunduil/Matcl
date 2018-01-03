@@ -19,6 +19,7 @@
  */
 
 #include "matcl-core/details/IO/printer.h"
+#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/disp_stream.h"
 #include "matcl-core/error/exception_classes.h"
 #include "matcl-core/details/integer.h"
@@ -145,6 +146,18 @@ void printer::disp_elem(Integer w, Integer v, align_type at, Integer vp)
 
     disp_elem(w,os.str(),at,vp);
 };
+void printer::disp_elem(Integer w, Integer_64 v, align_type at, Integer vp)
+{
+    std::ostringstream os;
+
+    if (v == 0 && m_disp_zero == false)
+    {}
+    else
+        os << v;
+
+    disp_elem(w,os.str(),at,vp);
+};
+
 Integer printer::get_precision(Integer elem_width, Integer off, Integer max_w)
 {
     if (elem_width == 0)

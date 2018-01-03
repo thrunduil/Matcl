@@ -78,14 +78,14 @@ class test_dynamic
 
         template<class T>
         void    test_compile_func_unary();
-        template<class T>
-        void    test_compile_binary();
-        template<class T>
-        void    test_compile_binary_notcompl();
-        template<class T>
-        void    test_compile_binary_notmp();
-        template<class T>
-        void    test_compile_binary_str();
+        template<class T1, class T2>
+        void    test_compile_func_binary();
+        template<class T, class T2>
+        void    test_compile_func_binary_notcompl();
+        template<class T, class T2>
+        void    test_compile_func_binary_notmp();
+        template<class T, class T2>
+        void    test_compile_func_binary_str();
         template<class T>
         void    test_compile_func_unary_str();
         template<class T>

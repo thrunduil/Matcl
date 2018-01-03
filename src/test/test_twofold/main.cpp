@@ -43,12 +43,12 @@ int main(int argc, const char* argv[])
             set_logger(log);
         };
         
+        matcl::test::test_error();
+        matcl::test::test_error_simd();
+
         matcl::test::test_functions();                
         matcl::test::test_functions_simd();        
         matcl::test::test_fma();        
-
-        matcl::test::test_error();
-        matcl::test::test_error_simd();
         
         matcl::test::test_io();
         matcl::test::test_io_simd();

@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "matcl-core/memory/global_objects.h"
 #include "matcl-core/matrix/scalar_types.h"
 #include "matcl-core/matrix/complex_type.h"
 

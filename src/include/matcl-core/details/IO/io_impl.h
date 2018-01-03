@@ -40,6 +40,11 @@ struct get_stream_precision<Integer>
     static Integer eval()   { return 0; };
 };
 template<>
+struct get_stream_precision<Integer_64>
+{
+    static Integer eval()   { return 0; };
+};
+template<>
 struct get_stream_precision<dynamic::object>
 {
     static Integer eval()   { return 0; };
@@ -105,6 +110,7 @@ struct MATCL_CORE_EXPORT stream_helpers
     // if this read returns false, then return value 'val' need not be
     // initialized, additionally failbit is set
 	static bool     read(std::istream&, Integer& val);
+    static bool     read(std::istream&, Integer_64& val);
     static bool     read(std::istream&, Float& val);
     static bool     read(std::istream&, Real& val);
     static bool     read(std::istream&, Complex& val);
@@ -114,6 +120,7 @@ struct MATCL_CORE_EXPORT stream_helpers
 
     //correct precision must be already set in the stream os
 	static void     write(std::ostream& os, Integer val);
+    static void     write(std::ostream& os, Integer_64 val);
     static void     write(std::ostream& os, Float val);
     static void     write(std::ostream& os, Real val);
     static void     write(std::ostream& os, const Complex& val);

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-simd/arch/simd_impl.h"
+#include "matcl-simd/details/arch/simd_impl.h"
 #include "matcl-simd/complex/simd_complex.h"
 #include "matcl-simd/details/helpers.h"
 
@@ -45,6 +45,13 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         // type of stored elements
         using value_type    = simd_double_complex;
 
+        // simd tag
+        using simd_tag      = Simd_tag;
+
+        // number of bits
+        static const int
+        number_bits         = 256;
+
         // type of real and imaginary part of stored elements
         using real_type     = double;
 
@@ -68,7 +75,10 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         simd_compl() = default;
 
         // construct vector with all elements equal to complex(re, 0)
-        explicit simd_compl(Integer re);
+        explicit simd_compl(int32_t re);
+
+        // construct vector with all elements equal to complex(re, 0)
+        explicit simd_compl(int64_t re);
 
         // construct vector with all elements equal to complex(re, 0)
         explicit simd_compl(float re);
@@ -127,12 +137,14 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         // construct vector with elements copied from arr; arr must have length
         // at least vector_size
         static simd_compl   load(const simd_double_complex* arr, std::true_type aligned);
-        static simd_compl   load(const simd_double_complex* arr, std::false_type not_aligned);
+        static simd_compl   load(const simd_double_complex* arr, 
+                                std::false_type not_aligned = std::false_type());
 
     public:
         // store elements in arr; arr must have length at least vector_size
         void                store(simd_double_complex* arr, std::true_type aligned) const;
-        void                store(simd_double_complex* arr, std::false_type not_aligned) const;
+        void                store(simd_double_complex* arr, 
+                                std::false_type not_aligned = std::false_type()) const;
 
         // store elements with in array with stepping (Step = 1,-1 is not optimized)
         template<int Step>
@@ -160,8 +172,8 @@ class alignas(32) simd_compl<double, 256, Simd_tag>
         // return simd storing last element
         simd_half           extract_high() const;
 
-        // cast elements to float complex
-        simd_float          cast_to_float() const;
+        // convert elements to float complex
+        simd_float          convert_to_float() const;
 
     public:
         // plus assign operator
@@ -266,12 +278,14 @@ class alignas(32) simd_compl<float, 256, Simd_tag>
         // construct vector with elements copied from arr; arr must have length
         // at least vector_size
         static simd_compl   load(const simd_single_complex* arr, std::true_type aligned);
-        static simd_compl   load(const simd_single_complex* arr, std::false_type not_aligned);
+        static simd_compl   load(const simd_single_complex* arr, 
+                                std::false_type not_aligned = std::false_type());
 
     public:
         // store elements in arr; arr must have length at least vector_size
         void                store(simd_single_complex* arr, std::true_type aligned) const;
-        void                store(simd_single_complex* arr, std::false_type not_aligned) const;
+        void                store(simd_single_complex* arr, 
+                                std::false_type not_aligned = std::false_type()) const;
 
         //store elements with in array with stepping (Step = 1,-1 is not optimized)
         template<int Step>
@@ -299,11 +313,11 @@ class alignas(32) simd_compl<float, 256, Simd_tag>
         // return simd storing last two elements
         simd_half           extract_high() const;
 
-        // cast the first four elements to double
-        simd_double         cast_low_to_double() const;
+        // convert the first four elements to double
+        simd_double         convert_low_to_double() const;
 
-        // cast the last four elements to double
-        simd_double         cast_high_to_double() const;
+        // convert the last four elements to double
+        simd_double         convert_high_to_double() const;
 
     public:
         // plus assign operator

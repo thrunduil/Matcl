@@ -102,7 +102,9 @@ mp_rational::mp_rational(const mp_float& val)
         mpfr_get_f(tmp, v, MPFR_RNDN);
 
         //convert to rational
-        mpq_init(iv.backend().data());
+
+        // we cannot use iv.backend().data()
+        mpq_init(*reinterpret_cast<mpq_t*>(&iv.backend()));
         mpq_set_f(iv.backend().data(), tmp);
 
         mpf_clear(tmp);

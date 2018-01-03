@@ -24,7 +24,6 @@
 
 #include "matcl-core/details/hash_table/hash_table_details.h"
 #include "matcl-core/memory/alloc.h"
-#include "matcl-core/memory/global_objects.h"
 
 namespace matcl
 {
