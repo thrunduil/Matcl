@@ -68,12 +68,17 @@ get_value(const matcl::simd::simd<TB, Bits, Tag>& x)
 
 // missing functions
 inline mp_float twofold_sum(const mp_float& a, const mp_float& b)          { return a + b; };
+inline mp_float twofold_sum_1(const mp_float& a, const mp_float& b)        { return a + b; };
 inline mp_float twofold_sum_sorted(const mp_float& a, const mp_float& b)   { return a + b; };
 inline mp_float twofold_minus(const mp_float& a, const mp_float& b)        { return a - b; };
+inline mp_float twofold_minus_1(const mp_float& a, const mp_float& b)      { return a - b; };
 inline mp_float twofold_mult(const mp_float& a, const mp_float& b)         { return a * b; };
+inline mp_float twofold_mult_1(const mp_float& a, const mp_float& b)       { return a * b; };
 inline mp_float twofold_mult_dekker(const mp_float& a, const mp_float& b)  { return a * b; };
 inline mp_float twofold_div(const mp_float& a, const mp_float& b)          { return a / b; };
+inline mp_float twofold_div_1(const mp_float& a, const mp_float& b)        { return a / b; };
 inline mp_float twofold_sqrt(const mp_float& a)                            { return sqrt(a); };
+inline mp_float twofold_inv_1(const mp_float& a)                           { return 1.0 / a; };
 
 template<class T> struct get_prec_sum{};
 template<> struct get_prec_sum<double>
@@ -107,12 +112,18 @@ mp_float twofold_minus_sorted(const mp_float& a, const mp_float& b)
 
 // double
 inline double twofold_sum(double a, double b)          { return a + b; };
+inline double twofold_sum_1(double a, double b)        { return a + b; };
 inline double twofold_sum_sorted(double a, double b)   { return a + b; };
 inline double twofold_minus(double a, double b)        { return a - b; };
+inline double twofold_minus_1(double a, double b)      { return a - b; };
 inline double twofold_mult(double a, double b)         { return a * b; };
+inline double twofold_mult_1(double a, double b)       { return a * b; };
 inline double twofold_mult_dekker(double a, double b)  { return a * b; };
 inline double twofold_div(double a, double b)          { return a / b; };
+inline double twofold_div_1(double a, double b)        { return a / b; };
 inline double twofold_sqrt(double a)                   { return matcl::sqrt(a); };
+inline double twofold_inv_1(double a)                  { return 1.0 / a; };
+inline double inv(double a)                            { return 1.0 / a; };
 
 template<class T>
 double twofold_sum(double a)                    { return a; };
@@ -134,7 +145,28 @@ twofold_sqrt(const matcl::simd::simd<T, Bits, Tag>& a)
 
 template<class T, int Bits, class Tag>
 matcl::simd::simd<T, Bits, Tag>
+twofold_inv_1(const matcl::simd::simd<T, Bits, Tag>& a)
+{ 
+    return matcl::simd::simd<T, Bits, Tag>::one() / a; 
+};
+
+template<class T, int Bits, class Tag>
+matcl::simd::simd<T, Bits, Tag>
+inv(const matcl::simd::simd<T, Bits, Tag>& a)
+{ 
+    return matcl::simd::simd<T, Bits, Tag>::one() / a; 
+};
+
+template<class T, int Bits, class Tag>
+matcl::simd::simd<T, Bits, Tag>
 twofold_mult(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
+{ 
+    return a * b; 
+};
+
+template<class T, int Bits, class Tag>
+matcl::simd::simd<T, Bits, Tag>
+twofold_mult_1(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
 { 
     return a * b; 
 };
@@ -155,6 +187,13 @@ twofold_sum(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T,
 
 template<class T, int Bits, class Tag>
 matcl::simd::simd<T, Bits, Tag>
+twofold_sum_1(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
+{ 
+    return a + b; 
+};
+
+template<class T, int Bits, class Tag>
+matcl::simd::simd<T, Bits, Tag>
 twofold_sum_sorted(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
 { 
     return a + b; 
@@ -163,6 +202,13 @@ twofold_sum_sorted(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::
 template<class T, int Bits, class Tag>
 matcl::simd::simd<T, Bits, Tag>
 twofold_minus(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
+{ 
+    return a - b; 
+};
+
+template<class T, int Bits, class Tag>
+matcl::simd::simd<T, Bits, Tag>
+twofold_minus_1(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
 { 
     return a - b; 
 };
@@ -181,6 +227,13 @@ twofold_div(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T,
     return a / b; 
 };
 
+template<class T, int Bits, class Tag>
+matcl::simd::simd<T, Bits, Tag>
+twofold_div_1(const matcl::simd::simd<T, Bits, Tag>& a, const matcl::simd::simd<T, Bits, Tag>& b)
+{ 
+    return a / b; 
+};
+
 inline
 double twofold_minus_sorted(double a, double b)
 {
@@ -189,12 +242,18 @@ double twofold_minus_sorted(double a, double b)
 
 //float
 inline float twofold_sum(float a, float b)         { return a + b; };
+inline float twofold_sum_1(float a, float b)        { return a + b; };
 inline float twofold_sum_sorted(float a, float b)  { return a + b; };
 inline float twofold_minus(float a, float b)        { return a - b; };
+inline float twofold_minus_1(float a, float b)      { return a - b; };
 inline float twofold_mult(float a, float b)         { return a * b; };
+inline float twofold_mult_1(float a, float b)       { return a * b; };
 inline float twofold_mult_dekker(float a, float b)  { return a * b; };
 inline float twofold_div(float a, float b)          { return a / b; };
+inline float twofold_div_1(float a, float b)        { return a / b; };
 inline float twofold_sqrt(float a)                  { return matcl::sqrt(a); };
+inline float twofold_inv_1(float a)                 { return 1.0f / a; };
+inline float inv(float a)                           { return 1.0f / a; };
 
 template<class T>
 float twofold_sum(float a)                   { return a; };
@@ -206,16 +265,16 @@ inline float twofold_minus_sorted(float a, float b)
 
 template<class Float>
 force_inline
-twofold<Float> twofold_sum(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_sum_sorted(const twofold<Float>& a, const twofold<Float>& b)
 { 
-    return matcl::twofold_sum(a.value, b.value); 
+    return matcl::twofold_sum_sorted(a.value, b.value); 
 };
 
 template<class Float>
 force_inline
-twofold<Float> twofold_sum_sorted(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_sum_1(const twofold<Float>& a, const twofold<Float>& b)
 { 
-    return matcl::twofold_sum_sorted(a.value, b.value); 
+    return matcl::twofold_sum(a.value, b.value); 
 };
 
 template<class T, int Bits, class Tag>
@@ -229,16 +288,16 @@ twofold_sum_sorted(const twofold<matcl::simd::simd<T, Bits, Tag>>& a,
 
 template<class Float>
 force_inline
-twofold<Float> twofold_minus(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_minus_sorted(const twofold<Float>& a, const twofold<Float>& b)
 { 
-    return matcl::twofold_minus(a.value, b.value); 
+    return matcl::twofold_minus_sorted(a.value, b.value); 
 };
 
 template<class Float>
 force_inline
-twofold<Float> twofold_minus_sorted(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_minus_1(const twofold<Float>& a, const twofold<Float>& b)
 { 
-    return matcl::twofold_minus_sorted(a.value, b.value); 
+    return matcl::twofold_minus(a.value, b.value); 
 };
 
 template<class T, int Bits, class Tag>
@@ -252,9 +311,16 @@ twofold_minus_sorted(const twofold<matcl::simd::simd<T, Bits, Tag>>& a,
 
 template<class Float>
 force_inline
-twofold<Float> twofold_mult(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_mult_1(const twofold<Float>& a, const twofold<Float>& b)
 { 
     return matcl::twofold_mult(a.value, b.value); 
+};
+
+template<class Float>
+force_inline
+twofold<Float> twofold_div_1(const twofold<Float>& a, const twofold<Float>& b)
+{ 
+    return matcl::twofold_div(a.value, b.value); 
 };
 
 template<class Float>
@@ -269,16 +335,23 @@ twofold<Float> twofold_mult_dekker(const twofold<Float>& a, const twofold<Float>
 
 template<class Float>
 force_inline
-twofold<Float> twofold_div(const twofold<Float>& a, const twofold<Float>& b)
+twofold<Float> twofold_sqrt(const twofold<Float>& a)
 { 
-    return matcl::twofold_div(a.value, b.value); 
+    return matcl::twofold_sqrt(a.value); 
 };
 
 template<class Float>
 force_inline
-twofold<Float> twofold_sqrt(const twofold<Float>& a)
+twofold<Float> twofold_inv_1(const twofold<Float>& a)
 { 
-    return matcl::twofold_sqrt(a.value); 
+    return matcl::twofold_inv(a.value); 
+};
+
+template<class Float>
+force_inline
+twofold<Float> inv(const twofold<Float>& a)
+{ 
+    return matcl::twofold_inv(a); 
 };
 
 template<class T, class Float>
@@ -325,6 +398,46 @@ struct Func_abs
     static std::string name()
     { 
         return "abs"; 
+    };
+};
+
+struct Func_inv_1
+{
+    template<class T>    
+    static T eval(const T& x1)
+    {
+        return twofold_inv_1(x1);
+    }
+
+    template<class T2>
+    static T2 convert_arg_1(const T2& x)
+    {
+        return T2(x.value);
+    };
+
+    static std::string name()
+    { 
+        return "inv"; 
+    };
+};
+
+struct Func_inv_2
+{
+    template<class T>    
+    static T eval(const T& x1)
+    {
+        return inv(x1);
+    }
+
+    template<class T2>
+    static T2 convert_arg_1(const T2& x)
+    {
+        return x;
+    };
+
+    static std::string name()
+    { 
+        return "inv_2"; 
     };
 };
 
@@ -394,7 +507,7 @@ struct Func_plus_11
     template<class T>    
     static T eval(const T& x1, const T& x2)
     {
-        return twofold_sum(x1, x2);
+        return twofold_sum_1(x1, x2);
     }
 
     template<class T2>
@@ -446,7 +559,7 @@ struct Func_minus_11
     template<class T>    
     static T eval(const T& x1, const T& x2)
     {
-        return twofold_minus(x1, x2);
+        return twofold_minus_1(x1, x2);
     }
 
     template<class T2>
@@ -498,7 +611,7 @@ struct Func_mult_11
     template<class T>    
     static T eval(const T& x1, const T& x2)
     {
-        return twofold_mult(x1, x2);
+        return twofold_mult_1(x1, x2);
     }
 
     template<class T2>
@@ -580,7 +693,7 @@ struct Func_div_11
     template<class T>    
     static T eval(const T& x1, const T& x2)
     {
-        return twofold_div(x1, x2);
+        return twofold_div_1(x1, x2);
     }
 
     template<class T2>

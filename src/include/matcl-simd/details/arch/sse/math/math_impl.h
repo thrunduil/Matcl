@@ -320,4 +320,58 @@ struct simd_sincos<float, 256, sse_tag>
     };
 };
 
+//-----------------------------------------------------------------------
+//                          tan/cot
+//-----------------------------------------------------------------------
+template<>
+struct simd_tancot<double, 256, sse_tag>
+{
+    using simd_type     = simd<double, 256, sse_tag>;
+    using simd_half     = simd<double, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval_tan(const simd_type& a)
+    {
+        simd_half v1    = tan(a.extract_low());
+        simd_half v2    = tan(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+
+    force_inline
+    static simd_type eval_cot(const simd_type& a)
+    {
+        simd_half v1    = cot(a.extract_low());
+        simd_half v2    = cot(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+
+};
+
+template<>
+struct simd_tancot<float, 256, sse_tag>
+{
+    using simd_type     = simd<float, 256, sse_tag>;
+    using simd_half     = simd<float, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval_tan(const simd_type& a)
+    {
+        simd_half v1    = tan(a.extract_low());
+        simd_half v2    = tan(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+
+    force_inline
+    static simd_type eval_cot(const simd_type& a)
+    {
+        simd_half v1    = cot(a.extract_low());
+        simd_half v2    = cot(a.extract_high());
+
+        return simd_type(v1, v2);
+    };
+};
+
 }}}

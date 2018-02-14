@@ -101,12 +101,16 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\general_defs.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\payne_hanek.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\pi2_reduction.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_exp.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_log.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_math_impl.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_float.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_double.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_tan_float.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_tancot_helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_tan_double.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\simd_math_func_def.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\poly\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-simd\details\scalar_func.h" />
@@ -172,6 +176,15 @@
     <ClCompile Include="..\..\src\matcl-simd\math\simd_exp.cpp" />
     <ClCompile Include="..\..\src\matcl-simd\math\simd_log.cpp" />
     <ClCompile Include="..\..\src\matcl-simd\math\simd_sincos.cpp" />
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_tancot.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\matcl-mp\matcl-mp.vcxproj">
+      <Project>{72527908-9492-4017-ab00-f4b9c91565ac}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{18102545-1797-4A67-8D54-E64826B582C8}</ProjectGuid>

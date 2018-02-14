@@ -40,6 +40,21 @@ mp_float constants::mp_eps(precision prec)
     return eps(mp_float(1.0, prec));
 };
 
+mp_float constants::mp_min_real(precision prec)
+{
+    mpfr_exp_t min_exp = mpfr_get_emin();
+    return ldexp(mp_float(0.5, prec), min_exp);
+}
+
+mp_float constants::mp_max_real(precision prec)
+{
+    mpfr_exp_t max_exp = mpfr_get_emax();
+    mp_float one        = mp_float(1.0, prec);
+    one                 = nextbelow(one);
+
+    return ldexp(one, max_exp);
+}
+
 mp_float constants::mp_inf(precision prec)
 {
     return mp_float(constants::inf(), prec);

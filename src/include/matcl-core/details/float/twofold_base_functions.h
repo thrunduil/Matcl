@@ -39,6 +39,44 @@ struct func_fms_a{};
 template<class Float_type>
 struct func_abs{};
 
+template<class Float_type>
+struct func_zero{};
+
+//-----------------------------------------------------------------------
+//                      zero
+//-----------------------------------------------------------------------
+template<class T, int Bits, class Tag>
+struct func_zero<matcl::simd::simd<T, Bits, Tag>>
+{
+    using simd_type = matcl::simd::simd<T, Bits, Tag>;
+
+    force_inline
+    static simd_type eval()
+    {
+        return simd_type::zero();
+    }
+};
+
+template<>
+struct func_zero<float>
+{
+    force_inline
+    static float eval()
+    {
+        return 0.0f;
+    };
+};
+
+template<>
+struct func_zero<double>
+{
+    force_inline
+    static double eval()
+    {
+        return 0.0;
+    };
+};
+
 //-----------------------------------------------------------------------
 //                      func_signbit
 //-----------------------------------------------------------------------

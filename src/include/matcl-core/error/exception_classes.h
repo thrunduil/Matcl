@@ -910,6 +910,52 @@ class MATCL_CORE_EXPORT value_not_in_cache : public matcl_exception
         virtual const char* what(exception_message& em) const override;
 };
 
+class MATCL_CORE_EXPORT limest_error_valid_initial_point_not_found
+                             : public matcl_exception
+{
+    private:
+        double      m_point;
+
+    public:
+        limest_error_valid_initial_point_not_found(double x)
+            : m_point(x)
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT limest_error_nonfinite_starting_point
+                             : public matcl_exception
+{
+    public:
+        limest_error_nonfinite_starting_point()
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT seq_error_omega_is_zero: public matcl_exception
+{
+    public:
+        seq_error_omega_is_zero()
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
+class MATCL_CORE_EXPORT seq_error_two_equal_points: public matcl_exception
+{
+    private:
+        double  m_point;
+        
+    public:
+        seq_error_two_equal_points(double x)
+            :m_point(x)
+        {};
+
+        virtual const char* what(exception_message& em) const override;
+};
+
 };};
 
 #pragma warning(pop)

@@ -103,4 +103,12 @@ Object                  convert_to_object(const dynamic::Type& ty, const Float_c
 MATCL_SCALAR_EXPORT
 Object                  convert_to_object(const dynamic::Type& ty, const Object& v);
 
+// convert value of type T to Object type, type T must be one
+// of matcl scalar types, string or a type registered as external
+// scalar (i.e. is_external_scalar<T>:value == true)
+template<class T>
+Object                  make_object(T&& val);
+
 };
+
+#include "matcl-scalar/details/object.inl"

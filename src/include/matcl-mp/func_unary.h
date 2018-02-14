@@ -151,6 +151,12 @@ MATCL_MP_EXPORT fp_type         fpclassify(const mp_int& val);
 MATCL_MP_EXPORT fp_type         fpclassify(const mp_float& val);
 MATCL_MP_EXPORT fp_type         fpclassify(const mp_rational& val);
 
+// return evaluate a hash function
+MATCL_MP_EXPORT size_t          hash_value(const mp_int& val);
+MATCL_MP_EXPORT size_t          hash_value(const mp_float& val);
+MATCL_MP_EXPORT size_t          hash_value(const mp_rational& val);
+MATCL_MP_EXPORT size_t          hash_value(const mp_complex& val);
+
 // absolute value; real and complex abs is accurate up to
 // 0.5 ulp; abs for real arguments is exact if no rounding is required
 MATCL_MP_EXPORT mp_int          abs(const mp_int& val, precision p = precision());

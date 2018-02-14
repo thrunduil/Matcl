@@ -221,6 +221,10 @@ void test_twofold::test_functions()
                 (dm, N, ptr_in, ptr_out, ptr_out_gen, 1.0);
     test_function<T, T2, TMP, test_functions::Func_sqrt_2>
                 (dm, N, ptr_in, ptr_out, ptr_out_gen, 4.0);
+    test_function<T, T2, TMP, test_functions::Func_inv_1>
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 2.0);
+    test_function<T, T2, TMP, test_functions::Func_inv_2>
+                (dm, N, ptr_in, ptr_out, ptr_out_gen, 16.0);
 };
 
 template<class T>

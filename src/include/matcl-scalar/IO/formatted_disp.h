@@ -126,7 +126,7 @@ void formatted_disp::disp_row(const std::string& label, Args&& ... args)
 template<class Type>
 Object formatted_disp::make_object(Type&& t)
 {
-    return Object(std::forward<Type>(t));
+    return matcl::make_object<Type>(std::forward<Type>(t));
 }
 
 };
