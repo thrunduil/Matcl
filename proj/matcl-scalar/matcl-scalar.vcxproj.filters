@@ -52,6 +52,12 @@
     <Filter Include="Source Files\include\general">
       <UniqueIdentifier>{6506c749-b8cb-416a-881b-e58dee6de5f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\lib_functions\sequence">
+      <UniqueIdentifier>{c7d20993-743f-427b-90fa-e332c430857f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details\sequence">
+      <UniqueIdentifier>{506534cd-e160-453d-b1d2-9823def0f789}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\include\matcl-scalar\objects\object_functions.h">
@@ -156,6 +162,36 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\details\object_interface.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\aitken_delta.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\richardson.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\sidi_w.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\wynn_epsilon.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\wynn_rho.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\sequence\accelerators_helpers.h">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\sequence\seq_transform_base.h">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\sequence.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\objects.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\limest.h">
+      <Filter>Source Files\include\lib_functions\sequence</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\matcl-scalar\objects\object_functions.cpp">
@@ -218,6 +254,9 @@
     <ClCompile Include="..\..\src\matcl-scalar\objects\object_interface.cpp">
       <Filter>Source Files\src\objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\matcl-scalar\lib_functions\limest.cpp">
+      <Filter>Source Files\src\lib_functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-scalar\details\typed_object_functions.inl">
@@ -239,6 +278,33 @@
       <Filter>Source Files\include\details</Filter>
     </None>
     <None Include="..\..\src\include\matcl-scalar\details\scalar_io.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\accelerators_helpers.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\aitken_delta.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\richardson.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\seq_transform_base.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\sidi_w.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\wynn_epsilon.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\wynn_rho.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\objects_impl.inl">
+      <Filter>Source Files\include\details\sequence</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-scalar\details\object.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
   </ItemGroup>

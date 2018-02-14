@@ -197,4 +197,48 @@ ms::cos(float x)
     return res.first();
 };
 
+force_inline double
+ms::tan(double x)
+{
+    using simd_type     = default_scalar_simd_type<double>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::tan(xs);
+
+    return res.first();
+};
+
+force_inline float
+ms::tan(float x)
+{
+    using simd_type     = default_scalar_simd_type<float>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::tan(xs);
+
+    return res.first();
+};
+
+force_inline double
+ms::cot(double x)
+{
+    using simd_type     = default_scalar_simd_type<double>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::cot(xs);
+
+    return res.first();
+};
+
+force_inline float
+ms::cot(float x)
+{
+    using simd_type     = default_scalar_simd_type<float>::type;
+
+    simd_type xs        = simd_type(x);
+    simd_type res       = ms::cot(xs);
+
+    return res.first();
+};
+
 }}

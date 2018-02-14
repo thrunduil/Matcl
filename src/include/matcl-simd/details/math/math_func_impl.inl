@@ -100,4 +100,18 @@ ms::cos(const simd<Val, Bits, Simd_tag>& x)
     return details::simd_sincos<Val, Bits, Simd_tag>::eval_cos(x);
 };
 
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::tan(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_tancot<Val, Bits, Simd_tag>::eval_tan(x);
+};
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
+ms::cot(const simd<Val, Bits, Simd_tag>& x)
+{
+    return details::simd_tancot<Val, Bits, Simd_tag>::eval_cot(x);
+};
+
 }}

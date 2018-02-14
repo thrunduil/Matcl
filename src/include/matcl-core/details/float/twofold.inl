@@ -151,6 +151,21 @@ matcl::twofold_mult(const Float_type& a, const Float_type& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
+matcl::twofold_mult_f(const Float_type& a, const Float_type& b)
+{
+    Float_type val  = a * b;
+
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        Float_type err  = details::func_fms_a<Float_type>::eval(a, b, val);
+    #else
+        Float_type err  = details::func_zero<Float_type>::eval();
+    #endif
+
+    return twofold<Float_type>(val, err);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
 matcl::twofold_div(const Float_type& a, const Float_type& b)
 {
     namespace mrd   = matcl::raw::details;
@@ -160,6 +175,54 @@ matcl::twofold_div(const Float_type& a, const Float_type& b)
     err             = err / b;
 
     return twofold<Float_type>(val, err);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div_f(const Float_type& a, const Float_type& b)
+{
+    namespace mrd   = matcl::raw::details;
+
+    Float_type val  = a / b;
+
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        Float_type err  = - details::func_fms_a<Float_type>::eval(val, b, a);
+        err             = err / b;
+    #else
+        Float_type err  = details::func_zero<Float_type>::eval();
+    #endif
+
+    return twofold<Float_type>(val, err);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_inv(const Float_type& b)
+{
+    namespace mrd   = matcl::raw::details;
+
+    Float_type one  = Float_type(1);
+    Float_type val  = one / b;
+    Float_type err  = - details::func_fms_a<Float_type>::eval(val, b, one);
+    err             = err * val;
+
+    return twofold<Float_type>(val, err);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_inv_f(const Float_type& b)
+{
+    namespace mrd   = matcl::raw::details;
+
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_inv(b);
+    #else
+        Float_type val  = Float_type(1) / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+
+        return twofold<Float_type>(val, err);
+    #endif    
 };
 
 template<class Float_type>
@@ -177,7 +240,20 @@ matcl::twofold_sqrt(const Float_type& a)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator+(const twofold<Float_type>& a, const twofold<Float_type>& b)
+matcl::twofold_sqrt_f(const Float_type& a)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_sqrt(a);
+    #else
+        Float_type val  = details::func_sqrt<Float_type>::eval(a);
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif    
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_sum(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
     // relative error is bounded by 3u^2/(1-4u) ~ 3u^2
     // this bound need not be optimal
@@ -197,10 +273,32 @@ matcl::operator+(const twofold<Float_type>& a, const twofold<Float_type>& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator+(const twofold<Float_type>& a, const Float_type& b)
+matcl::operator+(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    return twofold_sum(a, b);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_sum(const twofold<Float_type>& a, const Float_type& b)
 {
     twofold<Float_type> z0  = twofold_sum(a.value, b);
     return twofold<Float_type>::normalize_fast(z0.value, a.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_sum_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    twofold<Float_type> z0  = twofold_sum(a.value, b);
+    return twofold<Float_type>(z0.value, a.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator+(const twofold<Float_type>& a, const Float_type& b)
+{
+    return twofold_sum(a, b);
 }
 
 template<class Float_type>
@@ -213,10 +311,33 @@ matcl::twofold_sum_sorted(const twofold<Float_type>& a, const Float_type& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator+(const Float_type& a, const twofold<Float_type>& b)
+matcl::twofold_sum_sorted_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    twofold<Float_type> z0  = twofold_sum_sorted(a.value, b);
+    return twofold<Float_type>(z0.value, a.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_sum(const Float_type& a, const twofold<Float_type>& b)
 {
     twofold<Float_type> z0  = twofold_sum(a, b.value);
     return twofold<Float_type>::normalize_fast(z0.value, b.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_sum_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    twofold<Float_type> z0  = twofold_sum(a, b.value);
+    return twofold<Float_type>(z0.value, b.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator+(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_sum(a, b);
 }
 
 template<class Float_type>
@@ -229,7 +350,15 @@ matcl::twofold_sum_sorted(const Float_type& a, const twofold<Float_type>& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator-(const twofold<Float_type>& a, const twofold<Float_type>& b)
+matcl::twofold_sum_sorted_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    twofold<Float_type> z0  = twofold_sum_sorted(a, b.value);
+    return twofold<Float_type>(z0.value, b.error + z0.error);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_minus(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
     twofold<Float_type> z0  = twofold_minus(a.value, b.value);
     twofold<Float_type> z1  = twofold_minus(a.error, b.error);
@@ -244,10 +373,32 @@ matcl::operator-(const twofold<Float_type>& a, const twofold<Float_type>& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator-(const twofold<Float_type>& a, const Float_type& b)
+matcl::operator-(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    return twofold_minus(a, b);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_minus(const twofold<Float_type>& a, const Float_type& b)
 {
     twofold<Float_type> z0  = twofold_minus(a.value, b);
     return twofold<Float_type>::normalize_fast(z0.value, a.error + z0.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_minus_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    twofold<Float_type> z0  = twofold_minus(a.value, b);
+    return twofold<Float_type>(z0.value, a.error + z0.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator-(const twofold<Float_type>& a, const Float_type& b)
+{
+    return twofold_minus(a, b);
 };
 
 template<class Float_type>
@@ -260,10 +411,33 @@ matcl::twofold_minus_sorted(const twofold<Float_type>& a, const Float_type& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator-(const Float_type& a, const twofold<Float_type>& b)
+matcl::twofold_minus_sorted_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    twofold<Float_type> z0  = twofold_minus_sorted(a.value, b);
+    return twofold<Float_type>(z0.value, a.error + z0.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_minus(const Float_type& a, const twofold<Float_type>& b)
 {
     twofold<Float_type> z0  = twofold_minus(a, b.value);
     return twofold<Float_type>::normalize_fast(z0.value, z0.error - b.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_minus_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    twofold<Float_type> z0  = twofold_minus(a, b.value);
+    return twofold<Float_type>(z0.value, z0.error - b.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator-(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_minus(a, b);
 };
 
 template<class Float_type>
@@ -276,14 +450,29 @@ matcl::twofold_minus_sorted(const Float_type& a, const twofold<Float_type>& b)
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator-(const twofold<Float_type>& a)
+matcl::twofold_minus_sorted_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    twofold<Float_type> z0  = twofold_minus_sorted(a, b.value);
+    return twofold<Float_type>(z0.value, z0.error - b.error);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_uminus(const twofold<Float_type>& a)
 {
     return twofold<Float_type>(-a.value, -a.error);
 };
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator*(const twofold<Float_type>& a, const twofold<Float_type>& b)
+matcl::operator-(const twofold<Float_type>& a)
+{
+    return twofold_uminus(a);
+};
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
     // "Tight and rigourous error bounds for basic building blocks of 
     // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
@@ -299,8 +488,58 @@ matcl::operator*(const twofold<Float_type>& a, const twofold<Float_type>& b)
 }
 
 template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult_without_norm(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 6 u^2 if FMA is available, 7 u^2 otherwise,
+    // error can be reduced further to 5 u^2 at the cost of one multiplication
+    // and one addition
+    twofold<Float_type> p00 = twofold_mult(a.value, b.value);
+
+    Float_type p01  = a.value * b.error;
+    Float_type err  = fma_f(a.error, b.value, p01);
+    err             = err + p00.error;
+    return twofold<Float_type>(p00.value, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult_f(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_mult(a, b);
+    #else        
+        Float_type val  = a.value * b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult_f_without_norm(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_mult_without_norm(a, b);
+    #else        
+        Float_type val  = a.value * b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator*(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    return twofold_mult(a, b);
+}
+
+template<class Float_type>
 force_inline twofold<Float_type>
-matcl::operator*(const twofold<Float_type>& a, const Float_type& b)
+matcl::twofold_mult(const twofold<Float_type>& a, const Float_type& b)
 {
     namespace mrd   = matcl::raw::details;
 
@@ -321,15 +560,92 @@ matcl::operator*(const twofold<Float_type>& a, const Float_type& b)
 }
 
 template<class Float_type>
-force_inline twofold<Float_type> 
-matcl::operator*(const Float_type& a, const twofold<Float_type>& b)
+force_inline twofold<Float_type>
+matcl::twofold_mult_without_norm(const twofold<Float_type>& a, const Float_type& b)
 {
-    return b * a;
+    namespace mrd   = matcl::raw::details;
+
+    twofold<Float_type> p00 = twofold_mult(a.value, b);
+
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 2 u^2 if FMA is available, 3 u^2 otherwise, 
+    Float_type val          = p00.value;
+    Float_type err          = fma_f(a.error, b, p00.error);
+    return twofold<Float_type>(val, err);
 }
 
 template<class Float_type>
 force_inline twofold<Float_type>
-matcl::operator/(const twofold<Float_type>& a, const twofold<Float_type>& b)
+matcl::twofold_mult_f(const twofold<Float_type>& a, const Float_type& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_mult(a, b);
+    #else        
+        Float_type val  = a.value * b;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type>
+matcl::twofold_mult_f_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_mult_without_norm(a, b);
+    #else        
+        Float_type val  = a.value * b;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type>
+matcl::operator*(const twofold<Float_type>& a, const Float_type& b)
+{
+    return twofold_mult(a, b);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_mult(b, a);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_mult_without_norm(b, a);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult_f(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_mult_f(b, a);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_mult_f_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_mult_f_without_norm(b, a);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator*(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_mult(b, a);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type>
+matcl::twofold_div(const twofold<Float_type>& a, const twofold<Float_type>& b)
 {
     // "Tight and rigourous error bounds for basic building blocks of 
     // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
@@ -339,7 +655,7 @@ matcl::operator/(const twofold<Float_type>& a, const twofold<Float_type>& b)
     namespace mrd   = matcl::raw::details;
 
     Float_type val  = a.value / b.value;
-    twofold_t r     = b * val;
+    twofold_t r     = twofold_mult_without_norm(b, val);
     Float_type pi   = a.value - r.value;
     Float_type d_l  = a.error - r.error;
     Float_type d    = pi + d_l;
@@ -349,8 +665,62 @@ matcl::operator/(const twofold<Float_type>& a, const twofold<Float_type>& b)
 }
 
 template<class Float_type>
+force_inline twofold<Float_type>
+matcl::twofold_div_without_norm(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 15 u^2
+
+    using twofold_t = matcl::twofold<Float_type>;
+    namespace mrd   = matcl::raw::details;
+
+    Float_type val  = a.value / b.value;
+    twofold_t r     = twofold_mult_without_norm(b, val);
+    Float_type pi   = a.value - r.value;
+    Float_type d_l  = a.error - r.error;
+    Float_type d    = pi + d_l;
+    Float_type err  = d / b.value;
+
+    return twofold<Float_type>(val, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type>
+matcl::twofold_div_f(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_div(a, b);
+    #else        
+        Float_type val  = a.value / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type>
+matcl::twofold_div_f_without_norm(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_div_without_norm(a, b);
+    #else        
+        Float_type val  = a.value / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type>
+matcl::operator/(const twofold<Float_type>& a, const twofold<Float_type>& b)
+{
+    return twofold_div(a, b);
+}
+
+template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator/(const twofold<Float_type>& a, const Float_type& b)
+matcl::twofold_div(const twofold<Float_type>& a, const Float_type& b)
 {
     // "Tight and rigourous error bounds for basic building blocks of 
     // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
@@ -365,12 +735,67 @@ matcl::operator/(const twofold<Float_type>& a, const Float_type& b)
     Float_type dt   = (dh - pi.error);
     Float_type d    = (dt + a.error);
     Float_type err  = d / b;
+
     return twofold<Float_type>::normalize_fast(val, err);
 }
 
 template<class Float_type>
 force_inline twofold<Float_type> 
-matcl::operator/(const Float_type& a, const twofold<Float_type>& b)
+matcl::twofold_div_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 3 u^2.
+
+    namespace mrd   = matcl::raw::details;
+    using twofold_t = twofold<Float_type>;
+
+    Float_type val  = a.value / b;
+    twofold_t pi    = twofold_mult(val, b);
+    Float_type dh   = (a.value - pi.value);
+    Float_type dt   = (dh - pi.error);
+    Float_type d    = (dt + a.error);
+    Float_type err  = d / b;
+
+    return twofold<Float_type>(val, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div_f(const twofold<Float_type>& a, const Float_type& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_div(a, b);
+    #else        
+        Float_type val  = a.value / b;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div_f_without_norm(const twofold<Float_type>& a, const Float_type& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_div_without_norm(a, b);
+    #else        
+        Float_type val  = a.value / b;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator/(const twofold<Float_type>& a, const Float_type& b)
+{
+    return twofold_div(a, b);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div(const Float_type& a, const twofold<Float_type>& b)
 {
     // "Tight and rigourous error bounds for basic building blocks of 
     // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
@@ -380,12 +805,137 @@ matcl::operator/(const Float_type& a, const twofold<Float_type>& b)
     namespace mrd   = matcl::raw::details;
 
     Float_type val  = a / b.value;
-    twofold_t r     = b * val;
+    twofold_t r     = twofold_mult_without_norm(b, val);
     Float_type pi   = a - r.value;
     Float_type d    = pi - r.error;
     Float_type err  = d / b.value;
 
     return twofold<Float_type>::normalize_fast(val, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 15 u^2
+
+    using twofold_t = matcl::twofold<Float_type>;
+    namespace mrd   = matcl::raw::details;
+
+    Float_type val  = a / b.value;
+    twofold_t r     = twofold_mult_without_norm(b, val);
+    Float_type pi   = a - r.value;
+    Float_type d    = pi - r.error;
+    Float_type err  = d / b.value;
+
+    return twofold<Float_type>(val, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div_f(const Float_type& a, const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_div(a, b);
+    #else        
+        Float_type val  = a / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_div_f_without_norm(const Float_type& a, const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_div_without_norm(a, b);
+    #else        
+        Float_type val  = a / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::operator/(const Float_type& a, const twofold<Float_type>& b)
+{
+    return twofold_div(a, b);
+}
+
+//
+//
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_inv(const twofold<Float_type>& b)
+{
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 15 u^2 + 1u^2
+
+    using twofold_t = matcl::twofold<Float_type>;
+    namespace mrd   = matcl::raw::details;
+
+    Float_type one  = Float_type(1);
+    Float_type val  = one / b.value;
+    twofold_t r     = twofold_mult_without_norm(b, val);
+    Float_type d    = (one - r.value) - r.error;
+
+    // additional error due to using val instead of dividing by b.value
+    Float_type err  = d * val;
+
+    return twofold<Float_type>::normalize_fast(val, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_inv_without_norm(const twofold<Float_type>& b)
+{
+    // "Tight and rigourous error bounds for basic building blocks of 
+    // double-word arithmetic", M. Joldes, J.M. Muller, V. Popescu:
+    // relative forward error is 15 u^2 + 1u^2
+
+    using twofold_t = matcl::twofold<Float_type>;
+    namespace mrd   = matcl::raw::details;
+
+    Float_type one  = Float_type(1);
+    Float_type val  = one / b.value;
+    twofold_t r     = twofold_mult_without_norm(b, val);
+    Float_type d    = (one - r.value) - r.error;
+
+    // additional error due to using val instead of dividing by b.value
+    Float_type err  = d * val;
+
+    return twofold<Float_type>(val, err);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_inv_f(const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_inv(a, b);
+    #else        
+        Float_type val  = Float_type(1) / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::twofold_inv_f_without_norm(const twofold<Float_type>& b)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return twofold_inv_without_norm(b);
+    #else        
+        Float_type val  = Float_type(1) / b.value;
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
 }
 
 template<class Float_type>
@@ -401,6 +951,47 @@ matcl::sqrt(const twofold<Float_type>& a)
     Float_type z1   = t2 / d;
 
     return twofold<Float_type>::normalize_fast(z0, z1);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::sqrt_without_norm(const twofold<Float_type>& a)
+{
+    namespace mrd   = matcl::raw::details;
+
+    Float_type z0   = details::func_sqrt<Float_type>::eval(a.value);
+    Float_type t1   = details::func_fms_a<Float_type>::eval(z0, z0, a.value);
+    Float_type t2   = a.error - t1;
+    Float_type d    = Float_type(2.0) * z0;
+    Float_type z1   = t2 / d;
+
+    return twofold<Float_type>(z0, z1);
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::sqrt_f(const twofold<Float_type>& a)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return sqrt(a, b);
+    #else        
+        Float_type val  = details::func_sqrt<Float_type>::eval(a.value);
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
+}
+
+template<class Float_type>
+force_inline twofold<Float_type> 
+matcl::sqrt_f_without_norm(const twofold<Float_type>& a)
+{
+    #if MATCL_ARCHITECTURE_HAS_FMA
+        return sqrt_without_norm(a, b);
+    #else        
+        Float_type val  = details::func_sqrt<Float_type>::eval(a.value);
+        Float_type err  = details::func_zero<Float_type>::eval();
+        return twofold<Float_type>(val, err);
+    #endif
 }
 
 template<class Float_type>
