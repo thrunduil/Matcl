@@ -179,7 +179,7 @@ struct Func_sin : matcl::test_accuracy_function<Val>
         m_rand_denormals    = matcl::test::simd_accuracy_tester::rand_denormals();
 
         Val max     = std::numeric_limits<Val>::max();
-        Val max_1   = Val(411774.0);
+        Val max_1   = Val(823549.6);
 
         add_log_range(-max, max);
         add_linear_range(-max_1, max_1);
@@ -223,7 +223,7 @@ struct Func_cos : matcl::test_accuracy_function<Val>
         m_rand_denormals    = matcl::test::simd_accuracy_tester::rand_denormals();
 
         Val max     = std::numeric_limits<Val>::max();
-        Val max_1   = Val(411774.0);
+        Val max_1   = Val(823549.6);
 
         add_log_range(-max, max);
         add_linear_range(-max_1, max_1);
@@ -254,6 +254,94 @@ struct Func_cos : matcl::test_accuracy_function<Val>
     Val eval_ref(const Val& v) const override
     {
         return std::cos(v);
+    }
+};
+
+template<class Val>
+struct Func_tan : matcl::test_accuracy_function<Val>
+{
+    bool m_rand_denormals;
+
+    Func_tan()
+    {
+        m_rand_denormals    = matcl::test::simd_accuracy_tester::rand_denormals();
+
+        Val max     = std::numeric_limits<Val>::max();
+        Val max_1   = Val(823549.6);
+
+        add_log_range(-max, max);
+        add_linear_range(-max_1, max_1);
+
+        add_pi2_mult<Val>::eval(*this);
+    };
+
+    virtual std::string name() const override
+    { 
+        return "tan"; 
+    };
+
+    virtual bool rand_denormals() const override
+    {
+        return m_rand_denormals;
+    }
+    
+    matcl::mp_float eval_mp(const matcl::mp_float& v) const override
+    {
+        return tan(v);
+    }
+
+    Val eval_base(const Val& v) const override
+    {
+        return matcl::simd::tan(v);
+    }
+
+    Val eval_ref(const Val& v) const override
+    {
+        return std::tan(v);
+    }
+};
+
+template<class Val>
+struct Func_cot : matcl::test_accuracy_function<Val>
+{
+    bool m_rand_denormals;
+
+    Func_cot()
+    {
+        m_rand_denormals    = matcl::test::simd_accuracy_tester::rand_denormals();
+
+        Val max     = std::numeric_limits<Val>::max();
+        Val max_1   = Val(823549.6);
+
+        add_log_range(-max, max);
+        add_linear_range(-max_1, max_1);
+
+        add_pi2_mult<Val>::eval(*this);
+    };
+
+    virtual std::string name() const override
+    { 
+        return "cot"; 
+    };
+
+    virtual bool rand_denormals() const override
+    {
+        return m_rand_denormals;
+    }
+    
+    matcl::mp_float eval_mp(const matcl::mp_float& v) const override
+    {
+        return cot(v);
+    }
+
+    Val eval_base(const Val& v) const override
+    {
+        return matcl::simd::cot(v);
+    }
+
+    Val eval_ref(const Val& v) const override
+    {
+        return Val(1) / std::tan(v);
     }
 };
 

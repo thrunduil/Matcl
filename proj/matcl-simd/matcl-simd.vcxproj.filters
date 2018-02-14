@@ -399,6 +399,18 @@
     <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_sincos_float.h">
       <Filter>Source Files\include\details\math\impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_tan_double.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_tancot_helpers.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\pi2_reduction.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-simd\details\math\impl\simd_tan_float.h">
+      <Filter>Source Files\include\details\math\impl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-simd\details\arch\simd_impl.inl">
@@ -539,6 +551,9 @@
       <Filter>Source Files\src\math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-simd\math\simd_log.cpp">
+      <Filter>Source Files\src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-simd\math\simd_tancot.cpp">
       <Filter>Source Files\src\math</Filter>
     </ClCompile>
   </ItemGroup>

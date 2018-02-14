@@ -843,6 +843,48 @@ const char* default_exception_message::formatted_disp_invalid_row_size(Integer s
     return current_message.c_str();
 };
 
+const char* default_exception_message::limest_error_valid_initial_point_not_found(double x)
+{
+    std::ostringstream msg;
+
+    msg << "limest error: could not find initial point with well defined value of supplied function"
+        << "; point is: " << x;
+
+    current_message = msg.str();
+    return current_message.c_str();
+}
+
+const char* default_exception_message::limest_error_nonfinite_starting_point()
+{
+    std::ostringstream msg;
+
+    msg << "limest error: unable to evaluate limit; point is not finite";
+
+    current_message = msg.str();
+    return current_message.c_str();
+}
+
+const char* default_exception_message::seq_error_omega_is_zero()
+{
+    std::ostringstream msg;
+
+    msg << "sequence transformation error: omega is zero";
+
+    current_message = msg.str();
+    return current_message.c_str();
+}
+
+const char* default_exception_message::seq_error_two_equal_points(double x)
+{
+    std::ostringstream msg;
+
+    msg << "sequence transformation error: two interpolation points are equal or too close to each other"
+        << "; invalid point is: " << x;
+
+    current_message = msg.str();
+    return current_message.c_str();
+}
+
 void default_exception_message::warning(const std::string& msg)
 {
     std::stringstream of;

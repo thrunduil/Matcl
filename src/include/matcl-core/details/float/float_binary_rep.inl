@@ -54,7 +54,7 @@ force_inline double matcl::hex_double(const uint64_t& val)
 };
 
 //-----------------------------------------------------------------------
-//                   DOUBLE DECODERS
+//                   DOUBLE PRECISION DECODER
 //-----------------------------------------------------------------------
 force_inline
 double_decoder::double_decoder(const double* val)
@@ -92,7 +92,7 @@ size_t double_decoder::get_sign() const
 };
 
 //-----------------------------------------------------------------------
-//                   SINGLE DECODERS
+//                   SINGLE PRECISION DECODER
 //-----------------------------------------------------------------------
 force_inline
 float_decoder::float_decoder(const float* val)

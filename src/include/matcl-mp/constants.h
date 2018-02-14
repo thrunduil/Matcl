@@ -32,8 +32,14 @@ namespace matcl { namespace constants
 //                      float constants
 //-----------------------------------------------------------------
 // estimate machine epsilon for the given precision;
-// return smallest eps such that 1.0 + eps != 1.0
+// epsilon is the distance from 1.0 to the next larger number
 MATCL_MP_EXPORT mp_float    mp_eps(precision prec = precision(0));
+
+// smallest positive normalized number
+MATCL_MP_EXPORT mp_float    mp_min_real(precision prec = precision(0));
+
+// largest positive normalized number
+MATCL_MP_EXPORT mp_float    mp_max_real(precision prec = precision(0));
 
 // infinite value
 MATCL_MP_EXPORT mp_float    mp_inf(precision prec = precision(0));

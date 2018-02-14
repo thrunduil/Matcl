@@ -359,4 +359,87 @@ struct simd_sincos<float, Bits, nosimd_tag>
     };
 };
 
+//-----------------------------------------------------------------------
+//                          tan/cot
+//-----------------------------------------------------------------------
+template<int Bits>
+struct simd_tancot<double, Bits, nosimd_tag>
+{
+    using simd_type     = simd<double, Bits, nosimd_tag>;
+
+    force_inline
+    static simd_type eval_tan(const simd_type& a)
+    {
+        static const 
+        int vec_size    = simd_type::vector_size;
+
+        simd_type res;
+
+        const double* ptr_a = a.get_raw_ptr();
+        double* ptr_res     = res.get_raw_ptr();
+
+        for (int i = 0; i < vec_size; ++i)
+            ptr_res[i]      = ms::tan(ptr_a[i]);
+
+        return res;
+    };
+
+    force_inline
+    static simd_type eval_cot(const simd_type& a)
+    {
+        static const 
+        int vec_size    = simd_type::vector_size;
+
+        simd_type res;
+
+        const double* ptr_a = a.get_raw_ptr();
+        double* ptr_res     = res.get_raw_ptr();
+
+        for (int i = 0; i < vec_size; ++i)
+            ptr_res[i]      = ms::cot(ptr_a[i]);
+
+        return res;
+    };
+};
+
+template<int Bits>
+struct simd_tancot<float, Bits, nosimd_tag>
+{
+    using simd_type     = simd<float, Bits, nosimd_tag>;
+
+    force_inline
+    static simd_type eval_tan(const simd_type& a)
+    {
+        static const 
+        int vec_size    = simd_type::vector_size;
+
+        simd_type res;
+
+        const float* ptr_a  = a.get_raw_ptr();
+        float* ptr_res      = res.get_raw_ptr();
+
+        for (int i = 0; i < vec_size; ++i)
+            ptr_res[i]      = ms::tan(ptr_a[i]);
+
+        return res;
+    };
+
+    force_inline
+    static simd_type eval_cot(const simd_type& a)
+    {
+        static const 
+        int vec_size    = simd_type::vector_size;
+
+        simd_type res;
+
+        const float* ptr_a  = a.get_raw_ptr();
+        float* ptr_res      = res.get_raw_ptr();
+
+        for (int i = 0; i < vec_size; ++i)
+            ptr_res[i]      = ms::cot(ptr_a[i]);
+
+        return res;
+    };
+};
+
 }}}

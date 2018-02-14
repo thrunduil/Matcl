@@ -114,4 +114,14 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 cos(const simd<Val, Bits, Simd_tag>& x);
 
+// return the tangent function of x in radians
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+tan(const simd<Val, Bits, Simd_tag>& x);
+
+// return the cotangent function of x in radians
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+cot(const simd<Val, Bits, Simd_tag>& x);
+
 }}

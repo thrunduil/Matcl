@@ -333,6 +333,9 @@ Integer mp_float::cast_int(round_mode rm) const
         case round_mode::trunc:
             return mpfr_get_si(mmd::impl_value(*this), MPFR_RNDZ);
             break;
+        case round_mode::nearby:
+            return mpfr_get_si(mmd::impl_value(*this), MPFR_RNDN);
+            break;            
         case round_mode::round:
         default:
             return mpfr_get_si(mmd::impl_value(*this), MPFR_RNDNA);
@@ -365,6 +368,9 @@ mp_int mp_float::cast_mp_int(round_mode rm) const
         case round_mode::trunc:
             mpfr_get_z(iv->backend().data(), v, MPFR_RNDZ);
             break;
+        case round_mode::nearby:
+            mpfr_get_z(iv->backend().data(), v, MPFR_RNDN);
+            break;
         case round_mode::round:
         default:
             mpfr_get_z(iv->backend().data(), v, MPFR_RNDNA);
@@ -393,6 +399,9 @@ bool mp_float::can_cast_int(round_mode rm) const
         case round_mode::trunc:
             return mpfr_fits_slong_p(mmd::impl_value(*this), MPFR_RNDZ) != 0;
             break;
+        case round_mode::nearby:
+            return mpfr_fits_slong_p(mmd::impl_value(*this), MPFR_RNDN) != 0;
+            break;
         case round_mode::round:
         default:
             return mpfr_fits_slong_p(mmd::impl_value(*this), MPFR_RNDNA) != 0;
@@ -400,7 +409,7 @@ bool mp_float::can_cast_int(round_mode rm) const
     };
 };
 
-// digits10 = ceil(bits*log[10](2))
+// bits = ceil(digits*log[2](10))
 precision mp_float::digits10_to_bits(precision d)
 {
     const double LOG2_10 = 3.3219280948873624;
@@ -408,7 +417,7 @@ precision mp_float::digits10_to_bits(precision d)
     return precision(size_t(std::ceil( double(d) * LOG2_10 )));
 }
 
-// bits = ceil(digits*log[2](10))
+// digits10 = ceil(bits*log[10](2))
 precision mp_float::bits_to_digits10(precision b)
 {
     const double LOG10_2 = 0.30102999566398119;

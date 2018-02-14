@@ -88,7 +88,8 @@ enum class round_mode
     floor,      // round toward -INF
     ceil,       // round toward +INF
     trunc,      // round toward 0
-    round       // round to nearest with halfway cases rounded away from zero
+    round,      // round to nearest with halfway cases rounded away from zero
+    nearby,     // round to nearest with halfway cases to even
 };
 
 // unlimited precision floating point value type

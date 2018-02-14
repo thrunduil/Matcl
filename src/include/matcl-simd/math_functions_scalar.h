@@ -95,8 +95,16 @@ float   log(float x);
 double  sin(double x);
 float   sin(float x);
 
-// return the sine function of x in radians
+// return the cosine function of x in radians
 double  cos(double x);
 float   cos(float x);
+
+// return the tangent function of x in radians
+double  tan(double x);
+float   tan(float x);
+
+// return the cotangent function of x in radians
+double  cot(double x);
+float   cot(float x);
 
 }}

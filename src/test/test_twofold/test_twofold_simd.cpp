@@ -246,6 +246,10 @@ void test_twofold_simd::test_functions()
                 (dm, N, ptr_in_1, ptr_in_2, ptr_out_1, ptr_out_2, ptr_out_base);
     test_function<T, test_functions::Func_sqrt_2>
                 (dm, N, ptr_in_1, ptr_in_2, ptr_out_1, ptr_out_2, ptr_out_base);
+    test_function<T, test_functions::Func_inv_1>
+                (dm, N, ptr_in_1, ptr_in_2, ptr_out_1, ptr_out_2, ptr_out_base);
+    test_function<T, test_functions::Func_inv_2>
+                (dm, N, ptr_in_1, ptr_in_2, ptr_out_1, ptr_out_2, ptr_out_base);
 };
 
 template<class T>

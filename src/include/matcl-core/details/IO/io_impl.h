@@ -49,25 +49,27 @@ struct get_stream_precision<dynamic::object>
 {
     static Integer eval()   { return 0; };
 };
+
+// we need two extra decimal digits to read value back without error
 template<>
 struct get_stream_precision<Real>
 {
-    static Integer eval()   { return std::numeric_limits<Real>::max_digits10; };
+    static Integer eval()   { return std::numeric_limits<Real>::max_digits10 + 2; };
 };
 template<>
 struct get_stream_precision<Float>
 {
-    static Integer eval()   { return std::numeric_limits<Float>::max_digits10; };
+    static Integer eval()   { return std::numeric_limits<Float>::max_digits10 + 2; };
 };
 template<>
 struct get_stream_precision<Complex>
 {
-    static Integer eval()   { return std::numeric_limits<Real>::max_digits10; };
+    static Integer eval()   { return std::numeric_limits<Real>::max_digits10 + 2; };
 };
 template<>
 struct get_stream_precision<Float_complex>
 {
-    static Integer eval()   { return std::numeric_limits<Float>::max_digits10; };
+    static Integer eval()   { return std::numeric_limits<Float>::max_digits10 + 2; };
 };
 
 struct MATCL_CORE_EXPORT stream_helpers

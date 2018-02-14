@@ -659,6 +659,8 @@ void test_simd_scalar::test_functions_math()
     test_function_math<T, test_functions::Func_exp>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function_math<T, test_functions::Func_sin>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function_math<T, test_functions::Func_cos>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_math<T, test_functions::Func_tan>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
+    test_function_math<T, test_functions::Func_cot>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_fraction>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_iexponent>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
     test_function<T, test_functions::Func_exponent>(dm, N, ptr_in, ptr_out, ptr_out_gen); 
