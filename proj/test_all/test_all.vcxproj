@@ -168,7 +168,8 @@ start /wait $(OutDir)\test_dynamic-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_scal_accuracy-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_performance-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_twofold-$(Platform)-$(Configuration).exe
-start /wait $(OutDir)\test_poly-$(Platform)-$(Configuration).exe</Command>
+start /wait $(OutDir)\test_poly-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_sequence-$(Platform)-$(Configuration).exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -209,7 +210,8 @@ start /wait $(OutDir)\test_dynamic-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_scal_accuracy-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_performance-$(Platform)-$(Configuration).exe
 start /wait $(OutDir)\test_twofold-$(Platform)-$(Configuration).exe
-start /wait $(OutDir)\test_poly-$(Platform)-$(Configuration).exe</Command>
+start /wait $(OutDir)\test_poly-$(Platform)-$(Configuration).exe
+start /wait $(OutDir)\test_sequence-$(Platform)-$(Configuration).exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
