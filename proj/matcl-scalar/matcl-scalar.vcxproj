@@ -26,6 +26,8 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\details\object_interface.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalar_gen_details.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\scalfunc_helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\sequence\accelerators_helpers.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\details\sequence\seq_transform_base.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\details\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\general\fwd_decls.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\IO\formatted_disp.h" />
@@ -35,6 +37,14 @@
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_matrix.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\func_unary.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\manip.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\aitken_delta.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\limest.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\objects.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\richardson.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\sequence.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\sidi_w.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\wynn_epsilon.h" />
+    <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\sequence\wynn_rho.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\utils.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\lib_functions\scalar_gen.h" />
     <ClInclude Include="..\..\src\include\matcl-scalar\matcl_scalar.h" />
@@ -69,6 +79,7 @@
     <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\formatted_disp_stream.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\IO\scalar_io.cpp" />
+    <ClCompile Include="..\..\src\matcl-scalar\lib_functions\limest.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\scalar_gen.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\lib_functions\utils.cpp" />
     <ClCompile Include="..\..\src\matcl-scalar\objects\object.cpp" />
@@ -88,6 +99,9 @@
     <ProjectReference Include="..\matcl-dynamic\matcl-dynamic.vcxproj">
       <Project>{87be42f1-96bb-43d6-a8a8-9b5d8510bfe8}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\matcl-mp\matcl-mp.vcxproj">
+      <Project>{72527908-9492-4017-ab00-f4b9c91565ac}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-scalar\details\combinatorics.inl" />
@@ -95,7 +109,16 @@
     <None Include="..\..\src\include\matcl-scalar\details\func_matrix.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\func_unary.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\manip.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\object.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\scalar_io.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\accelerators_helpers.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\aitken_delta.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\objects_impl.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\richardson.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\seq_transform_base.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\sidi_w.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\wynn_epsilon.inl" />
+    <None Include="..\..\src\include\matcl-scalar\details\sequence\wynn_rho.inl" />
     <None Include="..\..\src\include\matcl-scalar\details\typed_object_functions.inl" />
   </ItemGroup>
   <ItemGroup>

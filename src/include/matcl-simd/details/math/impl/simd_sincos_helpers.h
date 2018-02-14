@@ -50,6 +50,19 @@ struct convert_int32<Simd_int32, Simd_int32>
     }
 };
 
+template<>
+struct convert_int32<simd<int32_t, 128, scalar_nosimd_tag>, simd<int64_t, 128, scalar_nosimd_tag>>
+{
+    using simd32    = simd<int32_t, 128, scalar_nosimd_tag>;
+    using simd64    = simd<int64_t, 128, scalar_nosimd_tag>;
+
+    force_inline
+    static simd64 eval(const simd32& x)
+    {
+        return x.convert_to_int64();
+    }
+};
+
 #if MATCL_ARCHITECTURE_HAS_SSE2
     template<>
     struct convert_int32<simd<int32_t, 128, sse_tag>, simd<int64_t, 128, sse_tag>>
@@ -109,7 +122,7 @@ struct get_mask_sign<int64_t>
 };
 
 //-----------------------------------------------------------------------
-//                              DOUBLE-FLOAT
+//                      DOUBLE-FLOAT SIN-COS
 //-----------------------------------------------------------------------
 
 static const int sin_tag    = 0;

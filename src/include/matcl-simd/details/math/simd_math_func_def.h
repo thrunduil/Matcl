@@ -49,6 +49,13 @@ struct simd_sincos
 };
 
 template<class Val, int Bits, class Simd_tag>
+struct simd_tancot
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function tan/cot not defined for for given arguments");
+};
+
+template<class Val, int Bits, class Simd_tag>
 struct simd_pow2k
 {
     static_assert(md::dependent_false<Simd_tag>::value, 

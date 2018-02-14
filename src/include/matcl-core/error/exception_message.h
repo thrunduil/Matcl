@@ -146,6 +146,11 @@ class MATCL_CORE_EXPORT exception_message : public matcl_new_delete
         virtual const char* object_value_type_not_allowed(const std::string& func) = 0;
         virtual const char* integer_value_type_not_allowed(const std::string& func) = 0;
         virtual const char* function_not_defined_for_complex(const std::string& name) = 0;
+
+        virtual const char* limest_error_valid_initial_point_not_found(double x) = 0;
+        virtual const char* limest_error_nonfinite_starting_point() = 0;
+        virtual const char* seq_error_omega_is_zero() = 0;
+        virtual const char* seq_error_two_equal_points(double x) = 0;
 };
 
 // default strings associated with exception classes
@@ -245,6 +250,11 @@ class MATCL_CORE_EXPORT default_exception_message : public exception_message
         virtual const char* object_value_type_not_allowed(const std::string& func) override;
         virtual const char* integer_value_type_not_allowed(const std::string& func) override;
         virtual const char* function_not_defined_for_complex(const std::string& name) override;
+
+        virtual const char* limest_error_valid_initial_point_not_found(double x) override;
+        virtual const char* limest_error_nonfinite_starting_point() override;
+        virtual const char* seq_error_omega_is_zero() override;
+        virtual const char* seq_error_two_equal_points(double x) override;
 
         static std::string  matrix_type_string(matcl::mat_code mt);        
 };

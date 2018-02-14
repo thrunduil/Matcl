@@ -1169,6 +1169,56 @@ struct Func_cos
     };
 };
 
+struct Func_tan
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return tan(x); 
+    }
+
+    template<class T>    
+    force_inline static T eval_base(const T& x)
+    { 
+        return std::tan(x); 
+    }
+
+    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    { 
+        return tan(x); 
+    }
+
+    static std::string name()
+    { 
+        return "tan"; 
+    };
+};
+
+struct Func_cot
+{
+    template<class T>    
+    force_inline static T eval(const T& x)
+    { 
+        return cot(x); 
+    }
+
+    template<class T>    
+    force_inline static T eval_base(const T& x)
+    { 
+        return T(1) / std::tan(x); 
+    }
+
+    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    { 
+        return cot(x); 
+    }
+
+    static std::string name()
+    { 
+        return "cot"; 
+    };
+};
+
 struct Func_log
 {
     template<class T>    

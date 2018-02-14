@@ -26,7 +26,14 @@
 #include "matcl-mp/func_binary.h"
 #include "matcl-core/details/scalfunc_real.h"
 #include "error.h"
+#include <boost/functional/hash.hpp>
 
+#pragma warning(push)
+#pragma warning(disable: 4100) //unreferenced formal parameter
+
+#include "gmp-impl.h"
+
+#pragma warning(pop)
 namespace matcl
 {
 
@@ -387,6 +394,64 @@ fp_type matcl::fpclassify(const mp_float& val)
 fp_type matcl::fpclassify(const mp_rational& val)
 {
     return fpclassify(mp_float(val));
+}
+
+//------------------------------------------------------
+size_t matcl::hash_value(const mp_int& val)
+{
+    using impl_int          = mmd::impl_int;
+
+    const impl_int& imp     = *mmd::get_ptr<mp_int>::eval(val.m_data);
+    const mpz_t& imp0       = imp.backend().data();
+
+    int size                = imp0[0]._mp_size;
+    size_t seed             = (size_t)size;
+
+    size                    = std::abs(size);
+    
+    for (int i = 0; i < size; ++i)
+        boost::hash_combine(seed, size_t(imp0[0]._mp_d[i]));
+
+    return seed;
+}
+
+size_t matcl::hash_value(const mp_float& val)
+{
+    if (is_zero(val) == true)
+        return 0;
+    
+    using impl_float        = mmd::impl_float;
+
+    const impl_float& v1    = *mmd::get_ptr<mp_float>::eval(val.m_data);
+    
+    int size                = v1[0]._mpfr_prec / BITS_PER_MP_LIMB;
+    size                    += (v1[0]._mpfr_prec % BITS_PER_MP_LIMB)? 1 : 0;
+
+    std::size_t seed        = 0;    
+
+    for (int i = 0; i < size; ++i)
+        boost::hash_combine(seed, v1[0]._mpfr_d[i]);
+
+    boost::hash_combine(seed, v1[0]._mpfr_exp);
+    boost::hash_combine(seed, v1[0]._mpfr_sign);
+
+    return seed;
+}
+
+size_t matcl::hash_value(const mp_rational& val)
+{
+    size_t seed = hash_value(val.numerator());
+    boost::hash_combine(seed, hash_value(val.denominator()));
+
+    return seed;
+}
+
+size_t matcl::hash_value(const mp_complex& val)
+{
+    size_t seed = hash_value(val.real());
+    boost::hash_combine(seed, hash_value(val.imag()));
+
+    return seed;
 }
 
 //------------------------------------------------------

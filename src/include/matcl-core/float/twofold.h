@@ -54,6 +54,15 @@ namespace matcl
 // for some small k (at most 16), where u is the unit roundoff (u = 2^-53 for 
 // double precision)
 
+// a function with name [func_name]_without_norm performs the same operations as
+// function [func_name], but does not return normalized twofold value; such functions
+// are faster, and have the same accuracy as functions [func_name]. However subsequent
+// calls of twofold functions on returned values will give less accurate results,
+// unless explicit normalization is performed (through twofold_sum_sorted,
+// twofold::normalize_fast, or other functions). Additionally member functions from
+// the twofold class should not be called. For example instead of t.sum(), where t is
+// non-normalized value one should call t.value + t.error.
+
 // representation of a floating point number as value + error
 template<class Float_type>
 class twofold
@@ -105,6 +114,10 @@ class twofold
 //                      ARITHMETIC FUNCTIONS
 //-----------------------------------------------------------------------
 
+//---------------------------------------------
+//              A + B
+//---------------------------------------------
+
 // evaluate a + b for arbitrary a and b; result is exact
 template<class Float_type>
 twofold<Float_type> twofold_sum(const Float_type& a, const Float_type& b);
@@ -124,6 +137,60 @@ twofold<Float_type> twofold_sum_sorted(const twofold<Float_type>& a, const Float
 template<class Float_type>
 twofold<Float_type> twofold_sum_sorted(const Float_type& a, const twofold<Float_type>& b);
 
+// evaluate a + b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_sum_sorted_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
+
+// evaluate a + b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_sum_sorted_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+// evaluate a + b; relative forward error does not exceed 3 * u^2
+template<class Float_type>
+twofold<Float_type> operator+(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
+// equivalent to a + b
+template<class Float_type>
+twofold<Float_type> twofold_sum(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
+// evaluate a + b; relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> operator+(const twofold<Float_type>& a, const Float_type& b);
+
+// equivalent to a + b
+template<class Float_type>
+twofold<Float_type> twofold_sum(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a + b; relative forward error does not exceed 2 * u^2
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_sum_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
+
+// evaluate a + b; relative forward error does not exceed 2 * u^2
+template<class Float_type>
+twofold<Float_type> operator+(const Float_type& a, const twofold<Float_type>& b);
+
+// equivalent to a + b
+template<class Float_type>
+twofold<Float_type> twofold_sum(const Float_type& a, const twofold<Float_type>& b);
+
+// evaluate a + b; relative forward error does not exceed 2 * u^2
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_sum_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+//---------------------------------------------
+//              A - B
+//---------------------------------------------
+
 // evaluate a - b for arbitrary a and b; result is exact
 template<class Float_type>
 twofold<Float_type> twofold_minus(const Float_type& a, const Float_type& b);
@@ -139,80 +206,339 @@ template<class Float_type>
 twofold<Float_type> twofold_minus_sorted(const twofold<Float_type>& a, const Float_type& b);
 
 // evaluate a - b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_minus_sorted_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
+
+// evaluate a - b, provided |a| >= |b|; this function is faster operator+
 // relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> twofold_minus_sorted(const Float_type& a, const twofold<Float_type>& b);
 
-// evaluate a * b; result is exact
+// evaluate a - b, provided |a| >= |b|; this function is faster operator+
+// relative forward error does not exceed 2 * u^2;
+// result is not normalized, see general info on non-normalized results
 template<class Float_type>
-twofold<Float_type> twofold_mult(const Float_type& a, const Float_type& b);
-
-// evaluate a / b; relative forward error does not exceed 1 * u^2
-template<class Float_type>
-twofold<Float_type> twofold_div(const Float_type& a, const Float_type& b);
-
-// square root of a; relative forward error does not exceed 1 * u^2
-template<class Float_type>
-twofold<Float_type> twofold_sqrt(const Float_type& a);
-
-// evaluate a + b; relative forward error does not exceed 3 * u^2
-template<class Float_type>
-twofold<Float_type> operator+(const twofold<Float_type>& a, const twofold<Float_type>& b);
-
-// evaluate a + b; relative forward error does not exceed 2 * u^2
-template<class Float_type>
-twofold<Float_type> operator+(const twofold<Float_type>& a, const Float_type& b);
-
-// evaluate a + b; relative forward error does not exceed 2 * u^2
-template<class Float_type>
-twofold<Float_type> operator+(const Float_type& a, const twofold<Float_type>& b);
+twofold<Float_type> twofold_minus_sorted_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
 
 // evaluate a - b; relative forward error does not exceed 3 * u^2
 template<class Float_type>
 twofold<Float_type> operator-(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
+// equivalent to a - b
+template<class Float_type>
+twofold<Float_type> twofold_minus(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
 // evaluate a - b; relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> operator-(const twofold<Float_type>& a, const Float_type& b);
+
+// equivalent to a - b
+template<class Float_type>
+twofold<Float_type> twofold_minus(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a - b; relative forward error does not exceed 2 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_minus_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
 
 // evaluate a - b; relative forward error does not exceed 2 * u^2
 template<class Float_type>
 twofold<Float_type> operator-(const Float_type& a, const twofold<Float_type>& b);
 
+// equivalent to a - b
+template<class Float_type>
+twofold<Float_type> twofold_minus(const Float_type& a, const twofold<Float_type>& b);
+
+// evaluate a - b; relative forward error does not exceed 2 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_minus_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+//---------------------------------------------
+//              -A
+//---------------------------------------------
 // evaluate -a; result is exact
 template<class Float_type>
 twofold<Float_type> operator-(const twofold<Float_type>& a);
+
+// equivalent to -a
+template<class Float_type>
+twofold<Float_type> twofold_uminus(const twofold<Float_type>& a);
+
+//---------------------------------------------
+//              A * B
+//---------------------------------------------
+// evaluate a * b; result is exact
+template<class Float_type>
+twofold<Float_type> twofold_mult(const Float_type& a, const Float_type& b);
+
+// evaluate a * b; result is exact if FMA instruction is available,
+// otherwise this function is equivalent to scalar multiplication a * b
+template<class Float_type>
+twofold<Float_type> twofold_mult_f(const Float_type& a, const Float_type& b);
 
 // evaluate a * b; relative forward error does not exceed 7 * u^2
 // (6 u^2 if FMA instruction is available)
 template<class Float_type>
 twofold<Float_type> operator*(const twofold<Float_type>& a, const twofold<Float_type>& b);
 
+// equivalent to a * b
+template<class Float_type>
+twofold<Float_type> twofold_mult(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
+// evaluate a * b; relative forward error does not exceed 6 * u^2 if FMA
+// instruction is available, otherwise this function is equivalent to scalar
+// multiplication a.value * b.value
+template<class Float_type>
+twofold<Float_type> twofold_mult_f(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
+// evaluate a * b; relative forward error does not exceed 7 * u^2
+// (6 u^2 if FMA instruction is available);
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_mult_without_norm(const twofold<Float_type>& a, 
+                        const twofold<Float_type>& b);
+
+// evaluate a * b; relative forward error does not exceed 7 * u^2
+// (6 u^2 if FMA instruction is available);
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_mult_f_without_norm(const twofold<Float_type>& a, 
+                        const twofold<Float_type>& b);
+
 // evaluate a * b;  relative forward error does not exceed 3 * u^2
 // (2 u^2 if FMA instruction is available)
 template<class Float_type>
 twofold<Float_type> operator*(const twofold<Float_type>& a, const Float_type& b);
+
+// equivalent to a * b
+template<class Float_type>
+twofold<Float_type> twofold_mult(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a * b;  relative forward error does not exceed 2 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// multiplication a.value * b
+template<class Float_type>
+twofold<Float_type> twofold_mult_f(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a * b;  relative forward error does not exceed 3 * u^2
+// (2 u^2 if FMA instruction is available);
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_mult_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
+
+// evaluate a * b;  relative forward error does not exceed 2 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// multiplication a.value * b;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_mult_f_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
 
 // evaluate a * b; relative forward error does not exceed 3 * u^2
 // (2 u^2 if FMA instruction is available)
 template<class Float_type>
 twofold<Float_type> operator*(const Float_type& a, const twofold<Float_type>& b);
 
+// equivalent to a * b
+template<class Float_type>
+twofold<Float_type> twofold_mult(const Float_type& a, const twofold<Float_type>& b);
+
+// evaluate a * b;  relative forward error does not exceed 2 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// multiplication a * b.value
+template<class Float_type>
+twofold<Float_type> twofold_mult_f(const Float_type& a, const twofold<Float_type>& b);
+
+// evaluate a * b; relative forward error does not exceed 3 * u^2
+// (2 u^2 if FMA instruction is available);
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_mult_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+// evaluate a * b;  relative forward error does not exceed 2 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// multiplication a * b.value;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_mult_f_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+//---------------------------------------------
+//              A / B
+//---------------------------------------------
+
+// evaluate a / b; relative forward error does not exceed 1 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_div(const Float_type& a, const Float_type& b);
+
+// evaluate a / b; relative forward error does not exceed 1 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division a / b
+template<class Float_type>
+twofold<Float_type> twofold_div_f(const Float_type& a, const Float_type& b);
+
+// evaluate 1 / b; relative forward error does not exceed 2 * u^2, this function
+// is faster than twofold_div(1, b), but less accurate
+template<class Float_type>
+twofold<Float_type> twofold_inv(const Float_type& b);
+
+// evaluate 1 / b; relative forward error does not exceed 2 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division 1 / b
+template<class Float_type>
+twofold<Float_type> twofold_inv_f(const Float_type& b);
+
 // evaluate a / b; relative forward error does not exceed 15 * u^2
 template<class Float_type>
 twofold<Float_type> operator/(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
+// equivalent to a / b; relative forward error does not exceed 15 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_div(const twofold<Float_type>& a, const twofold<Float_type>& b);
+
+// equivalent to a / b; relative forward error does not exceed 15 * u^2
+// if FMA instruction is available, otherwise this function is equivalent to scalar
+// division a.value / b.value
+template<class Float_type>
+twofold<Float_type> twofold_div_f(const twofold<Float_type>& a, 
+                        const twofold<Float_type>& b);
+
+// evaluate a / b; relative forward error does not exceed 15 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_div_without_norm(const twofold<Float_type>& a, 
+                        const twofold<Float_type>& b);
+
+// equivalent to a / b; relative forward error does not exceed 15 * u^2
+// if FMA instruction is available, otherwise this function is equivalent to scalar
+// division a.value / b.value;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_div_f_without_norm(const twofold<Float_type>& a, 
+                        const twofold<Float_type>& b);
 
 // evaluate a / b; relative forward error does not exceed 4 * u^2
 template<class Float_type>
 twofold<Float_type> operator/(const twofold<Float_type>& a, const Float_type& b);
 
+// equivalent to a / b
+template<class Float_type>
+twofold<Float_type> twofold_div(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a / b; relative forward error does not exceed 4 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division a.value / b
+template<class Float_type>
+twofold<Float_type> twofold_div_f(const twofold<Float_type>& a, const Float_type& b);
+
+// evaluate a / b; relative forward error does not exceed 4 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_div_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
+
+// evaluate a / b; relative forward error does not exceed 4 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division a.value / b;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_div_f_without_norm(const twofold<Float_type>& a, 
+                        const Float_type& b);
+
 // evaluate a / b; relative forward error does not exceed 15 * u^2
 template<class Float_type>
 twofold<Float_type> operator/(const Float_type& a, const twofold<Float_type>& b);
 
+// equivalent to a / b
+template<class Float_type>
+twofold<Float_type> twofold_div(const Float_type& a, const twofold<Float_type>& b);
+
+// evaluate a / b; relative forward error does not exceed 15 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division a / b.value
+template<class Float_type>
+twofold<Float_type> twofold_div_f(const Float_type& a, const twofold<Float_type>& b);
+
+// evaluate a / b; relative forward error does not exceed 15 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_div_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+// evaluate a / b; relative forward error does not exceed 15 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division a / b.value;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_div_f_without_norm(const Float_type& a, 
+                        const twofold<Float_type>& b);
+
+// evaluate 1 / b; relative forward error does not exceed 16 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_inv(const twofold<Float_type>& b);
+
+// evaluate 1 / b; relative forward error does not exceed 16 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division 1 / b.value;
+template<class Float_type>
+twofold<Float_type> twofold_inv_f(const twofold<Float_type>& b);
+
+// evaluate 1 / b; relative forward error does not exceed 16 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_inv_without_norm(const twofold<Float_type>& b);
+
+// evaluate 1 / b; relative forward error does not exceed 16 * u^2 if FMA 
+// instruction is available, otherwise this function is equivalent to scalar
+// division 1 / b.value;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> twofold_inv_f_without_norm(const twofold<Float_type>& b);
+
+//---------------------------------------------
+//              other
+//---------------------------------------------
+
+// square root of a; relative forward error does not exceed 1 * u^2
+template<class Float_type>
+twofold<Float_type> twofold_sqrt(const Float_type& a);
+
+// square root of a; relative forward error does not exceed 1 * u^2 if FMA
+// instruction is available, otherwise this function is equivalent to scalar
+// square root sqrt(a)
+template<class Float_type>
+twofold<Float_type> twofold_sqrt_f(const Float_type& a);
+
 // square root of a; relative forward error does not exceed 4 * u^2
 template<class Float_type>
 twofold<Float_type> sqrt(const twofold<Float_type>& a);
+
+// square root of a; relative forward error does not exceed 4 * u^2;
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> sqrt_without_norm(const twofold<Float_type>& a);
+
+// square root of a; relative forward error does not exceed 4 * u^2 if FMA
+// instruction is available, otherwise this function is equivalent to scalar
+// square root sqrt(a.value)
+template<class Float_type>
+twofold<Float_type> sqrt_f(const twofold<Float_type>& a);
+
+// square root of a; relative forward error does not exceed 4 * u^2 if FMA
+// instruction is available, otherwise this function is equivalent to scalar
+// square root sqrt(a.value);
+// result is not normalized, see general info on non-normalized results
+template<class Float_type>
+twofold<Float_type> sqrt_f_without_norm(const twofold<Float_type>& a);
 
 // absolute value of a; result is exact
 template<class Float_type>

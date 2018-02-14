@@ -360,4 +360,24 @@ const char* value_not_in_cache::what(exception_message& em) const
     return em.value_not_in_cache(m_name, m_prec, m_cache_prec);
 };
 
+const char* limest_error_valid_initial_point_not_found::what(exception_message& em) const
+{
+    return em.limest_error_valid_initial_point_not_found(m_point);
+};
+
+const char* limest_error_nonfinite_starting_point::what(exception_message& em) const
+{
+    return em.limest_error_nonfinite_starting_point();
+};
+
+const char* seq_error_omega_is_zero::what(exception_message& em) const
+{
+    return em.seq_error_omega_is_zero();
+};
+
+const char* seq_error_two_equal_points::what(exception_message& em) const
+{
+    return em.seq_error_two_equal_points(m_point);
+};
+
 };};
