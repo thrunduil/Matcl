@@ -76,4 +76,11 @@ struct simd_fraction
                 "function fraction not defined for for given arguments");
 };
 
+template<class Val, int Bits, class Simd_tag>
+struct simd_copysign
+{
+    static_assert(md::dependent_false<Simd_tag>::value, 
+                "function copysign not defined for for given arguments");
+};
+
 }}}

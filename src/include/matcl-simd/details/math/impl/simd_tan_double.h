@@ -86,14 +86,18 @@ struct simd_tancot<double, Bits, Tag>
     using simd_int          = typename ms::simd<int32_t, Bits, Tag>::simd_half;
 
     force_inline
-    static void approximation(const simd_type& xv, const simd_type& xe, simd_type& ret_tan, 
-                             simd_type& ret_cot)
+    static void approximation(const simd_type& x, const simd_type& xv, const simd_type& xe, 
+                            simd_type& ret_tan, simd_type& ret_cot)
     {
+        const simd_type zero    = simd_type::zero();
+
         // h(x)     = (tan(sqrt(x))/sqrt(x) - 1)/x - 1/2
         // tan(x)   = x^3 * (h(x^2) + 1/2) + x 
         // range    : [0, (pi/4)^2]
 
         using twofold       = matcl::twofold<simd_type>;
+
+        simd_type sign_inf  = ms::copysign(simd_type(std::numeric_limits<double>::infinity()), x);
 
         twofold x2t         = twofold_mult_f(xv, xv);
 
@@ -117,7 +121,9 @@ struct simd_tancot<double, Bits, Tag>
         ret_tan             = pt_t.value + pt_t.error;
 
         twofold pc_t        = twofold_inv_f_without_norm(pt_t);
+
         ret_cot             = pc_t.value + pc_t.error;
+        ret_cot             = if_then_else(neq(x, zero), ret_cot, sign_inf);
     }
 
     template<int Version>
@@ -145,7 +151,7 @@ struct simd_tancot<double, Bits, Tag>
         pi2_reduction<double, Bits, Tag>::reduction_full(x, in_range, xv, xe, q_lo);
 
         simd_type pt, pc;
-        approximation(xv, xe, pt, pc);
+        approximation(x, xv, xe, pt, pc);
 
         simd_type ret       = simd_tancot_reconstruction<double, Bits, Tag>
                                 ::eval<Version>(q_lo, pt, pc);
@@ -172,7 +178,7 @@ struct simd_tancot<double, Bits, Tag>
                                 ::reduction_CW3(x, xe, qi);        
 
         simd_type pt, pc;
-        approximation(xv, xe, pt, pc);
+        approximation(x, xv, xe, pt, pc);
 
         simd_type ret       = simd_tancot_reconstruction<double, Bits,Tag>
                                 ::eval<Version>(qi, pt, pc);

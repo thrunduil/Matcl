@@ -121,7 +121,7 @@ struct simd_tancot_float
             pi2_reduction<float, Bits, Tag>::reduction_full(x, in_range, xv, xe, q_lo);
 
         simd_type pt, pc;
-        approximation(xv, xe, pt, pc);
+        approximation(x, xv, xe, pt, pc);
 
         simd_type ret       = simd_tancot_reconstruction<float, Bits,Tag>
                                 ::eval<Version>(q_lo, pt, pc);
@@ -129,26 +129,29 @@ struct simd_tancot_float
     }
 
     force_inline
-    static void approximation(const simd_type& xv, const simd_type& xe, simd_type& ret_tan, 
-                             simd_type& ret_cot)
+    static void approximation(const simd_type& x, const simd_type& xv, const simd_type& xe, 
+                            simd_type& ret_tan, simd_type& ret_cot)
     {
+        const simd_type zero    = simd_type::zero();
+        simd_type sign_inf      = ms::copysign(simd_type(std::numeric_limits<float>::infinity()), x);
+
         // h(x)     = (tan(sqrt(x))/sqrt(x) - 1)/x - 1/2
         // tan(x)   = x^3 * (h(x^2) + 1/2) + x 
         // range    : [0, (pi/4)^2]
 
         using twofold       = matcl::twofold<simd_type>;
 
-        twofold x2t         = twofold_mult_f(xv, xv);
+        simd_type x2t       = xv * xv;
+        simd_type x3t       = x2t * xv;
 
         // eval polynomials
         simd_type p_tan;
-        simd_tancot_table_float<Bits, Tag>::eval(x2t.value, p_tan);
+        simd_tancot_table_float<Bits, Tag>::eval(x2t, p_tan);
 
         p_tan               = p_tan + simd_type(0.5);
         
         // p_tan * xv^3 must be computed with higher precision
-        twofold pt_x2       = twofold_mult_f_without_norm(p_tan, x2t);
-        twofold pt_x3       = twofold_mult_f_without_norm(pt_x2, xv);
+        twofold pt_x3       = twofold_mult_f(p_tan, x3t);
 
         // we also need the error term in order to compute 1.0 / pt_t
         twofold pt_t        = twofold_sum_sorted_without_norm(xv, pt_x3);
@@ -160,7 +163,9 @@ struct simd_tancot_float
         ret_tan             = pt_t.value + pt_t.error;
 
         twofold pc_t        = twofold_inv_f_without_norm(pt_t);
+
         ret_cot             = pc_t.value + pc_t.error;
+        ret_cot             = if_then_else(neq(x, zero), ret_cot, sign_inf);
     }
 
     template<int Version>
@@ -182,7 +187,7 @@ struct simd_tancot_float
         simd_type xv        = pi2_reduction<float, Bits, Tag>::reduction_CW3(x, xe, qi);
 
         simd_type pt, pc;
-        approximation(xv, xe, pt, pc);
+        approximation(x, xv, xe, pt, pc);
 
         simd_type ret       = simd_tancot_reconstruction<float, Bits, Tag>
                                 ::eval<Version>(qi, pt, pc);
@@ -230,7 +235,7 @@ struct simd_tancot_float<Bits, Tag, true>
         pi2_reduction_scalar<float, Bits, Tag>::reduction_full(x, xv, q_lo);
 
         simd_double pt, pc;
-        approximation(xv, pt, pc);
+        approximation(x, xv, pt, pc);
 
         simd_double ret     = simd_tancot_reconstruction<double, Bits, Tag>
                                 ::eval<Version>(q_lo, pt, pc);
@@ -238,8 +243,12 @@ struct simd_tancot_float<Bits, Tag, true>
     }
 
     force_inline
-    static void approximation(const simd_double& xv, simd_double& ret_tan, simd_double& ret_cot)
+    static void approximation(const simd_double& x, const simd_double& xv, 
+                                simd_double& ret_tan, simd_double& ret_cot)
     {
+        const simd_double zero  = simd_double::zero();
+        simd_double sign_inf    = ms::copysign(simd_double(std::numeric_limits<double>::infinity()), x);
+
         // h(x)     = (tan(sqrt(x))/sqrt(x) - 1)/x - 1/2
         // tan(x)   = x^3 * (h(x^2) + 1/2) + x 
         // range    : [0, (pi/4)^2]
@@ -257,6 +266,7 @@ struct simd_tancot_float<Bits, Tag, true>
 
         ret_tan             = pt_t;
         ret_cot             = simd_double::one() / pt_t;
+        ret_cot             = if_then_else(neq(x, zero), ret_cot, sign_inf);
     }
 
     template<int Version>
@@ -278,7 +288,7 @@ struct simd_tancot_float<Bits, Tag, true>
         simd_double xv      = pi2_reduction_scalar<float, Bits, Tag>::reduction_CW3(xd, qi);
 
         simd_double pt, pc;
-        approximation(xv, pt, pc);
+        approximation(xd, xv, pt, pc);
 
         simd_double ret     = simd_tancot_reconstruction<double, Bits, Tag>
                                 ::eval<Version>(qi, pt, pc);
@@ -335,7 +345,7 @@ struct simd_tancot_float<Bits, Tag, true>
             pi2_reduction<float, Bits, Tag>::reduction_full(x, in_range, xv, q_lo);
 
             simd_double pt, pc;
-            approximation(xv, pt, pc);
+            approximation(x, xv, pt, pc);
 
             simd_double ret     = simd_tancot_reconstruction<double, 256, avx_tag>
                                     ::eval<Version>(q_lo, pt, pc);
@@ -343,8 +353,12 @@ struct simd_tancot_float<Bits, Tag, true>
         }
 
         force_inline
-        static void approximation(const simd_double& xv, simd_double& ret_tan, simd_double& ret_cot)
+        static void approximation(const simd_double& x, const simd_double& xv, 
+                                    simd_double& ret_tan, simd_double& ret_cot)
         {
+            const simd_double zero  = simd_double::zero();
+            simd_double sign_inf    = ms::copysign(simd_double(std::numeric_limits<double>::infinity()), x);
+
             // h(x)     = (tan(sqrt(x))/sqrt(x) - 1)/x - 1/2
             // tan(x)   = x^3 * (h(x^2) + 1/2) + x 
             // range    : [0, (pi/4)^2]
@@ -362,6 +376,7 @@ struct simd_tancot_float<Bits, Tag, true>
 
             ret_tan             = pt_t;
             ret_cot             = simd_double::one() / pt_t;
+            ret_cot             = if_then_else(neq(x, zero), ret_cot, sign_inf);
         }        
 
         template<int Version>
@@ -383,7 +398,7 @@ struct simd_tancot_float<Bits, Tag, true>
             simd_double xv      = pi2_reduction<float, Bits, Tag>::reduction_CW3(xd, qi);
 
             simd_double pt, pc;
-            approximation(xv, pt, pc);
+            approximation(xd, xv, pt, pc);
 
             simd_double ret     = simd_tancot_reconstruction<double, 256, avx_tag>
                                     ::eval<Version>(qi, pt, pc);

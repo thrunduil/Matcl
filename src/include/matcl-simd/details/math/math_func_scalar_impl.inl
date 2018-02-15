@@ -137,6 +137,20 @@ force_inline int64_t ms::iexponent(double x)
     return res.first();
 }
 
+force_inline float ms::copysign(float x, float y)
+{
+    using simd_type     = default_scalar_simd_type<float>::type;
+    simd_type res       = copysign(simd_type(x), simd_type(y));
+    return res.first();
+}
+
+force_inline double ms::copysign(double x, double y)
+{
+    using simd_type     = default_scalar_simd_type<double>::type;
+    simd_type res       = copysign(simd_type(x), simd_type(y));
+    return res.first();
+}
+
 force_inline float ms::pow2ki(int32_t k)
 {
     // do not use SIMD-based scalars

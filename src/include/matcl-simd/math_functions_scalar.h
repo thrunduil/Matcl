@@ -82,6 +82,10 @@ int64_t iexponent(double x);
 float   exponent(float x);
 double  exponent(double x);
 
+// composes a floating point value with the magnitude of x and the sign of y
+float   copysign(float x, float y);
+double  copysign(double x, double y);
+
 // return the exponential function, i.e. the e (Euler's number, 2.7182818)
 // raised to the given power x; 
 double  exp(double x);
