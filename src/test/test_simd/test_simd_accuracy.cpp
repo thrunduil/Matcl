@@ -74,12 +74,12 @@ void simd_accuracy_tester::test_unary(int N)
 
     namespace func = test_functions_accuracy;
 
+    test_unary_func<Type>(dm, func::Func_cot<Type>(),N);
+    test_unary_func<Type>(dm, func::Func_tan<Type>(),N);    
     test_unary_func<Type>(dm, func::Func_exp<Type>(),N);
     test_unary_func<Type>(dm, func::Func_log<Type>(),N);
     test_unary_func<Type>(dm, func::Func_sin<Type>(),N);
     test_unary_func<Type>(dm, func::Func_cos<Type>(),N);
-    test_unary_func<Type>(dm, func::Func_tan<Type>(),N);
-    test_unary_func<Type>(dm, func::Func_cot<Type>(),N);
 
     out_stream << "\n";
 };

@@ -74,6 +74,13 @@ ms::exponent(const simd<Val, Bits, Simd_tag>& x)
 
 template<class Val, int Bits, class Simd_tag>
 force_inline simd<Val, Bits, Simd_tag> 
+ms::copysign(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y)
+{
+    return details::simd_copysign<Val, Bits, Simd_tag>::eval(x, y);
+}
+
+template<class Val, int Bits, class Simd_tag>
+force_inline simd<Val, Bits, Simd_tag> 
 ms::exp(const simd<Val, Bits, Simd_tag>& x)
 {
     return details::simd_exp<Val, Bits, Simd_tag>::eval(x);

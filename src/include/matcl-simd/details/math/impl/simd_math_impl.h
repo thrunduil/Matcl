@@ -229,4 +229,19 @@ struct simd_exponent_impl<float, Bits, Simd_tag>
     };
 };
 
+//-----------------------------------------------------------------------
+//                          copysign
+//-----------------------------------------------------------------------
+template<class Val, int Bits, class Simd_tag>
+struct simd_copysign_impl
+{
+    using simd_type = simd<Val, Bits, Simd_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return ms::bitwise_or(ms::signbit_base(y), ms::abs(x));
+    };
+};
+
 }}}

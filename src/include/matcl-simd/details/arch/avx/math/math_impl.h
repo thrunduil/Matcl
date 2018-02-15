@@ -73,6 +73,21 @@ struct simd_exponent<Val, 256, avx_tag>
 };
 
 //-----------------------------------------------------------------------
+//                          copysign
+//-----------------------------------------------------------------------
+template<class Val>
+struct simd_copysign<Val, 256, avx_tag>
+{
+    using simd_type = simd<Val, 256, avx_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_copysign_impl<Val, 256, avx_tag>::eval(x, y);
+    };
+};
+
+//-----------------------------------------------------------------------
 //                          fraction
 //-----------------------------------------------------------------------
 template<class Val>

@@ -166,9 +166,10 @@ double test_simd_scalar::test_function_std(int size, int n_rep, const T* in, T* 
             T x     = in[i];
             T res   = Func::eval_base(x);
             out[i]  = res;
-        };
 
-        val += out[0];
+            val     += res;
+        };
+        
     };
 
     double t = toc();

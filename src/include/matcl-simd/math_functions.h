@@ -93,6 +93,11 @@ template<class Val, int Bits, class Simd_tag>
 simd<Val, Bits, Simd_tag> 
 exponent(const simd<Val, Bits, Simd_tag>& x);
 
+// composes a floating point value with the magnitude of x and the sign of y
+template<class Val, int Bits, class Simd_tag>
+simd<Val, Bits, Simd_tag> 
+copysign(const simd<Val, Bits, Simd_tag>& x, const simd<Val, Bits, Simd_tag>& y);
+
 // return the exponential function, i.e. the e (Euler's number, 2.7182818)
 // raised to the given power x; 
 template<class Val, int Bits, class Simd_tag>

@@ -268,6 +268,46 @@ struct simd_fraction<T, 128, scalar_sse_tag>
 };
 
 //-----------------------------------------------------------------------
+//                          copysign
+//-----------------------------------------------------------------------
+template<class T>
+struct simd_copysign<T, 256, sse_tag>
+{
+    using simd_type = simd<T, 256, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(copysign(x.extract_low(), y.extract_low()), 
+                        copysign(x.extract_high(), y.extract_high()));
+    };
+};
+
+template<class T>
+struct simd_copysign<T, 128, sse_tag>
+{
+    using simd_type = simd<T, 128, sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_copysign_impl<T, 128, sse_tag>::eval(x, y);
+    };
+};
+
+template<class T>
+struct simd_copysign<T, 128, scalar_sse_tag>
+{
+    using simd_type     = simd<T, 128, scalar_sse_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(copysign(x.as_vector(), y.as_vector()));
+    };
+};
+
+//-----------------------------------------------------------------------
 //                          sin
 //-----------------------------------------------------------------------
 template<>

@@ -195,9 +195,8 @@ double test_simd::test_function_std(int size, int n_rep, const T* in, T* out)
             T res   = Func::eval_base(x);
 
             out[i]  = res;
-        };
-
-        val += out[0];
+            val     += res;
+        };        
     };
 
     double t = toc();
@@ -908,12 +907,12 @@ void test_simd::test_functions_math()
     dm.add_column("status",     align_type::left, 5);
 
     dm.disp_header();
-    
+
+    test_function_math<T, test_functions::Func_tan>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
+    test_function_math<T, test_functions::Func_cot>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
     test_function_math<T, test_functions::Func_exp>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);     
     test_function_math<T, test_functions::Func_sin>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
     test_function_math<T, test_functions::Func_cos>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function_math<T, test_functions::Func_tan>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
-    test_function_math<T, test_functions::Func_cot>(dm, N, ptr_in, ptr_out, ptr_out_gen, true);
     test_function<T, test_functions::Func_fraction>(dm, N, ptr_in, ptr_out, ptr_out_gen, true); 
     test_function<T, test_functions::Func_iexponent>(dm, N, ptr_in, ptr_out, ptr_out_gen, true); 
     test_function<T, test_functions::Func_exponent>(dm, N, ptr_in, ptr_out, ptr_out_gen, true); 

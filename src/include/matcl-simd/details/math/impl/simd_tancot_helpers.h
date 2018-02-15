@@ -76,9 +76,9 @@ struct simd_tancot_reconstruction
 
         simd_type res;
         if (Version == tan_tag)
-            res             = if_then_else(reinterpret_as<Val>(swap), pt, -pc);
+            res             = if_then_else(reinterpret_as<Val>(swap), -pc, pt);
         else
-            res             = if_then_else(reinterpret_as<Val>(swap), pc, -pt);
+            res             = if_then_else(reinterpret_as<Val>(swap), -pt, pc);
 
         return res;
     }
