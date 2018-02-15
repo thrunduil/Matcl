@@ -277,6 +277,41 @@ struct simd_exponent<T, Bits, scalar_nosimd_tag>
 };
 
 //-----------------------------------------------------------------------
+//                          copysign
+//-----------------------------------------------------------------------
+template<class T, int Bits>
+struct simd_copysign<T, Bits, nosimd_tag>
+{
+    using simd_type = simd<T, Bits, nosimd_tag>;
+
+    static const int 
+    vector_size     = simd_type::vector_size;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        simd_type res;
+
+        for (int i = 0; i < vector_size; ++i)
+            res.data[i] = matcl::simd::scalar_func::copysign(x.data[i], y.data[i]);
+
+        return res;
+    };
+};
+
+template<class T, int Bits>
+struct simd_copysign<T, Bits, scalar_nosimd_tag>
+{
+    using simd_type = simd<T, Bits, scalar_nosimd_tag>;
+
+    force_inline
+    static simd_type eval(const simd_type& x, const simd_type& y)
+    {
+        return simd_type(matcl::simd::scalar_func::copysign(x.data, y.data));
+    };
+};
+
+//-----------------------------------------------------------------------
 //                          sincos
 //-----------------------------------------------------------------------
 template<int Bits>

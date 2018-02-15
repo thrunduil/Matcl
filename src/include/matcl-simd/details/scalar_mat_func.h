@@ -201,6 +201,20 @@ struct exponent_impl_float
 };
 
 //-------------------------------------------------------------------
+//                         copysign
+//-------------------------------------------------------------------
+template<class Val>
+struct copysign_impl
+{
+    force_inline
+    static Val eval(Val x, Val y)
+    {
+        Val sign    = scalar_func::bitwise_and(y, Val(-0.0));
+        return scalar_func::bitwise_or(sign, std::abs(x));
+    };
+};
+
+//-------------------------------------------------------------------
 //                         missing scalar functions
 //-------------------------------------------------------------------
 
@@ -218,5 +232,8 @@ force_inline int32_t iexponent(float f) { return exponent_impl_float::eval_i(f);
 
 force_inline double exponent(double f)  { return exponent_impl_double::eval(f); }
 force_inline float exponent(float f)    { return exponent_impl_float::eval(f); }
+
+force_inline double copysign(double x, double y)    { return copysign_impl<double>::eval(x, y); }
+force_inline float copysign(float x, float y)       { return copysign_impl<float>::eval(x, y); }
 
 }}}
