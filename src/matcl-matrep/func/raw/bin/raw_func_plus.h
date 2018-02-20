@@ -21,6 +21,7 @@
 #pragma once
 
 #include "matcl-matrep/func/raw/bin/raw_func_helpers.h"
+#include "matcl-internals/func/raw_func_plus.h"
 
 namespace matcl { namespace raw { namespace details
 {
@@ -36,13 +37,6 @@ template<class M1,class M2>
 struct plus_helper_mat_scal_inpl
 {
     using ret_type_plus = typename ret_type_ms_cons<M1,M2,1,0,0,false,false>::type;
-    static void eval(matcl::Matrix& ret, const M1& A, const M2& B);
-};
-
-template<class M1,class M2>
-struct plus_helper_mat_mat_inpl
-{
-    using ret_type_plus = typename ret_type_constructor<M1,M2,1,0,0,false,false>::type;		
     static void eval(matcl::Matrix& ret, const M1& A, const M2& B);
 };
 

@@ -19,9 +19,9 @@
  */
 
 #include "matcl-matrep/func/raw/bin/raw_func_plus.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/func/raw/bin/eval_op.h"
-#include "matcl-matrep/func/raw/bin/raw_func_op_helpers.h"
+#include "matcl-internals/func/raw_func_op_helpers.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-matrep/matrix/struct_flag_ext.h"
 #include "matcl-internals/func/converter.h"
@@ -164,6 +164,8 @@ struct eval_plus_functor
 template<class M1,class M2>
 void plus_helper_mat_mat_inpl<M1,M2>::eval(matcl::Matrix& ret, const M1& A, const M2& B)
 {
+    using ret_type_plus = typename ret_type_constructor<M1,M2,1,0,0,false,false>::type;		
+
     return eval_op_impl<ret_type_plus,M1,M2,eval_plus_functor>::eval(ret,A,B);
 };
 

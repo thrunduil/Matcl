@@ -19,9 +19,9 @@
  */
 
 #include "matcl-matrep/func/raw/bin/raw_func_mod.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/func/raw/bin/eval_op.h"
-#include "matcl-matrep/func/raw/bin/raw_func_op_helpers.h"
+#include "matcl-internals/func/raw_func_op_helpers.h"
 #include "matcl-matrep/lib_functions/func_unary.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-scalar/objects/object_functions.h"

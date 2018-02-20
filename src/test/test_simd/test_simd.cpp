@@ -238,6 +238,8 @@ double test_simd::test_function_simd_int(int size, int n_rep, const Int_type* in
     using simd_tag              = typename Simd_type::simd_tag;
     using Simd_type_int         = matcl::simd::simd<Int_type, bits, simd_tag>;
 
+    (void)func;
+
     tic();
 
     volatile T val = 0;

@@ -19,7 +19,7 @@
  */
 
 #include "matcl-matrep/func/raw/sort2.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-matrep/base/sort_iterator.h"
 #include "matcl-internals/base/utils.h"

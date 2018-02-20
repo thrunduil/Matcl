@@ -24,11 +24,11 @@
 #include "matcl-matrep/lib_functions/func_unary.h"
 #include "matcl-matrep/details/extract_type2_switch.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
-#include "matcl-matrep/func/bin/op_helpers.h"
+#include "matcl-internals/func/op_helpers.h"
 #include "matcl-core/matrix/matrix_traits.h"
 #include "matcl-matrep/func/raw/bin/raw_func_div.h"
 #include "matcl-matrep/func/raw/bin/raw_func_mul.h"
-#include "matcl-matrep/func/raw/bin/raw_func_op_helpers.h"
+#include "matcl-internals/func/raw_func_op_helpers.h"
 #include "matcl-matrep/func/raw/scal_mul.h"
 
 #pragma warning( push )

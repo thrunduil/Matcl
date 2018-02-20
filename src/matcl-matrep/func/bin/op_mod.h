@@ -21,7 +21,7 @@
 #pragma once
 
 #include "matcl-matrep/func/bin/op_info.h"
-#include "matcl-matrep/func/raw/bin/raw_func_op_helpers.h"
+#include "matcl-internals/func/raw_func_op_helpers.h"
 
 #pragma warning(push)
 #pragma warning(disable: 4127)  // conditional expression is constant

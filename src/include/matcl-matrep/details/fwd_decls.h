@@ -145,14 +145,15 @@ class MATCL_MATREP_EXPORT Matrix;
 template<class value_type>
 class MATCL_MATREP_EXPORT dense_matrix_base;
 
+template<class value_type>
+class MATCL_MATREP_EXPORT sparse_matrix_base;
+
 };};
 
 namespace matcl { namespace raw { namespace details
 {
 
 template<class value_type>	class sparse_ccs;
-template<class value_type>	class dense_matrix_base;
-template<class value_type>	class sparse_matrix_base;
 
 };};};
 
