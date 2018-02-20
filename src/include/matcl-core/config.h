@@ -37,7 +37,7 @@
     #define MATCL_CORE_EXPORT  __declspec(dllimport)
 #endif
 
-#ifdef MATCL_EXPORTS
+#ifdef MATCL_MATREP_EXPORTS
     #define MATCL_CORE_EXTERN   __declspec(dllexport)
 #else
     #define MATCL_CORE_EXTERN   __declspec(dllimport)
