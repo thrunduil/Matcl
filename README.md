@@ -1,7 +1,6 @@
 ﻿# MATCL - Matrix Computation Library
 
 Matrix computation and linear algebra library written in C++.
-This library is a part of the Morfa project. See morfalang.org.
 
 ## matcl-core
 
