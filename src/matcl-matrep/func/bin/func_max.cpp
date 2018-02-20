@@ -25,7 +25,7 @@
 #include "matcl-matrep/details/extract_type2_switch.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-matrep/func/raw/bin/raw_func_max.h"
-#include "matcl-matrep/func/raw/bin/raw_func_op_helpers.h"
+#include "matcl-internals/func/raw_func_op_helpers.h"
 
 #pragma warning( push )
 #pragma warning(disable:4127)	// conditional expression is constant

@@ -19,9 +19,9 @@
  */
 
 #include "matcl-matrep/func/raw/bin/raw_func_neq_nan.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/func/raw/bin/eval_op.h"
-#include "matcl-matrep/func/raw/bin/raw_func_op_helpers.h"
+#include "matcl-internals/func/raw_func_op_helpers.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
 
 namespace matcl { namespace raw { namespace details

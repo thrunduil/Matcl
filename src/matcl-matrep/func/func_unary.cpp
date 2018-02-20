@@ -22,7 +22,7 @@
 
 #include "matcl-matrep/lib_functions/func_unary.h"
 #include "matcl-matrep/func/raw/raw_func_unary.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/func/raw/eval_functor.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-matrep/details/extract_type_switch.h"

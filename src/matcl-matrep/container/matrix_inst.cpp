@@ -22,7 +22,7 @@
 #include "matcl-matrep/container/matrix_container.inl"
 #include "matcl-matrep/lib_functions/manip.h"
 #include "matcl-scalar/object.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/objects/details/type_info_object.h"
 #include "matcl-matrep/details/details_manip.h"
 

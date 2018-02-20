@@ -19,7 +19,7 @@
  */
 
 #include "matcl-matrep/func/raw/scal_mul.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/lib_functions/func_unary.h"
 #include "matcl-matrep/lib_functions/manip.h"
 #include "matcl-core/matrix/matrix_traits.h"

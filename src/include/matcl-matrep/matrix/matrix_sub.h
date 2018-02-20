@@ -33,8 +33,9 @@ namespace matcl { namespace details
     //  
     //  In case when LHS in assignment is unique we force make_unique on RHS
     //  when dealing with self-assignment, i.e. V[...] = V[...]
-    void  prepare_for_assign(const Matrix& lhs, const Matrix& rhs);
-    void  prepare_for_assign(const Matrix& lhs, const Matrix& rhs1, const Matrix& rhs2);
+    void MATCL_MATREP_EXPORT prepare_for_assign(const Matrix& lhs, const Matrix& rhs);
+    void MATCL_MATREP_EXPORT prepare_for_assign(const Matrix& lhs, const Matrix& rhs1, 
+                                                const Matrix& rhs2);
 
 };};
 

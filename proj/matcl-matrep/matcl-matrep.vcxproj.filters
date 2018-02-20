@@ -453,6 +453,21 @@
     <ClInclude Include="..\..\src\matcl-matrep\visitors\insert_visitor.h">
       <Filter>Source Files\src\visitors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\op_helpers.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\raw_func_op_helpers.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\raw_func_unary.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\raw_manip.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\raw_func_plus.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-matrep\details\bit_manip.inl">
