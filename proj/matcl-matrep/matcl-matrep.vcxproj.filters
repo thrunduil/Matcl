@@ -366,6 +366,9 @@
     <ClInclude Include="..\..\src\include\matcl-internals\func\raw_func_plus.h">
       <Filter>Source Files\include\matcl-internals\func</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-matrep\matcl_matrep.h">
+      <Filter>Source Files\include\matcl-matrep</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-matrep\details\bit_manip.inl">
