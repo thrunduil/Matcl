@@ -28,69 +28,23 @@
 namespace matcl { namespace raw { namespace details
 {
 
-template<class ret_type,class M>
-struct eval_arg_helper_impl
-{
-    static void eval(matcl::Matrix& ret, const M& m)
-    {
-        return eval_functor_impl<ret_type,M>::eval(ret, m,details::arg_helper<typename M::value_type>());
-    };
-};
-
-template<class ret_type,class M>
-struct eval_eps_helper_impl
-{
-    static void eval(matcl::Matrix& ret, const M& m)
-    {
-        return eval_functor_impl<ret_type,M>::eval(ret, m,details::eps_helper<typename M::value_type>());
-    };
-};
-
-template<class ret_type,class M,class value_type>
-struct eval_abs2_helper_impl
-{
-    static void eval(matcl::Matrix& ret, const M& m)
-    {
-        eval_functor_impl<ret_type,M>::eval(ret, m,details::abs2_helper<typename M::value_type>());
-
-        bool is_square  = m.rows() == m.cols();
-        struct_flag so  = md::predefined_struct::get_abs(m.get_struct(), is_square);
-        so.add(ret.get_struct());
-        ret.set_struct(so);
-    };
-};
-
-template<class ret_type,class M,class value_type>
-struct eval_abs_helper_impl
-{
-    static void eval(matcl::Matrix& ret, const M& m)
-    {
-        eval_functor_impl<ret_type,M>::eval(ret, m,details::abs_helper<typename M::value_type>());
-
-        bool is_square  = m.rows() == m.cols();
-        struct_flag so  = md::predefined_struct::get_abs(m.get_struct(), is_square);
-        so.add(ret.get_struct());
-        ret.set_struct(so);
-    };
-};
-
 template<class ret_type,class M,bool is_compl>
-struct eval_conj_helper_impl
+struct eval_real_helper_impl
 {
     static void eval(matcl::Matrix& ret, const M& m)
     {
-        ret = matcl::Matrix(m, false);
+        ret = matcl::Matrix(m,false);
     };
 };
 
 template<class ret_type,class M>
-struct eval_conj_helper_impl<ret_type,M,true>
+struct eval_real_helper_impl<ret_type,M,true>
 {
     static void eval(matcl::Matrix& ret, const M& m)
     {
-        eval_functor_impl<ret_type,M>::eval(ret, m,details::conj_helper<typename M::value_type>());
+        eval_functor_impl<ret_type,M>::eval(ret, m,details::real_helper<typename M::value_type>());
 
-        struct_flag so  = md::predefined_struct::get_conj(m.get_struct());
+        struct_flag so  = md::predefined_struct::get_real(m.get_struct());
         so.add(ret.get_struct());
         ret.set_struct(so);
     };
@@ -121,24 +75,70 @@ struct eval_imag_helper_impl<ret_type,M,true>
 };
 
 template<class ret_type,class M,bool is_compl>
-struct eval_real_helper_impl
+struct eval_conj_helper_impl
 {
     static void eval(matcl::Matrix& ret, const M& m)
     {
-        ret = matcl::Matrix(m,false);
+        ret = matcl::Matrix(m, false);
     };
 };
 
 template<class ret_type,class M>
-struct eval_real_helper_impl<ret_type,M,true>
+struct eval_conj_helper_impl<ret_type,M,true>
 {
     static void eval(matcl::Matrix& ret, const M& m)
     {
-        eval_functor_impl<ret_type,M>::eval(ret, m,details::real_helper<typename M::value_type>());
+        eval_functor_impl<ret_type,M>::eval(ret, m,details::conj_helper<typename M::value_type>());
 
-        struct_flag so  = md::predefined_struct::get_real(m.get_struct());
+        struct_flag so  = md::predefined_struct::get_conj(m.get_struct());
         so.add(ret.get_struct());
         ret.set_struct(so);
+    };
+};
+
+template<class ret_type,class M,class value_type>
+struct eval_abs_helper_impl
+{
+    static void eval(matcl::Matrix& ret, const M& m)
+    {
+        eval_functor_impl<ret_type,M>::eval(ret, m,details::abs_helper<typename M::value_type>());
+
+        bool is_square  = m.rows() == m.cols();
+        struct_flag so  = md::predefined_struct::get_abs(m.get_struct(), is_square);
+        so.add(ret.get_struct());
+        ret.set_struct(so);
+    };
+};
+
+template<class ret_type,class M,class value_type>
+struct eval_abs2_helper_impl
+{
+    static void eval(matcl::Matrix& ret, const M& m)
+    {
+        eval_functor_impl<ret_type,M>::eval(ret, m,details::abs2_helper<typename M::value_type>());
+
+        bool is_square  = m.rows() == m.cols();
+        struct_flag so  = md::predefined_struct::get_abs(m.get_struct(), is_square);
+        so.add(ret.get_struct());
+        ret.set_struct(so);
+    };
+};
+
+template<class ret_type,class M>
+struct eval_arg_helper_impl
+{
+    static void eval(matcl::Matrix& ret, const M& m)
+    {
+        return eval_functor_impl<ret_type,M>::eval(ret, m,details::arg_helper<typename M::value_type>());
+    };
+};
+
+template<class ret_type,class M>
+struct eval_eps_helper_impl
+{
+    static void eval(matcl::Matrix& ret, const M& m)
+    {
+        return eval_functor_impl<ret_type,M>::eval(ret, m,details::eps_helper<typename M::value_type>());
     };
 };
 
@@ -459,54 +459,6 @@ void details::scalfunc_isa_helper<M>::eval_is_real(matcl::Matrix& ret, const M& 
 {
     static const bool is_integer = std::is_same<typename M::value_type,Integer>::value;
     return eval_is_real_helper_impl<ret_type_nan,M,is_integer>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_real(matcl::Matrix& ret, const M& m)
-{
-    static const bool is_complex = md::is_complex<typename M::value_type>::value
-                                    ||std::is_same<typename M::value_type,Object>::value;
-    return eval_real_helper_impl<ret_type,M,is_complex>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_imag(matcl::Matrix& ret, const M& m)
-{
-    static const bool is_complex = md::is_complex<typename M::value_type>::value
-                                    ||std::is_same<typename M::value_type,Object>::value;
-    return eval_imag_helper_impl<ret_type_imag,M,is_complex>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_conj(matcl::Matrix& ret, const M& m)
-{
-    static const bool is_compl_or_obj = md::is_complex<typename M::value_type>::value
-                                    ||std::is_same<typename M::value_type,Object>::value;
-    return eval_conj_helper_impl<ret_type_conj,M,is_compl_or_obj>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_abs(matcl::Matrix& ret, const M& m)
-{
-    return eval_abs_helper_impl<ret_type,M, typename M::value_type>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_abs2(matcl::Matrix& ret, const M& m)
-{
-    return eval_abs2_helper_impl<ret_type,M, typename M::value_type>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_arg(matcl::Matrix& ret, const M& m)
-{
-    return eval_arg_helper_impl<ret_type_arg,M>::eval(ret, m);
-};
-
-template<class M>
-void details::scalfunc_real_helper<M>::eval_eps(matcl::Matrix& ret, const M& m)
-{
-    return eval_eps_helper_impl<ret_type_arg,M>::eval(ret, m);
 };
 
 //-----------------------------------------------------------------------------
@@ -1006,16 +958,64 @@ void details::unary_helper_impl<M>::eval_is_true(matcl::Matrix& ret, const M& m)
     return eval_functor_impl<ret_type_is_true,M>::eval(ret, m,op_true_helper<typename M::value_type>());
 };
 
+template<class M>
+void details::scalfunc_real_helper<M>::eval_real(matcl::Matrix& ret, const M& m)
+{
+    static const bool is_complex = md::is_complex<typename M::value_type>::value
+                                    ||std::is_same<typename M::value_type,Object>::value;
+    return eval_real_helper_impl<ret_type,M,is_complex>::eval(ret, m);
+};
+
+template<class M>
+void details::scalfunc_real_helper<M>::eval_imag(matcl::Matrix& ret, const M& m)
+{
+    static const bool is_complex = md::is_complex<typename M::value_type>::value
+                                    ||std::is_same<typename M::value_type,Object>::value;
+    return eval_imag_helper_impl<ret_type_imag,M,is_complex>::eval(ret, m);
+};
+
+template<class M>
+void details::scalfunc_real_helper<M>::eval_conj(matcl::Matrix& ret, const M& m)
+{
+    static const bool is_compl_or_obj = md::is_complex<typename M::value_type>::value
+                                    ||std::is_same<typename M::value_type,Object>::value;
+    return eval_conj_helper_impl<ret_type_conj,M,is_compl_or_obj>::eval(ret, m);
+};
+
+template<class M>
+void details::scalfunc_real_helper<M>::eval_abs(matcl::Matrix& ret, const M& m)
+{
+    return eval_abs_helper_impl<ret_type,M, typename M::value_type>::eval(ret, m);
+};
+
+template<class M>
+void details::scalfunc_real_helper<M>::eval_abs2(matcl::Matrix& ret, const M& m)
+{
+    return eval_abs2_helper_impl<ret_type,M, typename M::value_type>::eval(ret, m);
+};
+
+template<class M>
+void details::scalfunc_real_helper<M>::eval_arg(matcl::Matrix& ret, const M& m)
+{
+    return eval_arg_helper_impl<ret_type_arg,M>::eval(ret, m);
+};
+
+template<class M>
+void details::scalfunc_real_helper<M>::eval_eps(matcl::Matrix& ret, const M& m)
+{
+    return eval_eps_helper_impl<ret_type_arg,M>::eval(ret, m);
+};
+
 };};};
 
 MACRO_INSTANTIATE_G_1(matcl::raw::details::scalfunc_isa_helper)
 MACRO_INSTANTIATE_S_1(matcl::raw::details::scalfunc_isa_helper)
-
-MACRO_INSTANTIATE_G_1(matcl::raw::details::scalfunc_real_helper)
-MACRO_INSTANTIATE_S_1(matcl::raw::details::scalfunc_real_helper)
 
 MACRO_INSTANTIATE_G_1(matcl::raw::details::scalar_func_helper)
 MACRO_INSTANTIATE_S_1(matcl::raw::details::scalar_func_helper)
 
 MACRO_INSTANTIATE_G_1(matcl::raw::details::unary_helper_impl)
 MACRO_INSTANTIATE_S_1(matcl::raw::details::unary_helper_impl)
+
+MACRO_INSTANTIATE_G_1(matcl::raw::details::scalfunc_real_helper)
+MACRO_INSTANTIATE_S_1(matcl::raw::details::scalfunc_real_helper)

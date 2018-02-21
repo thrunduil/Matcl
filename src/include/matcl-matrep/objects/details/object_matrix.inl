@@ -1117,6 +1117,88 @@ inline sub_object_matrix_2<T>::operator bool() const
     return Matrix(*this).operator bool();
 };
 
+//-----------------------------------------------------------------
+//                  object_matrix
+//-----------------------------------------------------------------
+
+template<class T>
+inline const Matrix& object_matrix<T>::to_matrix() const &
+{ 
+    return m_matrix; 
+};
+
+template<class T>
+inline Matrix&& object_matrix<T>::to_matrix() &&
+{ 
+    return std::move(m_matrix); 
+};
+
+template<class T>
+inline object_matrix<T>::operator bool() const
+{ 
+    return (bool)m_matrix; 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_empty() const
+{ 
+    return m_matrix.is_empty(); 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_scalar() const
+{ 
+    return m_matrix.is_scalar(); 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_square() const
+{ 
+    return m_matrix.is_square(); 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_vector() const 
+{ 
+    return m_matrix.is_vector(); 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_matrix_type() const
+{ 
+    return m_matrix.is_matrix_type(); 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_scalar_type() const
+{ 
+    return m_matrix.is_scalar_type(); 
+};
+
+template<class T>
+inline bool object_matrix<T>::is_unique() const 
+{ 
+    return m_matrix.is_unique(); 
+}
+
+template<class T>
+inline value_code object_matrix<T>::get_value_code() const 
+{ 
+    return value_code::v_object; 
+}
+
+template<class T>
+inline struct_code object_matrix<T>::get_struct_code() const 
+{ 
+    return m_matrix.get_struct_code(); 
+}
+
+template<class T>
+inline mat_code object_matrix<T>::get_matrix_code() const
+{ 
+    return m_matrix.get_matrix_code(); 
+}
+
 template<class T>
 object_matrix<T> object_matrix<T>::zeros(Integer r, Integer c)
 {

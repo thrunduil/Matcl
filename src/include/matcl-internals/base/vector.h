@@ -20,7 +20,6 @@
 
 #pragma once
 
-//TODO: is it needed?
 namespace data_struct
 {
 

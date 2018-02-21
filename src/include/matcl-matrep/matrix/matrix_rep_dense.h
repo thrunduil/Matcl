@@ -214,50 +214,50 @@ class MATCL_MATREP_EXPORT dense_matrix<T, true>
         
         // get pointer to the first elemenent stored the matrix; return nullptr
         // if matrix is empty; pointer is valid as long as this instance exists
-        const value_type*   ptr() const                 { return m_ptr; };        
+        const value_type*   ptr() const;
 
         // get pointer to the first elemenent stored the matrix; return nullptr
         // if matrix is empty; safe version of dense_matrix allows for const access only
-        const value_type*   ptr()                       { return m_ptr; };
+        const value_type*   ptr();
 
         // number of elements stored in the matrix (rows x columns);
-        Integer             size() const                { return m_size; };
+        Integer             size() const;
 
         // maximum number of rows; if one calls resize(r, c) and r <= max_rows,
         // c <= max_cols, then no memory allocations are needed
-        Integer             max_rows() const            { return m_max_rows; };
+        Integer             max_rows() const;
 
         // maximum number of rows; if one calls resize(r, c) and r <= max_rows,
         // c <= max_cols, then no memory allocations are needed
-        Integer             max_cols() const            { return m_max_cols; };
+        Integer             max_cols() const;
 
         // leading dimension, i.e. distance between first elements in
         // columns c+1 and c
-        Integer             ld() const                  { return m_ld; };        
+        Integer             ld() const;
 
         // convert to general matrix
-        const Matrix&       to_matrix() const &         { return m_matrix; };
-        Matrix&&            to_matrix() &&              { return std::move(m_matrix); };
+        const Matrix&       to_matrix() const &;
+        Matrix&&            to_matrix() &&;
 
         // get element at position pos; checks are not performed
         // safe version of dense_matrix allows for const access only
-        const T&            elem(Integer pos) const     { return m_ptr[pos-1]; };
-        const T&            elem(Integer pos)           { return m_ptr[pos-1]; };
+        const T&            elem(Integer pos) const;
+        const T&            elem(Integer pos);
 
         // get element at given row r and column c; checks are not performed
         // safe version of dense_matrix allows for const access only
-        const T&            elem(Integer r, Integer c) const    { return m_ptr[r-1 + (c-1) * m_ld]; }
-        const T&            elem(Integer r, Integer c)          { return m_ptr[r-1 + (c-1) * m_ld]; }
+        const T&            elem(Integer r, Integer c) const;
+        const T&            elem(Integer r, Integer c);
 
         //--------------------------------------------------------------------
         //          const functions defined for all matrix types
         //--------------------------------------------------------------------
         
         // number of rows
-        Integer             rows() const                { return m_rows; }; 
+        Integer             rows() const;
 
         // number of columns
-        Integer             cols() const                { return m_cols; };
+        Integer             cols() const;
         
         // larger or rows() and cols(); return zero for empty matrices
         Integer             length() const;
@@ -281,7 +281,7 @@ class MATCL_MATREP_EXPORT dense_matrix<T, true>
         bool                all_finite() const;
 
         // return additional structures assigned to this matrix
-        const struct_flag   get_struct() const          { return *m_flag; };   
+        const struct_flag   get_struct() const;
         
         // struct flag must be valid, data are not changed
         void                set_struct(const struct_flag&) const;
@@ -294,37 +294,37 @@ class MATCL_MATREP_EXPORT dense_matrix<T, true>
 
         // conversion to bool, throw error if Matrix is not convertible to scalar and
         // return true for nonzero scalars
-        explicit            operator bool() const       { return (bool)m_matrix; };
+        explicit            operator bool() const;
 
         // true if this is 0xn or mx0 matrix
-        bool                is_empty() const            { return rows() == 0 || cols() == 0; };
+        bool                is_empty() const;
 
         // true is this is a scalar or 1x1 matrix
-        bool                is_scalar() const           { return rows() == 1 && cols() == 1; };
+        bool                is_scalar() const;
 
         // true if rows() == cols()
-        bool                is_square() const           { return rows() == cols(); };
+        bool                is_square() const;
 
         // true if rows() == 1 or cols() == 1 or is_empty() == true
-        bool                is_vector() const           { return rows() == 1 || cols() == 1 || is_empty() == true; };
+        bool                is_vector() const;
 
         // true if given matrix is represented as a matrix
-        bool                is_matrix_type() const      { return true; }
+        bool                is_matrix_type() const;
 
         // true if given matrix is represented as scalar
-        bool                is_scalar_type() const      { return false; };
+        bool                is_scalar_type() const;
 
         // true if reference count is 1
-        bool                is_unique() const           { return m_matrix.is_unique(); }
+        bool                is_unique() const;
 
         // code of stored elements type
-        value_code          get_value_code() const      { return m_matrix.get_value_code(); }
+        value_code          get_value_code() const;
 
         // code if matrix representation (scalar, band, dense, or sparse)
-        struct_code         get_struct_code() const     { return m_matrix.get_struct_code(); }
+        struct_code         get_struct_code() const;
 
         // matrix code (value code and struct code)
-        mat_code            get_matrix_code() const     { return m_matrix.get_matrix_code(); }
+        mat_code            get_matrix_code() const;
 
         // delete rows specified by colon c.
         const dense_matrix  delrows(const colon&) const &;
@@ -588,13 +588,13 @@ class MATCL_MATREP_EXPORT dense_matrix<T,false> : public dense_matrix<T,true>
 
         // get pointer to the first elemenent stored the matrix; return nullptr
         // if matrix is empty
-        value_type*         ptr()                       { return m_ptr; };
+        value_type*         ptr();
 
         // get or modify element at position pos; checks are not performed
-        T&                  elem(Integer pos)           { return m_ptr[pos-1]; };
+        T&                  elem(Integer pos);
         
         // get of modify element at given row r and column c; checks are not performed
-        T&                  elem(Integer r, Integer c)  { return m_ptr[r-1 + (c-1) * m_ld]; }
+        T&                  elem(Integer r, Integer c);
 
         //--------------------------------------------------------------------
         //          non const functions defined for all matrix types

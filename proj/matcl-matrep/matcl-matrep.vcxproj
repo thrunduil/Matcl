@@ -99,36 +99,6 @@
     <ClInclude Include="..\..\src\matcl-matrep\container\container_pool.h" />
     <ClInclude Include="..\..\src\matcl-matrep\container\matrix_cons_data.h" />
     <ClInclude Include="..\..\src\matcl-matrep\container\matrix_container.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\bin\op_helpers.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\bin\op_info.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\bin\op_mod.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\eval_bin_functor.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\eval_op.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_and.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_atan2.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_div.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq_nan.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_geq.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_gt.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_helpers.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_hypot.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_idiv.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_leq.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_lt.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_max.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_min.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_minus.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mod.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mul.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq_nan.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_op_helpers.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_or.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_plus.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_pow.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_rem.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_xor.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\disp.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\eval_functor.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\eval_vec_functor.h" />
@@ -136,10 +106,8 @@
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\find.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\io.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\mvgen.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\raw_func_unary.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\raw_manip.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\raw_vecfunc.h" />
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\scal_mul.h" />
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\sort2.h" />
     <ClInclude Include="..\..\src\matcl-matrep\visitors\assign_visitor_utils.h" />
     <ClInclude Include="..\..\src\matcl-matrep\visitors\insert_visitor.h" />
@@ -211,57 +179,10 @@
     <ClCompile Include="..\..\src\matcl-matrep\container\raw\sparse_ccs.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\container\unique_matrix.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\error\error_check.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_and.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_atan2.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_div.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_eeq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_eeq_nan.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_geq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_gt.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_hypot.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_idiv.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_leq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_lt.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_max.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_min.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_minus.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_mod.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_mul.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_neq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_neq_nan.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_or.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_plus.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_pow.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_rem.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_xor.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\func_unary.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\manip.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\matrix_gen.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\matrix_io.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\eval_bin_func.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_and.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_atan2.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_div.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq_nan.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_geq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_gt.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_hypot.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_idiv.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_leq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_lt.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_max.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_min.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_minus.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mod.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mul.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq_nan.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_or.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_plus.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_pow.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_rem.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_xor.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\converter.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\disp.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\eval_scalar_func.cpp" />
@@ -272,7 +193,6 @@
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_func_unary.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_manip.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_vecfunc.cpp" />
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\scal_mul.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\sort2.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\func\vecfunc.cpp" />
     <ClCompile Include="..\..\src\matcl-matrep\objects\object_matrix.cpp" />
@@ -307,24 +227,24 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -381,6 +301,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
@@ -437,7 +358,7 @@
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -464,7 +385,7 @@
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

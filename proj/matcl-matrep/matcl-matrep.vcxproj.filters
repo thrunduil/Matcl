@@ -82,17 +82,11 @@
     <Filter Include="Source Files\src\container\raw">
       <UniqueIdentifier>{027b2d79-078c-4892-8478-4e6f7b1d1e71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\src\func\bin">
-      <UniqueIdentifier>{5b8c2658-a5eb-41a8-8e09-0f0e719ff28a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\src\func\raw">
       <UniqueIdentifier>{8c8a05ac-03a1-47c7-a602-75658c2b7497}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\src\func\raw\bin">
-      <UniqueIdentifier>{99fa59d1-1f55-4a38-9460-b5a1c8f04866}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\src\objects\predefined">
-      <UniqueIdentifier>{5be52050-ac29-4b67-a6f7-affa1929ba33}</UniqueIdentifier>
+      <UniqueIdentifier>{cb26ae8a-2eeb-420f-b09e-6447e8588ad1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -321,15 +315,6 @@
     <ClInclude Include="..\..\src\matcl-matrep\container\matrix_container.h">
       <Filter>Source Files\src\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\bin\op_helpers.h">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\bin\op_info.h">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\bin\op_mod.h">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\disp.h">
       <Filter>Source Files\src\func\raw</Filter>
     </ClInclude>
@@ -351,101 +336,14 @@
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\mvgen.h">
       <Filter>Source Files\src\func\raw</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\raw_func_unary.h">
-      <Filter>Source Files\src\func\raw</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\raw_manip.h">
       <Filter>Source Files\src\func\raw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\raw_vecfunc.h">
       <Filter>Source Files\src\func\raw</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\scal_mul.h">
-      <Filter>Source Files\src\func\raw</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\matcl-matrep\func\raw\sort2.h">
       <Filter>Source Files\src\func\raw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\eval_bin_functor.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\eval_op.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_and.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_atan2.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_div.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq_nan.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_geq.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_gt.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_helpers.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_hypot.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_idiv.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_leq.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_lt.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_max.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_min.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_minus.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mod.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mul.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq_nan.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_op_helpers.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_or.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_plus.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_pow.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_rem.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_xor.h">
-      <Filter>Source Files\src\func\raw\bin</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\matcl-matrep\visitors\assign_visitor_utils.h">
       <Filter>Source Files\src\visitors</Filter>
@@ -646,9 +544,6 @@
     <ClCompile Include="..\..\src\matcl-matrep\error\error_check.cpp">
       <Filter>Source Files\src\error</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\func_unary.cpp">
-      <Filter>Source Files\src\func</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\func\manip.cpp">
       <Filter>Source Files\src\func</Filter>
     </ClCompile>
@@ -660,75 +555,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\func\vecfunc.cpp">
       <Filter>Source Files\src\func</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_and.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_atan2.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_div.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_eeq.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_eeq_nan.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_geq.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_gt.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_hypot.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_idiv.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_leq.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_lt.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_max.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_min.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_minus.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_mod.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_mul.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_neq.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_neq_nan.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_or.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_plus.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_pow.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_rem.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\bin\func_xor.cpp">
-      <Filter>Source Files\src\func\bin</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\converter.cpp">
       <Filter>Source Files\src\func\raw</Filter>
@@ -751,92 +577,14 @@
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\mvgen.cpp">
       <Filter>Source Files\src\func\raw</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_func_unary.cpp">
-      <Filter>Source Files\src\func\raw</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_manip.cpp">
       <Filter>Source Files\src\func\raw</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_vecfunc.cpp">
       <Filter>Source Files\src\func\raw</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\scal_mul.cpp">
-      <Filter>Source Files\src\func\raw</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\func\raw\sort2.cpp">
       <Filter>Source Files\src\func\raw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\eval_bin_func.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_and.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_atan2.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_div.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_eeq_nan.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_geq.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_gt.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_hypot.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_idiv.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_leq.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_lt.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_max.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_min.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_minus.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mod.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_mul.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_neq_nan.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_or.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_plus.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_pow.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_rem.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\func\raw\bin\raw_func_xor.cpp">
-      <Filter>Source Files\src\func\raw\bin</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\visitors\assign_visitor_utils.cpp">
       <Filter>Source Files\src\visitors</Filter>
@@ -859,11 +607,17 @@
     <ClCompile Include="..\..\src\matcl-matrep\objects\type_info_object.cpp">
       <Filter>Source Files\src\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\matcl-matrep\objects\predefined\omatrix.cpp">
-      <Filter>Source Files\src\objects\predefined</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\matcl-matrep\container\matrix_assign.cpp">
       <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matrep\func\func_unary.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matrep\func\raw\raw_func_unary.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matrep\objects\predefined\omatrix.cpp">
+      <Filter>Source Files\src\objects\predefined</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

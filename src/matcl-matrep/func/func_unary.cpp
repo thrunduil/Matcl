@@ -406,27 +406,6 @@ struct eval_abs2 : public extract_type_switch<void,eval_abs2,true>
 };
 
 
-struct eval_conj : public extract_type_switch<void,eval_conj,true> 
-{
-    template<class M1>
-    static void eval(const Matrix& , const M1& A, matcl::Matrix& ret)
-    {
-        if (!md::is_complex<typename M1::value_type>::value &&
-            !std::is_same<typename M1::value_type,Object>::value)
-        {
-            ret = Matrix(A,false);
-            return;
-        };
-        return mrd::scalfunc_real_helper<M1>::eval_conj(ret,A);
-    };
-
-    template<class T>
-    static void eval_scalar(const Matrix& , const T& mat, matcl::Matrix& ret)
-    {
-        ret = mrd::conj_helper<T>::eval(mat);
-    };
-};
-
 struct eval_is_true : public extract_type_switch<void,eval_is_true,true> 
 {
     template<class T>
@@ -1597,6 +1576,27 @@ struct func_exp10
     }
 };
 
+struct eval_conj : public extract_type_switch<void,eval_conj,true> 
+{
+    template<class M1>
+    static void eval(const Matrix& , const M1& A, matcl::Matrix& ret)
+    {
+        if (!md::is_complex<typename M1::value_type>::value &&
+            !std::is_same<typename M1::value_type,Object>::value)
+        {
+            ret = Matrix(A,false);
+            return;
+        };
+        return mrd::scalfunc_real_helper<M1>::eval_conj(ret,A);
+    };
+
+    template<class T>
+    static void eval_scalar(const Matrix& , const T& mat, matcl::Matrix& ret)
+    {
+        ret = mrd::conj_helper<T>::eval(mat);
+    };
+};
+
 };};
 
 namespace matcl
@@ -1851,24 +1851,6 @@ Matrix matcl::angle(Matrix&& A0)
 
     matcl::Matrix ret;
     details::eval_arg::make<const Matrix&>(A,ret);
-    return ret;
-};
-
-Matrix matcl::conj(const Matrix& A0)
-{
-    Matrix A(A0);
-
-    matcl::Matrix ret;
-    details::eval_conj::make<const Matrix&>(A,ret);
-    return ret;
-};
-
-Matrix matcl::conj(Matrix&& A0)
-{
-    Matrix A(std::move(A0));
-
-    matcl::Matrix ret;
-    details::eval_conj::make<const Matrix&>(A,ret);
     return ret;
 };
 
@@ -3012,6 +2994,24 @@ Matrix matcl::invs(Matrix&& A0)
 
     matcl::Matrix ret;
     details::eval_inv::make<const Matrix&>(A,ret);
+    return ret;
+};
+
+Matrix matcl::conj(const Matrix& A0)
+{
+    Matrix A(A0);
+
+    matcl::Matrix ret;
+    details::eval_conj::make<const Matrix&>(A,ret);
+    return ret;
+};
+
+Matrix matcl::conj(Matrix&& A0)
+{
+    Matrix A(std::move(A0));
+
+    matcl::Matrix ret;
+    details::eval_conj::make<const Matrix&>(A,ret);
     return ret;
 };
 

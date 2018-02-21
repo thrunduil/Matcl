@@ -306,4 +306,179 @@ inline const sparse_matrix<T> sparse_col<T>::to_matrix() const
     return sparse_matrix<T>(base_type::to_matrix());
 };
 
+//-----------------------------------------------------------------
+//                  sparse_matrix
+//-----------------------------------------------------------------
+
+template<class T>
+inline const Integer* sparse_matrix<T, true>::ptr_c() const
+{ 
+    return m_c; 
+}
+
+template<class T>
+inline const Integer* sparse_matrix<T, true>::ptr_r() const
+{ 
+    return *m_r; 
+}
+
+template<class T>
+inline const typename sparse_matrix<T, true>::value_type*
+sparse_matrix<T, true>::ptr_x() const
+{ 
+    return *m_x; 
+}
+
+template<class T>
+inline Integer sparse_matrix<T, true>::offset() const
+{ 
+    return m_offset; 
+};
+
+template<class T>
+inline Integer sparse_matrix<T, true>::max_cols() const
+{ 
+    return m_max_cols; 
+}
+
+template<class T>
+inline Integer sparse_matrix<T, true>::nnz() const
+{ 
+    return m_c? m_c[m_cols]-m_offset : 0; 
+}
+
+template<class T>
+inline const Integer* sparse_matrix<T, true>::ptr_c()
+{ 
+    return m_c; 
+}
+
+template<class T>
+inline const Integer* sparse_matrix<T, true>::ptr_r()
+{ 
+    return *m_r; 
+}
+
+template<class T>
+inline const typename sparse_matrix<T, true>::value_type*
+sparse_matrix<T, true>::ptr_x()
+{ 
+    return *m_x; 
+}
+
+template<class T>
+inline const Matrix& sparse_matrix<T, true>::to_matrix() const &
+{ 
+    return m_matrix; 
+};
+
+template<class T>
+inline Matrix&& sparse_matrix<T, true>::to_matrix() &&
+{ 
+    return std::move(m_matrix); 
+};
+
+template<class T>
+inline Integer sparse_matrix<T, true>::rows() const
+{ 
+    return m_rows; 
+}; 
+
+template<class T>
+inline Integer sparse_matrix<T, true>::cols() const
+{ 
+    return m_cols; 
+};
+
+template<class T>
+inline const struct_flag sparse_matrix<T, true>::get_struct() const
+{ 
+    return *m_flag; 
+};   
+
+template<class T>
+inline sparse_matrix<T, true>::operator bool() const
+{ 
+    return (bool)m_matrix; 
+};
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_empty() const
+{ 
+    return rows() == 0 || cols() == 0; 
+};
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_scalar() const
+{ 
+    return rows() == 1 && cols() == 1; 
+};
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_square() const
+{ 
+    return rows() == cols(); 
+};
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_vector() const
+{ 
+    return rows() == 1 || cols() == 1 || is_empty() == true; 
+};
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_matrix_type() const
+{ 
+    return true; 
+}
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_scalar_type() const
+{ 
+    return false; 
+};
+
+template<class T>
+inline bool sparse_matrix<T, true>::is_unique() const
+{ 
+    return m_matrix.is_unique(); 
+}
+
+template<class T>
+inline value_code sparse_matrix<T, true>::get_value_code() const
+{ 
+    return m_matrix.get_value_code(); 
+}
+
+template<class T>
+inline struct_code sparse_matrix<T, true>::get_struct_code() const
+{ 
+    return m_matrix.get_struct_code(); 
+}
+
+template<class T>
+inline mat_code sparse_matrix<T, true>::get_matrix_code() const
+{ 
+    return m_matrix.get_matrix_code(); 
+}
+
+template<class T>
+inline Integer* sparse_matrix<T,false>::ptr_c()
+{ 
+    return m_c; 
+}
+
+template<class T>
+inline Integer* sparse_matrix<T,false>::ptr_r()
+{ 
+    return *m_r; 
+}
+
+template<class T>
+inline typename sparse_matrix<T,false>::value_type*
+sparse_matrix<T,false>::ptr_x()
+{ 
+    return *m_x; 
+}
+
 };
