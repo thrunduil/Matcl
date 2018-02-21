@@ -116,21 +116,21 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         //--------------------------------------------------------------------
         // index of first nonzero diagonal (negative values for subdiagonals
         // zero for main diagonal, positive values for superdiagonals)
-        Integer             first_diag() const              { return -m_ldiags; };
+        Integer             first_diag() const;
 
         // index of last nonzero diagonal (negative values for subdiagonals
         // zero for main diagonal, positive values for superdiagonals)
         // last_diag >= first_diag
-        Integer             last_diag() const               { return m_udiags; };
+        Integer             last_diag() const;
 
         // equivalent to max(0, last_diag())
-        Integer             number_superdiagonals() const   { return m_ldiags; };
+        Integer             number_superdiagonals() const;
 
         // equivalent to max(0, -first_diag())
-        Integer             number_subdiagonals() const     { return m_udiags; };
+        Integer             number_subdiagonals() const;
 
         // check if the matrix has main diagonal
-        bool                has_main_diagonal() const       { return true; };
+        bool                has_main_diagonal() const;
 
         // number of elements stored in the matrix (rows x columns);
         // throw error if integer overflow occured
@@ -138,13 +138,13 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
 
         // get the leading dimmension of the representation of a banded matrix,
         // i.e. distance between two consecutive elements in given diagional
-        Integer             ld() const              { return m_base_ld; };
+        Integer             ld() const;
 
         // size of the dense matrix representation of this matrix
-        Integer             base_size() const       { return m_base_size; };
+        Integer             base_size() const;
 
         // pointer to data
-        const value_type*   ptr() const             { return m_base_ptr; }
+        const value_type*   ptr() const;
 
         // index of the first row in given column; all indices are 0-based
         inline Integer      first_row(Integer col) const;
@@ -203,9 +203,9 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         // columns index of the first element on diagonal d (0-based)
         inline Integer      first_col_on_diag(Integer d) const;
 
-        // convert to general matrix; TODO: impl to inline
-        const Matrix&       to_matrix() const &     { return m_matrix; };
-        Matrix&&            to_matrix() &&          { return std::move(m_matrix); };
+        // convert to general matrix
+        const Matrix&       to_matrix() const &;
+        Matrix&&            to_matrix() &&;
 
         // get element at given row r and column c; element must lay on 
         // one of nonzero diagonal; checks are not performed;
@@ -218,10 +218,10 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         //--------------------------------------------------------------------
         
         // number of rows
-        Integer             rows() const            { return m_rows; }; 
+        Integer             rows() const;
 
         // number of columns
-        Integer             cols() const            { return m_cols; };
+        Integer             cols() const;
         
         // larger or rows() and cols(); return zero for empty matrices
         Integer             length() const;
@@ -245,7 +245,7 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         bool                all_finite() const;
 
         // return additional structures assigned to this matrix
-        const struct_flag   get_struct() const      { return *m_flag; };   
+        const struct_flag   get_struct() const;
         
         // struct flag must be valid, data are not changed
         void                set_struct(const struct_flag&) const;
@@ -258,37 +258,37 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
 
         // conversion to bool, throw error if Matrix is not convertible to scalar and
         // return true for nonzero scalars
-        explicit            operator bool() const   { return (bool)m_matrix; };
+        explicit            operator bool() const;
 
         // true if this is 0xn or mx0 matrix
-        bool                is_empty() const        { return rows() == 0 || cols() == 0; };
+        bool                is_empty() const;
 
         // true is this is a scalar or 1x1 matrix
-        bool                is_scalar() const       { return rows() == 1 && cols() == 1; };
+        bool                is_scalar() const;
 
         // true if rows() == cols()
-        bool                is_square() const       { return rows() == cols(); };
+        bool                is_square() const;
 
         // true if rows() == 1 or cols() == 1 or is_empty() == true
-        bool                is_vector() const       { return rows() == 1 || cols() == 1 || is_empty() == true; };
+        bool                is_vector() const;
 
         // true if given matrix is represented as a matrix
-        bool                is_matrix_type() const  { return true; }
+        bool                is_matrix_type() const;
 
         // true if given matrix is represented as scalar
-        bool                is_scalar_type() const  { return false; };
+        bool                is_scalar_type() const;
 
         // true if reference count is 1
-        bool                is_unique() const           { return m_matrix.is_unique(); }
+        bool                is_unique() const;
 
         // code of stored elements type
-        value_code          get_value_code() const      { return m_matrix.get_value_code(); }
+        value_code          get_value_code() const;
 
         // code if matrix representation (scalar, band, dense, or sparse)
-        struct_code         get_struct_code() const     { return m_matrix.get_struct_code(); }
+        struct_code         get_struct_code() const;
 
         // matrix code (value code and struct code)
-        mat_code            get_matrix_code() const     { return m_matrix.get_matrix_code(); }
+        mat_code            get_matrix_code() const;
 
         // delete rows specified by colon c.
         const sparse_matrix delrows(const colon&) const &;
@@ -504,8 +504,9 @@ class MATCL_MATREP_EXPORT band_matrix<T,false> : public band_matrix<T,true>
         //--------------------------------------------------------------------
         //      functions specific to band_matrix
         //--------------------------------------------------------------------
-
-        value_type*         ptr()               { return m_base_ptr; }
+        
+        // pointer to data
+        value_type*         ptr();
 
         // get or modify element at given row r and column c; element must lay on 
         // one of nonzero diagonal; checks are not performed;

@@ -286,17 +286,4 @@ sub_matrix_2&& unique_matrix::get_submatrix_2() &&
     return std::move(*m_data.m_sub_2);
 }
 
-#if 0
-TODO
-/*
-template<class T>
-struct is_convertible_to_matrix
-{
-    static const bool value  
-                        = is_scalar<T>::value || is_typed_matrix<T>::value || is_object_matrix<T>::value
-                        || is_submatrix<T>::value || is_typed_submatrix<T>::value || is_object_submatrix<T>::value
-                        || is_concat<T>::value || is_typed_concat<T>::value || is_object_concat<T>::value;
-};
-*/
-#endif
 };

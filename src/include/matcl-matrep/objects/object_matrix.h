@@ -228,8 +228,8 @@ class object_matrix
         object_type*        get_array_unique();
 
         // convert to general matrix
-        const Matrix&       to_matrix() const &     { return m_matrix; };
-        Matrix&&            to_matrix() &&          { return std::move(m_matrix); };
+        const Matrix&       to_matrix() const &;
+        Matrix&&            to_matrix() &&;
 
         //--------------------------------------------------------------------
         //          const functions defined for all matrix types
@@ -276,37 +276,37 @@ class object_matrix
 
         // conversion to bool, throw error if Matrix is not convertible to scalar and
         // return true for nonzero scalars
-        explicit            operator bool() const       { return (bool)m_matrix; };
+        explicit            operator bool() const;
 
         // true if this is 0xn or mx0 matrix
-        bool                is_empty() const            { return m_matrix.is_empty(); };
+        bool                is_empty() const;
 
         // true is this is a scalar or 1x1 matrix
-        bool                is_scalar() const           { return m_matrix.is_scalar(); };
+        bool                is_scalar() const;
 
         // true if rows() == cols()
-        bool                is_square() const           { return m_matrix.is_square(); };
+        bool                is_square() const;
 
         // true if rows() == 1 or cols() == 1 or is_empty() == true
-        bool                is_vector() const           { return m_matrix.is_vector(); };
+        bool                is_vector() const;
 
         // true if given matrix is represented as dense, sparse or band matrix
-        bool                is_matrix_type() const      { return m_matrix.is_matrix_type(); };
+        bool                is_matrix_type() const;
 
         // true if given matrix is represented as scalar
-        bool                is_scalar_type() const      { return m_matrix.is_scalar_type(); };
+        bool                is_scalar_type() const;
 
         // true if reference count is 1
-        bool                is_unique() const           { return m_matrix.is_unique(); }
+        bool                is_unique() const;
 
         // code of stored elements type
-        value_code          get_value_code() const      { return value_code::v_object; }
+        value_code          get_value_code() const;
 
         // code if matrix representation (scalar, band, dense, or sparse)
-        struct_code         get_struct_code() const     { return m_matrix.get_struct_code(); }
+        struct_code         get_struct_code() const;
 
         // matrix code (value code and struct code)
-        mat_code            get_matrix_code() const     { return m_matrix.get_matrix_code(); }
+        mat_code            get_matrix_code() const;
 
         // delete rows specified by colon c.
         const object_matrix delrows(const colon&) const &;

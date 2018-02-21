@@ -26,7 +26,7 @@ namespace matcl { namespace raw { namespace details
 {
 
 template<class M1,class M2>
-struct MATCL_MATREP_EXPORT plus_helper_mat_mat_inpl
+struct MATCL_MATFUNC_EXPORT plus_helper_mat_mat_inpl
 {
     //using ret_type_plus = typename ret_type_constructor<M1,M2,1,0,0,false,false>::type;		
     static void eval(matcl::Matrix& ret, const M1& A, const M2& B);
