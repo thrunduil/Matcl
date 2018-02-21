@@ -82,7 +82,6 @@ struct amy<TY, Rows, true, details::true_t>
             Y[i]        = a - Y[i];
     };
 
-    force_inline
     static void eval(TY* Y1, Integer Y_step, Integer rows, const TY& a)
     {
         if (Y_step == 1)
