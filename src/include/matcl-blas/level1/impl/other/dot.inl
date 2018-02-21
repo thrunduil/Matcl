@@ -129,7 +129,7 @@ struct dot<T, Rows, true, details::true_t>
 			res_1           = fma_f(sX_1,sY_1, res_1);
         };
 
-        T res               = sum_all(res_1);
+        T res               = horizontal_sum(res_1);
 		
         for (Integer i = size_1*vec_size; i < size; ++i)
             res             += X[i] * Y[i];
