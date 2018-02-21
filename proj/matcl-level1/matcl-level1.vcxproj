@@ -75,7 +75,7 @@
     <None Include="..\..\src\include\matcl-blas\level1\impl\other\x_abs.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\matcl-blas\test_level1_compile.cpp" />
+    <ClCompile Include="..\..\src\blas\matcl-blas\test_level1_compile.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E97C04A8-1280-441B-94F8-F98174D2F117}</ProjectGuid>

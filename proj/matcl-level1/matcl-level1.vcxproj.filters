@@ -166,7 +166,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\matcl-blas\test_level1_compile.cpp">
+    <ClCompile Include="..\..\src\blas\matcl-blas\test_level1_compile.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>

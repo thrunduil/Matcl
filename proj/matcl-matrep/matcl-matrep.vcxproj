@@ -66,6 +66,7 @@
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\matrix_gen.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\matrix_utils.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\vecfunc.h" />
+    <ClInclude Include="..\..\src\include\matcl-matrep\matcl_matrep.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\matrix\colon.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\matrix\matrix.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\matrix\matrix_concat.h" />
