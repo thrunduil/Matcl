@@ -35,10 +35,19 @@
     #define MATCL_MATFUNC_EXPORT  __declspec(dllimport)
 #endif
 
+#ifdef MATCL_MATMULT_EXPORTS
+    #define MATCL_MATMULT_EXPORT  __declspec(dllexport)
+#else
+    #define MATCL_MATMULT_EXPORT  __declspec(dllimport)
+#endif
+
 #ifdef __unix__
     #undef  MATCL_MATREP_EXPORT
     #define MATCL_MATREP_EXPORT
 
     #undef  MATCL_MATFUNC_EXPORT
     #define MATCL_MATFUNC_EXPORT
+
+    #undef  MATCL_MATMULT_EXPORT
+    #define MATCL_MATMULT_EXPORT
 #endif

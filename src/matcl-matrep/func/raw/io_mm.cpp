@@ -728,7 +728,7 @@ void mm_helper_load::eval(std::istream& is, matcl::Matrix& ret, std::string& com
     else if (str == mm_helper::struct_type::her)
         sf  = predefined_struct_type::her;
 
-    //no skew-symmetric struct flag in mmlib
+    //no skew-symmetric struct flag in matcl
 
     if (is_dense)
     {

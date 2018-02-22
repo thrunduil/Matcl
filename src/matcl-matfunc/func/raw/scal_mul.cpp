@@ -27,7 +27,7 @@
 #include "matcl-matrep/func/raw/raw_manip.h"
 #include "matcl-matrep/matrix/matrix.h"
 #include "matcl-matrep/matrix/struct_flag_ext.h"
-#include "matcl-blas/level1/level1.h"
+#include "matcl-blas-lapack/level1/level1.h"
 
 #pragma warning(push)
 #pragma warning(disable: 4127) // conditional expression is constant

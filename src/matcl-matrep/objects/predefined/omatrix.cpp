@@ -174,7 +174,7 @@ MATCL_REGISTER_SCALAR_FUNC(uminus, -, Matrix, mdyf::op_uminus)
 MATCL_REGISTER_SCALAR_FUNC(op_not, !, Matrix, mdyf::op_not)
 MATCL_REGISTER_SCALAR_FUNC(op_bool, (bool), Matrix, mdyf::op_bool)
 
-//unary functions from mmlib
+//unary functions from matcl
 
 MATCL_REGISTER_SCALAR_FUNC(op_neg, neg, Matrix, mdyf::op_neg)
 MATCL_REGISTER_SCALAR_FUNC(op_true, is_true, Matrix, mdyf::op_true)

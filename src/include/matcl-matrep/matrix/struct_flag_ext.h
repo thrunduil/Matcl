@@ -89,4 +89,28 @@ struct MATCL_MATREP_EXPORT predefined_struct_ext : details::predefined_struct
                                       bool is_square_1, bool is_square_2, bool is_re_1, bool is_re_2);
 };
 
+// mark real or complex matrix as unitary, i.e. A*ctrans(A) = ctrans(A)*A = I
+struct MATCL_MATMULT_EXPORT unitary_flag : user_flag_config, user_flag
+{
+    public:
+        unitary_flag();
+
+    private:
+        virtual bool        test(const matcl::Matrix& mat) const override;
+        virtual std::string tag() const override;
+
+        virtual user_flag   conj(struct_flag sf) const override;
+        virtual user_flag   trans(struct_flag sf) const override;
+        virtual user_flag   ctrans(struct_flag sf) const override;
+        virtual user_flag   uminus(struct_flag sf) const override;
+
+        virtual user_flag   mult_both(struct_flag sf_left, struct_flag sf_right, bool is_square) const override;
+        virtual user_flag   kron_both(struct_flag sf_left, struct_flag sf_right) const override;
+        virtual user_flag   kron_1(struct_flag sf_left, struct_flag sf_right) const;
+        virtual user_flag   kron_2(struct_flag sf_left, struct_flag sf_right) const;
+};
+
+// check if unitary flag was set
+bool MATCL_MATMULT_EXPORT is_unitary(const struct_flag& sf);
+
 };

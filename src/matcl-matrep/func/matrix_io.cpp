@@ -608,22 +608,22 @@ void matcl::save(oarchive & ar, const Matrix& m)
             ::make<const Matrix&,oarchive_impl&>(m,ar.get());
 };
 
-void matcl::convert_mmlib_to_mm(std::istream& mmlib_format, std::ostream& mm_format)
+void matcl::convert_matcl_to_mm(std::istream& matcl_format, std::ostream& mm_format)
 {
     Matrix A;
     std::string comments;
-    load(mmlib_format, A, comments);
+    load(matcl_format, A, comments);
 
     mm_save(mm_format, A, comments);
 };
 
-void matcl::convert_mm_to_mmlib(std::istream& mm_format, std::ostream& mmlib_format)
+void matcl::convert_mm_to_matcl(std::istream& mm_format, std::ostream& matcl_format)
 {
     Matrix A;
     std::string comments;
     mm_load(mm_format, A, comments);
 
-    save(mmlib_format, A, comments);
+    save(matcl_format, A, comments);
 };
 
 };

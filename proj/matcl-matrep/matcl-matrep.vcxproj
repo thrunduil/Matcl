@@ -32,6 +32,8 @@
     <ClInclude Include="..\..\src\include\matcl-internals\container\sparse_ccs.h" />
     <ClInclude Include="..\..\src\include\matcl-internals\error\error_check_basic.h" />
     <ClInclude Include="..\..\src\include\matcl-internals\func\converter.h" />
+    <ClInclude Include="..\..\src\include\matcl-internals\func\inplace.h" />
+    <ClInclude Include="..\..\src\include\matcl-internals\func\lapack_utils.h" />
     <ClInclude Include="..\..\src\include\matcl-internals\func\op_helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-internals\func\raw_func_op_helpers.h" />
     <ClInclude Include="..\..\src\include\matcl-internals\func\raw_func_plus.h" />
@@ -61,6 +63,7 @@
     <ClInclude Include="..\..\src\include\matcl-matrep\IO\serialization_helper.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\eval_functors.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\func_binary.h" />
+    <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\func_matrix.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\func_unary.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\manip.h" />
     <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\matrix_gen.h" />
@@ -121,6 +124,7 @@
     <None Include="..\..\src\include\matcl-matrep\details\bit_manip.inl" />
     <None Include="..\..\src\include\matcl-matrep\details\eval_functors.inl" />
     <None Include="..\..\src\include\matcl-matrep\details\func_binary.inl" />
+    <None Include="..\..\src\include\matcl-matrep\details\func_matrix.inl" />
     <None Include="..\..\src\include\matcl-matrep\details\func_unary.inl" />
     <None Include="..\..\src\include\matcl-matrep\details\matrix.inl" />
     <None Include="..\..\src\include\matcl-matrep\details\matrix_rep_band.inl" />
@@ -228,24 +232,24 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
