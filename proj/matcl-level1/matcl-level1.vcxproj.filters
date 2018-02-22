@@ -30,144 +30,139 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\config.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\config.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_apby.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_apby.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_axpby.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_axpby.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_basic.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_basic.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_other.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_other.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\utils.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\utils.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\details\eval_row_functors.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\details\eval_row_functors.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\details\simd_details.h">
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\details\simd_details.h">
       <Filter>Source Files\include\details</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_apby.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_apby.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_axpby.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_axpby.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_basic.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_basic.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_other.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_other.inl">
       <Filter>Source Files\include\details</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\amy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\apby\amy.inl">
       <Filter>Source Files\include\impl\apby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\apby.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\apby\apby.inl">
       <Filter>Source Files\include\impl\apby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\apy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\apby\apy.inl">
       <Filter>Source Files\include\impl\apby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ax.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ax.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axmy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axmy.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpby.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpby.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpby_test.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpby_test.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpy.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpy_test.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpy_test.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ay.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ay.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\mx.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\mx.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\mxpby.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\mxpby.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\my.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\my.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xmy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xmy.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xmya.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xmya.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xpby.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xpby.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xpya.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xpya.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ymx.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ymx.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ypx.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ypx.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ypxm.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ypxm.inl">
       <Filter>Source Files\include\impl\axpby</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\copy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\copy.inl">
       <Filter>Source Files\include\impl\basic</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_mat.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\eval_mat.inl">
       <Filter>Source Files\include\impl\basic</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_mat_XY.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\eval_mat_XY.inl">
       <Filter>Source Files\include\impl\basic</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_scal.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\eval_scal.inl">
       <Filter>Source Files\include\impl\basic</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\set_val.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\set_val.inl">
       <Filter>Source Files\include\impl\basic</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\swap.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\swap.inl">
       <Filter>Source Files\include\impl\basic</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\apx_abs.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\apx_abs.inl">
       <Filter>Source Files\include\impl\other</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\axypz.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\axypz.inl">
       <Filter>Source Files\include\impl\other</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\dot.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\dot.inl">
       <Filter>Source Files\include\impl\other</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\x_abs.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\x_abs.inl">
       <Filter>Source Files\include\impl\other</Filter>
     </None>
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\xy.inl">
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\xy.inl">
       <Filter>Source Files\include\impl\other</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\blas\matcl-blas\test_level1_compile.cpp">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

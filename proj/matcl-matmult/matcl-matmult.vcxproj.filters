@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func">
+      <UniqueIdentifier>{15eda26a-9278-446c-a7dc-b0c134fe83d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\objects">
+      <UniqueIdentifier>{957fd4cd-a9ae-4953-a431-9cbdcba9db04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func\bin">
+      <UniqueIdentifier>{5b8c2658-a5eb-41a8-8e09-0f0e719ff28a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func\raw">
+      <UniqueIdentifier>{8c8a05ac-03a1-47c7-a602-75658c2b7497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\objects\predefined">
+      <UniqueIdentifier>{5be52050-ac29-4b67-a6f7-affa1929ba33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\base">
+      <UniqueIdentifier>{60d91785-0fbd-46a5-98e1-d4036096d3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func\raw\mmul">
+      <UniqueIdentifier>{848729e3-179a-4e62-afee-fc6c3ff96628}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\matcl-matmult\base\struct_flag_predefined_ext.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\chain_mult.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\func_matrix.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\bin\func_kron.cpp">
+      <Filter>Source Files\src\func\bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\bin\func_mmul.cpp">
+      <Filter>Source Files\src\func\bin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\raw\inplace.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\raw\kron.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\raw\raw_scale.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\raw\sh_prod.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\raw\mmul\gemm.cpp">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\func\raw\mmul\mmul.cpp">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\matcl-matmult\objects\predefined\omatrix.cpp">
+      <Filter>Source Files\src\objects\predefined</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\matcl-matmult\func\raw\kron.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-matmult\func\raw\raw_scale.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-matmult\func\raw\raw_shprod.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-matmult\func\raw\mmul\mmul.h">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_utils.h">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_band_band.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_band_dense.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_band_sparse.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_dense_band.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_dense_dense.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_dense_sparse.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_sparse_band.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_sparse_dense.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+    <None Include="..\..\src\matcl-matmult\func\raw\mmul\mmul_sparse_sparse.inl">
+      <Filter>Source Files\src\func\raw\mmul</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -30,55 +30,52 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\config.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\details\eval_row_functors.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\details\simd_details.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_apby.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_axpby.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_basic.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\level1_other.h" />
-    <ClInclude Include="..\..\src\include\matcl-blas\level1\utils.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\config.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\details\eval_row_functors.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\details\simd_details.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_apby.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_axpby.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_basic.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\level1_other.h" />
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\level1\utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_apby.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_axpby.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_basic.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\details\level1_other.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\amy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\apby.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\apby\apy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ax.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axmy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpby.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpby_test.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\axpy_test.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ay.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\mx.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\mxpby.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\my.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xmy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xmya.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xpby.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\xpya.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ymx.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ypx.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\axpby\ypxm.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\copy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_mat.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_mat_XY.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\eval_scal.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\set_val.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\basic\swap.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\apx_abs.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\axypz.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\dot.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\xy.inl" />
-    <None Include="..\..\src\include\matcl-blas\level1\impl\other\x_abs.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\blas\matcl-blas\test_level1_compile.cpp" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_apby.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_axpby.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_basic.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\details\level1_other.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\apby\amy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\apby\apby.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\apby\apy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ax.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axmy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpby.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpby_test.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\axpy_test.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ay.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\mx.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\mxpby.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\my.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xmy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xmya.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xpby.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\xpya.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ymx.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ypx.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\axpby\ypxm.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\copy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\eval_mat.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\eval_mat_XY.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\eval_scal.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\set_val.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\basic\swap.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\apx_abs.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\axypz.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\dot.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\xy.inl" />
+    <None Include="..\..\src\include\matcl-blas-lapack\level1\impl\other\x_abs.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E97C04A8-1280-441B-94F8-F98174D2F117}</ProjectGuid>
@@ -92,24 +89,24 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

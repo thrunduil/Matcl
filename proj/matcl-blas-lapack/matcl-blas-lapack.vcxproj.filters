@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\blas">
+      <UniqueIdentifier>{af9286dd-39b6-4d1f-bf33-b8b22092fc5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\blas\details">
+      <UniqueIdentifier>{1acb7143-3b91-4f78-ae38-fb05a2ff653b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\lapack">
+      <UniqueIdentifier>{10dfe550-4818-4f2f-bbb7-c088b2382758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\lapack\details">
+      <UniqueIdentifier>{cc038fd5-8f44-4927-836c-46f5854ffa4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\blas">
+      <UniqueIdentifier>{5af242fc-b4fb-4b6e-9880-a8df70305543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack">
+      <UniqueIdentifier>{0ab542c4-79f3-4001-bd24-f124c807b287}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\include\matcl-blas-lapack\lapack\details\lapack_impl.inl">
+      <Filter>Source Files\include\lapack\details</Filter>
+    </None>
+    <None Include="..\..\src\blas\matcl-blas-lapack\blas\blas.inl">
+      <Filter>Source Files\src\blas</Filter>
+    </None>
+    <None Include="..\..\src\blas\matcl-blas-lapack\lapack\lapack.inl">
+      <Filter>Source Files\src\lapack</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\blas\blas.h">
+      <Filter>Source Files\include\blas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\blas\config_blas.h">
+      <Filter>Source Files\include\blas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\blas\details\blas_utils.h">
+      <Filter>Source Files\include\blas\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-blas-lapack\lapack\lapack.h">
+      <Filter>Source Files\include\lapack</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\blas\matcl-blas-lapack\blas\blas.cpp">
+      <Filter>Source Files\src\blas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blas\matcl-blas-lapack\lapack\lapack.cpp">
+      <Filter>Source Files\src\lapack</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

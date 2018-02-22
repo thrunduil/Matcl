@@ -1,7 +1,7 @@
 /*
- *  This file is a part of Morfa Matrix Lib.
+ *  This file is a part of Matrix Computation Library (MATCL)
  *
- *  Copyright (c) Pawe³ Kowal 2011-2015
+ *  Copyright (c) Pawe³ Kowal 2017 - 2018
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,9 +17,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 #pragma once
 
-// main header of mmlib_basic
+// main header of matcl-matrep
 
 #include "matcl-core/matrix/matrix_traits.h"
 #include "matcl-core/lib_functions/constants.h"
@@ -36,7 +37,7 @@
 #include "matcl-matrep/lib_functions/vecfunc.h"
 #include "matcl-matrep/lib_functions/func_unary.h"
 #include "matcl-matrep/lib_functions/func_binary.h"
-//#include "matcl-matrep/lib_functions/func_matrix.h"
+#include "matcl-matrep/lib_functions/func_matrix.h"
 #include "matcl-matrep/lib_functions/eval_functors.h"
 #include "matcl-matrep/matrix/colon.h"
 #include "matcl-matrep/details/matrix.inl"

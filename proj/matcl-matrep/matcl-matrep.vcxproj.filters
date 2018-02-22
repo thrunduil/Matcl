@@ -369,6 +369,15 @@
     <ClInclude Include="..\..\src\include\matcl-matrep\matcl_matrep.h">
       <Filter>Source Files\include\matcl-matrep</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-matrep\lib_functions\func_matrix.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\inplace.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\include\matcl-internals\func\lapack_utils.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\include\matcl-matrep\details\bit_manip.inl">
@@ -445,6 +454,9 @@
     </None>
     <None Include="..\..\src\matcl-matrep\visitors\insert_visitor.inl">
       <Filter>Source Files\src\visitors</Filter>
+    </None>
+    <None Include="..\..\src\include\matcl-matrep\details\func_matrix.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

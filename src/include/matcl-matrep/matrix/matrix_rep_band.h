@@ -116,21 +116,21 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         //--------------------------------------------------------------------
         // index of first nonzero diagonal (negative values for subdiagonals
         // zero for main diagonal, positive values for superdiagonals)
-        Integer             first_diag() const;
+        inline Integer      first_diag() const;
 
         // index of last nonzero diagonal (negative values for subdiagonals
         // zero for main diagonal, positive values for superdiagonals)
         // last_diag >= first_diag
-        Integer             last_diag() const;
+        inline Integer      last_diag() const;
 
         // equivalent to max(0, last_diag())
-        Integer             number_superdiagonals() const;
+        inline Integer      number_superdiagonals() const;
 
         // equivalent to max(0, -first_diag())
-        Integer             number_subdiagonals() const;
+        inline Integer      number_subdiagonals() const;
 
         // check if the matrix has main diagonal
-        bool                has_main_diagonal() const;
+        inline bool         has_main_diagonal() const;
 
         // number of elements stored in the matrix (rows x columns);
         // throw error if integer overflow occured
@@ -138,12 +138,13 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
 
         // get the leading dimmension of the representation of a banded matrix,
         // i.e. distance between two consecutive elements in given diagional
-        Integer             ld() const;
+        inline Integer      ld() const;
 
         // size of the dense matrix representation of this matrix
-        Integer             base_size() const;
+        inline Integer      base_size() const;
 
         // pointer to data
+        inline 
         const value_type*   ptr() const;
 
         // index of the first row in given column; all indices are 0-based
@@ -204,8 +205,8 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         inline Integer      first_col_on_diag(Integer d) const;
 
         // convert to general matrix
-        const Matrix&       to_matrix() const &;
-        Matrix&&            to_matrix() &&;
+        inline const Matrix& to_matrix() const &;
+        inline Matrix&&      to_matrix() &&;
 
         // get element at given row r and column c; element must lay on 
         // one of nonzero diagonal; checks are not performed;
@@ -218,10 +219,10 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         //--------------------------------------------------------------------
         
         // number of rows
-        Integer             rows() const;
+        inline Integer      rows() const;
 
         // number of columns
-        Integer             cols() const;
+        inline Integer      cols() const;
         
         // larger or rows() and cols(); return zero for empty matrices
         Integer             length() const;
@@ -245,6 +246,7 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
         bool                all_finite() const;
 
         // return additional structures assigned to this matrix
+        inline 
         const struct_flag   get_struct() const;
         
         // struct flag must be valid, data are not changed
@@ -258,37 +260,37 @@ class MATCL_MATREP_EXPORT band_matrix<T, true>
 
         // conversion to bool, throw error if Matrix is not convertible to scalar and
         // return true for nonzero scalars
-        explicit            operator bool() const;
+        inline explicit     operator bool() const;
 
         // true if this is 0xn or mx0 matrix
-        bool                is_empty() const;
+        inline bool         is_empty() const;
 
         // true is this is a scalar or 1x1 matrix
-        bool                is_scalar() const;
+        inline bool         is_scalar() const;
 
         // true if rows() == cols()
-        bool                is_square() const;
+        inline bool         is_square() const;
 
         // true if rows() == 1 or cols() == 1 or is_empty() == true
-        bool                is_vector() const;
+        inline bool         is_vector() const;
 
         // true if given matrix is represented as a matrix
-        bool                is_matrix_type() const;
+        inline bool         is_matrix_type() const;
 
         // true if given matrix is represented as scalar
-        bool                is_scalar_type() const;
+        inline bool         is_scalar_type() const;
 
         // true if reference count is 1
-        bool                is_unique() const;
+        inline bool         is_unique() const;
 
         // code of stored elements type
-        value_code          get_value_code() const;
+        inline value_code   get_value_code() const;
 
         // code if matrix representation (scalar, band, dense, or sparse)
-        struct_code         get_struct_code() const;
+        inline struct_code  get_struct_code() const;
 
         // matrix code (value code and struct code)
-        mat_code            get_matrix_code() const;
+        inline mat_code     get_matrix_code() const;
 
         // delete rows specified by colon c.
         const sparse_matrix delrows(const colon&) const &;
@@ -506,7 +508,7 @@ class MATCL_MATREP_EXPORT band_matrix<T,false> : public band_matrix<T,true>
         //--------------------------------------------------------------------
         
         // pointer to data
-        value_type*         ptr();
+        inline value_type*  ptr();
 
         // get or modify element at given row r and column c; element must lay on 
         // one of nonzero diagonal; checks are not performed;
