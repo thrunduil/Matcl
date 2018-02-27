@@ -1,7 +1,7 @@
 /*
- *  This file is a part of Morfa Matrix Lib.
+ *  This file is a part of Matrix Computation Library (MATCL)
  *
- *  Copyright (c) Pawe³ Kowal 2013-2016
+ *  Copyright (c) Pawe³ Kowal 2017 - 2018
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +30,8 @@ namespace matcl { namespace lapack
 template<class V>
 struct lacpy2
 {
-    static void eval(const char *uplo, i_type m, i_type n, const V* a, i_type lda, V* b, i_type ldb)
+    static void eval(const char *uplo, i_type m, i_type n, const V* a, 
+                     i_type lda, V* b, i_type ldb)
     {
         if (uplo[0] == 'u' || uplo[0] == 'U')
         {

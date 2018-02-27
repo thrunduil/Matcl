@@ -173,7 +173,14 @@ void blas_config::add_plugin_gpu(const std::string& path)
         std::wstring path(DllPath);
 
         boost::filesystem::wpath p(path);
-        p = p.parent_path() / "blas_config.txt";
+
+        #ifdef WIN32
+            p = p.parent_path() / "blas_config_win32.txt";
+        #elif defined WIN64
+            p = p.parent_path() / "blas_config_win64.txt";
+        #else
+            #error unknown platform
+        #endif
 
         return p.wstring();
     }
