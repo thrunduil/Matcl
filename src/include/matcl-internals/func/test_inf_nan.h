@@ -1,6 +1,25 @@
+/*
+ *  This file is a part of Matrix Computation Library (MATCL)
+ *
+ *  Copyright (c) Pawe³ Kowal 2017 - 2018
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
 #pragma once
 
-//#include "mmlib_basic/mmlib_header.h"
 #include "matcl-internals/func/test_functor.h"
 #include "matcl-matrep/details/extract_type_switch.h" 
 #include "matcl-scalar/details/scalfunc_helpers.h"
@@ -17,6 +36,7 @@ struct test_inf_nan
     { 
         return raw::details::isfinite_helper<T>::eval(val); 
     };
+
     bool eval(const Object& val)	
     { 
         return (bool)raw::details::isfinite_helper<Object>::eval(val); 
@@ -32,6 +52,7 @@ struct test_nan
     { 
         return raw::details::isnan_helper<T>::eval(val) == false; 
     };
+    
     bool eval(const Object& val)	
     { 
         return (bool)raw::details::isnan_helper<Object>::eval(val) == false; 
@@ -47,18 +68,14 @@ struct test_inf
     { 
         return raw::details::isinf_helper<T>::eval(val) == false; 
     };
+    
     bool eval(const Object& val)	
     { 
         return (bool)raw::details::isinf_helper<Object>::eval(val) == false; 
     };
 };
 
-/**
- * Test if value is not a nan and remember if it encountered an Inf
- *
- * @author  Piotr Dobaczewski
- * @date    16/10/2012
- */
+// Test if value is not a nan and remember if it encountered an Inf
 struct test_nan_remember_inf
 {
     public:
@@ -78,6 +95,7 @@ struct test_nan_remember_inf
                 return raw::details::isnan_helper<T>::eval(val) == false; 
             };
         };
+
         bool eval(const Object& val)	
         { 
             if ((bool)raw::details::isfinite_helper<Object>::eval(val) == true)
@@ -91,14 +109,8 @@ struct test_nan_remember_inf
             }
         };
         
-        /**
-         * Get the recent has_no_inf
-         *
-         * @author  Piotr Dobaczewski
-         * @date    16/10/2012
-         *
-         * @return  False if Inf was encountered since last visit
-         */
+        // Get the recent has_no_inf; return false if Inf was encountered
+        // since last visit
         bool get_has_no_inf() 
         {
             return m_has_no_inf;
@@ -118,6 +130,7 @@ struct test_matrix_visitor : public extract_type_switch<bool,test_matrix_visitor
         using S = typename T::struct_type;
         return test_range<V, S, test_func>::eval(mat, func);
     };
+
     template<class T>
     static bool eval_scalar(const Matrix& handle, const T& mat, test_func& func)
     {

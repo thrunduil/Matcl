@@ -1,7 +1,7 @@
 /*
- *  This file is a part of Morfa Matrix Lib.
+ *  This file is a part of Matrix Computation Library (MATCL)
  *
- *  Copyright (c) Pawe³ Kowal 2011-2016
+ *  Copyright (c) Pawe³ Kowal 2017 - 2018
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 #pragma once
 
 #include "matcl-blas-lapack/blas/config_blas.h"

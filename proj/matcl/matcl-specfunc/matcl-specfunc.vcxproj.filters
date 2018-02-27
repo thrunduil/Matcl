@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func">
+      <UniqueIdentifier>{15eda26a-9278-446c-a7dc-b0c134fe83d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\object">
+      <UniqueIdentifier>{957fd4cd-a9ae-4953-a431-9cbdcba9db04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{701f0323-67ca-49d9-ad1a-6dd593b10a30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details">
+      <UniqueIdentifier>{92d899db-acec-4a54-ba49-afd6b02516a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\general">
+      <UniqueIdentifier>{382a9bdf-1cdf-470b-a3ad-908444c8781f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\lib_functions">
+      <UniqueIdentifier>{4ee46a0c-3804-41f9-b18c-ebaa0980b88e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\object">
+      <UniqueIdentifier>{8d651818-2166-46b7-8d82-bd982dbb7168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func\raw">
+      <UniqueIdentifier>{23b14e8c-c140-455a-8915-b02eccc4f861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\object\predefined">
+      <UniqueIdentifier>{97f7d69d-fe2b-4a55-8946-2c0239c7154c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\airy.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\bessel.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\beta.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\elliptic.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\error.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\exp_integrals.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\gamma.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\hankel.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\owens_t.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\sin_cardinal.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\zeta.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\raw\compl_erf.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\func\raw\compl_gamma.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\object\object_func.cpp">
+      <Filter>Source Files\src\object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\object\predefined\object_complex.cpp">
+      <Filter>Source Files\src\object\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\object\predefined\object_float.cpp">
+      <Filter>Source Files\src\object\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\object\predefined\object_float_complex.cpp">
+      <Filter>Source Files\src\object\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\object\predefined\object_integer.cpp">
+      <Filter>Source Files\src\object\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-specfunc\object\predefined\object_real.cpp">
+      <Filter>Source Files\src\object\predefined</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\matcl-specfunc\func\raw\complex_func.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\general\config.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\airy.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\bessel.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\beta.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\elliptic.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\error.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\exp_integrals.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\gamma.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\hankel.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\owens_t.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\sin_cardinal.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\lib_functions\zeta.h">
+      <Filter>Source Files\include\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\objects\object_func.h">
+      <Filter>Source Files\include\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-specfunc\matcl_specfunc.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\airy.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\bessel.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\beta.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\elliptic.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\error.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\exp_integrals.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\gamma.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\hankel.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\owens_t.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\sin_cardinal.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-specfunc\details\zeta.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+  </ItemGroup>
+</Project>
