@@ -40,13 +40,13 @@ struct is_matrix<raw::Matrix<value_type,struct_type>>
 };
 
 template<class value_type>
-struct is_matrix<raw::details::dense_matrix_base<value_type>>
+struct is_matrix<raw::dense_matrix_base<value_type>>
 {	
     static const bool value = true;	 
 };
 
 template<class value_type>
-struct is_matrix<raw::details::sparse_matrix_base<value_type>>
+struct is_matrix<raw::sparse_matrix_base<value_type>>
 {	
     static const bool value = true;	 
 };
@@ -58,7 +58,7 @@ struct is_sparse<raw::Matrix<value_type,struct_sparse>>
 };
 
 template<class value_type>
-struct is_sparse<raw::details::sparse_matrix_base<value_type>>
+struct is_sparse<raw::sparse_matrix_base<value_type>>
 {	
     static const bool value = true;	 
 };

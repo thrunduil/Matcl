@@ -247,7 +247,7 @@ struct MATCL_SIMD_EXPORT simd_log_approx_float_data
 template<int Bits, class Tag>
 struct simd_log_approx_float
 {
-    using simd_type     = simd::simd<float, Bits, Tag>;
+    using simd_type     = matcl::simd::simd<float, Bits, Tag>;
 
     force_inline
     static simd_type eval(const simd_type& s)
@@ -288,7 +288,7 @@ struct simd_log_approx_float<Bits, scalar_sse_tag>
 template<int Bits, class Tag> 
 struct simd_log<float, Bits, Tag>
 {
-    using simd_type     = simd::simd<float, Bits, Tag>;
+    using simd_type     = matcl::simd::simd<float, Bits, Tag>;
 
     force_inline
     static void reduction(const simd_type& x, simd_type& k0, simd_type& k, simd_type& frac)

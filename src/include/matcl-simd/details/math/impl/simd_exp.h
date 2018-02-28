@@ -132,7 +132,8 @@ struct simd_exp<double, Bits, Simd_tag>
         return c;
     };
 
-    static simd_type process_overflows(simd_type a, simd_type p, simd_type k, simd_type l)
+    static simd_type process_overflows(const simd_type& a, const simd_type& p, 
+                                       const simd_type& k, const simd_type& l)
     {        
         const simd_type val_inf = simd_type(std::numeric_limits<double>::infinity());
         const simd_type max_a   = simd_type(1000.0);
@@ -201,7 +202,8 @@ struct simd_exp<float, Bits, Simd_tag>
         return c;
     };
 
-    static simd_type process_overflows(simd_type a, simd_type p, simd_type k)
+    static simd_type process_overflows(const simd_type& a, const simd_type& p, 
+                                       const simd_type& k)
     {
         const simd_type val_inf = simd_type(std::numeric_limits<float>::infinity());
         const simd_type max_a   = simd_type(120.0f);

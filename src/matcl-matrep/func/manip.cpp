@@ -32,7 +32,7 @@
 #include "matcl-matrep/func/raw/find.h"
 #include "matcl-matrep/func/raw/sort2.h"
 #include "matcl-matrep/matrix/matrix_concat.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-internals/func/converter.h"
 #include "matcl-matrep/details/details_manip.h"
 #include "matcl-matrep/details/matrix.inl"

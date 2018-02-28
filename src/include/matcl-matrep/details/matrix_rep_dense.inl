@@ -27,63 +27,6 @@ namespace matcl
 {
 
 //-----------------------------------------------------------------
-//                  dense_matrix
-//-----------------------------------------------------------------
-template<class T>
-inline const T& dense_matrix<T, true>::operator()(Integer r) const
-{
-    if (r < 1 || r > m_size)
-        throw_error_single_index(r,m_size);
-
-    return m_ptr[r-1];
-};
-
-template<class T>
-inline const T& dense_matrix<T, true>::operator()(Integer r)
-{
-    if (r < 1 || r > m_size)
-        throw_error_single_index(r,m_size);
-
-    return m_ptr[r-1];
-};
-
-template<class T>
-inline T& dense_matrix<T, false>::operator()(Integer r)
-{
-    if (r < 1 || r > m_size)
-        throw_error_single_index(r,m_size);
-
-    return m_ptr[r-1];
-};
-
-template<class T>
-inline const T& dense_matrix<T, true>::operator()(Integer r, Integer c) const
-{
-    if ((r < 1) || (r > m_rows) || (c < 1) || (c > m_cols))
-        throw_error_double_index(r, c, m_rows, m_cols);
-
-    return m_ptr[r-1 + (c-1) * m_ld];
-};
-
-template<class T>
-inline const T& dense_matrix<T, true>::operator()(Integer r, Integer c)
-{
-    if ((r < 1) || (r > m_rows) || (c < 1) || (c > m_cols))
-        throw_error_double_index(r, c, m_rows, m_cols);
-
-    return m_ptr[r-1 + (c-1) * m_ld];
-};
-
-template<class T>
-inline T& dense_matrix<T, false>::operator()(Integer r, Integer c)
-{
-    if ((r < 1) || (r > m_rows) || (c < 1) || (c > m_cols))
-        throw_error_double_index(r, c, m_rows, m_cols);
-
-    return m_ptr[r-1 + (c-1) * m_ld];
-};
-
-//-----------------------------------------------------------------
 //                  sub_dense_matrix
 //-----------------------------------------------------------------
 template<class T>
@@ -303,6 +246,241 @@ template<class T>
 inline const dense_matrix<T> dense_col<T>::to_matrix() const
 {
     return dense_matrix<T>(base_type::to_matrix());
+};
+
+//-----------------------------------------------------------------
+//                  dense_matrix
+//-----------------------------------------------------------------
+
+template<class T>
+inline const typename dense_matrix<T, true>::value_type* 
+dense_matrix<T, true>::ptr() const
+{ 
+    return m_ptr; 
+};        
+
+template<class T>
+inline const typename dense_matrix<T, true>::value_type* 
+dense_matrix<T, true>::ptr()
+{ 
+    return m_ptr; 
+};
+
+template<class T>
+inline Integer dense_matrix<T, true>::size() const
+{ 
+    return m_size; 
+};
+
+template<class T>
+inline Integer dense_matrix<T, true>::max_rows() const
+{ 
+    return m_max_rows; 
+};
+
+template<class T>
+inline Integer dense_matrix<T, true>::max_cols() const
+{ 
+    return m_max_cols; 
+};
+
+template<class T>
+inline Integer dense_matrix<T, true>::ld() const
+{
+    return m_ld; 
+};        
+
+template<class T>
+inline const Matrix& dense_matrix<T, true>::to_matrix() const &
+{ 
+    return m_matrix; 
+};
+
+template<class T>
+inline Matrix&& dense_matrix<T, true>::to_matrix() &&
+{ 
+    return std::move(m_matrix); 
+};
+
+template<class T>
+inline const T& dense_matrix<T, true>::elem(Integer pos) const
+{ 
+    return m_ptr[pos-1]; 
+};
+
+template<class T>
+inline const T& dense_matrix<T, true>::elem(Integer pos)
+{ 
+    return m_ptr[pos-1]; 
+};
+
+template<class T>
+inline const T& dense_matrix<T, true>::elem(Integer r, Integer c) const
+{ 
+    return m_ptr[r-1 + (c-1) * m_ld]; 
+}
+
+template<class T>
+inline const T& dense_matrix<T, true>::elem(Integer r, Integer c)
+{ 
+    return m_ptr[r-1 + (c-1) * m_ld]; 
+}
+
+template<class T>
+inline Integer dense_matrix<T, true>::rows() const
+{ 
+    return m_rows; 
+}; 
+
+template<class T>
+inline Integer dense_matrix<T, true>::cols() const
+{ 
+    return m_cols; 
+};
+
+template<class T>
+inline const struct_flag dense_matrix<T, true>::get_struct() const
+{ 
+    return *m_flag; 
+};   
+
+template<class T>
+inline dense_matrix<T, true>::operator bool() const
+{ 
+    return (bool)m_matrix; 
+};
+
+template<class T>
+inline bool dense_matrix<T, true>::is_empty() const
+{ 
+    return rows() == 0 || cols() == 0; 
+};
+
+template<class T>
+inline bool dense_matrix<T, true>::is_scalar() const
+{ 
+    return rows() == 1 && cols() == 1; 
+};
+
+template<class T>
+inline bool dense_matrix<T, true>::is_square() const
+{ 
+    return rows() == cols(); 
+};
+
+template<class T>
+inline bool dense_matrix<T, true>::is_vector() const
+{ 
+    return rows() == 1 || cols() == 1 || is_empty() == true; 
+};
+
+template<class T>
+inline bool dense_matrix<T, true>::is_matrix_type() const
+{ 
+    return true; 
+}
+
+template<class T>
+inline bool dense_matrix<T, true>::is_scalar_type() const
+{ 
+    return false; 
+};
+
+template<class T>
+inline bool dense_matrix<T, true>::is_unique() const
+{ 
+    return m_matrix.is_unique(); 
+}
+
+template<class T>
+inline value_code dense_matrix<T, true>::get_value_code() const
+{ 
+    return m_matrix.get_value_code(); 
+}
+
+template<class T>
+inline struct_code dense_matrix<T, true>::get_struct_code() const
+{ 
+    return m_matrix.get_struct_code(); 
+}
+
+template<class T>
+inline mat_code dense_matrix<T, true>::get_matrix_code() const
+{ 
+    return m_matrix.get_matrix_code(); 
+}
+
+template<class T>
+inline typename dense_matrix<T,false>::value_type*
+dense_matrix<T,false>::ptr()
+{ 
+    return m_ptr; 
+};
+
+template<class T>
+inline T& dense_matrix<T,false>::elem(Integer pos)
+{ 
+    return m_ptr[pos-1]; 
+};
+
+template<class T>
+inline T& dense_matrix<T,false>::elem(Integer r, Integer c)
+{ 
+    return m_ptr[r-1 + (c-1) * m_ld]; 
+}
+
+template<class T>
+inline const T& dense_matrix<T, true>::operator()(Integer r) const
+{
+    if (r < 1 || r > m_size)
+        throw_error_single_index(r,m_size);
+
+    return m_ptr[r-1];
+};
+
+template<class T>
+inline const T& dense_matrix<T, true>::operator()(Integer r)
+{
+    if (r < 1 || r > m_size)
+        throw_error_single_index(r,m_size);
+
+    return m_ptr[r-1];
+};
+
+template<class T>
+inline T& dense_matrix<T, false>::operator()(Integer r)
+{
+    if (r < 1 || r > m_size)
+        throw_error_single_index(r,m_size);
+
+    return m_ptr[r-1];
+};
+
+template<class T>
+inline const T& dense_matrix<T, true>::operator()(Integer r, Integer c) const
+{
+    if ((r < 1) || (r > m_rows) || (c < 1) || (c > m_cols))
+        throw_error_double_index(r, c, m_rows, m_cols);
+
+    return m_ptr[r-1 + (c-1) * m_ld];
+};
+
+template<class T>
+inline const T& dense_matrix<T, true>::operator()(Integer r, Integer c)
+{
+    if ((r < 1) || (r > m_rows) || (c < 1) || (c > m_cols))
+        throw_error_double_index(r, c, m_rows, m_cols);
+
+    return m_ptr[r-1 + (c-1) * m_ld];
+};
+
+template<class T>
+inline T& dense_matrix<T, false>::operator()(Integer r, Integer c)
+{
+    if ((r < 1) || (r > m_rows) || (c < 1) || (c > m_cols))
+        throw_error_double_index(r, c, m_rows, m_cols);
+
+    return m_ptr[r-1 + (c-1) * m_ld];
 };
 
 };
