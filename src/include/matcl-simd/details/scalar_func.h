@@ -108,7 +108,7 @@ template<>
 struct is_finite_impl<double>
 {
     force_inline
-    static double eval(const double& x)
+    static bool eval(const double& x)
     {
         int64_t xi      = reinterpret_cast<const int64_t&>(x);
 
@@ -119,7 +119,7 @@ struct is_finite_impl<double>
 
         // return true if at least one bit in the exponent is not set
         bool res        = (xi != mask);
-        return (res == true) ? true_value<double>::get() : 0.0;
+        return res;
     }
 };
 
@@ -127,7 +127,7 @@ template<>
 struct is_finite_impl<float>
 {
     force_inline
-    static float eval(const float& x)
+    static bool eval(const float& x)
     {
         int32_t xi      = reinterpret_cast<const int32_t&>(x);
 
@@ -138,7 +138,7 @@ struct is_finite_impl<float>
 
         // return true if at least one bit in the exponent is not set
         bool res        = (xi != mask);
-        return (res == true) ? true_value<float>::get() : 0.0f;
+        return res;
     }
 };
 

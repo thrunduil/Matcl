@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details">
+      <UniqueIdentifier>{46111e2b-04ae-4f88-a86d-2339153ad426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\dynamic_function">
+      <UniqueIdentifier>{cad255d8-965a-45f2-9f2a-2fed1f8b522c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\dynamic_function\details">
+      <UniqueIdentifier>{fdd464f9-6853-4dc5-a3b9-7ed669754157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\predefined">
+      <UniqueIdentifier>{e3344277-e9ed-4689-976b-9108ffd135c6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\data_constructor.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\eval_function_impl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\evaler.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\func_evaler_conv.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\fwd_decls.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\global_objects.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\object_data.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\object_data_pool.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\register_function_impl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\register_function_macro.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\register_object.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\result_of_cast.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\result_of_impl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\type_impl.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\type_object.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\details\utils.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\dynamic_function\details\dynamic_function_utils.h">
+      <Filter>Source Files\include\dynamic_function\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\dynamic_function\details\function_evaler.h">
+      <Filter>Source Files\include\dynamic_function\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\dynamic_function\details\function_traits.h">
+      <Filter>Source Files\include\dynamic_function\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\dynamic_function\details\type_list.h">
+      <Filter>Source Files\include\dynamic_function\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\dynamic_function\dynamic_function.h">
+      <Filter>Source Files\include\dynamic_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\config.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\exception.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\function.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\function_name.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\matcl_dynamic.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\matcl_function_names.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\object.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\object_type.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\object_type_traits.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\predefined_functions.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\predefined_functions_names.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\predefined_type_traits.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\register_function.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\result_of.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\special_types.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\type.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\typed_object_functions.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-dynamic\utils.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\predefined\special_functions.h">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\conversions_table.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\error_handler.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\function_table.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\initialization.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\numeric_conversions_table.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\overload_resolution.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\type_name.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\type_reference.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\type_table.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\type_table_cache.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-dynamic\type_table_cache_data.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\data_constructor.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\function.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\function_name.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\object.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\object_data.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\object_type.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\object_type_traits.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\register_object.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\special_types.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\type_object.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\details\typed_object_functions.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-dynamic\dynamic_function\details\dynamic_function.inl">
+      <Filter>Source Files\include\dynamic_function\details</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-dynamic\type_table_cache.inl">
+      <Filter>Source Files\src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_any.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_bool.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_complex.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_fcomplex.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_float.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_integer.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_null.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_real.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_string.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_type.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_type_traits_predefined.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\object_unit.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\predefined_assignments.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\predefined_conversions.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined\special_functions.cpp">
+      <Filter>Source Files\src\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\conversions_table.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\error_handler.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\func_evaler_conv.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\function.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\function_name.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\function_table.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\matcl_function_names.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\object.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\overload_resolution.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\predefined_functions.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\register_function.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\register_object.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\special_types.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\type.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\type_name.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\type_reference.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\type_table.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\type_table_cache.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-dynamic\utils.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

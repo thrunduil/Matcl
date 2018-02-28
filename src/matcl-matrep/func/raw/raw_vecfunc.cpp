@@ -19,7 +19,7 @@
  */
 
 #include "matcl-matrep/func/raw/raw_vecfunc.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/func/raw/eval_vec_functor.h"
 #include "matcl-matrep/utils/workspace.h"
 #include "matcl-matrep/func/raw/eval_vec_functor2.h"

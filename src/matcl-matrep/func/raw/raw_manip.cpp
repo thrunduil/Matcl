@@ -19,7 +19,7 @@
  */
 
 #include "matcl-matrep/func/raw/raw_manip.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-core/details/integer.h"
 #include "matcl-matrep/utils/workspace.h"
@@ -1918,19 +1918,6 @@ void details::manip_trans_helper<M>::eval_ctrans(M& ret, const M& m)
     return eval_ctrans_helper<ret_type,M,is_compl || is_obj,struct_type>::eval(ret,m);
 };
 
-template<class Val>
-void details::manip_trans_helper_mat<Val>::eval_trans(Val* ret_ptr, Integer ld, const MP& m)
-{
-    return eval_trans_helper<MP,MP,struct_dense>::eval_mat(ret_ptr, ld, m);
-}
-
-template<class Val>
-void details::manip_trans_helper_mat<Val>::eval_ctrans(Val* ret_ptr, Integer ld, const MP& m)
-{
-    using struct_type = struct_dense;
-    return eval_ctrans_helper<MP,MP,true,struct_type>::eval_mat(ret_ptr,ld,m);
-};
-
 template<class struct_type, class Val_in, class Val_ret>
 void details::manip_trans_converter_helper<struct_type, Val_in, Val_ret>::eval_trans(ret_type& ret, const in_type& m)
 {
@@ -1943,25 +1930,6 @@ void details::manip_trans_converter_helper<struct_type, Val_in, Val_ret>::eval_c
     static const bool is_compl  = md::is_complex<Val_in>::value;
     static const bool is_obj    = std::is_same<Val_in,Object>::value;
     return eval_ctrans_helper<ret_type,in_type,is_compl || is_obj,struct_type>::eval(ret,m);
-};
-
-template<class Val, class Val_ret>
-void details::manip_trans_reshaper_helper<Val,Val_ret>::eval_trans(ret_type& ret, const in_type& m, 
-                            Integer max_row, Integer max_col, Integer ret_rows, Integer ret_cols)
-{
-    return eval_trans_helper<ret_type,in_type,struct_sparse>
-        ::eval_reshape(ret, m, max_row, max_col,ret_rows, ret_cols);
-};
-
-template<class Val, class Val_ret>
-void details::manip_trans_reshaper_helper<Val,Val_ret>::eval_ctrans(ret_type& ret, const in_type& m, 
-                        Integer max_row, Integer max_col, Integer ret_rows, Integer ret_cols)
-{
-    static const bool is_compl  = md::is_complex<Val>::value;
-    static const bool is_obj    = std::is_same<Val,Object>::value;
-
-    return eval_ctrans_helper<ret_type,in_type,is_compl || is_obj,struct_sparse>
-        ::eval_reshape(ret, m, max_row, max_col,ret_rows, ret_cols);
 };
 
 struct estim_bandwidth
@@ -3772,6 +3740,38 @@ bool all_finite_helper<Mat>::eval(const Mat& mat)
     return mrd::all_finite_helper_impl<V,S>::eval(mat);
 };
 
+template<class Val>
+void details::manip_trans_helper_mat<Val>::eval_trans(Val* ret_ptr, Integer ld, const MP& m)
+{
+    return eval_trans_helper<MP,MP,struct_dense>::eval_mat(ret_ptr, ld, m);
+}
+
+template<class Val>
+void details::manip_trans_helper_mat<Val>::eval_ctrans(Val* ret_ptr, Integer ld, const MP& m)
+{
+    using struct_type = struct_dense;
+    return eval_ctrans_helper<MP,MP,true,struct_type>::eval_mat(ret_ptr,ld,m);
+};
+
+template<class Val, class Val_ret>
+void details::manip_trans_reshaper_helper<Val,Val_ret>::eval_trans(ret_type& ret, const in_type& m, 
+                            Integer max_row, Integer max_col, Integer ret_rows, Integer ret_cols)
+{
+    return eval_trans_helper<ret_type,in_type,struct_sparse>
+        ::eval_reshape(ret, m, max_row, max_col,ret_rows, ret_cols);
+};
+
+template<class Val, class Val_ret>
+void details::manip_trans_reshaper_helper<Val,Val_ret>::eval_ctrans(ret_type& ret, const in_type& m, 
+                        Integer max_row, Integer max_col, Integer ret_rows, Integer ret_cols)
+{
+    static const bool is_compl  = md::is_complex<Val>::value;
+    static const bool is_obj    = std::is_same<Val,Object>::value;
+
+    return eval_ctrans_helper<ret_type,in_type,is_compl || is_obj,struct_sparse>
+        ::eval_reshape(ret, m, max_row, max_col,ret_rows, ret_cols);
+};
+
 template integer_dense full(const matcl::raw::integer_sparse&);
 template real_dense full(const matcl::raw::real_sparse&);
 template float_dense full(const matcl::raw::float_sparse&);
@@ -3871,55 +3871,121 @@ MACRO_INSTANTIATE_S_1(matcl::raw::details::manip_reshape_helper)
 MACRO_INSTANTIATE_G_1(matcl::raw::details::manip_trans_helper)
 MACRO_INSTANTIATE_S_1(matcl::raw::details::manip_trans_helper)
 
-MACRO_INSTANTIATE_SCAL_1(matcl::raw::details::manip_trans_helper_mat)
-
 MACRO_INSTANTIATE_G_1(matcl::raw::details::manip_tr_helper)
 MACRO_INSTANTIATE_S_1(matcl::raw::details::manip_tr_helper)
 
 MACRO_INSTANTIATE_G_1(matcl::raw::all_finite_helper)
 MACRO_INSTANTIATE_S_1(matcl::raw::all_finite_helper)
 
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::integer_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::float_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::real_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::float_complex_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::complex_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::object_sparse&, Integer, bool);
+MACRO_INSTANTIATE_SCAL_1(matcl::raw::details::manip_trans_helper_mat)
 
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::integer_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::float_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::real_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::complex_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::float_complex_sparse&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::object_sparse&, Integer, bool);
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::integer_sparse&, Integer, bool);
 
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::integer_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::float_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::real_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::float_complex_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::complex_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::object_dense&, Integer, bool);
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::float_sparse&, Integer, bool);
 
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::integer_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::float_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::real_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::complex_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::float_complex_dense&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::object_dense&, Integer, bool);
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::real_sparse&, Integer, bool);
 
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::integer_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::float_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::real_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::complex_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::float_complex_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ld(const matcl::raw::object_band&, Integer, bool);
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::float_complex_sparse&, Integer, bool);
 
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::integer_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::float_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::real_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::complex_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::float_complex_band&, Integer, bool);
-template matcl::Integer matcl::raw::get_ud(const matcl::raw::object_band&, Integer, bool);
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::complex_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::object_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::integer_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::float_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::real_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::complex_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::float_complex_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::object_sparse&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ld(const matcl::raw::integer_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ld(const matcl::raw::float_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ld(const matcl::raw::real_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ld(const matcl::raw::float_complex_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::complex_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::object_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::integer_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::float_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::real_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::complex_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::float_complex_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ud(const matcl::raw::object_dense&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::integer_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::float_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::real_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::complex_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::float_complex_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT
+matcl::Integer matcl::raw::get_ld(const matcl::raw::object_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ud(const matcl::raw::integer_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ud(const matcl::raw::float_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ud(const matcl::raw::real_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ud(const matcl::raw::complex_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ud(const matcl::raw::float_complex_band&, Integer, bool);
+
+template MATCL_MATREP_EXPORT 
+matcl::Integer matcl::raw::get_ud(const matcl::raw::object_band&, Integer, bool);
 
 
 template bool matcl::raw::is_sym(const matcl::raw::integer_sparse&, Real, bool);

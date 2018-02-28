@@ -1108,7 +1108,7 @@ struct Func_exp
         return std::exp(x); 
     }
 
-    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    static matcl::mp_float eval_mp(const matcl::mp_float& x)
     { 
         return exp(x); 
     }
@@ -1133,7 +1133,7 @@ struct Func_sin
         return std::sin(x); 
     }
 
-    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    static matcl::mp_float eval_mp(const matcl::mp_float& x)
     { 
         return sin(x); 
     }
@@ -1158,7 +1158,7 @@ struct Func_cos
         return std::cos(x); 
     }
 
-    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    static matcl::mp_float eval_mp(const matcl::mp_float& x)
     { 
         return cos(x); 
     }
@@ -1183,7 +1183,7 @@ struct Func_tan
         return std::tan(x); 
     }
 
-    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    static matcl::mp_float eval_mp(const matcl::mp_float& x)
     { 
         return tan(x); 
     }
@@ -1208,7 +1208,7 @@ struct Func_cot
         return T(1) / std::tan(x); 
     }
 
-    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    static matcl::mp_float eval_mp(const matcl::mp_float& x)
     { 
         return cot(x); 
     }
@@ -1233,7 +1233,7 @@ struct Func_log
         return std::log(x); 
     }
 
-    force_inline static matcl::mp_float eval_mp(const matcl::mp_float& x)
+    static matcl::mp_float eval_mp(const matcl::mp_float& x)
     { 
         return log(x); 
     }

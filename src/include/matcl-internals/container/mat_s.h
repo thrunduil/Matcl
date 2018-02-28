@@ -107,6 +107,8 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
 
         sparse_matrix_base      copy(bool keep_maxcol = false) const;
         sparse_matrix_base      clone(bool keep_maxcol = false) const;
+        
+        inline 
         sparse_matrix_base      make_unique(bool keep_bufor = false) const;
 
         sparse_matrix_base      reserve(Integer r, Integer c) const;

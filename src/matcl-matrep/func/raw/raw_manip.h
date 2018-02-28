@@ -25,6 +25,7 @@
 #include "matcl-internals/container/mat_d.h"
 #include "matcl-internals/container/mat_s.h"
 #include "matcl-internals/container/mat_b.h"
+#include "matcl-internals/func/raw_manip.h"
 
 namespace matcl { namespace raw
 {
@@ -58,61 +59,6 @@ struct manip_reshape_helper
     static void     eval_repmat(matcl::Matrix& ret, const MP& A, Integer m, Integer n);
 };
 
-template<class MP>
-struct manip_tr_helper
-{
-    using ret_type_tril = MP;                
-    using ret_type_triu = MP;
-
-    static void eval_tril(matcl::Matrix& ret, const MP& m, Integer d, bool rvalue);
-    static void eval_triu(matcl::Matrix& ret, const MP& m, Integer d, bool rvalue);
-    static void eval_select_band(matcl::Matrix& ret, const MP& m, Integer fd, Integer ld);
-};
-
-template<class MP>
-struct manip_trans_helper
-{
-    using ret_type = MP;
-
-    //ret is empty matrix
-    static void     eval_trans(MP& ret, const MP& m);
-    static void     eval_ctrans(MP& ret, const MP& m);
-};
-
-template<class Val>
-struct manip_trans_helper_mat
-{
-    using MP        = raw::Matrix<Val,struct_dense>;
-
-    //store trans in ret matrix; ret must be properly initialized
-    static void     eval_trans(Val* ret_ptr, Integer ld, const MP& m);
-    static void     eval_ctrans(Val* ret_ptr, Integer ld, const MP& m);
-};
-
-template<class Val, class Val_ret>
-struct manip_trans_reshaper_helper
-{
-    using in_type   = raw::Matrix<Val, struct_sparse>;
-    using ret_type  = raw::Matrix<Val_ret, struct_sparse>;
-
-    // drop rows with index higher than max_row, and columns with index higher than
-    // max_col, create matrix of size ret_rows x ret_cols
-    static void     eval_trans(ret_type& ret, const in_type& m, Integer max_row, Integer max_col, 
-                               Integer ret_rows, Integer ret_cols);
-    static void     eval_ctrans(ret_type& ret, const in_type& m, Integer max_row, Integer max_col, 
-                                Integer ret_rows, Integer ret_cols);
-};
-
-template<class struct_type, class Val_in, class Val_ret>
-struct manip_trans_converter_helper
-{
-    using in_type   = raw::Matrix<Val_in, struct_type>;
-    using ret_type  = raw::Matrix<Val_ret, struct_type>;
-
-    static void     eval_trans(ret_type& ret, const in_type& m);
-    static void     eval_ctrans(ret_type& ret, const in_type& m);
-};
-
 };
 
 template<class val_type>
@@ -129,31 +75,6 @@ Matrix<val_type,struct_banded> band(const Matrix<val_type,struct_dense>& A);
 
 template<class val_type>
 Matrix<val_type,struct_banded> band(const Matrix<val_type,struct_sparse>& A);
-
-template<class V>
-Integer get_ld(const Matrix<V,struct_dense>& A, Integer min, bool use_flag = true);
-
-template<class V>
-Integer get_ld(const Matrix<V,struct_sparse>& A, Integer min, bool use_flag = true);
-
-template<class V>
-Integer get_ld(const Matrix<V,struct_banded>& A, Integer min, bool use_flag = true);
-
-template<class V>
-Integer get_ud(const Matrix<V,struct_dense>& A, Integer min, bool use_flag = true);
-
-template<class V>
-Integer get_ud(const Matrix<V,struct_sparse>& A, Integer min, bool use_flag = true);
-
-template<class V>
-Integer get_ud(const Matrix<V,struct_banded>& A, Integer min, bool use_flag = true);
-
-
-template<class V, class S>
-bool is_diag(const Matrix<V,S>& A)
-{
-    return (get_ld(A,0) == 0) && (get_ud(A,0) == 0);
-};
 
 template<class V, class S>
 bool is_tril(const Matrix<V,S>& A)

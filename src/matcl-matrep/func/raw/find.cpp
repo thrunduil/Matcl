@@ -19,7 +19,7 @@
  */
 
 #include "matcl-matrep/func/raw/find.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include <vector>
 #include "matcl-internals/base/utils.h"
 #include "matcl-core/details/integer.h"
