@@ -18,10 +18,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-core/general/thread.h"
 #include "matcl-core/error/exception_classes.h"
-#include "../base/alloc.h"
+//#include "../base/alloc.h"
 #include "matcl-core/memory/memory.h"
 
 namespace matcl {namespace details

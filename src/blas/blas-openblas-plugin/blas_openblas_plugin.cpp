@@ -18,19 +18,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "mkl_blas.h"
+#include "f77blas.h"
 
 #include <atomic>
 #include <thread>
 #include <algorithm>
-#include <iostream>
 
 // include the file with the interface such plugin needs to implement
 #include "matcl-blas-lapack/blas_loader/blas_plugin.h"
 #include "omp.h"
-#include "mkl.h"
 
-#define CALL_SYNTAX(x) x
+#define CALL_SYNTAX(x) x##_
 
 // WARNING: OMP spport must be enabled
 
@@ -57,6 +55,7 @@ global_data::global_data()
     m_threads       = max_threads;
 
     omp_set_num_threads(max_threads);
+    openblas_set_num_threads_(&max_threads);
 };
 
 int global_data::get_num_threads()
@@ -68,13 +67,15 @@ void global_data::set_num_threads(int n)
 {
     int max_threads = std::thread::hardware_concurrency();
     m_threads = std::min(std::max(n,1),max_threads);
+
     omp_set_num_threads(m_threads);
+
+    int n_threads   = m_threads;
+    openblas_set_num_threads_(&n_threads);
 };
 
 bool global_data::are_user_threads_allowed()
 {
-    // false for MKL 9.x
-    //return false;
     return true;
 };
 
@@ -110,26 +111,15 @@ bool are_user_threads_allowed()
 };
 
 #include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
-#include "blaswrap.h"
-
-//missing functions
-static d_type_wr 
-CALL_SYNTAX(sdsdot)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, 
-                    s_type_wr *sy, i_type_wr *incy)
-{
-    return f2c::sdsdot_(n, sb, sx, incx, sy, incy);
-};
-
-static d_type_wr 
-CALL_SYNTAX(dsdot)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, 
-                   i_type_wr *incy)
-{
-    return f2c::dsdot_(n, sx, incx, sy, incy);
-};
 
 static d_type_wr CALL_SYNTAX(scabs1)(c_type_wr *z__)
 {
     return f2c::scabs1_((f2c::complex*)z__);
+};
+
+static d_type_wr CALL_SYNTAX(dcabs1)(z_type_wr *z__)
+{
+    return f2c::dcabs1_((f2c::doublecomplex*)z__);
 };
 
 // generic stuff - the constructor which initializes all pointers to blas functions

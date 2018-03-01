@@ -33,12 +33,19 @@
 #include <sstream>
 #include <thread>
 
-#ifndef __unix__ //supposedly WINDOWS version
-
-    //TODO: get correct plugin names 
-    #define BLAS_LIBRARY_MKL                "blas_mkl_plugin.dll"
-    #define BLAS_LIBRARY_CLAPACK            "blas_clapack_plugin.dll"
+#ifdef _WIN64
+    #define BLAS_LIBRARY_MKL                "matcl-mkl-plugin-x64-Release.dll"
+    #define BLAS_LIBRARY_CLAPACK            "matcl-clapack-plugin-x64-Release.dll"
     #define BLAS_LIBRARY_CPU_GPU_DEFAULT    "blas_plugin_cpu_gpu_default.dll"
+#elif defined _WIN32
+    #define BLAS_LIBRARY_MKL                "matcl-mkl-plugin-Win32-Release.dll"
+    #define BLAS_LIBRARY_CLAPACK            "matcl-clapack-plugin-Win32-Release.dll"
+    #define BLAS_LIBRARY_CPU_GPU_DEFAULT    "blas_plugin_cpu_gpu_default.dll"
+#else
+    #error unknown platform
+#endif
+
+#ifndef __unix__ //supposedly WINDOWS version
 
     namespace matcl { namespace lapack
     {
@@ -48,9 +55,6 @@
             //to set environmental variable 
 
             int n_threads = std::thread::hardware_concurrency();
-
-            //TODO:
-            n_threads = 1;
 
             std::ostringstream os;
             os << n_threads;

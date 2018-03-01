@@ -21,6 +21,19 @@ external libraries:
         - authors:  Mutsuo Saito, Makoto Matsumoto
         - licence: BSD (modified)
         - source: http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/
+4. MATCL-BLAS-LAPACK
+    1.  LAPACK: LAPACK is written in Fortran 90 and provides routines for
+        solving systems of simultaneous linear equations, least-squares solutions
+        of linear systems of equations, eigenvalue problems, and singular value
+        problems.
+        - authors: Univ. of Tennessee; Univ. of California, Berkeley; 
+            Univ. of Colorado Denver; and NAG Ltd..
+        - licence: modified BSD license
+        - source: http://www.netlib.org/lapack/
+    2.  OPENBLAS: OpenBLAS is an optimized BLAS library based on GotoBLAS2
+        - authors: 
+        - licence: BSD
+        - source: http://www.openblas.net/
 
 CREDITS:
 1. Sylvie Boldo (implementation of Dekker's algorithm for exact multiplication

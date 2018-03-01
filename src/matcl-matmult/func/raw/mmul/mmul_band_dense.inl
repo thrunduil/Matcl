@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-matrep/lib_functions/func_matrix.h"
 
 namespace matcl { namespace raw { namespace details

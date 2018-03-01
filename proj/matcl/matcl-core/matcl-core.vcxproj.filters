@@ -76,6 +76,12 @@
     <Filter Include="Source Files\src\profile">
       <UniqueIdentifier>{43ad82b9-8484-4357-9108-be7748de647f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\include\utils">
+      <UniqueIdentifier>{217f1696-4c5f-4507-95dc-3f558fb9b3a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\utils">
+      <UniqueIdentifier>{cbb11990-a4b2-4b1b-9dc4-a83d8931cff8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\include\matcl-core\details\complex_details.h">
@@ -279,6 +285,12 @@
     <ClInclude Include="..\..\..\src\matcl-core\IO\out_stream_initializer.h">
       <Filter>Source Files\src\IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-core\utils\workspace.h">
+      <Filter>Source Files\include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-core\details\workspace_details.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\include\matcl-core\details\alloc.inl">
@@ -337,6 +349,9 @@
     </None>
     <None Include="..\..\..\src\include\matcl-core\details\simd\simd.inl">
       <Filter>Source Files\include\details\simd</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-core\details\workspace.inl">
+      <Filter>Source Files\include\details</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -447,6 +462,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\matcl-core\profile\timer.cpp">
       <Filter>Source Files\src\profile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-core\utils\workspace.cpp">
+      <Filter>Source Files\src\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

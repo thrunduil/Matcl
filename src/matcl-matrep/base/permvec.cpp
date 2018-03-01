@@ -24,7 +24,7 @@
 #include "matcl-matrep/matrix/colon.h"
 #include "matcl-matrep/details/matrix_details_subs.h"
 #include "matcl-internals/error/error_check_basic.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 
 namespace matcl
 {

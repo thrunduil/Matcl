@@ -25,7 +25,7 @@
 #include "matcl-internals/base/utils.h"
 #include "matcl-matrep/base/serialize.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 
 namespace matcl { namespace raw { namespace details

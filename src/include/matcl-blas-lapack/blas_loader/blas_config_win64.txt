@@ -1,2 +1,3 @@
-CPU 		blas_mkl_plugin-x64-Release.dll
-CPU 		blas_clapack_plugin-x64-Release.dll
+CPU 		matcl-mkl-plugin-x64-Release.dll
+CPU 		matcl-openblas-plugin-x64-Release.dll
+CPU 		matcl-clapack-plugin-x64-Release.dll
