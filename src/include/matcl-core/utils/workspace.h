@@ -20,8 +20,10 @@
 
 #pragma once
 
-#include "matcl-matrep/details/fwd_decls.h"
-#include "matcl-matrep/details/workspace_details.h"
+#include "matcl-core/config.h"
+#include "matcl-core/details/workspace_details.h"
+
+#include <type_traits>
 
 namespace matcl
 {
@@ -92,4 +94,4 @@ class pod_workspace : private details::workspace_base
 
 };
 
-#include "matcl-matrep/details/workspace.inl"
+#include "matcl-core/details/workspace.inl"

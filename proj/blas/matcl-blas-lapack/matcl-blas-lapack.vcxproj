@@ -39,6 +39,9 @@
     <ClCompile Include="..\..\..\src\blas\matcl-blas-lapack\lapack\lapack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\matcl\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\matcl-blas-loader\matcl-blas-loader.vcxproj">
       <Project>{b9e3f867-c8c0-4619-b796-743f3cae5122}</Project>
     </ProjectReference>

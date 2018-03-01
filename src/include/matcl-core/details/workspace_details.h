@@ -20,16 +20,19 @@
 
 #pragma once
 
+#include "matcl-core/config.h"
+#include "matcl-core/matrix/scalar_types.h"
+
 namespace matcl { namespace details
 {
 
 #pragma warning(push)
 #pragma warning(disable :4324) //structure was padded due to alignment specifier
 
-class MATCL_MATREP_EXPORT alignas(MATCL_SIMD_ALIGNMENT) workspace_base
+class MATCL_CORE_EXPORT alignas(MATCL_SIMD_ALIGNMENT) workspace_base
 {
     private:
-        static const size_t MAX_ON_STACK    = 10 * sizeof(Real);
+        static const size_t MAX_ON_STACK    = 10 * sizeof(double);
 
     private:
         union data

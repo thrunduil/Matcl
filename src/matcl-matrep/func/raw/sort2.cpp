@@ -26,7 +26,7 @@
 #include "matcl-matrep/func/raw/raw_manip.h"
 #include "matcl-matrep/base/colon_info.h"
 #include "matcl-matrep/algs/sparse_algs.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-matrep/lib_functions/manip.h"
 #include "matcl-matrep/func/raw/eval_vec_functor2.h"
 #include "matcl-internals/func/converter.h"

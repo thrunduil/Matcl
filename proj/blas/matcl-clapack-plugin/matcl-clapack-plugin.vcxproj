@@ -408,16 +408,16 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

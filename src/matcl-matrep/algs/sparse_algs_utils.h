@@ -22,7 +22,7 @@
 
 #include "matcl-matrep/details/fwd_decls.h"
 #include "matcl-internals/base/utils.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include <list>
 #include <map>
 

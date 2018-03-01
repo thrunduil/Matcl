@@ -25,7 +25,7 @@
 #include "matcl-internals/container/mat_b.inl"
 #include "matcl-internals/container/mat_d.inl"
 #include "matcl-internals/container/mat_s.inl"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-matrep/details/struct_flag_predefined.h"
 

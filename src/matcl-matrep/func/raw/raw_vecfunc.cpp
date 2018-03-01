@@ -21,7 +21,7 @@
 #include "matcl-matrep/func/raw/raw_vecfunc.h"
 #include "matcl-internals/base/instantiate.h"
 #include "matcl-matrep/func/raw/eval_vec_functor.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-matrep/func/raw/eval_vec_functor2.h"
 #include "matcl-scalar/objects/object_functions.h"
 #include "matcl-matrep/lib_functions/eval_functors.h"

@@ -25,7 +25,7 @@
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-core/details/integer.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-matrep/lib_functions/func_unary.h"
 
