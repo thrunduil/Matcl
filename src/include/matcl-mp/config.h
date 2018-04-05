@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "matcl_config.h"
+
 // export macros
 #ifdef MATCL_MP_EXPORTS
     #define MATCL_MP_EXPORT  __declspec(dllexport)
