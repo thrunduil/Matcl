@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "matcl_config.h"
 #include "matcl-core/config.h"
 
 // export macros

@@ -88,7 +88,7 @@ void blas_config::parse_line(const std::string& line)
     if (line[0] == '%')
         return;
 
-    typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
+    using tokenizer = boost::tokenizer<boost::char_separator<char>>;
     boost::char_separator<char> sep(" \t");
 
     tokenizer tokens(line, sep);

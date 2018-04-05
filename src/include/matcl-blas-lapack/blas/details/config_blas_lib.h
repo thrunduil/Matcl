@@ -20,7 +20,7 @@
 
 #pragma once
 
-#pragma once
+#include "matcl_config.h"
 
 #include "matcl-blas-lapack/blas_loader/clapack_types.h"
 #include "matcl-blas-lapack/lapack/details/clapack_lapack_declarations.h"

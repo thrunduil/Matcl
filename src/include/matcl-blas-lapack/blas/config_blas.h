@@ -19,6 +19,9 @@
  */
 
 #pragma once
+
+#include "matcl_config.h"
+
 #include <complex>
 
 #ifdef BLAS_EXPORTS

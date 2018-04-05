@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "matcl_config.h"
+
 #include "matcl-core/config.h"
 #include "matcl-simd/config.h"
 

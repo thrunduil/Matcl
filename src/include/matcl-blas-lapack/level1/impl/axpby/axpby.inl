@@ -138,7 +138,7 @@ struct axpby<TY, TY, TA, TB, Rows, true, details::true_t>
         {
             simd_type sX_1  = simd_type::load(X+i*vec_size, std::false_type());
             simd_type sY_1  = simd_type::load(Y+i*vec_size, std::false_type());
-			simd_type res_1 = sa * sX_1 + sb * sY_1;
+			simd_type res_1 = fma_f(sa, sX_1, sb * sY_1);
 
             res_1.store(Y+i*vec_size, std::false_type());
         };

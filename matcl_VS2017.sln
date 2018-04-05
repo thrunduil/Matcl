@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "simd", "simd", "{B917E3D8-F7A0-46EA-9F53-D10AEA5001F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "matcl", "matcl", "{7AFA9D3D-B664-4037-98E2-C821FA5FFF7C}"
+	ProjectSection(SolutionItems) = preProject
+		src\include\matcl_config.h = src\include\matcl_config.h
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-blas-lapack", "proj\blas\matcl-blas-lapack\matcl-blas-lapack.vcxproj", "{74D44CAD-93B5-4145-ACD8-C9F1758D87F9}"
 EndProject
@@ -82,6 +85,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_adhoc", "proj\test_adhoc\test_adhoc.vcxproj", "{D8EDCA07-4F5E-4768-AF0F-9CF5234882F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-openblas-plugin", "proj\blas\matcl-openblas-plugin\matcl-openblas-plugin.vcxproj", "{7DB49E31-8176-4BDF-B74C-BDEDEC450DC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{8A62B787-4AA4-47A5-AECA-2F6BF15E91AA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "proj\sql\sqlite3\sqlite3.vcxproj", "{D53A48FA-71AD-47D9-B428-B47988B38002}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-file", "proj\matcl\matcl-file\matcl-file.vcxproj", "{7434209D-63EA-4AF0-A7DF-550B2E939849}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matcl-sqlite-cpp", "proj\sql\sql\matcl-sql-cpp.vcxproj", "{80347B72-BF3E-4803-BD66-1B8C6E2580C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -339,6 +350,30 @@ Global
 		{7DB49E31-8176-4BDF-B74C-BDEDEC450DC6}.Release|x64.Build.0 = Release|x64
 		{7DB49E31-8176-4BDF-B74C-BDEDEC450DC6}.Release|x86.ActiveCfg = Release|Win32
 		{7DB49E31-8176-4BDF-B74C-BDEDEC450DC6}.Release|x86.Build.0 = Release|Win32
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Debug|x64.ActiveCfg = Debug|x64
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Debug|x64.Build.0 = Debug|x64
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Debug|x86.ActiveCfg = Debug|Win32
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Debug|x86.Build.0 = Debug|Win32
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Release|x64.ActiveCfg = Release|x64
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Release|x64.Build.0 = Release|x64
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Release|x86.ActiveCfg = Release|Win32
+		{D53A48FA-71AD-47D9-B428-B47988B38002}.Release|x86.Build.0 = Release|Win32
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Debug|x64.ActiveCfg = Debug|x64
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Debug|x64.Build.0 = Debug|x64
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Debug|x86.ActiveCfg = Debug|Win32
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Debug|x86.Build.0 = Debug|Win32
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Release|x64.ActiveCfg = Release|x64
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Release|x64.Build.0 = Release|x64
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Release|x86.ActiveCfg = Release|Win32
+		{7434209D-63EA-4AF0-A7DF-550B2E939849}.Release|x86.Build.0 = Release|Win32
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Debug|x64.ActiveCfg = Debug|x64
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Debug|x64.Build.0 = Debug|x64
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Debug|x86.ActiveCfg = Debug|Win32
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Debug|x86.Build.0 = Debug|Win32
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Release|x64.ActiveCfg = Release|x64
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Release|x64.Build.0 = Release|x64
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Release|x86.ActiveCfg = Release|Win32
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -377,6 +412,9 @@ Global
 		{542EC759-F4FD-4C82-9B5D-B4DA07A1AB0A} = {7AFA9D3D-B664-4037-98E2-C821FA5FFF7C}
 		{D8EDCA07-4F5E-4768-AF0F-9CF5234882F1} = {306CBFB8-552E-4634-BD0D-FABD2579CDC5}
 		{7DB49E31-8176-4BDF-B74C-BDEDEC450DC6} = {3B98CD77-66C2-488B-9CF9-6DDD564CB340}
+		{D53A48FA-71AD-47D9-B428-B47988B38002} = {8A62B787-4AA4-47A5-AECA-2F6BF15E91AA}
+		{7434209D-63EA-4AF0-A7DF-550B2E939849} = {7AFA9D3D-B664-4037-98E2-C821FA5FFF7C}
+		{80347B72-BF3E-4803-BD66-1B8C6E2580C1} = {8A62B787-4AA4-47A5-AECA-2F6BF15E91AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {12608364-895A-4DB9-A507-D2C004A2793C}
