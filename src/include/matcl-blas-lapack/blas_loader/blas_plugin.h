@@ -44,6 +44,8 @@ struct blas_plugin
     using get_default_threads_type  = i_type_wr (*)();
     using set_num_threads_type      = void      (*)(i_type_wr*);
     using user_threads_allowed_type = bool      (*)();
+    using get_name_type             = const char* (*)();
+    using initialize_type           = void      (*)();
 
     using caxpy_func_type = i_type_wr (*)(i_type_wr *n, c_type_wr *ca, c_type_wr *cx, 
                                           i_type_wr *incx, c_type_wr *cy, i_type_wr *incy);
@@ -387,6 +389,16 @@ struct blas_plugin
                                           z_type_wr *b, i_type_wr *ldb);
     using ztrsv_func_type = i_type_wr (*)(char *uplo, char *trans, char *diag, i_type_wr *n, z_type_wr *a,
                                           i_type_wr *lda, z_type_wr *x, i_type_wr *incx);
+
+    // return name of this plugin
+    const get_name_type             get_name_fptr;
+
+    // perform initialization; called after loading of this plugin
+    const initialize_type           initialize_fptr;
+
+    // perform initialization; called when blas::initialize_plugin() function
+    // is called
+    const initialize_type           force_initialization_fptr;
 
     const get_num_threads_type      get_num_threads_fptr;
     const get_default_threads_type  get_default_threads_fptr;

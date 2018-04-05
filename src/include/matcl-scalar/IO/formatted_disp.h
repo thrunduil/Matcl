@@ -61,6 +61,31 @@ class MATCL_SCALAR_EXPORT column_info
         int                 width() const;
 };
 
+// helper class storing a vector of values to be displayed in a new row
+// by object of class formatted_disp
+class MATCL_SCALAR_EXPORT formatted_disp_row
+{
+    private:
+        using object_vec    = std::vector<Object>;
+
+    private:
+        object_vec          m_vector;
+
+    public:
+        // add new element to the vector
+        template<class Arg>
+        formatted_disp_row& operator<<(Arg&& arg);
+
+        // remove previously aded elements
+        void                clear();
+
+        // number of elements in the vector
+        size_t              size() const;
+
+        // pointer to the first element in the vector
+        const Object*       data() const;
+};
+
 // class preforming formatted display of a vector of data
 // according to specified format
 class MATCL_SCALAR_EXPORT formatted_disp
@@ -94,7 +119,14 @@ class MATCL_SCALAR_EXPORT formatted_disp
         // function is called, otherwise is ignored; number of remaining arguments
         // must be equal to number of columns
         template<class ... Args>
-        void                disp_row(const std::string& label, Args&& ... args);        
+        void                disp_row(const std::string& label, Args&& ... args);
+
+        // display next row; row label 'label' is displayed, when set_row_label
+        // function is called, otherwise is ignored; number of remaining arguments
+        // must be equal to number of columns; values associated with colums are
+        // stored in argument row of type formatted_disp_row object; at the end
+        // row.clear() is called
+        void                disp_row(const std::string& label, formatted_disp_row& row);
 
     public:
         // return true if row labels will be displayed
@@ -127,6 +159,13 @@ template<class Type>
 Object formatted_disp::make_object(Type&& t)
 {
     return matcl::make_object<Type>(std::forward<Type>(t));
+}
+
+template<class Arg>
+formatted_disp_row& formatted_disp_row::operator<<(Arg&& arg)
+{
+    m_vector.push_back(make_object(std::forward<Arg>(arg)));
+    return *this;
 }
 
 };

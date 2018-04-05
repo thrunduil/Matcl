@@ -122,5 +122,16 @@ static d_type_wr CALL_SYNTAX(dcabs1)(z_type_wr *z__)
     return f2c::dcabs1_((f2c::doublecomplex*)z__);
 };
 
+const char* get_name()
+{
+    return "OPENBLAS";
+};
+
+void initialize()
+{};
+
+void force_initialization()
+{};
+
 // generic stuff - the constructor which initializes all pointers to blas functions
 #include "matcl-blas-lapack/blas_loader/blas_plugin_common.h"

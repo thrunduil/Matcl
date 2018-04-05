@@ -109,6 +109,12 @@ bool are_user_threads_allowed()
     return m_data.are_user_threads_allowed();
 };
 
+void initialize()
+{};
+
+void force_initialization()
+{};
+
 #include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
 #include "blaswrap.h"
 
