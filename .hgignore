@@ -21,3 +21,5 @@ src_quadprog/*
 *.db-shm
 *.db-wal
 *.o
+Win32/*
+x64/*

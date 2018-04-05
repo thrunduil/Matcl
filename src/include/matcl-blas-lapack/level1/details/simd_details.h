@@ -229,17 +229,4 @@ template<> struct eval_real<simd_single_complex>
     static TR eval(const T& val) { return real(val); };
 };
 
-//TODO
-#if 0
-//helper for static_assert, static_assert condition will be checked at instantiation
-//time. Parameter T must depend on template arguments in class or function.
-template<class T>
-struct dependent_false
-{
-    static const bool value = false;
-};
-
-
-#endif
-
 }}}

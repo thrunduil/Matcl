@@ -22,7 +22,7 @@
 #include "matcl-internals/base/instantiate.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-core/details/integer.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-matrep/details/struct_flag_predefined.h"
 #include "matcl-internals/func/converter.h"

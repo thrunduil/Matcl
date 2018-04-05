@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "matcl-blas-lapack/blas/details/config_blas_lib.h"
+#include "matcl-core/utils/workspace.h"
 
 #ifndef INLINE_TYPE
 #define INLINE_TYPE
@@ -869,16 +870,17 @@ void gees<s_type>(const char *jobvs,const char *sort,sel_fun selctg,
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> eigr(n+1), eigi(n+1);
+        using workspace     = matcl::pod_workspace<s_type>;
+
+        workspace eigr(n+1);
+        workspace eigi(n+1);
+
         LAPACK_NAME(sgees)(_rc(jobvs),_rc(sort),_rc(selctg),_rc(&n),_rc(a),_rc(&lda),
                           _rc(sdim),_rc(&eigr[0]),_rc(&eigi[0]),_rc(vs),_rc(&ldvs),
                           _rc(work),_rc(&lwork),_rcl(bwork),_rc(info));
 
         for (i_type i = 0; i < n; ++i)
-        {
             eig[i] = c_type(eigr[i],eigi[i]);
-        };
 
         return;
     };
@@ -899,16 +901,17 @@ void gees<d_type>(const char *jobvs,const char *sort,sel_fun selctg,
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> eigr(n+1), eigi(n+1);
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace eigr(n+1);
+        workspace eigi(n+1);
+
         LAPACK_NAME(dgees)(_rc(jobvs),_rc(sort),_rc(selctg),_rc(&n),_rc(a),_rc(&lda),
                           _rc(sdim),_rc(&eigr[0]),_rc(&eigi[0]),_rc(vs),_rc(&ldvs),
                           _rc(work),_rc(&lwork),_rcl(bwork),_rc(info));
 
         for (i_type i = 0; i < n; ++i)
-        {
             eig[i] = z_type(eigr[i],eigi[i]);
-        };
 
         return;
     };
@@ -929,8 +932,10 @@ void gees<c_type>(const char *jobvs,const char *sort,sel_fun selctg,
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> rwork(n+1);
+        using workspace     = matcl::pod_workspace<s_type>;
+
+        workspace rwork(n+1);
+
         LAPACK_NAME(cgees)(_rc(jobvs),_rc(sort),_rc(selctg),_rc(&n),_rc(a),_rc(&lda),
                       _rc(sdim),_rc(eig),_rc(vs),_rc(&ldvs),
                       _rc(work),_rc(&lwork),_rc(&rwork[0]),_rcl(bwork),_rc(info));
@@ -953,8 +958,9 @@ void gees<z_type>(const char *jobvs,const char *sort,sel_fun selctg,
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> rwork(n+1);
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace rwork(n+1);
         LAPACK_NAME(zgees)(_rc(jobvs),_rc(sort),_rc(selctg),_rc(&n),_rc(a),_rc(&lda),
                       _rc(sdim),_rc(eig),_rc(vs),_rc(&ldvs),
                       _rc(work),_rc(&lwork),_rc(&rwork[0]),_rcl(bwork),_rc(info));
@@ -1025,8 +1031,9 @@ void gges<s_type>(const char *jobvsl,const char *jobvsr,const char *sort,sel_fun
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> alphar(n+1), alphai(n+1);
+        using workspace     = matcl::pod_workspace<s_type>;
+
+        workspace alphar(n+1), alphai(n+1);
         LAPACK_NAME(sgges)(_rc(jobvsl),_rc(jobvsr),_rc(sort),_rc(selctg),_rc(&n),_rc(a),
                            _rc(&lda),_rc(b),_rc(&ldb), _rc(sdim),_rc(&alphar[0]),_rc(&alphai[0]),
                            _rc(beta),_rc(vsl),_rc(&ldvsl),_rc(vsr),_rc(&ldvsr), _rc(work),
@@ -1055,11 +1062,13 @@ void gges<d_type>(const char *jobvsl,const char *jobvsr,const char *sort,sel_fun
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> alphar(n+1), alphai(n+1);
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace alphar(n+1), alphai(n+1);
+
         LAPACK_NAME(dgges)(_rc(jobvsl),_rc(jobvsr),_rc(sort),_rc(selctg),_rc(&n),_rc(a),
-                           _rc(&lda),_rc(b),_rc(&ldb), _rc(sdim),_rc(alphar.data()),
-                           _rc(alphai.data()),_rc(beta),_rc(vsl),_rc(&ldvsl),_rc(vsr),_rc(&ldvsr), 
+                           _rc(&lda),_rc(b),_rc(&ldb), _rc(sdim),_rc(alphar.ptr()),
+                           _rc(alphai.ptr()),_rc(beta),_rc(vsl),_rc(&ldvsl),_rc(vsr),_rc(&ldvsr), 
                           _rc(work),_rc(&lwork),_rcl(bwork),_rc(info));
 
         for (i_type i = 0; i < n; ++i)
@@ -1085,8 +1094,9 @@ void gges<c_type>(const char *jobvsl,const char *jobvsr,const char *sort,sel_fun
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> rwork(8*n+1);
+        using workspace     = matcl::pod_workspace<s_type>;
+
+        workspace rwork(8*n+1);
         LAPACK_NAME(cgges)(_rc(jobvsl),_rc(jobvsr),_rc(sort),_rc(selctg),_rc(&n),_rc(a),
                            _rc(&lda),_rc(b),_rc(&ldb), _rc(sdim),_rc(alpha),_rc(beta),
                            _rc(vsl),_rc(&ldvsl),_rc(vsr),_rc(&ldvsr), _rc(work),_rc(&lwork),
@@ -1111,12 +1121,14 @@ void gges<z_type>(const char *jobvsl,const char *jobvsr,const char *sort,sel_fun
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> rwork(8*n+1);
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace rwork(8*n+1);
+
         LAPACK_NAME(zgges)(_rc(jobvsl),_rc(jobvsr),_rc(sort),_rc(selctg),_rc(&n),_rc(a),
                            _rc(&lda),_rc(b),_rc(&ldb),_rc(sdim),_rc(alpha),_rc(beta),
                            _rc(vsl),_rc(&ldvsl),_rc(vsr),_rc(&ldvsr), _rc(work),_rc(&lwork),
-                           _rc(&rwork[0]),_rcl(bwork),_rc(info));
+                           _rc(rwork.ptr()),_rcl(bwork),_rc(info));
     };
 };
 
@@ -1299,8 +1311,9 @@ void heev<c_type>(const char *jobv,const char *uplo, i_type n, c_type *a,i_type 
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> rwork(lapack::maximum(1,3*n-2));
+        using workspace     = matcl::pod_workspace<s_type>;
+
+        workspace rwork(lapack::maximum(1,3*n-2));
         LAPACK_NAME(cheev)(_rc(jobv),_rc(uplo),_rc(&n), _rc(a),_rc(&lda), 
                               _rc(w),_rc(work),_rc(&lwork), _rc(&rwork[0]),_rc(info));
     }
@@ -1317,8 +1330,9 @@ void heev<z_type>(const char *jobv,const char *uplo, i_type n, z_type *a,i_type 
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> rwork(lapack::maximum(1,3*n-2));
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace rwork(lapack::maximum(1,3*n-2));
         LAPACK_NAME(zheev)(_rc(jobv),_rc(uplo),_rc(&n), _rc(a),_rc(&lda), 
                               _rc(w),_rc(work),_rc(&lwork), _rc(&rwork[0]),_rc(info));
     }
@@ -1506,9 +1520,10 @@ void gesvd<c_type>(const char *jobu,const char *jobvt,i_type m,i_type n,c_type *
     }
     else
     {
-        //TODO: change this to workspace request
+        using workspace     = matcl::pod_workspace<s_type>;
+
         i_type K = (m<n)?m:n;
-        std::vector<s_type> rwork(5*K+1);
+        workspace rwork(5*K+1);
 
         LAPACK_NAME(cgesvd)(_rc(jobu),_rc(jobvt),_rc(&m),_rc(&n),_rc(a),_rc(&lda),
                             _rc(s),_rc(u),_rc(&ldu), _rc(vt),_rc(&ldvt),_rc(work),
@@ -1531,9 +1546,10 @@ void gesvd<z_type>(const char *jobu,const char *jobvt,i_type m,i_type n,z_type *
     }
     else
     {
-        //TODO: change this to workspace request
+        using workspace     = matcl::pod_workspace<d_type>;
+
         i_type K = (m<n)?m:n;
-        std::vector<d_type> rwork(5*K+1);
+        workspace rwork(5*K+1);
 
         LAPACK_NAME(zgesvd)(_rc(jobu),_rc(jobvt),_rc(&m),_rc(&n),_rc(a),_rc(&lda),
                             _rc(s),_rc(u),_rc(&ldu), _rc(vt),_rc(&ldvt),_rc(work),
@@ -1615,7 +1631,8 @@ void gesdd<c_type>(const char *jobu,i_type m,i_type n,c_type *a,i_type lda,
     }
     else
     {
-        //TODO: change this to workspace request
+        using workspace     = matcl::pod_workspace<s_type>;
+
         i_type K    = (m<n)?m:n;
         i_type K2   = (m>n)?m:n;
         i_type LW1  = 5*K+1;
@@ -1627,7 +1644,7 @@ void gesdd<c_type>(const char *jobu,i_type m,i_type n,c_type *a,i_type lda,
         else
             LW      = LW2;
 
-        std::vector<s_type> rwork(LW);
+        workspace rwork(LW);
 
         LAPACK_NAME(cgesdd)(_rc(jobu),_rc(&m),_rc(&n),_rc(a),_rc(&lda),_rc(s),_rc(u),_rc(&ldu),
                 _rc(vt),_rc(&ldvt),_rc(work),_rc(&lwork),_rc(&rwork[0]),_rc(iwork),_rc(info));
@@ -1648,7 +1665,8 @@ void gesdd<z_type>(const char *jobu,i_type m,i_type n,z_type *a,i_type lda,
     }
     else
     {
-        //TODO: change this to workspace request
+        using workspace     = matcl::pod_workspace<d_type>;
+
         i_type K    = (m<n)?m:n;
         i_type K2   = (m>n)?m:n;
         i_type LW1  = 5*K+1;
@@ -1660,7 +1678,7 @@ void gesdd<z_type>(const char *jobu,i_type m,i_type n,z_type *a,i_type lda,
         else
             LW      = LW2;
 
-        std::vector<d_type> rwork(LW);
+        workspace rwork(LW);
 
         LAPACK_NAME(zgesdd)(_rc(jobu),_rc(&m),_rc(&n),_rc(a),_rc(&lda),_rc(s),_rc(u),_rc(&ldu),
                 _rc(vt),_rc(&ldvt),_rc(work),_rc(&lwork),_rc(&rwork[0]),_rc(iwork),_rc(info));
@@ -1725,8 +1743,8 @@ void tgsen<s_type>(i_type ijob,i_type wantq,i_type wantz,const i_type *select,i_
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> alphar(n+1), alphai(n+1);
+        using workspace     = matcl::pod_workspace<s_type>;
+        workspace alphar(n+1), alphai(n+1);
 
         LAPACK_NAME(stgsen)(_rc(&ijob),_rc(&wantq),_rc(&wantz),_rc(select),_rc(&n),_rc(a),
                             _rc(&lda),_rc(b), _rc(&ldb),&alphar[0],&alphai[0],_rc(beta),
@@ -1756,8 +1774,9 @@ void tgsen<d_type>(i_type ijob,i_type wantq,i_type wantz,const i_type *select,i_
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> alphar(n+1), alphai(n+1);
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace alphar(n+1), alphai(n+1);
 
         LAPACK_NAME(dtgsen)(_rc(&ijob),_rc(&wantq),_rc(&wantz),_rc(select),_rc(&n),_rc(a),
                             _rc(&lda),_rc(b), _rc(&ldb),&alphar[0],&alphai[0],_rc(beta),
@@ -1892,8 +1911,9 @@ void trsen<d_type>(const char * job,const char * compq,const i_type *select,i_ty
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<d_type> wr(n+1), wi(n+1);
+        using workspace     = matcl::pod_workspace<d_type>;
+
+        workspace wr(n+1), wi(n+1);
         
         LAPACK_NAME(dtrsen)(_rc(job),_rc(compq),_rc(select),_rc(&n),_rc(t),_rc(&ldt),_rc(q),
                            _rc(&ldq),_rc(&wr[0]),_rc(&wi[0]),_rc(m),
@@ -1920,8 +1940,8 @@ void trsen<s_type>(const char * job,const char * compq,const i_type *select,i_ty
     }
     else
     {
-        //TODO: change this to workspace request
-        std::vector<s_type> wr(n+1), wi(n+1);
+        using workspace     = matcl::pod_workspace<s_type>;
+        workspace wr(n+1), wi(n+1);
         
         LAPACK_NAME(strsen)(_rc(job),_rc(compq),_rc(select),_rc(&n),_rc(t),_rc(&ldt),_rc(q),
                            _rc(&ldq),_rc(&wr[0]),_rc(&wi[0]),_rc(m),

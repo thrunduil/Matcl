@@ -34,9 +34,6 @@
     <Filter Include="Source Files\include\matcl-matrep\objects">
       <UniqueIdentifier>{b480be1d-5e0b-408d-bc09-e01fcc566ace}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\include\matcl-matrep\utils">
-      <UniqueIdentifier>{ae26b45b-c0b3-4fc0-8f85-36a3c720a49f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\include\matcl-matrep\objects\details">
       <UniqueIdentifier>{ab289204-7f22-4ca3-b6dd-fe51352d0e2b}</UniqueIdentifier>
     </Filter>
@@ -210,9 +207,6 @@
     <ClInclude Include="..\..\..\src\include\matcl-matrep\details\utils.h">
       <Filter>Source Files\include\matcl-matrep\details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\workspace_details.h">
-      <Filter>Source Files\include\matcl-matrep\details</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\include\matcl-matrep\general\config.h">
       <Filter>Source Files\include\matcl-matrep\general</Filter>
     </ClInclude>
@@ -305,9 +299,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\omatrix.h">
       <Filter>Source Files\include\matcl-matrep\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\include\matcl-matrep\utils\workspace.h">
-      <Filter>Source Files\include\matcl-matrep\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\include\matcl-matrep\matcl_matrep.h">
       <Filter>Source Files\include\matcl-matrep</Filter>
@@ -435,9 +426,6 @@
       <Filter>Source Files\include\matcl-matrep\details</Filter>
     </None>
     <None Include="..\..\..\src\include\matcl-matrep\details\serialization_helper.inl">
-      <Filter>Source Files\include\matcl-matrep\details</Filter>
-    </None>
-    <None Include="..\..\..\src\include\matcl-matrep\details\workspace.inl">
       <Filter>Source Files\include\matcl-matrep\details</Filter>
     </None>
     <None Include="..\..\..\src\include\matcl-matrep\objects\details\object_matrix.inl">
@@ -635,9 +623,6 @@
       <Filter>Source Files\src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\matcl-matrep\utils\utils.cpp">
-      <Filter>Source Files\src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\matcl-matrep\utils\workspace.cpp">
       <Filter>Source Files\src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\matcl-matrep\visitors\assign_visitor_utils.cpp">

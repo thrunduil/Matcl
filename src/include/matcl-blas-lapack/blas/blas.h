@@ -25,6 +25,26 @@
 namespace matcl { namespace lapack
 {
 
+//-----------------------------------------------------------------
+//                          blas loaders
+//-----------------------------------------------------------------
+
+// return name of loaded blas plugin
+BLAS_EXPORT std::string loaded_blas_plugin_name();
+
+// load blas plugin given by path; 
+// return true if given blas plugin is succesfully loaded; in this case
+// currently loaded blas plugin will be unloaded; current blas plugin cannot
+// be in use
+BLAS_EXPORT bool load_blas_plugin(const std::string& path);
+
+// force plugin initialization; some plugin may require additional initialization
+// which must be performed after static object initialization; such initialization
+// is performed when some of plugin function is called first time; if this function
+// is called, then this additional initialization is performed immediately on
+// currently loaded plugin
+BLAS_EXPORT void initialize_plugin();
+
 // BLAS 1, 2, 3 functions
 
 // BLAS Level 0

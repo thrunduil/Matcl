@@ -78,7 +78,9 @@ namespace matcl { namespace details
             if (!ret_ptr)
                 return ret_ptr;
 
-            memcpy(ret_ptr, ptr, std::min(old_size, n));
+            if (ptr)
+                memcpy(ret_ptr, ptr, std::min(old_size, n));
+
             return ret_ptr;
         }
 
