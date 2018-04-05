@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\details">
+      <UniqueIdentifier>{98e87b8a-4c9d-497b-80d4-9be71724018a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\builder">
+      <UniqueIdentifier>{11a2b95e-9aa3-402c-bd25-7b2e9a5444f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\builder">
+      <UniqueIdentifier>{41159ed1-0bcc-4147-819a-b57bf766d8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\builder\details">
+      <UniqueIdentifier>{c883b3ee-d508-4397-960e-1ca078bc3280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\builder\details">
+      <UniqueIdentifier>{675aabbf-7500-4073-8098-e2e866615f37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\blob.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\config.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\connection.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\database.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\exception.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\functors.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\query.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\sql.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\transaction.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\typedefs.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\details\connection_details.h">
+      <Filter>Source Files\src\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\details\database_details.h">
+      <Filter>Source Files\src\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\details\query_details.h">
+      <Filter>Source Files\src\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\matcl_sqlite_cpp.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\assignment.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\bind.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\column.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\column_decl.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\comma_list.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\config.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\create_index.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\create_table.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\delete.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\enums.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\expression.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\insert.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\ord_expression.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\select.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\table.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\table_constraint.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\update.h">
+      <Filter>Source Files\include\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\bind_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\column_decl_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\column_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\conflict_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\create_index_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\create_table_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\delete_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\expression_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\insert_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\ord_expression_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\select_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\table_constraint_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\table_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\update_impl.h">
+      <Filter>Source Files\src\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\create_index_impl.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\create_table_impl.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\delete_impl.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\flags.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\fwd_decls.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\insert_impl.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\select_impl.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\type_builder.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\update_impl.h">
+      <Filter>Source Files\include\builder\details</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\blob.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\connection.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\database.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\exception.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\query.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\sql.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\transaction.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\assignment.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\bind.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\column.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\column_decl.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\conflict.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\create_index.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\create_table.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\delete.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\expression.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\insert.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\ord_expression.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\select.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\table.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\table_constraint.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\update.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\syntax_test.cpp">
+      <Filter>Source Files\src\builder</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -24,6 +24,7 @@
 
 #pragma warning (push)
 #pragma warning (disable:4127) //conditional expression is constant
+#pragma warning (disable:4723) //potential divide by 0
 
 namespace matcl { namespace raw { namespace details
 {
@@ -161,6 +162,7 @@ struct div_helper_impl
         return gl_div(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,bool iso, class S1,class S2>
 struct div_0_helper_impl
 {
@@ -169,6 +171,7 @@ struct div_0_helper_impl
         return gl_div_0(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,bool iso, class S1,class S2>
 struct div_1_helper_impl
 {
@@ -186,6 +189,7 @@ struct div_helper_impl<ret,true,false,S1,S2>
         return md::div_c(arg1,arg2);
     };
 };
+
 template<class ret,class S1,class S2>
 struct div_0_helper_impl<ret,true,false,S1,S2>
 {
@@ -194,6 +198,7 @@ struct div_0_helper_impl<ret,true,false,S1,S2>
         return md::div_0_c(arg1,arg2);
     };
 };
+
 template<class ret,class S1,class S2>
 struct div_1_helper_impl<ret,true,false,S1,S2>
 {
@@ -211,6 +216,7 @@ struct div_helper_impl<ret,isc,true,S1,S2>
         return gl_div(Object(arg1),Object(arg2));
     };
 };
+
 template<class ret,bool isc, class S1,class S2>
 struct div_0_helper_impl<ret,isc,true,S1,S2>
 {
@@ -219,6 +225,7 @@ struct div_0_helper_impl<ret,isc,true,S1,S2>
         return gl_div_0(Object(arg1),Object(arg2));
     };
 };
+
 template<class ret,bool isc, class S1,class S2>
 struct div_1_helper_impl<ret,isc,true,S1,S2>
 {
@@ -236,6 +243,7 @@ struct elem_mul_helper_impl
         return gl_mult(arg1,arg2);
     };
 };
+
 template<class ret,class S1,class S2>
 struct elem_mul_helper_impl<ret,true,false,S1,S2>
 {
@@ -244,6 +252,7 @@ struct elem_mul_helper_impl<ret,true,false,S1,S2>
         return md::mul_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,class S1,class S2>
 struct elem_mul_helper_impl<ret,isc,true,S1,S2>
 {
@@ -261,6 +270,7 @@ struct mmul_helper_impl
         return gl_mult(arg1,arg2);
     };
 };
+
 template<class ret,class S1,class S2>
 struct mmul_helper_impl<ret,true,false,S1,S2>
 {
@@ -269,6 +279,7 @@ struct mmul_helper_impl<ret,true,false,S1,S2>
         return md::mul_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,class S1,class S2>
 struct mmul_helper_impl<ret,isc,true,S1,S2>
 {
@@ -295,6 +306,7 @@ struct min_helper_impl<ret,true,false,S1,S2>
         return md::lt_c(arg1,arg2)? ret(arg1) : ret(arg2); 
     };
 };
+
 template<class ret,class S1,class S2>
 struct min_helper_impl<ret,false,true,S1,S2>
 {
@@ -312,6 +324,7 @@ struct max_helper_impl
         return (arg1 > arg2)? ret(arg1) : ret(arg2); 
     };
 };
+
 template<class ret,class S1,class S2>
 struct max_helper_impl<ret,true,false,S1,S2>
 {
@@ -320,6 +333,7 @@ struct max_helper_impl<ret,true,false,S1,S2>
         return md::gt_c(arg1,arg2)? ret(arg1) : ret(arg2); 
     };
 };
+
 template<class ret,bool isc,class S1,class S2>
 struct max_helper_impl<ret,isc,true,S1,S2>
 {
@@ -337,6 +351,7 @@ struct eeq_helper_impl
         return (arg1 == arg2); 
     };
 };
+
 template<class ret,class S1,class S2>
 struct eeq_helper_impl<ret,true,false,S1,S2>
 {
@@ -345,6 +360,7 @@ struct eeq_helper_impl<ret,true,false,S1,S2>
         return md::eeq_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,class S1,class S2>
 struct eeq_helper_impl<ret,isc,true,S1,S2>
 {
@@ -362,6 +378,7 @@ struct eeq_nan_helper_impl
         return (arg1 == arg2); 
     };
 };
+
 template<class ret, class S1,class S2>
 struct eeq_nan_helper_impl<ret, false,true,false,S1,S2>
 {
@@ -380,6 +397,7 @@ struct eeq_nan_helper_impl<ret, false,true,false,S1,S2>
         }
     };
 };
+
 template<class ret,bool isf, class S1,class S2>
 struct eeq_nan_helper_impl<ret,true,isf,false,S1,S2>
 {
@@ -388,6 +406,7 @@ struct eeq_nan_helper_impl<ret,true,isf,false,S1,S2>
         return md::eeq_nan_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,bool isf, class S1,class S2>
 struct eeq_nan_helper_impl<ret,isc,isf,true,S1,S2>
 {
@@ -405,6 +424,7 @@ struct neq_helper_impl
         return (arg1 != arg2); 
     };
 };
+
 template<class ret,class S1,class S2>
 struct neq_helper_impl<ret,true,false,S1,S2>
 {
@@ -413,6 +433,7 @@ struct neq_helper_impl<ret,true,false,S1,S2>
         return md::neq_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc, class S1,class S2>
 struct neq_helper_impl<ret,isc,true,S1,S2>
 {
@@ -430,6 +451,7 @@ struct neq_nan_helper_impl
         return (arg1 != arg2); 
     };
 };
+
 template<class ret, class S1, class S2>
 struct neq_nan_helper_impl<ret, false, true, false, S1, S2>
 {
@@ -448,6 +470,7 @@ struct neq_nan_helper_impl<ret, false, true, false, S1, S2>
         }
     };
 };
+
 template<class ret, bool isf, class S1,class S2>
 struct neq_nan_helper_impl<ret,true,isf,false,S1,S2>
 {
@@ -456,6 +479,7 @@ struct neq_nan_helper_impl<ret,true,isf,false,S1,S2>
         return md::neq_nan_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc, bool isf,class S1,class S2>
 struct neq_nan_helper_impl<ret,isc,isf,true,S1,S2>
 {
@@ -473,6 +497,7 @@ struct leq_helper_impl
         return (arg1 <= arg2); 
     };
 };
+
 template<class ret,class S1,class S2>
 struct leq_helper_impl<ret,true,false,S1,S2>
 {
@@ -481,6 +506,7 @@ struct leq_helper_impl<ret,true,false,S1,S2>
         return md::leq_c(arg1,arg2);
     };
 };
+
 template<class ret,bool isc,class S1,class S2>
 struct leq_helper_impl<ret,isc,true,S1,S2>
 {

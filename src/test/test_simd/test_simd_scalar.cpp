@@ -210,6 +210,7 @@ double test_simd_scalar::test_function_simd_int(int size, int n_rep, const Int_t
     using Simd_type_int         = matcl::simd::simd<Int_type, bits, simd_tag>;
 
     tic();
+    (void)func;
 
     volatile T val = 0;
 

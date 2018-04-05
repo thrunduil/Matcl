@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\blas\blas-clapack-plugin\blas_clapack_plugin.cpp" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\caxpy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ccopy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cdotc.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cdotu.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cgbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cgemm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cgemv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cgerc.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cgeru.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\chbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\chemm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\chemv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cher.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cher2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cher2k.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cherk.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\chpmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\chpr.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\chpr2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\crotg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cscal.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\csrot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\csscal.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\cswap.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\csymm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\csyr2k.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\csyrk.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctbsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctpmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctpsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctrmm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctrmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctrsm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ctrsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dasum.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\daxpy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dcabs1.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dcopy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ddot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dgbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dgemm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dgemv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dger.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dnrm2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\drot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\drotg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\drotm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\drotmg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dscal.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsdot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dspmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dspr.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dspr2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dswap.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsymm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsymv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsyr.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsyr2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsyr2k.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dsyrk.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtbsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtpmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtpsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtrmm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtrmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtrsm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dtrsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dzasum.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\dznrm2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\icamax.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\idamax.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\isamax.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\izamax.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\lsame.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sasum.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\saxpy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\scabs1.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\scasum.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\scnrm2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\scopy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sdot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sdsdot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sgbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sgemm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sgemv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sger.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\snrm2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\srot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\srotg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\srotm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\srotmg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sscal.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sspmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sspr.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sspr2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\sswap.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssymm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssymv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssyr.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssyr2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssyr2k.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ssyrk.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\stbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\stbsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\stpmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\stpsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\strmm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\strmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\strsm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\strsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\xerbla.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\xerbla_array.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zaxpy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zcopy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zdotc.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zdotu.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zdrot.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zdscal.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zgbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zgemm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zgemv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zgerc.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zgeru.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zhbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zhemm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zhemv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zher.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zher2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zher2k.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zherk.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zhpmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zhpr.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zhpr2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zrotg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zscal.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zswap.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zsymm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zsyr2k.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\zsyrk.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztbmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztbsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztpmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztpsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztrmm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztrmv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztrsm.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\blas\ztrsv.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\abort_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\backspac.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\cabs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\close.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\ctype.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_abs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_cos.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_div.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_exp.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_log.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_sin.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\c_sqrt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\derfc_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\derf_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\dfe.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\dolio.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\dtime_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\due.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_abs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_acos.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_asin.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_atan.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_atn2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_cnjg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_cos.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_cosh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_dim.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_exp.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_imag.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_int.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_lg10.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_log.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_mod.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_nint.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_prod.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_sign.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_sin.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_sinh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_sqrt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_tan.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\d_tanh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\ef1asc_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\ef1cmc_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\endfile.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\erfc_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\erf_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\err.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\etime_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\exit_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\f77vers.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\f77_aloc.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\fmt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\fmtlib.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\ftell64_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\ftell_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\getenv_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\hl_ge.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\hl_gt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\hl_le.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\hl_lt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_abs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_dim.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_dnnt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_indx.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_len.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_mod.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_nint.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\h_sign.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i77vers.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\iio.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\ilnw.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\inquire.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_abs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_ceiling.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_dim.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_dnnt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_indx.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_len.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_len_trim.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_mod.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_nint.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\i_sign.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\lbitbits.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\lbitshft.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\lread.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\lwrite.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\l_ge.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\l_gt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\l_le.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\l_lt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\open.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_ci.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_dd.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_di.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_hh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_ii.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_qq.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_ri.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_zi.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\pow_zz.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\qbitbits.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\qbitshft.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\rdfmt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\rewind.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\rsfe.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\rsli.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\rsne.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_abs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_acos.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_asin.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_atan.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_atn2.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_cnjg.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_cos.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_cosh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_dim.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_exp.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_imag.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_int.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_lg10.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_log.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_mod.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_nint.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_sign.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_sin.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_sinh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_sqrt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_tan.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\r_tanh.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\sfe.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\signal_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\signbit.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\sig_die.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\sue.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\system_.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\s_cat.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\s_cmp.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\s_copy.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\s_paus.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\s_rnge.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\s_stop.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\typesize.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\uio.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\uninit.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\util.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\wref.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\wrtfmt.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\wsfe.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\wsle.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\wsne.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\xwsne.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_abs.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_cos.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_div.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_exp.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_log.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_sin.c" />
+    <ClCompile Include="..\..\..\src\blas\clapack\libf2c\z_sqrt.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\blas\clapack\blas\Makefile" />
+    <None Include="..\..\..\src\blas\clapack\libf2c\math.hvc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\arith.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\ctype.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\fio.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\fmt.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\fp.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\lio.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\rawio.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\signal1.h" />
+    <ClInclude Include="..\..\..\src\blas\clapack\libf2c\sysdep1.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B5074F59-7CE6-4A17-93E7-BBC0611EA7AC}</ProjectGuid>
+    <RootNamespace>symbolic</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)-$(Platform)-Release</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\blas\clapack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <PreprocessorDefinitions>;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-Release.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\blas\clapack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-Release.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\blas\clapack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <PreprocessorDefinitions>;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-Release.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\blas\clapack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-Release.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

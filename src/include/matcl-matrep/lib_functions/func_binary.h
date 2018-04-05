@@ -39,10 +39,10 @@ namespace mrd   = matcl::raw::details;
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the plus function; return an M x N matrix 
-MATCL_MATREP_EXPORT Matrix         plus(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix         plus(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix         plus(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix         plus(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix plus(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix plus(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix plus(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix plus(Matrix&& A, Matrix&& B);
 
 // addition x + y
 // redeclaration of function defined in matcl-scalar
@@ -65,10 +65,10 @@ typename md::unify_types_promote<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the minus function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  minus(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  minus(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  minus(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  minus(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix minus(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix minus(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix minus(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix minus(Matrix&& A, Matrix&& B);
 
 // subtraction x - y
 // redeclaration of function defined in matcl-scalar
@@ -91,10 +91,10 @@ typename md::unify_types_promote<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the mul function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  mul(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  mul(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  mul(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  mul(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix mul(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix mul(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix mul(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix mul(Matrix&& A, Matrix&& B);
 
 // multiplication x * y
 // redeclaration of function defined in matcl-scalar
@@ -104,10 +104,10 @@ typename md::unify_types_promote<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the div function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  div(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  div(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  div(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  div(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix div(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix div(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix div(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix div(Matrix&& A, Matrix&& B);
 
 // division x / y; integer division gives Real result; if x and y are
 // integer values and y is zero, then result is zero
@@ -118,10 +118,10 @@ typename md::unify_types2_promote<S1,S2,Float>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the div_0 function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  div_0(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  div_0(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  div_0(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  div_0(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix div_0(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix div_0(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix div_0(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix div_0(Matrix&& A, Matrix&& B);
 
 // division x / y; integer division gives Real result; 0/0 division gives 0
 // redeclaration of function defined in matcl-scalar
@@ -131,10 +131,10 @@ typename md::unify_types2_promote<S1,S2,Float>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the div_1 function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  div_1(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  div_1(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  div_1(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  div_1(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix div_1(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix div_1(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix div_1(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix div_1(Matrix&& A, Matrix&& B);
 
 // division x / y; integer division gives Real result; 0/0 division gives 1
 // redeclaration of function defined in matcl-scalar
@@ -158,10 +158,10 @@ typename md::unify_types2_promote<S1,S2,Float>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the idiv function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  idiv(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  idiv(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  idiv(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  idiv(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix idiv(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix idiv(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix idiv(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix idiv(Matrix&& A, Matrix&& B);
 
 // division x / y; if one of argument has floating point type then result
 // is equivalent to div function; however if both arguments are integers,
@@ -174,10 +174,10 @@ typename md::unify_types_promote<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the mod function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  mod(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  mod(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  mod(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  mod(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix mod(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix mod(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix mod(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix mod(Matrix&& A, Matrix&& B);
 
 // return is x - n * y where n = floor(x / y) if y != 0 and 0 otherwise;
 // is mod(x,y) is nonzero, then has the same sign as y; if signs of x and
@@ -190,10 +190,10 @@ typename md::real_unify_types_promote<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the rem function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  rem(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  rem(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  rem(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  rem(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix rem(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix rem(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix rem(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix rem(Matrix&& A, Matrix&& B);
 
 // return is x - n * y where n = trunc(x / y) if y != 0 and 0 otherwise
 // is rem(x,y) is nonzero, then has the same sign as x; if signs of x and
@@ -207,10 +207,10 @@ typename md::real_unify_types_promote<S1,S2>::type
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the atan2 function; return an M x N matrix with
 // real values
-MATCL_MATREP_EXPORT Matrix  atan2(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  atan2(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  atan2(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  atan2(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix atan2(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix atan2(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix atan2(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix atan2(Matrix&& A, Matrix&& B);
 
 // four quadrant arctangent of x and y; -pi <= atan2(x, y) <= pi;
 // not available for complex arguments
@@ -222,10 +222,10 @@ typename md::real_unify_types2_promote<S1,S2,Float>::type
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the hypot function; return an M x N matrix with
 // real values
-MATCL_MATREP_EXPORT Matrix  hypot(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  hypot(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  hypot(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  hypot(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix hypot(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix hypot(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix hypot(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix hypot(Matrix&& A, Matrix&& B);
 
 // calculate sqrt(|x|^2 + |y|^2) avoiding owerflow and underflow at
 // intermediate stages of computation
@@ -236,10 +236,10 @@ typename md::real_unify_types2_promote<S1,S2,Float>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the pow function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  pow(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  pow(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  pow(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  pow(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix pow(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix pow(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix pow(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix pow(Matrix&& A, Matrix&& B);
 
 // calculate power x^y
 // redeclaration of function defined in matcl-scalar
@@ -248,10 +248,10 @@ typename mrd::pow_return<S1,S2>::type
                             pow(const S1& x, const S2& y);
 
 // return a complex conversion of the pow function
-MATCL_MATREP_EXPORT Matrix  pow_c(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  pow_c(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  pow_c(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  pow_c(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix pow_c(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix pow_c(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix pow_c(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix pow_c(Matrix&& A, Matrix&& B);
 
 // calculate power x^y; both arguments are converted to complex values
 // redeclaration of function defined in matcl-scalar
@@ -301,10 +301,10 @@ bool                        op_xor(const S1& x, const S2& y);
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the elem_and function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  elem_and(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  elem_and(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  elem_and(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  elem_and(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix elem_and(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix elem_and(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix elem_and(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix elem_and(Matrix&& A, Matrix&& B);
 
 // element-wise and, i.e. x & y; for scalar types equivalent to x && y;
 // for objects elem_and function is called
@@ -329,10 +329,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the op_or function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  elem_or(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  elem_or(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  elem_or(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  elem_or(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix elem_or(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix elem_or(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix elem_or(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix elem_or(Matrix&& A, Matrix&& B);
 
 // element-wise or, i.e. x | y; for scalar types equivalent to x || y;
 // for objects elem_or function is called
@@ -357,10 +357,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the op_xor function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  elem_xor(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  elem_xor(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  elem_xor(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  elem_xor(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix elem_xor(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix elem_xor(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix elem_xor(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix elem_xor(Matrix&& A, Matrix&& B);
 
 // element-wise xor, i.e. x ^ y; for scalar types equivalent to 
 // (bool)x ^ (bool)y; for objects elem_xor function is called
@@ -384,10 +384,10 @@ inline Matrix               operator^(Matrix&& A, Matrix&& B)           {return 
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the eeq function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  eeq(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  eeq(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  eeq(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  eeq(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix eeq(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix eeq(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix eeq(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix eeq(Matrix&& A, Matrix&& B);
 
 // equality comparison; x == y
 // redeclaration of function defined in matcl-scalar
@@ -411,10 +411,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the neq function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  neq(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  neq(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  neq(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  neq(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix neq(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix neq(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix neq(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix neq(Matrix&& A, Matrix&& B);
 
 // inequality comparison; x != y
 // redeclaration of function defined in matcl-scalar
@@ -437,10 +437,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the geq function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  geq(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  geq(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  geq(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  geq(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix geq(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix geq(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix geq(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix geq(Matrix&& A, Matrix&& B);
 
 // greater or equal comparison; x >= y
 // redeclaration of function defined in matcl-scalar
@@ -463,10 +463,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the gt function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  gt(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  gt(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  gt(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  gt(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix gt(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix gt(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix gt(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix gt(Matrix&& A, Matrix&& B);
 
 // greater than comparison; x > y
 // redeclaration of function defined in matcl-scalar
@@ -489,10 +489,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the leq function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  leq(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  leq(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  leq(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  leq(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix leq(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix leq(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix leq(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix leq(Matrix&& A, Matrix&& B);
 
 // less or equal comparison; x <= y
 // redeclaration of function defined in matcl-scalar
@@ -515,10 +515,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the lt function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  lt(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  lt(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  lt(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  lt(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix lt(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix lt(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix lt(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix lt(Matrix&& A, Matrix&& B);
 
 // less than comparison; x < y
 // redeclaration of function defined in matcl-scalar
@@ -540,10 +540,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the eeq_nan function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  eeq_nan(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  eeq_nan(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  eeq_nan(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  eeq_nan(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix eeq_nan(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix eeq_nan(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix eeq_nan(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix eeq_nan(Matrix&& A, Matrix&& B);
 
 // equality comparison; x == y; nan values are considered as equal
 // redeclaration of function defined in matcl-scalar
@@ -553,10 +553,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the neq_nan function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  neq_nan(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  neq_nan(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  neq_nan(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  neq_nan(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix neq_nan(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix neq_nan(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix neq_nan(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix neq_nan(Matrix&& A, Matrix&& B);
 
 // inequality comparison; x != y; nan values are considered as equal
 // redeclaration of function defined in matcl-scalar
@@ -566,10 +566,10 @@ typename md::bool_or_object2<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the max function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  max(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  max(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  max(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  max(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix max(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix max(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix max(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix max(Matrix&& A, Matrix&& B);
 
 // return maximum value of x and y
 // redeclaration of function defined in matcl-scalar
@@ -579,10 +579,10 @@ typename md::unify_types_promote<S1,S2>::type
 
 // for each element of M x N matrix A (or 1x1 matrix) and M x N matrix B
 // (or 1x1 matrix) call the min function; return an M x N matrix
-MATCL_MATREP_EXPORT Matrix  min(const Matrix& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  min(Matrix&& A, const Matrix& B);
-MATCL_MATREP_EXPORT Matrix  min(const Matrix& A, Matrix&& B);
-MATCL_MATREP_EXPORT Matrix  min(Matrix&& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix min(const Matrix& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix min(Matrix&& A, const Matrix& B);
+MATCL_MATFUNC_EXPORT Matrix min(const Matrix& A, Matrix&& B);
+MATCL_MATFUNC_EXPORT Matrix min(Matrix&& A, Matrix&& B);
 
 // return minimum value of x and y
 // redeclaration of function defined in matcl-scalar
@@ -629,26 +629,45 @@ template<class S1, class Enable>
 typename md::real_unify_types_promote<S1,Float>::type
                             nextbelow(const S1& x);
 
-//TODO: fast versions?
-// return a * b + c; only one rounding at the end of computation is 
-// performed
-// redeclaration of function defined in matcl-scalar
-inline Real                 fma(Real a, Real b, Real c);
-inline Float                fma(Float a, Float b, Float c);
-inline Object               fma(const Object& a, const Object& b, const Object& c);
+// return a * b + c; 
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as two arithmetic operations
+inline Real                 fma_f(Real a, Real b, Real c);
+inline Float                fma_f(Float a, Float b, Float c);
+inline Object               fma_f(const Object& a, const Object& b, const Object& c);
 
-// return a * b - c; only one rounding at the end of computation is 
-// performed
-// redeclaration of function defined in matcl-scalar
-inline Real                 fms(Real a, Real b, Real c);
-inline Float                fms(Float a, Float b, Float c);
-inline Object               fms(const Object& a, const Object& b, const Object& c);
+// return a * b + c; 
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+inline Real                 fma_a(Real a, Real b, Real c);
+inline Float                fma_a(Float a, Float b, Float c);
+inline Object               fma_a(const Object& a, const Object& b, const Object& c);
 
-// compute a * b + c * d with high accuracy using Kahan's algorithm
-// redeclaration of function defined in matcl-scalar
-inline Real                 dot2_ac(Real a, Real b, Real c, Real d);
-inline Float                dot2_ac(Float a, Float b, Float c, Float d);
-inline Object               dot2_ac(const Object& a, const Object& b, const Object& c, 
+// return a * b - c
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as two arithmetic operations
+inline Real                 fms_f(Real a, Real b, Real c);
+inline Float                fms_f(Float a, Float b, Float c);
+inline Object               fms_f(const Object& a, const Object& b, const Object& c);
+
+// return a * b - c
+// when fma instruction is available (i.e. MATCL_ARCHITECTURE_HAS_FMA = 1), 
+// then only one rounding at the end of computation is performed, otherwise
+// this function is evaluated as using (slow) Dekker's algorithm
+inline Real                 fms_a(Real a, Real b, Real c);
+inline Float                fms_a(Float a, Float b, Float c);
+inline Object               fms_a(const Object& a, const Object& b, const Object& c);
+
+// compute a * b + c * d using the Kahan's algorithm, which gives high
+// accuracy of the result;
+// this function uses fma instruction is available; when fma is not available
+// (i.e. MATCL_ARCHITECTURE_HAS_FMA = 0), this function can be very slow
+inline Real                 dot2_a(Real a, Real b, Real c, Real d);
+inline Float                dot2_a(Float a, Float b, Float c, Float d);
+inline Object               dot2_a(const Object& a, const Object& b, const Object& c, 
                                     const Object& d);
 
 //---------------------------------------------------------------------------

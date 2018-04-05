@@ -1,0 +1,632 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep">
+      <UniqueIdentifier>{2ffd790e-ddf7-46c8-a691-1708f28e9a35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-internals">
+      <UniqueIdentifier>{250cfceb-082a-45f9-b16d-d69a36fd8476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\details">
+      <UniqueIdentifier>{cddad8e3-6fcb-4855-b5d8-a1a351e73a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\general">
+      <UniqueIdentifier>{7f4300d1-65cb-4a1d-9a6e-b8e857e79a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\IO">
+      <UniqueIdentifier>{b7e2fc9f-25ef-4a6f-b410-9d7f87690637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\lib_functions">
+      <UniqueIdentifier>{47e288d8-3d15-45ee-8eaf-d86ccfe6d285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\matrix">
+      <UniqueIdentifier>{334ef624-889f-4a0a-8f20-ce57f2b546e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\objects">
+      <UniqueIdentifier>{b480be1d-5e0b-408d-bc09-e01fcc566ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-matrep\objects\details">
+      <UniqueIdentifier>{ab289204-7f22-4ca3-b6dd-fe51352d0e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-internals\algs">
+      <UniqueIdentifier>{e8815180-7741-4ad5-a568-bb6a289700cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-internals\base">
+      <UniqueIdentifier>{5f4ac482-a9ab-41e8-8d0d-3522cf9a31ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-internals\container">
+      <UniqueIdentifier>{4870d28c-b3e0-46dd-aa80-4d8334e5c912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-internals\error">
+      <UniqueIdentifier>{004ffb5a-ea2e-4108-8e2b-c2d3ade7e3ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\matcl-internals\func">
+      <UniqueIdentifier>{eae645a8-6d40-4ae9-ad95-e71f46948267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\algs">
+      <UniqueIdentifier>{4f925e43-6f58-4487-b745-ed0c0cd4da90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\base">
+      <UniqueIdentifier>{c2dcc730-fecb-4987-a390-0e78f383ef07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\container">
+      <UniqueIdentifier>{476e8bfa-95a8-4a71-8050-e0698b29a236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\error">
+      <UniqueIdentifier>{a67eaabf-cc2b-4853-95cf-97aef7719d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func">
+      <UniqueIdentifier>{15eda26a-9278-446c-a7dc-b0c134fe83d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\objects">
+      <UniqueIdentifier>{957fd4cd-a9ae-4953-a431-9cbdcba9db04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\utils">
+      <UniqueIdentifier>{a4df9956-b26c-4a1e-8fd1-bee02e2bf697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\visitors">
+      <UniqueIdentifier>{0e7c4a00-30b5-4ee3-86d4-cadfa8d24f8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\container\raw">
+      <UniqueIdentifier>{027b2d79-078c-4892-8478-4e6f7b1d1e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\func\raw">
+      <UniqueIdentifier>{8c8a05ac-03a1-47c7-a602-75658c2b7497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\objects\predefined">
+      <UniqueIdentifier>{cb26ae8a-2eeb-420f-b09e-6447e8588ad1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\algs\scatter.h">
+      <Filter>Source Files\include\matcl-internals\algs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\base\instantiate.h">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\base\optim_params.h">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\base\pv_constructor.h">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\base\sort.h">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\base\utils.h">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\base\vector.h">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_b.h">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_base.h">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_d.h">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_s.h">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\sparse_ccs.h">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\error\error_check_basic.h">
+      <Filter>Source Files\include\matcl-internals\error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\converter.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\inplace.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\lapack_utils.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\op_helpers.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\raw_func_op_helpers.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\raw_func_plus.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\raw_func_unary.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\raw_manip.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\test_functor.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\test_inf_nan.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\assign_visitor.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\bit_manip.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\debug.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\details_manip.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\enablers.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\extract_type_switch.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\extract_type2_switch.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\fwd_decls.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\isa.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\matrix_details.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\matrix_details_subs.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\mpl.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\promote_type.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\rangebuf.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\refcount.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\struct_flag_predefined.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\details\utils.h">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\general\config.h">
+      <Filter>Source Files\include\matcl-matrep\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\general\tuple.h">
+      <Filter>Source Files\include\matcl-matrep\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\IO\matrix_io.h">
+      <Filter>Source Files\include\matcl-matrep\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\IO\serialization_helper.h">
+      <Filter>Source Files\include\matcl-matrep\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\eval_functors.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\func_binary.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\func_matrix.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\func_unary.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\manip.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\matrix_gen.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\matrix_utils.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\lib_functions\vecfunc.h">
+      <Filter>Source Files\include\matcl-matrep\lib_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\colon.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_concat.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_rep_band.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_rep_dense.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_rep_functions.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_rep_sparse.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_rep_sub.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\matrix_sub.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\permvec.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\struct_flag.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\struct_flag_ext.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matrix\unique_matrix.h">
+      <Filter>Source Files\include\matcl-matrep\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\details\object_matrix_subs.h">
+      <Filter>Source Files\include\matcl-matrep\objects\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\details\object_type_traits.h">
+      <Filter>Source Files\include\matcl-matrep\objects\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\details\type_info_object.h">
+      <Filter>Source Files\include\matcl-matrep\objects\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\object_matrix.h">
+      <Filter>Source Files\include\matcl-matrep\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\object_matrix_functions.h">
+      <Filter>Source Files\include\matcl-matrep\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\objects\omatrix.h">
+      <Filter>Source Files\include\matcl-matrep\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-matrep\matcl_matrep.h">
+      <Filter>Source Files\include\matcl-matrep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\algs\banded_algs.h">
+      <Filter>Source Files\src\algs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\algs\dense_algs.h">
+      <Filter>Source Files\src\algs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\algs\sparse_algs.h">
+      <Filter>Source Files\src\algs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\algs\sparse_algs_utils.h">
+      <Filter>Source Files\src\algs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\base\alloc.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\base\colon_info.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\base\serialize.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\base\sort_iterator.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\base\thread_local_cache.h">
+      <Filter>Source Files\src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\container\container_pool.h">
+      <Filter>Source Files\src\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\container\matrix_cons_data.h">
+      <Filter>Source Files\src\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\container\matrix_container.h">
+      <Filter>Source Files\src\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\disp.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\eval_functor.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\eval_vec_functor.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\eval_vec_functor2.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\find.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\io.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\mvgen.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\raw_func_unary.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\raw_manip.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\raw_vecfunc.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\func\raw\sort2.h">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\visitors\assign_visitor_utils.h">
+      <Filter>Source Files\src\visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-matrep\visitors\insert_visitor.h">
+      <Filter>Source Files\src\visitors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\include\matcl-internals\base\sort.inl">
+      <Filter>Source Files\include\matcl-internals\base</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-internals\container\mat_b.inl">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-internals\container\mat_d.inl">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-internals\container\mat_s.inl">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\bit_manip.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\eval_functors.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\func_binary.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\func_matrix.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\func_unary.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\matrix.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\matrix_rep_band.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\matrix_rep_dense.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\matrix_rep_functions.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\matrix_rep_sparse.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\refcount.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\details\serialization_helper.inl">
+      <Filter>Source Files\include\matcl-matrep\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\objects\details\object_matrix.inl">
+      <Filter>Source Files\include\matcl-matrep\objects\details</Filter>
+    </None>
+    <None Include="..\..\..\src\include\matcl-matrep\objects\details\type_info_object.inl">
+      <Filter>Source Files\include\matcl-matrep\objects\details</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\container\matrix_container.inl">
+      <Filter>Source Files\src\container</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\container\matrix2.inl">
+      <Filter>Source Files\src\container</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\visitors\assign_visitor.inl">
+      <Filter>Source Files\src\visitors</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\visitors\assign_visitor_del.inl">
+      <Filter>Source Files\src\visitors</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\visitors\assign_visitor_get.inl">
+      <Filter>Source Files\src\visitors</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\visitors\assign_visitor_mat.inl">
+      <Filter>Source Files\src\visitors</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-matrep\visitors\insert_visitor.inl">
+      <Filter>Source Files\src\visitors</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\banded_algs.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\dense_algs.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\scatter.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\sparse_algs_change.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\sparse_algs_change_submatrix.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\sparse_algs_del.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\sparse_algs_drop.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\sparse_algs_get.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\algs\sparse_algs_utils.cpp">
+      <Filter>Source Files\src\algs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\alloc.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\colon.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\colon_info.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\permvec.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\refcount.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\serialization_helper.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\struct_flag.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\struct_flag_predefined.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\base\struct_flag_predefined_ext.cpp">
+      <Filter>Source Files\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\raw\mat_b.cpp">
+      <Filter>Source Files\src\container\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\raw\mat_base.cpp">
+      <Filter>Source Files\src\container\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\raw\mat_d.cpp">
+      <Filter>Source Files\src\container\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\raw\mat_s.cpp">
+      <Filter>Source Files\src\container\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\raw\sparse_ccs.cpp">
+      <Filter>Source Files\src\container\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\container_pool.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_assign.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_concat.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_container.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_inst.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_rep_band.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_rep_dense.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\matrix_rep_sparse.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\container\unique_matrix.cpp">
+      <Filter>Source Files\src\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\error\error_check.cpp">
+      <Filter>Source Files\src\error</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\converter.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\disp.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\eval_scalar_func.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\find.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\io.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\io_mm.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\mvgen.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\raw_func_unary.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\raw_manip.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\raw_vecfunc.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\raw\sort2.cpp">
+      <Filter>Source Files\src\func\raw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\func_unary.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\manip.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\matrix_gen.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\matrix_io.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\func\vecfunc.cpp">
+      <Filter>Source Files\src\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\objects\predefined\omatrix.cpp">
+      <Filter>Source Files\src\objects\predefined</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\objects\object_matrix.cpp">
+      <Filter>Source Files\src\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\objects\type_info_object.cpp">
+      <Filter>Source Files\src\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\utils\debug.cpp">
+      <Filter>Source Files\src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\utils\sort.cpp">
+      <Filter>Source Files\src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\utils\utils.cpp">
+      <Filter>Source Files\src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-matrep\visitors\assign_visitor_utils.cpp">
+      <Filter>Source Files\src\visitors</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

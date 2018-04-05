@@ -21,7 +21,7 @@
 #include "matcl-matrep/algs/sparse_algs.h"
 #include "matcl-internals/base/sort.h"
 #include "matcl-internals/container/mat_s.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-matrep/matrix/matrix.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 

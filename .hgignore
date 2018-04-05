@@ -20,3 +20,6 @@ src_quadprog/*
 *.vspx
 *.db-shm
 *.db-wal
+*.o
+Win32/*
+x64/*

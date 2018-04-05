@@ -66,7 +66,7 @@ twofold<Arg_type>
 // number and c = 6 otherwise.
 // Thus, if p is not too ill-conditioned, then p(x) is calculated with nearly 
 // full accuracy. This function is however more costly, than the  horner 
-// function (3-8 times slower) TODO
+// function (3-8 times slower)
 //
 // References:
 //  [1]. Faithful Polynomial Evaluation with Compensated Horner Algorithm,

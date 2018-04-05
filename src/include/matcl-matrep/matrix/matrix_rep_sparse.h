@@ -234,27 +234,30 @@ class MATCL_MATREP_EXPORT sparse_matrix<T, true>
 
         // pointer to the column indices; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer
-        const Integer*      ptr_c() const           { return m_c; }
+        inline
+        const Integer*      ptr_c() const;
         
         // pointer to the row indices; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer
-        const Integer*      ptr_r() const           { return *m_r; }
+        inline
+        const Integer*      ptr_r() const;
         
         // pointer to data; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer
-        const value_type*   ptr_x() const           { return *m_x; }
+        inline
+        const value_type*   ptr_x() const;
 
         // offset from pointer roots to the first stored elements; i.e. first
         // row index is ptr_r()[offset()], and first stored value is 
         // ptr_x()[offset()];
-        Integer             offset() const          { return m_offset; };
+        inline Integer      offset() const;
 
         // maximum number of columns; if resize(r,c) is called with c <= max_cols()
         // and r >= rows(), then no memory allocations are needed
-        Integer             max_cols() const        { return m_max_cols; }
+        inline Integer      max_cols() const;
 
         // number of nonzero elements
-        Integer             nnz() const             { return m_c? m_c[m_cols]-m_offset : 0; }
+        inline Integer      nnz() const;
 
         // maximum nnz allowd without reallocation; length of arrays ptr_x and
         // ptr_r is nzmax() + offset()
@@ -272,17 +275,20 @@ class MATCL_MATREP_EXPORT sparse_matrix<T, true>
         // pointer to the column indices; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer;
         // safe version of sparse_matrix allows for const access only
-        const Integer*      ptr_c()                 { return m_c; }
+        inline
+        const Integer*      ptr_c();
 
         // pointer to the row indices; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer;
         // safe version of sparse_matrix allows for const access only
-        const Integer*      ptr_r()                 { return *m_r; }
+        inline
+        const Integer*      ptr_r();
 
         // pointer to data; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer;
         // safe version of sparse_matrix allows for const access only
-        const value_type*   ptr_x()                 { return *m_x; }
+        inline
+        const value_type*   ptr_x();
 
         // increase capacity; if s < 0, then unnecessary memory is released; if s == 0 then
         // capacity is doubled; if s > 0; then capacity is increased by s
@@ -292,21 +298,21 @@ class MATCL_MATREP_EXPORT sparse_matrix<T, true>
         void                sort();
 
         // convert to general matrix
-        const Matrix&       to_matrix() const &     { return m_matrix; };
-        Matrix&&            to_matrix() &&          { return std::move(m_matrix); };
+        inline const Matrix& to_matrix() const &;
+        inline Matrix&&      to_matrix() &&;
 
         //--------------------------------------------------------------------
         //          const functions defined for all matrix types
         //--------------------------------------------------------------------
         
         // number of rows
-        Integer             rows() const                { return m_rows; }; 
+        inline Integer      rows() const;
 
         // number of columns
-        Integer             cols() const                { return m_cols; };
+        inline Integer      cols() const;
         
         // larger or rows() and cols(); return zero for empty matrices
-        Integer             length() const;
+        inline Integer      length() const;
         
         // estimate of number of nonzeroes elements based on representation type
         // and struct flags (without testing of stored values)
@@ -327,7 +333,8 @@ class MATCL_MATREP_EXPORT sparse_matrix<T, true>
         bool                all_finite() const;
 
         // return additional structures assigned to this matrix
-        const struct_flag   get_struct() const          { return *m_flag; };   
+        inline 
+        const struct_flag   get_struct() const;
         
         // struct flag must be valid, data are not changed
         void                set_struct(const struct_flag&) const;
@@ -340,37 +347,37 @@ class MATCL_MATREP_EXPORT sparse_matrix<T, true>
 
         // conversion to bool, throw error if Matrix is not convertible to scalar and
         // return true for nonzero scalars
-        explicit            operator bool() const       { return (bool)m_matrix; };
+        inline explicit     operator bool() const;
 
         // true if this is 0xn or mx0 matrix
-        bool                is_empty() const            { return rows() == 0 || cols() == 0; };
+        inline bool         is_empty() const;
 
         // true is this is a scalar or 1x1 matrix
-        bool                is_scalar() const           { return rows() == 1 && cols() == 1; };
+        inline bool         is_scalar() const;
 
         // true if rows() == cols()
-        bool                is_square() const           { return rows() == cols(); };
+        inline bool         is_square() const;
 
         // true if rows() == 1 or cols() == 1 or is_empty() == true
-        bool                is_vector() const           { return rows() == 1 || cols() == 1 || is_empty() == true; };
+        inline bool         is_vector() const;
 
         // true if given matrix is represented as a matrix
-        bool                is_matrix_type() const      { return true; }
+        inline bool         is_matrix_type() const;
 
         // true if given matrix is represented as scalar
-        bool                is_scalar_type() const      { return false; };
+        inline bool         is_scalar_type() const;
 
         // true if reference count is 1
-        bool                is_unique() const           { return m_matrix.is_unique(); }
+        inline bool         is_unique() const;
 
         // code of stored elements type
-        value_code          get_value_code() const      { return m_matrix.get_value_code(); }
+        inline value_code   get_value_code() const;
 
         // code if matrix representation (scalar, band, dense, or sparse)
-        struct_code         get_struct_code() const     { return m_matrix.get_struct_code(); }
+        inline struct_code  get_struct_code() const;
 
         // matrix code (value code and struct code)
-        mat_code            get_matrix_code() const     { return m_matrix.get_matrix_code(); }
+        inline mat_code     get_matrix_code() const;
 
         // delete rows specified by colon c.
         const sparse_matrix delrows(const colon&) const &;
@@ -603,15 +610,15 @@ class MATCL_MATREP_EXPORT sparse_matrix<T,false> : public sparse_matrix<T,true>
 
         // pointer to the column indices; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer;
-        Integer*            ptr_c()                 { return m_c; }
+        inline Integer*     ptr_c();
         
         // pointer to the row indices; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer;
-        Integer*            ptr_r()                 { return *m_r; }
+        inline Integer*     ptr_r();
         
         // pointer to data; pointer is valid as long as this instance exists;
         // also calling non constant functions invalidates pointer;
-        value_type*         ptr_x()                 { return *m_x; }
+        inline value_type*  ptr_x();
 };
 
 };

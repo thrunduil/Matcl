@@ -19,7 +19,7 @@
  */
 
 #include "matcl-internals/func/converter.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-matrep/func/raw/raw_manip.h"
 #include "matcl-core/details/integer.h"

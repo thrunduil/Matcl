@@ -29,7 +29,7 @@ namespace matcl
 
 // Matrix as an object; 
 // for a dynamic Matrix object conversions from any other objects are
-// explicit, except conversions from nonobject mmlib scalars
+// explicit, except conversions from nonobject matcl scalars
 using OMatrix = dynamic::object_type<Matrix>;
 
 };

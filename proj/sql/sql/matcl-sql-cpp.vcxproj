@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\blob.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\assignment.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\bind.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\column.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\column_decl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\comma_list.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\config.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\create_index.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\create_table.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\delete.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\create_index_impl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\create_table_impl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\delete_impl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\flags.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\fwd_decls.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\insert_impl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\select_impl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\type_builder.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\details\update_impl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\enums.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\expression.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\insert.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\ord_expression.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\select.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\table.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\table_constraint.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\builder\update.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\config.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\connection.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\database.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\exception.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\functors.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\query.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\sql.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\matcl_sqlite_cpp.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\transaction.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-sqlite-cpp\typedefs.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\bind_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\column_decl_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\column_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\conflict_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\create_index_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\create_table_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\delete_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\expression_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\insert_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\ord_expression_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\select_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\table_constraint_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\table_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\details\update_impl.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\details\connection_details.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\details\database_details.h" />
+    <ClInclude Include="..\..\..\src\sql\matcl-sqlite-cpp\details\query_details.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sqlite3\sqlite3.vcxproj">
+      <Project>{d53a48fa-71ad-47d9-b428-b47988b38002}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\blob.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\assignment.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\bind.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\column.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\column_decl.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\conflict.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\create_index.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\create_table.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\delete.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\expression.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\insert.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\syntax_test.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\ord_expression.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\select.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\table.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\table_constraint.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\builder\update.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\connection.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\database.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\exception.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\query.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\sql.cpp" />
+    <ClCompile Include="..\..\..\src\sql\matcl-sqlite-cpp\transaction.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{80347B72-BF3E-4803-BD66-1B8C6E2580C1}</ProjectGuid>
+    <RootNamespace>symbolic</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>matcl-sqlite-cpp</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\sql\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_SQLITE_CPP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4702; 4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\sql\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_SQLITE_CPP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4702; 4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\sql\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_SQLITE_CPP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <DisableSpecificWarnings>4702; 4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\sql\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_SQLITE_CPP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <DisableSpecificWarnings>4702; 4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

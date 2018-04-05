@@ -1,0 +1,3 @@
+CPU 		matcl-mkl-plugin-win32-Release.dll
+CPU 		matcl-openblas-plugin-win32-Release.dll
+CPU 		matcl-clapack-plugin-win32-Release.dll
