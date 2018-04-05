@@ -39,6 +39,7 @@ void blas_config::init_actions()
         std::string var = "CPU";
         action func     = [=](const std::string& value)->bool 
                         { 
+                            std::string path = normalize_path(value);
                             this->m_plugins_cpu.push_back(value);
                             return true;
                         };
@@ -48,6 +49,7 @@ void blas_config::init_actions()
         std::string var = "GPU";
         action func = [=](const std::string& value)->bool
         {
+            std::string path = normalize_path(value);
             this->m_plugins_gpu.push_back(value);
             return true;
         };
@@ -57,6 +59,7 @@ void blas_config::init_actions()
         std::string var = "CPU_GPU";
         action func = [=](const std::string& value)->bool
         {
+            std::string path = normalize_path(value);
             this->m_plugins_cpu_gpu.push_back(value);
             return true;
         };
@@ -144,20 +147,29 @@ blas_config::string_vec blas_config::get_plugins_gpu() const
     return m_plugins_gpu;
 };
 
-void blas_config::add_plugin_cpu(const std::string& path)
+void blas_config::add_plugin_cpu(const std::string& path_in)
 {
+    std::string path = normalize_path(path_in);
     m_plugins_cpu.push_back(path);
 }
 
-void blas_config::add_plugin_cpu_gpu(const std::string& path)
+void blas_config::add_plugin_cpu_gpu(const std::string& path_in)
 {
+    std::string path = normalize_path(path_in);
     m_plugins_cpu_gpu.push_back(path);
 };
 
-void blas_config::add_plugin_gpu(const std::string& path)
+void blas_config::add_plugin_gpu(const std::string& path_in)
 {
+    std::string path = normalize_path(path_in);
     m_plugins_gpu.push_back(path);
 }
+
+std::string blas_config::normalize_path(const std::string& path_in)
+{
+    boost::filesystem::path p(path_in);
+    return p.string();
+};
 
 #ifndef __unix__
 
@@ -188,7 +200,7 @@ void blas_config::add_plugin_gpu(const std::string& path)
 #else
     std::wstring blas_config::get_config_path() const
     {
-        //TODO: implement
+        //TODO: UNIX
         return "blas_config.txt";
     }
 #endif

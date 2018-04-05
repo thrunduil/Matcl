@@ -45,19 +45,6 @@ optional<T> option::get() const
 };
 
 //-----------------------------------------------------------------------------------
-//                              option_type
-//-----------------------------------------------------------------------------------
-template<class T>
-option_type<T>::option_type(const std::string& name, const std::string& descr,
-                            const optional<T>& val)    
-    :option(impl_type(new option_impl_type(name, descr, val)))
-{}
-
-template<class T>
-option_type<T>::~option_type()
-{};
-
-//-----------------------------------------------------------------------------------
 //                              string_option
 //-----------------------------------------------------------------------------------
 

@@ -81,5 +81,16 @@ bool are_user_threads_allowed()
     return true;
 };	
 
+const char* get_name()
+{
+    return "CLAPACK";
+};
+
+void initialize()
+{};
+
+void force_initialization()
+{};
+
 // generic stuff - the constructor which initializes all pointers to blas functions
 #include "matcl-blas-lapack/blas_loader/blas_plugin_common.h"

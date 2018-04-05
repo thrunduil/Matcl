@@ -22,6 +22,9 @@
 
 ::blas_plugin::blas_plugin() 
     : 
+      get_name_fptr(reinterpret_cast<get_name_type>(get_name)),
+      initialize_fptr(reinterpret_cast<initialize_type>(initialize)),
+      force_initialization_fptr(reinterpret_cast<initialize_type>(force_initialization)),
       get_num_threads_fptr(reinterpret_cast<get_num_threads_type>(get_num_threads)),
       get_default_threads_fptr(reinterpret_cast<get_default_threads_type>(get_default_threads)),
       set_num_threads_fptr(reinterpret_cast<set_num_threads_type>(set_num_threads)),

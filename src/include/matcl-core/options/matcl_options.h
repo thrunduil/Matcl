@@ -119,9 +119,12 @@ class option_type : public option
 
     protected:
         option_type(const std::string& name, const std::string& descr,
-                    const optional<T>& val);
+                    const optional<T>& val)
+            :option(impl_type(new option_impl_type(name, descr, val)))
+        {}
 
-        ~option_type();
+        ~option_type()
+        {};
 };
 
 // base class for user defined options. User defined options must implement a
@@ -130,6 +133,7 @@ class option_type : public option
 // given class, Derived: type of option class.
 // allowed types T: bool, Integer, Real, Complex, std::string, and
 // std::vector of these types
+// classes derived from option_base should not be exported using dllexport
 template<class T, class Derived>
 class option_base : public option_type<T>
 {    
