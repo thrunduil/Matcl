@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "matcl_config.h"
+
 // portability issues
 #ifdef _MSC_VER
     #define force_inline __forceinline

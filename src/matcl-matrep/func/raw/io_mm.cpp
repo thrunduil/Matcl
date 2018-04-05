@@ -25,7 +25,7 @@
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-core/details/integer.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-matrep/lib_functions/func_unary.h"
 
@@ -728,7 +728,7 @@ void mm_helper_load::eval(std::istream& is, matcl::Matrix& ret, std::string& com
     else if (str == mm_helper::struct_type::her)
         sf  = predefined_struct_type::her;
 
-    //no skew-symmetric struct flag in mmlib
+    //no skew-symmetric struct flag in matcl
 
     if (is_dense)
     {

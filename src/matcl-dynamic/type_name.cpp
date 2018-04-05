@@ -174,8 +174,9 @@ class_name_parser::string_map class_name_parser::init_table()
 
 void class_name_parser::normalize(string_map& smap)
 {
-    typedef string_map::iterator iterator;
-    typedef string_map::value_type value_type;
+    using iterator      = string_map::iterator;
+    using value_type    = string_map::value_type;
+
     iterator pos = smap.begin();
     while (pos != smap.end())
     {

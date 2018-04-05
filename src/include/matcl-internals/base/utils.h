@@ -22,7 +22,7 @@
 
 #include "matcl-matrep/details/fwd_decls.h"
 #include "matcl-internals/base/vector.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-matrep/details/mpl.h"
 #include "matcl-matrep/matrix/matrix.h"
 

@@ -19,14 +19,14 @@
  */
 
 #include "matcl-matrep/func/raw/sort2.h"
-#include "matcl-matrep/base/instantiate.h"
+#include "matcl-internals/base/instantiate.h"
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-matrep/base/sort_iterator.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-matrep/func/raw/raw_manip.h"
 #include "matcl-matrep/base/colon_info.h"
 #include "matcl-matrep/algs/sparse_algs.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-matrep/lib_functions/manip.h"
 #include "matcl-matrep/func/raw/eval_vec_functor2.h"
 #include "matcl-internals/func/converter.h"

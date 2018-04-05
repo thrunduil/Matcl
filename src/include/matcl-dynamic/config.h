@@ -19,6 +19,8 @@
  */
 #pragma once
 
+#include "matcl_config.h"
+
 // export macros
 #ifdef MATCL_DYN_EXPORTS
     #define MATCL_DYN_EXPORT  __declspec(dllexport)

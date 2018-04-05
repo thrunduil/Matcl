@@ -28,7 +28,7 @@
 #include "matcl-internals/base/optim_params.h"
 #include "matcl-internals/container/mat_s.h"
 #include "matcl-core/details/integer.h"
-#include "matcl-blas/level1/level1.h"
+#include "matcl-blas-lapack/level1/level1.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-matrep/details/struct_flag_predefined.h"
 

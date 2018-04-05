@@ -34,7 +34,7 @@ template<class Ret, class V1, class V2>
 struct op_virtual_base;
 
 template<class Ret, class M1, class M2>
-struct MATCL_MATREP_EXPORT function_eval_bin_func
+struct MATCL_MATFUNC_EXPORT function_eval_bin_func
 {
     using In1   = typename get_value_type_raw_mat<M1>::type;
     using In2   = typename get_value_type_raw_mat<M2>::type;

@@ -103,7 +103,7 @@ MATCL_MATREP_EXPORT Matrix  triu(const Matrix &m,Integer d = 0);
 MATCL_MATREP_EXPORT Matrix  triu(Matrix &&m,Integer d = 0);
 
 // returns a new matrix formed by extracting the diagonals with index in range
-/// [fd, ld] of the matrix m, and settings all other elements to zero
+// [fd, ld] of the matrix m, and settings all other elements to zero
 MATCL_MATREP_EXPORT Matrix  select_band(const Matrix &m, Integer fd, Integer ld);
 
 // return a copy of m with the order of the rows reversed.
@@ -132,7 +132,7 @@ MATCL_MATREP_EXPORT Matrix  convert(const Matrix& A, matcl::mat_code new_type);
 MATCL_MATREP_EXPORT Matrix  convert_value(const Matrix& A, matcl::value_code vc);
 
 // convert a scalar of type From to a scalar of type To;
-// this function is enabled if To and From are mmlib scalars
+// this function is enabled if To and From are matcl scalars
 // warnings are not printed if this conversion leads to precision lost
 // redeclaration of function defined in matcl-scalar
 template<class To, class From, class Enable>

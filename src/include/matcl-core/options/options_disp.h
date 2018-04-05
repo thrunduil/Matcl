@@ -27,7 +27,7 @@ namespace matcl { namespace opt { namespace disp
 {
 
 // terminal width used in printing
-class MATCL_CORE_EXPORT terminal_width : public option_base<Integer, terminal_width>
+class terminal_width : public option_base<Integer, terminal_width>
 {
     private:
         using base_type             = option_base<Integer, terminal_width>;
@@ -57,7 +57,7 @@ class MATCL_CORE_EXPORT terminal_width : public option_base<Integer, terminal_wi
 };
 
 // maximum number of columns printed
-class MATCL_CORE_EXPORT max_cols : public option_base<Integer, max_cols>
+class max_cols : public option_base<Integer, max_cols>
 {
     private:
         using base_type             = option_base<Integer, max_cols>;
@@ -76,7 +76,7 @@ class MATCL_CORE_EXPORT max_cols : public option_base<Integer, max_cols>
 };
 
 // maximum number of rows printed
-class MATCL_CORE_EXPORT max_rows : public option_base<Integer, max_rows>
+class max_rows : public option_base<Integer, max_rows>
 {
     private:
         using base_type             = option_base<Integer, max_rows>;
@@ -95,7 +95,7 @@ class MATCL_CORE_EXPORT max_rows : public option_base<Integer, max_rows>
 };
 
 // maximum number of nonzero elements printed
-class MATCL_CORE_EXPORT max_nnz : public option_base<Integer, max_nnz>
+class max_nnz : public option_base<Integer, max_nnz>
 {
     private:
         using base_type             = option_base<Integer, max_nnz>;
@@ -114,7 +114,7 @@ class MATCL_CORE_EXPORT max_nnz : public option_base<Integer, max_nnz>
 };
 
 // number of significant digits printed for floating point values
-class MATCL_CORE_EXPORT precision : public option_base<Integer, precision>
+class precision : public option_base<Integer, precision>
 {
     private:
         using base_type             = option_base<Integer, precision>;
@@ -133,7 +133,7 @@ class MATCL_CORE_EXPORT precision : public option_base<Integer, precision>
 };
 
 // do add limit on number of rows and columns printed for sparse matrices?
-class MATCL_CORE_EXPORT restrict_sparse_matrix_size : public option_base<bool, restrict_sparse_matrix_size>
+class restrict_sparse_matrix_size : public option_base<bool, restrict_sparse_matrix_size>
 {
     private:
         using base_type         = option_base<bool, restrict_sparse_matrix_size>;
@@ -151,7 +151,7 @@ class MATCL_CORE_EXPORT restrict_sparse_matrix_size : public option_base<bool, r
 };
 
 // do display zero elements?
-class MATCL_CORE_EXPORT display_zero : public option_base<bool, display_zero>
+class display_zero : public option_base<bool, display_zero>
 {
     private:
         using base_type         = option_base<bool, display_zero>;
@@ -168,7 +168,7 @@ class MATCL_CORE_EXPORT display_zero : public option_base<bool, display_zero>
 };
 
 // display lower traingle for symmetric and hermitian matrices?
-class MATCL_CORE_EXPORT ignore_lower_triangle : public option_base<bool, ignore_lower_triangle>
+class ignore_lower_triangle : public option_base<bool, ignore_lower_triangle>
 {
     private:
         using base_type         = option_base<bool, ignore_lower_triangle>;
@@ -185,7 +185,7 @@ class MATCL_CORE_EXPORT ignore_lower_triangle : public option_base<bool, ignore_
 };
 
 // how to display scalars and sparse matrices?; see disp_mode
-class MATCL_CORE_EXPORT disp_mode : public option_base<Integer, disp_mode>
+class disp_mode : public option_base<Integer, disp_mode>
 {
     private:
         using base_type             = option_base<Integer, disp_mode>;
@@ -204,7 +204,7 @@ class MATCL_CORE_EXPORT disp_mode : public option_base<Integer, disp_mode>
 };
 
 // do display only matrix header?
-class MATCL_CORE_EXPORT header_only : public option_base<bool, header_only>
+class header_only : public option_base<bool, header_only>
 {
     private:
         using base_type         = option_base<bool, header_only>;
@@ -223,7 +223,7 @@ class MATCL_CORE_EXPORT header_only : public option_base<bool, header_only>
 // distance between row separators for dense and band matrices;
 // negative value or zero implies, that row separators are not
 // displayed
-class MATCL_CORE_EXPORT row_block : public option_base<Integer, row_block>
+class row_block : public option_base<Integer, row_block>
 {
     private:
         using base_type             = option_base<Integer, row_block>;

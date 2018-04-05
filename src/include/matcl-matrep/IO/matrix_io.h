@@ -150,19 +150,19 @@ typename details::enable_if_matcl_scalar<T,std::istream&>::type
 //                  SAVE AND LOAD IN TEXT FORMAT
 //--------------------------------------------------------------------
 
-// save matrix in mmlib text format
+// save matrix in matcl text format
 MATCL_MATREP_EXPORT 
 std::ostream&   save(std::ostream&, const Matrix&);
 
-// save matrix in mmlib text format with additional comments
+// save matrix in matcl text format with additional comments
 MATCL_MATREP_EXPORT 
 std::ostream&   save(std::ostream&, const Matrix&, const std::string& comments);
 
-// load matrix in mmlib text format
+// load matrix in matcl text format
 MATCL_MATREP_EXPORT 
 std::istream&   load(std::istream& is, Matrix& m);
 
-// load matrix in mmlib text format; additionally return associated
+// load matrix in matcl text format; additionally return associated
 // comments
 MATCL_MATREP_EXPORT 
 std::istream&   load(std::istream& is, Matrix& m, std::string& comments);
@@ -189,16 +189,16 @@ std::istream&   mm_load(std::istream& is, Matrix& m);
 MATCL_MATREP_EXPORT 
 std::istream&   mm_load(std::istream& is, Matrix& m, std::string& comments);
 
-// convert matrix stored in mmlib text format to Matrix Market format
+// convert matrix stored in matcl text format to Matrix Market format
 // only one matrix is converted; if given stream constains many matrices,
 // then this function must be called many times to convert all matrices
 MATCL_MATREP_EXPORT 
-void            convert_mmlib_to_mm(std::istream& mmlib_format, std::ostream& mm_format);
+void            convert_matcl_to_mm(std::istream& matcl_format, std::ostream& mm_format);
 
-// convert matrix stored in Matrix Market format to mmlib format
+// convert matrix stored in Matrix Market format to matcl format
 // only one matrix is converted; if given stream constains many matrices,
 // then this function must be called many times to convert all matrices
 MATCL_MATREP_EXPORT 
-void            convert_mm_to_mmlib(std::istream& mm_format, std::ostream& mmlib_format);
+void            convert_mm_to_matcl(std::istream& mm_format, std::ostream& matcl_format);
 
 };
