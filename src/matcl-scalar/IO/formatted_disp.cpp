@@ -106,10 +106,34 @@ void formatted_disp::disp_header()
     return m_impl->disp_header();
 };
 
+void formatted_disp::disp_row(const std::string& label, formatted_disp_row& row)
+{
+    m_impl->disp_row_object(label, row.size(), row.data());
+    row.clear();
+}
+
 void formatted_disp::disp_row_object(const std::string& label, 
                         std::initializer_list<Object> vals)
 {
     return m_impl->disp_row_object(label, vals.size(), vals.begin());
+}
+
+//--------------------------------------------------------------------
+//                      formatted_disp_row
+//--------------------------------------------------------------------
+void formatted_disp_row::clear()
+{
+    m_vector.clear();
+}
+
+size_t formatted_disp_row::size() const
+{
+    return m_vector.size();
+}
+
+const Object* formatted_disp_row::data() const
+{
+    return m_vector.data();
 }
 
 };

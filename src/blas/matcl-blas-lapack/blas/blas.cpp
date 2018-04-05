@@ -20,3 +20,25 @@
 
 #define INLINE_TYPE
 #include "blas.inl"
+
+#include "matcl-blas-lapack/blas_loader/blas_loader.h"
+
+namespace matcl 
+{
+
+std::string lapack::loaded_blas_plugin_name()
+{
+    return raw_blas_lapack::loaded_blas_plugin_name();
+}
+
+bool lapack::load_blas_plugin(const std::string& path)
+{
+    return raw_blas_lapack::load_blas_plugin(path);
+}
+
+void lapack::initialize_plugin()
+{
+    return raw_blas_lapack::initialize_plugin();
+};
+
+};

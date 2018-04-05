@@ -36,7 +36,7 @@
 #include "matcl-blas-lapack/blas/blas.h"
 #include "matcl-internals/func/lapack_utils.h"
 #include "matcl-internals/algs/scatter.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-internals/base/optim_params.h"
 #include "matcl-matrep/matrix/struct_flag_ext.h"
 #include "matcl-matmult/func/raw/mmul/mmul.h"

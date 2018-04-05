@@ -27,7 +27,7 @@
 #include "matcl-internals/base/utils.h"
 #include "matcl-internals/base/optim_params.h"
 #include "matcl-internals/container/mat_b.h"
-#include "matcl-matrep/utils/workspace.h"
+#include "matcl-core/utils/workspace.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-scalar/details/matfunc_helpers.h"
 #include "matcl-matrep/details/struct_flag_predefined.h"

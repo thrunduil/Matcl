@@ -27,6 +27,9 @@
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_plugin_common.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\blas-loader\plugin_manager.h">
+      <Filter>Source Files\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\blas\blas-loader\blas_config.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\blas\blas-loader\lsame.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\blas-loader\plugin_manager.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>

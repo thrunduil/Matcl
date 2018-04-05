@@ -68,7 +68,7 @@ void global_data::set_num_threads(int n)
 {
     int max_threads = std::thread::hardware_concurrency();
     m_threads = std::min(std::max(n,1),max_threads);
-    omp_set_num_threads(n);
+    omp_set_num_threads(m_threads);
 };
 
 bool global_data::are_user_threads_allowed()
@@ -83,7 +83,7 @@ static global_data m_data;
 extern "C"
 {
     BLAS_PLUGIN_EXPORT 
-    const ::blas_plugin* get_blas_wrapper()
+    const ::blas_plugin* get_blas_plugin()
     {
         return &m_data.m_plugin;
     }
@@ -108,6 +108,12 @@ bool are_user_threads_allowed()
 {
     return m_data.are_user_threads_allowed();
 };
+
+void initialize()
+{};
+
+void force_initialization()
+{};
 
 #include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
 #include "blaswrap.h"

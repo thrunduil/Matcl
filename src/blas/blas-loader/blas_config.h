@@ -51,6 +51,9 @@ class blas_config
         void            add_plugin_gpu(const std::string& path);
         void            add_plugin_cpu_gpu(const std::string& path);
 
+        static std::string  
+                        normalize_path(const std::string& path);
+
     private:
         std::wstring    get_config_path() const;
         void            load_config();
