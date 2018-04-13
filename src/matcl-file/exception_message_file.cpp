@@ -43,7 +43,7 @@ exception_message_file_ptr error::get_global_messanger_file()
     return messanger;
 }
 
-const char* default_exception_message_file::error_open_mmlibfile(const std::string& file, const std::string& msg)
+const char* default_exception_message_file::error_open_matclfile(const std::string& file, const std::string& msg)
 {
     std::ostringstream buf;
 
@@ -103,43 +103,43 @@ const char* default_exception_message_file::error_write_matfile()
     return current_message.c_str();
 };
 
-const char* default_exception_message_file::error_mmlibfile_locked()
+const char* default_exception_message_file::error_matclfile_locked()
 {
-    current_message = "mmlib file is locked";
+    current_message = "matcl file is locked";
     return current_message.c_str();
 };
 
-const char* default_exception_message_file::error_create_mmlibfile(const std::string& msg)
+const char* default_exception_message_file::error_create_matclfile(const std::string& msg)
 {
     std::ostringstream buf;
 
-    buf << "unable to create mmlib file, reason: " << msg;
+    buf << "unable to create matcl file, reason: " << msg;
 
     current_message = buf.str();
     return current_message.c_str();
 };
 
-const char* default_exception_message_file::error_read_mmlibfile(const std::string& msg)
+const char* default_exception_message_file::error_read_matclfile(const std::string& msg)
 {
     std::ostringstream buf;
 
-    buf << "unable to read mmlib file, reason: " << msg;
+    buf << "unable to read matcl file, reason: " << msg;
 
     current_message = buf.str();
     return current_message.c_str();
 };
 
-const char* default_exception_message_file::error_read_mmlibfile_mat_not_exist(const std::string& msg)
+const char* default_exception_message_file::error_read_matclfile_mat_not_exist(const std::string& msg)
 {
     std::ostringstream buf;
 
-    buf << "matrix " << msg <<" does not exist in mmlib file";
+    buf << "matrix " << msg <<" does not exist in matcl file";
 
     current_message = buf.str();
     return current_message.c_str();
 };
 
-const char* default_exception_message_file::error_write_mmlibfile_mat_already_exist(const std::string& msg)
+const char* default_exception_message_file::error_write_matclfile_mat_already_exist(const std::string& msg)
 {
     std::ostringstream buf;
 

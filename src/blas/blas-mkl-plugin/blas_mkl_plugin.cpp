@@ -115,8 +115,12 @@ void initialize()
 void force_initialization()
 {};
 
+const char* get_name()
+{
+    return "OPENBLAS";
+};
+
 #include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
-#include "blaswrap.h"
 
 //missing functions
 static d_type_wr 

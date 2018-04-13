@@ -56,7 +56,7 @@ static sql::enums::thread_mode sqpp_thread_mode(thread_mode tm)
 	};
 };
 
-mmlib_file_data::mmlib_file_data(const std::string& file_name, open_mode om, thread_mode tm)
+matcl_file_data::matcl_file_data(const std::string& file_name, open_mode om, thread_mode tm)
 {
 	sql::enums::open_mode om_q = sqpp_open_mode(om);
 	sql::enums::thread_mode tm_q = sqpp_thread_mode(tm);
@@ -68,11 +68,11 @@ mmlib_file_data::mmlib_file_data(const std::string& file_name, open_mode om, thr
 	}
 	catch(sql::matcl_sqlite_open_exception& ex)
 	{
-		throw error::error_open_mmlibfile(file_name,ex.sqlite_message());
+		throw error::error_open_matclfile(file_name,ex.sqlite_message());
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(std::exception& ex)
 	{
@@ -80,14 +80,14 @@ mmlib_file_data::mmlib_file_data(const std::string& file_name, open_mode om, thr
 	}
 	catch(...)
 	{
-		throw error::error_general("unknown exception during opening mmlib_file");
+		throw error::error_general("unknown exception during opening matcl_file");
 	};
 };
 
-mmlib_file_data::~mmlib_file_data()
+matcl_file_data::~matcl_file_data()
 {};
 
-void mmlib_file_data::add_to_save_list(const Matrix& mat, const std::string& mat_name, 
+void matcl_file_data::add_to_save_list(const Matrix& mat, const std::string& mat_name, 
 						const std::string& mat_string, bool allow_replace)
 {
 	mat_insert_elem item;
@@ -99,7 +99,7 @@ void mmlib_file_data::add_to_save_list(const Matrix& mat, const std::string& mat
 	m_save_mat_list.push_back(item);
 };
 
-void mmlib_file_data::add_data_to_save_list(const void* data, size_t bytes, const std::string& mat_name, 
+void matcl_file_data::add_data_to_save_list(const void* data, size_t bytes, const std::string& mat_name, 
 						const std::string& mat_string, bool allow_replace)
 {
 	data_insert_elem item;

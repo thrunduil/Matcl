@@ -133,8 +133,8 @@ static blob_ptr convert_to_matclblob(const sql::blob_ptr& bp)
     return new_bp;
 };
 
- mmlib_file::mmlib_file(const std::string& file_name, open_mode om, thread_mode tm)
-:m_data(new details::mmlib_file_data(file_name, om, tm))
+ matcl_file::matcl_file(const std::string& file_name, open_mode om, thread_mode tm)
+:m_data(new details::matcl_file_data(file_name, om, tm))
 {
 	sql::connection q = m_data->m_connection;
 	q.timeout_limit(1000);
@@ -145,16 +145,16 @@ static blob_ptr convert_to_matclblob(const sql::blob_ptr& bp)
         insert_data_table_if_not_exist();
 	};
 };
-mmlib_file::~mmlib_file()
+matcl_file::~matcl_file()
 {};
 
-void mmlib_file::timeout_limit(int msec)
+void matcl_file::timeout_limit(int msec)
 {
 	sql::connection q = m_data->m_connection;
 	q.timeout_limit(msec);
 };
 
-void mmlib_file::insert_main_table_if_not_exist()
+void matcl_file::insert_main_table_if_not_exist()
 {
 	sql::connection q = m_data->m_connection;
 	try
@@ -163,14 +163,14 @@ void mmlib_file::insert_main_table_if_not_exist()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception&)
 	{
 		insert_main_table();
 	};
 };
-bool mmlib_file::exist_data_table() const
+bool matcl_file::exist_data_table() const
 {
 	sql::connection q = m_data->m_connection;
 	try
@@ -179,7 +179,7 @@ bool mmlib_file::exist_data_table() const
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception&)
 	{
@@ -188,7 +188,7 @@ bool mmlib_file::exist_data_table() const
 
     return true;
 };
-void mmlib_file::insert_data_table_if_not_exist()
+void matcl_file::insert_data_table_if_not_exist()
 {
 	sql::connection q = m_data->m_connection;
 	try
@@ -197,7 +197,7 @@ void mmlib_file::insert_data_table_if_not_exist()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception&)
 	{
@@ -205,7 +205,7 @@ void mmlib_file::insert_data_table_if_not_exist()
 	};
 };
 
-void mmlib_file::insert_main_table()
+void matcl_file::insert_main_table()
 {
     using ct = sql::column_type;
 
@@ -238,15 +238,15 @@ void mmlib_file::insert_main_table()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_create_mmlibfile(ex.sqlite_message());
+		throw error::error_create_matclfile(ex.sqlite_message());
 	};
 }
 
-void mmlib_file::insert_data_table()
+void matcl_file::insert_data_table()
 {
 	sql::connection q = m_data->m_connection;
     using ct = sql::column_type;
@@ -271,15 +271,15 @@ void mmlib_file::insert_data_table()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_create_mmlibfile(ex.sqlite_message());
+		throw error::error_create_matclfile(ex.sqlite_message());
 	};
 }
 
-bool mmlib_file::exist(const std::string& mat_name)
+bool matcl_file::exist(const std::string& mat_name)
 {
 	sql::connection q = m_data->m_connection;
 	try
@@ -289,15 +289,15 @@ bool mmlib_file::exist(const std::string& mat_name)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-bool mmlib_file::exist_data(const std::string& mat_name)
+bool matcl_file::exist_data(const std::string& mat_name)
 {
 	sql::connection q = m_data->m_connection;
 	try
@@ -311,15 +311,15 @@ bool mmlib_file::exist_data(const std::string& mat_name)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-Matrix mmlib_file::load(const std::string& mat_name)
+Matrix matcl_file::load(const std::string& mat_name)
 {
 	sql::blob_ptr bp;
 	try
@@ -329,18 +329,18 @@ Matrix mmlib_file::load(const std::string& mat_name)
 		if (!c.step())
 		{
 			std::string msg = "matrix " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
 		};
 
 		bp = c.blob_at_col(col_data-1);
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 
 	const char* first = (const char*)bp->pointer();
@@ -360,7 +360,7 @@ Matrix mmlib_file::load(const std::string& mat_name)
 	return mat;
 };
 
-blob_ptr mmlib_file::load_data(const std::string& mat_name)
+blob_ptr matcl_file::load_data(const std::string& mat_name)
 {
 	sql::blob_ptr bp;
 	try
@@ -369,7 +369,7 @@ blob_ptr mmlib_file::load_data(const std::string& mat_name)
         if (et == false)
         {
 			std::string msg = "data " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
         };
 
 		sql::connection q = m_data->m_connection;
@@ -377,24 +377,24 @@ blob_ptr mmlib_file::load_data(const std::string& mat_name)
 		if (!c.step())
 		{
 			std::string msg = "data " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
 		};
 
 		bp = c.blob_at_col(data_col_data-1);
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 
 	return convert_to_matclblob(bp);
 };
 
-Matrix mmlib_file::load(const std::string& mat_name,std::string& mat_string)
+Matrix matcl_file::load(const std::string& mat_name,std::string& mat_string)
 {
 	sql::blob_ptr bp;
 	try
@@ -404,7 +404,7 @@ Matrix mmlib_file::load(const std::string& mat_name,std::string& mat_string)
 		if (!c.step())
 		{
 			std::string msg = "matrix " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
 		};
 
 		bp = c.blob_at_col(col_data - 1);
@@ -412,11 +412,11 @@ Matrix mmlib_file::load(const std::string& mat_name,std::string& mat_string)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 
 	const char* first = (const char*)bp->pointer();
@@ -436,7 +436,7 @@ Matrix mmlib_file::load(const std::string& mat_name,std::string& mat_string)
 	return mat;
 };
 
-blob_ptr mmlib_file::load_data(const std::string& mat_name,std::string& mat_string)
+blob_ptr matcl_file::load_data(const std::string& mat_name,std::string& mat_string)
 {
 	sql::blob_ptr bp;
 	try
@@ -445,7 +445,7 @@ blob_ptr mmlib_file::load_data(const std::string& mat_name,std::string& mat_stri
         if (et == false)
         {
 			std::string msg = "data " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
         };
 
 		sql::connection q = m_data->m_connection;
@@ -453,7 +453,7 @@ blob_ptr mmlib_file::load_data(const std::string& mat_name,std::string& mat_stri
 		if (!c.step())
 		{
 			std::string msg = "data " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
 		};
 
 		bp = c.blob_at_col(data_col_data - 1);
@@ -461,17 +461,17 @@ blob_ptr mmlib_file::load_data(const std::string& mat_name,std::string& mat_stri
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 
 	return convert_to_matclblob(bp);
 };
 
-std::string mmlib_file::load_mat_string(const std::string& mat_name)
+std::string matcl_file::load_mat_string(const std::string& mat_name)
 {
 	try
 	{
@@ -480,22 +480,22 @@ std::string mmlib_file::load_mat_string(const std::string& mat_name)
 		if (!c.step())
 		{
 			std::string msg = "matrix " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
 		};
 
 		return c.string_at_col(col_mat_string - 1);
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-std::string mmlib_file::load_data_string(const std::string& mat_name)
+std::string matcl_file::load_data_string(const std::string& mat_name)
 {
 	try
 	{
@@ -503,7 +503,7 @@ std::string mmlib_file::load_data_string(const std::string& mat_name)
         if (et == false)
         {
 			std::string msg = "data " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
         };
 
 		sql::connection q = m_data->m_connection;
@@ -511,22 +511,22 @@ std::string mmlib_file::load_data_string(const std::string& mat_name)
 		if (!c.step())
 		{
 			std::string msg = "data " + mat_name + " does not exist";
-			throw error::error_read_mmlibfile(msg);
+			throw error::error_read_matclfile(msg);
 		};
 
 		return c.string_at_col(data_col_mat_string - 1);
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-mmlib_file::matrix_list	mmlib_file::load_all()
+matcl_file::matrix_list	matcl_file::load_all()
 {
 	matrix_list ml;
 	
@@ -557,17 +557,17 @@ mmlib_file::matrix_list	mmlib_file::load_all()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 
 	return ml;
 };
 
-mmlib_file::data_list mmlib_file::load_data_all()
+matcl_file::data_list matcl_file::load_data_all()
 {
 	data_list ml;
 	
@@ -589,17 +589,17 @@ mmlib_file::data_list mmlib_file::load_data_all()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 
 	return ml;
 };
 
-void mmlib_file::load_all_mat_string(mmlib_file::string_list& sl)
+void matcl_file::load_all_mat_string(matcl_file::string_list& sl)
 {
 	try
 	{
@@ -612,15 +612,15 @@ void mmlib_file::load_all_mat_string(mmlib_file::string_list& sl)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::load_data_all_mat_string(mmlib_file::string_list& sl)
+void matcl_file::load_data_all_mat_string(matcl_file::string_list& sl)
 {
 	try
 	{
@@ -639,15 +639,15 @@ void mmlib_file::load_data_all_mat_string(mmlib_file::string_list& sl)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-matrix_info	mmlib_file::load_info(const std::string& mat_name)
+matrix_info	matcl_file::load_info(const std::string& mat_name)
 {
 	sql::blob_ptr bp;
 	try
@@ -656,22 +656,22 @@ matrix_info	mmlib_file::load_info(const std::string& mat_name)
 		sql::query c = q.execute(sql::select().from(matrix_table).where(sql::column("name") == mat_name).to_str());
 		if (!c.step())
 		{
-			throw error::error_read_mmlibfile_mat_not_exist(mat_name);
+			throw error::error_read_matclfile_mat_not_exist(mat_name);
 		};
 
 		return get_mat_info(&c);
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-matrix_info	mmlib_file::get_mat_info(void* ptr)
+matrix_info	matcl_file::get_mat_info(void* ptr)
 {
 	sql::query* c = static_cast<sql::query*>(ptr);
 
@@ -736,7 +736,7 @@ matrix_info	mmlib_file::get_mat_info(void* ptr)
 	return mi;
 };
 
-void mmlib_file::load_all_info(mmlib_file::matrix_info_list& ml)
+void matcl_file::load_all_info(matcl_file::matrix_info_list& ml)
 {
 	try
 	{
@@ -751,15 +751,15 @@ void mmlib_file::load_all_info(mmlib_file::matrix_info_list& ml)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::remove(const std::string& mat_name)
+void matcl_file::remove(const std::string& mat_name)
 {
 	try
 	{
@@ -768,15 +768,15 @@ void mmlib_file::remove(const std::string& mat_name)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::remove_data(const std::string& mat_name)
+void matcl_file::remove_data(const std::string& mat_name)
 {
 	try
 	{
@@ -791,15 +791,15 @@ void mmlib_file::remove_data(const std::string& mat_name)
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::save(const Matrix& mat, const std::string& mat_name, const std::string& mat_string,
+void matcl_file::save(const Matrix& mat, const std::string& mat_name, const std::string& mat_string,
                       bool allow_replace)
 {
 	bool ex = exist(mat_name);
@@ -809,7 +809,7 @@ void mmlib_file::save(const Matrix& mat, const std::string& mat_name, const std:
 	{
 		if (allow_replace == false)
 		{
-			throw error::error_write_mmlibfile_mat_already_exist(mat_name);
+			throw error::error_write_matclfile_mat_already_exist(mat_name);
 		}
 	};
 
@@ -855,15 +855,15 @@ void mmlib_file::save(const Matrix& mat, const std::string& mat_name, const std:
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::save_data(const void* data, size_t bytes, const std::string& mat_name, 
+void matcl_file::save_data(const void* data, size_t bytes, const std::string& mat_name, 
                            const std::string& mat_string, bool allow_replace)
 {
 	bool ex = exist_data(mat_name);
@@ -872,7 +872,7 @@ void mmlib_file::save_data(const void* data, size_t bytes, const std::string& ma
 	{
 		if (allow_replace == false)
 		{
-			throw error::error_write_mmlibfile_mat_already_exist(mat_name);
+			throw error::error_write_matclfile_mat_already_exist(mat_name);
 		}
 	};
 
@@ -904,32 +904,32 @@ void mmlib_file::save_data(const void* data, size_t bytes, const std::string& ma
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::add_to_save_list(const Matrix& mat, const std::string& mat_name, 
+void matcl_file::add_to_save_list(const Matrix& mat, const std::string& mat_name, 
                                   const std::string& mat_string, bool allow_replace)
 {
 	m_data->add_to_save_list(mat,mat_name,mat_string,allow_replace);
 };
 
-void mmlib_file::add_data_to_save_list(const void* data, size_t bytes, const std::string& mat_name, 
+void matcl_file::add_data_to_save_list(const void* data, size_t bytes, const std::string& mat_name, 
                                        const std::string& mat_string, bool allow_replace)
 {
 	m_data->add_data_to_save_list(data,bytes,mat_name,mat_string,allow_replace);
 };
 
-void mmlib_file::save_list()
+void matcl_file::save_list()
 {
 	try
 	{
-		using save_mat_list     = details::mmlib_file_data::save_mat_list;
-        using save_data_list    = details::mmlib_file_data::save_data_list;
+		using save_mat_list     = details::matcl_file_data::save_mat_list;
+        using save_data_list    = details::matcl_file_data::save_data_list;
 		using mat_iterator      = save_mat_list::const_iterator;
         using data_iterator     = save_data_list::const_iterator;
 
@@ -1020,15 +1020,15 @@ void mmlib_file::save_list()
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 }
 
-void mmlib_file::modify_mat_string(const std::string& mat_name, const std::string& mat_string)
+void matcl_file::modify_mat_string(const std::string& mat_name, const std::string& mat_string)
 {
 	try
 	{
@@ -1042,15 +1042,15 @@ void mmlib_file::modify_mat_string(const std::string& mat_name, const std::strin
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 
-void mmlib_file::modify_data_mat_string(const std::string& mat_name, const std::string& mat_string)
+void matcl_file::modify_data_mat_string(const std::string& mat_name, const std::string& mat_string)
 {
 	try
 	{
@@ -1064,11 +1064,11 @@ void mmlib_file::modify_data_mat_string(const std::string& mat_name, const std::
 	}
 	catch(sql::matcl_sqlite_lock_exception&)
 	{
-		throw error::error_mmlibfile_locked();
+		throw error::error_matclfile_locked();
 	}
 	catch(sql::matcl_sqlite_exception& ex)
 	{
-		throw error::error_read_mmlibfile(ex.sqlite_message());
+		throw error::error_read_matclfile(ex.sqlite_message());
 	};	
 };
 

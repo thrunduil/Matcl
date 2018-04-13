@@ -68,7 +68,7 @@
 
 // when this macro is set to 1, then dllmalloc memory manager is used
 // instead of the default one
-#define MATCL_USE_DLMALLOC      1
+#define MATCL_USE_DLMALLOC      0
 
 // when this macro is set to 1, then memory debugging and leak detection
 // is enabled

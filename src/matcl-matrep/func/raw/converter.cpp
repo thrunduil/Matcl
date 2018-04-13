@@ -754,7 +754,7 @@ namespace details
             Integer r = mat.rows(), c = mat.cols();
 
             using val_type_ret  = typename ret::value_type;
-            using val_type      = typename ret::value_type;
+            using val_type      = typename T::value_type;
 
             static bool prec_increased  = is_precision_increased<val_type, val_type_ret>::value;
 
@@ -766,7 +766,7 @@ namespace details
 
             ret res(ti,r,c,-ld,ud);
             
-            const typename T::value_type* ptr = mat.ptr();
+            const val_type* ptr     = mat.ptr();
 
             val_type_ret* ptr_ret   = res.rep_ptr();
             Integer mat_ld          = mat.ld();
