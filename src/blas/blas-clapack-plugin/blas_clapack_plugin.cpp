@@ -18,9 +18,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "../clapack/blaswrap.h"
-#include "../clapack/f2c.h"
-#include "../clapack/clapack.h"
+#include "extern/clapack/blaswrap.h"
+#include "extern/clapack/f2c.h"
+#include "extern/clapack/clapack.h"
 
 // include the file with the interface such plugin needs to implement
 #include "matcl-blas-lapack/blas_loader/blas_plugin.h"

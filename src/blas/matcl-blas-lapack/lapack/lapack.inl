@@ -218,30 +218,34 @@ template<> BLAS_EXPORT INLINE_TYPE
 s_type lange<s_type>(const char *norm,i_type m,i_type n,const s_type *a,i_type lda,
                      s_type *work)
 {
-    return (s_type)LAPACK_NAME(slange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda),
+    auto res = LAPACK_NAME(slange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda),
                                        _rc(work));
+    return (s_type)res;
 };
 
 template<> BLAS_EXPORT INLINE_TYPE 
 s_type lange<c_type>(const char *norm,i_type m,i_type n,const c_type *a,i_type lda,
                      s_type *work)
 {
-    return (s_type)LAPACK_NAME(clange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda),
+    auto res = LAPACK_NAME(clange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda),
                                        _rc(work));
+    return (s_type)res;
 };
 
 template<> BLAS_EXPORT INLINE_TYPE 
 d_type lange<d_type>(const char *norm,i_type m,i_type n,const d_type *a,i_type lda,
                      d_type *work)
 {
-    return LAPACK_NAME(dlange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda), _rc(work));
+    auto res = LAPACK_NAME(dlange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda), _rc(work));
+    return res;
 };
 
 template<> BLAS_EXPORT INLINE_TYPE 
 d_type lange<z_type>(const char *norm,i_type m,i_type n,const z_type *a,i_type lda,
                      d_type *work)
 {
-    return LAPACK_NAME(zlange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda),_rc(work));
+    auto res = LAPACK_NAME(zlange)(_rc(norm),_rc(&m),_rc(&n),_rc(a),_rc(&lda),_rc(work));
+    return res;
 };
 
 BLAS_EXPORT INLINE_TYPE

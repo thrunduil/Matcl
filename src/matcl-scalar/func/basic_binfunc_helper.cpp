@@ -70,6 +70,13 @@ Real basic_binfunc_helper<Real>::eval_powm1(const Real& x, const Real& y)
             return constants::inf();
     };
 
+    // powm1 is broken for x == nan, inf
+    if (is_finite(x) == false)
+        return matcl::pow(x, y) - 1.0;
+
+    if (is_finite(y) == false)
+        return matcl::pow(x, y) - 1.0;
+
     return mrd::scal_func::ignore_errors::powm1(x,y);
 }
 
@@ -90,6 +97,13 @@ Float basic_binfunc_helper<Float>::eval_powm1(const Float& x, const Float& y)
         else
             return constants::f_inf();
     };
+
+    // powm1 is broken for x == nan, inf
+    if (is_finite(x) == false)
+        return matcl::pow(x, y) - 1.0f;
+
+    if (is_finite(y) == false)
+        return matcl::pow(x, y) - 1.0f;
 
     return mrd::scal_func::ignore_errors::powm1(x,y);
 }
