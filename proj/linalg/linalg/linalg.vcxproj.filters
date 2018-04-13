@@ -1,0 +1,598 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\decompositions">
+      <UniqueIdentifier>{1d3a526c-4d72-4e86-bb54-8cc98ef406d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\krylov">
+      <UniqueIdentifier>{3d7be03d-dd81-4735-be2a-7e6fa26d2235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\linear_eq">
+      <UniqueIdentifier>{a9e83af0-82e7-4704-b983-e9e90cda48bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\norms_error">
+      <UniqueIdentifier>{af3deb39-905f-408b-9b0e-f1ccc3a89338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\special_matrices">
+      <UniqueIdentifier>{73f32beb-80d6-4366-bcca-bb11115cb453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\utils">
+      <UniqueIdentifier>{730dafa5-7f4e-4256-9c88-6cac2cabca33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\details">
+      <UniqueIdentifier>{235e7d45-40b6-470f-b43f-5fb2db18d468}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\general">
+      <UniqueIdentifier>{ab291515-396e-444e-a3d8-493beeb47d1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\graph">
+      <UniqueIdentifier>{90916a27-6a19-451b-9faf-29b82da0e826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\options">
+      <UniqueIdentifier>{5420126f-5f23-4fb0-a64e-03018da04702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions">
+      <UniqueIdentifier>{a490c38a-b4e5-42f9-850a-882b9358e042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\error">
+      <UniqueIdentifier>{2c71da63-08d2-48da-9626-a0277dfaa553}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\krylov">
+      <UniqueIdentifier>{6adf6a33-dc9d-4726-aa5a-b54b59542567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\linear_eq">
+      <UniqueIdentifier>{029e8534-7869-44ce-92cb-abc8d27d3a05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lusol">
+      <UniqueIdentifier>{42933f29-1d4f-4922-9558-22df790eb7ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\norms_error">
+      <UniqueIdentifier>{9556c721-d55c-4b4c-9fd8-5f7f860c6205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\ordering">
+      <UniqueIdentifier>{0473e813-3ba4-4955-9252-8f77b1cd81f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\special_matrices">
+      <UniqueIdentifier>{caf68fb9-7629-4d5b-83a4-965369964cca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\utils">
+      <UniqueIdentifier>{93bfc3ff-7fd5-446e-8d7a-32b2c7393429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions\cholmod">
+      <UniqueIdentifier>{0c148eec-254e-4b66-badc-de04f00f1d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions\eig">
+      <UniqueIdentifier>{098b98ed-8915-4c30-a476-5c8895a38ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions\lu">
+      <UniqueIdentifier>{f738c220-36ec-437d-8b26-7a92f5fb88fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions\quern">
+      <UniqueIdentifier>{22e5f89c-1cdc-48e7-b996-d4ef2143d84e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions\quern\include">
+      <UniqueIdentifier>{1b43ac27-9951-4210-8c90-5ab3e6357038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\decompositions\quern\src">
+      <UniqueIdentifier>{86812b64-6ddc-4fc1-8792-d52c42d881d2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\balancing.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\chol.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\cholmod.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\eig_functions.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\givens.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\gschur.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\gschur_sym.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\hess.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\householder.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\ldl.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\lu.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\qr.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\schur.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\speigs.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\svd.h">
+      <Filter>Source Files\include\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\details\linalg_fwd.h">
+      <Filter>Source Files\include\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\general\config_linalg.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\general\control_exceptions.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\general\linalg_exception.h">
+      <Filter>Source Files\include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\dm_decomposition.h">
+      <Filter>Source Files\include\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\graph_manip.h">
+      <Filter>Source Files\include\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\metis.h">
+      <Filter>Source Files\include\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\scotch.h">
+      <Filter>Source Files\include\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\krylov\arnoldi.h">
+      <Filter>Source Files\include\krylov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\krylov\block_arnoldi.h">
+      <Filter>Source Files\include\krylov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\krylov\krylov.h">
+      <Filter>Source Files\include\krylov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\linear_eq\linsolve.h">
+      <Filter>Source Files\include\linear_eq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\linear_eq\linsolve_object.h">
+      <Filter>Source Files\include\linear_eq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\norms_error\cond.h">
+      <Filter>Source Files\include\norms_error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\norms_error\norm.h">
+      <Filter>Source Files\include\norms_error</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\options\options_linsolve.h">
+      <Filter>Source Files\include\options</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\options\options_speigs.h">
+      <Filter>Source Files\include\options</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\special_matrices\matrix_functors.h">
+      <Filter>Source Files\include\special_matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\special_matrices\struct_flag_linalg.h">
+      <Filter>Source Files\include\special_matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\special_matrices\unitary_matrix.h">
+      <Filter>Source Files\include\special_matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\utils\utils.h">
+      <Filter>Source Files\include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\matcl_linalg.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\chol_impl.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\chol_rr_impl.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\chol_update.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\givens_q.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\householder_q.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\qr_band.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\qr_utils.h">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod.h">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_matrix.h">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_options.h">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\pstrf.h">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\arpack_wrapper.h">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_range.h">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_utils.h">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\svd_range.h">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_impl.h">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_struct.h">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_superlu.h">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\quern_unitary_mat_mult.h">
+      <Filter>Source Files\src\decompositions\quern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\include\quern.h">
+      <Filter>Source Files\src\decompositions\quern\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\include\quern_list.h">
+      <Filter>Source Files\src\decompositions\quern\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\krylov\arnoldi_blk_impl.h">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\krylov\arnoldi_impl.h">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\krylov\arnoldi_process.h">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\iterative_refinement.h">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_decomp.h">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_ext.h">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_struct.h">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\commonlib.h">
+      <Filter>Source Files\src\lusol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\heap.h">
+      <Filter>Source Files\src\lusol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\lusol.h">
+      <Filter>Source Files\src\lusol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\myblas.h">
+      <Filter>Source Files\src\lusol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\utils\linalg_utils.h">
+      <Filter>Source Files\src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\utils\optim_params.h">
+      <Filter>Source Files\src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\dmperm_pothen.h">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\maxmatch_weighted.h">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\part_wrappers_utils.h">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\scotch_wrapper.h">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\matcl_graph.h">
+      <Filter>Source Files\include\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\matcl_quern_solver.h">
+      <Filter>Source Files\src\decompositions\quern</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\include\matcl-linalg\details\givens.inl">
+      <Filter>Source Files\include\details</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\decompositions\cholmod_impl.inl">
+      <Filter>Source Files\src\decompositions</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod.inl">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\decompositions\cholmod\pstrf.inl">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\decompositions\quern\README">
+      <Filter>Source Files\src\decompositions\quern</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_general.inl">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_qtriang.inl">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_sparse.inl">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_triang.inl">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_utils.inl">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol1.inl">
+      <Filter>Source Files\src\lusol</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol6a.inl">
+      <Filter>Source Files\src\lusol</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol7a.inl">
+      <Filter>Source Files\src\lusol</Filter>
+    </None>
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol8a.inl">
+      <Filter>Source Files\src\lusol</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\src\include\matcl-linalg\matcl_linalg_extern.txt">
+      <Filter>Source Files\include</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\balancing.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\chol.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\cholmod.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\givens.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\givens_q.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\hess.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\householder.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\householder_q.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\ldl.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr_band.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr_givens.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr_update.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\svd.cpp">
+      <Filter>Source Files\src\decompositions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_instantiate.cpp">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_options.cpp">
+      <Filter>Source Files\src\decompositions\cholmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\arpack_wrapper.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\eig_22.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\eig_functions.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\gschur.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\gschur_sym.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\schur.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_range.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_utils.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\speigs.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\svd_22.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\svd_range.cpp">
+      <Filter>Source Files\src\decompositions\eig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu.cpp">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_band.cpp">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_dense.cpp">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_sparse.cpp">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_struct.cpp">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_superlu.cpp">
+      <Filter>Source Files\src\decompositions\lu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\quern_unitary_mat_mult.cpp">
+      <Filter>Source Files\src\decompositions\quern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\src\quern_factorization.cpp">
+      <Filter>Source Files\src\decompositions\quern\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\src\quern_order.cpp">
+      <Filter>Source Files\src\decompositions\quern\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\error\control_exceptions.cpp">
+      <Filter>Source Files\src\error</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\error\linalg_exception.cpp">
+      <Filter>Source Files\src\error</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_b.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_blk_impl.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_impl.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_process.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\block_arnoldi.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\krylov.cpp">
+      <Filter>Source Files\src\krylov</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\inv_22.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\iterative_refinement.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_object.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_decomp.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_ext.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_struct.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_update.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\make_linsolve_object.cpp">
+      <Filter>Source Files\src\linear_eq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\lusol\heap.cpp">
+      <Filter>Source Files\src\lusol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\lusol\lusol.cpp">
+      <Filter>Source Files\src\lusol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\utils\linalg_utils.cpp">
+      <Filter>Source Files\src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\utils\utils.cpp">
+      <Filter>Source Files\src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\matrix_functors.cpp">
+      <Filter>Source Files\src\special_matrices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\struct_flag_linalg.cpp">
+      <Filter>Source Files\src\special_matrices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\unitary_matrix.cpp">
+      <Filter>Source Files\src\special_matrices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\dm_decomposition.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\dmperm_pothen.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\graph_manip.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\max_match.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\maxmatch_weighted.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\metis.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\ordering.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\part_wrappers_utils.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\partitioning.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_wrapper.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\norms_error\cond.cpp">
+      <Filter>Source Files\src\norms_error</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\norms_error\norm.cpp">
+      <Filter>Source Files\src\norms_error</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\matcl_quern_solver.cpp">
+      <Filter>Source Files\src\decompositions\quern</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

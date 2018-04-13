@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\blas_ext.inl" />
+    <None Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\gemm2_NN.inl" />
+    <None Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\small_gemm.inl" />
+    <None Include="..\..\..\src\include\matcl-blas-ext\lapack_ext\lapack_impl.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\blas_ext.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\gesvdx.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\ggbal.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\gges.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\gghrd.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\hgeqz.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\qtriu2gschur.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\qtriu2schur.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen3.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen_cond.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen_helpers.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\trsen3.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\trsen_cond.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\laev2.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\lanv2.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\lanv2z.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\lasv2.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\gsg_orth.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\gs_orth.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\qrupdate.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\rotseq.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\chudl.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\chudu.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\gbtrs_rev.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getf2.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getf2r.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrfc.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrfr.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_cr.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_ll.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_rec.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_rl.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrs_rev.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\gttrs_rev.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\potfp2.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\potfp3.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\ptinorm.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\pttrs_rev.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\qtrtrs.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\tbtrs_rev.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\trtrs_rev.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\int2perm.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\laswpc.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\perm2int.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\utils.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\blas_concurrency.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\simple_thread_pool.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\task_group.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\thread_pool.cpp" />
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\workspace_pool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\blas_simd.h" />
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\givens_accumulator.h" />
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen_helpers.h" />
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\optim_params.h" />
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\utils.h" />
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\threads\simple_thread_pool.h" />
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\threads\thread_pool.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\blas_concurrency.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\config_blas_ext.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\lapack_ext\blas_ext.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\lapack_ext\lapack_ext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\matcl\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\matcl-blas-lapack\matcl-blas-lapack.vcxproj">
+      <Project>{74d44cad-93b5-4145-acd8-c9f1758d87f9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\matcl-blas-loader\matcl-blas-loader.vcxproj">
+      <Project>{b9e3f867-c8c0-4619-b796-743f3cae5122}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7AE55F62-33AB-4032-A58B-EF0F76CECFFD}</ProjectGuid>
+    <RootNamespace>symbolic</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BLAS_EXT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl-flapack-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BLAS_EXT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>matcl-flapack-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BLAS_EXT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <AdditionalDependencies>matcl-flapack-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BLAS_EXT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <AdditionalDependencies>matcl-flapack-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
