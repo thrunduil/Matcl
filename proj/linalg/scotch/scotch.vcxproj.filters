@@ -1,0 +1,1592 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e87eaf09-bd1b-4a03-b3c3-0d8abceb3529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\libscotch">
+      <UniqueIdentifier>{5f5c4125-5a0c-4d2c-84d4-95ec4ece20b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mpi">
+      <UniqueIdentifier>{4b0ec4ea-ab58-42a3-a4f0-837d97a0eade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\parmetis">
+      <UniqueIdentifier>{ee1cd690-6401-4a02-954e-bc0129c0c642}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\include\parmetis.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\include\ptscotch.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\include\ptscotchf.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\include\scotch.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\include\scotchf.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_build.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_cmplt.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_cmpltw.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_deco.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_dist.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_hcub.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_mesh.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_tleaf.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_torus.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_vcmplt.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_vhcub.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_bd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_df.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_ex.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_sq.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_zr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_bd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_df.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_ex.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_fm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_gg.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_gp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_zr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\comm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_file.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_file_compress.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_allreduce.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_band_grow.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_build.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_build_grid3d.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_coarsen.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_fold.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_fold_comm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_fold_dup.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_ghst.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_halo.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_io_load.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_match.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_redist.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dmapping.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_gather.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_perm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\fibo.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\gain.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\geom.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_coarsen.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_induce.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_habo.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_mmkt.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_scot.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_list.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_match.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hall_order_hd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hall_order_hf.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hall_order_hx.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_fold.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_nd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_si.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_sq.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_induce.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_bl.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_cp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_gp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_hd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_hf.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_hx.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_kp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_nd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_si.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_hgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_induce.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_bl.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_cp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_gp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_gr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_hd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_hf.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_hx.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_nd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_si.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_rb.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_rb_map.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_rb_part.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_band.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_bd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_cp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_df.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_ex.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_fm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_rb.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_rb_map.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_rb_part.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_stat.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dmapping.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_f.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_io.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_view.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mapping.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_order.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_pt.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_pt_f.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mapping.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mapping_io.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_coarsen.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_graph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_induce_sepa.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_io.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\module.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\order.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_ll.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_ly.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_yy.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\ptscotch.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\ptscotchf.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\scotch.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\scotch_config.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\scotchf.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_bd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_df.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_sq.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_zr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_bd.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_df.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_es.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_fm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_gg.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_gp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_th.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_vw.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_zr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_fm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_gg.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_gr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_zr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_fm.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_gg.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_gp.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_ml.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_rb.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_st.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_zr.h">
+      <Filter>Source Files\libscotch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\mpi\mpi_impl.h">
+      <Filter>Source Files\mpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\mpi\mpiuni.h">
+      <Filter>Source Files\mpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\metis.h">
+      <Filter>Source Files\parmetis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\parmetis.h">
+      <Filter>Source Files\parmetis</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_build.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_cmplt.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_cmpltw.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_deco.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_dist.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_hcub.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_mesh.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_tleaf.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_torus.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_vcmplt.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\arch_vhcub.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_bd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_df.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_ex.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_sq.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_bipart_zr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_gather_all.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bdgraph_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_bd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_df.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_ex.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_fm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_gg.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_gp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_bipart_zr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\bgraph_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\comm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_error.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_file.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_file_compress.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_file_uncompress.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_integer.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_memory.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_string.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_stub.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\common_thread.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_allreduce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_band.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_build.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_build_grid3d.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_build_hcub.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_coarsen.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_fold.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_fold_comm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_fold_dup.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_gather.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_gather_all.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_ghst.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_halo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_induce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_io_load.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_io_save.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_match.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_match_sync_coll.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_match_sync_ptop.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_redist.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_scatter.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_view.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dllmain.cpp">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dmapping.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dmapping_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_gather.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_io_block.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_io_tree.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_perm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dorder_tree_dist.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dummysizes.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\fibo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\gain.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\geom.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_band.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_base.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_coarsen.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_induce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_chac.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_habo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_mmkt.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_io_scot.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_list.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\graph_match.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hall_order_hd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hall_order_hf.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hall_order_hx.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_fold.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_gather.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_induce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_nd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_si.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_sq.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hdgraph_order_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_induce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_bl.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_cp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_gp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_hd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_hf.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_hx.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_kp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_nd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_si.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hgraph_order_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_hgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_induce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_mesh.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_bl.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_cp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_gp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_gr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_hd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_hf.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_hx.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_nd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_si.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\hmesh_order_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_gather.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_rb.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_rb_map.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_rb_part.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kdgraph_map_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_band.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_bd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_cp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_df.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_ex.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_fm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_rb.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_rb_map.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_rb_part.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_map_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\kgraph_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_arch.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_arch_build.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_arch_build_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_arch_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_common_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_band.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_band_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_build.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_build_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_build_grid3d.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_build_grid3d_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_check_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_coarsen.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_coarsen_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_gather.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_gather_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_grow.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_halo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_halo_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_induce.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_induce_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_io_load.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_io_load_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_io_save.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_io_save_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_map.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_map_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_map_view.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_map_view_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_gather.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_gather_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_io_block.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_io_block_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_io_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_perm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_perm_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_tree_dist.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_order_tree_dist_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_redist.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_redist_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_scatter.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_scatter_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_stat.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dgraph_stat_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dmapping.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_dorder.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_errcom.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_geom.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_geom_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_base.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_base_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_check_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_coarsen.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_coarsen_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_color.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_color_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_chac.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_chac_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_habo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_habo_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_mmkt.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_mmkt_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_scot.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_io_scot_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_io_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_view.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_map_view_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_order.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_order_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_part_ovl.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_graph_part_ovl_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mapping.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_memory.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_memory_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_graph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_graph_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_io_habo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_io_habo_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_io_scot.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_io_scot_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_order.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_mesh_order_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_order.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_parser.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_parser_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_random.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_random_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_strat.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_version.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\library_version_f.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mapping.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mapping_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_coarsen.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_graph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_induce_sepa.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_io_habo.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\mesh_io_scot.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\missing.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\order.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\order_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\order_io.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_ll.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_yy.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_gather_all.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_bd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_df.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_sq.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_separate_zr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vdgraph_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_bd.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_df.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_es.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_fm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_gg.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_gp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_th.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_vw.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_separate_zr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vgraph_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_fm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_gg.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_gr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_separate_zr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\vmesh_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_fm.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_gg.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_gp.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_ml.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_rb.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_st.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_part_zr.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\wgraph_store.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\mpi\mpi_uni.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\mpi\mpi_uni_time.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\metis_graph_order.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\metis_graph_order_f.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\metis_graph_part.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\metis_graph_part_f.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\parmetis_dgraph_order.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\parmetis_dgraph_order_f.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\parmetis_dgraph_part.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotchmetis\parmetis_dgraph_part_f.c">
+      <Filter>Source Files\parmetis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\dgraph_match_check.c">
+      <Filter>Source Files\libscotch</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\Makefile">
+      <Filter>Source Files\libscotch</Filter>
+    </None>
+    <None Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_ll.l">
+      <Filter>Source Files\libscotch</Filter>
+    </None>
+    <None Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\parser_yy.y">
+      <Filter>Source Files\libscotch</Filter>
+    </None>
+    <None Include="..\..\..\src\extern\scotch_6.0.4\src\libscotch\y.output">
+      <Filter>Source Files\libscotch</Filter>
+    </None>
+  </ItemGroup>
+</Project>

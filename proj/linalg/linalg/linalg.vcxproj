@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\balancing.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\chol.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\cholmod.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\eig_functions.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\givens.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\gschur.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\gschur_sym.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\hess.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\householder.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\ldl.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\lu.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\qr.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\schur.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\speigs.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\decompositions\svd.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\details\linalg_fwd.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\general\config_linalg.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\general\control_exceptions.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\general\linalg_exception.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\dm_decomposition.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\graph_manip.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\matcl_graph.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\metis.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\graph\scotch.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\krylov\arnoldi.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\krylov\block_arnoldi.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\krylov\krylov.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\linear_eq\linsolve.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\linear_eq\linsolve_object.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\matcl_linalg.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\norms_error\cond.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\norms_error\norm.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\options\options_linsolve.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\options\options_speigs.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\special_matrices\matrix_functors.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\special_matrices\struct_flag_linalg.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\special_matrices\unitary_matrix.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-linalg\utils\utils.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_matrix.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_options.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\cholmod\pstrf.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\chol_impl.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\chol_rr_impl.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\chol_update.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\arpack_wrapper.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_range.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_utils.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\eig\svd_range.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\givens_q.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\householder_q.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_impl.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_struct.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_superlu.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\qr_band.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\qr_utils.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\include\quern.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\include\quern_list.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\matcl_quern_solver.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\decompositions\quern\quern_unitary_mat_mult.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\krylov\arnoldi_blk_impl.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\krylov\arnoldi_impl.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\krylov\arnoldi_process.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\iterative_refinement.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_decomp.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_ext.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_struct.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\commonlib.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\heap.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\lusol.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\lusol\myblas.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\dmperm_pothen.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\maxmatch_weighted.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\part_wrappers_utils.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\ordering\scotch_wrapper.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\utils\linalg_utils.h" />
+    <ClInclude Include="..\..\..\src\matcl-linalg\utils\optim_params.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\include\matcl-linalg\details\givens.inl" />
+    <None Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod.inl" />
+    <None Include="..\..\..\src\matcl-linalg\decompositions\cholmod\pstrf.inl" />
+    <None Include="..\..\..\src\matcl-linalg\decompositions\cholmod_impl.inl" />
+    <None Include="..\..\..\src\matcl-linalg\decompositions\quern\README" />
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_general.inl" />
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_qtriang.inl" />
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_sparse.inl" />
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_triang.inl" />
+    <None Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_utils.inl" />
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol1.inl" />
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol6a.inl" />
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol7a.inl" />
+    <None Include="..\..\..\src\matcl-linalg\lusol\lusol8a.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\src\include\matcl-linalg\matcl_linalg_extern.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\balancing.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\chol.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\cholmod.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_instantiate.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\cholmod\cholmod_options.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\arpack_wrapper.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\eig_22.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\eig_functions.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\gschur.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\gschur_sym.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\schur.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_range.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\schur_utils.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\speigs.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\svd_22.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\eig\svd_range.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\givens.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\givens_q.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\hess.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\householder.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\householder_q.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\ldl.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_band.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_dense.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_sparse.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_struct.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\lu\lu_superlu.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr_band.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr_givens.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\qr_update.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\matcl_quern_solver.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\quern_unitary_mat_mult.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\src\quern_factorization.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\src\quern_order.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\svd.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\error\control_exceptions.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\error\linalg_exception.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_b.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_blk_impl.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_impl.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\arnoldi_process.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\block_arnoldi.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\krylov\krylov.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\inv_22.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\iterative_refinement.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_object.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_decomp.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_ext.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_struct.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_update.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\make_linsolve_object.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\lusol\heap.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\lusol\lusol.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\norms_error\cond.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\norms_error\norm.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\dmperm_pothen.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\dm_decomposition.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\graph_manip.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\maxmatch_weighted.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\max_match.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\metis.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\ordering.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\partitioning.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\part_wrappers_utils.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_wrapper.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\matrix_functors.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\struct_flag_linalg.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\unitary_matrix.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\utils\linalg_utils.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\utils\utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\blas\matcl-blas-ext\matcl-blas-ext.vcxproj">
+      <Project>{7ae55f62-33ab-4032-a58b-ef0f76cecffd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\blas\matcl-blas-lapack\matcl-blas-lapack.vcxproj">
+      <Project>{74d44cad-93b5-4145-acd8-c9f1758d87f9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\blas\matcl-blas-loader\matcl-blas-loader.vcxproj">
+      <Project>{b9e3f867-c8c0-4619-b796-743f3cae5122}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl\matcl-core\matcl-core.vcxproj">
+      <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl\matcl-dynamic\matcl-dynamic.vcxproj">
+      <Project>{87be42f1-96bb-43d6-a8a8-9b5d8510bfe8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl\matcl-matfunc\matcl-matfunc.vcxproj">
+      <Project>{f863ddb6-ffb2-4be8-8199-ca646ca9fa3c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl\matcl-matmult\matcl-matmult.vcxproj">
+      <Project>{4e316dbe-2750-4715-91d5-5400e0e121a9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl\matcl-matrep\matcl-matrep.vcxproj">
+      <Project>{2f6e3154-4009-4ffd-bb2a-cabad05de68b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\matcl\matcl-scalar\matcl-scalar.vcxproj">
+      <Project>{16dbdfff-845b-4087-b27b-b39631d7f63e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\cholmod\cholmod.vcxproj">
+      <Project>{7c67504d-6d43-437f-8b24-c4c77da5f97f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\scotch\scotch.vcxproj">
+      <Project>{5422e726-c717-4406-8979-ee59a8d9c51c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\superlu\superlu.vcxproj">
+      <Project>{22b06b51-c81d-4348-beee-681e7ca536e5}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2A3C5CB0-D520-4699-B114-17709FFCCA46}</ProjectGuid>
+    <RootNamespace>symbolic</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\scotch_6.0.4\src\libscotch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_LINALG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\scotch_6.0.4\src\libscotch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_LINALG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\scotch_6.0.4\src\libscotch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_LINALG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\scotch_6.0.4\src\libscotch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_LINALG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
