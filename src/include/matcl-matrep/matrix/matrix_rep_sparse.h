@@ -580,7 +580,7 @@ class MATCL_MATREP_EXPORT sparse_matrix<T,false> : public sparse_matrix<T,true>
         // default constructor create 1x1 matrix with zero scalar
         sparse_matrix();
 
-        // convert general matrix to sparsr_matrix; if mat is not dense, then
+        // convert general matrix to sparse_matrix; if mat is not sparse, then
         // conversions take place; this make matrix 'mat' unique, therefore copying
         // can happen; one cannot call any non const functions on 'mat' until this object
         // is destroyed
