@@ -63,6 +63,12 @@ d_type  get_density(const V* mat, const i_type n);
 
 class matrix_lock;
 
+template<class V>
+bool is_equal(const V& a, const V& b)
+{
+    return a == b;
+};
+
 //not shared between threads
 class access
 {

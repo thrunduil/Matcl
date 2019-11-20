@@ -167,7 +167,9 @@ class_name_parser::string_map class_name_parser::init_table()
     ret[typeid(Complex).name()]             = "Complex";
     ret[typeid(Float_complex).name()]       = "Float_complex";
     ret[typeid(object).name()]              = "Template";
-    ret[typeid(Matrix).name()]              = "Matrix";
+
+    //TODO:
+    //ret[typeid(Matrix).name()]              = "Matrix";
 
     return ret;
 };

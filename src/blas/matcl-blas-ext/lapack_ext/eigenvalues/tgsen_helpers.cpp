@@ -21,6 +21,8 @@
 #include "tgsen_helpers.h"
 #include <iostream>
 
+#include <cassert>
+
 namespace matcl { namespace lapack
 {
 

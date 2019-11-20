@@ -47,8 +47,58 @@ static void break_func()
 #include <iostream>
 #include <sstream>
 
+#include "matcl-scalar/lib_functions/func_forwarding.h"
+
+template<int N, class ... Args>
+struct get_elem
+{};
+
+template<class T, class ... Args>
+struct get_elem<0, T, Args ...>
+{
+    using type = T;
+};
+
+template<class T1, class T2, class ... Args>
+struct get_elem<1, T1, T2, Args ...>
+{
+    using type = T2;
+};
+
+template<int N, class T, class ... Args>
+struct get_elem<N, T, Args ...>
+{
+    using type = typename get_elem<N-1, Args...>::type;
+};
+
+template<class ... Args, 
+    class S1 = typename get_elem<0, Args ...>::type,
+    class S2 = typename get_elem<1, Args ...>::type,
+    class Enable = typename md::enable_if_external_scalar2<S1,S2,sizeof...(Args) == 2>::type,
+    class Res = typename result_of::result_of_plus<S1, S2>::type>
+Res
+test1(const Args& ...)
+{ 
+    return Res(); 
+};
+
+template<class S1, class S2, 
+    class Enable = typename md::enable_if_external_scalar2<S1,S2,1>::type>
+typename result_of::result_of_plus<S1, S2>::type
+test1(const S1& x, const S2& y, int = 0)
+{ 
+    return x + y; 
+};
+
 int main(int argc, const char* argv[])
 {
+    {
+        mp_int x(1);
+        mp_int y(1);
+
+        mp_int res = test1(x, y);
+    };
+
     (void)argc;
     (void)argv;
 

@@ -37,9 +37,9 @@ struct MATCL_MATREP_EXPORT register_serialization_impl
 
     // base_class_name is only used internally, can be given by typeid
     static ptr_type*    get_registered(const std::string& unique_id, 
-                            const char* base_class_name);
+                            const type_info& base_class_name);
     static void         make_register(const std::string& unique_id, 
-                            const char* base_class_name, ptr_type* ptr);
+                            const type_info& base_class_name, ptr_type* ptr);
 };
 
 }};
@@ -83,7 +83,7 @@ serialization_helper<Base_class>::get_impl(const std::string& unique_id)
 {
     using ptr_type  = serialization_helper_base;
     ptr_type* ptr   = details::register_serialization_impl
-                        ::get_registered(unique_id, typeid(Base_class).name());
+                        ::get_registered(unique_id, typeid(Base_class));
 
 
     using helper_type = serialization_helper<Base_class>;
@@ -140,7 +140,7 @@ serialization_helper<Base>*
     using ptr_type      = serialization_helper_base;
 
     ptr_type* helper    = details::register_serialization_impl
-                            ::get_registered(unique_name, typeid(Base).name());
+                            ::get_registered(unique_name, typeid(Base));
 
     if (helper != nullptr)
     {
@@ -155,7 +155,7 @@ serialization_helper<Base>*
     helper_type* ret = new serialization_helper_impl<Base,Derived>(unique_name);
 
     details::register_serialization_impl
-            ::make_register(unique_name, typeid(Base).name(), ret);
+            ::make_register(unique_name, typeid(Base), ret);
 
     return ret;
 };

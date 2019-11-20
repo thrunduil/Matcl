@@ -52,22 +52,33 @@ class test_matfunc
 
         void make()
         {   
-            /*
-            Integer code = 2911;
+            Integer code = 154;
             Matrix mat = tf.get_matrix(code);
             matcl::disp(mat);
+	
+            Matrix res1     = mat * ctrans(mat);
+            Matrix res2     = herprod(mat, false);
 
-            Matrix res1 = mat * trans(mat);
-            Matrix res2 = symprod(mat, false);
+            Matrix res3     = ctrans(mat) * mat;
+            Matrix res4     = herprod(mat, true);
 
-            Matrix res3 = trans(mat) * mat;
-            Matrix res4 = symprod(mat, true);
+            Real dif1		= norm_1(res1 - res2);
+            Real dif2		= norm_1(res3 - res4);
 
-            Real dif1	= norm_1(res1 - res2);
-            Real dif2	= norm_1(res3 - res4);
-
+            disp(res2);
             disp(res4);
-            */
+
+            Real n_A        = norm(res4, 1);
+            disp(n_A);
+
+            check_struct(res2);
+            check_struct(res4);
+
+            Real dif        = dif1 + dif2;
+            Real tol        = matcl::norm_1(mat);
+
+            if (dif < 10.0 * mat.numel() * tol * tol * constants::eps(mat.get_value_code()))
+                dif         = 0.;
 
             tf.make(opts);
         };

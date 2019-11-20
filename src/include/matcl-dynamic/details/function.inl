@@ -60,14 +60,15 @@ inline function::function(evaler* ev)
 
 template<class ... Object>
 force_inline 
-void eval_function::eval(const function_name& func, object& ret, Object&& ... args)
+void eval_function::eval(const function_name& func, object& ret, Object&& ... in_args)
 {
-    Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
-    const object* args[]    = {(const object*)&args...};
-    static const int n_args = sizeof...(Object);
+    static const int n      = sizeof...(Object);
 
-    using evaler            = typename details::select_evaler<n_args>::type;
-    evaler::eval(func, ret, types, args, n_args);
+    const object* args[n]   = {(const object*)(&in_args) ... };
+    Type types[n]           = {details::get_arg_type_eval<Object>::eval(in_args) ... };    
+
+    using evaler            = typename details::select_evaler<n>::type;
+    evaler::eval(func, ret, types, args, n);
 };
 
 force_inline
@@ -85,10 +86,10 @@ inline eval_function_template::eval_function_template(std::initializer_list<Type
 
 template<class ... Object>
 force_inline
-void eval_function_template::eval(const function_name& func, object& ret, Object&& ... args)
+void eval_function_template::eval(const function_name& func, object& ret, Object&& ... in_args)
 {
-    Type types[]            = {details::get_arg_type_eval<Object>::eval(args) ... };
-    const object* args[]    = {(const object*)&args...};
+    Type types[]            = {details::get_arg_type_eval<Object>::eval(in_args) ... };
+    const object* args[]    = {(const object*)&in_args...};
     int n_args              = sizeof...(Object);
 
     eval_impl(func, ret, types, args, n_args);

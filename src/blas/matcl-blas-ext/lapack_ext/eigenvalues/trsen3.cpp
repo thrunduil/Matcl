@@ -24,7 +24,9 @@
 #include "matcl-blas-lapack/blas/config_blas.h"
 #include "tgsen_helpers.h"
 #include "blas/matcl-blas-ext/lapack_ext/utils/optim_params.h"
+
 #include <vector>
+#include <cassert>
 
 namespace matcl { namespace lapack
 {
@@ -94,8 +96,9 @@ bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_
     if (BS > 1)
     {
         //complex eigenvalues cannot be split
-        assert2(t[BS - 1 + (BS - 2)*ldt] == 0);
+        assert2(is_equal(t[BS - 1 + (BS - 2)*ldt], V(0)) == true);
     };
+
     i_type BS_save      = BS;
 
     V* work_test        = work + LWMIN;
@@ -242,7 +245,7 @@ bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_
         if (BS > 1)
         {
             //complex eigenvalues cannot be split
-            assert2(t[BS - 1 + (BS - 2)*ldt] == 0);
+            assert2(is_equal(t[BS - 1 + (BS - 2)*ldt], V(0)) == true);
         };
 
         assert2(BS + n_eigs >= BS_save);
@@ -250,7 +253,7 @@ bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_
         assert2(sel_vec[BS-1] == 0);
     };
 
-    assert2(work_test[0] == MAGIC_NUMBER);
+    assert2(is_equal(work_test[0], V(MAGIC_NUMBER)) == true);
 
     return true;
 };

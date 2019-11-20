@@ -37,7 +37,7 @@ namespace details
     struct MATCL_MATREP_EXPORT struct_flag_register_impl
     {
         using ptr_type = std::shared_ptr<user_flag_config>;
-        static const size_t* get_code(const ptr_type&, const char* cl_name);
+        static const size_t* get_code(const ptr_type&, const type_info& cl_name);
     };
 
     template<class User_struct>
@@ -494,7 +494,7 @@ namespace details
     const size_t* struct_flag_register<User_struct>::code
         = struct_flag_register_impl
             ::get_code(struct_flag_register_impl::ptr_type(new User_struct()),
-                        typeid(User_struct).name());
+                        typeid(User_struct));
 };
 
 };

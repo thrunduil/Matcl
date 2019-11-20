@@ -30,17 +30,16 @@ namespace matcl { namespace dynamic { namespace details
 template<class T> 
 std::string mark_type<T>::name() const
 { 
-    return details::register_object_helper::get_name(typeid(T).name()); 
+    return details::register_object_helper::get_name(typeid(T)); 
 };
 
 template<class T>
 details::register_object_helper 
-register_object<T>::g_hook(typeid(T).name(), details::register_object_helper::create_data<T>);
+register_object<T>::g_hook(typeid(T), details::register_object_helper::create_data<T>);
 
 template<class T> 
 Type mark_type<T>::get() const
 {    
-    //static Type ti( register_object<T>::g_hook.get_object(typeid(T).name()) );
     return register_object<T>::g_hook.get_type();
 };
 

@@ -72,7 +72,12 @@
 
 // when this macro is set to 1, then memory debugging and leak detection
 // is enabled
-#ifdef _DEBUG
+
+#ifndef MATCL_DEBUG
+    #define MATCL_DEBUG         0
+#endif
+
+#if MATCL_DEBUG
     #define MATCL_DEBUG_MEMORY  1
 #else
     #define MATCL_DEBUG_MEMORY  0

@@ -60,7 +60,8 @@ Name: {app}\{#ver}\uninstall; Attribs: hidden;
 Source: "matcl_ico.ico"; DestDir: "{app}"
 
 ; include files
-Source: "..\src\include\*.*"; DestDir: "{app}\{#ver}\include";
+Source: "configs\matcl_config_release.h"; DestDir: "{app}\{#ver}\include\"; DestName: "matcl_config.h";
+
 Source: "..\src\include\matcl-core\*"; DestDir: "{app}\{#ver}\include\matcl-core"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\src\include\matcl-dynamic\*"; DestDir: "{app}\{#ver}\include\matcl-dynamic"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\src\include\matcl-file\*"; DestDir: "{app}\{#ver}\include\matcl-file"; Flags: ignoreversion createallsubdirs recursesubdirs

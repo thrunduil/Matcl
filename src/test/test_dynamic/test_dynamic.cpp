@@ -3202,6 +3202,7 @@ void test_dynamic::test_compile_func_unary_str()
     neg(val);    
     is_false(val);
     is_true(val);
+
     T y = +val;
 };
 

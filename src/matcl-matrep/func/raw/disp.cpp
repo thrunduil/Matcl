@@ -35,6 +35,8 @@
 #include "matcl-matrep/IO/matrix_io.h"
 #include "matcl-scalar/IO/scalar_io.h"
 
+#include <set>
+
 #pragma warning(push) 
 #pragma warning(disable:4702) //unreachable code
 
