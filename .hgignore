@@ -25,3 +25,5 @@ Win32/*
 x64/*
 *.suo
 *.exe
+*.user
+*.log
