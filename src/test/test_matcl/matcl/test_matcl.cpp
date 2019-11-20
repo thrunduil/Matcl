@@ -48,7 +48,8 @@ int main(int argc, const char* argv[])
     test::test_setups(argc, argv);
 
     #ifdef WIN64
-        std::string plugin_name  = "matcl-openblas-plugin-x64-Release.dll";
+        //std::string plugin_name  = "matcl-openblas-plugin-x64-Release.dll";
+        std::string plugin_name  = "matcl-clapack-plugin-x64-Release.dll";
         //std::string plugin_name  = "matcl-mkl-plugin-x64-Release.dll";
     #else
         //std::string plugin_name  = "matcl-clapack-plugin-Win32-Release.dll";
@@ -59,7 +60,7 @@ int main(int argc, const char* argv[])
     matcl::lapack::load_blas_plugin(plugin_name);
     matcl::lapack::initialize_plugin();
 
-    //test::test_selector().add_selection(3,"test_powm1()");
+    test::test_selector().add_selection(3,"test_herprod()");
     
     //test::test_selector().add_selection(4,"utils");
     //test::test_selector().add_selection(4,"matgen");

@@ -87,11 +87,6 @@ MATCL_MATMULT_EXPORT Matrix mmul(Matrix&& A, Matrix&& B,
                                  trans_type t_A = trans_type::no_trans,
                                  trans_type t_B = trans_type::no_trans);
 
-// matrix multiplication x * y
-template<class S1, class S2, class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
-typename md::unify_types_promote<S1,S2>::type
-                            mmul(const S1& x, const S2& y);
-
 // matrix multiplication perform op(A) x op(B), where A and B are matrices
 // or scalars of conforming sizes and
 // op(X) = X                               if trans_type is no_trans
@@ -114,11 +109,6 @@ inline Matrix               operator*(const Matrix& A, const Matrix& B)    {retu
 inline Matrix               operator*(Matrix&& A, const Matrix& B)         {return mmul(std::move(A),B); };
 inline Matrix               operator*(const Matrix& A, Matrix&& B)         {return mmul(A,std::move(B)); };
 inline Matrix               operator*(Matrix&& A, Matrix&& B)              {return mmul(std::move(A),std::move(B)); };
-
-// multiplication x * y; equivalent to mmul function
-template<class S1, class S2, class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
-typename md::unify_types_promote<S1,S2>::type
-                            operator*(const S1& x, const S2& y);
 
 // evaluate C = alpha * trans(A, t_A) * trans(B, t_B) + beta * C
 // alpha and beta must be scalars
@@ -194,11 +184,6 @@ MATCL_MATMULT_EXPORT Matrix kron(const Matrix& A, const Matrix& B);
 MATCL_MATMULT_EXPORT Matrix kron(Matrix&& A, const Matrix& B);
 MATCL_MATMULT_EXPORT Matrix kron(const Matrix& A, Matrix&& B);
 MATCL_MATMULT_EXPORT Matrix kron(Matrix&& A, Matrix&& B);
-
-// for scalars the kron function is equivalent to mul
-template<class S1, class S2, class Enable = typename md::enable_if_scalar2_ntobj<S1,S2,void>::type>
-typename md::unify_types_promote<S1,S2>::type
-                            kron(const S1& x, const S2& y);
 
 };
 

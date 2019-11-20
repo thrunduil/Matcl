@@ -1178,15 +1178,12 @@ Ret dynamic::neg(const object_type<T>& a)
     return matcl::unqualified_call::eval_neg<Ret,T>::eval(a.get());
 };
 
+// cast to boolean value; equivalent to cast_bool
 template<class T, class Ret>
 Ret dynamic::is_true(const object_type<T>& a)
 {
     return matcl::unqualified_call::eval_is_true<Ret,T>::eval(a.get());
 };
-
-// cast to boolean value; equivalent to cast_bool
-template<class T, class Res = typename result_of::result_of_op_true<T>::type_object>
-Res                     is_true(const object_type<T>& x);
 
 template<class T, class Enable>
 fp_type dynamic::fpclassify(const object_type<T>& a)

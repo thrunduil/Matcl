@@ -22,3 +22,9 @@
 
 // version number: 1.0.1
 #define MATCL_VERSION 010001
+
+#ifdef _DEBUG
+    #define MATCL_DEBUG  1
+#else
+    #define MATCL_DEBUG  0
+#endif

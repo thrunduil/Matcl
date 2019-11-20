@@ -23,3 +23,5 @@ src_quadprog/*
 *.o
 Win32/*
 x64/*
+*.suo
+*.exe

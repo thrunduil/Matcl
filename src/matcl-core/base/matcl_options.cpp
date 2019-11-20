@@ -62,45 +62,6 @@ void option::help(const disp_stream_ptr& ds,const options& disp_options) const
     m_impl->help(ds,*this,disp_options);
 };
 
-static std::string replace_all(std::string source, const std::string& from, const std::string& to )
-{
-    std::string new_string;
-    new_string.reserve( source.length() );  // avoids a few memory allocations
-
-    std::string::size_type last_pos = 0;
-    std::string::size_type find_pos;
-
-    while( std::string::npos != ( find_pos = source.find( from, last_pos )))
-    {
-        new_string.append( source, last_pos, find_pos - last_pos );
-        new_string += to;
-        last_pos = find_pos + from.length();
-    }
-
-    // Care for the rest after last occurrence
-    new_string += source.substr( last_pos );
-
-    return new_string;
-}
-
-std::string option::make_name(const std::string& type_name)
-{
-    if (type_name[0] == 'c')
-    {
-        //class ***
-        return replace_all(type_name.substr(6), "::", ".");
-    }
-    else if (type_name[0] == 's')
-    {
-        //struct ***
-        return replace_all(type_name.substr(7),"::",".");
-    }
-    else
-    {
-        return replace_all(type_name,"::",".");
-    };
-};
-
 void option::error_invalid_option_type(const std::string& get_type) const
 {
     throw error::invalid_option_type(name(), get_type, this->get_option_type());

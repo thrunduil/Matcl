@@ -156,9 +156,9 @@ void registered_user_flags::get_registered_vis(Integer& N, const size_t* const*&
 };
 
 const size_t* struct_flag_register_impl::get_code(const std::shared_ptr<user_flag_config>& conf,
-                                           const char* cl_name)
+                                           const type_info& cl_name)
 {
-    return registered_user_flags::get()->make_register(conf, cl_name);
+    return registered_user_flags::get()->make_register(conf, cl_name.name());
 };
 
 static inline 

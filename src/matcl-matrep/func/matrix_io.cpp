@@ -29,6 +29,7 @@
 
 #include <iomanip>
 #include "boost/io/ios_state.hpp"
+#include "boost/archive/impl/archive_serializer_map.ipp"
 
 #pragma warning (disable: 4127)
 

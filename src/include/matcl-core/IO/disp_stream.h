@@ -24,6 +24,7 @@
 #include "matcl-core/matrix/enums.h"
 #include "matcl-core/IO/output_stream.h"
 
+#include <functional>
 #include <string>
 #include <iosfwd>
 #include <vector>

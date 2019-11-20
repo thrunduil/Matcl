@@ -165,7 +165,9 @@
     <ClCompile Include="..\..\..\src\matcl-linalg\krylov\krylov.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\inv_22.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\iterative_refinement.cpp" />
-    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_object.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_decomp.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\linear_eq\linsolve_objects_ext.cpp" />
@@ -243,24 +245,24 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

@@ -3,7 +3,7 @@ external libraries:
     1.  BOOST
         - licence: boost
         - source: http://www.boost.org/
-        - version: 1.65.1
+        - version: 1.71.0
     2.  EOS Portable Archive: extension of boost::serialization library
         - author: Christian Pfligersdorffer
         - licence: boost

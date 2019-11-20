@@ -30,16 +30,115 @@
 
 namespace matcl { namespace details
 {
+
+//-----------------------------------------------------------------------------------
+//                              option_name
+//-----------------------------------------------------------------------------------
+
+option_name::option_name()
+    :m_info(nullptr), m_initialized(false)
+{};
+
+option_name::option_name(const type_info& ti)
+    :m_info(&ti), m_initialized(false)
+{};
+
+const std::string& option_name::name()
+{
+    if (m_initialized == false)
+        initialize();
+
+    return m_name;
+}
+
+void option_name::initialize()
+{
+    // name cannot be created during static initialization
+    // the problem is, that type_info need not be properly initialized at this stage
+
+    std::unique_lock<mutex_type> lock(m_mutex);
+
+    m_name = make_name(m_info);
+    m_initialized = true;
+}
+
+static std::string replace_all(std::string source, const std::string& from, const std::string& to )
+{
+    std::string new_string;
+    new_string.reserve( source.length() );  // avoids a few memory allocations
+
+    std::string::size_type last_pos = 0;
+    std::string::size_type find_pos;
+
+    while( std::string::npos != ( find_pos = source.find( from, last_pos )))
+    {
+        new_string.append( source, last_pos, find_pos - last_pos );
+        new_string += to;
+        last_pos = find_pos + from.length();
+    }
+
+    // Care for the rest after last occurrence
+    new_string += source.substr( last_pos );
+
+    return new_string;
+}
+
+std::string option_name::make_name(const type_info* ti)
+{
+    if (ti == nullptr)
+        return std::string();
+
+    const char* type_name_c = ti->name();
+
+    if (type_name_c == nullptr)
+        return std::string();
+
+    std::string type_name = std::string(type_name_c);
+
+    if (type_name[0] == 'c')
+    {
+        //class ***
+        return replace_all(type_name.substr(6), "::", ".");
+    }
+    else if (type_name[0] == 's')
+    {
+        //struct ***
+        return replace_all(type_name.substr(7),"::",".");
+    }
+    else
+    {
+        return replace_all(type_name,"::",".");
+    };
+}
+
 //-----------------------------------------------------------------------------------
 //                              option_impl
 //-----------------------------------------------------------------------------------
-std::string option_impl::pretty_type_name(const std::string& type_name)
+std::string option_impl::pretty_type_name(const type_info& ti)
 {
     const char* str_name    = typeid(std::string).name();
+    const char* type_name   = ti.name();
+
     if (type_name == str_name)
         return "string";
+
+    if (strcmp(type_name, str_name) == 0)
+        return "string";
     else
-        return type_name;
+        return type_name == nullptr? std::string() : std::string(type_name);
+};
+
+//-----------------------------------------------------------------------------------
+//                              lazy_options_map
+//-----------------------------------------------------------------------------------
+
+struct lazy_options_map
+{
+    using option_map    = std::map<std::string, option>;    
+    using options_vec   = std::vector<option>;
+
+    option_map      m_options_predefined;
+    options_vec     m_options_to_register;
 };
 
 //-----------------------------------------------------------------------------------
@@ -56,28 +155,54 @@ options_impl::options_impl()
 {};
 options_impl::~options_impl()
 {};
-options_impl::option_map& options_impl::get_options_predefined()
+
+static
+lazy_options_map& get_lazy_options_map()
 {
-    static option_map m_options_predefined;
+    static lazy_options_map m_options_predefined;
     return m_options_predefined;
 };
+
+options_impl::option_map& options_impl::get_options_predefined()
+{
+    return get_lazy_options_map().m_options_predefined;
+};
+
 void options_impl::error_unregistered_option(const std::string& opt_name)
 {
     std::ostringstream os;    
     throw error::option_unregistered(opt_name);
 }
+
 void details::options_impl::register_option(const option& opt)
 {
     std::unique_lock<mutex_type> lock(get_mutex_global());
 
-    const std::string& option_name = opt.name();
+    get_lazy_options_map().m_options_to_register.push_back(opt);
+};
 
-    auto pos = get_options_predefined().find(option_name);
+void details::options_impl::initialize_predefined()
+{
+    // protected by get_mutex_global()
 
-    if (pos == get_options_predefined().end())
-        get_options_predefined().insert(pos, option_map::value_type(option_name, opt));
-    else
-        pos->second = opt;
+    if (get_lazy_options_map().m_options_to_register.size() == 0)
+        return;
+
+    option_map& map = get_options_predefined();
+
+    for (const auto& opt : get_lazy_options_map().m_options_to_register)
+    {
+        const std::string& option_name = opt.name();
+
+        auto pos = map.find(option_name);
+
+        if (pos == map.end())
+            map.insert(pos, option_map::value_type(option_name, opt));
+        else
+            pos->second = opt;
+    }
+
+    get_lazy_options_map().m_options_to_register.clear();
 };
 
 void options_impl::set(const option& option_value)
@@ -93,6 +218,7 @@ void options_impl::set(const option& option_value)
     else
         pos->second = option_value;
 };
+
 void options_impl::remove(const option& option_value)
 {
     std::unique_lock<mutex_type> lock(m_mutex_local);
@@ -106,6 +232,7 @@ void options_impl::remove(const option& option_value)
     else
         m_options.erase(pos);
 };
+
 void options_impl::set(const options_impl& other)
 {
     for (auto pos = other.m_options.begin(); pos != other.m_options.end(); ++pos)
@@ -518,7 +645,11 @@ void options_impl::help(const disp_stream_ptr& ds, const options& disp_options_0
 {
     //this lock creates deadlock, if help is called after global
     //initialization, then everything should be ok.
-    //std::unique_lock<mutex_type> lock(m_mutex_global);
+
+    {
+        std::unique_lock<mutex_type> lock(get_mutex_global());
+        initialize_predefined();
+    }
 
     disp_map dm(get_options_predefined(), true);
 

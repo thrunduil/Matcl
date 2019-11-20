@@ -27,6 +27,7 @@
 #include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
 
 #include <vector>
+#include <cassert>
 
 namespace matcl { namespace lapack
 {
@@ -204,7 +205,7 @@ bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_
     if (BS > 1)
     {
         //complex eigenvalues cannot be split
-        assert2(a[BS - 1 + (BS - 2)*lda] == 0);
+        assert2(is_equal(a[BS - 1 + (BS - 2)*lda], V(0)) == true);
     };
     i_type BS_save      = BS;
 
@@ -419,7 +420,7 @@ bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_
         if (BS > 1)
         {
             //complex eigenvalues cannot be split
-            assert2(a[BS - 1 + (BS - 2)*lda] == 0);
+            assert2(is_equal(a[BS - 1 + (BS - 2)*lda], V(0)) == true);
         };
 
         assert2(BS + n_eigs >= BS_save);
@@ -429,7 +430,7 @@ bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_
 
   lab_exit:
 
-    assert2(work_test[0] == MAGIC_NUMBER);
+    assert2(is_equal(work_test[0], V(MAGIC_NUMBER)) == true);
 
     return success;
 };
