@@ -595,7 +595,7 @@ extern "C"
         return ml::plugin_manager::plugin()->izamax_fptr(n, zx, incx);
     }
 
-    d_type_wr sasum_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx)
+    s_type_ret_wr sasum_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->sasum_fptr(n, sx, incx);
@@ -608,19 +608,19 @@ extern "C"
         return ml::plugin_manager::plugin()->saxpy_fptr(n, sa, sx, incx, sy, incy);
     }
 
-    d_type_wr scabs1_(c_type_wr *z__)
+    s_type_ret_wr scabs1_(c_type_wr *z__)
     {
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->scabs1_fptr(z__);
     }
     
-    d_type_wr scasum_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx)
+    s_type_ret_wr scasum_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->scasum_fptr(n, cx, incx);
     }
     
-    d_type_wr scnrm2_(i_type_wr *n, c_type_wr *x, i_type_wr *incx)
+    s_type_ret_wr scnrm2_(i_type_wr *n, c_type_wr *x, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->scnrm2_fptr(n, x, incx);
@@ -632,13 +632,13 @@ extern "C"
         return ml::plugin_manager::plugin()->scopy_fptr(n, sx, incx, sy, incy);
     }
     
-    s_type_wr sdot_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
+    s_type_ret_wr sdot_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->sdot_fptr(n, sx, incx, sy, incy);
     }
     
-    d_type_wr sdsdot_(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
+    s_type_ret_wr sdsdot_(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
     {
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->sdsdot_fptr(n, sb, sx, incx, sy, incy);
@@ -674,7 +674,7 @@ extern "C"
         return ml::plugin_manager::plugin()->sger_fptr(m, n, alpha, x, incx, y, incy, a, lda);
     }
 
-    d_type_wr snrm2_(i_type_wr *n, s_type_wr *x, i_type_wr *incx)
+    s_type_ret_wr snrm2_(i_type_wr *n, s_type_wr *x, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->snrm2_fptr(n, x, incx);

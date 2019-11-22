@@ -26,6 +26,7 @@
 
 #include "matcl-linalg/matcl_linalg.h"
 #include "matcl-blas-lapack/blas/blas.h"
+#include "matcl-blas-lapack/blas_loader/blas_loader.h"
 
 #include <iostream>
 
@@ -48,8 +49,8 @@ int main(int argc, const char* argv[])
     test::test_setups(argc, argv);
 
     #ifdef WIN64
-        //std::string plugin_name  = "matcl-openblas-plugin-x64-Release.dll";
-        std::string plugin_name  = "matcl-clapack-plugin-x64-Release.dll";
+        std::string plugin_name  = "matcl-openblas-plugin-x64-Release.dll";
+        //std::string plugin_name  = "matcl-clapack-plugin-x64-Release.dll";
         //std::string plugin_name  = "matcl-mkl-plugin-x64-Release.dll";
     #else
         //std::string plugin_name  = "matcl-clapack-plugin-Win32-Release.dll";
@@ -57,10 +58,11 @@ int main(int argc, const char* argv[])
         //std::string plugin_name  = "matcl-mkl-plugin-Win32-Release.dll";
     #endif
 
-    matcl::lapack::load_blas_plugin(plugin_name);
-    matcl::lapack::initialize_plugin();
+    //matcl::lapack::load_blas_plugin(plugin_name);
+    //matcl::lapack::initialize_plugin();
+    //raw_blas_lapack::set_num_threads_blas_kernel(1);
 
-    test::test_selector().add_selection(3,"test_herprod()");
+    //test::test_selector().add_selection(3,"test_herprod()");
     
     //test::test_selector().add_selection(4,"utils");
     //test::test_selector().add_selection(4,"matgen");

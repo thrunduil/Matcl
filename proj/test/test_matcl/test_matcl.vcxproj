@@ -22,6 +22,9 @@
     <ProjectReference Include="..\..\blas\matcl-blas-lapack\matcl-blas-lapack.vcxproj">
       <Project>{74d44cad-93b5-4145-acd8-c9f1758d87f9}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\blas\matcl-blas-loader\matcl-blas-loader.vcxproj">
+      <Project>{b9e3f867-c8c0-4619-b796-743f3cae5122}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\matcl\matcl-core\matcl-core.vcxproj">
       <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
     </ProjectReference>
