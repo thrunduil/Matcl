@@ -171,38 +171,28 @@ std::string blas_config::normalize_path(const std::string& path_in)
     return p.string();
 };
 
-#ifndef __unix__
+#include <Windows.h>
 
-    #include <Windows.h>
+extern "C" IMAGE_DOS_HEADER __ImageBase;
 
-    extern "C" IMAGE_DOS_HEADER __ImageBase;
+std::wstring blas_config::get_config_path() const
+{
+    WCHAR   DllPath[MAX_PATH] = { 0 };
+    GetModuleFileNameW((HINSTANCE)&__ImageBase, DllPath, _countof(DllPath));
 
-    std::wstring blas_config::get_config_path() const
-    {
-        WCHAR   DllPath[MAX_PATH] = { 0 };
-        GetModuleFileNameW((HINSTANCE)&__ImageBase, DllPath, _countof(DllPath));
+    std::wstring path(DllPath);
 
-        std::wstring path(DllPath);
+    boost::filesystem::wpath p(path);
 
-        boost::filesystem::wpath p(path);
+    #ifdef _WIN64
+        p = p.parent_path() / "blas_config_win64.txt";
+    #elif defined _WIN32
+        p = p.parent_path() / "blas_config_win32.txt";
+    #else
+        #error unknown platform
+    #endif
 
-        #ifdef _WIN64
-            p = p.parent_path() / "blas_config_win64.txt";
-        #elif defined _WIN32
-            p = p.parent_path() / "blas_config_win32.txt";
-        #else
-            #error unknown platform
-        #endif
-
-        return p.wstring();
-    }
-
-#else
-    std::wstring blas_config::get_config_path() const
-    {
-        //TODO: UNIX
-        return "blas_config.txt";
-    }
-#endif
+    return p.wstring();
+}
 
 }}

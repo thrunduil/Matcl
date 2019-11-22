@@ -182,15 +182,6 @@ template<bool Throw_bad_alloc>
 void* default_allocator<Throw_bad_alloc>::malloc(size_t n)
 {
     void* ptr = md::allocator_impl::malloc(n + sizeof(Integer));
-
-    //TODO
-    /*
-    if (!ptr)
-    {
-        matcl::free_caches();
-        ptr = md::allocator_impl::malloc(n + sizeof(Integer));
-    }
-    */
         
     if (ptr)
     {
@@ -210,15 +201,6 @@ void* default_allocator<Throw_bad_alloc>::aligned_malloc(size_t n)
 {
     void* ptr   = md::allocator_impl::aligned_malloc(n + sizeof(Integer), MATCL_CACHE_LINE_SIZE);
 
-    //TODO
-    /*
-    if (!ptr)
-    {
-        matcl::free_caches();
-        ptr     = md::allocator_impl::aligned_malloc(n + sizeof(Integer), MATCL_CACHE_LINE_SIZE);
-    }
-    */
-
     if (ptr)
     {
         md::set_magic_number(ptr, n);
@@ -237,15 +219,6 @@ void* default_allocator<Throw_bad_alloc>::simple_malloc(size_t n)
 {
     void* ptr = md::allocator_impl::malloc(n);
 
-    //TODO
-    /*
-    if (!ptr)
-    {
-        matcl::free_caches();
-        ptr = md::allocator_impl::malloc(n);
-    }
-    */
-    
     #if MATCL_DEBUG_MEMORY
         details::leak_detector::report_malloc(ptr);
     #endif
@@ -266,15 +239,6 @@ void* default_allocator<Throw_bad_alloc>
     if (n > 0)
     {
         new_ptr = md::allocator_impl::realloc(ptr, n + sizeof(Integer));
-
-        //TODO
-        /*
-        if (!new_ptr)
-        {
-            matcl::free_caches();
-            new_ptr     = md::allocator_impl::realloc(ptr,n + sizeof(Integer));
-        }
-        */
 
         if (new_ptr)
             md::set_magic_number(new_ptr, n);
@@ -335,16 +299,6 @@ void* default_allocator<Throw_bad_alloc>
     {
         new_ptr = md::allocator_impl::aligned_realloc(ptr, old_size,
                                  n + sizeof(Integer), MATCL_CACHE_LINE_SIZE);
-
-        //TODO
-        /*
-        if (!new_ptr)
-        {
-            matcl::free_caches();
-            new_ptr     = md::allocator_impl::aligned_realloc(ptr, old_size, 
-                                n + sizeof(Integer), MATCL_CACHE_LINE_SIZE);
-        }
-        */
 
         if (new_ptr)
             md::set_magic_number(new_ptr, n);
