@@ -5,8 +5,8 @@
 
 [Setup]
 
-AppVersion=1.0.1
-#define ver "1.0.1"
+AppVersion=1.0.2
+#define ver "1.0.2"
 
 AppName=matcl
 DefaultDirName={pf}\matcl
@@ -135,8 +135,6 @@ Source: "..\x64\release\matcl-openblas-plugin-x64-Release.dll"; DestDir: "{app}\
 Source: "..\x64\release\matcl-simd-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-clapack-plugin-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\openblas-x64-release.dll"; DestDir: "{app}\{#ver}\x64\bin";
-Source: "..\x64\release\libgfortran-4.dll"; DestDir: "{app}\{#ver}\x64\bin";
-Source: "..\x64\release\libwinpthread-1.dll"; DestDir: "{app}\{#ver}\x64\bin";
 
 Source: "..\x64\release\blas_config_win64.txt"; DestDir: "{app}\{#ver}\x64\bin";
 
