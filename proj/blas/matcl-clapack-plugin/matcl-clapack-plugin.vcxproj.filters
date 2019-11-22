@@ -10,6 +10,9 @@
     <Filter Include="Source Files\clapack\f2c">
       <UniqueIdentifier>{a3810ac7-c56a-49c1-af5d-4022e01b85d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\clapack\headers">
+      <UniqueIdentifier>{49756fba-765f-49f9-a24e-ad0fcfb2c386}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\blas\blas-clapack-plugin\blas_clapack_plugin.cpp">
@@ -950,6 +953,9 @@
     <None Include="..\..\..\src\extern\clapack\libf2c\math.hvc">
       <Filter>Source Files\clapack\f2c</Filter>
     </None>
+    <None Include="..\..\..\src\extern\clapack\lapack_nowrap.def">
+      <Filter>Source Files\clapack\headers</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\extern\clapack\libf2c\arith.h">
@@ -978,6 +984,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\extern\clapack\libf2c\sysdep1.h">
       <Filter>Source Files\clapack\f2c</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\clapack\blaswrap.h">
+      <Filter>Source Files\clapack\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\clapack\clapack.h">
+      <Filter>Source Files\clapack\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\extern\clapack\f2c.h">
+      <Filter>Source Files\clapack\headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

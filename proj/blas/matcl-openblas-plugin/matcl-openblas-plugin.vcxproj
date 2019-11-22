@@ -132,7 +132,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\clapack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>

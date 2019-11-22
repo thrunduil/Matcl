@@ -25,6 +25,7 @@
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_plugin.h" />
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_plugin_common.h" />
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\clapack_types.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\function_names_macros.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\blas\blas-loader\blas_config.cpp" />
@@ -86,9 +87,6 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>

@@ -31,7 +31,7 @@
 //missing functions
 namespace f2c
 {
-    static d_type_wr 
+    static s_type_wr 
     CALL_SYNTAX2(sdsdot)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, 
                          s_type_wr *sy, i_type_wr *incy)
     {
@@ -44,10 +44,37 @@ namespace f2c
         return f2c::dsdot_(n, sx, incx, sy, incy);
     };
     
-    static d_type_wr CALL_SYNTAX2(scabs1)(c_type_wr *z__)
+    static s_type_wr CALL_SYNTAX2(scabs1)(c_type_wr *z__)
     {
         return f2c::scabs1_((f2c::complex*)z__);
     };
+
+    static s_type_wr CALL_SYNTAX2(sasum)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx)
+    {
+        return f2c::sasum_(n, sx, incx);
+    };
+
+    static s_type_wr CALL_SYNTAX2(scasum)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx)
+    {
+        return f2c::scasum_(n, (f2c::complex*)cx, incx);
+    };
+
+    static s_type_wr CALL_SYNTAX2(scnrm2)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx)
+    {
+        return f2c::scnrm2_(n, (f2c::complex*)cx, incx);
+    };
+
+    static s_type_wr 
+    CALL_SYNTAX2(sdot)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
+    {
+        return f2c::sdot_(n, sx, incx, sy, incy);
+    };
+
+    static s_type_wr CALL_SYNTAX2(snrm2)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx)
+    {
+        return f2c::snrm2_(n, sx, incx);
+    };
+
 };
 
 static const ::blas_plugin g_clapack_plugin;

@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)\tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>

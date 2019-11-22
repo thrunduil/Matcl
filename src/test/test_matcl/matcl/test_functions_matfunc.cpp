@@ -52,7 +52,8 @@ class test_matfunc
 
         void make()
         {   
-            Integer code = 154;
+            /*
+            Integer code = 169;
             Matrix mat = tf.get_matrix(code);
             matcl::disp(mat);
 	
@@ -65,11 +66,9 @@ class test_matfunc
             Real dif1		= norm_1(res1 - res2);
             Real dif2		= norm_1(res3 - res4);
 
+            disp(res1);
             disp(res2);
             disp(res4);
-
-            Real n_A        = norm(res4, 1);
-            disp(n_A);
 
             check_struct(res2);
             check_struct(res4);
@@ -79,6 +78,7 @@ class test_matfunc
 
             if (dif < 10.0 * mat.numel() * tol * tol * constants::eps(mat.get_value_code()))
                 dif         = 0.;
+            */
 
             tf.make(opts);
         };

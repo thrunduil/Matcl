@@ -332,9 +332,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\extern\clapack\blas\Makefile" />
+    <None Include="..\..\..\src\extern\clapack\lapack_nowrap.def" />
     <None Include="..\..\..\src\extern\clapack\libf2c\math.hvc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\extern\clapack\blaswrap.h" />
+    <ClInclude Include="..\..\..\src\extern\clapack\clapack.h" />
+    <ClInclude Include="..\..\..\src\extern\clapack\f2c.h" />
     <ClInclude Include="..\..\..\src\extern\clapack\libf2c\arith.h" />
     <ClInclude Include="..\..\..\src\extern\clapack\libf2c\ctype.h" />
     <ClInclude Include="..\..\..\src\extern\clapack\libf2c\fio.h" />
@@ -394,10 +398,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>

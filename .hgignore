@@ -28,3 +28,4 @@ x64/*
 *.user
 *.log
 *.pdb
+src/extern/win32/mkl/*

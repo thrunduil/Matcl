@@ -220,17 +220,17 @@ struct blas_plugin
     using isamax_func_type= i_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx);
     using izamax_func_type= i_type_wr (*)(i_type_wr *n, z_type_wr *zx, i_type_wr *incx);
     using lsame_func_type = i_type_wr (*)(char *ca, char *cb);
-    using sasum_func_type = d_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx);
+    using sasum_func_type = s_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx);
     using saxpy_func_type = i_type_wr (*)(i_type_wr *n, s_type_wr *sa, s_type_wr *sx, i_type_wr *incx, 
                                           s_type_wr *sy, i_type_wr *incy);
-    using scabs1_func_type= d_type_wr (*)(c_type_wr *z__);
-    using scasum_func_type= d_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx);
-    using scnrm2_func_type= d_type_wr (*)(i_type_wr *n, c_type_wr *x, i_type_wr *incx);
+    using scabs1_func_type= s_type_wr (*)(c_type_wr *z__);
+    using scasum_func_type= s_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx);
+    using scnrm2_func_type= s_type_wr (*)(i_type_wr *n, c_type_wr *x, i_type_wr *incx);
     using scopy_func_type = i_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, 
                                           i_type_wr *incy);
     using sdot_func_type  = s_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, 
                                           i_type_wr *incy);
-    using sdsdot_func_type= d_type_wr (*)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx,
+    using sdsdot_func_type= s_type_wr (*)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx,
                                           s_type_wr *sy, i_type_wr *incy);
     using sgbmv_func_type = i_type_wr (*)(char *trans, i_type_wr *m, i_type_wr *n, i_type_wr *kl,
                                           i_type_wr *ku, s_type_wr *alpha, s_type_wr *a, i_type_wr *lda,
@@ -246,7 +246,7 @@ struct blas_plugin
     using sger_func_type  = i_type_wr (*)(i_type_wr *m, i_type_wr *n, s_type_wr *alpha, s_type_wr *x, 
                                           i_type_wr *incx, s_type_wr *y, i_type_wr *incy, s_type_wr *a,
                                           i_type_wr *lda);
-    using snrm2_func_type = d_type_wr (*)(i_type_wr *n, s_type_wr *x, i_type_wr *incx);
+    using snrm2_func_type = s_type_wr (*)(i_type_wr *n, s_type_wr *x, i_type_wr *incx);
     using srot_func_type  = i_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy,
                                           i_type_wr *incy, s_type_wr *c__, s_type_wr *s);
     using srotg_func_type = i_type_wr (*)(s_type_wr *sa, s_type_wr *sb, s_type_wr *c__, s_type_wr *s);

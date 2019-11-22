@@ -24,6 +24,7 @@
 #include "matcl-core/memory/memory.h"
 #include "matcl-core/details/leak_detector.h"
 #include "matcl-core/IO/out_stream_initializer.h"
+#include "matcl-core/general/thread.h"
 
 #include <iostream>
 
@@ -70,8 +71,10 @@ class global_objects_impl
 {
     private:
         using global_vec    = std::vector<global_object*>;
+        using mutex_type    = matcl::default_spinlock_mutex;
 
-    private:
+    private:        
+        mutex_type  m_mutex;
         global_vec  m_globals;
 
     public:
@@ -118,6 +121,8 @@ void global_objects_impl::close()
 
 void global_objects_impl::register_global(global_object* gl)
 {
+    std::unique_lock<mutex_type> lock(m_mutex);
+
     m_globals.push_back(gl);
 };
 
