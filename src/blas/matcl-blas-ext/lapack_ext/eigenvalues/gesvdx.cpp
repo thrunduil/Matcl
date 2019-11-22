@@ -19,7 +19,8 @@
  */
 
 #if 0
-TODO
+TODO: not finished
+
 #include "matcl-blas-lapack/blas/blas.h"
 #include "matcl-blas-lapack/lapack/lapack.h"
 #include "matcl-blas-ext/lapack_ext/lapack_ext.h"

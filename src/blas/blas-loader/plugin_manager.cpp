@@ -242,58 +242,26 @@ bool plugin_manager::get_plugin_mix(const plugins_list& plugins, ::blas_plugin*&
     return true;
 }
 
-#if defined(WIN32) || defined(WIN64)
-    #include <Windows.h>
+#include <Windows.h>
 
-    void plugin_manager::free_library(void* dll_handle)
-    {
-        FreeLibrary((HINSTANCE)dll_handle);
-    }
+void plugin_manager::free_library(void* dll_handle)
+{
+    FreeLibrary((HINSTANCE)dll_handle);
+}
 
-    void* plugin_manager::load_library(const char* path)
-    {
-        return LoadLibrary(path);
-    };
+void* plugin_manager::load_library(const char* path)
+{
+    return LoadLibrary(path);
+};
 
-    void* plugin_manager::get_proc_address(void* mod, const char* func)
-    {
-        return GetProcAddress((HINSTANCE)mod, func);
-    };
+void* plugin_manager::get_proc_address(void* mod, const char* func)
+{
+    return GetProcAddress((HINSTANCE)mod, func);
+};
 
-    bool plugin_manager::set_environment_variable(const char* name, const char* value)
-    {
-        return SetEnvironmentVariable(name, value);
-    };
-
-#elif defined(__unix__)
-
-    //TODO: UNIX, default blas plugins
-
-    #include <sys/types.h>
-    #include <dlfcn.h>
-
-    void* plugin_manager::load_library(const char* path)
-    {
-        return dlopen(path, RTLD_LAZY);
-    };
-
-    void* plugin_manager::get_proc_address(void* mod, const char* func)
-    {
-        return dlsym(mod, func);
-    };
-
-    void plugin_manager::free_library(void* dll_handle)
-    {
-        dlclose(dll_handle);
-    }
-
-    bool plugin_manager::set_environment_variable(const char* name, const char* value)
-    {
-        //TODO: UNIX
-        return SetEnvironmentVariable(name, value);
-    };
-#else
-    #error unknown system
-#endif
+bool plugin_manager::set_environment_variable(const char* name, const char* value)
+{
+    return SetEnvironmentVariable(name, value);
+};
 
 }}
