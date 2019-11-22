@@ -29,3 +29,5 @@ x64/*
 *.log
 *.pdb
 src/extern/win32/mkl/*
+src/extern/win32/slicot/matcl_slicot-win32-release.lib
+src/extern/win32/slicot/matcl_slicot-win32-release.dll
