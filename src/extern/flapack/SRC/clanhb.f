@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLANHB + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clanhb.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clanhb.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clanhb.f"> 
+*> Download CLANHB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clanhb.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clanhb.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clanhb.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       REAL             FUNCTION CLANHB( NORM, UPLO, N, K, AB, LDAB,
 *                        WORK )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM, UPLO
 *       INTEGER            K, LDAB, N
@@ -29,7 +29,7 @@
 *       REAL               WORK( * )
 *       COMPLEX            AB( LDAB, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -119,12 +119,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup complexOTHERauxiliary
 *
@@ -132,11 +132,12 @@
       REAL             FUNCTION CLANHB( NORM, UPLO, N, K, AB, LDAB,
      $                 WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          NORM, UPLO
       INTEGER            K, LDAB, N
@@ -154,14 +155,17 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, L
-      REAL               ABSA, SCALE, SUM, VALUE
+      REAL               ABSA, SUM, VALUE
+*     ..
+*     .. Local Arrays ..
+      REAL               SSQ( 2 ), COLSSQ( 2 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, SISNAN
       EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ
+      EXTERNAL           CLASSQ, SCOMBSSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -179,7 +183,7 @@
             DO 20 J = 1, N
                DO 10 I = MAX( K+2-J, 1 ), K
                   SUM = ABS( AB( I, J ) )
-                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM                  
+                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    10          CONTINUE
                SUM = ABS( REAL( AB( K+1, J ) ) )
                IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
@@ -233,39 +237,57 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
+*        SSQ(1) is scale
+*        SSQ(2) is sum-of-squares
+*        For better accuracy, sum each column separately.
 *
-         SCALE = ZERO
-         SUM = ONE
+         SSQ( 1 ) = ZERO
+         SSQ( 2 ) = ONE
+*
+*        Sum off-diagonals
+*
          IF( K.GT.0 ) THEN
             IF( LSAME( UPLO, 'U' ) ) THEN
                DO 110 J = 2, N
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
                   CALL CLASSQ( MIN( J-1, K ), AB( MAX( K+2-J, 1 ), J ),
-     $                         1, SCALE, SUM )
+     $                         1, COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL SCOMBSSQ( SSQ, COLSSQ )
   110          CONTINUE
                L = K + 1
             ELSE
                DO 120 J = 1, N - 1
-                  CALL CLASSQ( MIN( N-J, K ), AB( 2, J ), 1, SCALE,
-     $                         SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL CLASSQ( MIN( N-J, K ), AB( 2, J ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL SCOMBSSQ( SSQ, COLSSQ )
   120          CONTINUE
                L = 1
             END IF
-            SUM = 2*SUM
+            SSQ( 2 ) = 2*SSQ( 2 )
          ELSE
             L = 1
          END IF
+*
+*        Sum diagonal
+*
+         COLSSQ( 1 ) = ZERO
+         COLSSQ( 2 ) = ONE
          DO 130 J = 1, N
             IF( REAL( AB( L, J ) ).NE.ZERO ) THEN
                ABSA = ABS( REAL( AB( L, J ) ) )
-               IF( SCALE.LT.ABSA ) THEN
-                  SUM = ONE + SUM*( SCALE / ABSA )**2
-                  SCALE = ABSA
+               IF( COLSSQ( 1 ).LT.ABSA ) THEN
+                  COLSSQ( 2 ) = ONE + COLSSQ(2)*( COLSSQ(1) / ABSA )**2
+                  COLSSQ( 1 ) = ABSA
                ELSE
-                  SUM = SUM + ( ABSA / SCALE )**2
+                  COLSSQ( 2 ) = COLSSQ( 2 ) + ( ABSA / COLSSQ( 1 ) )**2
                END IF
             END IF
   130    CONTINUE
-         VALUE = SCALE*SQRT( SUM )
+         CALL SCOMBSSQ( SSQ, COLSSQ )
+         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
       END IF
 *
       CLANHB = VALUE

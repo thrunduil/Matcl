@@ -2,28 +2,28 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAPY2 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapy2.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapy2.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapy2.f"> 
+*> Download SLAPY2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapy2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapy2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapy2.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       REAL             FUNCTION SLAPY2( X, Y )
-* 
+*
 *       .. Scalar Arguments ..
 *       REAL               X, Y
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -51,22 +51,22 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date June 2017
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION SLAPY2( X, Y )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     June 2017
 *
 *     .. Scalar Arguments ..
       REAL               X, Y
@@ -82,20 +82,35 @@
 *     ..
 *     .. Local Scalars ..
       REAL               W, XABS, YABS, Z
+      LOGICAL            X_IS_NAN, Y_IS_NAN
+*     ..
+*     .. External Functions ..
+      LOGICAL            SISNAN
+      EXTERNAL           SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      XABS = ABS( X )
-      YABS = ABS( Y )
-      W = MAX( XABS, YABS )
-      Z = MIN( XABS, YABS )
-      IF( Z.EQ.ZERO ) THEN
-         SLAPY2 = W
-      ELSE
-         SLAPY2 = W*SQRT( ONE+( Z / W )**2 )
+*     ..
+*     .. Executable Statements ..
+*
+      X_IS_NAN = SISNAN( X )
+      Y_IS_NAN = SISNAN( Y )
+      IF ( X_IS_NAN ) SLAPY2 = X
+      IF ( Y_IS_NAN ) SLAPY2 = Y
+*
+      IF ( .NOT.( X_IS_NAN.OR.Y_IS_NAN ) ) THEN
+         XABS = ABS( X )
+         YABS = ABS( Y )
+         W = MAX( XABS, YABS )
+         Z = MIN( XABS, YABS )
+         IF( Z.EQ.ZERO ) THEN
+            SLAPY2 = W
+         ELSE
+            SLAPY2 = W*SQRT( ONE+( Z / W )**2 )
+         END IF
       END IF
       RETURN
 *

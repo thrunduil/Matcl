@@ -2,14 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
-*  
+*
+*     .. Scalar Arguments ..
+*     CHARACTER          CMACH
+*     ..
+*
 *
 *> \par Purpose:
 *  =============
@@ -24,6 +28,7 @@
 *
 *> \param[in] CMACH
 *> \verbatim
+*>          CMACH is CHARACTER*1
 *>          Specifies the value to be returned by DLAMCH:
 *>          = 'E' or 'e',   DLAMCH := eps
 *>          = 'S' or 's ,   DLAMCH := sfmin
@@ -51,29 +56,25 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
 *
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          CMACH
-*     ..
-*
-*     .. Scalar Arguments ..
-      DOUBLE PRECISION   A, B
 *     ..
 *
 * =====================================================================
@@ -155,7 +156,7 @@
 *> might hold one of these in a register.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \date November 2011
+*> \date December 2016
 *> \ingroup auxOTHERauxiliary
 *>
 *> \param[in] A
@@ -171,7 +172,7 @@
 *>
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *

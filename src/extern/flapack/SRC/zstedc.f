@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSTEDC + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zstedc.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zstedc.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zstedc.f"> 
+*> Download ZSTEDC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zstedc.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zstedc.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zstedc.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
 *                          LRWORK, IWORK, LIWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPZ
 *       INTEGER            INFO, LDZ, LIWORK, LRWORK, LWORK, N
@@ -30,7 +30,7 @@
 *       DOUBLE PRECISION   D( * ), E( * ), RWORK( * )
 *       COMPLEX*16         WORK( * ), Z( LDZ, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -128,8 +128,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array,
-*>                                         dimension (LRWORK)
+*>          RWORK is DOUBLE PRECISION array, dimension (MAX(1,LRWORK))
 *>          On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK.
 *> \endverbatim
 *>
@@ -194,12 +193,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date June 2017
 *
 *> \ingroup complex16OTHERcomputational
 *
@@ -213,10 +212,10 @@
       SUBROUTINE ZSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     June 2017
 *
 *     .. Scalar Arguments ..
       CHARACTER          COMPZ
@@ -454,31 +453,25 @@
 *
 *        endwhile
 *
-*        If the problem split any number of times, then the eigenvalues
-*        will not be properly ordered.  Here we permute the eigenvalues
-*        (and the associated eigenvectors) into ascending order.
 *
-         IF( M.NE.N ) THEN
+*        Use Selection Sort to minimize swaps of eigenvectors
 *
-*           Use Selection Sort to minimize swaps of eigenvectors
-*
-            DO 60 II = 2, N
-               I = II - 1
-               K = I
-               P = D( I )
-               DO 50 J = II, N
-                  IF( D( J ).LT.P ) THEN
-                     K = J
-                     P = D( J )
-                  END IF
-   50          CONTINUE
-               IF( K.NE.I ) THEN
-                  D( K ) = D( I )
-                  D( I ) = P
-                  CALL ZSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
-               END IF
-   60       CONTINUE
-         END IF
+         DO 60 II = 2, N
+           I = II - 1
+           K = I
+           P = D( I )
+           DO 50 J = II, N
+              IF( D( J ).LT.P ) THEN
+                 K = J
+                 P = D( J )
+              END IF
+   50      CONTINUE
+           IF( K.NE.I ) THEN
+              D( K ) = D( I )
+              D( I ) = P
+              CALL ZSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+           END IF
+   60    CONTINUE
       END IF
 *
    70 CONTINUE

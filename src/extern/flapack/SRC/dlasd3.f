@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASD3 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd3.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd3.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd3.f"> 
+*> Download DLASD3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd3.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd3.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd3.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -21,7 +21,7 @@
 *       SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
 *                          LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
 *                          INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDQ, LDU, LDU2, LDVT, LDVT2, NL, NR,
 *      $                   SQRE
@@ -32,7 +32,7 @@
 *      $                   U2( LDU2, * ), VT( LDVT, * ), VT2( LDVT2, * ),
 *      $                   Z( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -94,8 +94,7 @@
 *>
 *> \param[out] Q
 *> \verbatim
-*>          Q is DOUBLE PRECISION array,
-*>                     dimension at least (LDQ,K).
+*>          Q is DOUBLE PRECISION array, dimension (LDQ,K)
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -104,7 +103,7 @@
 *>         The leading dimension of the array Q.  LDQ >= K.
 *> \endverbatim
 *>
-*> \param[in] DSIGMA
+*> \param[in,out] DSIGMA
 *> \verbatim
 *>          DSIGMA is DOUBLE PRECISION array, dimension(K)
 *>         The first K elements of this array contain the old roots
@@ -125,7 +124,7 @@
 *>         The leading dimension of the array U.  LDU >= N.
 *> \endverbatim
 *>
-*> \param[in,out] U2
+*> \param[in] U2
 *> \verbatim
 *>          U2 is DOUBLE PRECISION array, dimension (LDU2, N)
 *>         The first K columns of this matrix contain the non-deflated
@@ -187,7 +186,7 @@
 *>         type is any column which has been deflated.
 *> \endverbatim
 *>
-*> \param[in] Z
+*> \param[in,out] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (K)
 *>         The first K elements of this array contain the components
@@ -205,14 +204,14 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date June 2017
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *> \par Contributors:
 *  ==================
@@ -225,10 +224,10 @@
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     June 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, LDQ, LDU, LDU2, LDVT, LDVT2, NL, NR,
@@ -351,7 +350,7 @@
          CALL DLASD4( K, J, DSIGMA, Z, U( 1, J ), RHO, D( J ),
      $                VT( 1, J ), INFO )
 *
-*        If the zero finder fails, the computation is terminated.
+*        If the zero finder fails, report the convergence failure.
 *
          IF( INFO.NE.0 ) THEN
             RETURN

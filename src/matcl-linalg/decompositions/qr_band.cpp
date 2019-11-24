@@ -24,6 +24,21 @@
 namespace matcl { namespace lapack
 {
 
+template<class V>   
+struct get_trans_type{};
+
+template<>
+struct get_trans_type<d_type> { static const char* eval() { return "trans"; }; };
+
+template<>
+struct get_trans_type<s_type> { static const char* eval() { return "trans"; }; };
+
+template<>
+struct get_trans_type<c_type> { static const char* eval() { return "conj trans"; }; };
+
+template<>
+struct get_trans_type<z_type> { static const char* eval() { return "conj trans"; }; };
+
 //=======================   gbbqrf    ================================
 
 /*********************************************************************
@@ -190,6 +205,8 @@ void lapack::gbbqrf(i_type nb, i_type m, i_type n, i_type ml, i_type mu, Val* a,
 
     i_type ncol = std::min(an, am - aml);
 
+    const char* trans_t     = get_trans_type<Val>::eval();
+
     //  Factorization of full band matrix A(:,1:ncol).
     for (i_type j = 1; j <= ncol; j += anb)
     {
@@ -228,7 +245,7 @@ void lapack::gbbqrf(i_type nb, i_type m, i_type n, i_type ml, i_type mu, Val* a,
             //  Apply block reflector to A(j:j+aml+jb-1,j+jb:an) from the left.
             i_type jlc = std::min( an, j + jb - 1 + aml + amu );
 
-            lapack::larfb("left", "transpose", "forward", "columnwise", aml + jb, jlc - j - jb + 1, jb,
+            lapack::larfb("left", trans_t, "forward", "columnwise", aml + jb, jlc - j - jb + 1, jb,
                 &work[iv-1], aml + jb, &work[it-1], jb, &a[ml+mu+nb-jb-1 +(j+jb-1)*lda], lda - 1,
                 &work[irwk-1], jlc - j - jb + 1 );
         }
@@ -255,7 +272,7 @@ void lapack::gbbqrf(i_type nb, i_type m, i_type n, i_type ml, i_type mu, Val* a,
                 &a[ml+mu+nb-1+(j-1)*lda], lda - 1, &tau[j-1], &work[it-1], jb );
 
             //  Apply block reflector to A(j:am,j+jb:an) from the left.
-            lapack::larfb("left", "transpose", "forward", "columnwise", am - j + 1, an - j - jb + 1, jb,
+            lapack::larfb("left", trans_t, "forward", "columnwise", am - j + 1, an - j - jb + 1, jb,
                 &a[ml+mu+nb-1 + (j-1)*lda], lda - 1, &work[it-1], jb, &a[ml+mu+nb-jb-1 + (j+jb-1)*lda], 
                 lda - 1, &work[irwk-1], an - j - jb + 1 );
         };
@@ -440,7 +457,9 @@ void lapack::gbbqr2(i_type m, i_type n, i_type ml, i_type mu, Val* a,
 
             a[ml+mu+1-1+(j-1)*lda]  = Val(1.0);
 
-            lapack::larf("left", mh, nh, &a[ml+mu+1-1 +(j-1)*lda], 1, &tau[j-1],
+            Val tau_conj            = conj(tau[j-1]);
+
+            lapack::larf("left", mh, nh, &a[ml+mu+1-1 +(j-1)*lda], 1, &tau_conj,
                 &a[ml+mu-1+(j+1-1)*lda], lda - 1, work);
 
             a[ml+mu+1-1+(j-1)*lda]  = diag;
@@ -622,8 +641,9 @@ void gebqr2(i_type m, i_type n, i_type ml, i_type mu, Val* a, i_type lda, Val* t
             Val diag = a[j-1 + (j-1)*lda];
 
             a[j-1 +(j-1)*lda]   = Val(1.0);
+            Val tau_conj        = conj(tau[j-1]);
 
-            lapack::larf("left", mh, nh, &a[j-1 +(j-1)*lda], 1, &tau[j-1], 
+            lapack::larf("left", mh, nh, &a[j-1 +(j-1)*lda], 1, &tau_conj, 
                          &a[j-1 + (j+1-1)*lda], lda, work);
 
             a[j-1 + (j-1)*lda]  = diag;
@@ -799,6 +819,8 @@ void lapack::gebqrf(i_type nb, i_type m, i_type n, i_type ml, i_type mu, Val *a,
 
     i_type ncol = std::min( an, am - aml );
 
+    const char* trans_t     = get_trans_type<Val>::eval();
+
     //  Factorization of full band matrix A(:,1:ncol).
     for (i_type j = 1; j <= ncol; j += anb)
     {
@@ -837,7 +859,7 @@ void lapack::gebqrf(i_type nb, i_type m, i_type n, i_type ml, i_type mu, Val *a,
             //  Apply block reflector to A(j:j+aml+jb-1,j+jb:an) from the left.
             i_type jlc  = std::min( an, j + jb - 1 + aml + amu );
 
-            lapack::larfb("left", "transpose", "forward", "columnwise", aml + jb, 
+            lapack::larfb("left", trans_t, "forward", "columnwise", aml + jb, 
                           jlc - j - jb + 1, jb, &work[iv-1], aml + jb, &work[it-1], jb,
                           &a[j-1 +(j+jb-1)*lda], lda, &work[irwk-1], jlc - j - jb + 1 );
         };

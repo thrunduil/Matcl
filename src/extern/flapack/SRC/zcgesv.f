@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZCGESV + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcgesv.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zcgesv.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcgesv.f"> 
+*> Download ZCGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcgesv.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zcgesv.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcgesv.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
 *                          SWORK, RWORK, ITER, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, ITER, LDA, LDB, LDX, N, NRHS
 *       ..
@@ -31,7 +31,7 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( N, * ),
 *      $                   X( LDX, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -93,9 +93,9 @@
 *>          dimension (LDA,N)
 *>          On entry, the N-by-N coefficient matrix A.
 *>          On exit, if iterative refinement has been successfully used
-*>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
+*>          (INFO = 0 and ITER >= 0, see description below), then A is
 *>          unchanged, if double precision factorization has been used
-*>          (INFO.EQ.0 and ITER.LT.0, see description below), then the
+*>          (INFO = 0 and ITER < 0, see description below), then the
 *>          array A contains the factors L and U from the factorization
 *>          A = P*L*U; the unit diagonal elements of L are not stored.
 *> \endverbatim
@@ -112,8 +112,8 @@
 *>          The pivot indices that define the permutation matrix P;
 *>          row i of the matrix was interchanged with row IPIV(i).
 *>          Corresponds either to the single precision factorization
-*>          (if INFO.EQ.0 and ITER.GE.0) or the double precision
-*>          factorization (if INFO.EQ.0 and ITER.LT.0).
+*>          (if INFO = 0 and ITER >= 0) or the double precision
+*>          factorization (if INFO = 0 and ITER < 0).
 *> \endverbatim
 *>
 *> \param[in] B
@@ -142,7 +142,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N*NRHS)
+*>          WORK is COMPLEX*16 array, dimension (N,NRHS)
 *>          This array is used to hold the residual vectors.
 *> \endverbatim
 *>
@@ -170,7 +170,7 @@
 *>               -3 : failure of CGETRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
-*>          > 0: iterative refinement has been sucessfully used.
+*>          > 0: iterative refinement has been successfully used.
 *>               Returns the number of iterations
 *> \endverbatim
 *>
@@ -188,12 +188,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date June 2016
 *
 *> \ingroup complex16GEsolve
 *
@@ -201,10 +201,10 @@
       SUBROUTINE ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*  -- LAPACK driver routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     June 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, ITER, LDA, LDB, LDX, N, NRHS
@@ -240,7 +240,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           CGETRS, CGETRF, CLAG2Z, XERBLA, ZAXPY, ZGEMM,
-     $                   ZLACPY, ZLAG2C
+     $                   ZLACPY, ZLAG2C, ZGETRF, ZGETRS
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX
@@ -421,7 +421,7 @@
    30 CONTINUE
 *
 *     If we are at this place of the code, this is because we have
-*     performed ITER=ITERMAX iterations and never satisified the stopping
+*     performed ITER=ITERMAX iterations and never satisfied the stopping
 *     criterion, set up the ITER flag accordingly and follow up on double
 *     precision routine.
 *

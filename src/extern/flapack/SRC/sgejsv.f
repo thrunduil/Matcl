@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGEJSV + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgejsv.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgejsv.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgejsv.f"> 
+*> Download SGEJSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgejsv.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgejsv.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgejsv.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -21,7 +21,7 @@
 *       SUBROUTINE SGEJSV( JOBA, JOBU, JOBV, JOBR, JOBT, JOBP,
 *                          M, N, A, LDA, SVA, U, LDU, V, LDV,
 *                          WORK, LWORK, IWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       IMPLICIT    NONE
 *       INTEGER     INFO, LDA, LDU, LDV, LWORK, M, N
@@ -32,7 +32,7 @@
 *       INTEGER     IWORK( * )
 *       CHARACTER*1 JOBA, JOBP, JOBR, JOBT, JOBU, JOBV
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -53,7 +53,6 @@
 *> of [SIGMA] is computed and stored in the array SVA.
 *> SGEJSV can sometimes compute tiny singular values and their singular vectors much
 *> more accurately than other SVD routines, see below under Further Details.
-
 *> \endverbatim
 *
 *  Arguments:
@@ -83,12 +82,12 @@
 *>              desirable, then this option is advisable. The input matrix A
 *>              is preprocessed with QR factorization with FULL (row and
 *>              column) pivoting.
-*>       = 'G'  Computation as with 'F' with an additional estimate of the
+*>       = 'G': Computation as with 'F' with an additional estimate of the
 *>              condition number of B, where A=D*B. If A has heavily weighted
 *>              rows, then using this condition number gives too pessimistic
 *>              error bound.
 *>       = 'A': Small singular values are the noise and the matrix is treated
-*>              as numerically rank defficient. The error in the computed
+*>              as numerically rank deficient. The error in the computed
 *>              singular values is bounded by f(m,n)*epsilon*||A||.
 *>              The computed SVD A = U * S * V^t restores A up to
 *>              f(m,n)*epsilon*||A||.
@@ -100,7 +99,7 @@
 *>              numerical RANK is declared to be r. The SVD is computed with
 *>              absolute error bounds, but more accurately than with 'A'.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBU
 *> \verbatim
 *>          JOBU is CHARACTER*1
@@ -111,7 +110,7 @@
 *>              of U.
 *>       = 'N': U is not computed.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBV
 *> \verbatim
 *>          JOBV is CHARACTER*1
@@ -125,7 +124,7 @@
 *>              of V.
 *>       = 'N': V is not computed.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBR
 *> \verbatim
 *>          JOBR is CHARACTER*1
@@ -134,7 +133,7 @@
 *>         specified range. If A .NE. 0 is scaled so that the largest singular
 *>         value of c*A is around SQRT(BIG), BIG=SLAMCH('O'), then JOBR issues
 *>         the licence to kill columns of A whose norm in c*A is less than
-*>         SQRT(SFMIN) (for JOBR.EQ.'R'), or less than SMALL=SFMIN/EPSLN,
+*>         SQRT(SFMIN) (for JOBR = 'R'), or less than SMALL=SFMIN/EPSLN,
 *>         where SFMIN=SLAMCH('S'), EPSLN=SLAMCH('E').
 *>       = 'N': Do not kill small columns of c*A. This option assumes that
 *>              BLAS and QR factorizations and triangular solvers are
@@ -146,7 +145,7 @@
 *>         For computing the singular values in the FULL range [SFMIN,BIG]
 *>         use SGESVJ.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBT
 *> \verbatim
 *>          JOBT is CHARACTER*1
@@ -167,7 +166,7 @@
 *>         The implementer can easily remove this constraint and make the
 *>         code more complicated. See the descriptions of U and V.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBP
 *> \verbatim
 *>          JOBP is CHARACTER*1
@@ -231,14 +230,14 @@
 *>          If JOBU = 'F', then U contains on exit the M-by-M matrix of
 *>                         the left singular vectors, including an ONB
 *>                         of the orthogonal complement of the Range(A).
-*>          If JOBU = 'W'  .AND. (JOBV.EQ.'V' .AND. JOBT.EQ.'T' .AND. M.EQ.N),
+*>          If JOBU = 'W'  .AND. (JOBV = 'V' .AND. JOBT = 'T' .AND. M = N),
 *>                         then U is used as workspace if the procedure
 *>                         replaces A with A^t. In that case, [V] is computed
 *>                         in U as left singular vectors of A^t and then
 *>                         copied back to the V array. This 'W' option is just
 *>                         a reminder to the caller that in this case U is
 *>                         reserved as workspace of length N*N.
-*>          If JOBU = 'N'  U is not referenced.
+*>          If JOBU = 'N'  U is not referenced, unless JOBT='T'.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -253,14 +252,14 @@
 *>          V is REAL array, dimension ( LDV, N )
 *>          If JOBV = 'V', 'J' then V contains on exit the N-by-N matrix of
 *>                         the right singular vectors;
-*>          If JOBV = 'W', AND (JOBU.EQ.'U' AND JOBT.EQ.'T' AND M.EQ.N),
+*>          If JOBV = 'W', AND (JOBU = 'U' AND JOBT = 'T' AND M = N),
 *>                         then V is used as workspace if the pprocedure
 *>                         replaces A with A^t. In that case, [U] is computed
 *>                         in V as right singular vectors of A^t and then
 *>                         copied back to the U array. This 'W' option is just
 *>                         a reminder to the caller that in this case V is
 *>                         reserved as workspace of length N*N.
-*>          If JOBV = 'N'  V is not referenced.
+*>          If JOBV = 'N'  V is not referenced, unless JOBT='T'.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -272,14 +271,14 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension at least LWORK.
+*>          WORK is REAL array, dimension (LWORK)
 *>          On exit,
 *>          WORK(1) = SCALE = WORK(2) / WORK(1) is the scaling factor such
 *>                    that SCALE*SVA(1:N) are the computed singular values
 *>                    of A. (See the description of SVA().)
 *>          WORK(2) = See the description of WORK(1).
 *>          WORK(3) = SCONDA is an estimate for the condition number of
-*>                    column equilibrated A. (If JOBA .EQ. 'E' or 'G')
+*>                    column equilibrated A. (If JOBA = 'E' or 'G')
 *>                    SCONDA is an estimate of SQRT(||(R^t * R)^(-1)||_1).
 *>                    It is computed using SPOCON. It holds
 *>                    N^(-1/4) * SCONDA <= ||R^(-1)||_2 <= N^(1/4) * SCONDA
@@ -298,7 +297,7 @@
 *>                    triangular factor in the first QR factorization.
 *>          WORK(5) = an estimate of the scaled condition number of the
 *>                    triangular factor in the second QR factorization.
-*>          The following two parameters are computed if JOBT .EQ. 'T'.
+*>          The following two parameters are computed if JOBT = 'T'.
 *>          They are provided for a developer/implementer who is familiar
 *>          with the details of the method.
 *>
@@ -314,47 +313,47 @@
 *>          Length of WORK to confirm proper allocation of work space.
 *>          LWORK depends on the job:
 *>
-*>          If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*>            -> .. no scaled condition estimate required (JOBE.EQ.'N'):
+*>          If only SIGMA is needed ( JOBU = 'N', JOBV = 'N' ) and
+*>            -> .. no scaled condition estimate required (JOBE = 'N'):
 *>               LWORK >= max(2*M+N,4*N+1,7). This is the minimal requirement.
 *>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= max(2*M+N,3*N+(N+1)*NB,7). Here NB is the optimal
 *>               block size for DGEQP3 and DGEQRF.
-*>               In general, optimal LWORK is computed as 
-*>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 7).        
+*>               In general, optimal LWORK is computed as
+*>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 7).
 *>            -> .. an estimate of the scaled condition number of A is
 *>               required (JOBA='E', 'G'). In this case, LWORK is the maximum
 *>               of the above and N*N+4*N, i.e. LWORK >= max(2*M+N,N*N+4*N,7).
-*>               ->> For optimal performance (blocked code) the optimal value 
+*>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= max(2*M+N,3*N+(N+1)*NB, N*N+4*N, 7).
 *>               In general, the optimal length LWORK is computed as
-*>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 
+*>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF),
 *>                                                     N+N*N+LWORK(DPOCON),7).
 *>
-*>          If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
+*>          If SIGMA and the right singular vectors are needed (JOBV = 'V'),
 *>            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
 *>            -> For optimal performance, LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
 *>               where NB is the optimal block size for DGEQP3, DGEQRF, DGELQ,
 *>               DORMLQ. In general, the optimal length LWORK is computed as
-*>               LWORK >= max(2*M+N,N+LWORK(DGEQP3), N+LWORK(DPOCON), 
+*>               LWORK >= max(2*M+N,N+LWORK(DGEQP3), N+LWORK(DPOCON),
 *>                       N+LWORK(DGELQ), 2*N+LWORK(DGEQRF), N+LWORK(DORMLQ)).
 *>
 *>          If SIGMA and the left singular vectors are needed
 *>            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
 *>            -> For optimal performance:
-*>               if JOBU.EQ.'U' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
-*>               if JOBU.EQ.'F' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,N+M*NB,7),
+*>               if JOBU = 'U' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
+*>               if JOBU = 'F' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,N+M*NB,7),
 *>               where NB is the optimal block size for DGEQP3, DGEQRF, DORMQR.
 *>               In general, the optimal length LWORK is computed as
 *>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DPOCON),
-*>                        2*N+LWORK(DGEQRF), N+LWORK(DORMQR)). 
-*>               Here LWORK(DORMQR) equals N*NB (for JOBU.EQ.'U') or 
-*>               M*NB (for JOBU.EQ.'F').
-*>               
-*>          If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and 
-*>            -> if JOBV.EQ.'V'  
-*>               the minimal requirement is LWORK >= max(2*M+N,6*N+2*N*N). 
-*>            -> if JOBV.EQ.'J' the minimal requirement is 
+*>                        2*N+LWORK(DGEQRF), N+LWORK(DORMQR)).
+*>               Here LWORK(DORMQR) equals N*NB (for JOBU = 'U') or
+*>               M*NB (for JOBU = 'F').
+*>
+*>          If the full SVD is needed: (JOBU = 'U' or JOBU = 'F') and
+*>            -> if JOBV = 'V'
+*>               the minimal requirement is LWORK >= max(2*M+N,6*N+2*N*N).
+*>            -> if JOBV = 'J' the minimal requirement is
 *>               LWORK >= max(2*M+N, 4*N+N*N,2*N+N*N+6).
 *>            -> For optimal performance, LWORK should be additionally
 *>               larger than N+M*NB, where NB is the optimal block size
@@ -363,14 +362,14 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension M+3*N.
+*>          IWORK is INTEGER array, dimension (M+3*N).
 *>          On exit,
 *>          IWORK(1) = the numerical rank determined after the initial
 *>                     QR factorization with pivoting. See the descriptions
 *>                     of JOBA and JOBR.
 *>          IWORK(2) = the number of the computed nonzero singular values
 *>          IWORK(3) = if nonzero, a warning message:
-*>                     If IWORK(3).EQ.1 then some of the column norms of A
+*>                     If IWORK(3) = 1 then some of the column norms of A
 *>                     were denormalized floats. The requested high accuracy
 *>                     is not warranted by the data.
 *> \endverbatim
@@ -378,21 +377,21 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>           < 0  : if INFO = -i, then the i-th argument had an illegal value.
-*>           = 0 :  successfull exit;
-*>           > 0 :  SGEJSV  did not converge in the maximal allowed number
-*>                  of sweeps. The computed values may be inaccurate.
+*>           < 0:  if INFO = -i, then the i-th argument had an illegal value.
+*>           = 0:  successful exit;
+*>           > 0:  SGEJSV  did not converge in the maximal allowed number
+*>                 of sweeps. The computed values may be inaccurate.
 *> \endverbatim
 *
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2015
+*> \date June 2016
 *
 *> \ingroup realGEsing
 *
@@ -429,8 +428,8 @@
 *>     The rank revealing QR factorization (in this code: SGEQP3) should be
 *>  implemented as in [3]. We have a new version of SGEQP3 under development
 *>  that is more robust than the current one in LAPACK, with a cleaner cut in
-*>  rank defficient cases. It will be available in the SIGMA library [4].
-*>  If M is much larger than N, it is obvious that the inital QRF with
+*>  rank deficient cases. It will be available in the SIGMA library [4].
+*>  If M is much larger than N, it is obvious that the initial QRF with
 *>  column pivoting can be preprocessed by the QRF without pivoting. That
 *>  well known trick is not used in SGEJSV because in some cases heavy row
 *>  weighting can be treated with complete pivoting. The overhead in cases
@@ -459,7 +458,7 @@
 *>     LAPACK Working note 170.
 *> [3] Z. Drmac and Z. Bujanovic: On the failure of rank-revealing QR
 *>     factorization software - a case study.
-*>     ACM Trans. math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
+*>     ACM Trans. Math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
 *>     LAPACK Working note 176.
 *> [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
 *>     QSVD, (H,K)-SVD computations.
@@ -477,10 +476,10 @@
      $                   M, N, A, LDA, SVA, U, LDU, V, LDV,
      $                   WORK, LWORK, IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.6.0) --
+*  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2015
+*     June 2016
 *
 *     .. Scalar Arguments ..
       IMPLICIT    NONE
@@ -563,7 +562,7 @@
       ELSE IF ( LSVEC .AND. ( LDU .LT. M ) ) THEN
          INFO = - 13
       ELSE IF ( RSVEC .AND. ( LDV .LT. N ) ) THEN
-         INFO = - 14
+         INFO = - 15
       ELSE IF ( (.NOT.(LSVEC .OR. RSVEC .OR. ERREST).AND.
      $                           (LWORK .LT. MAX(7,4*N+1,2*M+N))) .OR.
      $ (.NOT.(LSVEC .OR. RSVEC) .AND. ERREST .AND.
@@ -572,7 +571,7 @@
      $ .OR.
      $ (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX(7,2*M+N,4*N+1)))
      $ .OR.
-     $ (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND. 
+     $ (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND.
      $                          (LWORK.LT.MAX(2*M+N,6*N+2*N*N)))
      $ .OR. (LSVEC .AND. RSVEC .AND. JRACC .AND.
      $                          LWORK.LT.MAX(2*M+N,4*N+N*N,2*N+N*N+6)))
@@ -591,7 +590,11 @@
 *
 *     Quick return for void matrix (Y3K safe)
 * #:)
-      IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) RETURN
+      IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) THEN
+         IWORK(1:3) = 0
+         WORK(1:7) = 0
+         RETURN
+      ENDIF
 *
 *     Determine whether the matrix U should be M x N or M x M
 *
@@ -717,6 +720,7 @@
             IWORK(1) = 0
             IWORK(2) = 0
          END IF
+         IWORK(3) = 0
          IF ( ERREST ) WORK(3) = ONE
          IF ( LSVEC .AND. RSVEC ) THEN
             WORK(4) = ONE
@@ -830,7 +834,7 @@
             KILL   = LSVEC
             LSVEC  = RSVEC
             RSVEC  = KILL
-            IF ( LSVEC ) N1 = N 
+            IF ( LSVEC ) N1 = N
 *
             ROWPIV = .TRUE.
          END IF
@@ -949,7 +953,7 @@
       IF ( L2ABER ) THEN
 *        Standard absolute error bound suffices. All sigma_i with
 *        sigma_i < N*EPSLN*||A|| are flushed to zero. This is an
-*        agressive enforcement of lower numerical rank by introducing a
+*        aggressive enforcement of lower numerical rank by introducing a
 *        backward error of the order of N*EPSLN*||A||.
          TEMP1 = SQRT(FLOAT(N))*EPSLN
          DO 3001 p = 2, N
@@ -961,9 +965,9 @@
  3001    CONTINUE
  3002    CONTINUE
       ELSE IF ( L2RANK ) THEN
-*        .. similarly as above, only slightly more gentle (less agressive).
+*        .. similarly as above, only slightly more gentle (less aggressive).
 *        Sudden drop on the diagonal of R1 is used as the criterion for
-*        close-to-rank-defficient.
+*        close-to-rank-deficient.
          TEMP1 = SQRT(SFMIN)
          DO 3401 p = 2, N
             IF ( ( ABS(A(p,p)) .LT. (EPSLN*ABS(A(p-1,p-1))) ) .OR.
@@ -1290,7 +1294,7 @@
             CALL SPOCON('Lower',NR,WORK(2*N+1),NR,ONE,TEMP1,
      $                   WORK(2*N+NR*NR+1),IWORK(M+2*N+1),IERR)
             CONDR1 = ONE / SQRT(TEMP1)
-*           .. here need a second oppinion on the condition number
+*           .. here need a second opinion on the condition number
 *           .. then assume worst case scenario
 *           R1 is OK for inverse <=> CONDR1 .LT. FLOAT(N)
 *           more conservative    <=> CONDR1 .LT. SQRT(FLOAT(N))
@@ -1331,7 +1335,7 @@
             ELSE
 *
 *              .. ill-conditioned case: second QRF with pivoting
-*              Note that windowed pivoting would be equaly good
+*              Note that windowed pivoting would be equally good
 *              numerically, and more run-time efficient. So, in
 *              an optimal implementation, the next call to SGEQP3
 *              should be replaced with eg. CALL SGEQPX (ACM TOMS #782)
@@ -1384,7 +1388,7 @@
 *
                IF ( CONDR2 .GE. COND_OK ) THEN
 *                 .. save the Householder vectors used for Q3
-*                 (this overwrittes the copy of R2, as it will not be
+*                 (this overwrites the copy of R2, as it will not be
 *                 needed in this branch, but it does not overwritte the
 *                 Huseholder vectors of Q2.).
                   CALL SLACPY( 'U', NR, NR, V, LDV, WORK(2*N+1), N )
@@ -1634,7 +1638,7 @@
 *
 *        This branch deploys a preconditioned Jacobi SVD with explicitly
 *        accumulated rotations. It is included as optional, mainly for
-*        experimental purposes. It does perfom well, and can also be used.
+*        experimental purposes. It does perform well, and can also be used.
 *        In this implementation, this branch will be automatically activated
 *        if the  condition number sigma_max(A) / sigma_min(A) is predicted
 *        to be greater than the overflow threshold. This is because the

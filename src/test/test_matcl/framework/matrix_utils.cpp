@@ -31,6 +31,8 @@
 #include "matcl-internals/container/mat_b.h"
 #include "matcl-matrep/details/matrix.inl"
 
+#include "matcl-matrep/matrix/struct_flag_ext.h"
+
 namespace matcl
 {
 
@@ -291,6 +293,20 @@ bool matcl::has_struct_hessu(const Matrix& m)
         return true;
 
     if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_unitary(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (is_unitary(m.get_struct()) == true)
+        return true;
+
+    if (m.get_struct().is_id() == true)
         return true;
 
     return false;

@@ -41,10 +41,10 @@
 #define zaxpy_ f2c_zaxpy
 //#define sdot_ f2c_sdot
 #define ddot_ f2c_ddot
-#define cdotu_ f2c_cdotu
-#define zdotu_ f2c_zdotu
-#define cdotc_ f2c_cdotc
-#define zdotc_ f2c_zdotc
+//#define cdotu_ f2c_cdotu
+//#define zdotu_ f2c_zdotu
+//#define cdotc_ f2c_cdotc
+//#define zdotc_ f2c_zdotc
 //#define snrm2_ f2c_snrm2
 #define dnrm2_ f2c_dnrm2
 //#define scnrm2_ f2c_scnrm2

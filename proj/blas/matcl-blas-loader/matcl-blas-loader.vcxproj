@@ -24,7 +24,7 @@
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_loader.h" />
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_plugin.h" />
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_plugin_common.h" />
-    <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\clapack_types.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_types.h" />
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\function_names_macros.h" />
   </ItemGroup>
   <ItemGroup>

@@ -104,12 +104,12 @@ i_type_wr ccopy_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy,
                  i_type_wr *incy);
 
 BLAS_LOADER_EXPORT 
-i_type_wr cdotc_(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx, i_type_wr *incx, 
-                 c_type_wr *cy, i_type_wr *incy);
+c_type_wr cdotc_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                 i_type_wr *incy);
 
 BLAS_LOADER_EXPORT 
-i_type_wr cdotu_(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx, i_type_wr *incx, 
-                 c_type_wr *cy, i_type_wr *incy);
+c_type_wr cdotu_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                 i_type_wr *incy);
 
 BLAS_LOADER_EXPORT 
 i_type_wr cgbmv_(char *trans, i_type_wr *m, i_type_wr *n, i_type_wr *kl, i_type_wr *ku,
@@ -596,12 +596,12 @@ i_type_wr zcopy_(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy,
                  i_type_wr *incy);
 
 BLAS_LOADER_EXPORT
-i_type_wr zdotc_(z_type_wr *ret_val, i_type_wr *n, z_type_wr *zx, i_type_wr *incx, 
-                 z_type_wr *zy, i_type_wr *incy);
+z_type_wr zdotc_(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
+                 i_type_wr *incy);
 
 BLAS_LOADER_EXPORT
-i_type_wr zdotu_(z_type_wr *ret_val, i_type_wr *n, z_type_wr *zx, i_type_wr *incx,
-                 z_type_wr *zy, i_type_wr *incy);
+z_type_wr zdotu_(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
+                 i_type_wr *incy);
 
 BLAS_LOADER_EXPORT
 i_type_wr zdrot_(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy, 

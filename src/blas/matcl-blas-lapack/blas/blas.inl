@@ -396,17 +396,15 @@ d_type ddot(i_type n, const d_type *x, i_type incx, const d_type *y, i_type incy
 BLAS_EXPORT INLINE_TYPE
 c_type cdotu(i_type n, const c_type *x, i_type incx, const c_type *y, i_type incy)
 {
-    c_type out;
-    BLAS_NAME(cdotu)(_rc(&out), _rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
-    return out;
+    auto ret = BLAS_NAME(cdotu)(_rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
+    return *reinterpret_cast<c_type*>(&ret);
 };
 
 BLAS_EXPORT INLINE_TYPE
 z_type zdotu(i_type n, const z_type *x, i_type incx, const z_type *y, i_type incy)
 {
-    z_type out;
-    BLAS_NAME(zdotu)(_rc(&out),_rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
-    return out;
+    auto ret = BLAS_NAME(zdotu)(_rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
+    return *reinterpret_cast<z_type*>(&ret);
 };
 
 //-----------------------------------------------------------------
@@ -502,17 +500,15 @@ z_type dotc<z_type>(i_type n, const z_type *x, i_type incx, const z_type *y, i_t
 BLAS_EXPORT INLINE_TYPE
 c_type cdotc(i_type n, const c_type *x, i_type incx, const c_type *y, i_type incy)
 {
-    c_type out;
-    BLAS_NAME(cdotc)(_rc(&out), _rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
-    return out;
+    auto ret = BLAS_NAME(cdotc)(_rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
+    return *reinterpret_cast<c_type*>(&ret);
 };
 
 BLAS_EXPORT INLINE_TYPE
 z_type zdotc(i_type n, const z_type *x, i_type incx, const z_type *y, i_type incy)
 {
-    z_type out;
-    BLAS_NAME(zdotc)(_rc(&out),_rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
-    return out;
+    auto ret = BLAS_NAME(zdotc)(_rc(&n),_rc(x),_rc(&incx),_rc(y),_rc(&incy));
+    return *reinterpret_cast<z_type*>(&ret);
 };
 
 //-----------------------------------------------------------------

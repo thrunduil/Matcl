@@ -72,12 +72,11 @@ struct lapack_xgeqrf_maker<V,struct_dense>
 
     static void eval(Mat& Ac, Mat& tau, Integer& ret_ld)
     {
-        Integer ld_max          = linalg_optim_params::qrband_block_crossover();
         Integer ld, ud;
         {
             Matrix tmp(Ac,false);
-            ld                  = matcl::get_ld(tmp,ld_max);
-            ud                  = matcl::get_ud(tmp,ld_max);
+            ld                  = matcl::get_ld(tmp);
+            ud                  = matcl::get_ud(tmp);
         };
         ret_ld = ld;
 
@@ -500,7 +499,7 @@ struct qr_str<V,struct_banded>
         Mat Qc  = Ac.copy();
         Qc.assign_to_fresh(Qc.resize(M, M_eco));
 
-        bool isv    = Qc.all_finite() && Qc.all_finite();
+        bool isv    = Qc.all_finite();
 
         if (isv == false)
         {

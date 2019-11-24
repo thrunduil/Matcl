@@ -298,7 +298,7 @@ class quern_Q_matrix : public quern_matrix<Val>, public unitary_matrix_data
         virtual Integer         rows() const override           { return m_rows; }
         virtual Integer         cols() const override           { return m_cols; }
         virtual value_code      get_value_code() const override { return matrix_traits::value_code<Val>::value; }
-        virtual ti::ti_object   get_type() const override         { return ti::ti_object_type<Val>(); };
+        virtual ti::ti_object   get_type() const override       { return ti::ti_object_type<Val>(); };
         virtual bool            all_finite() const override     { return true; };
 
         virtual void            to_matrix(matcl::Matrix& ret) const override;
@@ -365,6 +365,7 @@ void quern_Q_matrix<Val>::mult_right(matcl::Matrix& ret, const matcl::Matrix& ma
 
     return qmult.mult_right(ret, mat, t_unitary);
 };
+
 template<class Val>
 void quern_Q_matrix<Val>::mult_left(matcl::Matrix& ret, const matcl::Matrix& mat, 
                                      trans_type t_unitary) const
@@ -403,8 +404,21 @@ void quern_Q_matrix<Val>::mult_left(matcl::Matrix& ret, const matcl::Matrix& mat
 template<class Val>
 void quern_Q_matrix<Val>::to_matrix(matcl::Matrix& ret) const
 {
+    if (m_rows <= 1 && m_cols <= 1)
+    {
+        if (m_rows == 0 || m_cols == 0)
+            ret = zeros(m_cols,m_cols,this->get_value_code());
+        else
+            ret = Val(1.0);
+
+        return;
+    };
+
+    quern_unitary_mat_mult<Val> qmult(this->m_rows, this->m_cols, this->row_start, this->column_index,
+                                      this->value);
+
     Matrix I = speye(m_cols,m_cols,this->get_value_code());
-    return mult_right(ret, I, trans_type::no_trans);
+    return qmult.mult_right(ret, I, trans_type::no_trans);
 };
 
 template<class Val>

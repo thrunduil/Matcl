@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAQR0 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqr0.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqr0.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqr0.f"> 
+*> Download DLAQR0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqr0.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqr0.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqr0.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE DLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
 *                          ILOZ, IHIZ, Z, LDZ, WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, IHIZ, ILO, ILOZ, INFO, LDH, LDZ, LWORK, N
 *       LOGICAL            WANTT, WANTZ
@@ -29,7 +29,7 @@
 *       DOUBLE PRECISION   H( LDH, * ), WI( * ), WORK( * ), WR( * ),
 *      $                   Z( LDZ, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -67,7 +67,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>           The order of the matrix H.  N .GE. 0.
+*>           The order of the matrix H.  N >= 0.
 *> \endverbatim
 *>
 *> \param[in] ILO
@@ -79,12 +79,12 @@
 *> \verbatim
 *>          IHI is INTEGER
 *>           It is assumed that H is already upper triangular in rows
-*>           and columns 1:ILO-1 and IHI+1:N and, if ILO.GT.1,
+*>           and columns 1:ILO-1 and IHI+1:N and, if ILO > 1,
 *>           H(ILO,ILO-1) is zero. ILO and IHI are normally set by a
 *>           previous call to DGEBAL, and then passed to DGEHRD when the
 *>           matrix output by DGEBAL is reduced to Hessenberg form.
 *>           Otherwise, ILO and IHI should be set to 1 and N,
-*>           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N.
+*>           respectively.  If N > 0, then 1 <= ILO <= IHI <= N.
 *>           If N = 0, then ILO = 1 and IHI = 0.
 *> \endverbatim
 *>
@@ -97,19 +97,19 @@
 *>           decomposition (the Schur form); 2-by-2 diagonal blocks
 *>           (corresponding to complex conjugate pairs of eigenvalues)
 *>           are returned in standard form, with H(i,i) = H(i+1,i+1)
-*>           and H(i+1,i)*H(i,i+1).LT.0. If INFO = 0 and WANTT is
+*>           and H(i+1,i)*H(i,i+1) < 0. If INFO = 0 and WANTT is
 *>           .FALSE., then the contents of H are unspecified on exit.
-*>           (The output value of H when INFO.GT.0 is given under the
+*>           (The output value of H when INFO > 0 is given under the
 *>           description of INFO below.)
 *>
-*>           This subroutine may explicitly set H(i,j) = 0 for i.GT.j and
+*>           This subroutine may explicitly set H(i,j) = 0 for i > j and
 *>           j = 1, 2, ... ILO-1 or j = IHI+1, IHI+2, ... N.
 *> \endverbatim
 *>
 *> \param[in] LDH
 *> \verbatim
 *>          LDH is INTEGER
-*>           The leading dimension of the array H. LDH .GE. max(1,N).
+*>           The leading dimension of the array H. LDH >= max(1,N).
 *> \endverbatim
 *>
 *> \param[out] WR
@@ -125,7 +125,7 @@
 *>           and WI(ILO:IHI). If two eigenvalues are computed as a
 *>           complex conjugate pair, they are stored in consecutive
 *>           elements of WR and WI, say the i-th and (i+1)th, with
-*>           WI(i) .GT. 0 and WI(i+1) .LT. 0. If WANTT is .TRUE., then
+*>           WI(i) > 0 and WI(i+1) < 0. If WANTT is .TRUE., then
 *>           the eigenvalues are stored in the same order as on the
 *>           diagonal of the Schur form returned in H, with
 *>           WR(i) = H(i,i) and, if H(i:i+1,i:i+1) is a 2-by-2 diagonal
@@ -143,7 +143,7 @@
 *>          IHIZ is INTEGER
 *>           Specify the rows of Z to which transformations must be
 *>           applied if WANTZ is .TRUE..
-*>           1 .LE. ILOZ .LE. ILO; IHI .LE. IHIZ .LE. N.
+*>           1 <= ILOZ <= ILO; IHI <= IHIZ <= N.
 *> \endverbatim
 *>
 *> \param[in,out] Z
@@ -153,7 +153,7 @@
 *>           If WANTZ is .TRUE., then Z(ILO:IHI,ILOZ:IHIZ) is
 *>           replaced by Z(ILO:IHI,ILOZ:IHIZ)*U where U is the
 *>           orthogonal Schur factor of H(ILO:IHI,ILO:IHI).
-*>           (The output value of Z when INFO.GT.0 is given under
+*>           (The output value of Z when INFO > 0 is given under
 *>           the description of INFO below.)
 *> \endverbatim
 *>
@@ -161,7 +161,7 @@
 *> \verbatim
 *>          LDZ is INTEGER
 *>           The leading dimension of the array Z.  if WANTZ is .TRUE.
-*>           then LDZ.GE.MAX(1,IHIZ).  Otherwize, LDZ.GE.1.
+*>           then LDZ >= MAX(1,IHIZ).  Otherwise, LDZ >= 1.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -174,7 +174,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>           The dimension of the array WORK.  LWORK .GE. max(1,N)
+*>           The dimension of the array WORK.  LWORK >= max(1,N)
 *>           is sufficient, but LWORK typically as large as 6*N may
 *>           be required for optimal performance.  A workspace query
 *>           to determine the optimal workspace size is recommended.
@@ -190,19 +190,19 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>             =  0:  successful exit
-*>           .GT. 0:  if INFO = i, DLAQR0 failed to compute all of
+*>             = 0:  successful exit
+*>             > 0:  if INFO = i, DLAQR0 failed to compute all of
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
 *>
-*>                If INFO .GT. 0 and WANT is .FALSE., then on exit,
+*>                If INFO > 0 and WANT is .FALSE., then on exit,
 *>                the remaining unconverged eigenvalues are the eigen-
 *>                values of the upper Hessenberg matrix rows and
 *>                columns ILO through INFO of the final, output
 *>                value of H.
 *>
-*>                If INFO .GT. 0 and WANTT is .TRUE., then on exit
+*>                If INFO > 0 and WANTT is .TRUE., then on exit
 *>
 *>           (*)  (initial value of H)*U  = U*(final value of H)
 *>
@@ -210,7 +210,7 @@
 *>                value of H is upper Hessenberg and quasi-triangular
 *>                in rows and columns INFO+1 through IHI.
 *>
-*>                If INFO .GT. 0 and WANTZ is .TRUE., then on exit
+*>                If INFO > 0 and WANTZ is .TRUE., then on exit
 *>
 *>                  (final value of Z(ILO:IHI,ILOZ:IHIZ)
 *>                   =  (initial value of Z(ILO:IHI,ILOZ:IHIZ)*U
@@ -218,7 +218,7 @@
 *>                where U is the orthogonal matrix in (*) (regard-
 *>                less of the value of WANTT.)
 *>
-*>                If INFO .GT. 0 and WANTZ is .FALSE., then Z is not
+*>                If INFO > 0 and WANTZ is .FALSE., then Z is not
 *>                accessed.
 *> \endverbatim
 *
@@ -243,12 +243,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup doubleOTHERauxiliary
 *
@@ -256,10 +256,10 @@
       SUBROUTINE DLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, WORK, LWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            IHI, IHIZ, ILO, ILOZ, INFO, LDH, LDZ, LWORK, N
@@ -678,7 +678,7 @@
                   END IF
                END IF
 *
-*              ==== Use up to NS of the the smallest magnatiude
+*              ==== Use up to NS of the the smallest magnitude
 *              .    shifts.  If there aren't NS shifts available,
 *              .    then use them all, possibly dropping one to
 *              .    make the number of shifts even. ====

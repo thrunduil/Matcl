@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASD2 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd2.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd2.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd2.f"> 
+*> Download DLASD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd2.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -21,7 +21,7 @@
 *       SUBROUTINE DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU, VT,
 *                          LDVT, DSIGMA, U2, LDU2, VT2, LDVT2, IDXP, IDX,
 *                          IDXC, IDXQ, COLTYP, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDU, LDU2, LDVT, LDVT2, NL, NR, SQRE
 *       DOUBLE PRECISION   ALPHA, BETA
@@ -33,7 +33,7 @@
 *      $                   U2( LDU2, * ), VT( LDVT, * ), VT2( LDVT2, * ),
 *      $                   Z( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -190,7 +190,7 @@
 *>
 *> \param[out] IDXP
 *> \verbatim
-*>          IDXP is INTEGER array dimension(N)
+*>          IDXP is INTEGER array, dimension(N)
 *>         This will contain the permutation used to place deflated
 *>         values of D at the end of the array. On output IDXP(2:K)
 *>         points to the nondeflated D-values and IDXP(K+1:N)
@@ -199,14 +199,14 @@
 *>
 *> \param[out] IDX
 *> \verbatim
-*>          IDX is INTEGER array dimension(N)
+*>          IDX is INTEGER array, dimension(N)
 *>         This will contain the permutation used to sort the contents of
 *>         D into ascending order.
 *> \endverbatim
 *>
 *> \param[out] IDXC
 *> \verbatim
-*>          IDXC is INTEGER array dimension(N)
+*>          IDXC is INTEGER array, dimension(N)
 *>         This will contain the permutation used to arrange the columns
 *>         of the deflated U matrix into three groups:  the first group
 *>         contains non-zero entries only at and above NL, the second
@@ -216,7 +216,7 @@
 *>
 *> \param[in,out] IDXQ
 *> \verbatim
-*>          IDXQ is INTEGER array dimension(N)
+*>          IDXQ is INTEGER array, dimension(N)
 *>         This contains the permutation which separately sorts the two
 *>         sub-problems in D into ascending order.  Note that entries in
 *>         the first hlaf of this permutation must first be moved one
@@ -226,7 +226,7 @@
 *>
 *> \param[out] COLTYP
 *> \verbatim
-*>          COLTYP is INTEGER array dimension(N)
+*>          COLTYP is INTEGER array, dimension(N)
 *>         As workspace, this will contain a label which will indicate
 *>         which of the following types a column in the U2 matrix or a
 *>         row in the VT2 matrix is:
@@ -249,14 +249,14 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date June 2017
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *> \par Contributors:
 *  ==================
@@ -269,10 +269,10 @@
      $                   LDVT, DSIGMA, U2, LDU2, VT2, LDVT2, IDXP, IDX,
      $                   IDXC, IDXQ, COLTYP, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     June 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, LDU, LDU2, LDVT, LDVT2, NL, NR, SQRE

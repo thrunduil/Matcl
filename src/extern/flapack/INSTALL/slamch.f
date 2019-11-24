@@ -2,8 +2,8 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
@@ -13,7 +13,7 @@
 *     .. Scalar Arguments ..
 *      CHARACTER          CMACH
 *     ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -28,6 +28,7 @@
 *
 *> \param[in] CMACH
 *> \verbatim
+*>          CMACH is CHARACTER*1
 *>          Specifies the value to be returned by SLAMCH:
 *>          = 'E' or 'e',   SLAMCH := eps
 *>          = 'S' or 's ,   SLAMCH := sfmin
@@ -55,22 +56,22 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
 *
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION SLAMCH( CMACH )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          CMACH
@@ -155,7 +156,7 @@
 *> might hold one of these in a register.
 *> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*> \date November 2011
+*> \date December 2016
 *> \ingroup auxOTHERauxiliary
 *>
 *> \param[in] A
@@ -170,7 +171,7 @@
 *
       REAL             FUNCTION SLAMC3( A, B )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *
