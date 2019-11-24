@@ -287,6 +287,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL CCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
             A( K, K ) = REAL( A( K, K ) )
          ELSE
 *
@@ -654,6 +655,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL CCOPY( N - K + 1, W( K, K ), 1, A( K, K ), 1 )
             A( K, K ) = REAL( A( K, K ) )
          ELSE
 *
