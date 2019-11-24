@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZCPOSV + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcposv.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zcposv.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcposv.f"> 
+*> Download ZCPOSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcposv.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zcposv.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcposv.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
 *                          SWORK, RWORK, ITER, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, ITER, LDA, LDB, LDX, N, NRHS
@@ -31,7 +31,7 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( N, * ),
 *      $                   X( LDX, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -111,9 +111,9 @@
 *>          elements need not be set and are assumed to be zero.
 *>
 *>          On exit, if iterative refinement has been successfully used
-*>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
+*>          (INFO = 0 and ITER >= 0, see description below), then A is
 *>          unchanged, if double precision factorization has been used
-*>          (INFO.EQ.0 and ITER.LT.0, see description below), then the
+*>          (INFO = 0 and ITER < 0, see description below), then the
 *>          array A contains the factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H.
 *> \endverbatim
@@ -150,7 +150,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N*NRHS)
+*>          WORK is COMPLEX*16 array, dimension (N,NRHS)
 *>          This array is used to hold the residual vectors.
 *> \endverbatim
 *>
@@ -178,7 +178,7 @@
 *>               -3 : failure of CPOTRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
-*>          > 0: iterative refinement has been sucessfully used.
+*>          > 0: iterative refinement has been successfully used.
 *>               Returns the number of iterations
 *> \endverbatim
 *>
@@ -196,12 +196,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date June 2016
 *
 *> \ingroup complex16POsolve
 *
@@ -209,10 +209,10 @@
       SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*  -- LAPACK driver routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     June 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -248,7 +248,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZHEMM, ZLACPY, ZLAT2C, ZLAG2C, CLAG2Z,
-     $                   CPOTRF, CPOTRS, XERBLA
+     $                   CPOTRF, CPOTRS, XERBLA, ZPOTRF, ZPOTRS
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX
@@ -431,7 +431,7 @@
    30 CONTINUE
 *
 *     If we are at this place of the code, this is because we have
-*     performed ITER=ITERMAX iterations and never satisified the
+*     performed ITER=ITERMAX iterations and never satisfied the
 *     stopping criterion, set up the ITER flag accordingly and follow
 *     up on double precision routine.
 *

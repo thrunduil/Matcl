@@ -2,24 +2,24 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLANSP + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlansp.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlansp.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlansp.f"> 
+*> Download ZLANSP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlansp.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlansp.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlansp.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZLANSP( NORM, UPLO, N, AP, WORK )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM, UPLO
 *       INTEGER            N
@@ -28,7 +28,7 @@
 *       DOUBLE PRECISION   WORK( * )
 *       COMPLEX*16         AP( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -103,23 +103,24 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANSP( NORM, UPLO, N, AP, WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          NORM, UPLO
       INTEGER            N
@@ -137,14 +138,17 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, K
-      DOUBLE PRECISION   ABSA, SCALE, SUM, VALUE
+      DOUBLE PRECISION   ABSA, SUM, VALUE
+*     ..
+*     .. Local Arrays ..
+      DOUBLE PRECISION   SSQ( 2 ), COLSSQ( 2 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
       EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASSQ
+      EXTERNAL           ZLASSQ, DCOMBSSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, SQRT
@@ -219,40 +223,57 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
+*        SSQ(1) is scale
+*        SSQ(2) is sum-of-squares
+*        For better accuracy, sum each column separately.
 *
-         SCALE = ZERO
-         SUM = ONE
+         SSQ( 1 ) = ZERO
+         SSQ( 2 ) = ONE
+*
+*        Sum off-diagonals
+*
          K = 2
          IF( LSAME( UPLO, 'U' ) ) THEN
             DO 110 J = 2, N
-               CALL ZLASSQ( J-1, AP( K ), 1, SCALE, SUM )
+               COLSSQ( 1 ) = ZERO
+               COLSSQ( 2 ) = ONE
+               CALL ZLASSQ( J-1, AP( K ), 1, COLSSQ( 1 ), COLSSQ( 2 ) )
+               CALL DCOMBSSQ( SSQ, COLSSQ )
                K = K + J
   110       CONTINUE
          ELSE
             DO 120 J = 1, N - 1
-               CALL ZLASSQ( N-J, AP( K ), 1, SCALE, SUM )
+               COLSSQ( 1 ) = ZERO
+               COLSSQ( 2 ) = ONE
+               CALL ZLASSQ( N-J, AP( K ), 1, COLSSQ( 1 ), COLSSQ( 2 ) )
+               CALL DCOMBSSQ( SSQ, COLSSQ )
                K = K + N - J + 1
   120       CONTINUE
          END IF
-         SUM = 2*SUM
+         SSQ( 2 ) = 2*SSQ( 2 )
+*
+*        Sum diagonal
+*
          K = 1
+         COLSSQ( 1 ) = ZERO
+         COLSSQ( 2 ) = ONE
          DO 130 I = 1, N
             IF( DBLE( AP( K ) ).NE.ZERO ) THEN
                ABSA = ABS( DBLE( AP( K ) ) )
-               IF( SCALE.LT.ABSA ) THEN
-                  SUM = ONE + SUM*( SCALE / ABSA )**2
-                  SCALE = ABSA
+               IF( COLSSQ( 1 ).LT.ABSA ) THEN
+                  COLSSQ( 2 ) = ONE + COLSSQ(2)*( COLSSQ(1) / ABSA )**2
+                  COLSSQ( 1 ) = ABSA
                ELSE
-                  SUM = SUM + ( ABSA / SCALE )**2
+                  COLSSQ( 2 ) = COLSSQ( 2 ) + ( ABSA / COLSSQ( 1 ) )**2
                END IF
             END IF
             IF( DIMAG( AP( K ) ).NE.ZERO ) THEN
                ABSA = ABS( DIMAG( AP( K ) ) )
-               IF( SCALE.LT.ABSA ) THEN
-                  SUM = ONE + SUM*( SCALE / ABSA )**2
-                  SCALE = ABSA
+               IF( COLSSQ( 1 ).LT.ABSA ) THEN
+                  COLSSQ( 2 ) = ONE + COLSSQ(2)*( COLSSQ(1) / ABSA )**2
+                  COLSSQ( 1 ) = ABSA
                ELSE
-                  SUM = SUM + ( ABSA / SCALE )**2
+                  COLSSQ( 2 ) = COLSSQ( 2 ) + ( ABSA / COLSSQ( 1 ) )**2
                END IF
             END IF
             IF( LSAME( UPLO, 'U' ) ) THEN
@@ -261,7 +282,8 @@
                K = K + N - I + 1
             END IF
   130    CONTINUE
-         VALUE = SCALE*SQRT( SUM )
+         CALL DCOMBSSQ( SSQ, COLSSQ )
+         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
       END IF
 *
       ZLANSP = VALUE

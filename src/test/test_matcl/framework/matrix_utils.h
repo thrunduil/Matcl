@@ -36,6 +36,7 @@ bool    has_struct_qtril(const Matrix& m);
 bool    has_struct_qtriu(const Matrix& m);
 bool    has_struct_hessl(const Matrix& m);
 bool    has_struct_hessu(const Matrix& m);
+bool    has_struct_unitary(const Matrix& m);
 
 bool    has_struct(const Matrix& m, struct_flag sf);
 

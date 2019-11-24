@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTGEX2 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgex2.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgex2.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgex2.f"> 
+*> Download CTGEX2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgex2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgex2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgex2.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, J1, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       LOGICAL            WANTQ, WANTZ
 *       INTEGER            INFO, J1, LDA, LDB, LDQ, LDZ, N
@@ -29,7 +29,7 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
 *      $                   Z( LDZ, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -76,7 +76,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX arrays, dimensions (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the matrix A in the pair (A, B).
 *>          On exit, the updated matrix A.
 *> \endverbatim
@@ -89,7 +89,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX arrays, dimensions (LDB,N)
+*>          B is COMPLEX array, dimension (LDB,N)
 *>          On entry, the matrix B in the pair (A, B).
 *>          On exit, the updated matrix B.
 *> \endverbatim
@@ -102,7 +102,7 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>          Q is COMPLEX array, dimension (LDZ,N)
+*>          Q is COMPLEX array, dimension (LDQ,N)
 *>          If WANTQ = .TRUE, on entry, the unitary matrix Q. On exit,
 *>          the updated matrix Q.
 *>          Not referenced if WANTQ = .FALSE..
@@ -148,12 +148,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date June 2017
 *
 *> \ingroup complexGEauxiliary
 *
@@ -190,10 +190,10 @@
       SUBROUTINE CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, J1, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     June 2017
 *
 *     .. Scalar Arguments ..
       LOGICAL            WANTQ, WANTZ
@@ -266,7 +266,7 @@
       CALL CLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
       SA = SCALE*SQRT( SUM )
 *
-*     THRES has been changed from 
+*     THRES has been changed from
 *        THRESH = MAX( TEN*EPS*SA, SMLNUM )
 *     to
 *        THRESH = MAX( TWENTY*EPS*SA, SMLNUM )

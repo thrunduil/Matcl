@@ -2,24 +2,24 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLANGE + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slange.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slange.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slange.f"> 
+*> Download SLANGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slange.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slange.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slange.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       REAL             FUNCTION SLANGE( NORM, M, N, A, LDA, WORK )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM
 *       INTEGER            LDA, M, N
@@ -27,7 +27,7 @@
 *       .. Array Arguments ..
 *       REAL               A( LDA, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -102,23 +102,24 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup realGEauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION SLANGE( NORM, M, N, A, LDA, WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          NORM
       INTEGER            LDA, M, N
@@ -135,10 +136,13 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      REAL               SCALE, SUM, VALUE, TEMP
+      REAL               SUM, VALUE, TEMP
+*     ..
+*     .. Local Arrays ..
+      REAL               SSQ( 2 ), COLSSQ( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASSQ
+      EXTERNAL           SLASSQ, SCOMBSSQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, SISNAN
@@ -158,7 +162,7 @@
          VALUE = ZERO
          DO 20 J = 1, N
             DO 10 I = 1, M
-               TEMP = ABS( A( I, J ) ) 
+               TEMP = ABS( A( I, J ) )
                IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
    10       CONTINUE
    20    CONTINUE
@@ -194,13 +198,19 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
+*        SSQ(1) is scale
+*        SSQ(2) is sum-of-squares
+*        For better accuracy, sum each column separately.
 *
-         SCALE = ZERO
-         SUM = ONE
+         SSQ( 1 ) = ZERO
+         SSQ( 2 ) = ONE
          DO 90 J = 1, N
-            CALL SLASSQ( M, A( 1, J ), 1, SCALE, SUM )
+            COLSSQ( 1 ) = ZERO
+            COLSSQ( 2 ) = ONE
+            CALL SLASSQ( M, A( 1, J ), 1, COLSSQ( 1 ), COLSSQ( 2 ) )
+            CALL SCOMBSSQ( SSQ, COLSSQ )
    90    CONTINUE
-         VALUE = SCALE*SQRT( SUM )
+         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
       END IF
 *
       SLANGE = VALUE

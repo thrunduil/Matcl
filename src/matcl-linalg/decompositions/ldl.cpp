@@ -69,6 +69,8 @@ struct ldl_str<V, struct_dense>
         else
             Ac.assign_to_fresh(A.copy());
         
+        Ac.get_struct().reset();
+
         Integer info    = 0;
                 
         const char uplo = upper ? 'U' : 'L';
@@ -99,8 +101,6 @@ struct ldl_str<V, struct_dense>
         if(info < 0)
             throw error::error_ldl();
 
-        Ac.set_struct(struct_flag());        
-
         Matrix P            = irange(1,N);
         Mat_b D             = Mat_b(A.get_type(), N, N, -1, 1);        
 
@@ -124,6 +124,9 @@ struct ldl_str<V, struct_dense>
         {
             ret_D.add_struct(predefined_struct_type::sym);
         }
+
+        ret_D.add_struct(predefined_struct_type::qtril);
+        ret_D.add_struct(predefined_struct_type::qtriu);
 
         if (upper == false)
             ret_L.add_struct(predefined_struct_type::tril);
@@ -207,8 +210,12 @@ struct ldl_str<V, struct_dense>
                     ptr_A[j]    = V(0.0);
             
                 ptr_D_0[0]      = ptr_A[i+1];
-                ptr_D_l1[0]     = V(0.0);
-                ptr_D_u1[0]     = V(0.0);
+
+                if (i < N - 2)
+                {
+                    ptr_D_l1[0] = V(0.0);
+                    ptr_D_u1[0] = V(0.0);
+                };
 
                 ptr_A[i+1]      = V(1.0);
                 ++i;                
@@ -301,8 +308,12 @@ struct ldl_str<V, struct_dense>
                     ptr_A[j]    = V(0.0);
             
                 ptr_D_0[0]      = ptr_A[i-1];
-                ptr_D_l1[0]     = V(0.0);
-                ptr_D_u1[0]     = V(0.0);
+
+                if (i > 1)
+                {
+                    ptr_D_l1[0] = V(0.0);
+                    ptr_D_u1[0] = V(0.0);
+                };
 
                 ptr_A[i-1]      = V(1.0);
                 --i;                
@@ -462,10 +473,15 @@ static void ldl_impl(ldl_return_type& ret, const Matrix& A, bool upper)
         value_code v    = A.get_value_code();
         v               = matrix_traits::real_value_type(v);
         v               = matrix_traits::unify_value_types(v,value_code::v_float);
+        
+        Matrix I        = speye(A.rows(), A.rows(), v);
+        permvec p       = permvec::identity(A.rows());
 
-        Matrix I    = speye(A.rows(), A.rows(), v);
-        permvec p   = permvec::identity(A.rows());
-        ret         = ldl_return_type(I, A, p);
+        value_code vd   = matrix_traits::unify_value_types(v, A.get_value_code());
+        Matrix Ad       = bdiag(get_diag(A));
+        Ad              = matcl::convert_value(Ad, vd);
+
+        ret         = ldl_return_type(I, Ad, p);
         return;
     }
 
@@ -485,7 +501,12 @@ static void ldl_herm_impl(ldl_return_type& ret, const Matrix& A, bool upper)
 
         Matrix I    = speye(A.rows(),A.rows(),v);
         permvec p   = permvec::identity(A.rows());
-        ret         = ldl_return_type(I, A, p);
+
+        value_code vd   = matrix_traits::unify_value_types(v, A.get_value_code());
+        Matrix Ad       = bdiag(get_diag(A));
+        Ad              = matcl::convert_value(Ad, vd);
+
+        ret         = ldl_return_type(I, Ad, p);
         return;
     }
 

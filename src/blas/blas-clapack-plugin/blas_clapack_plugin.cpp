@@ -75,6 +75,45 @@ namespace f2c
         return f2c::snrm2_(n, sx, incx);
     };
 
+    static c_type_wr 
+    CALL_SYNTAX2(cdotc)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                        i_type_wr *incy)
+    {
+        c_type_wr ret;
+        f2c::cdotc_((complex*)&ret, n, (complex*)cx, incx, (complex*)cy, incy);
+
+        return ret;
+    }
+
+    static c_type_wr 
+    CALL_SYNTAX2(cdotu)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                        i_type_wr *incy)
+    {
+        c_type_wr ret;
+        f2c::cdotu_((complex*)&ret, n, (complex*)cx, incx, (complex*)cy, incy);
+
+        return ret;
+    }
+
+    static z_type_wr 
+    CALL_SYNTAX2(zdotc)(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy, 
+                        i_type_wr *incy)
+    {
+        z_type_wr ret;
+        f2c::zdotc_((doublecomplex*)&ret, n, (doublecomplex*)cx, incx, (doublecomplex*)cy, incy);
+
+        return ret;
+    }
+
+    static z_type_wr 
+    CALL_SYNTAX2(zdotu)(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy, 
+                        i_type_wr *incy)
+    {
+        z_type_wr ret;
+        f2c::zdotu_((doublecomplex*)&ret, n, (doublecomplex*)cx, incx, (doublecomplex*)cy, incy);
+
+        return ret;
+    }
 };
 
 static const ::blas_plugin g_clapack_plugin;

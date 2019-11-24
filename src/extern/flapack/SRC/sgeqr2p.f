@@ -2,39 +2,49 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGEQR2P + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqr2p.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeqr2p.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqr2p.f"> 
+*> Download SGEQR2P + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqr2p.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeqr2p.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqr2p.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
 *       ..
 *       .. Array Arguments ..
 *       REAL               A( LDA, * ), TAU( * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> SGEQR2P computes a QR factorization of a real m by n matrix A:
-*> A = Q * R.
+*> SGEQR2P computes a QR factorization of a real m-by-n matrix A:
+*>
+*>    A = Q * ( R ),
+*>            ( 0 )
+*>
+*> where:
+*>
+*>    Q is a m-by-m orthogonal matrix;
+*>    R is an upper-triangular n-by-n matrix with nonnegative diagonal
+*>    entries;
+*>    0 is a (m-n)-by-n zero matrix, if m > n.
+*>
 *> \endverbatim
 *
 *  Arguments:
@@ -58,7 +68,8 @@
 *>          On entry, the m by n matrix A.
 *>          On exit, the elements on and above the diagonal of the array
 *>          contain the min(m,n) by n upper trapezoidal matrix R (R is
-*>          upper triangular if m >= n); the elements below the diagonal,
+*>          upper triangular if m >= n). The diagonal entries of R
+*>          are nonnegative; the elements below the diagonal,
 *>          with the array TAU, represent the orthogonal matrix Q as a
 *>          product of elementary reflectors (see Further Details).
 *> \endverbatim
@@ -91,12 +102,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date November 2019
 *
 *> \ingroup realGEcomputational
 *
@@ -116,15 +127,17 @@
 *>  where tau is a real scalar, and v is a real vector with
 *>  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
 *>  and tau in TAU(i).
+*>
+*> See Lapack Working Note 203 for details
 *> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.2) --
+*  -- LAPACK computational routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     November 2019
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N

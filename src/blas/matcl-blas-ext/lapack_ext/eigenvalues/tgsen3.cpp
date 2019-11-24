@@ -24,7 +24,6 @@
 #include "tgsen_helpers.h"
 #include "blas/matcl-blas-ext/lapack_ext/utils/optim_params.h"
 #include "matcl-blas-lapack/blas/details/config_blas_lib.h"
-#include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
 
 #include <vector>
 #include <cassert>

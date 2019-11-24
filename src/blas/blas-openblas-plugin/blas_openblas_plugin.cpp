@@ -28,16 +28,10 @@
 #include "matcl-blas-lapack/blas_loader/blas_plugin.h"
 #include "omp.h"
 
-#include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
-
 #define CALL_SYNTAX(x) x##_
 
-//#define FUNCTION_NAME_cdotc wrap_cdotc
-//#define FUNCTION_NAME_cdotu wrap_cdotu
 #define FUNCTION_NAME_scabs1 wrap_scabs1
 #define FUNCTION_NAME_dcabs1 wrap_dcabs1
-//#define FUNCTION_NAME_zdotc wrap_zdotc
-//#define FUNCTION_NAME_zdotu wrap_zdotu
 
 // WARNING: OMP spport must be enabled
 
@@ -92,42 +86,6 @@ static global_data m_data;
 
 extern "C"
 {
-    static i_type_wr 
-    wrap_cdotc(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx,
-                                          i_type_wr *incx, c_type_wr *cy, i_type_wr *incy)
-    {
-        *reinterpret_cast<openblas_complex_float*>(ret_val)
-                = CALL_SYNTAX(cdotc)(n, (float *)cx, incx, (float *)cy, incy);
-        return 0;
-    }
-
-    static i_type_wr 
-    wrap_cdotu(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx,
-                                          i_type_wr *incx, c_type_wr *cy, i_type_wr *incy)
-    {
-        *reinterpret_cast<openblas_complex_float*>(ret_val)
-                = CALL_SYNTAX(cdotu)(n, (float *)cx, incx, (float *)cy, incy);
-        return 0;
-    }
-
-    static i_type_wr 
-    wrap_zdotc(z_type_wr *res, i_type_wr *n, z_type_wr *zx, i_type_wr *incx,
-                                          z_type_wr *zy, i_type_wr *incy)
-    {
-        *reinterpret_cast<openblas_complex_double*>(res)
-                = CALL_SYNTAX(zdotc)(n, (double *)zx, incx, (double *)zy, incy);
-        return 0;
-    }
-
-    static i_type_wr 
-    wrap_zdotu(z_type_wr *res, i_type_wr *n, z_type_wr *zx, i_type_wr *incx,
-                                          z_type_wr *zy, i_type_wr *incy)
-    {
-        *reinterpret_cast<openblas_complex_double*>(res)
-                = CALL_SYNTAX(zdotu)(n, (double *)zx, incx, (double *)zy, incy);
-        return 0;
-    }
-
     static s_type_wr wrap_scabs1(c_type_wr *z)
     {
         return std::abs(z->r) + std::abs(z->i);

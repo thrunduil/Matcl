@@ -2,24 +2,24 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAGTS + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagts.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagts.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagts.f"> 
+*> Download SLAGTS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagts.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagts.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagts.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, JOB, N
 *       REAL               TOL
@@ -28,7 +28,7 @@
 *       INTEGER            IN( * )
 *       REAL               A( * ), B( * ), C( * ), D( * ), Y( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -122,12 +122,12 @@
 *> \param[in,out] TOL
 *> \verbatim
 *>          TOL is REAL
-*>          On entry, with  JOB .lt. 0, TOL should be the minimum
+*>          On entry, with  JOB < 0, TOL should be the minimum
 *>          perturbation to be made to very small diagonal elements of U.
 *>          TOL should normally be chosen as about eps*norm(U), where eps
 *>          is the relative machine precision, but if TOL is supplied as
 *>          non-positive, then it is reset to eps*max( abs( u(i,j) ) ).
-*>          If  JOB .gt. 0  then TOL is not referenced.
+*>          If  JOB > 0  then TOL is not referenced.
 *>
 *>          On exit, TOL is changed as described above, only if TOL is
 *>          non-positive on entry. Otherwise TOL is unchanged.
@@ -136,35 +136,35 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0   : successful exit
-*>          .lt. 0: if INFO = -i, the i-th argument had an illegal value
-*>          .gt. 0: overflow would occur when computing the INFO(th)
-*>                  element of the solution vector x. This can only occur
-*>                  when JOB is supplied as positive and either means
-*>                  that a diagonal element of U is very small, or that
-*>                  the elements of the right-hand side vector y are very
-*>                  large.
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          > 0: overflow would occur when computing the INFO(th)
+*>               element of the solution vector x. This can only occur
+*>               when JOB is supplied as positive and either means
+*>               that a diagonal element of U is very small, or that
+*>               the elements of the right-hand side vector y are very
+*>               large.
 *> \endverbatim
 *
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE SLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, JOB, N

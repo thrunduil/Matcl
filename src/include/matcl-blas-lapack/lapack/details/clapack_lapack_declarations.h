@@ -1,7 +1,7 @@
 /* header file for clapack 3.2.1 */
 #pragma once
 
-#include "matcl-blas-lapack/blas_loader/clapack_types.h"
+#include "matcl-blas-lapack/blas_loader/blas_types.h"
 
 // based on clapack.h but only lapack declarations & different namespace
 

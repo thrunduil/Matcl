@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLANTR + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlantr.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlantr.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlantr.f"> 
+*> Download DLANTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlantr.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlantr.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlantr.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
 *                        WORK )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, NORM, UPLO
 *       INTEGER            LDA, M, N
@@ -28,7 +28,7 @@
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   A( LDA, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -128,12 +128,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup doubleOTHERauxiliary
 *
@@ -141,11 +141,12 @@
       DOUBLE PRECISION FUNCTION DLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
      $                 WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, NORM, UPLO
       INTEGER            LDA, M, N
@@ -163,14 +164,17 @@
 *     .. Local Scalars ..
       LOGICAL            UDIAG
       INTEGER            I, J
-      DOUBLE PRECISION   SCALE, SUM, VALUE
+      DOUBLE PRECISION   SUM, VALUE
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           DLASSQ
+*     .. Local Arrays ..
+      DOUBLE PRECISION   SSQ( 2 ), COLSSQ( 2 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, DISNAN
       EXTERNAL           LSAME, DISNAN
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL           DLASSQ, DCOMBSSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN, SQRT
@@ -311,38 +315,56 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
+*        SSQ(1) is scale
+*        SSQ(2) is sum-of-squares
+*        For better accuracy, sum each column separately.
 *
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
-               SCALE = ONE
-               SUM = MIN( M, N )
+               SSQ( 1 ) = ONE
+               SSQ( 2 ) = MIN( M, N )
                DO 290 J = 2, N
-                  CALL DLASSQ( MIN( M, J-1 ), A( 1, J ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL DLASSQ( MIN( M, J-1 ), A( 1, J ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL DCOMBSSQ( SSQ, COLSSQ )
   290          CONTINUE
             ELSE
-               SCALE = ZERO
-               SUM = ONE
+               SSQ( 1 ) = ZERO
+               SSQ( 2 ) = ONE
                DO 300 J = 1, N
-                  CALL DLASSQ( MIN( M, J ), A( 1, J ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL DLASSQ( MIN( M, J ), A( 1, J ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL DCOMBSSQ( SSQ, COLSSQ )
   300          CONTINUE
             END IF
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
-               SCALE = ONE
-               SUM = MIN( M, N )
+               SSQ( 1 ) = ONE
+               SSQ( 2 ) = MIN( M, N )
                DO 310 J = 1, N
-                  CALL DLASSQ( M-J, A( MIN( M, J+1 ), J ), 1, SCALE,
-     $                         SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL DLASSQ( M-J, A( MIN( M, J+1 ), J ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL DCOMBSSQ( SSQ, COLSSQ )
   310          CONTINUE
             ELSE
-               SCALE = ZERO
-               SUM = ONE
+               SSQ( 1 ) = ZERO
+               SSQ( 2 ) = ONE
                DO 320 J = 1, N
-                  CALL DLASSQ( M-J+1, A( J, J ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL DLASSQ( M-J+1, A( J, J ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL DCOMBSSQ( SSQ, COLSSQ )
   320          CONTINUE
             END IF
          END IF
-         VALUE = SCALE*SQRT( SUM )
+         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
       END IF
 *
       DLANTR = VALUE

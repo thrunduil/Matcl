@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSTEMR + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstemr.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstemr.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstemr.f"> 
+*> Download DSTEMR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstemr.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstemr.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstemr.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -21,7 +21,7 @@
 *       SUBROUTINE DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                          M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
 *                          IWORK, LIWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBZ, RANGE
 *       LOGICAL            TRYRAC
@@ -33,7 +33,7 @@
 *       DOUBLE PRECISION   D( * ), E( * ), W( * ), WORK( * )
 *       DOUBLE PRECISION   Z( LDZ, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -136,13 +136,17 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is DOUBLE PRECISION
+*>
+*>          If RANGE='V', the lower bound of the interval to
+*>          be searched for eigenvalues. VL < VU.
+*>          Not referenced if RANGE = 'A' or 'I'.
 *> \endverbatim
 *>
 *> \param[in] VU
 *> \verbatim
 *>          VU is DOUBLE PRECISION
 *>
-*>          If RANGE='V', the lower and upper bounds of the interval to
+*>          If RANGE='V', the upper bound of the interval to
 *>          be searched for eigenvalues. VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
 *> \endverbatim
@@ -150,14 +154,19 @@
 *> \param[in] IL
 *> \verbatim
 *>          IL is INTEGER
+*>
+*>          If RANGE='I', the index of the
+*>          smallest eigenvalue to be returned.
+*>          1 <= IL <= IU <= N, if N > 0.
+*>          Not referenced if RANGE = 'A' or 'V'.
 *> \endverbatim
 *>
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
 *>
-*>          If RANGE='I', the indices (in ascending order) of the
-*>          smallest and largest eigenvalues to be returned.
+*>          If RANGE='I', the index of the
+*>          largest eigenvalue to be returned.
 *>          1 <= IL <= IU <= N, if N > 0.
 *>          Not referenced if RANGE = 'A' or 'V'.
 *> \endverbatim
@@ -213,7 +222,7 @@
 *>
 *> \param[out] ISUPPZ
 *> \verbatim
-*>          ISUPPZ is INTEGER ARRAY, dimension ( 2*max(1,M) )
+*>          ISUPPZ is INTEGER array, dimension ( 2*max(1,M) )
 *>          The support of the eigenvectors in Z, i.e., the indices
 *>          indicating the nonzero elements in Z. The i-th computed eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through
@@ -224,13 +233,13 @@
 *> \param[in,out] TRYRAC
 *> \verbatim
 *>          TRYRAC is LOGICAL
-*>          If TRYRAC.EQ..TRUE., indicates that the code should check whether
+*>          If TRYRAC = .TRUE., indicates that the code should check whether
 *>          the tridiagonal matrix defines its eigenvalues to high relative
 *>          accuracy.  If so, the code uses relative-accuracy preserving
 *>          algorithms that might be (a bit) slower depending on the matrix.
 *>          If the matrix does not define its eigenvalues to high relative
 *>          accuracy, the code can uses possibly faster algorithms.
-*>          If TRYRAC.EQ..FALSE., the code is not required to guarantee
+*>          If TRYRAC = .FALSE., the code is not required to guarantee
 *>          relatively accurate eigenvalues and can use the fastest possible
 *>          techniques.
 *>          On exit, a .TRUE. TRYRAC will be set to .FALSE. if the matrix
@@ -289,12 +298,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2013
+*> \date June 2016
 *
 *> \ingroup doubleOTHERcomputational
 *
@@ -312,10 +321,10 @@
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.5.0) --
+*  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2013
+*     June 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE
@@ -717,9 +726,9 @@
          IF( SCALE.NE.ONE ) THEN
             CALL DSCAL( M, ONE / SCALE, W, 1 )
          END IF
-  
+
       END IF
-    
+
 *
 *     If eigenvalues are not in increasing order, then sort them,
 *     possibly along with eigenvectors.

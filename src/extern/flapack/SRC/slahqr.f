@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAHQR + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slahqr.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slahqr.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slahqr.f"> 
+*> Download SLAHQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slahqr.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slahqr.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slahqr.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
 *                          ILOZ, IHIZ, Z, LDZ, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, IHIZ, ILO, ILOZ, INFO, LDH, LDZ, N
 *       LOGICAL            WANTT, WANTZ
@@ -28,7 +28,7 @@
 *       .. Array Arguments ..
 *       REAL               H( LDH, * ), WI( * ), WR( * ), Z( LDZ, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -150,26 +150,26 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>           =   0: successful exit
-*>          .GT. 0: If INFO = i, SLAHQR failed to compute all the
+*>           = 0:   successful exit
+*>           > 0:   If INFO = i, SLAHQR failed to compute all the
 *>                  eigenvalues ILO to IHI in a total of 30 iterations
 *>                  per eigenvalue; elements i+1:ihi of WR and WI
 *>                  contain those eigenvalues which have been
 *>                  successfully computed.
 *>
-*>                  If INFO .GT. 0 and WANTT is .FALSE., then on exit,
+*>                  If INFO > 0 and WANTT is .FALSE., then on exit,
 *>                  the remaining unconverged eigenvalues are the
 *>                  eigenvalues of the upper Hessenberg matrix rows
-*>                  and columns ILO thorugh INFO of the final, output
+*>                  and columns ILO through INFO of the final, output
 *>                  value of H.
 *>
-*>                  If INFO .GT. 0 and WANTT is .TRUE., then on exit
+*>                  If INFO > 0 and WANTT is .TRUE., then on exit
 *>          (*)       (initial value of H)*U  = U*(final value of H)
-*>                  where U is an orthognal matrix.    The final
+*>                  where U is an orthogonal matrix.    The final
 *>                  value of H is upper Hessenberg and triangular in
 *>                  rows and columns INFO+1 through IHI.
 *>
-*>                  If INFO .GT. 0 and WANTZ is .TRUE., then on exit
+*>                  If INFO > 0 and WANTZ is .TRUE., then on exit
 *>                      (final value of Z)  = (initial value of Z)*U
 *>                  where U is the orthogonal matrix in (*)
 *>                  (regardless of the value of WANTT.)
@@ -178,12 +178,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup realOTHERauxiliary
 *
@@ -207,10 +207,10 @@
       SUBROUTINE SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            IHI, IHIZ, ILO, ILOZ, INFO, LDH, LDZ, N
@@ -223,8 +223,6 @@
 *  =========================================================
 *
 *     .. Parameters ..
-      INTEGER            ITMAX
-      PARAMETER          ( ITMAX = 30 )
       REAL               ZERO, ONE, TWO
       PARAMETER          ( ZERO = 0.0e0, ONE = 1.0e0, TWO = 2.0e0 )
       REAL               DAT1, DAT2
@@ -235,7 +233,7 @@
      $                   H22, RT1I, RT1R, RT2I, RT2R, RTDISC, S, SAFMAX,
      $                   SAFMIN, SMLNUM, SN, SUM, T1, T2, T3, TR, TST,
      $                   ULP, V2, V3
-      INTEGER            I, I1, I2, ITS, J, K, L, M, NH, NR, NZ
+      INTEGER            I, I1, I2, ITS, ITMAX, J, K, L, M, NH, NR, NZ
 *     ..
 *     .. Local Arrays ..
       REAL               V( 3 )
@@ -291,6 +289,10 @@
          I1 = 1
          I2 = N
       END IF
+*
+*     ITMAX is the total number of QR iterations allowed.
+*
+      ITMAX = 30 * MAX( 10, NH )
 *
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1 or 2. Each iteration of the loop works

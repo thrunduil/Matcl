@@ -2,24 +2,24 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLANTP + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clantp.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clantp.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clantp.f"> 
+*> Download CLANTP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clantp.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clantp.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clantp.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       REAL             FUNCTION CLANTP( NORM, UPLO, DIAG, N, AP, WORK )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, NORM, UPLO
 *       INTEGER            N
@@ -28,7 +28,7 @@
 *       REAL               WORK( * )
 *       COMPLEX            AP( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -113,23 +113,24 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date December 2016
 *
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION CLANTP( NORM, UPLO, DIAG, N, AP, WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     December 2016
 *
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, NORM, UPLO
       INTEGER            N
@@ -148,14 +149,17 @@
 *     .. Local Scalars ..
       LOGICAL            UDIAG
       INTEGER            I, J, K
-      REAL               SCALE, SUM, VALUE
+      REAL               SUM, VALUE
+*     ..
+*     .. Local Arrays ..
+      REAL               SSQ( 2 ), COLSSQ( 2 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, SISNAN
       EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ
+      EXTERNAL           CLASSQ, SCOMBSSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -308,45 +312,64 @@
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
+*        SSQ(1) is scale
+*        SSQ(2) is sum-of-squares
+*        For better accuracy, sum each column separately.
 *
          IF( LSAME( UPLO, 'U' ) ) THEN
             IF( LSAME( DIAG, 'U' ) ) THEN
-               SCALE = ONE
-               SUM = N
+               SSQ( 1 ) = ONE
+               SSQ( 2 ) = N
                K = 2
                DO 280 J = 2, N
-                  CALL CLASSQ( J-1, AP( K ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL CLASSQ( J-1, AP( K ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL SCOMBSSQ( SSQ, COLSSQ )
                   K = K + J
   280          CONTINUE
             ELSE
-               SCALE = ZERO
-               SUM = ONE
+               SSQ( 1 ) = ZERO
+               SSQ( 2 ) = ONE
                K = 1
                DO 290 J = 1, N
-                  CALL CLASSQ( J, AP( K ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL CLASSQ( J, AP( K ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL SCOMBSSQ( SSQ, COLSSQ )
                   K = K + J
   290          CONTINUE
             END IF
          ELSE
             IF( LSAME( DIAG, 'U' ) ) THEN
-               SCALE = ONE
-               SUM = N
+               SSQ( 1 ) = ONE
+               SSQ( 2 ) = N
                K = 2
                DO 300 J = 1, N - 1
-                  CALL CLASSQ( N-J, AP( K ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL CLASSQ( N-J, AP( K ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL SCOMBSSQ( SSQ, COLSSQ )
                   K = K + N - J + 1
   300          CONTINUE
             ELSE
-               SCALE = ZERO
-               SUM = ONE
+               SSQ( 1 ) = ZERO
+               SSQ( 2 ) = ONE
                K = 1
                DO 310 J = 1, N
-                  CALL CLASSQ( N-J+1, AP( K ), 1, SCALE, SUM )
+                  COLSSQ( 1 ) = ZERO
+                  COLSSQ( 2 ) = ONE
+                  CALL CLASSQ( N-J+1, AP( K ), 1,
+     $                         COLSSQ( 1 ), COLSSQ( 2 ) )
+                  CALL SCOMBSSQ( SSQ, COLSSQ )
                   K = K + N - J + 1
   310          CONTINUE
             END IF
          END IF
-         VALUE = SCALE*SQRT( SUM )
+         VALUE = SSQ( 1 )*SQRT( SSQ( 2 ) )
       END IF
 *
       CLANTP = VALUE

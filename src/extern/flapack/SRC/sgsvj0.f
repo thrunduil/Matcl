@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGSVJ0 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgsvj0.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgsvj0.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgsvj0.f"> 
+*> Download SGSVJ0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgsvj0.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgsvj0.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgsvj0.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
 *                          SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
 *       REAL               EPS, SFMIN, TOL
@@ -30,7 +30,7 @@
 *       REAL               A( LDA, * ), SVA( N ), D( N ), V( LDV, * ),
 *      $                   WORK( LWORK )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -117,7 +117,7 @@
 *> \param[in] MV
 *> \verbatim
 *>          MV is INTEGER
-*>          If JOBV .EQ. 'A', then MV rows of V are post-multipled by a
+*>          If JOBV = 'A', then MV rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV = 'N',   then MV is not referenced.
 *> \endverbatim
@@ -125,9 +125,9 @@
 *> \param[in,out] V
 *> \verbatim
 *>          V is REAL array, dimension (LDV,N)
-*>          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
+*>          If JOBV = 'V' then N rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
-*>          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
+*>          If JOBV = 'A' then MV rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV = 'N',   then V is not referenced.
 *> \endverbatim
@@ -136,8 +136,8 @@
 *> \verbatim
 *>          LDV is INTEGER
 *>          The leading dimension of the array V,  LDV >= 1.
-*>          If JOBV = 'V', LDV .GE. N.
-*>          If JOBV = 'A', LDV .GE. MV.
+*>          If JOBV = 'V', LDV >= N.
+*>          If JOBV = 'A', LDV >= MV.
 *> \endverbatim
 *>
 *> \param[in] EPS
@@ -157,7 +157,7 @@
 *>          TOL is REAL
 *>          TOL is the threshold for Jacobi rotations. For a pair
 *>          A(:,p), A(:,q) of pivot columns, the Jacobi rotation is
-*>          applied only if ABS(COS(angle(A(:,p),A(:,q)))) .GT. TOL.
+*>          applied only if ABS(COS(angle(A(:,p),A(:,q)))) > TOL.
 *> \endverbatim
 *>
 *> \param[in] NSWEEP
@@ -169,31 +169,31 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension LWORK.
+*>          WORK is REAL array, dimension (LWORK)
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          LWORK is the dimension of WORK. LWORK .GE. M.
+*>          LWORK is the dimension of WORK. LWORK >= M.
 *> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0 : successful exit.
-*>          < 0 : if INFO = -i, then the i-th argument had an illegal value
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, then the i-th argument had an illegal value
 *> \endverbatim
 *
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2015
+*> \date November 2017
 *
 *> \ingroup realOTHERcomputational
 *
@@ -218,10 +218,10 @@
       SUBROUTINE SGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
      $                   SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.6.0) --
+*  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2015
+*     November 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
@@ -262,7 +262,8 @@
       EXTERNAL           ISAMAX, LSAME, SDOT, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP
+      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -280,7 +281,7 @@
          INFO = -5
       ELSE IF( ( RSVEC.OR.APPLV ) .AND. ( MV.LT.0 ) ) THEN
          INFO = -8
-      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR. 
+      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR.
      $         ( APPLV.AND.( LDV.LT.MV ) ) ) THEN
          INFO = -10
       ELSE IF( TOL.LE.EPS ) THEN
@@ -485,7 +486,7 @@
      $                                              FASTR )
                                     SVA( q ) = AAQQ*SQRT( MAX( ZERO,
      $                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*SQRT( MAX( ZERO, 
+                                    AAPP = AAPP*SQRT( MAX( ZERO,
      $                                         ONE-T*AQOAP*AAPQ ) )
                                     MXSINJ = MAX( MXSINJ, ABS( T ) )
 *
@@ -800,7 +801,7 @@
                                     MXSINJ = MAX( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*SQRT( MAX( ZERO,
      $                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*SQRT( MAX( ZERO, 
+                                    AAPP = AAPP*SQRT( MAX( ZERO,
      $                                         ONE-T*AQOAP*AAPQ ) )
 *
                                     APOAQ = D( p ) / D( q )
@@ -1044,7 +1045,7 @@
 
  1993 CONTINUE
 *     end i=1:NSWEEP loop
-* #:) Reaching this point means that the procedure has comleted the given
+* #:) Reaching this point means that the procedure has completed the given
 *     number of iterations.
       INFO = NSWEEP - 1
       GO TO 1995

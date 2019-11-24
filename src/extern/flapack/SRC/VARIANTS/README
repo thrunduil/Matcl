@@ -1,5 +1,5 @@
-   		   ===============
- 		   = README File =
+		   ===============
+		   = README File =
 		   ===============
 
 This README File is for the LAPACK driver variants.
@@ -9,7 +9,7 @@ It is composed of 5 sections:
 	- Testing
 	- Linking your program
 	- Support
-	
+
 Author: Peng DU and Julie LANGOU, May 2008
 
 ===============
@@ -23,28 +23,28 @@ This directory contains several variants of LAPACK routines in single/double/com
 	- [sdcz]geqrf with QR Left Looking Level 3 BLAS version algorithm [2]- Directory: SRC/VARIANTS/qr/LL
 	- [sdcz]potrf with Cholesky Right Looking Level 3 BLAS version algorithm [2]- Directory: SRC/VARIANTS/cholesky/RL
 	- [sdcz]potrf with Cholesky Top Level 3 BLAS version algorithm [2]- Directory: SRC/VARIANTS/cholesky/TOP
-	
+
 References:For a more detailed description please refer to
 	- [1] Toledo, S. 1997. Locality of Reference in LU Decomposition with Partial Pivoting. SIAM J. Matrix Anal. Appl. 18, 4 (Oct. 1997),
           1065-1081. http://dx.doi.org/10.1137/S0895479896297744
 	- [2]LAWN XXX
-	
+
 =========
 = BUILD =
 =========
-	
-These variants are compiled by default in the build process but they are not tested by default.
-The build process creates one new library per variants in the four arithmetics (singel/double/comple/double complex).
-The libraries are in the SRC/VARIANTS/LIB directory.
 
-Corresponding libraries created in SRC/VARIANTS/LIB:
+These variants are compiled by default in the build process but they are not tested by default.
+The build process creates one new library per variants in the four arithmetic (single real/double real/single complex/double complex).
+The libraries are in the SRC/VARIANTS directory.
+
+Corresponding libraries created in SRC/VARIANTS:
 	- LU Crout : lucr.a
 	- LU Left Looking : lull.a
 	- LU Sivan Toledo's recursive : lurec.a
 	- QR Left Looking : qrll.a
 	- Cholesky Right Looking : cholrl.a
 	- Cholesky Top : choltop.a
-	
+
 
 ===========
 = TESTING =
@@ -64,16 +64,16 @@ You should then see the following files in the TESTING directory:
 = LINKING YOUR PROGRAM =
 ========================
 
-You just need to add the variants methods library in your linking sequence before your lapack libary.
+You just need to add the variants methods library in your linking sequence before your lapack library.
 Here is a quick example for LU
 
 Default using LU Right Looking version:
- $(FORTRAN) -c myprog.f
- $(FORTRAN) -o myexe myprog.o $(LAPACKLIB) $(BLASLIB)
+ $(FC) $(FFLAGS) -c myprog.f
+ $(FC) $(FFLAGS) $(LDFLAGS) -o myexe myprog.o $(LAPACKLIB) $(BLASLIB)
 
 Using LU Left Looking version:
- $(FORTRAN) -c myprog.f
- $(FORTRAN) -o myexe myprog.o $(PATH TO LAPACK/SRC/VARIANTS/LIB)/lull.a $(LAPACKLIB) $(BLASLIB)
+ $(FC) $(FFLAGS) -c myprog.f
+ $(FC) $(FFLAGS) $(LDFLAGS) -o myexe myprog.o $(PATH TO LAPACK/SRC/VARIANTS)/lull.a $(LAPACKLIB) $(BLASLIB)
 
 ===========
 = SUPPORT =

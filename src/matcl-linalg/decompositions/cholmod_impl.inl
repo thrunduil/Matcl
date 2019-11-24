@@ -208,6 +208,8 @@ struct cholmod_struct<raw::Matrix<V,struct_dense>>
         else
             Ac.assign_to_fresh(mat.copy());
 
+        Ac.get_struct().reset();
+
         Integer lda     = Ac.ld();        
         V* ptr          = Ac.ptr();
 

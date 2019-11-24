@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGGESX + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggesx.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggesx.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggesx.f"> 
+*> Download DGGESX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggesx.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggesx.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggesx.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -22,7 +22,7 @@
 *                          B, LDB, SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL,
 *                          VSR, LDVSR, RCONDE, RCONDV, WORK, LWORK, IWORK,
 *                          LIWORK, BWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBVSL, JOBVSR, SENSE, SORT
 *       INTEGER            INFO, LDA, LDB, LDVSL, LDVSR, LIWORK, LWORK, N,
@@ -40,7 +40,7 @@
 *       LOGICAL            SELCTG
 *       EXTERNAL           SELCTG
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -111,7 +111,7 @@
 *>
 *> \param[in] SELCTG
 *> \verbatim
-*>          SELCTG is procedure) LOGICAL FUNCTION of three DOUBLE PRECISION arguments
+*>          SELCTG is a LOGICAL FUNCTION of three DOUBLE PRECISION arguments
 *>          SELCTG must be declared EXTERNAL in the calling subroutine.
 *>          If SORT = 'N', SELCTG is not referenced.
 *>          If SORT = 'S', SELCTG is used to select eigenvalues to sort
@@ -131,10 +131,10 @@
 *> \verbatim
 *>          SENSE is CHARACTER*1
 *>          Determines which reciprocal condition numbers are computed.
-*>          = 'N' : None are computed;
-*>          = 'E' : Computed for average of selected eigenvalues only;
-*>          = 'V' : Computed for selected deflating subspaces only;
-*>          = 'B' : Computed for both.
+*>          = 'N':  None are computed;
+*>          = 'E':  Computed for average of selected eigenvalues only;
+*>          = 'V':  Computed for selected deflating subspaces only;
+*>          = 'B':  Computed for both.
 *>          If SENSE = 'E', 'V', or 'B', SORT must equal 'S'.
 *> \endverbatim
 *>
@@ -332,12 +332,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date June 2017
 *
 *> \ingroup doubleGEeigen
 *
@@ -365,10 +365,10 @@
      $                   VSR, LDVSR, RCONDE, RCONDV, WORK, LWORK, IWORK,
      $                   LIWORK, BWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*  -- LAPACK driver routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     June 2017
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBVSL, JOBVSR, SENSE, SORT

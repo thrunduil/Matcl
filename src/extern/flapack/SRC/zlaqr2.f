@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAQR2 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr2.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr2.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr2.f"> 
+*> Download ZLAQR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr2.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -21,7 +21,7 @@
 *       SUBROUTINE ZLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
 *                          IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
 *                          NV, WV, LDWV, WORK, LWORK )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            IHIZ, ILOZ, KBOT, KTOP, LDH, LDT, LDV, LDWV,
 *      $                   LDZ, LWORK, N, ND, NH, NS, NV, NW
@@ -31,7 +31,7 @@
 *       COMPLEX*16         H( LDH, * ), SH( * ), T( LDT, * ), V( LDV, * ),
 *      $                   WORK( * ), WV( LDWV, * ), Z( LDZ, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -103,7 +103,7 @@
 *> \param[in] NW
 *> \verbatim
 *>          NW is INTEGER
-*>          Deflation window size.  1 .LE. NW .LE. (KBOT-KTOP+1).
+*>          Deflation window size.  1 <= NW <= (KBOT-KTOP+1).
 *> \endverbatim
 *>
 *> \param[in,out] H
@@ -119,9 +119,9 @@
 *>
 *> \param[in] LDH
 *> \verbatim
-*>          LDH is integer
+*>          LDH is INTEGER
 *>          Leading dimension of H just as declared in the calling
-*>          subroutine.  N .LE. LDH
+*>          subroutine.  N <= LDH
 *> \endverbatim
 *>
 *> \param[in] ILOZ
@@ -133,7 +133,7 @@
 *> \verbatim
 *>          IHIZ is INTEGER
 *>          Specify the rows of Z to which transformations must be
-*>          applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N.
+*>          applied if WANTZ is .TRUE.. 1 <= ILOZ <= IHIZ <= N.
 *> \endverbatim
 *>
 *> \param[in,out] Z
@@ -141,20 +141,20 @@
 *>          Z is COMPLEX*16 array, dimension (LDZ,N)
 *>          IF WANTZ is .TRUE., then on output, the unitary
 *>          similarity transformation mentioned above has been
-*>          accumulated into Z(ILOZ:IHIZ,ILO:IHI) from the right.
+*>          accumulated into Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right.
 *>          If WANTZ is .FALSE., then Z is unreferenced.
 *> \endverbatim
 *>
 *> \param[in] LDZ
 *> \verbatim
-*>          LDZ is integer
+*>          LDZ is INTEGER
 *>          The leading dimension of Z just as declared in the
-*>          calling subroutine.  1 .LE. LDZ.
+*>          calling subroutine.  1 <= LDZ.
 *> \endverbatim
 *>
 *> \param[out] NS
 *> \verbatim
-*>          NS is integer
+*>          NS is INTEGER
 *>          The number of unconverged (ie approximate) eigenvalues
 *>          returned in SR and SI that may be used as shifts by the
 *>          calling subroutine.
@@ -162,14 +162,14 @@
 *>
 *> \param[out] ND
 *> \verbatim
-*>          ND is integer
+*>          ND is INTEGER
 *>          The number of converged eigenvalues uncovered by this
 *>          subroutine.
 *> \endverbatim
 *>
 *> \param[out] SH
 *> \verbatim
-*>          SH is COMPLEX*16 array, dimension KBOT
+*>          SH is COMPLEX*16 array, dimension (KBOT)
 *>          On output, approximate eigenvalues that may
 *>          be used for shifts are stored in SH(KBOT-ND-NS+1)
 *>          through SR(KBOT-ND).  Converged eigenvalues are
@@ -184,15 +184,15 @@
 *>
 *> \param[in] LDV
 *> \verbatim
-*>          LDV is integer scalar
+*>          LDV is INTEGER
 *>          The leading dimension of V just as declared in the
-*>          calling subroutine.  NW .LE. LDV
+*>          calling subroutine.  NW <= LDV
 *> \endverbatim
 *>
 *> \param[in] NH
 *> \verbatim
-*>          NH is integer scalar
-*>          The number of columns of T.  NH.GE.NW.
+*>          NH is INTEGER
+*>          The number of columns of T.  NH >= NW.
 *> \endverbatim
 *>
 *> \param[out] T
@@ -202,16 +202,16 @@
 *>
 *> \param[in] LDT
 *> \verbatim
-*>          LDT is integer
+*>          LDT is INTEGER
 *>          The leading dimension of T just as declared in the
-*>          calling subroutine.  NW .LE. LDT
+*>          calling subroutine.  NW <= LDT
 *> \endverbatim
 *>
 *> \param[in] NV
 *> \verbatim
-*>          NV is integer
+*>          NV is INTEGER
 *>          The number of rows of work array WV available for
-*>          workspace.  NV.GE.NW.
+*>          workspace.  NV >= NW.
 *> \endverbatim
 *>
 *> \param[out] WV
@@ -221,21 +221,21 @@
 *>
 *> \param[in] LDWV
 *> \verbatim
-*>          LDWV is integer
+*>          LDWV is INTEGER
 *>          The leading dimension of W just as declared in the
-*>          calling subroutine.  NW .LE. LDV
+*>          calling subroutine.  NW <= LDV
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension LWORK.
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
 *>          On exit, WORK(1) is set to an estimate of the optimal value
 *>          of LWORK for the given values of N, NW, KTOP and KBOT.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is integer
+*>          LWORK is INTEGER
 *>          The dimension of the work array WORK.  LWORK = 2*NW
 *>          suffices, but greater efficiency may result from larger
 *>          values of LWORK.
@@ -250,12 +250,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date September 2012
+*> \date June 2017
 *
 *> \ingroup complex16OTHERauxiliary
 *
@@ -270,10 +270,10 @@
      $                   IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
      $                   NV, WV, LDWV, WORK, LWORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     June 2017
 *
 *     .. Scalar Arguments ..
       INTEGER            IHIZ, ILOZ, KBOT, KTOP, LDH, LDT, LDV, LDWV,
