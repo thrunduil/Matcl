@@ -122,7 +122,8 @@ class lu_solver : public option_base<Integer, lu_solver>
         static void config()
         {
             m_description       = "lu sparse solver";
-            m_default_value     = (Integer)lu_solver_type::superlu;
+            //TODO: change solver to superlu when tested
+            m_default_value     = (Integer)lu_solver_type::lusol;
             m_validator         = validator_enum((Integer)lu_solver_type::last);
         };
 };

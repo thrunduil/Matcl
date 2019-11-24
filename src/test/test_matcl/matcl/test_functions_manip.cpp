@@ -54,25 +54,9 @@ class test_manip
         void make()
         {   
             /*
-            Integer code = 139;
+            Integer code = 163;
             Matrix mat = tf.get_matrix(code);
             matcl::disp(mat);
-
-            double tol      = 0.0;
-
-            if (mat.rows() == mat.cols())
-            {
-                bool is     = is_her(mat, tol);
-                bool is2    = is_her(mat + ctrans(mat), tol);
-
-                disp(mat - ctrans(mat));
-
-                (void)is2;
-                (void)is;
-
-                //if (is == true && norm_1(mat - ctrans(mat)) > 0.0)
-                //    out     += 1;
-            }
             */
 
             tf.make(opts);
@@ -167,7 +151,6 @@ void manip_functions_list::make(options opts)
     SELECT_TEST (3, test_is_sorted());
     SELECT_TEST (3, test_is_sorted_cols());
     SELECT_TEST (3, test_is_sorted_rows());
-
     SELECT_TEST (3, test_cat());
     SELECT_TEST (3, test_get_diag());
     SELECT_TEST (3, test_tril());
@@ -1281,11 +1264,32 @@ Real test_function_diag::eval_mat(const Matrix& mat,bool,int code )
     {
         Real dif		= 0;
         Matrix tmp		= vec(mat);
+
         // make dense diagonal only if mat not too big
         if (Real(tmp.numel()) * Real(tmp.numel()) < 10000)
         {
             Matrix out	= diag(tmp,d);
-                
+
+            check_struct(out);
+
+            if (d == 0)
+            {
+                if (has_struct_diag(out) == false)
+                    dif += 1;
+            };
+
+            if (d > 0)
+            {
+                if (has_struct_triu(out) == false)
+                    dif += 1;
+            };
+
+            if (d < 0)
+            {
+                if (has_struct_tril(out) == false)
+                    dif += 1;
+            };
+
             if (d > 0 && d > out.cols())
                 return dif;
 
@@ -1294,7 +1298,6 @@ Real test_function_diag::eval_mat(const Matrix& mat,bool,int code )
 
             Matrix out2	= get_diag(out,d);
 
-            check_struct(out);
             check_struct(out2);
 
             dif			+= norm_1(out2 - tmp);
@@ -1329,6 +1332,26 @@ Real test_function_bdiag::eval_mat(const Matrix& mat,bool,int code )
         Matrix tmp		= vec(mat);
         {
             Matrix out	= bdiag(tmp,d);
+            check_struct(out);
+
+            if (d == 0)
+            {
+                if (has_struct_diag(out) == false)
+                    dif += 1;
+            };
+
+            if (d > 0)
+            {
+                if (has_struct_triu(out) == false)
+                    dif += 1;
+            };
+
+            if (d < 0)
+            {
+                if (has_struct_tril(out) == false)
+                    dif += 1;
+            };
+
             // make dense diagonal only if mat not too big
             if (Real(tmp.numel()) * Real(tmp.numel()) < 10000)
             {
@@ -1344,7 +1367,6 @@ Real test_function_bdiag::eval_mat(const Matrix& mat,bool,int code )
 
             Matrix out2	= get_diag(out,d);
 
-            check_struct(out);
             check_struct(out2);
 
             dif			+= norm_1(out2 - tmp);
@@ -1380,6 +1402,25 @@ Real test_function_spdiag::eval_mat(const Matrix& mat,bool,int code )
         Matrix tmp		= vec(mat);
         {
             Matrix out	= spdiag(tmp,d);
+ 
+            if (d == 0)
+            {
+                if (has_struct_diag(out) == false)
+                    dif += 1;
+            };
+
+            if (d > 0)
+            {
+                if (has_struct_triu(out) == false)
+                    dif += 1;
+            };
+
+            if (d < 0)
+            {
+                if (has_struct_tril(out) == false)
+                    dif += 1;
+            };
+
             // make dense diagonal only if mat not too big
             if (Real(tmp.numel()) * Real(tmp.numel()) < 10000)
             {
@@ -1395,7 +1436,6 @@ Real test_function_spdiag::eval_mat(const Matrix& mat,bool,int code )
 
             Matrix out2	= get_diag(out,d);
 
-            check_struct(out);
             check_struct(out2);
 
             dif			+= norm_1(out2 - tmp);
@@ -1445,10 +1485,16 @@ Real test_function_diags::eval_mat(const Matrix& mat,bool,int code )
 
             dif			+= norm_1(out - diag(tmp,0));
 
+            if (has_struct_diag(out) == false)
+                dif     += 1.0;
+
             if (1 < m*n)
             {
                 Matrix out2	= diags(tmp,(mat_row(), 1),m*n,m*n);
                 check_struct(out2);
+
+                if (has_struct_triu(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out2 - diag(tmp,1)(colon(1,m*n),colon(1,m*n)) );
             };
@@ -1457,6 +1503,9 @@ Real test_function_diags::eval_mat(const Matrix& mat,bool,int code )
             {
                 Matrix out2	= diags(tmp,(mat_row(), -1),m*n,m*n);
                 check_struct(out2);
+
+                if (has_struct_tril(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out2 - diag(tmp,-1)(colon(1,m*n),colon(1,m*n)) );
             };
@@ -1468,12 +1517,18 @@ Real test_function_diags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out	= diags(mat(colon(),colon(1,2)),(mat_row(), -1, 0),m,m);
                 check_struct(out);
 
+                if (has_struct_tril(out) == false)
+                    dif     += 1.0;
+
                 dif			+= norm_1(get_diag(out,-1) - mat(colon(1,m-1),1));
                 dif			+= norm_1(get_diag(out,0) - mat(colon(),2));
             }
             {
                 Matrix out	= diags(mat(colon(),colon(1,2)),(mat_row(), 0, 1),m,m);
                 check_struct(out);
+
+                if (has_struct_triu(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(get_diag(out,0) - mat(colon(),1));
                 dif			+= norm_1(get_diag(out,1) - mat(colon(1,m-1),2));
@@ -1524,6 +1579,9 @@ Real test_function_bdiags::eval_mat(const Matrix& mat,bool,int code )
             Matrix out02	= spdiags(tmp,(mat_row(), 0),m*n,m*n);
             check_struct(out0);
 
+            if (has_struct_diag(out0) == false)
+                dif     += 1.0;
+
             dif			+= norm_1(out0 - out02);
 
             if (1 < m*n)
@@ -1531,6 +1589,9 @@ Real test_function_bdiags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out	= bdiags(tmp,(mat_row(), 1),m*n,m*n);
                 Matrix out2	= spdiags(tmp,(mat_row(), 1),m*n,m*n);
                 check_struct(out);
+
+                if (has_struct_triu(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out - out2);
             };
@@ -1540,6 +1601,9 @@ Real test_function_bdiags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out	= bdiags(tmp,(mat_row(), -1),m*n,m*n);
                 Matrix out2	= spdiags(tmp,(mat_row(), -1),m*n,m*n);
                 check_struct(out);
+
+                if (has_struct_tril(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out - out2);
             };		
@@ -1551,12 +1615,18 @@ Real test_function_bdiags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out2	= spdiags(mat(colon(),colon(1,2)),(mat_row(), -1, 0),m,m);
                 check_struct(out);
 
+                if (has_struct_tril(out) == false)
+                    dif     += 1.0;
+
                 dif			+= norm_1(out - out2);
             }
             {
                 Matrix out	= bdiags(mat(colon(),colon(1,2)),(mat_row(), 0, 1),m,m);
                 Matrix out2	= spdiags(mat(colon(),colon(1,2)),(mat_row(), 0, 1),m,m);
                 check_struct(out);
+
+                if (has_struct_triu(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out - out2);
             }
@@ -1607,6 +1677,9 @@ Real test_function_spdiags::eval_mat(const Matrix& mat,bool,int code )
             Matrix out02	= bdiags(tmp,(mat_row(), 0),m*n,m*n);
             check_struct(out0);
 
+            if (has_struct_diag(out0) == false)
+                dif     += 1.0;
+
             dif			+= norm_1(out0 - out02);
 
             if (1 < m*n)
@@ -1614,6 +1687,9 @@ Real test_function_spdiags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out	= spdiags(tmp,(mat_row(), 1),m*n,m*n);
                 Matrix out2	= bdiags(tmp,(mat_row(), 1),m*n,m*n);
                 check_struct(out);
+
+                if (has_struct_triu(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out - out2);
             };
@@ -1623,6 +1699,9 @@ Real test_function_spdiags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out	= spdiags(tmp,(mat_row(), -1),m*n,m*n);
                 Matrix out2	= bdiags(tmp,(mat_row(), -1),m*n,m*n);
                 check_struct(out);
+
+                if (has_struct_tril(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out - out2);
             };		
@@ -1634,12 +1713,18 @@ Real test_function_spdiags::eval_mat(const Matrix& mat,bool,int code )
                 Matrix out2	= bdiags(mat(colon(),colon(1,2)),(mat_row(), -1, 0),m,m);
                 check_struct(out);
 
+                if (has_struct_tril(out) == false)
+                    dif     += 1.0;
+
                 dif			+= norm_1(out - out2);
             }
             {
                 Matrix out	= spdiags(mat(colon(),colon(1,2)),(mat_row(), 0, 1),m,m);
                 Matrix out2	= bdiags(mat(colon(),colon(1,2)),(mat_row(), 0, 1),m,m);
                 check_struct(out);
+
+                if (has_struct_triu(out) == false)
+                    dif     += 1.0;
 
                 dif			+= norm_1(out - out2);
             }
@@ -2640,6 +2725,21 @@ Real test_function_tril::eval_mat(const Matrix& mat,bool,int code )
     {		
         Matrix out		= tril(mat,d);
         check_struct(out);
+
+        if (d <= 1)
+        {
+            if (d <= 0)
+            {
+                if (has_struct_tril(out) == false)
+                    return 1.0;
+            }
+            else
+            {
+                if (has_struct_hessl(out) == false)
+                    return 1.0;
+            }
+        };
+
         return norm_1(out - out_full);
     }
     catch(const std::exception& ex)
@@ -2715,6 +2815,21 @@ Real test_function_triu::eval_mat(const Matrix& mat,bool,int code )
     {		
         Matrix out		= triu(mat,d);        
         check_struct(out);
+
+        if (d >= -1)
+        {
+            if (d >= 0)
+            {
+                if (has_struct_triu(out) == false)
+                    return 1.0;
+            }
+            else
+            {
+                if (has_struct_hessu(out) == false)
+                    return 1.0;
+            }
+        };
+
         return norm_1(out - out_full);
     }
     catch(const std::exception& ex)
@@ -2948,7 +3063,18 @@ Real test_function_sparse::eval_mat(const Matrix& mat,bool,int code )
     (void)code;
     try
     {		
+        Matrix mat_s    = sparse(mat);
+
         Real dif		= norm_1(mat - sparse(mat));
+
+        check_struct(mat_s);
+
+        if (has_struct(mat_s, mat.get_struct()) == false)
+            dif         += 1.0;
+
+        if (mat_s.get_struct_code() != struct_code::struct_sparse)
+            dif         += 1.0;
+
         return dif;
     }
     catch(const std::exception& ex)
@@ -2977,7 +3103,13 @@ Real test_function_full::eval_mat(const Matrix& mat,bool,int code )
     {		
         Matrix mat_f    = full(mat);
         Real dif		= norm_1(mat - mat_f);
+        
         if (mat_f.get_struct_code() != struct_code::struct_dense)
+            dif         += 1.0;
+
+        check_struct(mat_f);
+
+        if (has_struct(mat_f, mat.get_struct()) == false)
             dif         += 1.0;
 
         return dif;
@@ -3005,7 +3137,17 @@ Real test_function_band::eval_mat(const Matrix& mat,bool,int code )
     (void)code;
     try
     {		
-        Real dif		= norm_1(mat - band(mat));
+        Matrix mat_b    = band(mat);
+        Real dif		= norm_1(mat - mat_b);
+
+        check_struct(mat_b);
+
+        if (has_struct(mat_b, mat.get_struct()) == false)
+            dif         += 1.0;
+
+        if (mat_b.get_struct_code() != struct_code::struct_banded)
+            dif         += 1.0;
+
         return dif;
     }
     catch(const std::exception& ex)
@@ -3039,6 +3181,9 @@ Real test_function_clone::eval_mat(const Matrix& mat,bool,int code )
 
             dif				= norm_1(mat - A);
             dif				+= (A.is_unique()==false);
+
+            if (has_struct(A, mat.get_struct()) == false)
+                dif         += 1;
         };
         {
             Matrix B		= mat;
@@ -3046,6 +3191,9 @@ Real test_function_clone::eval_mat(const Matrix& mat,bool,int code )
             check_struct(A);
             dif				= norm_1(mat - A);
             dif				+= (A.is_unique()==false);
+
+            if (has_struct(A, mat.get_struct()) == false)
+                dif         += 1;
         };
         {
             Matrix B		= mat;
@@ -3053,6 +3201,9 @@ Real test_function_clone::eval_mat(const Matrix& mat,bool,int code )
             check_struct(A);
             dif				= norm_1(mat - A);
             dif				+= (A.is_unique()==false);
+
+            if (has_struct(A, mat.get_struct()) == false)
+                dif         += 1;
         };
         return dif;
     }
@@ -3133,6 +3284,9 @@ Real test_function_convert::eval_mat(const Matrix& mat,bool,int )
         if (v1 == v12)
             dif			+=norm_1(out - mat);
 
+        if (has_struct(out, mat.get_struct()) == false)
+            dif         += 1.0;
+
         return dif;
     }
     catch(const std::exception& ex)
@@ -3170,6 +3324,9 @@ Real test_function_convert_val::eval_mat(const Matrix& mat,bool,int )
         if (out.get_value_code() != (matcl::value_code)code)
             dif         += 1.0;
         if (out.get_struct_code() != mat.get_struct_code())
+            dif         += 1.0;
+
+        if (has_struct(out, mat.get_struct()) == false)
             dif         += 1.0;
 
         return dif;
@@ -3253,6 +3410,23 @@ Real test_function_trans_t::eval_mat(const Matrix& mat,bool,int code )
         Real out        = norm_1(m1 - mat);
         out             += norm_1(m2 - trans(mat));
         out             += norm_1(m3 - ctrans(mat));
+
+        check_struct(m1);
+        check_struct(m2);
+        check_struct(m3);
+
+        struct_flag s1  = md::predefined_struct::get_trans(mat.get_struct(), trans_type::no_trans);
+        struct_flag s2  = md::predefined_struct::get_trans(mat.get_struct(), trans_type::trans);
+        struct_flag s3  = md::predefined_struct::get_trans(mat.get_struct(), trans_type::conj_trans);
+
+        if (has_struct(m1, s1) == false)
+            out         += 1;
+
+        if (has_struct(m2, s2) == false)
+            out         += 1;
+
+        if (has_struct(m3, s3) == false)
+            out         += 1;
 
         return out;
     }
@@ -3464,6 +3638,12 @@ Real test_function_select_band::eval_mat(const Matrix& mat,bool,int code )
 
         check_struct(out1);
         check_struct(out2);
+
+        if (m_fd >= 0 && has_struct_triu(out1) == false)
+            out         += 1;
+
+        if (m_ld <= 0 && has_struct_tril(out1) == false)
+            out         += 1;
 
         return out;
     }

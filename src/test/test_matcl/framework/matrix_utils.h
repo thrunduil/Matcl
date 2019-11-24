@@ -28,4 +28,15 @@ namespace matcl
 
 Real norm_1(const Matrix& m);
 
+// check struct flags
+bool    has_struct_diag(const Matrix& m);
+bool    has_struct_tril(const Matrix& m);
+bool    has_struct_triu(const Matrix& m);
+bool    has_struct_qtril(const Matrix& m);
+bool    has_struct_qtriu(const Matrix& m);
+bool    has_struct_hessl(const Matrix& m);
+bool    has_struct_hessu(const Matrix& m);
+
+bool    has_struct(const Matrix& m, struct_flag sf);
+
 };

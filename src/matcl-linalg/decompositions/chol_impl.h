@@ -607,7 +607,12 @@ struct chol_impl<Float,struct_sparse>
     {
         //cholmod is not implemented for single precision
         Mat_R tmp   = mr::converter<Mat_R,Mat>::eval(A);
-        return chol_impl<Real,struct_sparse>::eval(ret, tmp, upper, opts);
+        chol_impl<Real,struct_sparse>::eval(ret, tmp, upper, opts);
+
+        // convert back to single precision
+        auto scope  = error::enable_warnings(false);
+        Matrix res  = matcl::convert_value(ret.get<1>(), value_code::v_float);
+        ret         = chol2_return_type(res, ret.get<2>(), ret.get<3>());
     };
 };
 
@@ -648,7 +653,6 @@ struct chol_impl<Complex,struct_sparse>
         switch (ord)
         {
             case opt::chol_ordering_type::default_val:
-            default:
                 break;
             case opt::chol_ordering_type::natural:
                 c.method[0].ordering    = CHOLMOD_NATURAL;
@@ -658,7 +662,7 @@ struct chol_impl<Complex,struct_sparse>
             ///metis is broken in cholmod
             case opt::ordering_type::metis:
                 c.method[0].ordering    = CHOLMOD_METIS;
-                c.postorder   = true;
+                c.postorder             = true;
                 c.nmethods              = 1;
                 break;
             */
@@ -671,7 +675,9 @@ struct chol_impl<Complex,struct_sparse>
                 c.method[0].ordering    = CHOLMOD_NESDIS;
                 c.postorder             = true;
                 c.nmethods              = 1;
-                break;        
+                break;    
+            default:
+                break;
         };
 
         cholmod_sparse *cholmA  = cholmod_helpers::matcl_sparse_hercomplex_to_cholmod(A, c);        
@@ -713,7 +719,7 @@ struct chol_impl<Complex,struct_sparse>
             ret_factor.add_struct(predefined_struct_type::tril);
         }
 
-        ret = chol2_return_type(ret_factor, p, 0);
+        ret = chol2_return_type(ret_factor, p, N_suc);
         return;
     };
 };
@@ -728,7 +734,12 @@ struct chol_impl<Float_complex,struct_sparse>
     {
         //cholmod is not implemented for single precision
         Mat_R tmp   = mr::converter<Mat_R,Mat>::eval(A);
-        return chol_impl<Complex,struct_sparse>::eval(ret, tmp, upper, opts);
+        chol_impl<Complex,struct_sparse>::eval(ret, tmp, upper, opts);
+
+        // convert back to single precision
+        auto scope  = error::enable_warnings(false);
+        Matrix res  = matcl::convert_value(ret.get<1>(), value_code::v_float_complex);
+        ret         = chol2_return_type(res, ret.get<2>(), ret.get<3>());
     };
 };
 

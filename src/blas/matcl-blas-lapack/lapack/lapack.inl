@@ -1637,16 +1637,14 @@ void gesdd<c_type>(const char *jobu,i_type m,i_type n,c_type *a,i_type lda,
     {
         using workspace     = matcl::pod_workspace<s_type>;
 
-        i_type K    = (m<n)?m:n;
-        i_type K2   = (m>n)?m:n;
-        i_type LW1  = 5*K+1;
-        i_type LW2  = K * maximum(5*K+7,2*K2+2*K+1) + 1;
+        i_type MX   = (m>n)?m:n;
+        i_type MN   = (m<n)?m:n;
         i_type LW;
 
         if (jobu == nullptr || jobu[0] == 'N' || jobu[0] == 'n')
-            LW      = LW1;
+            LW      = 5*MN+1;
         else
-            LW      = LW2;
+            LW      = maximum(5*MN*MN + 5*MN, 2*MX*MN + 2*MN*MN + MN) + 1;
 
         workspace rwork(LW);
 
@@ -1671,16 +1669,14 @@ void gesdd<z_type>(const char *jobu,i_type m,i_type n,z_type *a,i_type lda,
     {
         using workspace     = matcl::pod_workspace<d_type>;
 
-        i_type K    = (m<n)?m:n;
-        i_type K2   = (m>n)?m:n;
-        i_type LW1  = 5*K+1;
-        i_type LW2  = K * maximum(5*K+7,2*K2+2*K+1) + 1;
+        i_type MX   = (m>n)?m:n;
+        i_type MN   = (m<n)?m:n;
         i_type LW;
 
         if (jobu == nullptr || jobu[0] == 'N' || jobu[0] == 'n')
-            LW      = LW1;
+            LW      = 5*MN+1;
         else
-            LW      = LW2;
+            LW      = maximum(5*MN*MN + 5*MN, 2*MX*MN + 2*MN*MN + MN) + 1;
 
         workspace rwork(LW);
 

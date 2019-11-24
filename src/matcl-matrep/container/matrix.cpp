@@ -256,12 +256,15 @@ Matrix& Matrix::operator=(Matrix&& mat) &
     return *this;
 };
 
-const struct_flag Matrix::get_struct() const
+const struct_flag& Matrix::get_struct() const
 {
-    if (m_type < mat_code::integer_dense)
-        return struct_flag();
+    static struct_flag struct_scalar;
 
-    return m_value.m_mat.m_mat_ptr->get_struct();
+    if (m_type < mat_code::integer_dense)
+        return struct_scalar;
+
+    const struct_flag& ret = m_value.m_mat.m_mat_ptr->get_struct();
+    return ret;
 };
 
 void Matrix::set_struct(const struct_flag& fl) const

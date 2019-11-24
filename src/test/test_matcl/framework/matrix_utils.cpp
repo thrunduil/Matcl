@@ -177,4 +177,149 @@ Real matcl::norm_1(const Matrix& A)
     return unary_visitor_norm_1::make<const Matrix&>(A);
 };
 
+bool matcl::has_struct_diag(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_diag() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_tril(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_tril() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_triu(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_triu() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_qtril(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_qtril() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_qtriu(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_qtriu() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_hessl(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_hessl() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct_hessu(const Matrix& m)
+{
+    if (m.rows() == 0 || m.cols() == 0)
+        return true;
+
+    if (m.get_struct().is_hessu() == true)
+        return true;
+
+    if (m.is_scalar() == true)
+        return true;
+
+    if (m.structural_nnz() == 0)
+        return true;
+
+    return false;
+};
+
+bool matcl::has_struct(const Matrix& m, struct_flag sf)
+{
+    if (sf.is_diag() == true && has_struct_diag(m) == false)
+        return false;
+
+    if (sf.is_tril() == true && has_struct_tril(m) == false)
+        return false;
+        
+    if (sf.is_triu() == true && has_struct_triu(m) == false)
+        return false;
+
+    if (sf.is_qtril() == true && has_struct_qtril(m) == false)
+        return false;
+
+    if (sf.is_qtriu() == true && has_struct_qtriu(m) == false)
+        return false;
+
+    if (sf.is_hessl() == true && has_struct_hessl(m) == false)
+        return false;
+
+    if (sf.is_hessu() == true && has_struct_hessu(m) == false)
+        return false;
+
+    return true;
+};
+
 };
