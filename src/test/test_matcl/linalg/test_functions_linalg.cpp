@@ -58,6 +58,28 @@ static Real error_tolerance(Real mult, const Matrix& mat)
     return tol;
 };
 
+template<class V>
+static Matrix make_scalar(const V& v, value_code vc)
+{
+    switch (vc)
+    {
+        case value_code::v_integer:
+            return Matrix(convert_scalar<Integer>(v));
+        case value_code::v_float:
+            return Matrix(convert_scalar<Float>(v));
+        case value_code::v_real:
+            return Matrix(convert_scalar<Real>(v));
+        case value_code::v_float_complex:
+            return Matrix(convert_scalar<Float_complex>(v));
+        case value_code::v_complex:
+            return Matrix(convert_scalar<Complex>(v));
+        case value_code::v_object:
+            return Matrix(Object(v));
+        default:
+            throw std::runtime_error("invalid value code");
+    };
+}
+
 class test_linalg
 {
     linalg_functions_list&		tf;
@@ -74,44 +96,79 @@ class test_linalg
         {};
 
         void make()
-        {    
-            /*
-            int code = 408;
-
-            Matrix mat = tf.get_matrix(code);
-
-            matcl::disp(full(mat(colon(1,4),colon(1,4))));
-
-            Real dif = 0;
-
+        {   
             {
-                test_function_ldl ts;
-                dif += ts.eval_mat(mat, false, code);
+                int code = 279;
+
+                Matrix mat = tf.get_matrix(code);
+
+                matcl::disp(full(mat));
+
+                Matrix S, est_rank, norm_E;
+                permvec p;
+                Matrix M;
+
+                M           = hersum(mat);
+                bool upper  = true;
+
+                disp(M);
+                std::tie(S,p,est_rank,norm_E) = cholmod(M,upper);
+
+                check_struct(S);
+                Real dif = 0;
+
+                disp(S);
+
+                // check factorization M(p,p) + E = S'S
+                Matrix M1   = upper ? ctrans(S) * S : S * ctrans(S);
+                int N       = M.rows();
+
+                Matrix E = M(p, p) - M1;
+                dif = norm_1(norm(E, 2.) - norm_E.get_scalar<Real>());
+        
+                if (dif < error_tolerance(10.0, M1))
+                    dif = 0.;
+
+                // check estimated rank is plausible
+                if (est_rank.get_scalar<Integer>() < 0 || est_rank.get_scalar<Integer>() > N)
+                    dif += 1000.0;
+
+                // check bound on ||E||
+                Matrix eig_M = schur_decomposition(M).eig();
+
+                Real tol_E  = error_tolerance(10.0, eig_M);
+
+                if (N > 0)
+                    tol_E   += 100.0 * abs(min_d(eig_M)).get_scalar<Real>() * N; 
+
+                if (N > 0 && norm_E > tol_E)
+                {
+                    dif += 10000;
+                }
+
+                // check finitenes of all results
+                if (mat.all_finite() == true)
+                {
+                    if (S.all_finite() == false)
+                        dif     += 1.0;
+
+                    if (est_rank.all_finite() == false)
+                        dif     += 1.0;
+
+                    if (norm_E.all_finite() == false)
+                        dif     += 1.0;
+                }
+
+                if (M1.is_square() == false)
+                    dif += 1;
+
+                if (upper == true && has_struct_triu(S) == false)
+                    dif += 1.0;
+
+                if (upper == false && has_struct_tril(S) == false)
+                    dif += 1.0;
             };
 
-            {
-                Matrix mat_s1   = mat + trans(mat);
-                Matrix mat_s2   = mat_s1;
-                Matrix Z        = zeros(100,100);
-
-                Matrix mat_s    = (mat_row(), (mat_col(), mat_s1, Z), (mat_col(), Z, mat_s2));
-
-                mat_s.set_struct(struct_flag::sym);
-
-
-                Matrix l,d,p;
-
-                tie(l,d,p)            =   ldl(mat_s);
-
-                //disp(full(l));
-                disp(full(reshape(get_diag(d),100,2)));
-
-                Matrix mat_s_check    = p * l * d * trans(l) * trans(p);  
-
-                disp(norm(mat_s_check - mat_s));
-            };
-            */
-         
             tf.make(opts);
         };
 
@@ -183,24 +240,28 @@ void linalg_functions_list::make(options opts)
 {
     m_options = opts;
     
-    SELECT_TEST (3, test_svd());
-    SELECT_TEST (3, test_norm());
+    //TODO
 
-    SELECT_TEST (3, test_chol());
-    SELECT_TEST (3, test_chol_rr());
+    //SELECT_TEST (3, test_svd());
+    //SELECT_TEST (3, test_norm());
+    //SELECT_TEST (3, test_cond());
+    //SELECT_TEST (3, test_lu_rook());    
+    //SELECT_TEST (3, test_lu_partial());   
+    //SELECT_TEST (3, test_lu_complete());    
+    //SELECT_TEST (3, test_chol());
+    //SELECT_TEST (3, test_chol_rr());
+    
     SELECT_TEST (3, test_cholmod());
-    SELECT_TEST (3, test_lu_rook());
-    SELECT_TEST (3, test_lu_partial());   
-    SELECT_TEST (3, test_lu_complete());
+    
     SELECT_TEST (3, test_linsolve());
     SELECT_TEST (3, test_linsolve_rev());
     SELECT_TEST (3, test_linsolve_rev2());        
+    
     SELECT_TEST (3, test_qr());
     SELECT_TEST (3, test_hess());
     SELECT_TEST (3, test_schur());
     SELECT_TEST (3, test_eigs());
-    SELECT_TEST (3, test_ldl());
-    SELECT_TEST (3, test_cond());
+    SELECT_TEST (3, test_ldl());    
 };
 
 Matrix linalg_functions_list::get_matrix(int code) const
@@ -553,10 +614,10 @@ Real test_function_lu_partial::eval_mat(const Matrix& mat,bool show, int code)
         if (d < error_tolerance(100.0, mat))
             d = 0;
 
-        if (L.get_struct().is_tril() == false && L.is_scalar() == false && L.structural_nnz() != 0)
+        if (has_struct_tril(L) == false)
             d += 1;
 
-        if (U.get_struct().is_triu() == false && U.is_scalar() == false && U.structural_nnz() != 0)
+        if (has_struct_triu(U) == false)
             d += 1;
 
         return d;
@@ -624,10 +685,10 @@ Real test_function_lu_rook::eval_mat(const Matrix& mat,bool , int code)
         if (d < error_tolerance(100.0, mat))
             d = 0;
 
-        if (L.get_struct().is_tril() == false && L.is_scalar() == false && L.structural_nnz() != 0)
+        if (has_struct_tril(L) == false)
             d += 1;
 
-        if (U.get_struct().is_triu() == false && U.is_scalar() == false && U.structural_nnz() != 0)
+        if (has_struct_triu(U) == false)
             d += 1;
 
         return d;
@@ -695,10 +756,10 @@ Real test_function_lu_complete::eval_mat(const Matrix& mat,bool , int code)
         if (d < error_tolerance(100.0, mat))
             d = 0;
 
-        if (L.get_struct().is_tril() == false && L.is_scalar() == false && L.structural_nnz() != 0)
+        if (has_struct_tril(L) == false)
             d += 1;
 
-        if (U.get_struct().is_triu() == false && U.is_scalar() == false && U.structural_nnz() != 0)
+        if (has_struct_triu(U) == false)
             d += 1;
 
         return d;
@@ -907,7 +968,364 @@ Real test_function_svd::eval_scalar(const Scalar&, bool,int)
     return 0;
 };
 
+//----------------------------------------------------------------------------
+//                  test_function_cond
+//----------------------------------------------------------------------------
+Real test_function_cond::eval_mat(const Matrix& mat,bool ,int code)
+{
+    (void)code;
+    Real res;
+
+    try
+    {
+        res = cond(mat);
+    }
+    catch(const error::square_matrix_required& )
+    {
+        if (mat.is_square() ) 
+        {
+            m_is_error = true;
+            m_error = "error::square_matrix_required should not appear here - matrix was square";
+            return 1.;
+        }
+        else
+        {
+            return 0.;
+        }
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error = true;
+        m_error = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+
+    try
+    {
+        Real dif        = 0;
+        Matrix s        = svd1(mat,svd_algorithm::dc);
+        Real test_cond  = (mat.rows() > 1 ) ? (s(1) / s(matcl::end)).get_scalar<Real>() : 1;
+        dif             += norm_1(test_cond - res);
+        
+        return dif;
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error = true;
+        m_error = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+};
+
+Real test_function_cond::eval_scalar(const Scalar&, bool,int)
+{
+    return 0;
+};
+
+//----------------------------------------------------------------------------
+//                  test_function_chol
+//----------------------------------------------------------------------------
+Real test_function_chol::eval_mat(const Matrix& mat,bool ,int code)
+{
+    (void)code;
+
+    Real out    = 0.;
+    out         += eval(mat,true);
+    out         += eval(mat,false);
+
+    return out;
+};
+
+Real test_function_chol::eval(const Matrix& mat, bool upper)
+{
+    Matrix S;
+    permvec p;
+
+    Matrix M0 = mat;
+
+    if (mat.get_value_code() == matcl::value_code::v_integer)
+    {
+        M0 = matcl::convert(M0,matcl::matrix_traits::get_matrix_type(matcl::value_code::v_real, 
+                                                                     mat.get_struct_code()));
+    };
+
+    Matrix M        = herprod(M0, true);
+    value_code vc   = M.get_value_code();
+    Matrix r        = make_scalar(100.0f * epsilon_mat(M), vc) * speye(M.rows(), vc);
+
+    M = M + r;
+
+    try
+    {		
+        std::tie(S,p) = chol(M, upper);
+    }
+    catch(const std::exception& )
+    {
+        return 1;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+
+    try
+    {
+        Matrix M1   = upper? ctrans(S) * S : S * ctrans(S);
+        check_struct(S);
+
+        Real dif = norm_1(M(p, p) - M1);
+
+        if (dif < error_tolerance(100.0, M1))
+            dif = 0.0;
+
+        if (M1.is_square() == false)
+            dif += 1;
+    
+        if (S.is_square() == false)
+            dif += 1;
+
+        if (upper == true && has_struct_triu(S) == false)
+            dif += 1.0;
+
+        if (upper == false && has_struct_tril(S) == false)
+            dif += 1.0;
+
+        return dif;
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error = true;
+        m_error = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+};
+
+Real test_function_chol::eval_scalar(const Scalar&, bool,int)
+{
+    return 0;
+};
+
+//----------------------------------------------------------------------------
+//                  test_function_chol_rr
+//----------------------------------------------------------------------------
+Real test_function_chol_rr::eval_mat(const Matrix& mat,bool ,int code)
+{
+    (void)code;
+
+    Real out = 0.;
+
+    out += eval(mat,true);
+    out += eval(mat,false);
+
+    return out;
+};
+
+Real test_function_chol_rr::eval(const Matrix& mat,bool upper)
+{
+    Matrix S;
+    permvec p;
+    Integer rank;
+    Matrix M0 = mat;
+
+    if (mat.get_value_code() == matcl::value_code::v_integer)
+    {
+        M0 = matcl::convert(M0,matcl::matrix_traits::get_matrix_type(matcl::value_code::v_real, mat.get_struct_code()));
+    };
+    
+    Matrix M = herprod(M0, true);
+
+    try
+    {		
+        std::tie(S,p,rank) = chol_rr(M,upper);
+    }
+    catch(const std::exception& )
+    {
+        return 1;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+
+    try
+    {
+        Matrix M1 = upper ? ctrans(S) * S : S * ctrans(S);
+        check_struct(S);
+
+        Real dif = norm_1(M(p, p) - M1);
+
+        if (dif < error_tolerance(300.0, M1))
+            dif = 0.0;
+
+        if (M1.is_square() == false)
+            dif += 1;
+
+        if (upper == true && has_struct_triu(S) == false)
+            dif += 1.0;
+
+        if (upper == false && has_struct_tril(S) == false)
+            dif += 1.0;
+
+        return dif;
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error = true;
+        m_error = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+};
+
+Real test_function_chol_rr::eval_scalar(const Scalar&, bool,int)
+{
+    return 0;
+};
+
+//----------------------------------------------------------------------------
+//                  test_function_cholmod
+//----------------------------------------------------------------------------
+Real test_function_cholmod::eval_mat(const Matrix& mat,bool show,int code)
+{
+    (void)code;
+
+    Real out = 0.;
+    out += eval(mat,true,show);
+    out += eval(mat,false,show);
+
+    return out;
+};
+
+Real test_function_cholmod::eval(const Matrix& mat,bool upper, bool show)
+{
+    Matrix S, est_rank, norm_E;
+    permvec p;
+    Matrix M;
+
+    try
+    {		 
+        M = hersum(mat);
+        std::tie(S,p,est_rank,norm_E) = cholmod(M,upper);
+    }
+    catch(const std::exception& )
+    {
+        return 0;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+
+    try
+    {
+        check_struct(S);
+        Real dif = 0;
+
+        // check factorization M(p,p) + E = S'S
+        Matrix M1   = upper ? ctrans(S) * S : S * ctrans(S);
+        int N       = M.rows();
+
+        Matrix E = M(p, p) - M1;
+        dif = norm_1(norm(E, 2.) - norm_E.get_scalar<Real>());
+        
+        if (dif < error_tolerance(10.0, M1))
+            dif = 0.;
+
+        // check estimated rank is plausible
+        if (est_rank.get_scalar<Integer>() < 0 || est_rank.get_scalar<Integer>() > N)
+            dif += 1000.0;
+
+        // check bound on ||E||
+        Matrix eig_M = schur_decomposition(M).eig();
+
+        Real tol_E  = error_tolerance(10.0, eig_M);
+
+        if (N > 0)
+            tol_E   += 100.0 * abs(min_d(eig_M)).get_scalar<Real>() * N; 
+
+        if (N > 0 && norm_E > tol_E)
+        {
+            dif += 10000;
+
+            if(show)
+                disp(std::string("Bound on ||E|| not satisfied for diagonal matrix"));
+        }
+
+        // check finitenes of all results
+        if (mat.all_finite() == true)
+        {
+            if (S.all_finite() == false)
+                dif     += 1.0;
+
+            if (est_rank.all_finite() == false)
+                dif     += 1.0;
+
+            if (norm_E.all_finite() == false)
+                dif     += 1.0;
+        }
+
+        if (M1.is_square() == false)
+            dif += 1;
+
+        if (upper == true && has_struct_triu(S) == false)
+            dif += 1.0;
+
+        if (upper == false && has_struct_tril(S) == false)
+            dif += 1.0;
+
+        return dif;
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error = true;
+        m_error = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+};
+
+Real test_function_cholmod::eval_scalar(const Scalar&, bool,int)
+{
+    return 0;
+};
+
 //TODO: rewrite from this point to the end
+
+
 Real test_function_linsolve::test_notrans(const Matrix& A,const Matrix& B, permvec p, permvec q)
 {
     Matrix X, X_f;
@@ -1484,270 +1902,6 @@ Real test_function_linsolve_rev2::test_ctrans(const Matrix& A,const Matrix& B, p
 Real test_function_linsolve_rev2::eval_scalar(const Scalar& ,bool, int code )
 {
     (void) code;
-    return 0;
-};
-
-Real test_function_chol::eval_mat(const Matrix& mat,bool ,int code)
-{
-    (void)code;
-
-    Real out = 0.;
-    out += eval(mat,true);
-    out += eval(mat,false);
-
-    return out;
-};
-Real test_function_chol::eval(const Matrix& mat,bool upper)
-{
-    Matrix S;
-    permvec p;
-
-    Matrix M0 = mat;
-    if (mat.get_value_code() == matcl::value_code::v_integer)
-    {
-        M0 = matcl::convert(M0,matcl::matrix_traits::get_matrix_type(matcl::value_code::v_real, 
-                                                                     mat.get_struct_code()));
-    };
-    Matrix M = ctrans(M0) * M0;
-    Matrix r = constants::eps() * 100. * speye(M.rows()) * (norm_1(M) + constants::eps());
-
-    M = M + r;
-
-    try
-    {		
-        std::tie(S,p) = chol(M, upper);
-    }
-    catch(const std::exception& )
-    {
-        return 1;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-
-    try
-    {
-        Matrix M1 = upper? ctrans(S)*S : S * ctrans(S);
-        check_struct(S);
-
-        Real dif = norm_1(M(p.to_matrix(),p.to_matrix()) - M1) / (norm_1(M1) + constants::eps());
-
-        if (M1.is_square() == false)
-        {
-            dif += 1;
-        };
-        if (S.is_square() == false)
-        {
-            dif += 1;
-        };
-
-        if (abs(dif) < 1e-14)
-        {
-            dif = 0.;
-        };
-
-        return dif;
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-};
-Real test_function_chol::eval_scalar(const Scalar&, bool,int)
-{
-    return 0;
-};
-Real test_function_chol_rr::eval_mat(const Matrix& mat,bool ,int code)
-{
-    (void)code;
-
-    Real out = 0.;
-
-    out += eval(mat,true);
-    out += eval(mat,false);
-
-    return out;
-};
-Real test_function_chol_rr::eval(const Matrix& mat,bool upper)
-{
-    Matrix S;
-    permvec p;
-    Integer rank;
-    Matrix M0 = mat;
-    if (mat.get_value_code() == matcl::value_code::v_integer)
-    {
-        M0 = matcl::convert(M0,matcl::matrix_traits::get_matrix_type(matcl::value_code::v_real, mat.get_struct_code()));
-    };
-    Matrix M = ctrans(M0) * M0;
-
-    try
-    {		
-        std::tie(S,p,rank) = chol_rr(M,upper);
-    }
-    catch(const std::exception& )
-    {
-        return 1;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-
-    try
-    {
-        Matrix M1 = upper ? ctrans(S)*S : S * ctrans(S);
-        check_struct(S);
-
-        Real nrm = matcl::norm(M1,1);
-        Real dif = 0.;
-        
-        if (matcl::is_nan(nrm) == true)
-        {
-        }
-        else
-        {
-            dif = norm_1(M(p,p) - M1) / (nrm + constants::eps()) / (M1.length() + 1.);
-        };
-
-        if (M1.is_square() == false)
-        {
-            dif += 1;
-        };
-
-        if (abs(dif) < 1e-10)
-        {
-            dif = 0.;
-        };
-
-        return dif;
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-};
-Real test_function_chol_rr::eval_scalar(const Scalar&, bool,int)
-{
-    return 0;
-};
-
-Real test_function_cholmod::eval_mat(const Matrix& mat,bool show,int code)
-{
-    (void)code;
-
-    Real out = 0.;
-    out += eval(mat,true,show);
-    out += eval(mat,false,show);
-
-    return out;
-};
-Real test_function_cholmod::eval(const Matrix& mat,bool upper, bool show)
-{
-    Matrix S, est_rank, norm_E;
-    permvec p;
-    Matrix M;
-
-    //TODO: test matrix with zeroes on diagonal
-
-    try
-    {		 
-        M = ctrans(mat) + mat;
-        std::tie(S,p,est_rank,norm_E) = cholmod(M,upper);
-    }
-    catch(const std::exception& )
-    {
-        return 0;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-
-    try
-    {
-        check_struct(S);
-        Real dif = 0;
-        // check factorization M(p,p) + E = S'S
-        Matrix M1 = upper ? ctrans(S) * S : S * ctrans(S);
-
-        Matrix E = M(p, p) - M1;
-        dif = norm_1(norm(E, 2.) - norm_E.get_scalar<Real>());
-        if (dif < M.rows() || dif < 10 * constants::eps())
-        {
-            dif = 0.;
-        };
-        // check estimated rank is plausible
-        if (est_rank.get_scalar<Integer>() < 0 || est_rank.get_scalar<Integer>() > M.rows())
-        {
-            dif = 1000;
-        }
-        // check bound on ||E||
-        Matrix eig_M = schur_decomposition(M.clone()).eig();
-        if (M.rows() > 0 && (norm_E > 100 * (abs(min_d(eig_M)) * M.rows() + constants::eps())))
-        {
-            dif += 10000;
-            if(show)
-            {
-                disp(std::string("Bound on ||E|| not satisfied for diagonal matrix"));
-                disp(M);
-            }
-        }
-        // check finitenes of all results
-        if (any(any(neg(is_finite(S * est_rank * norm_E)),1),2))
-        {
-            if (all(all(is_finite(mat),1),2))
-            {
-                dif += 1000;
-            }
-        }
-        if (M1.is_square() == false)
-        {
-            dif += 1;
-        };
-        if (S.is_square() == false)
-        {
-            dif += 1;
-        };
-        return dif;
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-};
-Real test_function_cholmod::eval_scalar(const Scalar&, bool,int)
-{
     return 0;
 };
 
@@ -2451,64 +2605,6 @@ Real test_function_ldl::eval_1(const Matrix& mat_temp,int code, bool upper)
     };
 };
 Real test_function_ldl::eval_scalar(const Scalar&, bool,int)
-{
-    return 0;
-};
-Real test_function_cond::eval_mat(const Matrix& mat,bool ,int code)
-{
-    (void)code;
-    Real res;
-    try
-    {
-        res = cond(mat);
-    }
-    catch(const error::square_matrix_required& )
-    {
-        if (mat.is_square() ) 
-        {
-            m_is_error = true;
-            m_error = "error::square_matrix_required should not appear here - matrix was square";
-            return 1.;
-        }
-        else
-        {
-            return 0.;
-        }
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-    try
-    {
-        Real dif = 0;
-        Matrix s = svd1(mat,svd_algorithm::dc);
-        Real test_cond = (mat.rows() > 1 ) ? (s(1) / s(matcl::end)).get_scalar<Real>() : 1;
-        dif += norm_1(test_cond - res);
-        return dif;
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-};
-Real test_function_cond::eval_scalar(const Scalar&, bool,int)
 {
     return 0;
 };

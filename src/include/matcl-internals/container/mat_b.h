@@ -167,6 +167,9 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_banded> : public dense_matri
         void                serialize(oarchive_impl & ar, const unsigned int version) const;
         void                serialize(iarchive_impl & ar, const unsigned int version); 
 
+        // update struct flag based on number of sub- and super-diagonals
+        void                update_struct() const;
+
     protected:
         Integer             m_ldiags;
         Integer             m_udiags;

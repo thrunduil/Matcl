@@ -30,64 +30,81 @@
 namespace matcl { namespace details
 {
 
-static inline void cholmod_diag(cholmod_return_type& ret, const matcl::Matrix& handle, 
-                                correction_type::type corr, Real tol)
+template<class VR>
+struct cholmod_diag
 {
-    matcl::Matrix A = real(handle);
-
-    matcl::Matrix U,P;
-    tie(U,P) = sort2(handle,1,false);
-    
-    U = full(U);
-
-    Integer N   = (Integer)handle.numel();    
-    Real* ptr   = U.get_array_unique<Real>();
-
-    if (tol < 0)
+    static inline void eval(cholmod_return_type& ret, const matcl::Matrix& handle, 
+                                correction_type::type corr, Real tol_in)
     {
-        Real max_diag_abs = max(abs(ptr[0]),abs(ptr[N-1]));
+        matcl::Matrix A = real(handle);
 
-        if (corr == correction_type::TYPE_I)
-	    {
-            tol = N * constants::eps() * max_diag_abs;
-	    }
-	    else
-	    {
-            Real tau = std::pow(constants::eps(),(Real)(2./3.0));
-		    tol = tau * max_diag_abs;
-	    };	
-    };
-
-    Integer rank    = N;
-    Real norm       = 0;
-    Real sqrt_tol   = sqrt(tol);
+        matcl::Matrix U,P;
+        tie(U,P) = sort2(handle,1,false);
     
-    for(Integer i = 0; i < N; ++i)
-    {
-        if (ptr[i] > tol)
+        U = full(U);
+
+        Integer N   = (Integer)handle.numel();    
+        VR* ptr     = U.get_array_unique<VR>();
+
+        if (N == 0)
         {
-            ptr[i] = sqrt(ptr[i]);
+            ret = cholmod_return_type(A, details::pv_constructor::make(P), 0, 0.0);
+            return;
+        };
+
+        VR tol      = VR();
+
+        if (tol_in < 0)
+        {
+            VR max_diag_abs = max(abs(ptr[0]), abs(ptr[N-1]));
+
+            if (corr == correction_type::TYPE_I)
+	        {
+                tol = N * constants::eps<VR>() * max_diag_abs;
+	        }
+	        else
+	        {
+                VR tau = std::pow(constants::eps<VR>(), VR(2./3.0));
+		        tol = tau * max_diag_abs;
+	        };	
         }
         else
         {
-            if (corr == correction_type::TYPE_I)
+            tol     = VR(tol_in);
+        };
+
+
+        Integer rank    = N;
+        Real norm       = 0;
+        VR sqrt_tol     = sqrt(tol);
+    
+        for(Integer i = 0; i < N; ++i)
+        {
+            if (ptr[i] > tol)
             {
-                Real d  = max(abs(ptr[i]), tol);
-                norm    = max(norm,d-ptr[i]);
-                ptr[i]  = sqrt(d);
+                ptr[i] = sqrt(ptr[i]);
             }
             else
             {
-                Real d  = tol - ptr[i];
-                norm    = max(norm,d);
-                ptr[i]  = sqrt_tol;
+                if (corr == correction_type::TYPE_I)
+                {
+                    VR d    = max(abs(ptr[i]), tol);
+                    norm    = max(norm,d-ptr[i]);
+                    ptr[i]  = sqrt(d);
+                }
+                else
+                {
+                    VR d    = tol - ptr[i];
+                    norm    = max(norm,d);
+                    ptr[i]  = sqrt_tol;
+                };
+                --rank;
             };
-            --rank;
         };
-    };
 
-    ret = cholmod_return_type(spdiag(U),details::pv_constructor::make(P),rank,norm);
-    return;
+        ret = cholmod_return_type(spdiag(U),details::pv_constructor::make(P),rank,norm);
+        return;
+    };
 };
 
 template<class T>
@@ -113,7 +130,7 @@ struct cholmod_struct
         }
         else if (mat.get_struct().is_diag())
         {
-            return cholmod_diag(ret, get_diag(handle), corr, tol);
+            return cholmod_diag<VR>::eval(ret, get_diag(handle), corr, tol);
         }
 
         if ( mat.nnz() == 0)
@@ -166,7 +183,7 @@ struct cholmod_struct<raw::Matrix<V,struct_dense>>
         }
         else if (mat.get_struct().is_diag())
         {
-            return cholmod_diag(ret, get_diag(handle), corr, tol);
+            return cholmod_diag<VR>::eval(ret, get_diag(handle), corr, tol);
         }
 
         matcl::details::cholmod_options opts;

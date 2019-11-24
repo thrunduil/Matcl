@@ -34,8 +34,6 @@ using namespace matcl;
 
 int main(int argc, const char* argv[])
 {
-    //init_genrand(3);
-
     init_genrand(4);
 
     matcl::test::test_options::set_seed(3);

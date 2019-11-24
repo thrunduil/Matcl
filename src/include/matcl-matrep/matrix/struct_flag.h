@@ -397,6 +397,20 @@ class MATCL_MATREP_EXPORT struct_flag
         // set user defined structure 
         void                set_user(user_flag uf);
 
+        // add symmetric flag; it is preferred to mark real symmetric matrices as
+        // symmetric but not hermitian
+        void                add_sym(bool is_sym)            { m_flag.m_sym |= is_sym; };
+        
+        // add hermitian flag; it is preferred to mark only complex matrices as 
+        // hermitian matrix matrix
+        void                add_her(bool is_her)            { m_flag.m_her |= is_her; };
+        
+        // add structure of lower triangular part
+        void                add_ldiags(diag_type ld);
+        
+        // add structure of upper triangular part
+        void                add_udiags(diag_type ud);
+        
         // test for equality
         bool                operator==(const struct_flag& other) const;
         

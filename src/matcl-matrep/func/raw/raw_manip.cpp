@@ -2639,6 +2639,8 @@ struct eval_tril_helper<ret_type,M,struct_banded>
             return;
         };
 
+        A.update_struct();
+
         if (D >= 0 && A.get_struct().is_tril())
         {
             ret = matcl::Matrix(A,false);

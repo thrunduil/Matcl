@@ -988,7 +988,9 @@ Real test_function_resize_reserve::eval_mat(const Matrix& mat1,bool,int code )
         struct_flag old_struct  = mat.get_struct();
 
         mat.reserve(mat.rows() + 4, mat.cols() + 3);
-        dif             += check_struct_eq(mat.get_struct(), old_struct);
+
+        if (has_struct(mat, old_struct) == false)
+            dif         += 1.0;
 
         Matrix mat_f    = full(mat1);
         Matrix B_f      = mat_f;

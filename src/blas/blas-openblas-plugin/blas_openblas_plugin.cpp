@@ -32,12 +32,12 @@
 
 #define CALL_SYNTAX(x) x##_
 
-#define FUNCTION_NAME_cdotc wrap_cdotc
-#define FUNCTION_NAME_cdotu wrap_cdotu
+//#define FUNCTION_NAME_cdotc wrap_cdotc
+//#define FUNCTION_NAME_cdotu wrap_cdotu
 #define FUNCTION_NAME_scabs1 wrap_scabs1
 #define FUNCTION_NAME_dcabs1 wrap_dcabs1
-#define FUNCTION_NAME_zdotc wrap_zdotc
-#define FUNCTION_NAME_zdotu wrap_zdotu
+//#define FUNCTION_NAME_zdotc wrap_zdotc
+//#define FUNCTION_NAME_zdotu wrap_zdotu
 
 // WARNING: OMP spport must be enabled
 
