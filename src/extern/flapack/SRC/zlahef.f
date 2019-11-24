@@ -2,24 +2,24 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at
-*            http://www.netlib.org/lapack/explore-html/
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download ZLAHEF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahef.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlahef.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahef.f">
+*> Download ZLAHEF + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahef.f"> 
+*> [TGZ]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlahef.f"> 
+*> [ZIP]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahef.f"> 
 *> [TXT]</a>
-*> \endhtmlonly
+*> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
-*
+* 
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, KB, LDA, LDW, N, NB
@@ -28,7 +28,7 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX*16         A( LDA, * ), W( LDW, * )
 *       ..
-*
+*  
 *
 *> \par Purpose:
 *  =============
@@ -155,12 +155,12 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*> \date December 2016
+*> \date November 2013
 *
 *> \ingroup complex16HEcomputational
 *
@@ -169,7 +169,7 @@
 *>
 *> \verbatim
 *>
-*>  December 2016,  Igor Kozachenko,
+*>  November 2013,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *> \endverbatim
@@ -177,10 +177,10 @@
 *  =====================================================================
       SUBROUTINE ZLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.0) --
+*  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
+*     November 2013
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -286,6 +286,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
             A( K, K ) = DBLE( A( K, K ) )
          ELSE
 *
@@ -653,6 +654,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL ZCOPY( N - K + 1, W( K, K ), 1, A( K, K ), 1 )
             A( K, K ) = DBLE( A( K, K ) )
          ELSE
 *

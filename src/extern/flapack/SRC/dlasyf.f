@@ -274,6 +274,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL DCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
          ELSE
             IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
 *
@@ -570,6 +571,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            CALL DCOPY( N - K + 1, W( K, K ), 1, A( K, K ), 1 )
          ELSE
             IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
 *
