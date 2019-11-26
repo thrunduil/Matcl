@@ -24,30 +24,13 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ZERO
-      PARAMETER          ( ZERO = 0.0D0 )
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D0 )
+*     .. External Functions ..
+      DOUBLE PRECISION   DLAPY2
+      EXTERNAL           DLAPY2
 *     ..
-*     .. Local Scalars ..
-      DOUBLE PRECISION   W, XABS, YABS, Z
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
-*
-      XABS = ABS( X )
-      YABS = ABS( Y )
-      W = MAX( XABS, YABS )
-      Z = MIN( XABS, YABS )
-      IF( Z.EQ.ZERO ) THEN
-         AR_DLAPY2 = W
-      ELSE
-         AR_DLAPY2 = W*SQRT( ONE+( Z / W )**2 )
-      END IF
-      RETURN
+      AR_DLAPY2 = DLAPY2(X, Y)
 *
 *     End of AR_DLAPY2
 *

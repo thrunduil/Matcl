@@ -59,79 +59,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-*     ..
-*     .. Local Scalars ..
-      INTEGER            J, KNT
-      DOUBLE PRECISION   BETA, RSAFMN, SAFMIN, XNORM
-*     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AR_DLAMCH, AR_DLAPY2, DNRM2
-      EXTERNAL           AR_DLAMCH, AR_DLAPY2, DNRM2
+      EXTERNAL           DLARFG
 *     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, SIGN
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           DSCAL
 *     ..
 *     .. Executable Statements ..
-*
-      IF( N.LE.1 ) THEN
-         TAU = ZERO
-         RETURN
-      END IF
-*
-      XNORM = DNRM2( N-1, X, INCX )
-*
-      IF( XNORM.EQ.ZERO ) THEN
-*
-*        H  =  I
-*
-         TAU = ZERO
-      ELSE
-*
-*        general case
-*
-         BETA = -SIGN( AR_DLAPY2( ALPHA, XNORM ), ALPHA )
-         SAFMIN = AR_DLAMCH( 'S' ) / AR_DLAMCH( 'E' )
-         IF( ABS( BETA ).LT.SAFMIN ) THEN
-*
-*           XNORM, BETA may be inaccurate; scale X and recompute them
-*
-            RSAFMN = ONE / SAFMIN
-            KNT = 0
-   10       CONTINUE
-            KNT = KNT + 1
-            CALL DSCAL( N-1, RSAFMN, X, INCX )
-            BETA = BETA*RSAFMN
-            ALPHA = ALPHA*RSAFMN
-            IF( ABS( BETA ).LT.SAFMIN )
-     $         GO TO 10
-*
-*           New BETA is at most 1, at least SAFMIN
-*
-            XNORM = DNRM2( N-1, X, INCX )
-            BETA = -SIGN( AR_DLAPY2( ALPHA, XNORM ), ALPHA )
-            TAU = ( BETA-ALPHA ) / BETA
-            CALL DSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
-*
-*           If ALPHA is subnormal, it may lose relative accuracy
-*
-            ALPHA = BETA
-            DO 20 J = 1, KNT
-               ALPHA = ALPHA*SAFMIN
-   20       CONTINUE
-         ELSE
-            TAU = ( BETA-ALPHA ) / BETA
-            CALL DSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
-            ALPHA = BETA
-         END IF
-      END IF
-*
-      RETURN
+      CALL DLARFG( N, ALPHA, X, INCX, TAU )
 *
 *     End of AR_DLARFG
 *

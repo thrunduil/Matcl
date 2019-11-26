@@ -36,20 +36,12 @@
 *
 *  =====================================================================
 *
-*     .. Intrinsic Functions ..
-      INTRINSIC          LOG10, SQRT
+*     .. External Functions ..
+      EXTERNAL           SLABAD
+*     ..
 *     ..
 *     .. Executable Statements ..
-*
-*     If it looks like we're on a Cray, take the square root of
-*     SMALL and LARGE to avoid overflow and underflow problems.
-*
-      IF( LOG10( LARGE ).GT.2000. ) THEN
-         SMALL = SQRT( SMALL )
-         LARGE = SQRT( LARGE )
-      END IF
-*
-      RETURN
+      CALL SLABAD( SMALL, LARGE )
 *
 *     End of AR_SLABAD
 *

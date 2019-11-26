@@ -65,51 +65,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER
-*     ..
 *     .. External Functions ..
-      LOGICAL            AR_LSAME
-      EXTERNAL           AR_LSAME
+      EXTERNAL           DLARF
+*     ..
 *     ..
 *     .. Executable Statements ..
-*
-      IF( AR_LSAME( SIDE, 'L' ) ) THEN
-*
-*        Form  H * C
-*
-         IF( TAU.NE.ZERO ) THEN
-*
-*           w := C' * v
-*
-            CALL DGEMV( 'Transpose', M, N, ONE, C, LDC, V, INCV, ZERO,
-     $                  WORK, 1 )
-*
-*           C := C - v * w'
-*
-            CALL DGER( M, N, -TAU, V, INCV, WORK, 1, C, LDC )
-         END IF
-      ELSE
-*
-*        Form  C * H
-*
-         IF( TAU.NE.ZERO ) THEN
-*
-*           w := C * v
-*
-            CALL DGEMV( 'No transpose', M, N, ONE, C, LDC, V, INCV,
-     $                  ZERO, WORK, 1 )
-*
-*           C := C - w * v'
-*
-            CALL DGER( M, N, -TAU, WORK, 1, V, INCV, C, LDC )
-         END IF
-      END IF
-      RETURN
+      CALL DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *     End of AR_DLARF
 *

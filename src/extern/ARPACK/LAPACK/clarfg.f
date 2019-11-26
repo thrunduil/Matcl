@@ -59,87 +59,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
-*     ..
-*     .. Local Scalars ..
-      INTEGER            J, KNT
-      REAL               ALPHI, ALPHR, BETA, RSAFMN, SAFMIN, XNORM
-*     ..
 *     .. External Functions ..
-      REAL               SCNRM2, AR_SLAMCH, AR_SLAPY3
-      COMPLEX            AR_CLADIV
-      EXTERNAL           SCNRM2, AR_SLAMCH, AR_SLAPY3, AR_CLADIV
+      EXTERNAL           CLARFG
 *     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AIMAG, CMPLX, REAL, SIGN
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           CSCAL, CSSCAL
 *     ..
 *     .. Executable Statements ..
-*
-      IF( N.LE.0 ) THEN
-         TAU = ZERO
-         RETURN
-      END IF
-*
-      XNORM = SCNRM2( N-1, X, INCX )
-      ALPHR = REAL( ALPHA )
-      ALPHI = AIMAG( ALPHA )
-*
-      IF( XNORM.EQ.ZERO .AND. ALPHI.EQ.ZERO ) THEN
-*
-*        H  =  I
-*
-         TAU = ZERO
-      ELSE
-*
-*        general case
-*
-         BETA = -SIGN( AR_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SAFMIN = AR_SLAMCH( 'S' ) / AR_SLAMCH( 'E' )
-         RSAFMN = ONE / SAFMIN
-*
-         IF( ABS( BETA ).LT.SAFMIN ) THEN
-*
-*           XNORM, BETA may be inaccurate; scale X and recompute them
-*
-            KNT = 0
-   10       CONTINUE
-            KNT = KNT + 1
-            CALL CSSCAL( N-1, RSAFMN, X, INCX )
-            BETA = BETA*RSAFMN
-            ALPHI = ALPHI*RSAFMN
-            ALPHR = ALPHR*RSAFMN
-            IF( ABS( BETA ).LT.SAFMIN )
-     $         GO TO 10
-*
-*           New BETA is at most 1, at least SAFMIN
-*
-            XNORM = SCNRM2( N-1, X, INCX )
-            ALPHA = CMPLX( ALPHR, ALPHI )
-            BETA = -SIGN( AR_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-            TAU = CMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-            ALPHA = AR_CLADIV( CMPLX( ONE ), ALPHA-BETA )
-            CALL CSCAL( N-1, ALPHA, X, INCX )
-*
-*           If ALPHA is subnormal, it may lose relative accuracy
-*
-            ALPHA = BETA
-            DO 20 J = 1, KNT
-               ALPHA = ALPHA*SAFMIN
-   20       CONTINUE
-         ELSE
-            TAU = CMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-            ALPHA = AR_CLADIV( CMPLX( ONE ), ALPHA-BETA )
-            CALL CSCAL( N-1, ALPHA, X, INCX )
-            ALPHA = BETA
-         END IF
-      END IF
-*
-      RETURN
+      CALL CLARFG( N, ALPHA, X, INCX, TAU )
 *
 *     End of AR_CLARFG
 *

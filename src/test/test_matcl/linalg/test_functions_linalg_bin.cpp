@@ -191,54 +191,63 @@ void linalg_bin_functions_list::test_gen_sym_eigen()
     };
 };
 
-//-----------------------------------------------------------------
+//----------------------------------------------------------------------------
+//                  test_function_gschur
+//----------------------------------------------------------------------------
 Real test_function_gschur::eval_mat(const Matrix& mat1,const Matrix& mat2,int code)
 {
     (void)code;    
-    Matrix  aa1;          Matrix  bb1;          Matrix  q1;          Matrix  z1;
-    Matrix  aa1_compl;    Matrix  bb1_compl;    Matrix  q1_compl;    Matrix  z1_compl;
-    Matrix  aa1_sel;      Matrix  bb1_sel;      Matrix  q1_sel;      Matrix  z1_sel;
+
+    if (mat1.is_square() == false)
+        return 0.;
+
+    if (mat2.is_square() == false)
+        return 0.;
+
+    if (mat1.rows() != mat2.rows())
+        return 0.;
+
+    Matrix aa1, bb1, q1, z1;
+    Matrix aa1_compl, bb1_compl, q1_compl, z1_compl;
+    Matrix aa1_sel, bb1_sel, q1_sel, z1_sel;
+
     Matrix temp_select;
-    int     size    = mat1.rows();
+    
+    int size    = mat1.rows();
+
     try
     {
-        tie(q1,z1,aa1,bb1)                          =   gschur      (mat1, mat2);
-        tie(q1_compl,z1_compl,aa1_compl,bb1_compl)  =   gschur_compl(mat1, mat2);
+        tie(q1,z1,aa1,bb1)                          = gschur(mat1, mat2);
+        tie(q1_compl,z1_compl,aa1_compl,bb1_compl)  = gschur_compl(mat1, mat2);
+    
         //prepare valid selection vector to maintain paired eigenvalues
         {
             gschur_decomposition obj(mat1, mat2);
 
-            temp_select         =   mod(floor(real(obj.eig()) * 123), 2);
-            if (size > 0 && (bool)all(is_finite(temp_select),1) == false)
-            {
-                temp_select     =   zeros(aa1.rows(), 1);
-            }
+            temp_select = mod(floor(real(obj.eig()) * 123), 2);
+
+            if (size > 0 && temp_select.all_finite() == false)
+                temp_select = zeros(aa1.rows(), 1);
         }
-        tie(q1_sel, z1_sel, aa1_sel, bb1_sel) = ordgschur(q1, z1, aa1, bb1, temp_select);
+
+        tie(q1_sel, z1_sel, aa1_sel, bb1_sel)   = ordgschur(q1, z1, aa1, bb1, temp_select);
     }
     catch(const error::error_size_geig&)
     {
-        if (!mat1.is_square() || !mat2.is_square() || mat1.cols() != mat2.cols())
-        {
-            return 0.;
-        }
-        else
-        {
-            m_is_error = true;
-            m_error = "error_size_geigr should not appear here - matrices were conformant & square";
-            return 1.;
-        }
+        m_is_error  = true;
+        m_error     = "error_size_geigr should not appear here - matrices were conformant & square";
+        return 1.;
     }
     catch(const std::exception& ex)
     {
-        m_is_error = true;
-        m_error = ex.what();
+        m_is_error  = true;
+        m_error     = ex.what();
         return 1.;
     }
     catch(...)
     {
-        m_is_error = true;
-        m_error = "unknown error";
+        m_is_error  = true;
+        m_error     = "unknown error";
         return 1.;
     };
 

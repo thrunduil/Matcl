@@ -59,87 +59,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-*     ..
-*     .. Local Scalars ..
-      INTEGER            J, KNT
-      DOUBLE PRECISION   ALPHI, ALPHR, BETA, RSAFMN, SAFMIN, XNORM
-*     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AR_DLAMCH, AR_DLAPY3, DZNRM2
-      COMPLEX*16         AR_ZLADIV
-      EXTERNAL           AR_DLAMCH, AR_DLAPY3, DZNRM2, AR_ZLADIV
+      EXTERNAL           ZLARFG
 *     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, SIGN
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           ZDSCAL, ZSCAL
 *     ..
 *     .. Executable Statements ..
-*
-      IF( N.LE.0 ) THEN
-         TAU = ZERO
-         RETURN
-      END IF
-*
-      XNORM = DZNRM2( N-1, X, INCX )
-      ALPHR = DBLE( ALPHA )
-      ALPHI = DIMAG( ALPHA )
-*
-      IF( XNORM.EQ.ZERO .AND. ALPHI.EQ.ZERO ) THEN
-*
-*        H  =  I
-*
-         TAU = ZERO
-      ELSE
-*
-*        general case
-*
-         BETA = -SIGN( AR_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SAFMIN = AR_DLAMCH( 'S' ) / AR_DLAMCH( 'E' )
-         RSAFMN = ONE / SAFMIN
-*
-         IF( ABS( BETA ).LT.SAFMIN ) THEN
-*
-*           XNORM, BETA may be inaccurate; scale X and recompute them
-*
-            KNT = 0
-   10       CONTINUE
-            KNT = KNT + 1
-            CALL ZDSCAL( N-1, RSAFMN, X, INCX )
-            BETA = BETA*RSAFMN
-            ALPHI = ALPHI*RSAFMN
-            ALPHR = ALPHR*RSAFMN
-            IF( ABS( BETA ).LT.SAFMIN )
-     $         GO TO 10
-*
-*           New BETA is at most 1, at least SAFMIN
-*
-            XNORM = DZNRM2( N-1, X, INCX )
-            ALPHA = DCMPLX( ALPHR, ALPHI )
-            BETA = -SIGN( AR_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-            TAU = DCMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-            ALPHA = AR_ZLADIV( DCMPLX( ONE ), ALPHA-BETA )
-            CALL ZSCAL( N-1, ALPHA, X, INCX )
-*
-*           If ALPHA is subnormal, it may lose relative accuracy
-*
-            ALPHA = BETA
-            DO 20 J = 1, KNT
-               ALPHA = ALPHA*SAFMIN
-   20       CONTINUE
-         ELSE
-            TAU = DCMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-            ALPHA = AR_ZLADIV( DCMPLX( ONE ), ALPHA-BETA )
-            CALL ZSCAL( N-1, ALPHA, X, INCX )
-            ALPHA = BETA
-         END IF
-      END IF
-*
-      RETURN
+      CALL ZLARFG( N, ALPHA, X, INCX, TAU )
 *
 *     End of AR_ZLARFG
 *

@@ -50,66 +50,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE, TWO
-      PARAMETER          ( ONE = 1.0D+0, TWO = 2.0D+0 )
-      INTEGER            LV
-      PARAMETER          ( LV = 128 )
-      DOUBLE PRECISION   TWOPI
-      PARAMETER          ( TWOPI = 6.2831853071795864769252867663D+0 )
+*     .. External Functions ..
+      EXTERNAL           DLARNV
 *     ..
-*     .. Local Scalars ..
-      INTEGER            I, IL, IL2, IV
-*     ..
-*     .. Local Arrays ..
-      DOUBLE PRECISION   U( LV )
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          COS, LOG, MIN, SQRT
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           AR_DLARUV
 *     ..
 *     .. Executable Statements ..
-*
-      DO 40 IV = 1, N, LV / 2
-         IL = MIN( LV / 2, N-IV+1 )
-         IF( IDIST.EQ.3 ) THEN
-            IL2 = 2*IL
-         ELSE
-            IL2 = IL
-         END IF
-*
-*        Call AR_DLARUV to generate IL2 numbers from a uniform (0,1)
-*        distribution (IL2 <= LV)
-*
-         CALL AR_DLARUV( ISEED, IL2, U )
-*
-         IF( IDIST.EQ.1 ) THEN
-*
-*           Copy generated numbers
-*
-            DO 10 I = 1, IL
-               X( IV+I-1 ) = U( I )
-   10       CONTINUE
-         ELSE IF( IDIST.EQ.2 ) THEN
-*
-*           Convert generated numbers to uniform (-1,1) distribution
-*
-            DO 20 I = 1, IL
-               X( IV+I-1 ) = TWO*U( I ) - ONE
-   20       CONTINUE
-         ELSE IF( IDIST.EQ.3 ) THEN
-*
-*           Convert generated numbers to normal (0,1) distribution
-*
-            DO 30 I = 1, IL
-               X( IV+I-1 ) = SQRT( -TWO*LOG( U( 2*I-1 ) ) )*
-     $                       COS( TWOPI*U( 2*I ) )
-   30       CONTINUE
-         END IF
-   40 CONTINUE
-      RETURN
+      CALL DLARNV( IDIST, ISEED, N, X )
 *
 *     End of AR_DLARNV
 *
