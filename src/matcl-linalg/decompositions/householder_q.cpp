@@ -49,7 +49,7 @@ struct qr_un_or_selector<Real>
     static void eval(Integer M, Integer N, Integer K, Mat& Qc, const Mat& tau, Mat& work, 
                         Integer lwork, Integer* info2, Integer offset)
     {
-        lapack::orgqr(M-offset, N-offset, K-offset, lap(Qc.ptr()+offset), Qc.ld(), 
+        lapack::orgqr(M-offset, N-offset, K, lap(Qc.ptr() + offset), Qc.ld(), 
                         lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
     };
 };
@@ -62,8 +62,8 @@ struct qr_un_or_selector<Float>
     static void eval(Integer M, Integer N, Integer K, Mat& Qc, const Mat& tau, Mat& work, 
                         Integer lwork, Integer* info2, Integer offset)
     {
-        lapack::orgqr(M-offset, N-offset, K-offset, lap(Qc.ptr()+offset), Qc.ld(), 
-                        lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
+        lapack::orgqr(M-offset, N-offset, K, lap(Qc.ptr() + offset), 
+                      Qc.ld(), lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
     };
 };
 
@@ -75,8 +75,8 @@ struct qr_un_or_selector<Complex>
     static void eval(Integer M, Integer N, Integer K, Mat& Qc, const Mat& tau, Mat& work, 
                         Integer lwork, Integer* info2, Integer offset)
     {
-        lapack::ungqr(M-offset, N-offset, K-offset, lap(Qc.ptr()+offset), Qc.ld(), 
-                    lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
+        lapack::ungqr(M-offset, N-offset, K, lap(Qc.ptr() + offset), 
+                      Qc.ld(), lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
     };
 };
 
@@ -88,8 +88,8 @@ struct qr_un_or_selector<Float_complex>
     static void eval(Integer M, Integer N, Integer K, Mat& Qc, const Mat& tau, Mat& work, 
                         Integer lwork, Integer* info2, Integer offset)
     {
-        lapack::ungqr(M-offset, N-offset, K-offset, lap(Qc.ptr()+offset), Qc.ld(), 
-                    lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
+        lapack::ungqr(M-offset, N-offset, K, lap(Qc.ptr() + offset), 
+                      Qc.ld(), lap(tau.ptr()), lap(work.ptr()), lwork, lap(info2));
     };
 };
 
@@ -101,7 +101,7 @@ struct lapack_xyygqr_maker
     static void eval(Integer M, Integer N, Integer K, Mat& Qc, const Mat& tau, Integer offset)
     {
         Integer info2 = 0;
-        Mat work2(Qc.get_type(), 1, 1);     
+        Mat work2(Qc.get_type(), 1, 1);
 
         qr_un_or_selector<V>::eval(M, N, K, Qc, tau, work2, -1, &info2, offset);
 
@@ -484,14 +484,12 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
             M               = M - offset;
             ptr_V           = ptr_V + offset;
             ptr_C           = ptr_C + offset;
-            K               = K - offset;
         }
         else
         {
             N               = N - offset;
             ptr_V           = ptr_V + offset;
-            ptr_C           = ptr_C + offset*C_ld;
-            K               = K - offset;
+            ptr_C           = ptr_C + offset * C_ld;
         };
         
         Integer I1, I2, I3;
@@ -650,7 +648,6 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
 
         //apply offset
         Integer offset      = data.m_offset;
-        num_refl            = num_refl - offset;
         ptr_V0              = ptr_V0 + offset;
         ptr_Y               = ptr_Y + offset;
 
@@ -815,9 +812,8 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
 
         //apply offset
         Integer offset      = data.m_offset;
-        num_refl            = num_refl - offset;
         ptr_V0              = ptr_V0 + offset;
-        ptr_Y               = ptr_Y + offset*Y_ld;
+        ptr_Y               = ptr_Y + offset * Y_ld;
 
         if (t_unitary == trans_type::no_trans)
         {            
@@ -1687,13 +1683,10 @@ void householder_helper<Val>::to_matrix(Matrix& ret, const umatrix& data)
         for (Integer j = N - 1; j >= off; --j)
         {
             for (Integer i = 0; i < off; ++i)
-            {
                 ptr[i] = Val(0.0);
-            };
+
             for (Integer i = off; i < M; ++i)
-            {
                 ptr[i] = ptr_p[i];
-            };
 
             ptr     -= LD;
             ptr_p   -= LD;
@@ -1702,9 +1695,7 @@ void householder_helper<Val>::to_matrix(Matrix& ret, const umatrix& data)
         for (Integer j = off - 1; j >= 0; --j)
         {
             for (Integer i = 0; i < M; ++i)
-            {
                 ptr[i] = Val(0.0);
-            };
 
             ptr[j]  = Val(1.0);
             ptr     -= LD;

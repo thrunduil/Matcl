@@ -80,9 +80,7 @@ namespace details
             refcount_str*       get_refstr() const          { return m_refcount; };
 
             type_info           get_type() const            { return m_ti; };
-
-            const struct_flag&  get_struct() const          { return m_flag; };
-            struct_flag&        get_struct()                { return m_flag; };
+            struct_flag&        get_struct() const          { return m_flag; };
 
             void                reset_unique();
             void                reset_unique(Integer r, Integer c);
@@ -105,7 +103,7 @@ namespace details
             val_type*           m_ptr;
             root_ptr<val_type>  m_root_ptr;
             type_info           m_ti;  
-            struct_flag         m_flag;
+            mutable struct_flag m_flag;
             bool                m_effective_unique;
 
         private:
@@ -157,8 +155,7 @@ class MATCL_MATREP_EXPORT dense_matrix_base
         bool                    is_unique() const               { return m_data.is_unique(); };
         refcount_str*           get_refstr() const              { return m_data.get_refstr(); };
 
-        const struct_flag&      get_struct() const              { return m_data.m_flag; };
-        struct_flag&            get_struct()                    { return m_data.m_flag; };
+        struct_flag&            get_struct() const              { return m_data.m_flag; };
         void                    set_struct(struct_flag f) const { m_data.m_flag.set(f); };
         void                    add_struct(struct_flag f) const { m_data.m_flag.add(f); };
         tinfo                   get_type() const;        

@@ -345,7 +345,7 @@ class MATCL_MATREP_EXPORT struct_flag
         };
 
     private:
-        mutable impl_type   m_flag;
+        impl_type           m_flag;
 
     public:
         // create empty struct flag (i.e. general matrix flag)
@@ -358,15 +358,15 @@ class MATCL_MATREP_EXPORT struct_flag
         struct_flag(user_flag uf);
 
         // change struct type 
-        void                set(const struct_flag& t) const { m_flag = t.m_flag; };
+        void                set(const struct_flag& t)   { m_flag = t.m_flag; };
         
         // add struct type, resulting struct_flag has all properties from this and
         // new struct_flag
-        void                add(const struct_flag& t) const;
+        void                add(const struct_flag& t);
         
         // add user struct type, resulting struct_flag has all properties from this and
         // user propertied from new struct_flag
-        void                add_user(const struct_flag& t) const;
+        void                add_user(const struct_flag& t);
         
         // reset struct type to general matrix
         void                reset();

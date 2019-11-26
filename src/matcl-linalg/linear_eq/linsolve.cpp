@@ -1159,18 +1159,27 @@ static void linsolve_diag(Matrix& ret, const matcl::Matrix& A, matcl::permvec p,
     if (p.is_id() == false)
         b2  = b2(p.to_matrix(),colon());
 
+    value_code vc_A = Ad.get_value_code();
+    value_code vc_B = b2.get_value_code();
+
+    value_code vc   = matrix_traits::unify_value_types(vc_A, vc_B);
+    vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+    value_code vcr  = matrix_traits::real_value_type(vc);
+
+    Matrix one      = ones(1, 1, vcr);
+
     switch(trans)
     {
         case trans_type::no_trans:
         case trans_type::trans:
         {
-            out = bdiag(div(1.f,Ad))*b2;
+            out = bdiag(div(one, Ad)) * b2;
             break;
         }
         case trans_type::conj_trans:
         {
             Ad = matcl::conj(Ad);
-            out = bdiag(div(1.f,Ad))*b2;
+            out = bdiag(div(one, Ad)) * b2;
             break;
         }
         default:
@@ -1181,7 +1190,7 @@ static void linsolve_diag(Matrix& ret, const matcl::Matrix& A, matcl::permvec p,
     };    
 
     if (q.is_id() == false)
-        out = out(q.invperm().to_matrix(),colon());
+        out = out(q.invperm(), colon());
 
     ret = out;
     return;
@@ -1208,18 +1217,27 @@ static void linsolve_diag_rev(Matrix& ret, const matcl::Matrix& A, permvec p, pe
 
     Matrix out;
 
+    value_code vc_A = Ad.get_value_code();
+    value_code vc_B = b2.get_value_code();
+
+    value_code vc   = matrix_traits::unify_value_types(vc_A, vc_B);
+    vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+    value_code vcr  = matrix_traits::real_value_type(vc);
+
+    Matrix one      = ones(1, 1, vcr);
+
     switch(trans)
     {
         case trans_type::no_trans:
         case trans_type::trans:
         {
-            out = b2*bdiag(div(1.f,Ad));
+            out = b2 * bdiag(div(one, Ad));
             break;
         }
         case trans_type::conj_trans:
         {
             Ad = matcl::conj(Ad);
-            out = b2*bdiag(div(1.f,Ad));
+            out = b2 * bdiag(div(one, Ad));
             break;
         }
         default:
@@ -1378,6 +1396,7 @@ static void linsolve_impl(Matrix& ret, const matcl::Matrix& A, const matcl::perm
     value_code vc_B = b.get_value_code();
     value_code vc   = matrix_traits::unify_value_types(vc_A, vc_B);
     vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+    value_code vcr  = matrix_traits::real_value_type(vc);
 
     if (vc == value_code::v_object)
         throw error::object_value_type_not_allowed("linsolve");
@@ -1399,14 +1418,16 @@ static void linsolve_impl(Matrix& ret, const matcl::Matrix& A, const matcl::perm
         if (A == 0)
             throw error::error_singular();
 
+        Matrix one  = ones(1,1, vcr);
+
         if (trans == trans_type::conj_trans)
         {
-            ret = b * div(1.0f, matcl::conj(A));
+            ret = b * div(one, matcl::conj(A));
             return;
         }
         else
         {
-            ret = b * div(1.0f, A);
+            ret = b * div(one, A);
             return;
         };
     }
@@ -1511,6 +1532,7 @@ static void linsolve_lu_impl(linsolve_obj& ret, const matcl::Matrix& A, const ma
         Matrix DL = A.diag(-1);
         Matrix D0 = A.diag(0);        
         Matrix DU = A.diag(1);
+
         ret = linsolve_tridiag(DL, D0, DU, opts);
         return;
     };
@@ -1578,6 +1600,7 @@ static void linsolve_rev_impl(Matrix& ret, const matcl::Matrix& A, const matcl::
     value_code vc_B = b.get_value_code();
     value_code vc   = matrix_traits::unify_value_types(vc_A, vc_B);
     vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+    value_code vcr  = matrix_traits::real_value_type(vc);
 
     if (vc == value_code::v_object)
         throw error::object_value_type_not_allowed("linsolve_rev");
@@ -1599,7 +1622,8 @@ static void linsolve_rev_impl(Matrix& ret, const matcl::Matrix& A, const matcl::
         if (A == 0)
             throw error::error_singular();
 
-        ret = b * div(1.0f, A);
+        Matrix one  = ones(1,1, vcr);
+        ret         = b * div(one, A);
         return;
     }
 
@@ -1654,6 +1678,7 @@ static void linsolve_rev2_impl(Matrix& ret, const matcl::Matrix& A, const matcl:
     value_code vc_B = b.get_value_code();
     value_code vc   = matrix_traits::unify_value_types(vc_A, vc_B);
     vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+    value_code vcr  = matrix_traits::real_value_type(vc);
 
     if (vc == value_code::v_object)
         throw error::object_value_type_not_allowed("linsolve_rev2");
@@ -1675,14 +1700,16 @@ static void linsolve_rev2_impl(Matrix& ret, const matcl::Matrix& A, const matcl:
         if (A == 0)
             throw error::error_singular();
 
+        Matrix one  = ones(1,1, vcr);
+
         if (trans == trans_type::conj_trans)
         {
-            ret = b * div(1.0f, matcl::conj(A));
+            ret = b * div(one, matcl::conj(A));
             return;
         }
         else
         {
-            ret = b * div(1.0f, A);
+            ret = b * div(one, A);
             return;
         };
     }

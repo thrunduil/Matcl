@@ -714,7 +714,7 @@ struct schur_str<V,struct_dense>
             if (with_U)
             {
                 // NOTE: don't set unitary flag for Q, RRR algorithm may yield a numerically non-unitary matrix
-                sd.m_U_factor   = Matrix(TA,true);
+                sd.m_U_factor   = Matrix(Q,true);
                 sd.m_has_U      = true;
             }
             else
@@ -748,7 +748,7 @@ struct schur_str<V,struct_dense>
         bool has_unit   = is_unitary(sd.m_U_factor.get_struct());;
 
         Mat TA          = TA0.make_unique();
-        TA.get_struct().reset_value();
+        TA.get_struct().reset();
 
         Mat Q           = with_U? sd.m_U_factor.impl_unique<Mat>() : Mat(TA.get_type());
         Q.get_struct().reset();
@@ -808,15 +808,13 @@ struct schur_str<V,struct_dense>
         else if (md::is_complex<V>::value == false)
         {            
             if (ld == 1)
-                mat_TA.add_struct(md::predefined_struct::get_qtriu(mat_TA.get_struct()));
+                mat_TA.add_struct(predefined_struct_type::qtriu);
             else
-                mat_TA.add_struct(md::predefined_struct::get_triu(mat_TA.get_struct(),0,
-                                                                  is_real_matrix(mat_TA)));
+                mat_TA.add_struct(predefined_struct_type::triu);
         }
         else
         {
-            mat_TA.add_struct(md::predefined_struct::get_triu(mat_TA.get_struct(),0,
-                                                              is_real_matrix(mat_TA)));
+            mat_TA.add_struct(predefined_struct_type::triu);
         }
 
         sd.m_TA = mat_TA;

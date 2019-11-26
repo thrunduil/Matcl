@@ -82,8 +82,8 @@ std::string arpack_select_eig_helper::select_eig_string(const cluster_type which
 template<class T>
 arpack_wrapper<T>::arpack_wrapper(const linear_operator& A_in, arpack_output out, Integer max_iter,
                                   Integer n_arnoldi, Real tol_in)
-    : m_lock(arpack_mutex), m_N(A_in.rows()), m_tol(tol_in), m_calculate_called(false), m_max_iter(max_iter)
-    , m_output(out), m_generalized(false), m_A(A_in)
+    : m_lock(arpack_mutex), m_N(A_in.rows()), m_tol(TR(tol_in)), m_calculate_called(false)
+    , m_max_iter(max_iter), m_output(out), m_generalized(false), m_A(A_in), m_converged(false)
 {    
     m_kernel_type   = get_kernel_type(A_in);
     m_has_x0        = false;
@@ -107,8 +107,8 @@ template<class T>
 arpack_wrapper<T>::arpack_wrapper(const linear_operator& A_in, const linear_operator& B_in, 
                                   bool hermitian, arpack_output out, Integer max_iter, Integer n_arnoldi,
                                   Real tol_in)
-    : m_lock(arpack_mutex), m_N(A_in.rows()), m_tol(tol_in), m_calculate_called(false), m_max_iter(max_iter), 
-      m_output(out), m_generalized(true), m_A(A_in), m_B(B_in)
+    : m_lock(arpack_mutex), m_N(A_in.rows()), m_tol(TR(tol_in)), m_calculate_called(false), m_max_iter(max_iter), 
+      m_output(out), m_generalized(true), m_A(A_in), m_B(B_in), m_converged(false)
 {
     m_kernel_type   = get_kernel_type(hermitian);
     m_has_x0        = false;
@@ -333,8 +333,9 @@ void arpack_wrapper<T>::process_xyeupd(Integer xyaupd_info, bool return_nonconve
     Mat_D eig       = mat_eig.get_impl_unique<Mat_D>();
     call_xyeupd(info, v, eig);
 
-    bool none_conv  = (info == -14) || m_iparam_ptr[5-1] == 0;
-    if (none_conv == true && return_nonconverged  == false)
+    bool info_nconv = (info == -14) ;
+    bool none_conv  = m_iparam_ptr[5-1] == 0;
+    if (info_nconv == true || none_conv == true && return_nonconverged  == false)
     {
         // XYAUPD  did not find any eigenvalues to sufficient accuracy
         m_V_result  = speye(m_N, 0, get_value_code());
@@ -459,7 +460,7 @@ void arpack_wrapper<T>::extract_H(Integer results_to_return)
         work_H          += ldh;
     };
 
-    m_T_result.set_struct(predefined_struct_type::hessu);
+    m_T_result.set_struct(predefined_struct_type::qtriu);
 };
 
 template<class T>
@@ -620,17 +621,16 @@ void arpack_wrapper<Float>::call_xyaupd(Integer& ido, Integer& info, Mat_D& v)
     arpack_select_eig_helper sel_helper(m_cluster);
     const char * which  = sel_helper.get_select_type_string().c_str();
     const char* bmat    = m_generalized? "G" : "I";
-    Float tol           = Float(m_tol);
 
     if (m_kernel_type == kernel_type::symmetric)
     {        
-        arpack::ssaupd_ (   lap(&ido), bmat, lap(&m_N), which, lap(&m_num_eig), lap(&tol), lap(m_x0_ptr), 
+        arpack::ssaupd_ (   lap(&ido), bmat, lap(&m_N), which, lap(&m_num_eig), lap(&m_tol), lap(m_x0_ptr), 
                             lap(&m_num_vec), lap(v.ptr()), lap(&m_ldv), lap(m_iparam_ptr), lap(m_ipntr_ptr), 
                             lap(m_workd_ptr), lap(m_workl_ptr), lap(&m_lworkl), lap(&info) );
     }
     else 
     {        
-        arpack::snaupd_ (   lap(&ido), bmat, lap(&m_N), which, lap(&m_num_eig), lap(&tol), lap(m_x0_ptr), 
+        arpack::snaupd_ (   lap(&ido), bmat, lap(&m_N), which, lap(&m_num_eig), lap(&m_tol), lap(m_x0_ptr), 
                             lap(&m_num_vec), lap(v.ptr()), lap(&m_ldv), lap(m_iparam_ptr), lap(m_ipntr_ptr), 
                             lap(m_workd_ptr), lap(m_workl_ptr), lap(&m_lworkl), lap(&info) );
     };
@@ -653,9 +653,8 @@ void arpack_wrapper<Float_complex>::call_xyaupd(Integer& ido, Integer& info, Mat
     arpack_select_eig_helper sel_helper(m_cluster);
     const char * which  = sel_helper.get_select_type_string().c_str();
     const char* bmat    = m_generalized? "G" : "I";
-    Float tol           = Float(m_tol);
 
-    arpack::cnaupd_ (   lap(&ido), bmat, lap(&m_N), which, lap(&m_num_eig), lap(&tol), lap(m_x0_ptr), 
+    arpack::cnaupd_ (   lap(&ido), bmat, lap(&m_N), which, lap(&m_num_eig), lap(&m_tol), lap(m_x0_ptr), 
                         lap(&m_num_vec), lap(v.ptr()), lap(&m_ldv), lap(m_iparam_ptr), lap(m_ipntr_ptr), 
                         lap(m_workd_ptr), lap(m_workl_ptr), lap(&m_lworkl), lap(m_rwork_ptr), lap(&info) );
 }
@@ -727,7 +726,6 @@ void arpack_wrapper<Float>::call_xyeupd(Integer& info, Mat_D& v, Mat_D& eig)
     arpack_select_eig_helper sel_helper(m_cluster);
     const char * which  = sel_helper.get_select_type_string().c_str();
     const char* bmat    = m_generalized? "G" : "I";
-    Float tol           = Float(m_tol);
 
     Integer rvec        = (m_output == arpack_output::eig)? 0 : 1;    
 
@@ -753,7 +751,7 @@ void arpack_wrapper<Float>::call_xyeupd(Integer& info, Mat_D& v, Mat_D& eig)
         {
             const char* howmny  = "A";
             arpack::sseupd_((lapack::l_type*)lap(&rvec), howmny, (lapack::l_type*)lap(m_select_ptr), lap(eig.ptr()),
-                        lap(ptr_Z), lap(&ldz), nullptr, bmat, lap(&m_N), which, lap(&m_num_eig), lap(&tol), 
+                        lap(ptr_Z), lap(&ldz), nullptr, bmat, lap(&m_N), which, lap(&m_num_eig), lap(&m_tol), 
                         lap(m_x0_ptr), lap(&m_num_vec), lap(v.ptr()), lap(&m_ldv), lap(m_iparam_ptr), lap(m_ipntr_ptr),
                         lap(m_workd_ptr), lap(m_workl_ptr), lap(&m_lworkl), lap(&info) );
             break;
@@ -764,7 +762,7 @@ void arpack_wrapper<Float>::call_xyeupd(Integer& info, Mat_D& v, Mat_D& eig)
 
             arpack::sneupd_((lapack::l_type*)lap(&rvec), howmny, (lapack::l_type*)lap(m_select_ptr), lap(eig.ptr()),
                         lap(eig.ptr() + eig.ld()), lap(ptr_Z), lap(&ldz), nullptr, nullptr, lap(m_workev_ptr), bmat, 
-                        lap(&m_N), which, lap(&m_num_eig), lap(&tol), lap(m_x0_ptr), lap(&m_num_vec), lap(v.ptr()),
+                        lap(&m_N), which, lap(&m_num_eig), lap(&m_tol), lap(m_x0_ptr), lap(&m_num_vec), lap(v.ptr()),
                         lap(&m_ldv), lap(m_iparam_ptr), lap(m_ipntr_ptr), lap(m_workd_ptr), lap(m_workl_ptr), 
                         lap(&m_lworkl), lap(&info) );
             break;
@@ -819,7 +817,7 @@ void arpack_wrapper<Float_complex>::call_xyeupd(Integer& info, Mat_D& v, Mat_D& 
     arpack_select_eig_helper sel_helper(m_cluster);
     const char * which  = sel_helper.get_select_type_string().c_str();
     const char* bmat    = m_generalized? "G" : "I";
-    Float tol           = Float(m_tol);
+
     Integer rvec        = (m_output == arpack_output::eig)? 0 : 1;
     const char* howmny  = (m_output == arpack_output::schur)? "P" : "A";
 
@@ -840,7 +838,7 @@ void arpack_wrapper<Float_complex>::call_xyeupd(Integer& info, Mat_D& v, Mat_D& 
     };
     arpack::cneupd_((lapack::l_type*)lap(&rvec), howmny, (lapack::l_type*)lap(m_select_ptr), lap(eig.ptr()), 
                     lap(ptr_Z), lap(&ldz), nullptr, lap(m_workev_ptr), bmat, lap(&m_N), which, lap(&m_num_eig),
-                    lap(&tol), lap(m_x0_ptr), lap(&m_num_vec), lap(v.ptr()), lap(&m_ldv), lap(m_iparam_ptr),
+                    lap(&m_tol), lap(m_x0_ptr), lap(&m_num_vec), lap(v.ptr()), lap(&m_ldv), lap(m_iparam_ptr),
                     lap(m_ipntr_ptr), lap(m_workd_ptr), lap(m_workl_ptr), lap(&m_lworkl), lap(m_rwork_ptr), lap(&info) );
 
     m_vec_ritz  = Matrix(Z,false);

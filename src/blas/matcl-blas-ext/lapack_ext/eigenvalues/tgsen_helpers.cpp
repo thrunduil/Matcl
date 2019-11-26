@@ -264,11 +264,11 @@ i_type find_block_end(i_type BS, i_type n, int max_eig_in_window, const i_type* 
 template<class V>
 void lapack::make_id(V* mat, i_type n)
 {
-    memset(mat, 0, n*n*sizeof(d_type));
+    memset(mat, 0, n * n * sizeof(V));
 
     for (i_type k = 0; k < n; ++k)
     {
-        mat[k]  = 1.0;
+        mat[k]  = V(1.0);
         mat     = mat + n;
     };
 };

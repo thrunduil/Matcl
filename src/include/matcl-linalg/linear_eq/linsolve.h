@@ -294,7 +294,7 @@ MATCL_LINALG_EXPORT Matrix linsolve_rev(matcl::Matrix&& A, matcl::Matrix&& b,
                                         const matcl::options& opts = matcl::options());
 
 /// solve linear equation:
-///         X A(p^-1,q^-1) = b
+///         X * A(p^-1,q^-1) = b
 ///
 /// where p, q are permutation matrices. This is equvaluent to
 ///     X = (b(:,q) * A^-1)(:,p^-1)
@@ -316,9 +316,9 @@ MATCL_LINALG_EXPORT Matrix linsolve_rev(matcl::Matrix&& A, const matcl::permvec&
                                         const matcl::options& opts = matcl::options());
 
 /// solve linear equation:
-///          A          X = b   if trans = trans_type::no_trans
-///          trans(A)   X = b   if trans = trans_type::trans
-///          ctrans(A)  X = b   if trans = trans_type::conj_trans
+///          X * A         = b   if trans = trans_type::no_trans
+///          X * trans(A)  = b   if trans = trans_type::trans
+///          X * ctrans(A) = b   if trans = trans_type::conj_trans
 ///
 /// if trans != trans_type::no_trans and A and b are sparse matrices, then A or b is transposed
 /// opts is used by LU decomposition performed internally if necessary,
@@ -337,9 +337,9 @@ MATCL_LINALG_EXPORT Matrix linsolve_rev2(matcl::Matrix&& A, matcl::Matrix&& b,
                                          const matcl::options& opts = matcl::options());
 
 /// solve linear equation:
-///         A(p^-1,q^-1)          X = b   if trans = trans_type::no_trans
-///         trans(A(p^-1,q^-1))   X = b   if trans = trans_type::trans
-///         ctrans(A(p^-1,q^-1))  X = b   if trans = trans_type::conj_trans
+///         X * A(p^-1,q^-1)         = b   if trans = trans_type::no_trans
+///         X * trans(A(p^-1,q^-1))  = b   if trans = trans_type::trans
+///         X * ctrans(A(p^-1,q^-1)) = b   if trans = trans_type::conj_trans
 ///
 /// where p, q are permutation matrices. This is equvaluent to
 ///     X = (b(:,q) * op(A)^-1)(:,p^-1)

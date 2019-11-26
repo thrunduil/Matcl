@@ -2911,6 +2911,122 @@ void zhetrf(const char *uplo, i_type n, z_type *a, i_type lda, i_type *ipiv, z_t
     LAPACK_NAME(zhetrf)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
 }
 
+//-----------------------------------------------------------------------
+//                          SYTRF_ROOK/HETRF_ROOK
+//-----------------------------------------------------------------------
+
+template<> BLAS_EXPORT INLINE_TYPE
+void sytrf_rook<s_type>(const char *uplo, i_type n, s_type *a, i_type lda, i_type *ipiv, s_type *work, 
+                      i_type lwork, i_type *info)
+{
+    LAPACK_NAME(ssytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void sytrf_rook<d_type>(const char *uplo, i_type n, d_type *a, i_type lda, i_type *ipiv, d_type *work, 
+                      i_type lwork, i_type *info)
+{
+    LAPACK_NAME(dsytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void sytrf_rook<c_type>(const char *uplo, i_type n, c_type *a, i_type lda, i_type *ipiv, c_type *work, 
+                      i_type lwork, i_type *info)
+{
+    LAPACK_NAME(csytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void sytrf_rook<z_type>(const char *uplo, i_type n, z_type *a, i_type lda, i_type *ipiv, z_type *work, 
+                      i_type lwork, i_type *info)
+{
+    LAPACK_NAME(zsytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void ssytrf_rook(const char *uplo, i_type n, s_type *a, i_type lda, i_type *ipiv, s_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(ssytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void dsytrf_rook(const char *uplo, i_type n, d_type *a, i_type lda, i_type *ipiv, d_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(dsytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void csytrf_rook(const char *uplo, i_type n, c_type *a, i_type lda, i_type *ipiv, c_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(csytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void zsytrf_rook(const char *uplo, i_type n, z_type *a, i_type lda, i_type *ipiv, z_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(zsytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void hetrf_rook<s_type>(const char *uplo, i_type n, s_type *a, i_type lda, i_type *ipiv, s_type *work, 
+                    i_type lwork, i_type *info)
+{
+    LAPACK_NAME(ssytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void hetrf_rook<d_type>(const char *uplo, i_type n, d_type *a, i_type lda, i_type *ipiv, d_type *work, 
+                    i_type lwork, i_type *info)
+{
+    LAPACK_NAME(dsytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void hetrf_rook<c_type>(const char *uplo, i_type n, c_type *a, i_type lda, i_type *ipiv, c_type *work, 
+                i_type lwork, i_type *info)
+{
+    LAPACK_NAME(chetrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void shetrf_rook(const char *uplo, i_type n, s_type *a, i_type lda, i_type *ipiv, s_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(ssytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void dhetrf_rook(const char *uplo, i_type n, d_type *a, i_type lda, i_type *ipiv, d_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(dsytrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+template<> BLAS_EXPORT INLINE_TYPE
+void hetrf_rook<z_type>(const char *uplo, i_type n, z_type *a, i_type lda, i_type *ipiv, z_type *work, 
+                i_type lwork, i_type *info)
+{
+    LAPACK_NAME(zhetrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void chetrf_rook(const char *uplo, i_type n, c_type *a, i_type lda, i_type *ipiv, c_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(chetrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
+BLAS_EXPORT INLINE_TYPE 
+void zhetrf_rook(const char *uplo, i_type n, z_type *a, i_type lda, i_type *ipiv, z_type *work, 
+            i_type lwork, i_type *info)
+{
+    LAPACK_NAME(zhetrf_rook)(_rc(uplo),_rc(&n),_rc(a),_rc(&lda),_rc(ipiv),_rc(work),_rc(&lwork),_rc(info));
+}
+
 BLAS_EXPORT INLINE_TYPE 
 void dgeqr2(i_type m, i_type n, d_type *a, i_type lda, d_type *tau, d_type *work, i_type *info)
 {

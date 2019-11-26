@@ -121,7 +121,7 @@ class arpack_wrapper
     private:
         lock_type           m_lock;
         Integer             m_N;
-        Real                m_tol;
+        TR                  m_tol;
         kernel_type         m_kernel_type;
         arpack_output       m_output;
         linear_operator     m_A;

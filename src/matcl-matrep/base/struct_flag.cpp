@@ -465,12 +465,12 @@ void struct_flag::reset_value()
     m_flag.m_user       = 0;
 };
 
-void struct_flag::add(const struct_flag& t) const
+void struct_flag::add(const struct_flag& t)
 {
     m_flag  = m_flag.add(t.m_flag);
 }
 
-void struct_flag::add_user(const struct_flag& t) const
+void struct_flag::add_user(const struct_flag& t)
 {
     m_flag  = m_flag.add_user(t.m_flag);
 }

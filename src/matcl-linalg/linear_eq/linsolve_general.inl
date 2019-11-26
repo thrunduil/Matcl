@@ -586,7 +586,7 @@ struct linsolve_general_struct<struct_banded,struct_dense,V1,V2>
         using M     = raw::Matrix<V,struct_dense>;
         using MB    = raw::Matrix<V,struct_banded>;
 
-        if (A.has_diag(0))
+        if (A.has_diag(0) == false)
             throw error::error_singular();
 
         Integer ld      = A.number_subdiagonals();
@@ -690,7 +690,7 @@ struct linsolve_general_struct<struct_banded,struct_dense,V1,V2>
         using M     = raw::Matrix<V,struct_dense>;
         using MB    = raw::Matrix<V,struct_banded>;
 
-        if (A.has_diag(0))
+        if (A.has_diag(0) == false)
             throw error::error_singular();
 
         Integer ld      = A.number_subdiagonals();

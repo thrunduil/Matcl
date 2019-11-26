@@ -328,7 +328,7 @@ MATCL_LINALG_EXPORT Matrix eig_sym(Matrix&& A, Matrix&& B,
 ///
 ///          A * U = U * T
 ///
-///  where U is unitary matrix, T is uppertriangular
+///  where U is unitary matrix, T is quasi-upper triangular
 ///     [U, T, conv] = pschur(A, k, ec, opts)
 /// A       - the linear operator of size N x N
 /// k       - number of eigenvalues to find
@@ -336,7 +336,7 @@ MATCL_LINALG_EXPORT Matrix eig_sym(Matrix&& A, Matrix&& B,
 ///           on default returns eigenvalues with largest absolute value
 /// opts    - additional options; see namespace opt::speigs for details
 /// U       - unitary matrix of size N x kr, kr <= r + 1
-/// T       - upper triangular matrix of size krxkr, T is hermitian if
+/// T       - quasi-upper triangular matrix of size krxkr, T is hermitian if
 ///           A is hermitian and real
 /// conv    = true: all eigenvalues converged withing specified tolorance
 ///         = false: some of eigenvalue did not converged
@@ -381,7 +381,7 @@ MATCL_LINALG_EXPORT pschur_return pschur(const linear_operator& A, const Integer
 ///           on default returns eigenvalues with largest absolute value
 /// opts    - additional options; see namespace opt::speigs for details
 /// U       - a matrix of size N x kr, kr <= r + 1
-/// T       - upper triangular matrix of size kr x kr, T is hermitian if
+/// T       - quasi-upper triangular matrix of size kr x kr, T is hermitian if
 ///           A is hermitian and real
 /// conv    = true: all eigenvalues converged withing specified tolorance
 ///         = false: some of eigenvalue did not converged
@@ -400,7 +400,7 @@ MATCL_LINALG_EXPORT pschur_return pbschur(const linear_operator& A, const linear
 /// opts    - additional options; see namespace opt::speigs for details
 /// E       - ke x 1 vector of eigenvalues, ke <= k + 1
 /// conv    = true: all eigenvalues converged withing specified tolorance
-///         = false: some of eigenvalue did not converged
+///         = false: some of eigenvalues did not converged
 ///
 /// this function calls methods from class pschur_decomposition
 MATCL_LINALG_EXPORT eigs_return eigs(const linear_operator& A, const Integer k, 
