@@ -40,7 +40,7 @@ namespace matcl { namespace lapack
 #define MAGIC_NUMBER 12345.
 
 template<class V, bool Is_compl = details::is_complex<V>::value>
-struct compute_eigenvalues
+struct compute_eigenvalues_tgsen3
 {
     static void eval(i_type n, i_type k, V* a, i_type lda, V* b, i_type ldb, 
                     i_type wantq, i_type wantz, V* Q, i_type LDQ, V* Z, i_type LDZ, 
@@ -124,7 +124,7 @@ struct compute_eigenvalues
 };
 
 template<class V>
-struct compute_eigenvalues<V,true>
+struct compute_eigenvalues_tgsen3<V,true>
 {
     static void eval(i_type n, i_type k, V* a, i_type lda, V* b, i_type ldb, 
                     i_type wantq, i_type wantz, V* Q, i_type LDQ, V* Z, i_type LDZ, 
@@ -175,7 +175,7 @@ struct compute_eigenvalues<V,true>
 };
 
 template<class V>
-bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_window, i_type max_window_size,
+static bool compute_block(i_type& BS, i_type BB, i_type n, i_type K, i_type max_eig_in_window, i_type max_window_size,
               i_type* sel_vec, V* a, i_type lda, V* b, i_type ldb, V* Q, i_type LDQ, 
               V* Z, i_type LDZ, i_type wantq, i_type wantz, matrix_lock* a_lock, matrix_lock* b_lock,
               V* work, i_type& lwork)
@@ -520,7 +520,8 @@ matcl::lapack::tgsen3(i_type wantq,i_type wantz,const i_type *select,i_type n, i
     // Quick return if possible.
     if ( M == n || M == 0 )
     {
-        compute_eigenvalues<V>::eval(n, K, a, lda, b, ldb, wantq, wantz, Q, LDQ, Z, LDZ, alpha, beta);
+        compute_eigenvalues_tgsen3<V>::eval(n, K, a, lda, b, ldb, wantq, wantz,
+                                            Q, LDQ, Z, LDZ, alpha, beta);
         return;
     };
 
@@ -578,7 +579,8 @@ matcl::lapack::tgsen3(i_type wantq,i_type wantz,const i_type *select,i_type n, i
         *info = 1;
     };
 
-    compute_eigenvalues<V>::eval(n, K, a, lda, b, ldb, wantq, wantz, Q, LDQ, Z, LDZ, alpha, beta);
+    compute_eigenvalues_tgsen3<V>::eval(n, K, a, lda, b, ldb, wantq, wantz, Q, 
+                                        LDQ, Z, LDZ, alpha, beta);
 
     return;
 };

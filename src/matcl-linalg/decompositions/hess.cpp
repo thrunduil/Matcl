@@ -1943,6 +1943,7 @@ static void hess_impl(Matrix& ret, const Matrix& A)
     if (A.structural_nnz() == 0  || get_ld(A,1) <= 1)
     {
         ret = A;
+        ret.get_struct().add_ldiags(struct_flag::one);
         return;
     };
 
@@ -1950,6 +1951,7 @@ static void hess_impl(Matrix& ret, const Matrix& A)
     {
         Matrix ret_A = A(colon(colon::cend(), -1, 1), colon(colon::cend(), -1, 1));
         ret = ret_A;
+        ret.get_struct().add_ldiags(struct_flag::one);
         return;
     };
 
@@ -1983,6 +1985,8 @@ static void hess2_impl(hess_ret& ret, const Matrix& A)
     {
         matcl::value_code vt0 = matrix_traits::real_value_type(A.get_value_code());
         matcl::value_code vt  = matrix_traits::unify_value_types(vt0, value_code::v_float);
+
+        A.get_struct().add_ldiags(struct_flag::one);
         ret = hess_ret(unitary_matrix(speye(A.rows(),A.rows(), vt),false), A);
         return;
     }
@@ -2003,6 +2007,7 @@ static void hess2_impl(hess_ret& ret, const Matrix& A)
 
         ret_U.add_struct(sf);
         
+        ret_A.get_struct().add_ldiags(struct_flag::one);
         ret = hess_ret(unitary_matrix(ret_U,false), ret_A);
         return;
     }

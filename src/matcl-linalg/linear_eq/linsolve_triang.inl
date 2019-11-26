@@ -299,7 +299,7 @@ struct linsolve_triang_str<struct_banded,struct_dense,V1,V2>
         MA Ac   = raw::converter<MA,M1>::eval(A);
         MB Bc   = raw::converter<MB,M2>::eval(B.make_unique());
 
-        Integer off = A.first_elem_diag(0);
+        Integer off = 0;
        
         if (trans != trans_type::no_trans)
             std::swap(p,q);
@@ -383,7 +383,7 @@ struct linsolve_triang_str<struct_banded,struct_dense,V1,V2>
         MA Ac   = raw::converter<MA,M1>::eval(A);
         MB Bc   = raw::converter<MB,M2>::eval(B.make_unique());
 
-        Integer off = Ac.first_elem_diag(0);
+        Integer off = 0;
        
         if (trans != trans_type::no_trans)
             std::swap(p,q);

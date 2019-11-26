@@ -323,7 +323,7 @@ class MATCL_MATREP_EXPORT Matrix : private details::matrix_base
         ti::ti_object               get_type() const;
 
         // return additional structures assigned to this matrix
-        const struct_flag&          get_struct() const;        
+        struct_flag&                get_struct() const;        
 
         // struct flag must be valid, data are not changed
         void                        set_struct(const struct_flag&) const;

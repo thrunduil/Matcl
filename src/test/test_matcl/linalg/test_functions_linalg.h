@@ -46,9 +46,22 @@ class linalg_functions_list
         void		test_lu_partial();
         void		test_lu_rook();
         void		test_lu_complete();
-        void        test_linsolve();
+
+        void        test_linsolve_0_NT();
+        void        test_linsolve_0_T();
+        void        test_linsolve_0_CT();
+        void        test_linsolve_1_NT();
+        void        test_linsolve_1_T();
+        void        test_linsolve_1_CT();
+        void        test_linsolve_3_NT();
+        void        test_linsolve_3_T();
+        void        test_linsolve_3_CT();
+
         void        test_linsolve_rev();
-        void        test_linsolve_rev2();
+        void        test_linsolve_rev2_0();
+        void        test_linsolve_rev2_1();
+        void        test_linsolve_rev2_3();
+
         void		test_norm();
         void		test_svd();
         void		test_chol();
@@ -101,9 +114,12 @@ class test_function_linsolve : public unary_function
         dynamic_mat_set&	ms;
         long                m_new_objects;
         long                K;
+        trans_type          m_trans;
 
     public:
-        test_function_linsolve(long k, dynamic_mat_set& ms) :ms(ms),K(k){};
+        test_function_linsolve(long k, trans_type t, dynamic_mat_set& ms) 
+            :ms(ms), m_trans(t), K(k)
+        {};
 
         virtual long n_new_objects()    { return m_new_objects; };
 

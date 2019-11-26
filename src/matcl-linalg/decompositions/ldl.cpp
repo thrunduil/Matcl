@@ -77,24 +77,24 @@ struct ldl_str<V, struct_dense>
 
         if(hermitian)
         {
-            lapack::hetrf(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()), 
+            lapack::hetrf_rook(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()), 
                           -1, lap(&info));
             
             Integer lwork = (Integer) real(work.ptr()[0]);
             work.reset_unique(lwork, 1);
                         
-            lapack::hetrf(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()), 
+            lapack::hetrf_rook(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()), 
                           lwork, lap(&info));
         }
         else
         {
-            lapack::sytrf(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()),
+            lapack::sytrf_rook(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()),
                           -1, lap(&info));
 
             Integer lwork = (Integer) real(work.ptr()[0]);
             work.reset_unique(lwork, 1);
             
-            lapack::sytrf(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()), 
+            lapack::sytrf_rook(&uplo, N, lap(Ac.ptr()), Ac.ld(), lap(ptr_PIV), lap(work.ptr()), 
                           lwork, lap(&info));
         }
 
@@ -105,9 +105,9 @@ struct ldl_str<V, struct_dense>
         Mat_b D             = Mat_b(A.get_type(), N, N, -1, 1);        
 
         if (upper == true)
-            post_ldl_upper(Ac, D, P, ptr_PIV, hermitian);
+            post_ldl_upper_rook(Ac, D, P, ptr_PIV, hermitian);
         else
-            post_ldl_lower(Ac, D, P, ptr_PIV, hermitian);
+            post_ldl_lower_rook(Ac, D, P, ptr_PIV, hermitian);
 
         ret_P           = details::pv_constructor::make(P);        
         ret_L           = Matrix(Ac,true);
@@ -232,6 +232,7 @@ struct ldl_str<V, struct_dense>
             ptr_D_u1            += D_ld;
         }
     };
+
     static void post_ldl_upper(Mat& Ac, Mat_b& D, Matrix& P, const Integer* ptr_PIV, 
                          bool hermitian)
     {
@@ -328,6 +329,240 @@ struct ldl_str<V, struct_dense>
             ptr_D_0             -= D_ld;
             ptr_D_l1            -= D_ld;
             ptr_D_u1            -= D_ld;
+        }
+    };
+
+    static void post_ldl_upper_rook(Mat& Ac, Mat_b& D, Matrix& P, const Integer* ptr_PIV, 
+                         bool hermitian)
+    {
+        Integer D_ld        = D.ld();
+        Integer N           = Ac.cols();
+        V* ptr_D_0          = D.rep_ptr() + (N-1) * D_ld + D.first_elem_diag(0);
+        V* ptr_D_l1         = D.rep_ptr() + (N-2) * D_ld + D.first_elem_diag(-1);
+        V* ptr_D_u1         = D.rep_ptr() + (N-2) * D_ld + D.first_elem_diag(1);
+
+        Integer A_ld        = Ac.ld();
+        V* ptr_A            = Ac.ptr() + (N-1) * A_ld;
+        
+        Integer *ptr_P      = P.get_array_unique<Integer>();        
+
+        for (Integer i = N-1; i >= 0; i--)
+        {                
+            Integer ip      = ptr_PIV[i];
+            Integer ip2     = i >= 1 ? ptr_PIV[i - 1] : 0;
+
+            bool step_2     = false;
+
+            Integer p1, p2;
+            Integer p3 = 0, p4 = 0;
+
+            if (ip > 0)
+            {
+                p1      = i;
+                p2      = ip - 1;                    
+            }
+            else
+            {
+                p1      = i;
+                p2      = -ip - 1;
+
+                p3      = i - 1;
+                p4      = -ip2 - 1;
+                step_2  = true;                    
+            };
+
+            std::swap(ptr_P[p1], ptr_P[p2]);
+
+            //apply delayed permutations
+            if (p1 != p2)
+            {
+                V* ptr          = Ac.ptr() + (N-1)*A_ld;
+                for (Integer j = i+1; j < N; ++j)
+                {
+                    std::swap(ptr[p1], ptr[p2]);
+                    ptr         -= A_ld;
+                };
+            };
+
+            //clear upper-triangular part
+            for (Integer j = i+1; j < N; ++j)
+                ptr_A[j]        = V(0.0);
+
+            ptr_D_0[0]          = ptr_A[i];
+            ptr_A[i]            = V(1.0);
+
+            if (step_2)
+            {
+                std::swap(ptr_P[p3], ptr_P[p4]);
+
+                if (p3 != p4)
+                {
+                    V* ptr          = Ac.ptr() + (N-1)*A_ld;
+                    for (Integer j = i+1; j < N; ++j)
+                    {
+                        std::swap(ptr[p3], ptr[p4]);
+                        ptr         -= A_ld;
+                    };
+                };
+
+                V subdiag       = ptr_A[i - 1];
+
+                ptr_D_u1[0]     = subdiag;
+                if (hermitian)
+                    ptr_D_l1[0] = conj(subdiag);
+                else
+                    ptr_D_l1[0] = subdiag;
+
+                ptr_A[i - 1]    = V(0);
+
+                ptr_A           -= A_ld;
+
+                ptr_D_0         -= D_ld;
+                ptr_D_l1        -= D_ld;
+                ptr_D_u1        -= D_ld;
+
+                //clear upper-triangular part
+                for (Integer j = i; j < N; ++j)
+                    ptr_A[j]    = V(0.0);
+            
+                ptr_D_0[0]      = ptr_A[i-1];
+
+                if (i > 1)
+                {
+                    ptr_D_l1[0] = V(0.0);
+                    ptr_D_u1[0] = V(0.0);
+                };
+
+                ptr_A[i-1]      = V(1.0);
+                --i;                
+            }
+            else if (i > 0)
+            {
+                ptr_D_l1[0]     = V(0.0);
+                ptr_D_u1[0]     = V(0.0);
+            };
+                
+            ptr_A               -= A_ld;
+            ptr_D_0             -= D_ld;
+            ptr_D_l1            -= D_ld;
+            ptr_D_u1            -= D_ld;
+        }
+    };
+
+    static void post_ldl_lower_rook(Mat& Ac, Mat_b& D, Matrix& P, const Integer* ptr_PIV, 
+                         bool hermitian)
+    {
+        Integer D_ld        = D.ld();
+        Integer N           = Ac.cols();
+        V* ptr_D_0          = D.rep_ptr() + D.first_elem_diag(0);
+        V* ptr_D_l1         = D.rep_ptr() + D.first_elem_diag(-1);
+        V* ptr_D_u1         = D.rep_ptr() + D.first_elem_diag(1);
+
+        V* ptr_A            = Ac.ptr();
+        Integer A_ld        = Ac.ld();
+        
+        Integer *ptr_P      = P.get_array_unique<Integer>();        
+
+        for (Integer i = 0; i < N; i++)
+        {                
+            Integer ip      = ptr_PIV[i];
+            Integer ip2     = i < N - 1 ? ptr_PIV[i + 1] : 0;
+            bool step_2     = false;
+
+            Integer p1, p2;
+            Integer p3 = 0, p4 = 0;
+
+            if (ip > 0)
+            {
+                p1      = i;
+                p2      = ip - 1;                    
+            }
+            else
+            {
+                p1      = i;
+                p2      = -ip - 1;
+
+                p3      = i + 1;
+                p4      = -ip2 - 1;
+
+                step_2  = true;                    
+            };
+
+            std::swap(ptr_P[p1], ptr_P[p2]);
+
+            //apply delayed permutations
+            if (p1 != p2)
+            {
+                V* ptr          = Ac.ptr();
+                for (Integer j = 0; j < i; ++j)
+                {
+                    std::swap(ptr[p1], ptr[p2]);
+                    ptr         += A_ld;
+                };
+            };
+
+            //clear upper-triangular part
+            for (Integer j = 0; j < i; ++j)
+                ptr_A[j]        = V(0.0);
+
+            ptr_D_0[0]          = ptr_A[i];
+            ptr_A[i]            = V(1.0);
+
+            if (step_2)
+            {
+                std::swap(ptr_P[p3], ptr_P[p4]);
+
+                if (p3 != p4)
+                {
+                    V* ptr          = Ac.ptr();
+                    for (Integer j = 0; j < i; ++j)
+                    {
+                        std::swap(ptr[p3], ptr[p4]);
+                        ptr         += A_ld;
+                    };
+                };
+
+                V subdiag       = ptr_A[i + 1];
+
+                ptr_D_l1[0]     = subdiag;
+                if (hermitian)
+                    ptr_D_u1[0] = conj(subdiag);
+                else
+                    ptr_D_u1[0] = subdiag;
+
+                ptr_A[i + 1]    = V(0);
+
+                ptr_A           += A_ld;
+
+                ptr_D_0         += D_ld;
+                ptr_D_l1        += D_ld;
+                ptr_D_u1        += D_ld;
+
+                //clear upper-triangular part
+                for (Integer j = 0; j < i+1; ++j)
+                    ptr_A[j]    = V(0.0);
+            
+                ptr_D_0[0]      = ptr_A[i+1];
+
+                if (i < N - 2)
+                {
+                    ptr_D_l1[0] = V(0.0);
+                    ptr_D_u1[0] = V(0.0);
+                };
+
+                ptr_A[i+1]      = V(1.0);
+                ++i;                
+            }
+            else if (i < N - 1)
+            {
+                ptr_D_l1[0]     = V(0.0);
+                ptr_D_u1[0]     = V(0.0);
+            };
+                
+            ptr_A               += A_ld;
+            ptr_D_0             += D_ld;
+            ptr_D_l1            += D_ld;
+            ptr_D_u1            += D_ld;
         }
     };
 

@@ -95,9 +95,8 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
         sparse_ccs&             rep()                           { return m_data; }
         const sparse_ccs&       rep() const                     { return m_data; }
 
-        type_info               get_type() const                  { return m_data.get_type(); };
-        const struct_flag&      get_struct() const              { return m_data.get_struct(); };
-        struct_flag&            get_struct()                    { return m_data.get_struct(); };
+        type_info               get_type() const                { return m_data.get_type(); };
+        struct_flag&            get_struct() const              { return m_data.get_struct(); };
         void                    set_struct(struct_flag f) const { m_data.get_struct().set(f); };
         void                    add_struct(struct_flag f) const { m_data.get_struct().add(f); };
 

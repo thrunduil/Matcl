@@ -98,9 +98,8 @@ class MATCL_MATREP_EXPORT sparse_ccs
         Integer             total_cols() const      { return m_max_cols; }
         Integer             nzmax() const           { return *m_nzmax-m_offset; }
         Integer             nnz() const             { return m_c? m_c[m_cols]-m_offset : 0; }
-        tinfo               get_type() const          { return m_ti; };
-        const struct_flag&  get_struct() const      { return m_flag; };
-        struct_flag&        get_struct()            { return m_flag; };
+        tinfo               get_type() const        { return m_ti; };
+        struct_flag&        get_struct() const      { return m_flag; };
 
         void                assign_to_fresh(const sparse_ccs& o);
         void                assign_to_fresh(sparse_ccs&& o);
@@ -123,7 +122,7 @@ class MATCL_MATREP_EXPORT sparse_ccs
         Integer **          m_r;
         value_type **       m_x;
         tinfo               m_ti;  
-        struct_flag         m_flag;
+        mutable struct_flag m_flag;
         bool                m_effective_unique;
 
         sparse_ccs&         operator=(const sparse_ccs&) = delete;

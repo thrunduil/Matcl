@@ -117,7 +117,7 @@ user_flag unitary_flag::kron_2(struct_flag sf_left, struct_flag sf_right) const
 
 bool matcl::is_unitary(const struct_flag& sf)
 {
-    return sf.get_user(unitary_flag());
+    return sf.get_user(unitary_flag()) || sf.is_id();
 };
 
 };
