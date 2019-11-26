@@ -1,0 +1,5 @@
+Pawel Kowal 2019.
+
+1. all lapack's functions are forwarded to flapack library
+   except *lahqr. Directory Lapack_old contains original
+   functions.

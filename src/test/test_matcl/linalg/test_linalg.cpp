@@ -38,7 +38,10 @@ int main(int argc, const char* argv[])
     
     //test::test_selector().add_selection(2,"multi_thread");          
 
-    //test::test_selector().add_selection(3,"test_set_col2_mat()");
+    test::test_selector().add_selection(3,"test_eigs()");
+
+    test::test_selector().add_selection(4,"unary");
+    //test::test_selector().add_selection(4,"binary");
 
     test::test_setups(argc, argv);
     

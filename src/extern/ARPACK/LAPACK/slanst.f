@@ -57,68 +57,13 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
-*     ..
-*     .. Local Scalars ..
-      INTEGER            I
-      REAL               ANORM, SCALE, SUM
-*     ..
 *     .. External Functions ..
-      LOGICAL            AR_LSAME
-      EXTERNAL           AR_LSAME
+      REAL               SLANST
+      EXTERNAL           SLANST
 *     ..
-*     .. External Subroutines ..
-      EXTERNAL           AR_SLASSQ
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
-*
-      IF( N.LE.0 ) THEN
-         ANORM = ZERO
-      ELSE IF( AR_LSAME( NORM, 'M' ) ) THEN
-*
-*        Find max(abs(A(i,j))).
-*
-         ANORM = ABS( D( N ) )
-         DO 10 I = 1, N - 1
-            ANORM = MAX( ANORM, ABS( D( I ) ) )
-            ANORM = MAX( ANORM, ABS( E( I ) ) )
-   10    CONTINUE
-      ELSE IF( AR_LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' .OR.
-     $         AR_LSAME( NORM, 'I' ) ) THEN
-*
-*        Find norm1(A).
-*
-         IF( N.EQ.1 ) THEN
-            ANORM = ABS( D( 1 ) )
-         ELSE
-            ANORM = MAX( ABS( D( 1 ) )+ABS( E( 1 ) ),
-     $              ABS( E( N-1 ) )+ABS( D( N ) ) )
-            DO 20 I = 2, N - 1
-               ANORM = MAX( ANORM, ABS( D( I ) )+ABS( E( I ) )+
-     $                 ABS( E( I-1 ) ) )
-   20       CONTINUE
-         END IF
-      ELSE IF( ( AR_LSAME( NORM, 'F' ) ) .OR. ( AR_LSAME( NORM, 'E' ) ) ) THEN
-*
-*        Find normF(A).
-*
-         SCALE = ZERO
-         SUM = ONE
-         IF( N.GT.1 ) THEN
-            CALL AR_SLASSQ( N-1, E, 1, SCALE, SUM )
-            SUM = 2*SUM
-         END IF
-         CALL AR_SLASSQ( N, D, 1, SCALE, SUM )
-         ANORM = SCALE*SQRT( SUM )
-      END IF
-*
-      AR_SLANST = ANORM
-      RETURN
+      AR_SLANST = SLANST( NORM, N, D, E )
 *
 *     End of AR_SLANST
 *

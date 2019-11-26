@@ -46,71 +46,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
-      COMPLEX*16         CZERO
-      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
+*     .. External Functions ..
+      EXTERNAL           ZLARTG
 *     ..
-*     .. Local Scalars ..
-      DOUBLE PRECISION   D, DI, F1, F2, FA, G1, G2, GA
-      COMPLEX*16         FS, GS, SS, T
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, DCONJG, DIMAG, SQRT
-*     ..
-*     .. Statement Functions ..
-      DOUBLE PRECISION   ABS1, ABSSQ
-*     ..
-*     .. Statement Function definitions ..
-      ABS1( T ) = ABS( DBLE( T ) ) + ABS( DIMAG( T ) )
-      ABSSQ( T ) = DBLE( T )**2 + DIMAG( T )**2
 *     ..
 *     .. Executable Statements ..
-*
-*     [ 25 or 38 ops for main paths ]
-*
-      IF( G.EQ.CZERO ) THEN
-         CS = ONE
-         SN = ZERO
-         R = F
-      ELSE IF( F.EQ.CZERO ) THEN
-         CS = ZERO
-*
-         SN = DCONJG( G ) / ABS( G )
-         R = ABS( G )
-*
-*         SN = ONE
-*         R = G
-*
-      ELSE
-         F1 = ABS1( F )
-         G1 = ABS1( G )
-         IF( F1.GE.G1 ) THEN
-            GS = G / F1
-            G2 = ABSSQ( GS )
-            FS = F / F1
-            F2 = ABSSQ( FS )
-            D = SQRT( ONE+G2 / F2 )
-            CS = ONE / D
-            SN = DCONJG( GS )*FS*( CS / F2 )
-            R = F*D
-         ELSE
-            FS = F / G1
-            F2 = ABSSQ( FS )
-            FA = SQRT( F2 )
-            GS = G / G1
-            G2 = ABSSQ( GS )
-            GA = SQRT( G2 )
-            D = SQRT( ONE+F2 / G2 )
-            DI = ONE / D
-            CS = ( FA / GA )*DI
-            SS = ( DCONJG( GS )*FS ) / ( FA*GA )
-            SN = SS*DI
-            R = G*SS*D
-         END IF
-      END IF
-      RETURN
+      CALL ZLARTG( F, G, CS, SN, R )
 *
 *     End of AR_ZLARTG
 *

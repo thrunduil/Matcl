@@ -59,79 +59,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
-*     ..
-*     .. Local Scalars ..
-      INTEGER            J, KNT
-      REAL               BETA, RSAFMN, SAFMIN, XNORM
-*     ..
 *     .. External Functions ..
-      REAL               AR_SLAMCH, AR_SLAPY2, SNRM2
-      EXTERNAL           AR_SLAMCH, AR_SLAPY2, SNRM2
+      EXTERNAL           SLARFG
 *     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, SIGN
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           SSCAL
 *     ..
 *     .. Executable Statements ..
-*
-      IF( N.LE.1 ) THEN
-         TAU = ZERO
-         RETURN
-      END IF
-*
-      XNORM = SNRM2( N-1, X, INCX )
-*
-      IF( XNORM.EQ.ZERO ) THEN
-*
-*        H  =  I
-*
-         TAU = ZERO
-      ELSE
-*
-*        general case
-*
-         BETA = -SIGN( AR_SLAPY2( ALPHA, XNORM ), ALPHA )
-         SAFMIN = AR_SLAMCH( 'S' ) / AR_SLAMCH( 'E' )
-         IF( ABS( BETA ).LT.SAFMIN ) THEN
-*
-*           XNORM, BETA may be inaccurate; scale X and recompute them
-*
-            RSAFMN = ONE / SAFMIN
-            KNT = 0
-   10       CONTINUE
-            KNT = KNT + 1
-            CALL SSCAL( N-1, RSAFMN, X, INCX )
-            BETA = BETA*RSAFMN
-            ALPHA = ALPHA*RSAFMN
-            IF( ABS( BETA ).LT.SAFMIN )
-     $         GO TO 10
-*
-*           New BETA is at most 1, at least SAFMIN
-*
-            XNORM = SNRM2( N-1, X, INCX )
-            BETA = -SIGN( AR_SLAPY2( ALPHA, XNORM ), ALPHA )
-            TAU = ( BETA-ALPHA ) / BETA
-            CALL SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
-*
-*           If ALPHA is subnormal, it may lose relative accuracy
-*
-            ALPHA = BETA
-            DO 20 J = 1, KNT
-               ALPHA = ALPHA*SAFMIN
-   20       CONTINUE
-         ELSE
-            TAU = ( BETA-ALPHA ) / BETA
-            CALL SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX )
-            ALPHA = BETA
-         END IF
-      END IF
-*
-      RETURN
+      CALL SLARFG( N, ALPHA, X, INCX, TAU )
 *
 *     End of AR_SLARFG
 *

@@ -24,30 +24,13 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ZERO
-      PARAMETER          ( ZERO = 0.0E0 )
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E0 )
+*     .. External Functions ..
+      REAL               SLAPY2
+      EXTERNAL           SLAPY2
 *     ..
-*     .. Local Scalars ..
-      REAL               W, XABS, YABS, Z
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
-*
-      XABS = ABS( X )
-      YABS = ABS( Y )
-      W = MAX( XABS, YABS )
-      Z = MIN( XABS, YABS )
-      IF( Z.EQ.ZERO ) THEN
-         AR_SLAPY2 = W
-      ELSE
-         AR_SLAPY2 = W*SQRT( ONE+( Z / W )**2 )
-      END IF
-      RETURN
+      AR_SLAPY2 = SLAPY2(X, Y)
 *
 *     End of AR_SLAPY2
 *

@@ -37,8 +37,11 @@ void test_all_linalg(const rand_matrix_ptr& rand)
         matcl::out_stream << std::string() + "\t\t\tsingle_thread" + "\n";
         matcl::out_stream << std::string(50, '-') + "\n";
 
-        test::test_linalg_st(rand);     N = matcl::details::no_existing_objects();
-        test::test_linalg_bin_st(rand); N = matcl::details::no_existing_objects();
+        if (test::test_selector().is_selected_no_scons_parse(4,"unary"))   
+            test::test_linalg_st(rand);     N = matcl::details::no_existing_objects();
+
+        if (test::test_selector().is_selected_no_scons_parse(4,"binary"))   
+            test::test_linalg_bin_st(rand); N = matcl::details::no_existing_objects();               
     }
     
     if (test::test_selector().is_selected(2,"multi_thread"))   
@@ -47,8 +50,11 @@ void test_all_linalg(const rand_matrix_ptr& rand)
         matcl::out_stream << std::string() + "\t\t\tmulti_thread" + "\n";
         matcl::out_stream << std::string(50, '-') + "\n";
 
-        test::test_linalg_mt(rand);     N = matcl::details::no_existing_objects();
-        test::test_linalg_bin_mt(rand); N = matcl::details::no_existing_objects();
+        if (test::test_selector().is_selected_no_scons_parse(4,"unary"))   
+            test::test_linalg_st(rand);     N = matcl::details::no_existing_objects();
+
+        if (test::test_selector().is_selected_no_scons_parse(4,"binary"))   
+            test::test_linalg_bin_st(rand); N = matcl::details::no_existing_objects();
     }
 };
 

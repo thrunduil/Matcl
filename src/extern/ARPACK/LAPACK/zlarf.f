@@ -69,52 +69,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      COMPLEX*16         ONE, ZERO
-      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
-     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZGERC
-*     ..
 *     .. External Functions ..
-      LOGICAL            AR_LSAME
-      EXTERNAL           AR_LSAME
+      EXTERNAL           ZLARF
+*     ..
 *     ..
 *     .. Executable Statements ..
-*
-      IF( AR_LSAME( SIDE, 'L' ) ) THEN
-*
-*        Form  H * C
-*
-         IF( TAU.NE.ZERO ) THEN
-*
-*           w := C' * v
-*
-            CALL ZGEMV( 'Conjugate transpose', M, N, ONE, C, LDC, V,
-     $                  INCV, ZERO, WORK, 1 )
-*
-*           C := C - v * w'
-*
-            CALL ZGERC( M, N, -TAU, V, INCV, WORK, 1, C, LDC )
-         END IF
-      ELSE
-*
-*        Form  C * H
-*
-         IF( TAU.NE.ZERO ) THEN
-*
-*           w := C * v
-*
-            CALL ZGEMV( 'No transpose', M, N, ONE, C, LDC, V, INCV,
-     $                  ZERO, WORK, 1 )
-*
-*           C := C - w * v'
-*
-            CALL ZGERC( M, N, -TAU, WORK, 1, V, INCV, C, LDC )
-         END IF
-      END IF
-      RETURN
+      CALL ZLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *     End of AR_ZLARF
 *

@@ -65,51 +65,12 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           SGEMV, SGER
-*     ..
 *     .. External Functions ..
-      LOGICAL            AR_LSAME
-      EXTERNAL           AR_LSAME
+      EXTERNAL           SLARF
+*     ..
 *     ..
 *     .. Executable Statements ..
-*
-      IF( AR_LSAME( SIDE, 'L' ) ) THEN
-*
-*        Form  H * C
-*
-         IF( TAU.NE.ZERO ) THEN
-*
-*           w := C' * v
-*
-            CALL SGEMV( 'Transpose', M, N, ONE, C, LDC, V, INCV, ZERO,
-     $                  WORK, 1 )
-*
-*           C := C - v * w'
-*
-            CALL SGER( M, N, -TAU, V, INCV, WORK, 1, C, LDC )
-         END IF
-      ELSE
-*
-*        Form  C * H
-*
-         IF( TAU.NE.ZERO ) THEN
-*
-*           w := C * v
-*
-            CALL SGEMV( 'No transpose', M, N, ONE, C, LDC, V, INCV,
-     $                  ZERO, WORK, 1 )
-*
-*           C := C - w * v'
-*
-            CALL SGER( M, N, -TAU, WORK, 1, V, INCV, C, LDC )
-         END IF
-      END IF
-      RETURN
+      CALL SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *     End of AR_SLARF
 *

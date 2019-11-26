@@ -97,99 +97,16 @@ class test_linalg
 
         void make()
         {   
+            /*
             {
                 int code    = 278;
                 Matrix mat  = tf.get_matrix(code);
 
                 matcl::disp(mat);
-
-                {
-                    Matrix A    = frandn(100,100);
-
-                    Matrix U, T;
-                    bool conv;
-
-                    tie(U,T,conv) = pschur(A, 2, cluster_type::LM, 
-                                            matcl::options{opt::speigs::return_nonconvergent(true)
-                                                           //,opt::speigs::tol(constants::eps<Float>())
-                                                           });
-
-                    disp(U);
-                    disp(T);
-                };
-
-                Matrix U;
-                Matrix T;
-                bool conv = false;
-    
-                // max_trials to accommodate non-determinism of ARPACK
-                Integer max_trials = 5;
-
-                Integer size    = mat.rows();
-                Integer k       = std::max(0, std::min(5, size - 3));
-
-                for (int trial = 0; trial < max_trials; trial++)
-                {
-                    tie(U,T,conv) = pschur(mat, k, cluster_type::LM, 
-                                            matcl::options{opt::speigs::return_nonconvergent(true)});
-    
-                    if (conv == true)
-                        break;
-                }
-        
-                if (conv == false)
-                {
-                    tie(U,T,conv) = pschur(mat, k, cluster_type::LM, 
-                                            matcl::options{opt::speigs::return_nonconvergent(false)});
-                }
-
-                for (int i = 0; i < 1; ++i)
-                {
-                    check_struct(U);
-                    check_struct(T);
-
-                    // check finitness
-                    if (mat.all_finite() == true)
-                    {
-                        if (U.all_finite() == false)
-                            break;
-
-                        if (T.all_finite() == false)
-                            break;
-                    };
-
-                    if (mat.all_finite() == false)
-                    {
-                        if (U.all_finite() == true)
-                            break;
-
-                        if (T.all_finite() == true)
-                            break;
-                    };
-
-                    if (has_struct_qtriu(T) == false)
-                        break;
-
-                    Real dif    = 0;
-
-                    // check orthogonality
-                    dif     += norm_1(ctrans(U) * U - eye(U.cols()));
-
-                    value_code vc   = mat.get_value_code();
-                    Real tol_U      = 100.0 * constants::eps(vc) * U.cols();
-
-                    if (dif < tol_U)
-                        dif         = 0.0;
-
-                    // check correctness
-                    dif         += norm_1(mat * U - U * T);
-
-                    if (dif < error_tolerance(1000.0, mat) )
-                        dif = 0.0;
-                }
             };
+            */
 
-            tf.make(opts);
+             tf.make(opts);
         };
 
         void operator()()
@@ -261,34 +178,34 @@ void linalg_functions_list::make(options opts)
 {
     m_options = opts;
     
-    //TODO
-
-    //SELECT_TEST (3, test_svd());
-    //SELECT_TEST (3, test_norm());
-    //SELECT_TEST (3, test_cond());
-    //SELECT_TEST (3, test_lu_rook());    
-    //SELECT_TEST (3, test_lu_partial());   
-    //SELECT_TEST (3, test_lu_complete());    
-    //SELECT_TEST (3, test_chol());
-    //SELECT_TEST (3, test_chol_rr());    
-    //SELECT_TEST (3, test_cholmod());
-    //SELECT_TEST (3, test_qr());
-    //SELECT_TEST (3, test_ldl());
-    //SELECT_TEST (3, test_linsolve_0_NT());
-    //SELECT_TEST (3, test_linsolve_0_T());
-    //SELECT_TEST (3, test_linsolve_0_CT());
-    //SELECT_TEST (3, test_linsolve_1_NT());
-    //SELECT_TEST (3, test_linsolve_1_T());
-    //SELECT_TEST (3, test_linsolve_1_CT());
-    //SELECT_TEST (3, test_linsolve_3_NT());
-    //SELECT_TEST (3, test_linsolve_3_T());
-    //SELECT_TEST (3, test_linsolve_3_CT());
-    //SELECT_TEST (3, test_linsolve_rev());    
-    //SELECT_TEST (3, test_linsolve_rev2_0());       
-    //SELECT_TEST (3, test_linsolve_rev2_1());       
-    //SELECT_TEST (3, test_linsolve_rev2_3());       
-    //SELECT_TEST (3, test_hess());        
-    //SELECT_TEST (3, test_schur());
+    SELECT_TEST (3, test_svd());
+    SELECT_TEST (3, test_norm());
+    SELECT_TEST (3, test_cond());
+    SELECT_TEST (3, test_lu_rook());    
+    SELECT_TEST (3, test_lu_partial());   
+    SELECT_TEST (3, test_lu_complete());    
+    SELECT_TEST (3, test_chol());
+    SELECT_TEST (3, test_chol_rr());    
+    SELECT_TEST (3, test_cholmod());
+    SELECT_TEST (3, test_qr());
+    SELECT_TEST (3, test_ldl());
+    
+    SELECT_TEST (3, test_linsolve_0_NT());
+    SELECT_TEST (3, test_linsolve_0_T());
+    SELECT_TEST (3, test_linsolve_0_CT());
+    SELECT_TEST (3, test_linsolve_1_NT());
+    SELECT_TEST (3, test_linsolve_1_T());
+    SELECT_TEST (3, test_linsolve_1_CT());
+    SELECT_TEST (3, test_linsolve_3_NT());
+    SELECT_TEST (3, test_linsolve_3_T());
+    SELECT_TEST (3, test_linsolve_3_CT());
+    SELECT_TEST (3, test_linsolve_rev());    
+    SELECT_TEST (3, test_linsolve_rev2_0());       
+    SELECT_TEST (3, test_linsolve_rev2_1());       
+    SELECT_TEST (3, test_linsolve_rev2_3());       
+    
+    SELECT_TEST (3, test_hess());        
+    SELECT_TEST (3, test_schur());
     SELECT_TEST (3, test_eigs());    
 };
 
