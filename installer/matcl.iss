@@ -123,10 +123,8 @@ Source: "..\x64\release\matcl-blas-lapack-x64-Release.dll"; DestDir: "{app}\{#ve
 Source: "..\x64\release\matcl-flapack-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-blas-loader-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-mp-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
-Source: "..\x64\release\libquadmath-0.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\mpir-x64-release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\mpfr-x64-release.dll"; DestDir: "{app}\{#ver}\x64\bin";
-Source: "..\x64\release\libgcc_s_seh-1.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-file-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-mp-obj-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-sqlite-cpp-x64-release.dll"; DestDir: "{app}\{#ver}\x64\bin";
@@ -135,6 +133,9 @@ Source: "..\x64\release\matcl-openblas-plugin-x64-Release.dll"; DestDir: "{app}\
 Source: "..\x64\release\matcl-simd-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\matcl-clapack-plugin-x64-Release.dll"; DestDir: "{app}\{#ver}\x64\bin";
 Source: "..\x64\release\openblas-x64-release.dll"; DestDir: "{app}\{#ver}\x64\bin";
+
+Source: "..\x64\release\libgcc_s_seh-1.dll"; DestDir: "{app}\{#ver}\x64\bin";
+Source: "..\x64\release\libquadmath-0.dll"; DestDir: "{app}\{#ver}\x64\bin";
 
 Source: "..\x64\release\blas_config_win64.txt"; DestDir: "{app}\{#ver}\x64\bin";
 
@@ -167,6 +168,9 @@ Source: "..\win32\release\matcl-openblas-plugin-win32-Release.dll"; DestDir: "{a
 Source: "..\win32\release\matcl-simd-win32-Release.dll"; DestDir: "{app}\{#ver}\win32\bin";
 Source: "..\win32\release\matcl-clapack-plugin-win32-Release.dll"; DestDir: "{app}\{#ver}\win32\bin";
 Source: "..\win32\release\openblas-win32-release.dll"; DestDir: "{app}\{#ver}\win32\bin";
+
+Source: "..\win32\release\libgcc_s_dw2-1.dll"; DestDir: "{app}\{#ver}\win32\bin";
+Source: "..\win32\release\libquadmath-0.dll"; DestDir: "{app}\{#ver}\win32\bin";
 
 Source: "..\win32\release\blas_config_win32.txt"; DestDir: "{app}\{#ver}\win32\bin";
 
