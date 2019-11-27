@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\extern\cholmod\amd.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\amd_internal.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\camd.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\camd_internal.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\ccolamd.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_blas.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_camd.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_check.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_cholesky.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_complexity.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_config.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_core.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_internal.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_io64.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_matrixops.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_modify.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_partition.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_supernodal.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\cholmod_template.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\colamd.h" />
+    <ClInclude Include="..\..\..\src\extern\cholmod\SuiteSparse_config.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_1.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_2.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_aat.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_control.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_defaults.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_dump.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_global.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_info.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_order.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_postorder.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_post_tree.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_preprocess.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\amd_valid.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_1.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_2.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_aat.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_control.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_defaults.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_dump.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_global.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_info.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_order.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_postorder.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_preprocess.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\camd_valid.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\ccolamd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\ccolamd_global.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_aat.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_add.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_amd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_analyze.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_band.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_camd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_ccolamd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_change_factor.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_check.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_colamd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_common.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_complex.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_copy.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_csymamd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_dense.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_error.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_etree.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_factor.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_factorize.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_memory.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_metis.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_nesdis.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_postorder.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_rcond.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_read.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_resymbol.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_rowcolcounts.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_rowfac.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_solve.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_sparse.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_spsolve.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_transpose.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_triplet.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_version.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\cholmod_write.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\colamd.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\colamd_global.c" />
+    <ClCompile Include="..\..\..\src\extern\cholmod\SuiteSparse_config.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\src\extern\cholmod\lesser.txt" />
+    <Text Include="..\..\..\src\extern\cholmod\License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_change_factor.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_dense.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_lsolve.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_ltsolve.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_rowfac.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_solve.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_transpose.inl" />
+    <None Include="..\..\..\src\extern\cholmod\t_cholmod_triplet.inl" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7C67504D-6D43-437F-8B24-C4C77DA5F97F}</ProjectGuid>
+    <RootNamespace>symbolic</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\metis\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FILE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\metis\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FILE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\metis\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;..\..\..\src\extern\metis\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FILE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>matcl_metis-$(Platform)-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

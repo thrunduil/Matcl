@@ -68,6 +68,8 @@ Matrix<value_type,struct_banded>::Matrix(tinfo ti, Integer r, Integer c, Integer
         base_type::reset_unique(l + u + 1, c);
     else
         base_type::reset_unique(0, c);
+
+    this->update_struct();
 }
 
 template <class value_type>
@@ -381,7 +383,6 @@ Matrix<val_type,struct_banded>::get_diag_band() const
         ptr_this += this_ld;
     };
 
-    out.get_struct() = this->get_struct();
     return out;
 };
 
@@ -422,7 +423,9 @@ Matrix<val_type,struct_banded>::reserve(Integer r, Integer c, Integer fd, Intege
     out.m_data.m_rows   = m_ldiags + m_udiags + 1;
     out.m_data.m_size   = imult(out.m_data.m_rows,out.m_data.m_cols);
     out.m_data.m_ptr    = out.m_data.m_ptr + um - m_udiags;
+
     out.set_struct(cur_matr_type::get_struct());
+    out.update_struct();
 
     const value_type* this_ptr = ptr();
     value_type* ptr     = out.ptr();
@@ -560,6 +563,7 @@ Matrix<val_type,struct_banded>::resize(Integer r, Integer c, Integer fd, Integer
     bool is_sym = (r == c) && (out.m_ldiags == out.m_udiags);
     out.m_data.get_struct() = md::predefined_struct::get_resize(out.m_data.get_struct(), is_sym,
                                                                 is_real_matrix(out));
+    out.update_struct();
 
     return out;
 };
@@ -600,6 +604,7 @@ Matrix<val_type,struct_banded>::make_view(Integer rc0, Integer re, Integer ce, I
 
     bool is_sym             = (r == c) && (out.m_ldiags == out.m_udiags);
     out.m_data.get_struct() = md::predefined_struct::get_rectangle_view(out.m_data.get_struct(), is_sym);
+    out.update_struct();
 
     return out;
 };
@@ -630,6 +635,25 @@ void Matrix<value_type,struct_banded>::serialize(iarchive_impl & ar, const unsig
     ar >> m_udiags;
     ar >> m_rows;
     ar >> m_cols;
+};
+
+template<class value_type>
+void Matrix<value_type,struct_banded>::update_struct() const
+{
+    if (m_ldiags <= 1)
+    {
+        if (m_ldiags == 0)
+            const_cast<struct_flag&>(get_struct()).add_ldiags(struct_flag::zero);
+        else
+            const_cast<struct_flag&>(get_struct()).add_ldiags(struct_flag::one);
+    }
+    if (m_udiags <= 1)
+    {
+        if (m_udiags == 0)
+            const_cast<struct_flag&>(get_struct()).add_udiags(struct_flag::zero);
+        else
+            const_cast<struct_flag&>(get_struct()).add_udiags(struct_flag::one);
+    }
 };
 
 };};

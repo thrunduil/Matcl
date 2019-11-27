@@ -35,6 +35,8 @@
 #include "matcl-matrep/IO/matrix_io.h"
 #include "matcl-scalar/IO/scalar_io.h"
 
+#include <set>
+
 #pragma warning(push) 
 #pragma warning(disable:4702) //unreachable code
 
@@ -212,7 +214,6 @@ namespace details
 
         struct measure_params
         {
-            Integer                 vcvw;
             std::vector<Integer>    min_value_width;
             Integer                 min_width;
             Integer                 width_row_header;
@@ -228,7 +229,7 @@ namespace details
             for(Integer v = 0; v < n_subv; ++v)
             {
                 Integer vw			        = os.do_get_value_min_width(user, x, v);
-                vw					        = std::min(vw,os.do_get_max_value_width(user,v) + m.vcvw);
+                vw					        = std::min(vw,os.do_get_max_value_width(user,v));
                 m.min_value_width[v]	    = std::max(m.min_value_width[v],vw);
         
                 if(os.do_show_values_labels(user))
@@ -236,7 +237,7 @@ namespace details
                     m.min_value_width[v]	= std::max(m.min_value_width[v],
                                                        os.do_get_subvalue_label_width(user,v+1));
                     m.min_value_width[v]	= std::min(m.min_value_width[v],
-                                                       os.do_get_max_value_width(user,v) + m.vcvw);
+                                                       os.do_get_max_value_width(user,v));
                 }
             }
 

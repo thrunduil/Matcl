@@ -18,9 +18,6 @@
     <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_plugin.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\clapack_types.h">
-      <Filter>Source Files\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\blas\blas-loader\blas_config.h">
       <Filter>Source Files\src</Filter>
     </ClInclude>
@@ -29,6 +26,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\blas\blas-loader\plugin_manager.h">
       <Filter>Source Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\function_names_macros.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-blas-lapack\blas_loader\blas_types.h">
+      <Filter>Source Files\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

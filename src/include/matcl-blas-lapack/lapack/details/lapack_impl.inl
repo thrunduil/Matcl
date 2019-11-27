@@ -68,7 +68,7 @@ lae2(typename details::real_type<V>::type A, V B0, typename details::real_type<V
     const VR ONE    = VR(1.0);
     const VR TWO    = VR(2.0);
     const VR ZERO   = VR(0.0);
-    const VR HALF   = VR(0.0);
+    const VR HALF   = VR(0.5);
 
     // Compute the eigenvalues
     VR B            = abs(B0);

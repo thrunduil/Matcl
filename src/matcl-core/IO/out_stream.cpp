@@ -32,6 +32,9 @@ class out_stream_buf: public std::stringbuf
     private:
         using base_type = std::stringbuf;
 
+    private:
+        std::mutex	    m_mutex;
+
     public:
         virtual int sync() override
         {
@@ -42,6 +45,9 @@ class out_stream_buf: public std::stringbuf
 
         virtual std::streamsize xsputn(const char_type* s, std::streamsize n) override
         {
+            using scoped_lock   = std::unique_lock<std::mutex>;
+
+            scoped_lock lock(m_mutex);
             std::streamsize out = base_type::xsputn(s, n);
 
             for(std::streamsize i = 0; i < n; ++i)

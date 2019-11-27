@@ -40,7 +40,7 @@ optional<T> option::get() const
     if (impl != nullptr)
         return impl->get();
 
-    error_invalid_option_type(m_impl->pretty_type_name(typeid(T).name()));
+    error_invalid_option_type(m_impl->pretty_type_name(typeid(T)));
     return optional<T>();
 };
 
@@ -81,7 +81,7 @@ option_base<T,Derived>::option_base(const optional<T>& val)
 {};
 
 template<class T, class Derived>
-std::string option_base<T,Derived>::m_name;
+typename option_base<T,Derived>::option_name_ptr option_base<T,Derived>::m_name;
 
 template<class T, class Derived>
 std::string option_base<T,Derived>::m_description;
@@ -115,7 +115,7 @@ void option_base<T,Derived>::initialize()
     if (m_initialized == false)
     {
         Derived::config();
-        m_name  = make_name(typeid(Derived).name());        
+        m_name  = option_name_ptr(new details::option_name(typeid(Derived)));
         m_initialized = true;
         lock.unlock();
 
@@ -126,7 +126,8 @@ void option_base<T,Derived>::initialize()
 };
 
 template<class T, class Derived>
-std::string option_base<T,Derived>::get_name()
+const typename option_base<T,Derived>::option_name_ptr& 
+option_base<T,Derived>::get_name()
 {
     option_base<T,Derived>::initialize();
     return option_base<T,Derived>::m_name;
@@ -150,9 +151,9 @@ typename option_base<T,Derived>::validator_type option_base<T,Derived>::get_vali
 //                              option_impl_type
 //-----------------------------------------------------------------------------------
 template<class T>
-details::option_impl_type<T>::option_impl_type(const std::string& name, const std::string& descr,
+details::option_impl_type<T>::option_impl_type(const name_ptr& name, const std::string& descr,
                                                const impl_type& val)
-    :m_name(name), m_value(val), m_description(descr)
+    :m_name(std::move(name)), m_value(val), m_description(descr)
 {};
 
 template<class T>
@@ -168,7 +169,7 @@ void details::option_impl_type<T>::accept(option_visitor& vis, const option& opt
 template<class T>
 std::string details::option_impl_type<T>::get_option_type() const
 {
-    return pretty_type_name(typeid(T).name());
+    return pretty_type_name(typeid(T));
 };
 
 //--------------------------------------------------------------------------
@@ -238,6 +239,8 @@ template <class T>
 static T details::options_impl::get_predefined(const option& option_value)
 {
     std::unique_lock<mutex_type> lock(get_mutex_global());
+
+    initialize_predefined();
 
     std::string name = option_value.name();
 

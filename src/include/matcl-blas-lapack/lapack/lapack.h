@@ -3819,6 +3819,199 @@ BLAS_EXPORT void    zpbtrf(const char *uplo, i_type n, i_type kd, z_type *ab,
                            i_type ldab, i_type *info);
 
 //-----------------------------------------------------------------------
+//                          SYTRF_ROOK
+//-----------------------------------------------------------------------
+/*> \par Purpose:
+ *  =============
+ *>
+ *> \verbatim
+ *>
+ *> DSYTRF_ROOK computes the factorization of a real symmetric matrix A
+ *> using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
+ *> The form of the factorization is
+ *>
+ *>    A = U*D*U**T  or  A = L*D*L**T
+ *>
+ *> where U (or L) is a product of permutation and unit upper (lower)
+ *> triangular matrices, and D is symmetric and block diagonal with
+ *> 1-by-1 and 2-by-2 diagonal blocks.
+ *>
+ *> This is the blocked version of the algorithm, calling Level 3 BLAS.
+ *> \endverbatim
+ *
+ *  Arguments:
+ *  ==========
+ *
+ *> \param[in] UPLO
+ *> \verbatim
+ *>          UPLO is CHARACTER*1
+ *>          = 'U':  Upper triangle of A is stored;
+ *>          = 'L':  Lower triangle of A is stored.
+ *> \endverbatim
+ *>
+ *> \param[in] N
+ *> \verbatim
+ *>          N is INTEGER
+ *>          The order of the matrix A.  N >= 0.
+ *> \endverbatim
+ *>
+ *> \param[in,out] A
+ *> \verbatim
+ *>          A is DOUBLE PRECISION array, dimension (LDA,N)
+ *>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+ *>          N-by-N upper triangular part of A contains the upper
+ *>          triangular part of the matrix A, and the strictly lower
+ *>          triangular part of A is not referenced.  If UPLO = 'L', the
+ *>          leading N-by-N lower triangular part of A contains the lower
+ *>          triangular part of the matrix A, and the strictly upper
+ *>          triangular part of A is not referenced.
+ *>
+ *>          On exit, the block diagonal matrix D and the multipliers used
+ *>          to obtain the factor U or L (see below for further details).
+ *> \endverbatim
+ *>
+ *> \param[in] LDA
+ *> \verbatim
+ *>          LDA is INTEGER
+ *>          The leading dimension of the array A.  LDA >= max(1,N).
+ *> \endverbatim
+ *>
+ *> \param[out] IPIV
+ *> \verbatim
+ *>          IPIV is INTEGER array, dimension (N)
+ *>          Details of the interchanges and the block structure of D.
+ *>
+ *>          If UPLO = 'U':
+ *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
+ *>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+ *>
+ *>               If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
+ *>               columns k and -IPIV(k) were interchanged and rows and
+ *>               columns k-1 and -IPIV(k-1) were inerchaged,
+ *>               D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
+ *>
+ *>          If UPLO = 'L':
+ *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
+ *>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+ *>
+ *>               If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
+ *>               columns k and -IPIV(k) were interchanged and rows and
+ *>               columns k+1 and -IPIV(k+1) were inerchaged,
+ *>               D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+ *> \endverbatim
+ *>
+ *> \param[out] WORK
+ *> \verbatim
+ *>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)).
+ *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+ *> \endverbatim
+ *>
+ *> \param[in] LWORK
+ *> \verbatim
+ *>          LWORK is INTEGER
+ *>          The length of WORK.  LWORK >=1.  For best performance
+ *>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
+ *>
+ *>          If LWORK = -1, then a workspace query is assumed; the routine
+ *>          only calculates the optimal size of the WORK array, returns
+ *>          this value as the first entry of the WORK array, and no error
+ *>          message related to LWORK is issued by XERBLA.
+ *> \endverbatim
+ *>
+ *> \param[out] INFO
+ *> \verbatim
+ *>          INFO is INTEGER
+ *>          = 0:  successful exit
+ *>          < 0:  if INFO = -i, the i-th argument had an illegal value
+ *>          > 0:  if INFO = i, D(i,i) is exactly zero.  The factorization
+ *>                has been completed, but the block diagonal matrix D is
+ *>                exactly singular, and division by zero will occur if it
+ *>                is used to solve a system of equations.
+ *> \endverbatim
+ *
+ *  Authors:
+ *  ========
+ *
+ *> \author Univ. of Tennessee
+ *> \author Univ. of California Berkeley
+ *> \author Univ. of Colorado Denver
+ *> \author NAG Ltd.
+ *
+ *> \date April 2012
+ *
+ *> \ingroup doubleSYcomputational
+ *
+ *> \par Further Details:
+ *  =====================
+ *>
+ *> \verbatim
+ *>
+ *>  If UPLO = 'U', then A = U*D*U**T, where
+ *>     U = P(n)*U(n)* ... *P(k)U(k)* ...,
+ *>  i.e., U is a product of terms P(k)*U(k), where k decreases from n to
+ *>  1 in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
+ *>  and 2-by-2 diagonal blocks D(k).  P(k) is a permutation matrix as
+ *>  defined by IPIV(k), and U(k) is a unit upper triangular matrix, such
+ *>  that if the diagonal block D(k) is of order s (s = 1 or 2), then
+ *>
+ *>             (   I    v    0   )   k-s
+ *>     U(k) =  (   0    I    0   )   s
+ *>             (   0    0    I   )   n-k
+ *>                k-s   s   n-k
+ *>
+ *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(1:k-1,k).
+ *>  If s = 2, the upper triangle of D(k) overwrites A(k-1,k-1), A(k-1,k),
+ *>  and A(k,k), and v overwrites A(1:k-2,k-1:k).
+ *>
+ *>  If UPLO = 'L', then A = L*D*L**T, where
+ *>     L = P(1)*L(1)* ... *P(k)*L(k)* ...,
+ *>  i.e., L is a product of terms P(k)*L(k), where k increases from 1 to
+ *>  n in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
+ *>  and 2-by-2 diagonal blocks D(k).  P(k) is a permutation matrix as
+ *>  defined by IPIV(k), and L(k) is a unit lower triangular matrix, such
+ *>  that if the diagonal block D(k) is of order s (s = 1 or 2), then
+ *>
+ *>             (   I    0     0   )  k-1
+ *>     L(k) =  (   0    I     0   )  s
+ *>             (   0    v     I   )  n-k-s+1
+ *>                k-1   s  n-k-s+1
+ *>
+ *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(k+1:n,k).
+ *>  If s = 2, the lower triangle of D(k) overwrites A(k,k), A(k+1,k),
+ *>  and A(k+1,k+1), and v overwrites A(k+2:n,k:k+1).
+ *> \endverbatim
+ *
+ *> \par Contributors:
+ *  ==================
+ *>
+ *> \verbatim
+ *>
+ *>   April 2012, Igor Kozachenko,
+ *>                  Computer Science Division,
+ *>                  University of California, Berkeley
+ *>
+ *>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+ *>                  School of Mathematics,
+ *>                  University of Manchester
+ *>
+ *> \endverbatim
+ */
+
+template<class V> BLAS_EXPORT
+typename details::enable_if_valid<void,V>::type
+sytrf_rook(const char *uplo, i_type n, V *a, i_type lda, i_type *ipiv, V* work,
+      i_type lwork, i_type *info);
+
+BLAS_EXPORT void ssytrf_rook(const char *uplo, i_type n, s_type *a, i_type lda, 
+                        i_type *ipiv, s_type *work, i_type lwork, i_type *info);
+BLAS_EXPORT void dsytrf_rook(const char *uplo, i_type n, d_type *a, i_type lda, 
+                        i_type *ipiv, d_type *work, i_type lwork, i_type *info);
+BLAS_EXPORT void csytrf_rook(const char *uplo, i_type n, c_type *a, i_type lda, 
+                        i_type *ipiv, c_type *work, i_type lwork, i_type *info);
+BLAS_EXPORT void zsytrf_rook(const char *uplo, i_type n, z_type *a, i_type lda, 
+                        i_type *ipiv, z_type *work, i_type lwork, i_type *info);
+
+//-----------------------------------------------------------------------
 //                          SYTRF
 //-----------------------------------------------------------------------
 /*
@@ -3941,6 +4134,203 @@ BLAS_EXPORT void dsytrf(const char *uplo, i_type n, d_type *a, i_type lda,
 BLAS_EXPORT void csytrf(const char *uplo, i_type n, c_type *a, i_type lda, 
                         i_type *ipiv, c_type *work, i_type lwork, i_type *info);
 BLAS_EXPORT void zsytrf(const char *uplo, i_type n, z_type *a, i_type lda, 
+                        i_type *ipiv, z_type *work, i_type lwork, i_type *info);
+
+//-----------------------------------------------------------------------
+//                          HETRF
+//-----------------------------------------------------------------------
+/*
+*> \par Purpose:
+ *  =============
+ *>
+ *> \verbatim
+ *>
+ *> ZHETRF_ROOK computes the factorization of a complex Hermitian matrix A
+ *> using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
+ *> The form of the factorization is
+ *>
+ *>    A = U*D*U**T  or  A = L*D*L**T
+ *>
+ *> where U (or L) is a product of permutation and unit upper (lower)
+ *> triangular matrices, and D is Hermitian and block diagonal with
+ *> 1-by-1 and 2-by-2 diagonal blocks.
+ *>
+ *> This is the blocked version of the algorithm, calling Level 3 BLAS.
+ *> \endverbatim
+ *
+ *  Arguments:
+ *  ==========
+ *
+ *> \param[in] UPLO
+ *> \verbatim
+ *>          UPLO is CHARACTER*1
+ *>          = 'U':  Upper triangle of A is stored;
+ *>          = 'L':  Lower triangle of A is stored.
+ *> \endverbatim
+ *>
+ *> \param[in] N
+ *> \verbatim
+ *>          N is INTEGER
+ *>          The order of the matrix A.  N >= 0.
+ *> \endverbatim
+ *>
+ *> \param[in,out] A
+ *> \verbatim
+ *>          A is COMPLEX*16 array, dimension (LDA,N)
+ *>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
+ *>          N-by-N upper triangular part of A contains the upper
+ *>          triangular part of the matrix A, and the strictly lower
+ *>          triangular part of A is not referenced.  If UPLO = 'L', the
+ *>          leading N-by-N lower triangular part of A contains the lower
+ *>          triangular part of the matrix A, and the strictly upper
+ *>          triangular part of A is not referenced.
+ *>
+ *>          On exit, the block diagonal matrix D and the multipliers used
+ *>          to obtain the factor U or L (see below for further details).
+ *> \endverbatim
+ *>
+ *> \param[in] LDA
+ *> \verbatim
+ *>          LDA is INTEGER
+ *>          The leading dimension of the array A.  LDA >= max(1,N).
+ *> \endverbatim
+ *>
+ *> \param[out] IPIV
+ *> \verbatim
+ *>          IPIV is INTEGER array, dimension (N)
+ *>          Details of the interchanges and the block structure of D.
+ *>
+ *>          If UPLO = 'U':
+ *>             Only the last KB elements of IPIV are set.
+ *>
+ *>             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+ *>             interchanged and D(k,k) is a 1-by-1 diagonal block.
+ *>
+ *>             If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
+ *>             columns k and -IPIV(k) were interchanged and rows and
+ *>             columns k-1 and -IPIV(k-1) were inerchaged,
+ *>             D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
+ *>
+ *>          If UPLO = 'L':
+ *>             Only the first KB elements of IPIV are set.
+ *>
+ *>             If IPIV(k) > 0, then rows and columns k and IPIV(k)
+ *>             were interchanged and D(k,k) is a 1-by-1 diagonal block.
+ *>
+ *>             If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
+ *>             columns k and -IPIV(k) were interchanged and rows and
+ *>             columns k+1 and -IPIV(k+1) were inerchaged,
+ *>             D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+ *> \endverbatim
+ *>
+ *> \param[out] WORK
+ *> \verbatim
+ *>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK)).
+ *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+ *> \endverbatim
+ *>
+ *> \param[in] LWORK
+ *> \verbatim
+ *>          LWORK is INTEGER
+ *>          The length of WORK.  LWORK >=1.  For best performance
+ *>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
+ *>
+ *>          If LWORK = -1, then a workspace query is assumed; the routine
+ *>          only calculates the optimal size of the WORK array, returns
+ *>          this value as the first entry of the WORK array, and no error
+ *>          message related to LWORK is issued by XERBLA.
+ *> \endverbatim
+ *>
+ *> \param[out] INFO
+ *> \verbatim
+ *>          INFO is INTEGER
+ *>          = 0:  successful exit
+ *>          < 0:  if INFO = -i, the i-th argument had an illegal value
+ *>          > 0:  if INFO = i, D(i,i) is exactly zero.  The factorization
+ *>                has been completed, but the block diagonal matrix D is
+ *>                exactly singular, and division by zero will occur if it
+ *>                is used to solve a system of equations.
+ *> \endverbatim
+ *
+ *  Authors:
+ *  ========
+ *
+ *> \author Univ. of Tennessee
+ *> \author Univ. of California Berkeley
+ *> \author Univ. of Colorado Denver
+ *> \author NAG Ltd.
+ *
+ *> \date June 2016
+ *
+ *> \ingroup complex16HEcomputational
+ *
+ *> \par Further Details:
+ *  =====================
+ *>
+ *> \verbatim
+ *>
+ *>  If UPLO = 'U', then A = U*D*U**T, where
+ *>     U = P(n)*U(n)* ... *P(k)U(k)* ...,
+ *>  i.e., U is a product of terms P(k)*U(k), where k decreases from n to
+ *>  1 in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
+ *>  and 2-by-2 diagonal blocks D(k).  P(k) is a permutation matrix as
+ *>  defined by IPIV(k), and U(k) is a unit upper triangular matrix, such
+ *>  that if the diagonal block D(k) is of order s (s = 1 or 2), then
+ *>
+ *>             (   I    v    0   )   k-s
+ *>     U(k) =  (   0    I    0   )   s
+ *>             (   0    0    I   )   n-k
+ *>                k-s   s   n-k
+ *>
+ *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(1:k-1,k).
+ *>  If s = 2, the upper triangle of D(k) overwrites A(k-1,k-1), A(k-1,k),
+ *>  and A(k,k), and v overwrites A(1:k-2,k-1:k).
+ *>
+ *>  If UPLO = 'L', then A = L*D*L**T, where
+ *>     L = P(1)*L(1)* ... *P(k)*L(k)* ...,
+ *>  i.e., L is a product of terms P(k)*L(k), where k increases from 1 to
+ *>  n in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
+ *>  and 2-by-2 diagonal blocks D(k).  P(k) is a permutation matrix as
+ *>  defined by IPIV(k), and L(k) is a unit lower triangular matrix, such
+ *>  that if the diagonal block D(k) is of order s (s = 1 or 2), then
+ *>
+ *>             (   I    0     0   )  k-1
+ *>     L(k) =  (   0    I     0   )  s
+ *>             (   0    v     I   )  n-k-s+1
+ *>                k-1   s  n-k-s+1
+ *>
+ *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(k+1:n,k).
+ *>  If s = 2, the lower triangle of D(k) overwrites A(k,k), A(k+1,k),
+ *>  and A(k+1,k+1), and v overwrites A(k+2:n,k:k+1).
+ *> \endverbatim
+ *
+ *> \par Contributors:
+ *  ==================
+ *>
+ *> \verbatim
+ *>
+ *>  June 2016,  Igor Kozachenko,
+ *>                  Computer Science Division,
+ *>                  University of California, Berkeley
+ *>
+ *>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+ *>                  School of Mathematics,
+ *>                  University of Manchester
+ *>
+ *> \endverbatim
+*/
+template<class V> BLAS_EXPORT
+typename details::enable_if_valid<void,V>::type
+hetrf_rook(const char *uplo, i_type n, V *a, i_type lda, i_type *ipiv, V* work, 
+      i_type lwork, i_type *info);
+
+BLAS_EXPORT void shetrf_rook(const char *uplo, i_type n, s_type *a, i_type lda, 
+                        i_type *ipiv, s_type *work, i_type lwork, i_type *info);
+BLAS_EXPORT void dhetrf_rook(const char *uplo, i_type n, d_type *a, i_type lda,
+                        i_type *ipiv, d_type *work, i_type lwork, i_type *info);
+BLAS_EXPORT void chetrf_rook(const char *uplo, i_type n, c_type *a, i_type lda,
+                        i_type *ipiv, c_type *work, i_type lwork, i_type *info);
+BLAS_EXPORT void zhetrf_rook(const char *uplo, i_type n, z_type *a, i_type lda,
                         i_type *ipiv, z_type *work, i_type lwork, i_type *info);
 
 //-----------------------------------------------------------------------

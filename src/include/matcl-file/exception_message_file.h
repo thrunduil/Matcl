@@ -47,12 +47,12 @@ class MATCL_FILE_EXPORT exception_message_file
         virtual const char* error_read_matfile() = 0;
         virtual const char* error_read_matfile_var(const std::string& var_name) = 0;
         virtual const char* error_write_matfile() = 0;
-        virtual const char* error_open_mmlibfile(const std::string& file, const std::string& msg)= 0;
-        virtual const char* error_mmlibfile_locked()= 0;
-        virtual const char* error_create_mmlibfile(const std::string& msg)= 0;
-        virtual const char* error_read_mmlibfile(const std::string& msg)= 0;
-        virtual const char* error_read_mmlibfile_mat_not_exist(const std::string& mat)= 0;
-        virtual const char* error_write_mmlibfile_mat_already_exist(const std::string& mat)= 0;
+        virtual const char* error_open_matclfile(const std::string& file, const std::string& msg)= 0;
+        virtual const char* error_matclfile_locked()= 0;
+        virtual const char* error_create_matclfile(const std::string& msg)= 0;
+        virtual const char* error_read_matclfile(const std::string& msg)= 0;
+        virtual const char* error_read_matclfile_mat_not_exist(const std::string& mat)= 0;
+        virtual const char* error_write_matclfile_mat_already_exist(const std::string& mat)= 0;
 };
 
 class MATCL_FILE_EXPORT default_exception_message_file : public exception_message_file
@@ -66,12 +66,12 @@ class MATCL_FILE_EXPORT default_exception_message_file : public exception_messag
         virtual const char* error_read_matfile() override;
         virtual const char* error_read_matfile_var(const std::string& var_name) override;
         virtual const char* error_write_matfile() override;
-        virtual const char* error_open_mmlibfile(const std::string& file, const std::string& msg) override;
-        virtual const char* error_mmlibfile_locked() override;
-        virtual const char* error_create_mmlibfile(const std::string& msg) override;
-        virtual const char* error_read_mmlibfile(const std::string& msg) override;
-        virtual const char* error_read_mmlibfile_mat_not_exist(const std::string& mat) override;
-        virtual const char* error_write_mmlibfile_mat_already_exist(const std::string& mat) override;
+        virtual const char* error_open_matclfile(const std::string& file, const std::string& msg) override;
+        virtual const char* error_matclfile_locked() override;
+        virtual const char* error_create_matclfile(const std::string& msg) override;
+        virtual const char* error_read_matclfile(const std::string& msg) override;
+        virtual const char* error_read_matclfile_mat_not_exist(const std::string& mat) override;
+        virtual const char* error_write_matclfile_mat_already_exist(const std::string& mat) override;
 };
 
 };};

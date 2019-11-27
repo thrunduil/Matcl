@@ -26,7 +26,7 @@
 	#define BLAS_PLUGIN_EXPORT
 #endif
 
-#include "matcl-blas-lapack/blas_loader/clapack_types.h"
+#include "matcl-blas-lapack/blas_loader/blas_types.h"
 
 // Structure holding pointers to specific implementations of all
 // blas functions
@@ -51,10 +51,10 @@ struct blas_plugin
                                           i_type_wr *incx, c_type_wr *cy, i_type_wr *incy);
     using ccopy_func_type = i_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, 
                                           c_type_wr *cy, i_type_wr *incy);
-    using cdotc_func_type = i_type_wr (*)(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx,
-                                          i_type_wr *incx, c_type_wr *cy, i_type_wr *incy);
-    using cdotu_func_type = i_type_wr (*)(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx,
-                                          i_type_wr *incx, c_type_wr *cy, i_type_wr *incy);
+    using cdotc_func_type = c_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy,
+                                          i_type_wr *incy);
+    using cdotu_func_type = c_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                                          i_type_wr *incy);
     using cgbmv_func_type = i_type_wr (*)(char *trans, i_type_wr *m, i_type_wr *n, i_type_wr *kl,
                                           i_type_wr *ku, c_type_wr *alpha, c_type_wr *a, i_type_wr *lda, 
                                           c_type_wr *x, i_type_wr *incx, c_type_wr *beta, c_type_wr *y,
@@ -220,17 +220,17 @@ struct blas_plugin
     using isamax_func_type= i_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx);
     using izamax_func_type= i_type_wr (*)(i_type_wr *n, z_type_wr *zx, i_type_wr *incx);
     using lsame_func_type = i_type_wr (*)(char *ca, char *cb);
-    using sasum_func_type = d_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx);
+    using sasum_func_type = s_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx);
     using saxpy_func_type = i_type_wr (*)(i_type_wr *n, s_type_wr *sa, s_type_wr *sx, i_type_wr *incx, 
                                           s_type_wr *sy, i_type_wr *incy);
-    using scabs1_func_type= d_type_wr (*)(c_type_wr *z__);
-    using scasum_func_type= d_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx);
-    using scnrm2_func_type= d_type_wr (*)(i_type_wr *n, c_type_wr *x, i_type_wr *incx);
+    using scabs1_func_type= s_type_wr (*)(c_type_wr *z__);
+    using scasum_func_type= s_type_wr (*)(i_type_wr *n, c_type_wr *cx, i_type_wr *incx);
+    using scnrm2_func_type= s_type_wr (*)(i_type_wr *n, c_type_wr *x, i_type_wr *incx);
     using scopy_func_type = i_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, 
                                           i_type_wr *incy);
     using sdot_func_type  = s_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, 
                                           i_type_wr *incy);
-    using sdsdot_func_type= d_type_wr (*)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx,
+    using sdsdot_func_type= s_type_wr (*)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx,
                                           s_type_wr *sy, i_type_wr *incy);
     using sgbmv_func_type = i_type_wr (*)(char *trans, i_type_wr *m, i_type_wr *n, i_type_wr *kl,
                                           i_type_wr *ku, s_type_wr *alpha, s_type_wr *a, i_type_wr *lda,
@@ -246,7 +246,7 @@ struct blas_plugin
     using sger_func_type  = i_type_wr (*)(i_type_wr *m, i_type_wr *n, s_type_wr *alpha, s_type_wr *x, 
                                           i_type_wr *incx, s_type_wr *y, i_type_wr *incy, s_type_wr *a,
                                           i_type_wr *lda);
-    using snrm2_func_type = d_type_wr (*)(i_type_wr *n, s_type_wr *x, i_type_wr *incx);
+    using snrm2_func_type = s_type_wr (*)(i_type_wr *n, s_type_wr *x, i_type_wr *incx);
     using srot_func_type  = i_type_wr (*)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy,
                                           i_type_wr *incy, s_type_wr *c__, s_type_wr *s);
     using srotg_func_type = i_type_wr (*)(s_type_wr *sa, s_type_wr *sb, s_type_wr *c__, s_type_wr *s);
@@ -307,10 +307,10 @@ struct blas_plugin
                                           z_type_wr *zy, i_type_wr *incy);
     using zcopy_func_type = i_type_wr (*)(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
                                           i_type_wr *incy);
-    using zdotc_func_type = i_type_wr (*)(z_type_wr *res, i_type_wr *n, z_type_wr *zx, i_type_wr *incx,
-                                          z_type_wr *zy, i_type_wr *incy);
-    using zdotu_func_type = i_type_wr (*)(z_type_wr *res, i_type_wr *n, z_type_wr *zx, i_type_wr *incx,
-                                          z_type_wr *zy, i_type_wr *incy);
+    using zdotc_func_type = z_type_wr (*)(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
+                                          i_type_wr *incy);
+    using zdotu_func_type = z_type_wr (*)(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
+                                          i_type_wr *incy);
     using zdrot_func_type = i_type_wr (*)(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy,
                                           i_type_wr *incy, d_type_wr *c__, d_type_wr *s);
     using zdscal_func_type= i_type_wr (*)(i_type_wr *n, d_type_wr *da, z_type_wr *zx, i_type_wr *incx);

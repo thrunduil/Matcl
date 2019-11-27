@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{6abf5c8d-4cc5-4121-b802-deb480ae9f18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\data_struct">
+      <UniqueIdentifier>{2589789a-6406-49ad-adac-b6085a64b3ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\matrix_set">
+      <UniqueIdentifier>{e7fdd44f-1313-4fda-81e8-642dc15731ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test_functions">
+      <UniqueIdentifier>{e5df5d10-6a3c-4959-a906-ed70117a4721}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\crash_behaviour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\test_main_body.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\data_struct\test_selector.cpp">
+      <Filter>Source Files\data_struct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\colon_set.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\dynamic_mat_set.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_rand.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_set.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_set_1.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_set_bin_1.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\rand_sp.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\rand_str.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\special_cases.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\matrix_set\test_options.cpp">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\test_functions\bin_function.cpp">
+      <Filter>Source Files\test_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\test\test_matcl\framework\test_functions\unary_function.cpp">
+      <Filter>Source Files\test_functions</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\crash_behaviour.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_utils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\test_main_body.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\data_struct\options.h">
+      <Filter>Source Files\data_struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\data_struct\scalar.h">
+      <Filter>Source Files\data_struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\data_struct\test_selector.h">
+      <Filter>Source Files\data_struct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\colon_set.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\dynamic_mat_set.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_rand.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_set.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_set_1.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\matrix_set_bin_1.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\rand_sp.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\rand_str.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\special_cases.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\matrix_set\test_options.h">
+      <Filter>Source Files\matrix_set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\test_functions\bin_function.h">
+      <Filter>Source Files\test_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_matcl\framework\test_functions\unary_function.h">
+      <Filter>Source Files\test_functions</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

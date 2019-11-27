@@ -31,13 +31,15 @@ void register_object_helper::get_type_data(const char* obj_name, Type& ty,
     ty = type_table::get()->get_type_data(obj_name, pool);
 };
 
-std::string	register_object_helper::get_name(const char* name)
+std::string	register_object_helper::get_name(const type_info& ti)
 {
-    return type_table::get_class_name(name);
+    return type_table::get_class_name(ti.name());
 };
 
-register_object_helper::register_object_helper(const char* obj_name, constr_type constr)
+register_object_helper::register_object_helper(const type_info& ti, constr_type constr)
 {
+    const char* obj_name = ti.name();
+
     type_table::open();
     type_table::get()->register_object(obj_name, constr);
     get_type_data(obj_name, m_type, m_pool);

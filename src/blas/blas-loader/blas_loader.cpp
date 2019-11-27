@@ -90,18 +90,18 @@ extern "C"
         return ml::plugin_manager::plugin()->ccopy_fptr(n, cx, incx, cy, incy);
     }
 
-    i_type_wr cdotc_(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx, i_type_wr *incx, 
-                     c_type_wr *cy, i_type_wr *incy)
+    c_type_wr cdotc_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                     i_type_wr *incy)
     {        
         ml::plugin_manager::init_plugin();
-        return ml::plugin_manager::plugin()->cdotc_fptr(ret_val, n, cx, incx, cy, incy);
+        return ml::plugin_manager::plugin()->cdotc_fptr(n, cx, incx, cy, incy);
     }
 
-    i_type_wr cdotu_(c_type_wr *ret_val, i_type_wr *n, c_type_wr *cx, i_type_wr *incx, 
-                     c_type_wr *cy, i_type_wr *incy)
+    c_type_wr cdotu_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                     i_type_wr *incy)
     {        
         ml::plugin_manager::init_plugin();
-        return ml::plugin_manager::plugin()->cdotu_fptr(ret_val, n, cx, incx, cy, incy);
+        return ml::plugin_manager::plugin()->cdotu_fptr(n, cx, incx, cy, incy);
     }
 
     i_type_wr cgbmv_(char *trans, i_type_wr *m, i_type_wr *n, i_type_wr *kl, i_type_wr *ku,
@@ -595,7 +595,7 @@ extern "C"
         return ml::plugin_manager::plugin()->izamax_fptr(n, zx, incx);
     }
 
-    d_type_wr sasum_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx)
+    s_type_ret_wr sasum_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->sasum_fptr(n, sx, incx);
@@ -608,19 +608,19 @@ extern "C"
         return ml::plugin_manager::plugin()->saxpy_fptr(n, sa, sx, incx, sy, incy);
     }
 
-    d_type_wr scabs1_(c_type_wr *z__)
+    s_type_ret_wr scabs1_(c_type_wr *z__)
     {
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->scabs1_fptr(z__);
     }
     
-    d_type_wr scasum_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx)
+    s_type_ret_wr scasum_(i_type_wr *n, c_type_wr *cx, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->scasum_fptr(n, cx, incx);
     }
     
-    d_type_wr scnrm2_(i_type_wr *n, c_type_wr *x, i_type_wr *incx)
+    s_type_ret_wr scnrm2_(i_type_wr *n, c_type_wr *x, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->scnrm2_fptr(n, x, incx);
@@ -632,13 +632,13 @@ extern "C"
         return ml::plugin_manager::plugin()->scopy_fptr(n, sx, incx, sy, incy);
     }
     
-    s_type_wr sdot_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
+    s_type_ret_wr sdot_(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->sdot_fptr(n, sx, incx, sy, incy);
     }
     
-    d_type_wr sdsdot_(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
+    s_type_ret_wr sdsdot_(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, i_type_wr *incy)
     {
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->sdsdot_fptr(n, sb, sx, incx, sy, incy);
@@ -674,7 +674,7 @@ extern "C"
         return ml::plugin_manager::plugin()->sger_fptr(m, n, alpha, x, incx, y, incy, a, lda);
     }
 
-    d_type_wr snrm2_(i_type_wr *n, s_type_wr *x, i_type_wr *incx)
+    s_type_ret_wr snrm2_(i_type_wr *n, s_type_wr *x, i_type_wr *incx)
     {   
         ml::plugin_manager::init_plugin();
         return ml::plugin_manager::plugin()->snrm2_fptr(n, x, incx);
@@ -856,18 +856,16 @@ extern "C"
         return ml::plugin_manager::plugin()->zcopy_fptr(n, zx, incx, zy, incy);
     }
     
-    i_type_wr zdotc_(z_type_wr *ret_val, i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
-                     i_type_wr *incy)
+    z_type_wr zdotc_(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, i_type_wr *incy)
     {   
         ml::plugin_manager::init_plugin();
-        return ml::plugin_manager::plugin()->zdotc_fptr(ret_val, n, zx, incx, zy, incy);
+        return ml::plugin_manager::plugin()->zdotc_fptr(n, zx, incx, zy, incy);
     }
 
-    i_type_wr zdotu_(z_type_wr *ret_val, i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, 
-                     i_type_wr *incy)
+    z_type_wr zdotu_(i_type_wr *n, z_type_wr *zx, i_type_wr *incx, z_type_wr *zy, i_type_wr *incy)
     {   
         ml::plugin_manager::init_plugin();
-        return ml::plugin_manager::plugin()->zdotu_fptr(ret_val, n, zx, incx, zy, incy);
+        return ml::plugin_manager::plugin()->zdotu_fptr(n, zx, incx, zy, incy);
     }
 
     i_type_wr zdrot_(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy, i_type_wr *incy, 

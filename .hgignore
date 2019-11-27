@@ -23,3 +23,14 @@ src_quadprog/*
 *.o
 Win32/*
 x64/*
+*.suo
+*.exe
+*.user
+*.log
+*.pdb
+src/extern/win32/mkl/*
+src/extern/win32/slicot/matcl_slicot-win32-release.lib
+src/extern/win32/slicot/matcl_slicot-win32-release.dll
+src/extern/ARPACK/arpack-ng-master/*
+src/extern/ARPACK/SRC_old/*
+src/extern/ARPACK/UTIL_old/*

@@ -891,6 +891,22 @@ struct bdiags_helper
             };
         }
 
+        if (fd >= -1)
+        {
+            if (fd >= 0)
+                res.get_struct().set_ldiags(struct_flag::zero);
+            else
+                res.get_struct().set_ldiags(struct_flag::one);
+        }
+
+        if (ld <= 1)
+        {
+            if (ld <= 0)
+                res.get_struct().set_udiags(struct_flag::zero);
+            else
+                res.get_struct().set_udiags(struct_flag::one);
+        }
+
         return res;
     };
 };

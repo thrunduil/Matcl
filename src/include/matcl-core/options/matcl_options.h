@@ -74,9 +74,7 @@ class MATCL_CORE_EXPORT option : public matcl_new_delete
 
     protected:
         option() = delete;
-        option(const impl_type&);
-
-        static std::string  make_name(const std::string& type_name);
+        option(const impl_type&);        
 
     public:
         ~option();
@@ -101,7 +99,8 @@ class MATCL_CORE_EXPORT option : public matcl_new_delete
         // return name of value type stored in given option
         std::string         get_option_type() const;
         
-        // display information about this option
+        // display information about this option; this function should
+        // not be called during static objects initialization phase
         void                help(const disp_stream_ptr& ds,const options& disp_options) const;
 
     private:
@@ -116,11 +115,13 @@ class option_type : public option
         using option_impl_type  = details::option_impl_type<T>;
         using impl_type         = std::shared_ptr<option_impl_type>;
         using base_type         = option;
+        using option_name       = details::option_name;
+        using option_name_ptr   = std::shared_ptr<option_name>;
 
     protected:
-        option_type(const std::string& name, const std::string& descr,
+        option_type(const option_name_ptr& name, const std::string& descr,
                     const optional<T>& val)
-            :option(impl_type(new option_impl_type(name, descr, val)))
+            :option(impl_type(new option_impl_type(std::move(name), descr, val)))
         {}
 
         ~option_type()
@@ -140,6 +141,8 @@ class option_base : public option_type<T>
     private:
         using base_type         = option_type<T>;
         using mutex_type        = matcl::default_spinlock_mutex;
+        using option_name       = details::option_name;
+        using option_name_ptr   = std::shared_ptr<option_name>;
 
     public:
         // optional type
@@ -155,7 +158,7 @@ class option_base : public option_type<T>
     private:
         static bool             m_initialized;
         static mutex_type       m_mutex;
-        static std::string      m_name;
+        static option_name_ptr  m_name;
 
     public:        
         // these static members must be initialized in Derived::config() function
@@ -179,7 +182,8 @@ class option_base : public option_type<T>
 
     private:
         static void             initialize();        
-        static std::string      get_name();
+        static const option_name_ptr&
+                                get_name();
         static std::string      get_description();
         static validator_type   get_validator();  
 };

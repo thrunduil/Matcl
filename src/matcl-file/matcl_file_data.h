@@ -43,7 +43,7 @@ struct data_insert_elem
 	bool			allow_replace;
 };
 
-class mmlib_file_data
+class matcl_file_data
 {
     private:
         using connection    = sql::connection;
@@ -53,8 +53,8 @@ class mmlib_file_data
         using save_data_list    = std::list<data_insert_elem>;
 
 	public:
-		mmlib_file_data(const std::string& file_name, open_mode, thread_mode);
-		~mmlib_file_data();
+		matcl_file_data(const std::string& file_name, open_mode, thread_mode);
+		~matcl_file_data();
 
 		void		add_to_save_list(const Matrix& mat, const std::string& mat_name, 
 									const std::string& mat_string, bool allow_replace);

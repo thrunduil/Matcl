@@ -465,15 +465,27 @@ void struct_flag::reset_value()
     m_flag.m_user       = 0;
 };
 
-void struct_flag::add(const struct_flag& t) const
+void struct_flag::add(const struct_flag& t)
 {
     m_flag  = m_flag.add(t.m_flag);
 }
 
-void struct_flag::add_user(const struct_flag& t) const
+void struct_flag::add_user(const struct_flag& t)
 {
     m_flag  = m_flag.add_user(t.m_flag);
 }
+
+void struct_flag::add_ldiags(diag_type ld)
+{
+    m_flag.m_ldiags = std::max(m_flag.m_ldiags, (size_t)ld);
+}
+ 
+void struct_flag::add_udiags(diag_type ud)
+{
+    m_flag.m_udiags = std::max(m_flag.m_udiags, (size_t)ud);
+}
+ 
+
 
 bool struct_flag::operator==(const struct_flag& other) const
 {

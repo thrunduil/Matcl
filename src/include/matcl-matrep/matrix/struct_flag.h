@@ -37,7 +37,7 @@ namespace details
     struct MATCL_MATREP_EXPORT struct_flag_register_impl
     {
         using ptr_type = std::shared_ptr<user_flag_config>;
-        static const size_t* get_code(const ptr_type&, const char* cl_name);
+        static const size_t* get_code(const ptr_type&, const type_info& cl_name);
     };
 
     template<class User_struct>
@@ -345,7 +345,7 @@ class MATCL_MATREP_EXPORT struct_flag
         };
 
     private:
-        mutable impl_type   m_flag;
+        impl_type           m_flag;
 
     public:
         // create empty struct flag (i.e. general matrix flag)
@@ -358,15 +358,15 @@ class MATCL_MATREP_EXPORT struct_flag
         struct_flag(user_flag uf);
 
         // change struct type 
-        void                set(const struct_flag& t) const { m_flag = t.m_flag; };
+        void                set(const struct_flag& t)   { m_flag = t.m_flag; };
         
         // add struct type, resulting struct_flag has all properties from this and
         // new struct_flag
-        void                add(const struct_flag& t) const;
+        void                add(const struct_flag& t);
         
         // add user struct type, resulting struct_flag has all properties from this and
         // user propertied from new struct_flag
-        void                add_user(const struct_flag& t) const;
+        void                add_user(const struct_flag& t);
         
         // reset struct type to general matrix
         void                reset();
@@ -397,6 +397,20 @@ class MATCL_MATREP_EXPORT struct_flag
         // set user defined structure 
         void                set_user(user_flag uf);
 
+        // add symmetric flag; it is preferred to mark real symmetric matrices as
+        // symmetric but not hermitian
+        void                add_sym(bool is_sym)            { m_flag.m_sym |= is_sym; };
+        
+        // add hermitian flag; it is preferred to mark only complex matrices as 
+        // hermitian matrix matrix
+        void                add_her(bool is_her)            { m_flag.m_her |= is_her; };
+        
+        // add structure of lower triangular part
+        void                add_ldiags(diag_type ld);
+        
+        // add structure of upper triangular part
+        void                add_udiags(diag_type ud);
+        
         // test for equality
         bool                operator==(const struct_flag& other) const;
         
@@ -494,7 +508,7 @@ namespace details
     const size_t* struct_flag_register<User_struct>::code
         = struct_flag_register_impl
             ::get_code(struct_flag_register_impl::ptr_type(new User_struct()),
-                        typeid(User_struct).name());
+                        typeid(User_struct));
 };
 
 };

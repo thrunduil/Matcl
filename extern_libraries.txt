@@ -3,7 +3,7 @@ external libraries:
     1.  BOOST
         - licence: boost
         - source: http://www.boost.org/
-        - version: 1.65.1
+        - version: 1.71.0
     2.  EOS Portable Archive: extension of boost::serialization library
         - author: Christian Pfligersdorffer
         - licence: boost
@@ -38,12 +38,12 @@ external libraries:
             Univ. of Colorado Denver; and NAG Ltd..
         - licence: modified BSD license
         - source: http://www.netlib.org/lapack/
-        - version: 3.4.0
+        - version: 3.9.0
     2.  OPENBLAS: OpenBLAS is an optimized BLAS library based on GotoBLAS2
         - authors: 
         - licence: BSD
         - source: http://www.openblas.net/
-        - version: 0.2.20
+        - version: 0.3.7
 
 5.  MATCL-FILE:
     1. sqlite3 is a self-contained, high-reliability, embedded, full-featured, 
@@ -52,6 +52,14 @@ external libraries:
         - licence: public domain
         - source: https://www.sqlite.org
         - version: 3.23.0
+
+6.  MATCL-LINALG:
+    1. ARPACK: a collection of Fortran77 subroutines designed to solve large scale
+            eigenvalue problems.
+        - authors:    Danny Sorensen, Richard Lehoucq, Chao Yang, Kristi Maschhoff
+        - licence: BSD Software License
+        - source: https://github.com/opencollab/arpack-ng
+        - version: 3.8.0
 
 CREDITS:
 1. Sylvie Boldo (implementation of Dekker's algorithm for exact multiplication

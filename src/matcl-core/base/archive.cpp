@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+#include "matcl-core/config.h"
 #include "matcl-core/memory/global_objects.h"
 #include "matcl-core/IO/archive.h"
 #include "matcl-core/IO/serialize.h"
@@ -113,3 +114,27 @@ oarchive& oarchive::operator<<(const Float_complex& v)
 };
 
 };
+
+// explicit instantiations of functions required by boost::serialize
+// library
+
+#include <boost/archive/impl/basic_binary_iprimitive.ipp>
+#include <boost/archive/impl/basic_binary_oprimitive.ipp>
+#include <boost/archive/impl/basic_binary_iarchive.ipp>
+
+using iarchive_impl = boost::archive::basic_binary_iprimitive
+            <class eos::portable_iarchive,char,struct std::char_traits<char> >;
+
+using oarchive_impl = boost::archive::basic_binary_oprimitive
+            <class eos::portable_oarchive,char,struct std::char_traits<char> >;
+
+template iarchive_impl;
+template oarchive_impl;
+
+template void MATCL_CORE_EXPORT iarchive_impl::load(std::string &s);
+template void MATCL_CORE_EXPORT iarchive_impl::load(char * t);
+template void MATCL_CORE_EXPORT iarchive_impl::init();
+
+template void MATCL_CORE_EXPORT oarchive_impl::save(const std::string &s);
+template void MATCL_CORE_EXPORT oarchive_impl::save(const char * t);
+template void MATCL_CORE_EXPORT oarchive_impl::init();
