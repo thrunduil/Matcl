@@ -7,7 +7,7 @@ c\Description:
 c  Computes all eigenvalues and the last component of the eigenvectors
 c  of a symmetric tridiagonal matrix using the implicit QL or QR method.
 c
-c  This is mostly a modification of the LAPACK routine AR_SSTEQR.
+c  This is mostly a modification of the LAPACK routine ssteqr.
 c  See Remarks.
 c
 c\Usage:
@@ -32,13 +32,13 @@ c          tridiagonal matrix in positions 1 through N-1.
 c          On exit, E has been destroyed.
 c
 c  Z       Real array, dimension (N).  (OUTPUT)
-c          On exit, Z contains the last row of the orthonormal 
-c          eigenvector matrix of the symmetric tridiagonal matrix.  
+c          On exit, Z contains the last row of the orthonormal
+c          eigenvector matrix of the symmetric tridiagonal matrix.
 c          If an error exit is made, Z contains the last row of the
 c          eigenvector matrix associated with the stored eigenvalues.
 c
 c  WORK    Real array, dimension (max(1,2*N-2)).  (WORKSPACE)
-c          Workspace used in accumulating the transformation for 
+c          Workspace used in accumulating the transformation for
 c          computing the last components of the eigenvectors.
 c
 c  INFO    Integer.  (OUTPUT)
@@ -61,42 +61,42 @@ c\Routines called:
 c     saxpy   Level 1 BLAS that computes a vector triad.
 c     scopy   Level 1 BLAS that copies one vector to another.
 c     sswap   Level 1 BLAS that swaps the contents of two vectors.
-c     AR_LSAME   LAPACK character comparison routine.
-c     AR_SLAE2   LAPACK routine that computes the eigenvalues of a 2-by-2 
+c     lsame   LAPACK character comparison routine.
+c     slae2   LAPACK routine that computes the eigenvalues of a 2-by-2
 c             symmetric matrix.
-c     AR_SLAEV2  LAPACK routine that eigendecomposition of a 2-by-2 symmetric 
+c     slaev2  LAPACK routine that eigendecomposition of a 2-by-2 symmetric
 c             matrix.
-c     AR_SLAMCH  LAPACK routine that determines machine constants.
-c     AR_SLANST  LAPACK routine that computes the norm of a matrix.
-c     AR_SLAPY2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
-c     AR_SLARTG  LAPACK Givens rotation construction routine.
-c     AR_SLASCL  LAPACK routine for careful scaling of a matrix.
-c     AR_SLASET  LAPACK matrix initialization routine.
-c     AR_SLASR   LAPACK routine that applies an orthogonal transformation to 
+c     slamch  LAPACK routine that determines machine constants.
+c     slanst  LAPACK routine that computes the norm of a matrix.
+c     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+c     slartg  LAPACK Givens rotation construction routine.
+c     slascl  LAPACK routine for careful scaling of a matrix.
+c     slaset  LAPACK matrix initialization routine.
+c     slasr   LAPACK routine that applies an orthogonal transformation to
 c             a matrix.
-c     AR_SLASRT  LAPACK sorting routine.
-c     AR_SSTEQR  LAPACK routine that computes eigenvalues and eigenvectors
+c     slasrt  LAPACK sorting routine.
+c     ssteqr  LAPACK routine that computes eigenvalues and eigenvectors
 c             of a symmetric tridiagonal matrix.
-c     AR_XERBLA  LAPACK error handler routine.
+c     xerbla  LAPACK error handler routine.
 c
 c\Authors
 c     Danny Sorensen               Phuong Vu
 c     Richard Lehoucq              CRPC / Rice University
 c     Dept. of Computational &     Houston, Texas
 c     Applied Mathematics
-c     Rice University           
-c     Houston, Texas            
+c     Rice University
+c     Houston, Texas
 c
-c\SCCS Information: @(#) 
+c\SCCS Information: @(#)
 c FILE: stqrb.F   SID: 2.5   DATE OF SID: 8/27/96   RELEASE: 2
 c
 c\Remarks
 c     1. Starting with version 2.5, this routine is a modified version
-c        of LAPACK version 2.0 subroutine AR_SSTEQR. No lines are deleted,
+c        of LAPACK version 2.0 subroutine SSTEQR. No lines are deleted,
 c        only commeted out and new lines inserted.
 c        All lines commented out have "c$$$" at the beginning.
-c        Note that the LAPACK version 1.0 subroutine AR_SSTEQR contained
-c        bugs. 
+c        Note that the LAPACK version 1.0 subroutine SSTEQR contained
+c        bugs.
 c
 c\EndLib
 c
@@ -118,9 +118,9 @@ c
      &           d( n ), e( n-1 ), z( n ), work( 2*n-2 )
 c
 c     .. parameters ..
-      Real               
+      Real
      &                   zero, one, two, three
-      parameter          ( zero = 0.0E+0, one = 1.0E+0, 
+      parameter          ( zero = 0.0E+0, one = 1.0E+0,
      &                     two = 2.0E+0, three = 3.0E+0 )
       integer            maxit
       parameter          ( maxit = 30 )
@@ -129,19 +129,19 @@ c     .. local scalars ..
       integer            i, icompz, ii, iscale, j, jtot, k, l, l1, lend,
      &                   lendm1, lendp1, lendsv, lm1, lsv, m, mm, mm1,
      &                   nm1, nmaxit
-      Real               
+      Real
      &                   anorm, b, c, eps, eps2, f, g, p, r, rt1, rt2,
      &                   s, safmax, safmin, ssfmax, ssfmin, tst
 c     ..
 c     .. external functions ..
-      logical            AR_LSAME
+      logical            lsame
       Real
-     &                   AR_SLAMCH, AR_SLANST, AR_SLAPY2
-      external           AR_LSAME, AR_SLAMCH, AR_SLANST, AR_SLAPY2
+     &                   slamch, slanst, slapy2
+      external           lsame, slamch, slanst, slapy2
 c     ..
 c     .. external subroutines ..
-      external           AR_SLAE2, AR_SLAEV2, AR_SLARTG, AR_SLASCL, AR_SLASET, AR_SLASR,
-     &                   AR_SLASRT, sswap, AR_XERBLA
+      external           slae2, slaev2, slartg, slascl, slaset, slasr,
+     &                   slasrt, sswap, xerbla
 c     ..
 c     .. intrinsic functions ..
       intrinsic          abs, max, sign, sqrt
@@ -152,11 +152,11 @@ c     test the input parameters.
 c
       info = 0
 c
-c$$$      IF( AR_LSAME( COMPZ, 'N' ) ) THEN
+c$$$      IF( LSAME( COMPZ, 'N' ) ) THEN
 c$$$         ICOMPZ = 0
-c$$$      ELSE IF( AR_LSAME( COMPZ, 'V' ) ) THEN
+c$$$      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
 c$$$         ICOMPZ = 1
-c$$$      ELSE IF( AR_LSAME( COMPZ, 'I' ) ) THEN
+c$$$      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
 c$$$         ICOMPZ = 2
 c$$$      ELSE
 c$$$         ICOMPZ = -1
@@ -170,7 +170,7 @@ c$$$     $         N ) ) ) THEN
 c$$$         INFO = -6
 c$$$      END IF
 c$$$      IF( INFO.NE.0 ) THEN
-c$$$         CALL AR_XERBLA( 'AR_SSTEQR', -INFO )
+c$$$         CALL XERBLA( 'SSTEQR', -INFO )
 c$$$         RETURN
 c$$$      END IF
 c
@@ -191,9 +191,9 @@ c
 c
 c     determine the unit roundoff and over/underflow thresholds.
 c
-      eps = AR_SLAMCH( 'e' )
+      eps = slamch( 'e' )
       eps2 = eps**2
-      safmin = AR_SLAMCH( 's' )
+      safmin = slamch( 's' )
       safmax = one / safmin
       ssfmax = sqrt( safmax ) / three
       ssfmin = sqrt( safmin ) / eps2
@@ -202,7 +202,7 @@ c     compute the eigenvalues and eigenvectors of the tridiagonal
 c     matrix.
 c
 c$$      if( icompz.eq.2 )
-c$$$     $   call AR_SLASET( 'full', n, n, zero, one, z, ldz )
+c$$$     $   call slaset( 'full', n, n, zero, one, z, ldz )
 c
 c     *** New starting with version 2.5 ***
 c
@@ -254,21 +254,21 @@ c
 c
 c     scale submatrix in rows and columns l to lend
 c
-      anorm = AR_SLANST( 'i', lend-l+1, d( l ), e( l ) )
+      anorm = slanst( 'i', lend-l+1, d( l ), e( l ) )
       iscale = 0
       if( anorm.eq.zero )
      $   go to 10
       if( anorm.gt.ssfmax ) then
          iscale = 1
-         call AR_SLASCL( 'g', 0, 0, anorm, ssfmax, lend-l+1, 1, d( l ), n,
+         call slascl( 'g', 0, 0, anorm, ssfmax, lend-l+1, 1, d( l ), n,
      $                info )
-         call AR_SLASCL( 'g', 0, 0, anorm, ssfmax, lend-l, 1, e( l ), n,
+         call slascl( 'g', 0, 0, anorm, ssfmax, lend-l, 1, e( l ), n,
      $                info )
       else if( anorm.lt.ssfmin ) then
          iscale = 2
-         call AR_SLASCL( 'g', 0, 0, anorm, ssfmin, lend-l+1, 1, d( l ), n,
+         call slascl( 'g', 0, 0, anorm, ssfmin, lend-l+1, 1, d( l ), n,
      $                info )
-         call AR_SLASCL( 'g', 0, 0, anorm, ssfmin, lend-l, 1, e( l ), n,
+         call slascl( 'g', 0, 0, anorm, ssfmin, lend-l, 1, e( l ), n,
      $                info )
       end if
 c
@@ -304,15 +304,15 @@ c
          if( m.eq.l )
      $      go to 80
 c
-c        if remaining matrix is 2-by-2, use AR_SLAE2 or AR_SLAEV2
+c        if remaining matrix is 2-by-2, use slae2 or slaev2
 c        to compute its eigensystem.
 c
          if( m.eq.l+1 ) then
             if( icompz.gt.0 ) then
-               call AR_SLAEV2( d( l ), e( l ), d( l+1 ), rt1, rt2, c, s )
+               call slaev2( d( l ), e( l ), d( l+1 ), rt1, rt2, c, s )
                work( l ) = c
                work( n-1+l ) = s
-c$$$               call AR_SLASR( 'r', 'v', 'b', n, 2, work( l ),
+c$$$               call slasr( 'r', 'v', 'b', n, 2, work( l ),
 c$$$     $                     work( n-1+l ), z( 1, l ), ldz )
 c
 c              *** New starting with version 2.5 ***
@@ -322,7 +322,7 @@ c
                z(l)   = s*tst + c*z(l)
 c              *************************************
             else
-               call AR_SLAE2( d( l ), e( l ), d( l+1 ), rt1, rt2 )
+               call slae2( d( l ), e( l ), d( l+1 ), rt1, rt2 )
             end if
             d( l ) = rt1
             d( l+1 ) = rt2
@@ -340,7 +340,7 @@ c
 c        form shift.
 c
          g = ( d( l+1 )-p ) / ( two*e( l ) )
-         r = AR_SLAPY2( g, one )
+         r = slapy2( g, one )
          g = d( m ) - p + ( e( l ) / ( g+sign( r, g ) ) )
 c
          s = one
@@ -353,7 +353,7 @@ c
          do 70 i = mm1, l, -1
             f = s*e( i )
             b = c*e( i )
-            call AR_SLARTG( g, f, c, s, r )
+            call slartg( g, f, c, s, r )
             if( i.ne.m-1 )
      $         e( i+1 ) = r
             g = d( i+1 ) - p
@@ -375,14 +375,14 @@ c        if eigenvectors are desired, then apply saved rotations.
 c
          if( icompz.gt.0 ) then
             mm = m - l + 1
-c$$$            call AR_SLASR( 'r', 'v', 'b', n, mm, work( l ), work( n-1+l ),
+c$$$            call slasr( 'r', 'v', 'b', n, mm, work( l ), work( n-1+l ),
 c$$$     $                  z( 1, l ), ldz )
 c
 c             *** New starting with version 2.5 ***
 c
-              call AR_SLASR( 'r', 'v', 'b', 1, mm, work( l ), 
+              call slasr( 'r', 'v', 'b', 1, mm, work( l ),
      &                    work( n-1+l ), z( l ), 1 )
-c             *************************************                             
+c             *************************************
          end if
 c
          d( l ) = d( l ) - p
@@ -424,15 +424,15 @@ c
          if( m.eq.l )
      $      go to 130
 c
-c        if remaining matrix is 2-by-2, use AR_SLAE2 or AR_SLAEV2
+c        if remaining matrix is 2-by-2, use slae2 or slaev2
 c        to compute its eigensystem.
 c
          if( m.eq.l-1 ) then
             if( icompz.gt.0 ) then
-               call AR_SLAEV2( d( l-1 ), e( l-1 ), d( l ), rt1, rt2, c, s )
+               call slaev2( d( l-1 ), e( l-1 ), d( l ), rt1, rt2, c, s )
 c$$$               work( m ) = c
 c$$$               work( n-1+m ) = s
-c$$$               call AR_SLASR( 'r', 'v', 'f', n, 2, work( m ),
+c$$$               call slasr( 'r', 'v', 'f', n, 2, work( m ),
 c$$$     $                     work( n-1+m ), z( 1, l-1 ), ldz )
 c
 c               *** New starting with version 2.5 ***
@@ -440,9 +440,9 @@ c
                 tst      = z(l)
                 z(l)   = c*tst - s*z(l-1)
                 z(l-1) = s*tst + c*z(l-1)
-c               ************************************* 
+c               *************************************
             else
-               call AR_SLAE2( d( l-1 ), e( l-1 ), d( l ), rt1, rt2 )
+               call slae2( d( l-1 ), e( l-1 ), d( l ), rt1, rt2 )
             end if
             d( l-1 ) = rt1
             d( l ) = rt2
@@ -460,7 +460,7 @@ c
 c        form shift.
 c
          g = ( d( l-1 )-p ) / ( two*e( l-1 ) )
-         r = AR_SLAPY2( g, one )
+         r = slapy2( g, one )
          g = d( m ) - p + ( e( l-1 ) / ( g+sign( r, g ) ) )
 c
          s = one
@@ -473,7 +473,7 @@ c
          do 120 i = m, lm1
             f = s*e( i )
             b = c*e( i )
-            call AR_SLARTG( g, f, c, s, r )
+            call slartg( g, f, c, s, r )
             if( i.ne.m )
      $         e( i-1 ) = r
             g = d( i ) - p
@@ -495,14 +495,14 @@ c        if eigenvectors are desired, then apply saved rotations.
 c
          if( icompz.gt.0 ) then
             mm = l - m + 1
-c$$$            call AR_SLASR( 'r', 'v', 'f', n, mm, work( m ), work( n-1+m ),
+c$$$            call slasr( 'r', 'v', 'f', n, mm, work( m ), work( n-1+m ),
 c$$$     $                  z( 1, m ), ldz )
 c
 c           *** New starting with version 2.5 ***
 c
-            call AR_SLASR( 'r', 'v', 'f', 1, mm, work( m ), work( n-1+m ),
+            call slasr( 'r', 'v', 'f', 1, mm, work( m ), work( n-1+m ),
      &                  z( m ), 1 )
-c           *************************************                             
+c           *************************************
          end if
 c
          d( l ) = d( l ) - p
@@ -525,14 +525,14 @@ c     undo scaling if necessary
 c
   140 continue
       if( iscale.eq.1 ) then
-         call AR_SLASCL( 'g', 0, 0, ssfmax, anorm, lendsv-lsv+1, 1,
+         call slascl( 'g', 0, 0, ssfmax, anorm, lendsv-lsv+1, 1,
      $                d( lsv ), n, info )
-         call AR_SLASCL( 'g', 0, 0, ssfmax, anorm, lendsv-lsv, 1, e( lsv ),
+         call slascl( 'g', 0, 0, ssfmax, anorm, lendsv-lsv, 1, e( lsv ),
      $                n, info )
       else if( iscale.eq.2 ) then
-         call AR_SLASCL( 'g', 0, 0, ssfmin, anorm, lendsv-lsv+1, 1,
+         call slascl( 'g', 0, 0, ssfmin, anorm, lendsv-lsv+1, 1,
      $                d( lsv ), n, info )
-         call AR_SLASCL( 'g', 0, 0, ssfmin, anorm, lendsv-lsv, 1, e( lsv ),
+         call slascl( 'g', 0, 0, ssfmin, anorm, lendsv-lsv, 1, e( lsv ),
      $                n, info )
       end if
 c
@@ -554,7 +554,7 @@ c
 c
 c        use quick sort
 c
-         call AR_SLASRT( 'i', n, d, info )
+         call slasrt( 'i', n, d, info )
 c
       else
 c

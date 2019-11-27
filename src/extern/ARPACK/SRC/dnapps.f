@@ -20,7 +20,7 @@ c     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T.
 c
 c\Usage:
 c  call dnapps
-c     ( N, KEV, NP, SHIFTR, SHIFTI, V, LDV, H, LDH, RESID, Q, LDQ, 
+c     ( N, KEV, NP, SHIFTR, SHIFTI, V, LDV, H, LDH, RESID, Q, LDQ,
 c       WORKL, WORKD )
 c
 c\Arguments
@@ -29,8 +29,8 @@ c          Problem size, i.e. size of matrix A.
 c
 c  KEV     Integer.  (INPUT/OUTPUT)
 c          KEV+NP is the size of the input matrix H.
-c          KEV is the size of the updated matrix HNEW.  KEV is only 
-c          updated on ouput when fewer than NP shifts are applied in
+c          KEV is the size of the updated matrix HNEW.  KEV is only
+c          updated on output when fewer than NP shifts are applied in
 c          order to keep the conjugate pair together.
 c
 c  NP      Integer.  (INPUT)
@@ -38,7 +38,7 @@ c          Number of implicit shifts to be applied.
 c
 c  SHIFTR, Double precision array of length NP.  (INPUT)
 c  SHIFTI  Real and imaginary part of the shifts to be applied.
-c          Upon, entry to dnapps, the shifts must be sorted so that the 
+c          Upon, entry to dnapps, the shifts must be sorted so that the
 c          conjugate pairs are in consecutive locations.
 c
 c  V       Double precision N by (KEV+NP) array.  (INPUT/OUTPUT)
@@ -51,7 +51,7 @@ c          Leading dimension of V exactly as declared in the calling
 c          program.
 c
 c  H       Double precision (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT)
-c          On INPUT, H contains the current KEV+NP by KEV+NP upper 
+c          On INPUT, H contains the current KEV+NP by KEV+NP upper
 c          Hessenber matrix of the Arnoldi factorization.
 c          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg
 c          matrix in the KEV leading submatrix.
@@ -62,7 +62,7 @@ c          program.
 c
 c  RESID   Double precision array of length N.  (INPUT/OUTPUT)
 c          On INPUT, RESID contains the the residual vector r_{k+p}.
-c          On OUTPUT, RESID is the update residual vector rnew_{k} 
+c          On OUTPUT, RESID is the update residual vector rnew_{k}
 c          in the first KEV locations.
 c
 c  Q       Double precision KEV+NP by KEV+NP work array.  (WORKSPACE)
@@ -97,19 +97,19 @@ c     pp 357-385.
 c
 c\Routines called:
 c     ivout   ARPACK utility routine that prints integers.
-c     ARSCND  ARPACK utility routine for timing.
+c     arscnd  ARPACK utility routine for timing.
 c     dmout   ARPACK utility routine that prints matrices.
 c     dvout   ARPACK utility routine that prints vectors.
-c     AR_DLABAD  LAPACK routine that computes machine constants.
-c     AR_DLACPY  LAPACK matrix copy routine.
-c     AR_DLAMCH  LAPACK routine that determines machine constants. 
-c     AR_DLANHS  LAPACK routine that computes various norms of a matrix.
-c     AR_DLAPY2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
-c     AR_DLARF   LAPACK routine that applies Householder reflection to
+c     dlabad  LAPACK routine that computes machine constants.
+c     dlacpy  LAPACK matrix copy routine.
+c     dlamch  LAPACK routine that determines machine constants.
+c     dlanhs  LAPACK routine that computes various norms of a matrix.
+c     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+c     dlarf   LAPACK routine that applies Householder reflection to
 c             a matrix.
-c     AR_DLARFG  LAPACK Householder reflection construction routine.
-c     AR_DLARTG  LAPACK Givens rotation construction routine.
-c     AR_DLASET  LAPACK matrix initialization routine.
+c     dlarfg  LAPACK Householder reflection construction routine.
+c     dlartg  LAPACK Givens rotation construction routine.
+c     dlaset  LAPACK matrix initialization routine.
 c     dgemv   Level 2 BLAS routine for matrix vector multiplication.
 c     daxpy   Level 1 BLAS that computes a vector triad.
 c     dcopy   Level 1 BLAS that copies one vector to another .
@@ -120,19 +120,19 @@ c     Danny Sorensen               Phuong Vu
 c     Richard Lehoucq              CRPC / Rice University
 c     Dept. of Computational &     Houston, Texas
 c     Applied Mathematics
-c     Rice University           
-c     Houston, Texas    
+c     Rice University
+c     Houston, Texas
 c
 c\Revision history:
 c     xx/xx/92: Version ' 2.4'
 c
-c\SCCS Information: @(#) 
+c\SCCS Information: @(#)
 c FILE: napps.F   SID: 2.4   DATE OF SID: 3/28/97   RELEASE: 2
 c
 c\Remarks
 c  1. In this version, each shift is applied to all the sublocks of
 c     the Hessenberg matrix H and not just to the submatrix that it
-c     comes from. Deflation as in LAPACK routine AR_DLAHQR (QR algorithm
+c     comes from. Deflation as in LAPACK routine dlahqr (QR algorithm
 c     for upper Hessenberg matrices ) is used.
 c     The subdiagonals of H are enforced to be non-negative.
 c
@@ -141,7 +141,7 @@ c
 c-----------------------------------------------------------------------
 c
       subroutine dnapps
-     &   ( n, kev, np, shiftr, shifti, v, ldv, h, ldh, resid, q, ldq, 
+     &   ( n, kev, np, shiftr, shifti, v, ldv, h, ldh, resid, q, ldq,
      &     workl, workd )
 c
 c     %----------------------------------------------------%
@@ -162,7 +162,7 @@ c     | Array Arguments |
 c     %-----------------%
 c
       Double precision
-     &           h(ldh,kev+np), resid(n), shifti(np), shiftr(np), 
+     &           h(ldh,kev+np), resid(n), shifti(np), shiftr(np),
      &           v(ldv,kev+np), q(ldq,kev+np), workd(2*n), workl(kev+np)
 c
 c     %------------%
@@ -180,24 +180,24 @@ c
       integer    i, iend, ir, istart, j, jj, kplusp, msglvl, nr
       logical    cconj, first
       Double precision
-     &           c, f, g, h11, h12, h21, h22, h32, ovfl, r, s, sigmai, 
+     &           c, f, g, h11, h12, h21, h22, h32, ovfl, r, s, sigmai,
      &           sigmar, smlnum, ulp, unfl, u(3), t, tau, tst1
-      save       first, ovfl, smlnum, ulp, unfl 
+      save       first, ovfl, smlnum, ulp, unfl
 c
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
 c
-      external   daxpy, dcopy, dscal, AR_DLACPY, AR_DLARFG, AR_DLARF,
-     &           AR_DLASET, AR_DLABAD, ARSCND, AR_DLARTG
+      external   daxpy, dcopy, dscal, dlacpy, dlarfg, dlarf,
+     &           dlaset, dlabad, arscnd, dlartg
 c
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
 c
       Double precision
-     &           AR_DLAMCH, AR_DLANHS, AR_DLAPY2
-      external   AR_DLAMCH, AR_DLANHS, AR_DLAPY2
+     &           dlamch, dlanhs, dlapy2
+      external   dlamch, dlanhs, dlapy2
 c
 c     %----------------------%
 c     | Intrinsics Functions |
@@ -206,7 +206,7 @@ c
       intrinsic  abs, max, min
 c
 c     %----------------%
-c     | Data statments |
+c     | Data statements |
 c     %----------------%
 c
       data       first / .true. /
@@ -221,13 +221,13 @@ c        %-----------------------------------------------%
 c        | Set machine-dependent constants for the       |
 c        | stopping criterion. If norm(H) <= sqrt(OVFL), |
 c        | overflow should not occur.                    |
-c        | REFERENCE: LAPACK subroutine AR_DLAHQR           |
+c        | REFERENCE: LAPACK subroutine dlahqr           |
 c        %-----------------------------------------------%
 c
-         unfl = AR_DLAMCH( 'safe minimum' )
+         unfl = dlamch( 'safe minimum' )
          ovfl = one / unfl
-         call AR_DLABAD( unfl, ovfl )
-         ulp = AR_DLAMCH( 'precision' )
+         call dlabad( unfl, ovfl )
+         ulp = dlamch( 'precision' )
          smlnum = unfl*( n / ulp )
          first = .false.
       end if
@@ -237,16 +237,16 @@ c     | Initialize timing statistics  |
 c     | & message level for debugging |
 c     %-------------------------------%
 c
-      call ARSCND (t0)
+      call arscnd (t0)
       msglvl = mnapps
-      kplusp = kev + np 
-c 
+      kplusp = kev + np
+c
 c     %--------------------------------------------%
 c     | Initialize Q to the identity to accumulate |
 c     | the rotations and reflections              |
 c     %--------------------------------------------%
 c
-      call AR_DLASET ('All', kplusp, kplusp, zero, one, q, ldq)
+      call dlaset ('All', kplusp, kplusp, zero, one, q, ldq)
 c
 c     %----------------------------------------------%
 c     | Quick return if there are no shifts to apply |
@@ -266,11 +266,11 @@ c
          sigmai = shifti(jj)
 c
          if (msglvl .gt. 2 ) then
-            call ivout (logfil, 1, jj, ndigit, 
+            call ivout (logfil, 1, jj, ndigit,
      &               '_napps: shift number.')
-            call dvout (logfil, 1, sigmar, ndigit, 
+            call dvout (logfil, 1, sigmar, ndigit,
      &               '_napps: The real part of the shift ')
-            call dvout (logfil, 1, sigmai, ndigit, 
+            call dvout (logfil, 1, sigmai, ndigit,
      &               '_napps: The imaginary part of the shift ')
          end if
 c
@@ -327,19 +327,19 @@ c
 c           %----------------------------------------%
 c           | Check for splitting and deflation. Use |
 c           | a standard test as in the QR algorithm |
-c           | REFERENCE: LAPACK subroutine AR_DLAHQR    |
+c           | REFERENCE: LAPACK subroutine dlahqr    |
 c           %----------------------------------------%
 c
             tst1 = abs( h( i, i ) ) + abs( h( i+1, i+1 ) )
             if( tst1.eq.zero )
-     &         tst1 = AR_DLANHS( '1', kplusp-jj+1, h, ldh, workl )
+     &         tst1 = dlanhs( '1', kplusp-jj+1, h, ldh, workl )
             if( abs( h( i+1,i ) ).le.max( ulp*tst1, smlnum ) ) then
                if (msglvl .gt. 0) then
-                  call ivout (logfil, 1, i, ndigit, 
+                  call ivout (logfil, 1, i, ndigit,
      &                 '_napps: matrix splitting at row/column no.')
-                  call ivout (logfil, 1, jj, ndigit, 
+                  call ivout (logfil, 1, jj, ndigit,
      &                 '_napps: matrix splitting with shift number.')
-                  call dvout (logfil, 1, h(i+1,i), ndigit, 
+                  call dvout (logfil, 1, h(i+1,i), ndigit,
      &                 '_napps: off diagonal element.')
                end if
                iend = i
@@ -351,9 +351,9 @@ c
    40    continue
 c
          if (msglvl .gt. 2) then
-             call ivout (logfil, 1, istart, ndigit, 
+             call ivout (logfil, 1, istart, ndigit,
      &                   '_napps: Start of current block ')
-             call ivout (logfil, 1, iend, ndigit, 
+             call ivout (logfil, 1, iend, ndigit,
      &                   '_napps: End of current block ')
          end if
 c
@@ -368,7 +368,7 @@ c        | If istart + 1 = iend then no reason to apply a       |
 c        | complex conjugate pair of shifts on a 2 by 2 matrix. |
 c        %------------------------------------------------------%
 c
-         if ( istart + 1 .eq. iend .and. abs( sigmai ) .gt. zero ) 
+         if ( istart + 1 .eq. iend .and. abs( sigmai ) .gt. zero )
      &      go to 100
 c
          h11 = h(istart,istart)
@@ -381,14 +381,14 @@ c           %---------------------------------------------%
 c
             f = h11 - sigmar
             g = h21
-c 
+c
             do 80 i = istart, iend-1
 c
 c              %-----------------------------------------------------%
-c              | Contruct the plane rotation G to zero out the bulge |
+c              | Construct the plane rotation G to zero out the bulge |
 c              %-----------------------------------------------------%
 c
-               call AR_DLARTG (f, g, c, s, r)
+               call dlartg (f, g, c, s, r)
                if (i .gt. istart) then
 c
 c                 %-------------------------------------------%
@@ -413,7 +413,7 @@ c
                do 50 j = i, kplusp
                   t        =  c*h(i,j) + s*h(i+1,j)
                   h(i+1,j) = -s*h(i,j) + c*h(i+1,j)
-                  h(i,j)   = t   
+                  h(i,j)   = t
    50          continue
 c
 c              %---------------------------------------------%
@@ -423,17 +423,17 @@ c
                do 60 j = 1, min(i+2,iend)
                   t        =  c*h(j,i) + s*h(j,i+1)
                   h(j,i+1) = -s*h(j,i) + c*h(j,i+1)
-                  h(j,i)   = t   
+                  h(j,i)   = t
    60          continue
 c
 c              %----------------------------------------------------%
 c              | Accumulate the rotation in the matrix Q;  Q <- Q*G |
 c              %----------------------------------------------------%
 c
-               do 70 j = 1, min( i+jj, kplusp ) 
+               do 70 j = 1, min( i+jj, kplusp )
                   t        =   c*q(j,i) + s*q(j,i+1)
                   q(j,i+1) = - s*q(j,i) + c*q(j,i+1)
-                  q(j,i)   = t   
+                  q(j,i)   = t
    70          continue
 c
 c              %---------------------------%
@@ -449,7 +449,7 @@ c
 c           %-----------------------------------%
 c           | Finished applying the real shift. |
 c           %-----------------------------------%
-c 
+c
          else
 c
 c           %----------------------------------------------------%
@@ -465,9 +465,9 @@ c           | Compute 1st column of (H - shift*I)*(H - conj(shift)*I) |
 c           %---------------------------------------------------------%
 c
             s    = 2.0*sigmar
-            t = AR_DLAPY2 ( sigmar, sigmai ) 
+            t = dlapy2 ( sigmar, sigmai )
             u(1) = ( h11 * (h11 - s) + t * t ) / h21 + h12
-            u(2) = h11 + h22 - s 
+            u(2) = h11 + h22 - s
             u(3) = h32
 c
             do 90 i = istart, iend-1
@@ -479,7 +479,7 @@ c              | Construct Householder reflector G to zero out u(1). |
 c              | G is of the form I - tau*( 1 u )' * ( 1 u' ).       |
 c              %-----------------------------------------------------%
 c
-               call AR_DLARFG ( nr, u(1), u(2), 1, tau )
+               call dlarfg ( nr, u(1), u(2), 1, tau )
 c
                if (i .gt. istart) then
                   h(i,i-1)   = u(1)
@@ -492,7 +492,7 @@ c              %--------------------------------------%
 c              | Apply the reflector to the left of H |
 c              %--------------------------------------%
 c
-               call AR_DLARF ('Left', nr, kplusp-i+1, u, 1, tau,
+               call dlarf ('Left', nr, kplusp-i+1, u, 1, tau,
      &                     h(i,i), ldh, workl)
 c
 c              %---------------------------------------%
@@ -500,14 +500,14 @@ c              | Apply the reflector to the right of H |
 c              %---------------------------------------%
 c
                ir = min ( i+3, iend )
-               call AR_DLARF ('Right', ir, nr, u, 1, tau,
+               call dlarf ('Right', ir, nr, u, 1, tau,
      &                     h(1,i), ldh, workl)
 c
 c              %-----------------------------------------------------%
 c              | Accumulate the reflector in the matrix Q;  Q <- Q*G |
 c              %-----------------------------------------------------%
 c
-               call AR_DLARF ('Right', kplusp, nr, u, 1, tau, 
+               call dlarf ('Right', kplusp, nr, u, 1, tau,
      &                     q(1,i), ldq, workl)
 c
 c              %----------------------------%
@@ -526,7 +526,7 @@ c           %--------------------------------------------%
 c           | Finished applying a complex pair of shifts |
 c           | to the current block                       |
 c           %--------------------------------------------%
-c 
+c
          end if
 c
   100    continue
@@ -562,13 +562,13 @@ c
 c        %--------------------------------------------%
 c        | Final check for splitting and deflation.   |
 c        | Use a standard test as in the QR algorithm |
-c        | REFERENCE: LAPACK subroutine AR_DLAHQR        |
+c        | REFERENCE: LAPACK subroutine dlahqr        |
 c        %--------------------------------------------%
 c
          tst1 = abs( h( i, i ) ) + abs( h( i+1, i+1 ) )
          if( tst1.eq.zero )
-     &       tst1 = AR_DLANHS( '1', kev, h, ldh, workl )
-         if( h( i+1,i ) .le. max( ulp*tst1, smlnum ) ) 
+     &       tst1 = dlanhs( '1', kev, h, ldh, workl )
+         if( h( i+1,i ) .le. max( ulp*tst1, smlnum ) )
      &       h(i+1,i) = zero
  130  continue
 c
@@ -581,9 +581,9 @@ c     | of H would be zero as in exact arithmetic.      |
 c     %-------------------------------------------------%
 c
       if (h(kev+1,kev) .gt. zero)
-     &    call dgemv ('N', n, kplusp, one, v, ldv, q(1,kev+1), 1, zero, 
+     &    call dgemv ('N', n, kplusp, one, v, ldv, q(1,kev+1), 1, zero,
      &                workd(n+1), 1)
-c 
+c
 c     %----------------------------------------------------------%
 c     | Compute column 1 to kev of (V*Q) in backward order       |
 c     | taking advantage of the upper Hessenberg structure of Q. |
@@ -599,15 +599,17 @@ c     %-------------------------------------------------%
 c     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). |
 c     %-------------------------------------------------%
 c
-      call AR_DLACPY ('A', n, kev, v(1,kplusp-kev+1), ldv, v, ldv)
-c 
+      do 150 i = 1, kev
+         call dcopy(n, v(1,kplusp-kev+i), 1, v(1,i), 1)
+  150 continue
+c
 c     %--------------------------------------------------------------%
 c     | Copy the (kev+1)-st column of (V*Q) in the appropriate place |
 c     %--------------------------------------------------------------%
 c
       if (h(kev+1,kev) .gt. zero)
      &   call dcopy (n, workd(n+1), 1, v(1,kev+1), 1)
-c 
+c
 c     %-------------------------------------%
 c     | Update the residual vector:         |
 c     |    r <- sigmak*r + betak*v(:,kev+1) |
@@ -625,7 +627,7 @@ c
      &        '_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}')
          call dvout (logfil, 1, h(kev+1,kev), ndigit,
      &        '_napps: betak = e_{kev+1}^T*H*e_{kev}')
-         call ivout (logfil, 1, kev, ndigit, 
+         call ivout (logfil, 1, kev, ndigit,
      &               '_napps: Order of the final Hessenberg matrix ')
          if (msglvl .gt. 2) then
             call dmout (logfil, kev, kev, h, ldh, ndigit,
@@ -633,11 +635,11 @@ c
          end if
 c
       end if
-c 
+c
  9000 continue
-      call ARSCND (t1)
+      call arscnd (t1)
       tnapps = tnapps + (t1 - t0)
-c 
+c
       return
 c
 c     %---------------%
