@@ -1,0 +1,115 @@
+
+    Integer n=500;
+    Integer p=10;
+    Real dens = 0.7 / n;
+
+    Matrix c = sprandn(n+p, n,dens);
+    Matrix d = sprandn(n+p, p,dens);
+
+    Matrix ad = sprandn(n,n,dens) + 5.0 * speye(n,n); 
+    Matrix bd = sprandn(n,p,dens); 
+    Matrix md = trans(c) * c + 5.0 * speye(n,n);
+    Matrix rd = trans(d) * d + 5.0 * speye(p,p);
+    Matrix nd = trans(c) * d;
+    Matrix ed = speye(n,n); 
+    
+    Matrix xd ;//= solve_dare(ad, bd, md, rd, nd); //, ed); // E not supported
+
+    // 1st transformation matrix, dare side
+    Matrix mat1d = sparse((mat_col(), (mat_row(), ad + ed, bd), (mat_row(), ad - ed, bd)));
+    // 2nd transformation matrix, dare side
+    Matrix mat2d = sparse((mat_col(), (mat_row(), md, nd), (mat_row(), trans(nd), rd)));
+
+    // transformation dare -> care, dense version
+    Matrix q, mat1ct;
+    tie(q, mat1ct) = qr2(sqrt(2.0)/2.0 * trans(mat1d));
+    Matrix mat1c = trans(mat1ct);
+    Matrix mat2c = trans(q) * mat2d * q;
+
+    // extract care from transformation matrices
+    Matrix ec = mat1c(colon(1,n),colon(1,n));
+    Matrix ac = mat1c(colon(n+1,matcl::end),colon(1,n));
+    Matrix bc = mat1c(colon(n+1,matcl::end),colon(n+1,matcl::end));
+    Matrix mc = mat2c(colon(1,n),colon(1,n));
+    Matrix nc = mat2c(colon(1,n), colon(n+1,matcl::end));
+    Matrix rc = mat2c(colon(n+1,matcl::end), colon(n+1,matcl::end));
+
+    // aliminate ec to use slicot solve_care
+    Matrix ac_noec = trans(linsolve(trans(ec), trans(ac)));
+    Matrix mc_noec = linsolve(trans(ec), trans(linsolve(trans(ec), trans(mc))));
+    Matrix nc_noec = linsolve(trans(ec), nc);
+    Matrix xc;// = solve_care(ac_noec, bc, mc_noec, rc, nc_noec);
+
+
+    // emulate Lyapack method - eliminate nc and ec
+    // eliminate nc first
+    Matrix acbis = ac - bc * linsolve(rc, trans(nc));
+    Matrix mcbis = mc - nc * linsolve(rc, trans(nc));
+
+    // eliminate ec
+    Matrix acbisbis = trans (linsolve(trans(ec),trans(acbis)));
+    Matrix mcbisbis = linsolve(trans(ec),  trans(linsolve(trans(ec), trans(mcbis)))  );
+    Matrix ncbisbis = spzeros(n,p);
+    Matrix xcbisbis;// = solve_care(acbisbis, bc, mcbisbis, rc, ncbisbis);
+
+    // sparse
+    // extend transformation matrices - required by quern
+    Matrix mat1d_ext = (mat_row(), mat1d, spzeros(2 * n, n - p));
+    Matrix mat2d_ext = spzeros(2 * n, 2 * n);
+    mat2d_ext(colon(1, n + p), colon(1, n + p)) = mat2d;
+
+    // transformation
+    qrs factor = qrs(sqrt(2.0)/2.0 * mat1d_ext, true);
+    Matrix mat1c_sparse_ext = factor.get_r_trans();
+    Matrix mat2c_sparse_ext = factor.q_trans_times(trans(factor.q_trans_times(trans(mat2d_ext))));
+
+    // un-extend transformation matrices on the sparse CARE side
+    Matrix mat1c_sparse = sparse(mat1c_sparse_ext(colon(), colon(1,n+p)));
+    Matrix mat2c_sparse = sparse(mat2c_sparse_ext(colon(1,n+p), colon(1,n+p)));
+
+    // extract sparse CARE from transformation matrices
+    Matrix ec_sparse = mat1c_sparse(colon(1,n),colon(1,n));
+    Matrix ac_sparse = mat1c_sparse(colon(n+1,matcl::end),colon(1,n));
+    Matrix bc_sparse = mat1c_sparse(colon(n+1,matcl::end),colon(n+1,matcl::end));
+    Matrix mc_sparse = mat2c_sparse(colon(1,n),colon(1,n));
+    Matrix nc_sparse = mat2c_sparse(colon(1,n), colon(n+1,matcl::end));
+    Matrix rc_sparse = mat2c_sparse(colon(n+1,matcl::end), colon(n+1,matcl::end));
+
+    // eliminate ec to use slicot solve_care
+    Matrix ac_sparse_noec = trans(linsolve(trans(ec_sparse), trans(ac_sparse)));
+    Matrix mc_sparse_noec = linsolve(trans(ec_sparse), trans(linsolve(trans(ec_sparse), trans(mc_sparse))));
+    Matrix nc_sparse_noec = linsolve(trans(ec_sparse), nc_sparse);
+
+    Matrix xc_sparse;// = solve_care(ac_sparse_noec, bc_sparse, mc_sparse_noec, rc_sparse, nc_sparse_noec);
+
+    // eliminate ec and nc to emulate Lyapack
+    // first nc
+    Matrix acbis_sparse = ac_sparse - bc_sparse * linsolve(rc_sparse, trans(nc_sparse));
+    Matrix mcbis_sparse = mc_sparse - nc_sparse * linsolve(rc_sparse, trans(nc_sparse));
+
+    // now ec
+    Matrix acbisbis_sparse = trans (linsolve(trans(ec_sparse),trans(acbis_sparse)));
+    Matrix mcbisbis_sparse = linsolve(trans(ec_sparse),  trans(linsolve(trans(ec_sparse), trans(mcbis_sparse)))  );
+    Matrix ncbisbis_sparse = spzeros(n,p);
+
+    Matrix xcbisbis_sparse;// = solve_care(acbisbis_sparse, bc_sparse, mcbisbis_sparse, rc_sparse, ncbisbis_sparse);
+
+    // display fill-ins
+    // original sparsities
+    disp(mat1d.nnz() / mat1d.numel());
+    disp(mat2d.nnz() / mat2d.numel());
+    // sparsities after 1st stage - as if we had sparse general CARE algorithm
+    disp(mat1c_sparse.nnz() / mat1c_sparse.numel());
+    disp(mat2c_sparse.nnz() / mat2c_sparse.numel());
+    // sparsities after 2nd stage - required by lyapack - ec and nc need to be zero
+    disp(acbisbis_sparse.nnz() / acbisbis_sparse.numel());
+    disp(bc_sparse.nnz() / bc_sparse.numel());
+    disp(mcbisbis_sparse.nnz() / mcbisbis_sparse.numel());
+    disp(rc_sparse.nnz() / rc_sparse.numel());
+
+    // display differences between solution x-s
+    disp(norm_1(xd - xc) / norm_1(xd));
+    disp(norm_1(xd - xcbisbis) / norm_1(xd));
+    disp(norm_1(xd - xc_sparse) / norm_1(xd));
+    disp(norm_1(xd - xcbisbis_sparse) / norm_1(xd));
+    disp("konie");

@@ -25,6 +25,7 @@
 
 #pragma warning(push)
 #pragma warning(disable:4127)   //conditional expression is constant
+#pragma warning(disable:4244)   // :  '=': conversion from 'double' to 'T', possible loss of data
 #include <boost/math/special_functions.hpp>
 #pragma warning(pop)
 

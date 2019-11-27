@@ -39,11 +39,11 @@ struct MATCL_DYN_EXPORT register_object_helper
         pool_type*              m_pool;
 
     public:
-        register_object_helper(const char*, constr_type constr);
+        register_object_helper(const type_info&, constr_type constr);
 
         template<class T>           
         static Type             create_data(pool_type*& pool);
-        static std::string      get_name(const char* name);
+        static std::string      get_name(const type_info& name);
         
         Type                    get_type() const;
         pool_type*              get_pool() const;

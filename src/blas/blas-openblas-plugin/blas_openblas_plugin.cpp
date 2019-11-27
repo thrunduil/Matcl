@@ -30,6 +30,9 @@
 
 #define CALL_SYNTAX(x) x##_
 
+#define FUNCTION_NAME_scabs1 wrap_scabs1
+#define FUNCTION_NAME_dcabs1 wrap_dcabs1
+
 // WARNING: OMP spport must be enabled
 
 class global_data
@@ -83,6 +86,19 @@ static global_data m_data;
 
 extern "C"
 {
+    static s_type_wr wrap_scabs1(c_type_wr *z)
+    {
+        return std::abs(z->r) + std::abs(z->i);
+    };
+
+    static d_type_wr wrap_dcabs1(z_type_wr *z)
+    {
+        return std::abs(z->r) + std::abs(z->i);
+    };
+};
+
+extern "C"
+{
     BLAS_PLUGIN_EXPORT 
     const ::blas_plugin* get_blas_plugin()
     {
@@ -108,18 +124,6 @@ void set_num_threads(i_type_wr* n)
 bool are_user_threads_allowed()
 {
     return m_data.are_user_threads_allowed();
-};
-
-#include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
-
-static d_type_wr CALL_SYNTAX(scabs1)(c_type_wr *z__)
-{
-    return f2c::scabs1_((f2c::complex*)z__);
-};
-
-static d_type_wr CALL_SYNTAX(dcabs1)(z_type_wr *z__)
-{
-    return f2c::dcabs1_((f2c::doublecomplex*)z__);
 };
 
 const char* get_name()

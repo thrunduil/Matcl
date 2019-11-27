@@ -70,19 +70,21 @@ static spin_lock    g_mutex;
 
 serialization_helper_base* 
 register_serialization_impl::get_registered(const std::string& unique_id, 
-                        const char* base_class_name0)
+                        const type_info& base_class_name_ti)
 {
     lock_type lock(g_mutex);
 
+    const char* base_class_name0= base_class_name_ti.name();
     std::string base_class_name = base_class_name0? std::string(base_class_name0) : "";
     return g_helper_map.get_registered(unique_id,base_class_name);
 };
 
 void register_serialization_impl::make_register(const std::string& unique_id, 
-                        const char* base_class_name0, ptr_type* ptr)
+                        const type_info& base_class_name_ti, ptr_type* ptr)
 {
     lock_type lock(g_mutex);
 
+    const char* base_class_name0= base_class_name_ti.name();
     std::string base_class_name = base_class_name0? std::string(base_class_name0) : "";
     return g_helper_map.make_register(unique_id,base_class_name,ptr);
 };

@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0064c808-7e8c-41a2-8a4a-87dcde2a2467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e6c9462e-8137-4e83-a5fb-dba3e61498b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{0f0d2285-3bf6-4ee3-8e16-c7f9f4e33ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\include\lapack_ext">
+      <UniqueIdentifier>{e35cc2b9-609c-4741-9a14-d60d8c3c641a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\blas_ext">
+      <UniqueIdentifier>{5af242fc-b4fb-4b6e-9880-a8df70305543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack_ext">
+      <UniqueIdentifier>{0ab542c4-79f3-4001-bd24-f124c807b287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack_ext\eigenvalues">
+      <UniqueIdentifier>{8e7e299e-6a09-4f50-bf18-1d684def11a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack_ext\lapack_func">
+      <UniqueIdentifier>{cab5ba98-8599-43d2-96a5-fe43aaef6016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack_ext\orthogonal">
+      <UniqueIdentifier>{555cec1e-eb55-4193-abab-f6a5653eba31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack_ext\triangular">
+      <UniqueIdentifier>{ed888925-7ca4-47d0-979d-a1b7d87abf36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\lapack_ext\utils">
+      <UniqueIdentifier>{f4692f40-4dad-4329-8c79-4bffd4eb2d86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\threads">
+      <UniqueIdentifier>{8af3a55a-23ae-4315-ad0d-c4993989cef1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\include\matcl-blas-ext\lapack_ext\lapack_impl.inl">
+      <Filter>Source Files\include\lapack_ext</Filter>
+    </None>
+    <None Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\blas_ext.inl">
+      <Filter>Source Files\src\blas_ext</Filter>
+    </None>
+    <None Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\gemm2_NN.inl">
+      <Filter>Source Files\src\blas_ext</Filter>
+    </None>
+    <None Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\small_gemm.inl">
+      <Filter>Source Files\src\blas_ext</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\blas_ext.cpp">
+      <Filter>Source Files\src\blas_ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\gesvdx.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\ggbal.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\gges.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\gghrd.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\hgeqz.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\qtriu2gschur.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\qtriu2schur.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen_cond.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen_helpers.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen3.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\trsen_cond.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\trsen3.cpp">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\laev2.cpp">
+      <Filter>Source Files\src\lapack_ext\lapack_func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\lanv2.cpp">
+      <Filter>Source Files\src\lapack_ext\lapack_func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\lanv2z.cpp">
+      <Filter>Source Files\src\lapack_ext\lapack_func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\lapack_func\lasv2.cpp">
+      <Filter>Source Files\src\lapack_ext\lapack_func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\int2perm.cpp">
+      <Filter>Source Files\src\lapack_ext\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\laswpc.cpp">
+      <Filter>Source Files\src\lapack_ext\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\perm2int.cpp">
+      <Filter>Source Files\src\lapack_ext\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\utils.cpp">
+      <Filter>Source Files\src\lapack_ext\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\chudl.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\chudu.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\gbtrs_rev.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getf2.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getf2r.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_cr.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_ll.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_rec.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrf_rl.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrfc.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrfr.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\getrs_rev.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\gttrs_rev.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\potfp2.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\potfp3.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\ptinorm.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\pttrs_rev.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\qtrtrs.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\tbtrs_rev.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\triangular\trtrs_rev.cpp">
+      <Filter>Source Files\src\lapack_ext\triangular</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\gs_orth.cpp">
+      <Filter>Source Files\src\lapack_ext\orthogonal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\gsg_orth.cpp">
+      <Filter>Source Files\src\lapack_ext\orthogonal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\qrupdate.cpp">
+      <Filter>Source Files\src\lapack_ext\orthogonal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\orthogonal\rotseq.cpp">
+      <Filter>Source Files\src\lapack_ext\orthogonal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\blas_concurrency.cpp">
+      <Filter>Source Files\src\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\simple_thread_pool.cpp">
+      <Filter>Source Files\src\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\thread_pool.cpp">
+      <Filter>Source Files\src\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\workspace_pool.cpp">
+      <Filter>Source Files\src\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\blas\matcl-blas-ext\threads\task_group.cpp">
+      <Filter>Source Files\src\threads</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\blas_concurrency.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\config_blas_ext.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\lapack_ext\blas_ext.h">
+      <Filter>Source Files\include\lapack_ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-blas-ext\lapack_ext\lapack_ext.h">
+      <Filter>Source Files\include\lapack_ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\blas_ext\blas_simd.h">
+      <Filter>Source Files\src\blas_ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\givens_accumulator.h">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\eigenvalues\tgsen_helpers.h">
+      <Filter>Source Files\src\lapack_ext\eigenvalues</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\optim_params.h">
+      <Filter>Source Files\src\lapack_ext\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\lapack_ext\utils\utils.h">
+      <Filter>Source Files\src\lapack_ext\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\threads\simple_thread_pool.h">
+      <Filter>Source Files\src\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\blas\matcl-blas-ext\threads\thread_pool.h">
+      <Filter>Source Files\src\threads</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

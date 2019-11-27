@@ -1,7 +1,7 @@
 /* header file for clapack 3.2.1 */
 #pragma once
 
-#include "matcl-blas-lapack/blas_loader/clapack_types.h"
+#include "matcl-blas-lapack/blas_loader/blas_types.h"
 
 // based on clapack.h but only lapack declarations & different namespace
 
@@ -479,6 +479,9 @@ extern "C" {
 	i_type_wr *info);
 
 /* Subroutine */ int chetrf_(char *uplo, i_type_wr *n, c_type_wr *a, i_type_wr *lda, 
+	 i_type_wr *ipiv, c_type_wr *work, i_type_wr *lwork, i_type_wr *info);
+
+/* Subroutine */ int chetrf_rook_(char *uplo, i_type_wr *n, c_type_wr *a, i_type_wr *lda, 
 	 i_type_wr *ipiv, c_type_wr *work, i_type_wr *lwork, i_type_wr *info);
 
 /* Subroutine */ int chetri_(char *uplo, i_type_wr *n, c_type_wr *a, i_type_wr *lda, 
@@ -1300,6 +1303,9 @@ s_type_wr clantr_(char *norm, char *uplo, char *diag, i_type_wr *m, i_type_wr *n
 	 i_type_wr *ipiv, i_type_wr *info);
 
 /* Subroutine */ int csytrf_(char *uplo, i_type_wr *n, c_type_wr *a, i_type_wr *lda, 
+	 i_type_wr *ipiv, c_type_wr *work, i_type_wr *lwork, i_type_wr *info);
+
+/* Subroutine */ int csytrf_rook_(char *uplo, i_type_wr *n, c_type_wr *a, i_type_wr *lda, 
 	 i_type_wr *ipiv, c_type_wr *work, i_type_wr *lwork, i_type_wr *info);
 
 /* Subroutine */ int csytri_(char *uplo, i_type_wr *n, c_type_wr *a, i_type_wr *lda, 
@@ -3187,6 +3193,9 @@ d_type_wr dlapy3_(d_type_wr *x, d_type_wr *y, d_type_wr *z__);
 /* Subroutine */ int dsytrf_(char *uplo, i_type_wr *n, d_type_wr *a, i_type_wr *
 	lda, i_type_wr *ipiv, d_type_wr *work, i_type_wr *lwork, i_type_wr *info);
 
+/* Subroutine */ int dsytrf_rook_(char *uplo, i_type_wr *n, d_type_wr *a, i_type_wr *
+	lda, i_type_wr *ipiv, d_type_wr *work, i_type_wr *lwork, i_type_wr *info);
+
 /* Subroutine */ int dsytri_(char *uplo, i_type_wr *n, d_type_wr *a, i_type_wr *
 	lda, i_type_wr *ipiv, d_type_wr *work, i_type_wr *info);
 
@@ -4826,6 +4835,9 @@ s_type_wr slapy3_(s_type_wr *x, s_type_wr *y, s_type_wr *z__);
 /* Subroutine */ int ssytrf_(char *uplo, i_type_wr *n, s_type_wr *a, i_type_wr *lda, 
 	i_type_wr *ipiv, s_type_wr *work, i_type_wr *lwork, i_type_wr *info);
 
+/* Subroutine */ int ssytrf_rook_(char *uplo, i_type_wr *n, s_type_wr *a, i_type_wr *lda, 
+	i_type_wr *ipiv, s_type_wr *work, i_type_wr *lwork, i_type_wr *info);
+
 /* Subroutine */ int ssytri_(char *uplo, i_type_wr *n, s_type_wr *a, i_type_wr *lda, 
 	i_type_wr *ipiv, s_type_wr *work, i_type_wr *info);
 
@@ -5518,6 +5530,10 @@ s_type_wr slapy3_(s_type_wr *x, s_type_wr *y, s_type_wr *z__);
 	z_type_wr *work, i_type_wr *lwork, i_type_wr *info);
 
 /* Subroutine */ int zhetrf_(char *uplo, i_type_wr *n, z_type_wr *a, 
+	i_type_wr *lda, i_type_wr *ipiv, z_type_wr *work, i_type_wr *lwork, 
+	i_type_wr *info);
+
+/* Subroutine */ int zhetrf_rook_(char *uplo, i_type_wr *n, z_type_wr *a, 
 	i_type_wr *lda, i_type_wr *ipiv, z_type_wr *work, i_type_wr *lwork, 
 	i_type_wr *info);
 
@@ -6431,6 +6447,10 @@ d_type_wr zlantr_(char *norm, char *uplo, char *diag, i_type_wr *m, i_type_wr *n
 	i_type_wr *lda, i_type_wr *ipiv, i_type_wr *info);
 
 /* Subroutine */ int zsytrf_(char *uplo, i_type_wr *n, z_type_wr *a, 
+	i_type_wr *lda, i_type_wr *ipiv, z_type_wr *work, i_type_wr *lwork, 
+	i_type_wr *info);
+
+/* Subroutine */ int zsytrf_rook_(char *uplo, i_type_wr *n, z_type_wr *a, 
 	i_type_wr *lda, i_type_wr *ipiv, z_type_wr *work, i_type_wr *lwork, 
 	i_type_wr *info);
 

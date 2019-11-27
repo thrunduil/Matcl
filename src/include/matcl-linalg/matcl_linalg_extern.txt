@@ -1,0 +1,28 @@
+external libraries used in matcl_linalg:
+
+1. band_qr: qr decomposition of band matrices, 
+        author: 
+            Alfredo Remon, Enrique Quintana-Orti, Gregorio Quintana-Orti,
+            Dept. de Ingenieria y Ciencia de Computadores, Univ. Jaume I
+            12.080 Castellon, Spain
+            {gquintan,remon,quintana}@icc.uji.es
+        licence: BSD
+        version: 03 April 2010
+2. quern: qr decomposition of sparse matrices,
+        author: 
+            Robert Bridson
+            UBC Computer Science
+        licence: Public domain
+        version: February 4, 2009
+
+3. petsc: bsd
+4. scotch: CeCILL-C
+5. superlu: BSD
+6. metis: Apache 2
+7. cholmod: LGPL
+8. lusol: LGPL
+9. arpack: BSD
+10. dmperm from Trilinos: BSD
+11. hungarian algorithm from spral: BSD
+12. COLAMD: BSD
+13. GENMMD : BSD

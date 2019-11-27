@@ -110,7 +110,7 @@ struct MATCL_MATMULT_EXPORT unitary_flag : user_flag_config, user_flag
         virtual user_flag   kron_2(struct_flag sf_left, struct_flag sf_right) const;
 };
 
-// check if unitary flag was set
+// check if unitary or identity flag was set
 bool MATCL_MATMULT_EXPORT is_unitary(const struct_flag& sf);
 
 };

@@ -62,7 +62,7 @@ struct tuple : public std::tuple<Args...>
     // convert matcl::tuple to std::tuple
     standard_tuple_type&& to_standard_tuple() &&
     { 
-        return std::move((standard_tuple_type)*this); 
+        return std::move(*this); 
     };
 };
 

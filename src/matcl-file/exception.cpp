@@ -28,13 +28,13 @@
 namespace matcl { namespace error
 {
 
-const char* mmlib_file_exception::what() const throw()
+const char* matcl_file_exception::what() const throw()
 {
     m_message = what(*get_global_messanger_file());
     return m_message.c_str();
 };
 
-const char* mmlib_file_exception::what(exception_message& em) const
+const char* matcl_file_exception::what(exception_message& em) const
 {
     (void)em;
     m_message = "invalid exception_message";
@@ -66,34 +66,34 @@ const char* error_write_matfile::what(exception_message_file& em) const
     return em.error_write_matfile();
 };
 
-const char* error_open_mmlibfile::what(exception_message_file& em) const
+const char* error_open_matclfile::what(exception_message_file& em) const
 {
-    return em.error_open_mmlibfile(file_name,msg);
+    return em.error_open_matclfile(file_name,msg);
 };
 
-const char* error_mmlibfile_locked::what(exception_message_file& em) const
+const char* error_matclfile_locked::what(exception_message_file& em) const
 {
-    return em.error_mmlibfile_locked();
+    return em.error_matclfile_locked();
 };
 
-const char* error_create_mmlibfile::what(exception_message_file& em) const
+const char* error_create_matclfile::what(exception_message_file& em) const
 {
-    return em.error_create_mmlibfile(msg);
+    return em.error_create_matclfile(msg);
 };
 
-const char* error_read_mmlibfile::what(exception_message_file& em) const
+const char* error_read_matclfile::what(exception_message_file& em) const
 {
-    return em.error_read_mmlibfile(msg);
+    return em.error_read_matclfile(msg);
 };
 
-const char* error_read_mmlibfile_mat_not_exist::what(exception_message_file& em) const
+const char* error_read_matclfile_mat_not_exist::what(exception_message_file& em) const
 {
-    return em.error_read_mmlibfile_mat_not_exist(mat_name);
+    return em.error_read_matclfile_mat_not_exist(mat_name);
 };
 
-const char* error_write_mmlibfile_mat_already_exist::what(exception_message_file& em) const
+const char* error_write_matclfile_mat_already_exist::what(exception_message_file& em) const
 {
-    return em.error_write_mmlibfile_mat_already_exist(mat_name);
+    return em.error_write_matclfile_mat_already_exist(mat_name);
 };
 
 };};

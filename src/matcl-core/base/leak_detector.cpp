@@ -22,6 +22,7 @@
 #include "matcl-core/details/leak_detector.h"
 #include "matcl-core/error/exception_classes.h"
 #include "matcl-core/memory/alloc.h"
+#include "matcl-core/general/thread.h"
 
 #include <map>
 #include <set>
@@ -37,11 +38,14 @@ struct leak_detector_impl
         using code_set  = std::set<size_t>;
         using hander    = std::function<void ()>;
 
+        using mutex_type= matcl::default_spinlock_mutex;
+
     private:
         ptr_map     m_ptr_map;
         size_t      m_code;
         code_set    m_stop_codes;
         hander      m_handler;
+        mutex_type  m_mutex;
 
     public:
         leak_detector_impl();
@@ -60,6 +64,8 @@ leak_detector_impl::leak_detector_impl()
 
 void leak_detector_impl::report_malloc(void* ptr)
 {
+    std::unique_lock<mutex_type> lock(m_mutex);
+
     if (m_stop_codes.find(m_code) != m_stop_codes.end())
         m_handler();
 
@@ -69,6 +75,8 @@ void leak_detector_impl::report_malloc(void* ptr)
 
 void leak_detector_impl::report_free(void* ptr)
 {
+    std::unique_lock<mutex_type> lock(m_mutex);
+
     auto pos = m_ptr_map.find(ptr);
 
     matcl_assert(pos != m_ptr_map.end(), "invalid free");

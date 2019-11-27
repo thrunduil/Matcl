@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)\tmp\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -21,13 +21,13 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>C:\coding\extern\boost_1_65_1;..\..\..\src\extern\magma\include;..\..\..\src\extern\$(Platform)\openblas\include;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\coding\extern\boost_1_71_0;..\..\..\src\extern\magma\include;..\..\..\src\extern\$(Platform)\openblas\include;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_filesystem.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>C:\coding\extern\boost_1_65_1\stage\win32_debug_multi;..\..\..\src\extern\$(Platform)\flapack;..\..\..\src\extern\magma;..\..\..\src\extern\$(Platform)\openblas\;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\coding\extern\boost_1_71_0\stage\win32_debug_multi\lib;..\..\..\src\extern\$(Platform)\flapack;..\..\..\src\extern\magma;..\..\..\src\extern\$(Platform)\openblas\;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

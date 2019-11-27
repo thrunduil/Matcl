@@ -56,8 +56,8 @@ using blob_ptr = std::shared_ptr<blob_data>;
 
 namespace details
 {
-    class mmlib_file_data;
-    using mmlib_file_data_ptr = std::shared_ptr<mmlib_file_data>;
+    class matcl_file_data;
+    using matcl_file_data_ptr = std::shared_ptr<matcl_file_data>;
 };
 
 class MATCL_FILE_EXPORT matrix_info
@@ -90,10 +90,10 @@ class MATCL_FILE_EXPORT matrix_info
 
         const std::string      name() const             { return m_name; };
 
-        friend class mmlib_file;
+        friend class matcl_file;
 };
 
-class MATCL_FILE_EXPORT mmlib_file
+class MATCL_FILE_EXPORT matcl_file
 {
     public:
         using matrix_list       = std::list<Matrix>;
@@ -102,11 +102,11 @@ class MATCL_FILE_EXPORT mmlib_file
         using string_list       = std::list<std::string>;
 
     private:
-        using mmlib_file_data_ptr   = details::mmlib_file_data_ptr;
+        using matcl_file_data_ptr   = details::matcl_file_data_ptr;
     
     public:
-        mmlib_file(const std::string& file_name, open_mode om, thread_mode = thread_mode::multi_thread);
-        ~mmlib_file();
+        matcl_file(const std::string& file_name, open_mode om, thread_mode = thread_mode::multi_thread);
+        ~matcl_file();
 
         void                timeout_limit(int msec);
 
@@ -151,7 +151,7 @@ class MATCL_FILE_EXPORT mmlib_file
                                 const std::string& mat_string);
 
     private:
-        mmlib_file_data_ptr    m_data;
+        matcl_file_data_ptr    m_data;
 
         void                insert_main_table_if_not_exist();
         void                insert_data_table_if_not_exist();

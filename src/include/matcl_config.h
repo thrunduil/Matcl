@@ -20,5 +20,11 @@
 
 #pragma once
 
-// version number: 1.0.1
-#define MATCL_VERSION 010001
+// version number: 1.0.2
+#define MATCL_VERSION 010002
+
+#ifdef _DEBUG
+    #define MATCL_DEBUG  1
+#else
+    #define MATCL_DEBUG  0
+#endif

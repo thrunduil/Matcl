@@ -11,7 +11,7 @@
 */
 
 #include "matcl-blas-lapack/blas_loader/blas_loader.h"
-#include "matcl-blas-lapack/blas_loader/clapack_types.h"
+#include "matcl-blas-lapack/blas_loader/blas_types.h"
 
 BLAS_LOADER_EXPORT l_type_wr lsame_(char *ca, char *cb)
 {

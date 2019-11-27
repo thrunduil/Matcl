@@ -46,6 +46,32 @@ namespace matcl
 namespace matcl { namespace details
 {
 
+class MATCL_CORE_EXPORT option_name
+{
+    private:
+        using mutex_type    = matcl::default_spinlock_mutex;
+        using atomic_bool   = matcl::atomic<bool>;
+
+    private:
+        const type_info*    m_info;
+        std::string         m_name;
+        atomic_bool         m_initialized;
+        mutex_type          m_mutex;
+
+        option_name(const option_name&) = delete;
+        option_name& operator=(const option_name&) = delete;
+
+    public:
+        option_name();
+        option_name(const type_info& ti);
+
+        const std::string&  name();
+
+    private:
+        static std::string  make_name(const type_info* ti);
+        void                initialize();
+};
+
 class MATCL_CORE_EXPORT option_impl : public std::enable_shared_from_this<option_impl>
 {
     public:
@@ -61,7 +87,7 @@ class MATCL_CORE_EXPORT option_impl : public std::enable_shared_from_this<option
                                 const options& disp_options) const;
 
     public:
-        static std::string  pretty_type_name(const std::string& type_name);
+        static std::string  pretty_type_name(const type_info& type_name);
 };
 
 template<class T>
@@ -69,14 +95,15 @@ class option_impl_type : public option_impl
 {
     private:
         using impl_type     = optional<T>;
+        using name_ptr      = std::shared_ptr<option_name>;
 
     private:
         impl_type           m_value;
-        std::string         m_name;
+        name_ptr            m_name;
         std::string         m_description;
 
     public:
-        option_impl_type(const std::string& name, const std::string& descr,
+        option_impl_type(const name_ptr& name, const std::string& descr,
                          const impl_type& val);
 
         virtual ~option_impl_type() override;
@@ -85,7 +112,7 @@ class option_impl_type : public option_impl
         option_impl_type& operator=(const option_impl_type&)  = delete;
 
     public:
-        virtual std::string name() const override                       { return m_name; }
+        virtual std::string name() const override                       { return m_name->name(); }
         virtual std::string description() const override                { return m_description;}
         virtual bool        has_value() const override                  { return (bool)m_value; }
         impl_type           get() const                                 { return m_value; }
@@ -97,7 +124,7 @@ class option_impl_type : public option_impl
 class MATCL_CORE_EXPORT options_impl : public matcl_new_delete
 {
     private:
-        using option_map    = std::map<std::string, option>;
+        using option_map    = std::map<std::string, option>;        
         using ptr_type      = std::shared_ptr<options_impl>;
         using notifier_ptr  = std::shared_ptr<options_notifier>;
 
@@ -105,7 +132,7 @@ class MATCL_CORE_EXPORT options_impl : public matcl_new_delete
         using mutex_type    = matcl::default_spinlock_mutex;
 
     private:
-        option_map          m_options;
+        option_map          m_options;        
         notifier_ptr        m_notifier;
         mutable mutex_type  m_mutex_local;        
 
@@ -142,6 +169,7 @@ class MATCL_CORE_EXPORT options_impl : public matcl_new_delete
         static void         register_option(const option& opt);
         static option_map&  get_options_predefined();
         static mutex_type&  get_mutex_global();
+        static void         initialize_predefined();
 
         template<class T, class Derived>
         friend class matcl::option_base;

@@ -34,7 +34,7 @@
 namespace matcl { namespace error
 {
 
-class MATCL_FILE_EXPORT mmlib_file_exception : public matcl_exception
+class MATCL_FILE_EXPORT matcl_file_exception : public matcl_exception
 {
     public:
         virtual const char* what() const throw() override;
@@ -44,68 +44,68 @@ class MATCL_FILE_EXPORT mmlib_file_exception : public matcl_exception
         virtual const char* what(exception_message_file& em) const = 0;
 };
 
-class MATCL_FILE_EXPORT error_mmlibfile_locked : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_matclfile_locked : public matcl_file_exception
 {
     public:
-        error_mmlibfile_locked(){};
+        error_matclfile_locked(){};
 
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_create_mmlibfile : public mmlib_file_exception
-{
-    public:
-        std::string msg;
-    public:
-        error_create_mmlibfile(const std::string& msg) : msg(msg){};
-
-        virtual const char* what(exception_message_file& em) const override;
-};
-
-class MATCL_FILE_EXPORT error_read_mmlibfile : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_create_matclfile : public matcl_file_exception
 {
     public:
         std::string msg;
     public:
-        error_read_mmlibfile(const std::string& msg) : msg(msg){};
+        error_create_matclfile(const std::string& msg) : msg(msg){};
 
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_read_mmlibfile_mat_not_exist : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_read_matclfile : public matcl_file_exception
+{
+    public:
+        std::string msg;
+    public:
+        error_read_matclfile(const std::string& msg) : msg(msg){};
+
+        virtual const char* what(exception_message_file& em) const override;
+};
+
+class MATCL_FILE_EXPORT error_read_matclfile_mat_not_exist : public matcl_file_exception
 {
     public:
         std::string mat_name;
     public:
-        error_read_mmlibfile_mat_not_exist(const std::string& msg) : mat_name(msg){};
+        error_read_matclfile_mat_not_exist(const std::string& msg) : mat_name(msg){};
 
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_write_mmlibfile_mat_already_exist : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_write_matclfile_mat_already_exist : public matcl_file_exception
 {
     public:
         std::string mat_name;
     public:
-        error_write_mmlibfile_mat_already_exist(const std::string& msg) : mat_name(msg){};
+        error_write_matclfile_mat_already_exist(const std::string& msg) : mat_name(msg){};
 
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_open_mmlibfile : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_open_matclfile : public matcl_file_exception
 {
     public:
         std::string file_name;
         std::string msg;
 
     public:
-        error_open_mmlibfile(const std::string& file, const std::string& msg = "")
+        error_open_matclfile(const std::string& file, const std::string& msg = "")
             : file_name(file), msg(msg)	{};
 
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_open_matfile : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_open_matfile : public matcl_file_exception
 {
     public:
         std::string file_name;
@@ -118,7 +118,7 @@ class MATCL_FILE_EXPORT error_open_matfile : public mmlib_file_exception
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_matfile_not_opened : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_matfile_not_opened : public matcl_file_exception
 {
     public:
         error_matfile_not_opened(){};
@@ -126,7 +126,7 @@ class MATCL_FILE_EXPORT error_matfile_not_opened : public mmlib_file_exception
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_read_matfile : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_read_matfile : public matcl_file_exception
 {
     public:
         error_read_matfile(){};
@@ -134,7 +134,7 @@ class MATCL_FILE_EXPORT error_read_matfile : public mmlib_file_exception
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_read_matfile_var : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_read_matfile_var : public matcl_file_exception
 {
     public:
         std::string var_name;
@@ -146,7 +146,7 @@ class MATCL_FILE_EXPORT error_read_matfile_var : public mmlib_file_exception
         virtual const char* what(exception_message_file& em) const override;
 };
 
-class MATCL_FILE_EXPORT error_write_matfile : public mmlib_file_exception
+class MATCL_FILE_EXPORT error_write_matfile : public matcl_file_exception
 {
     public:
         error_write_matfile(){};
