@@ -386,12 +386,26 @@ Real matcl::error_tolerance(Real mult, const Matrix& mat)
     return tol;
 };
 
+static Real get_mult_scal_complex(value_code vc)
+{
+    if (matrix_traits::is_real(vc))
+        return 1.0;
+
+    // for real numbers:  
+    //      fl(x * y) = x * y * (1+d), |d| <= u
+    // for complex numbers:
+    //      fl(x * y) = x * y * (1+d), |d| <= sqrt(2) * 2 * u
+    // => for complex numbers errors are sqrt(2) * 2 times higher
+    return 2.8284;
+};
+
 Real matcl::error_mult(Real mult, const Matrix& A, const Matrix& B)
 {
     value_code vc   = matrix_traits::unify_value_types(A.get_value_code(), B.get_value_code());
     Matrix one      = matcl::ones(1, 1, vc);
 
-    Real tol = mult * norm_1(A) * norm_1(B) * A.cols() * epsilon_mat(one);
+    Real mult_comp  = get_mult_scal_complex(vc);
+    Real tol        = mult * mult_comp * norm_1(A) * norm_1(B) * A.cols() * epsilon_mat(one);
     return tol;
 };
 
@@ -402,7 +416,9 @@ Real matcl::error_mult(Real mult, const Matrix& A, const Matrix& B, const Matrix
 
     Matrix one      = matcl::ones(1, 1, vc);
 
-    Real tol = mult * norm_1(A) * norm_1(B) * norm_1(C) * (A.cols() + B.cols()) * epsilon_mat(one);
+    Real mult_comp  = get_mult_scal_complex(vc);
+    Real tol        = mult * mult_comp * norm_1(A) * norm_1(B) * norm_1(C) 
+                    * (A.cols() + B.cols()) * epsilon_mat(one);
     return tol;
 };
 

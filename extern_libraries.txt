@@ -53,6 +53,14 @@ external libraries:
         - source: https://www.sqlite.org
         - version: 3.23.0
 
+6.  MATCL-LINALG:
+    1. ARPACK: a collection of Fortran77 subroutines designed to solve large scale
+            eigenvalue problems.
+        - authors:    Danny Sorensen, Richard Lehoucq, Chao Yang, Kristi Maschhoff
+        - licence: BSD Software License
+        - source: https://github.com/opencollab/arpack-ng
+        - version: 3.8.0
+
 CREDITS:
 1. Sylvie Boldo (implementation of Dekker's algorithm for exact multiplication
         of two doubles)
