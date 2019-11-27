@@ -3134,7 +3134,7 @@ Real test_function_eigs::eval_mat(const Matrix& mat,bool ,int code)
         dif     += norm_1(ctrans(U) * U - eye(U.cols()));
 
         value_code vc   = mat.get_value_code();
-        Real tol_U      = 100.0 * constants::eps(vc) * U.cols();
+        Real tol_U      = 1000.0 * constants::eps(vc) * U.cols();
 
         if (dif < tol_U)
             dif         = 0.0;
@@ -3146,6 +3146,8 @@ Real test_function_eigs::eval_mat(const Matrix& mat,bool ,int code)
 
         if (dif < error_tolerance(1000.0, mat) )
             dif = 0.0;
+        else
+            return dif;
         
         return dif;
     }

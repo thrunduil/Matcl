@@ -370,6 +370,8 @@ void arpack_wrapper<T>::process_xyeupd(Integer xyaupd_info, bool return_nonconve
     bool comp_V = (m_output == arpack_output::ritz || m_output == arpack_output::schur_ritz);
     bool comp_U = (m_output == arpack_output::schur || m_output == arpack_output::schur_ritz);
 
+    //TODO: check B-orthogonality of Schur vectors
+
     switch(m_kernel_type)
     {
         case kernel_type::symmetric:
