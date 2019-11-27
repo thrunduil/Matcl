@@ -20,6 +20,7 @@
 
 #include "matrix_utils.h"
 #include "matcl-matrep/lib_functions/manip.h"
+#include "matcl-matrep/lib_functions/matrix_gen.h"
 #include "matcl-internals/base/utils.h"
 #include "matcl-matrep/details/extract_type_switch.h" 
 #include "matcl-scalar/details/scalfunc_helpers.h" 
@@ -309,6 +310,9 @@ bool matcl::has_struct_unitary(const Matrix& m)
     if (m.get_struct().is_id() == true)
         return true;
 
+    if (m.is_scalar() == true && is_one(m) == true)
+        return true;
+
     return false;
 };
 
@@ -337,5 +341,114 @@ bool matcl::has_struct(const Matrix& m, struct_flag sf)
 
     return true;
 };
+
+bool matcl::is_one(const Matrix& m)
+{
+    if (m.is_scalar() == false)
+        return false;
+
+    value_code vc   = m.get_value_code();
+
+    switch (vc)
+    {
+        case value_code::v_integer:
+            return is_one(m.get_scalar<Integer>());
+        case value_code::v_float:
+            return is_one(m.get_scalar<Float>());
+        case value_code::v_real:
+            return is_one(m.get_scalar<Real>());
+        case value_code::v_float_complex:
+            return is_one(m.get_scalar<Complex>());
+        case value_code::v_complex:
+            return is_one(m.get_scalar<Float_complex>());
+        case value_code::v_object:
+            return is_one(m.get_scalar<Object>());
+        default:
+            throw std::runtime_error("invalid value code");
+    };
+};
+
+Real matcl::epsilon_mat(const Matrix& mat)
+{
+    value_code vc  = mat.get_value_code();
+
+    // add some small value when result is close to zero
+    Real mr         = std::sqrt(constants::min_real(vc));
+
+    Real ret        = constants::eps(vc) * norm_1(mat) + mr;
+    return ret;
+};
+
+Real matcl::error_tolerance(Real mult, const Matrix& mat)
+{
+    Real tol = mult * (std::min(mat.rows(), mat.cols())) * epsilon_mat(mat);
+
+    return tol;
+};
+
+Real matcl::error_mult(Real mult, const Matrix& A, const Matrix& B)
+{
+    value_code vc   = matrix_traits::unify_value_types(A.get_value_code(), B.get_value_code());
+    Matrix one      = matcl::ones(1, 1, vc);
+
+    Real tol = mult * norm_1(A) * norm_1(B) * A.cols() * epsilon_mat(one);
+    return tol;
+};
+
+Real matcl::error_mult(Real mult, const Matrix& A, const Matrix& B, const Matrix& C)
+{
+    value_code vc   = matrix_traits::unify_value_types(A.get_value_code(), B.get_value_code());
+    vc              = matrix_traits::unify_value_types(vc, B.get_value_code());
+
+    Matrix one      = matcl::ones(1, 1, vc);
+
+    Real tol = mult * norm_1(A) * norm_1(B) * norm_1(C) * (A.cols() + B.cols()) * epsilon_mat(one);
+    return tol;
+};
+
+Real matcl::error_tolerance2(Real mult, const Matrix& mat1, const Matrix& mat2)
+{
+    Real tol = mult * (std::min(mat1.rows(), mat1.cols())) 
+                    * (epsilon_mat(mat1) + epsilon_mat(mat2));
+
+    return tol;
+};
+
+template<class V>
+Matrix matcl::make_scalar<V>(const V& v, value_code vc)
+{
+    switch (vc)
+    {
+        case value_code::v_integer:
+            return Matrix(convert_scalar<Integer>(v));
+        case value_code::v_float:
+            return Matrix(convert_scalar<Float>(v));
+        case value_code::v_real:
+            return Matrix(convert_scalar<Real>(v));
+        case value_code::v_float_complex:
+            return Matrix(convert_scalar<Float_complex>(v));
+        case value_code::v_complex:
+            return Matrix(convert_scalar<Complex>(v));
+        case value_code::v_object:
+            return Matrix(Object(v));
+        default:
+            throw std::runtime_error("invalid value code");
+    };
+}
+
+template
+Matrix matcl::make_scalar<Integer>(const Integer& v, value_code vc);
+
+template
+Matrix matcl::make_scalar<Float>(const Float& v, value_code vc);
+
+template
+Matrix matcl::make_scalar<Real>(const Real& v, value_code vc);
+
+template
+Matrix matcl::make_scalar<Complex>(const Complex& v, value_code vc);
+
+template
+Matrix matcl::make_scalar<Float_complex>(const Float_complex& v, value_code vc);
 
 };

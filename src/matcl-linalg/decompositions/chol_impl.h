@@ -56,6 +56,7 @@ struct chol_diag
             if (val <= VR(0.0))
             {
                 ret = chol2_return_type(matcl::bdiag(Matrix(Ub, false), 0), p, i);
+                return;
             };
 
 			ptr[i]      = raw::details::sqrt_helper<V>::eval(val);

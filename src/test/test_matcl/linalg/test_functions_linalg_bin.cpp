@@ -55,20 +55,107 @@ class test_linalg_bin
 
         void make()
         {
-            /*
-            Integer code = 8713;
-            Matrix mat1     = tf.get_matrix(code).first;
-            Matrix mat2     = tf.get_matrix(code).second;
+            {
+                Integer code    = 153748;
+                Matrix mat10    = tf.get_matrix(code).first;
+                Matrix mat20    = tf.get_matrix(code).second;
 
-            matcl::disp(mat1);
-            matcl::disp(mat2);
+                matcl::disp(mat10);
+                matcl::disp(mat20);
 
-            Matrix out_full = kron(full(mat1) , full(mat2));	
-            Matrix out      = kron(mat1 , mat2);	
+                mat10           = randn(100, 100);
+                mat20           = randn(100, 10);
 
-            disp(out_full);
-            disp(out);
-            */
+                Matrix matA     = mat10;
+                Matrix matB     = herprod(mat20);
+                //Matrix matB   = mat20;
+
+                //make mat2 posdef
+                Integer size    = matB.rows();
+                //value_code vc1  = matA.get_value_code();
+                //value_code vc2  = matB.get_value_code();
+
+                //Real diag       = sqrt(constants::eps(vc2)) * norm_1(matB);
+                //Real diagB      = 1.e-10 * norm_1(matB);
+                //matB            = matB + Float(diagB) * speye(size, size, vc2);
+
+                //Real diagA      = 1.e-1 * norm_1(matA);
+                //matA            = matA + Float(diagA) * speye(size, size, vc1);
+
+                // max_trials to accommodate non-determinism of ARPACK
+                Integer max_trials = 5;
+                Integer k       = std::max(0, std::min(5, size - 3));
+    
+                Matrix U;
+                Matrix T;
+                bool conv = false;
+
+                //Matrix OP       = linsolve(matB, matA);
+
+                for (int trial = 0; trial < max_trials; trial++)
+                {
+                    matcl::options opts2{opt::speigs::return_nonconvergent(true)};
+                    tie(U,T,conv) = pbschur(matA, matB, false, k, cluster_type::LM, opts2);
+
+                    if (conv == true)
+                        break;
+                }
+        
+                if (conv == false)
+                {
+                    matcl::options opts2{opt::speigs::return_nonconvergent(false)};
+                    tie(U,T,conv) = pbschur(matA, matB, false, k, cluster_type::LM, opts2);
+                }
+
+                disp(U);
+                disp(T);
+
+                for (int i = 0; i < 1; ++i)
+                {
+                    check_struct(U);
+                    check_struct(T);
+
+                    // check finitness
+                    if (matA.all_finite() == true && matB.all_finite() == true)
+                    {
+                        if (U.all_finite() == false)
+                            break;
+
+                        if (T.all_finite() == false)
+                            break;
+                    }
+                    else
+                    {
+                        if (U.all_finite() == true)
+                            break;
+
+                        if (T.all_finite() == true)
+                            break;
+                    };
+
+                    if (has_struct_qtriu(T) == false)
+                        break;
+
+                    Real dif    = 0.;
+
+                    // check correctness
+                    Matrix mt_1     = matA * U;
+                    Matrix mt_2     = U * T;
+
+                    dif             += norm_1(mt_1 - mt_2);
+                    Real tol1       = error_mult(500.0, matA, U) + error_mult(500.0, U, T);
+
+                    if (dif < tol1)
+                        dif = 0.0;
+
+                    Matrix mt3      = ctrans(U) * matB * U;
+                    dif             += norm_1(mt3 - eye(U.cols()));
+                    Real tol3       = error_mult(1000.0, ctrans(U), matB, U);
+
+                    if (dif < tol3)
+                        dif         = 0.0;
+                }
+            };
 
             tf.make(opts,thread_id);
         };
@@ -79,7 +166,7 @@ class test_linalg_bin
         };
 
     private:		
-        test_linalg_bin& operator=(const test_linalg_bin&);
+        test_linalg_bin& operator=(const test_linalg_bin&) = delete;
 };
 
 void test_linalg_bin_st(const rand_matrix_ptr& rand)
@@ -102,6 +189,7 @@ void test_linalg_bin_st(const rand_matrix_ptr& rand)
     catch(const std::exception& ex)
     {
         matcl::out_stream <<ex.what();
+        matcl::out_stream.flush();
     };
 };
 
@@ -133,15 +221,21 @@ void test_linalg_bin_mt(const rand_matrix_ptr& rand)
     };
 };
 
-//
+linalg_bin_functions_list::matrix_pair 
+linalg_bin_functions_list::get_matrix(int code) const
+{
+    return m_tests.get_matrix(code);
+};
+
 void linalg_bin_functions_list::make(options opts, Integer thread_id)
 {
     (void)thread_id;
 
     m_options = opts;       
     
-    SELECT_TEST (3, test_gschur());
-    SELECT_TEST (3, test_gen_sym_eigen());
+    //TODO
+    //SELECT_TEST (3, test_gschur());    
+    //SELECT_TEST (3, test_gen_sym_eigen());
     SELECT_TEST (3, test_geigs());
 };
 
@@ -152,13 +246,9 @@ void linalg_bin_functions_list::test_gschur()
     Real out = m_tests.make(&tf,m_options);
 
     if (out == 0.)
-    {
         matcl::out_stream << std::string() + "gschur: OK" + "\n";
-    }
     else
-    {
         matcl::out_stream << std::string() + "gschur: FAILED"  + "\n";
-    };
 };
 
 void linalg_bin_functions_list::test_geigs()
@@ -167,13 +257,9 @@ void linalg_bin_functions_list::test_geigs()
     Real out = m_tests.make(&tf,m_options);
 
     if (out == 0.)
-    {
         matcl::out_stream << std::string() + "geigs: OK" + "\n";
-    }
     else
-    {
         matcl::out_stream << std::string() + "geigs: FAILED"  + "\n";
-    };
 };
 
 void linalg_bin_functions_list::test_gen_sym_eigen()
@@ -182,13 +268,9 @@ void linalg_bin_functions_list::test_gen_sym_eigen()
     Real out = m_tests.make(&tf,m_options);
 
     if (out == 0.)
-    {
         matcl::out_stream << std::string() + "gen_sym_eigen: OK" + "\n";
-    }
     else
-    {
         matcl::out_stream << std::string() + "gen_sym_eigen: FAILED"  + "\n";
-    };
 };
 
 //----------------------------------------------------------------------------
@@ -253,92 +335,7 @@ Real test_function_gschur::eval_mat(const Matrix& mat1,const Matrix& mat2,int co
 
     try
     {
-        Real dif = 0;  
-        //check if any selection was done
-        if ((sum(temp_select,1) > 0) &&  (temp_select(1,1) == 0) && 
-            all(all(is_finite(q1_sel + z1_sel), 1), 2))
-        {
-            dif += (norm_1(q1 - q1_sel) == 0);
-            dif += (norm_1(z1 - z1_sel) == 0);
-            // not tested = problems with id and id-like matrices
-            //dif += (norm_1(aa1 - aa1_sel) == 0);
-            //dif += (norm_1(bb1 - bb1_sel) == 0);
-        }
-        // check finitenes of all results
-        if (any(any(neg(is_finite(aa1       + bb1       + q1       + z1 +
-                                  aa1_compl + bb1_compl + q1_compl + z1_compl +
-                                  aa1_sel   + bb1_sel   + q1_sel   + z1_sel 
-                                  )),1),2))
-        {
-            if (all(all(is_finite(mat1 + mat2),1),2))
-            {
-                dif += 1000;
-            }
-        }
-        //check unitariness of qs, z
-        dif +=norm_1(q1 * ctrans(q1) - eye(size));
-        dif +=norm_1(z1 * ctrans(z1) - eye(size));
-        dif +=norm_1(q1_compl * ctrans(q1_compl) - eye(size));
-        dif +=norm_1(z1_compl * ctrans(z1_compl) - eye(size));
-        dif +=norm_1(q1_sel * ctrans(q1_sel) - eye(size));
-        dif +=norm_1(z1_sel * ctrans(z1_sel) - eye(size));
-        // check correct factorizations
-        Matrix mat1_check1 = q1 * aa1 * ctrans(z1);    
-        dif += norm_1(mat1 - mat1_check1);
-        Matrix mat1_check1_compl = q1_compl * aa1_compl * ctrans(z1_compl);    
-        dif += norm_1(mat1 - mat1_check1_compl);
-        Matrix mat1_check1_sel = q1_sel * aa1_sel * ctrans(z1_sel);    
-        dif += norm_1(mat1 - mat1_check1_sel);
-        //take roundoff error of testing by multiplication into account
-        if (dif < 18 *
-            ::powl(size, 3./2.) * constants::eps()
-            * max(max(norm_1(mat1), norm_1(mat2)),1))
-        {
-            dif = 0;
-        }
-        
-        Matrix mat2_check1 = q1 * bb1 * ctrans(z1);   
-        dif += norm_1(mat2 - mat2_check1);
-        Matrix mat2_check1_compl = q1_compl * bb1_compl * ctrans(z1_compl);   
-        dif += norm_1(mat2 - mat2_check1_compl);
-        Matrix mat2_check1_sel = q1_sel * bb1_sel * ctrans(z1_sel);   
-        dif += norm_1(mat2 - mat2_check1_sel);
-        //take roundoff error of testing by multiplication into account
-        if (dif < 18 *
-            ::powl(size, 3./2.) * constants::eps() 
-            * max(max(norm_1(mat1), norm_1(mat2)),1))
-        {
-            dif = 0;
-        }
-
-        // check qtriu aa and triu bb
-        dif += norm_1(tril(aa1,-2));
-        dif += norm_1(tril(bb1,-1));
-        dif += norm_1(tril(aa1_sel,-2));
-        dif += norm_1(tril(bb1_sel,-1));
-        // check triu for complex
-        dif += norm_1(tril(aa1_compl,-1));
-        dif += norm_1(tril(bb1_compl,-1));
-        
-        // check dimmensions (only two...)
-        if (aa1.is_square() == false || bb1_sel.is_square() == false 
-            || q1_compl.is_square() == false)
-        {
-            dif += 1;
-        };
-        
-        if(size > 1 && mat1.structural_nnz() > 0 && mat2.structural_nnz() > 0 
-            && all(all(is_finite(aa1 + bb1), 1), 2)
-            && (!aa1.get_struct().is_qtriu()        || !bb1.get_struct().is_triu()
-             || !is_unitary(q1.get_struct())        || !is_unitary(z1.get_struct())
-             || !aa1_compl.get_struct().is_triu()   || !bb1_compl.get_struct().is_triu()
-             || !is_unitary(q1_compl.get_struct())  || !is_unitary(z1_compl.get_struct())
-             || !aa1_sel.get_struct().is_qtriu()    || !bb1_sel.get_struct().is_triu()
-             || !is_unitary(q1_sel.get_struct())    || !is_unitary(z1_sel.get_struct())))
-        {
-            dif += 43247895;
-        }
-        
+        // check struct
         check_struct(aa1);
         check_struct(bb1);
         check_struct(q1);
@@ -352,6 +349,180 @@ Real test_function_gschur::eval_mat(const Matrix& mat1,const Matrix& mat2,int co
         check_struct(q1_sel);
         check_struct(z1_sel);
 
+        // check finitness
+        if (mat1.all_finite() == true && mat2.all_finite() == true)
+        {
+            if (aa1.all_finite() == false)
+                return 1.;
+
+            if (bb1.all_finite() == false)
+                return 1.;
+
+            if (q1.all_finite() == false)
+                return 1.;
+
+            if (z1.all_finite() == false)
+                return 1.;
+
+            if (aa1_compl.all_finite() == false)
+                return 1.;
+
+            if (bb1_compl.all_finite() == false)
+                return 1.;
+
+            if (q1_compl.all_finite() == false)
+                return 1.;
+
+            if (z1_compl.all_finite() == false)
+                return 1.;
+
+            if (aa1_sel.all_finite() == false)
+                return 1.;
+
+            if (bb1_sel.all_finite() == false)
+                return 1.;
+
+            if (q1_sel.all_finite() == false)
+                return 1.;
+
+            if (z1_sel.all_finite() == false)
+                return 1.;
+        }
+        else
+        {
+            if (aa1.all_finite() == true)
+                return 1.;
+
+            if (bb1.all_finite() == true)
+                return 1.;
+
+            if (q1.all_finite() == true)
+                return 1.;
+
+            if (z1.all_finite() == true)
+                return 1.;
+
+            if (aa1_compl.all_finite() == true)
+                return 1.;
+
+            if (bb1_compl.all_finite() == true)
+                return 1.;
+
+            if (q1_compl.all_finite() == true)
+                return 1.;
+
+            if (z1_compl.all_finite() == true)
+                return 1.;
+
+            if (aa1_sel.all_finite() == true)
+                return 1.;
+
+            if (bb1_sel.all_finite() == true)
+                return 1.;
+
+            if (q1_sel.all_finite() == true)
+                return 1.;
+
+            if (z1_sel.all_finite() == true)
+                return 1.;
+        }
+
+        // check dimmensions
+        if (aa1.is_square() == false || bb1.is_square() == false 
+            || q1.is_square() == false || z1.is_square() == false 
+            || aa1_compl.is_square() == false || bb1_compl.is_square() == false
+            || q1_compl.is_square() == false || z1_compl.is_square() == false
+            || aa1_sel.is_square() == false || bb1_sel.is_square() == false
+            || q1_sel.is_square() == false || z1_sel.is_square() == false)
+        {
+            return 1.0;
+        };
+
+        // check if flags are set
+        if (has_struct_unitary(q1) == false)
+            return 1.;
+
+        if (has_struct_unitary(z1) == false)
+            return 1.;
+
+        if (has_struct_unitary(q1_compl) == false)
+            return 1.;
+
+        if (has_struct_unitary(z1_compl) == false)
+            return 1.;
+
+        if (has_struct_unitary(q1_sel) == false)
+            return 1.;
+
+        if (has_struct_unitary(z1_sel) == false)
+            return 1.;
+
+        if (has_struct_qtriu(aa1) == false)
+            return 1.0;
+
+        if (has_struct_triu(bb1) == false)
+            return 1.0;
+
+        if (has_struct_qtriu(aa1_sel) == false)
+            return 1.0;
+
+        if (has_struct_triu(bb1_sel) == false)
+            return 1.0;
+
+        if (has_struct_triu(aa1_compl) == false)
+            return 1.0;
+
+        if (has_struct_triu(bb1_compl) == false)
+            return 1.0;
+
+        Real dif = 0.;
+
+        //check unitary matrices
+        dif     +=norm_1(q1 * ctrans(q1) - eye(size));
+        dif     +=norm_1(z1 * ctrans(z1) - eye(size));
+        dif     +=norm_1(q1_compl * ctrans(q1_compl) - eye(size));
+        dif     +=norm_1(z1_compl * ctrans(z1_compl) - eye(size));
+        dif     +=norm_1(q1_sel * ctrans(q1_sel) - eye(size));
+        dif     +=norm_1(z1_sel * ctrans(z1_sel) - eye(size));
+
+        value_code vc1  = mat1.get_value_code();
+        value_code vc2  = mat2.get_value_code();
+        value_code vc   = matrix_traits::unify_value_types(vc1, vc2);
+
+        Real tol_U      = 100.0 * constants::eps(vc) * mat1.rows();
+
+        if (dif < tol_U)
+            dif         = 0.0;
+        else
+            return dif;
+
+        //check if factorization is correct
+        Matrix mat1_check1          = q1 * aa1 * ctrans(z1);            
+        Matrix mat1_check1_compl    = q1_compl * aa1_compl * ctrans(z1_compl);            
+        Matrix mat1_check1_sel      = q1_sel * aa1_sel * ctrans(z1_sel);    
+        
+        dif     += norm_1(mat1 - mat1_check1);
+        dif     += norm_1(mat1 - mat1_check1_compl);
+        dif     += norm_1(mat1 - mat1_check1_sel);
+
+        if (dif < error_tolerance2(500.0, mat1, mat2) )
+            dif = 0.0;
+        else
+            return dif;
+
+        Matrix mat2_check1          = q1 * bb1 * ctrans(z1);   
+        Matrix mat2_check1_compl    = q1_compl * bb1_compl * ctrans(z1_compl);   
+        Matrix mat2_check1_sel      = q1_sel * bb1_sel * ctrans(z1_sel);   
+
+        dif     += norm_1(mat2 - mat2_check1);
+        dif     += norm_1(mat2 - mat2_check1_compl);
+        dif     += norm_1(mat2 - mat2_check1_sel);
+
+        if (dif < error_tolerance2(500.0, mat1, mat2) )
+            dif = 0.0;
+        else
+            return dif;
+
         return dif;
     }
     catch(const std::exception& ex)
@@ -367,313 +538,224 @@ Real test_function_gschur::eval_mat(const Matrix& mat1,const Matrix& mat2,int co
         return 1.;
     };
 };
+
 Real test_function_gschur::eval_scalar(const Scalar&,const Scalar&, int)
 {
     return 0;
 };
 
-Real test_function_geigs::eval_mat(const Matrix& matA,const Matrix& matB_in,int code)
-{
-    (void)code;
-    (void)matA;
-    (void)matB_in;
-
-    //TODO:
-    /*
-    (void)code;
-    Matrix matB = matB_in;
-    if ( ! matB.get_struct().is_id()) matB = ctrans(matB) * matB;
-
-    Matrix U;
-    Matrix T;
-    bool conv;
-    // max_trials to accommodate non-determinism of ARPACK
-    Integer max_trials = 5;
-    
-    Integer size = matA.rows();
-    Integer k = std::max(0, std::min(5, size - 3));
-    int trial;
-    try
-    {
-        for (trial = 0; trial < max_trials; trial++)
-        {
-            matcl::options opts{opt::speigs::return_nonconvergent(true)};
-            tie(U,T,conv) = itschur(matA, matB, k, cluster_type::LM, opts);
-            if (conv == true)
-                break;
-        }
-
-        if (conv == false) 
-        {
-            matcl::options opts{opt::speigs::return_nonconvergent(false)};
-            tie(U,T,conv) = itschur(matA, matB, k, cluster_type::LM, opts);
-        }
-    }
-    catch(const error::error_nonposdef_chol&)
-    {
-        return 0.;
-    }
-    catch(const error::error_singular&)
-    {
-        return 0.;
-    }
-    catch(const error::error_size_geig& )
-    {
-        if (matA.is_square() && matB.is_square() && 
-            matA.rows() == matB.cols() &&
-            is_sym(matB)) throw;
-        else return 0.;
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-    try
-    {
-        Real dif = 0;
-        dif += norm_1(matA * V - matB * V * (size > 0 ? diag(D) : matA));
-        Matrix s = svd1(matB,svd_algorithm::dc);
-        Real condB = size > 1 ? (max2(s).get<1>() / min2(s).get<1>()).get_scalar<Real>() : 1.0;
-        Real thresh = 1000 * constants::eps() 
-                    * max(norm_1(matA), 1.0)
-                    * condB
-                    * (( condB > 1e7 ) ? condB : 1);
-        //roundoff error of testing into account
-        if (dif < thresh)
-        {
-            dif = 0;
-        }
-        // check finiteness of results
-        if (any(any(neg(is_finite(V)),1),2) ||
-            any(any(neg(is_finite(D)),1),2))
-        {
-            if ( all(all(is_finite(matA),1),2) && all(all(is_finite(matB),1),2))
-            {
-                return 1000;
-            }
-        }
-        return dif;
-    }
-    catch(const std::exception& ex)
-    {
-        m_is_error = true;
-        m_error = ex.what();
-        return 1.;
-    }
-    catch(...)
-    {
-        m_is_error = true;
-        m_error = "unknown error";
-        return 1.;
-    };
-    */
-    return 0;
-};
-Real test_function_geigs::eval_scalar(const Scalar&,const Scalar&, int)
-{
-    return 0;
-};
-
-Real test_function_gen_sym_eigen::eval_mat(const Matrix& randmat1,const Matrix& randmat2,int code)
+//----------------------------------------------------------------------------
+//                  test_function_gen_sym_eigen
+//----------------------------------------------------------------------------
+Real test_function_gen_sym_eigen::eval_mat(const Matrix& mat1_in, const Matrix& mat2_in, 
+                                           int code)
 {
     (void)code;    
-    Matrix  v1, d1, v2, d2, v3, d3, mat1, mat2;
-    int     size    = randmat1.rows();
-    try
-    {
-        if (randmat1.get_struct().is_id())
-        {
-            mat1 = randmat1;
-        }
-        else
-        {
-            mat1 = randmat1 + ctrans(randmat1);
-            if(randmat1.get_value_code() == value_code::v_complex)
-            {
-                mat1.add_struct(predefined_struct_type::her);
-            }
-            else
-            {
-                mat1.add_struct(predefined_struct_type::sym);
-            }
-        }
-        mat2 = randmat2 * ctrans(randmat2); // semdefinite matrix also accepted for testing!
-    }
-    catch(const error::invalid_eeop&)
-    {
+
+    if (mat1_in.is_square() == false)
         return 0.;
-    }
+
+    if (mat2_in.is_square() == false)
+        return 0.;
+
+    if (mat1_in.rows() != mat2_in.rows())
+        return 0.;
+
+    Matrix v1, d1, v2, d2, v3, d3, mat1, mat2;
+
     try
     {
-        tie(v1, d1)  =   gen_sym_eigen(mat1, mat2, gschur_sym_type::A_B);
-        tie(v2, d2)  =   gen_sym_eigen(mat1, mat2, gschur_sym_type::AB);
-        tie(v3, d3)  =   gen_sym_eigen(mat1, mat2, gschur_sym_type::BA);
+        mat1        = hersum(mat1_in);
+        mat2        = herprod(mat2_in);
+
+        //make mat2 posdef
+        value_code vc2  = mat2.get_value_code();
+        Real diag   = sqrt(constants::eps(vc2)) * norm_1(mat2);
+        mat2        = mat2 + Float(diag) * speye(mat2.rows(), mat2.rows(), mat2.get_value_code());
+
+        tie(v1, d1) = gen_sym_eigen(mat1, mat2, gschur_sym_type::A_B);
+        tie(v2, d2) = gen_sym_eigen(mat1, mat2, gschur_sym_type::AB);
+        tie(v3, d3) = gen_sym_eigen(mat1, mat2, gschur_sym_type::BA);
     }
     catch(const error::error_nonposdef&)
     {
-        // correct exception!
-        if(mat2.structural_nnz()  == 0)
-        {
-            return 0.;
-        }
+        // check if matrix has in fact been non positive definite
         try
         {
-            chol(full(mat2),false); // check if matrix has in fact been non positive definite
-            return 1.; // it was not
+            auto ret    = chol(full(mat2), false);
+
+            // it was not
+            return 1.;
         }
         catch(const error::error_nonposdef&)
         {
             return 0.;
         }
+
         throw;
     }
     catch(const error::error_size_geig&)
     {
-        if (!randmat1.is_square() || !randmat2.is_square() || mat1.cols() != mat2.cols())
-        {
-            return 0.;
-        }
-        else
-        {
-            m_is_error = true;
-            m_error = "error_size_geig should not appear here - matrices were conformant & square";
-            return 1.;
-        }
+        m_is_error  = true;
+        m_error     = "error_size_geig should not appear here - matrices were conformant & square";
+        return 1.;
     }
     catch(const std::exception& ex)
     {
-        m_is_error = true;
-        m_error = ex.what();
+        m_is_error  = true;
+        m_error     = ex.what();
         return 1.;
     }
     catch(...)
     {
-        m_is_error = true;
-        m_error = "unknown error";
+        m_is_error  = true;
+        m_error     = "unknown error";
         return 1.;
     };
 
+    int size    = mat1.rows();
+
     try
     {
-        Real dif = 0;  
-        // check finitenes of all results
-        if (any(any(neg(is_finite(v1 + v2 + v3 + d1 + d2 + d3)),1),2))
-        {
-            if (all(all(is_finite(mat1 + mat2),1),2))
-            {
-                dif += 1000;
-            }
-        }
-        // check correct factorizations of all variants
-        // variant 1: Ax = lBx
-        Matrix mat1_check1 = mat2 * v1 * d1;    
-        Matrix mat2_check1 = ctrans(v1) * full(mat2) * v1;
-        dif += norm_1(mat1_check1 - mat1 * v1);
-        if(all(all(is_finite(v1),1),2))
-        {
-            dif += norm_1(mat2_check1 - eye(size));
-        }
-        Real cond_mat2, inv_norm_mat_2;
-        if (size > 0)
-        {
-            Matrix svd_mat2 = svd1(mat2,svd_algorithm::dc);
-            cond_mat2 = (svd_mat2(1) /svd_mat2(size)).get_scalar<Real>();
-            inv_norm_mat_2 = (1. / svd_mat2(size)).get_scalar<Real>();
-        }
-        else
-        {
-            cond_mat2 = 0;
-            inv_norm_mat_2 = 0;
-        }
-        if (dif < 400 * 
-            (max(inv_norm_mat_2, max(cond_mat2, max(norm_1(mat1), norm_1(mat2)))) + constants::eps()) *
-            ::powl(size, 3./2.) * constants::eps()
-            || cond_mat2 > 1. / ::sqrt(constants::eps()) )
-        {
-            dif = 0;
-        }
-        // variant 2: ABx = lx
-        Matrix mat1_check2 = mat1 * 1. * mat2 * v2;
-        Matrix mat2_check2 = ctrans(v2) * mat2 * v2;
-        dif += norm_1(mat1_check2 - v2 * d2);
-        if(all(all(is_finite(v2),1),2))
-        {
-            dif += norm_1(mat2_check2 - eye(size));
-        }
-        if (dif < 6 * 
-            (cond_mat2 * max(norm_1(mat1), norm_1(mat2)) + constants::eps()) *
-            ::powl(size, 3./2.) * constants::eps())
-        {
-            dif = 0;
-        }
-        // variant 3: BAx = lx
-        Matrix mat1_check3 = mat2 * 1. * mat1 * v3;    
-        Matrix mat2_check3;
-        dif += norm_1(mat1_check3 - v3 * d3);
-        if (size != 0 && all(all(is_finite(v3),1),2))
-        {
-            try
-            {
-                if (cond_mat2 < 10e13)
-                {
-                    Matrix chol_mat2;
-                    permvec perm;
-                    
-                    std::tie(chol_mat2, perm) = chol(mat2,true);
-                    Matrix igrek = linsolve(ctrans(chol_mat2), v3);
-                    mat2_check3 = ctrans(v3) * linsolve(chol_mat2, igrek);
-                    dif += norm_1(mat2_check3 - eye(size));
-                }
-            }
-            catch (std::exception&)
-            {
-                disp(std::string( "Unexpected error during testing gen_sym_eigen, chol(mat2) failed") );
-                throw;
-            }
-        }
-        //take roundoff error of testing by multiplication into account
-        if (dif < 400 * 
-            (cond_mat2 * max(norm_1(mat1) * norm_1(mat2), max(norm_1(mat1), norm_1(mat2))) + constants::eps()) *
-            ::powl(size, 3./2.) * constants::eps())
-        {
-            dif = 0;
-        }
-        // check diag d's
-        dif += norm_1(tril(d1,-1) + triu(d1,1));
-        dif += norm_1(tril(d2,-1) + triu(d2,1));
-        dif += norm_1(tril(d3,-1) + triu(d3,1));
-        // check dimmensions (only one...)
-        if (d1.is_square() == false)
-        {
-            dif += 1;
-        };
-        if(size > 1 && mat1.structural_nnz() > 0 && mat2.structural_nnz() > 0 &&
-            all(all(is_finite(d1), 1), 2)
-            && (!d1.get_struct().is_diag() || !d2.get_struct().is_diag() || !d3.get_struct().is_diag()))
-        {
-            dif += 43247895;
-        }
+        // check struct
         check_struct(d1);
         check_struct(d2);
         check_struct(d3);
         check_struct(v1);
         check_struct(v2);
         check_struct(v3);
-        if (dif > 10e-14)
+
+        // check finitness
+        if (mat1.all_finite() == true && mat2.all_finite() == true)
         {
-            disp(std::string( "Problematyczne macierze, A:"));
-            disp(mat1);
-            disp(std::string( "B:"));
-            disp(mat2);
+            if (d1.all_finite() == false)
+                return 1.;
+
+            if (d2.all_finite() == false)
+                return 1.;
+
+            if (d3.all_finite() == false)
+                return 1.;
+
+            if (v1.all_finite() == false)
+                return 1.;
+
+            if (v2.all_finite() == false)
+                return 1.;
+
+            if (v3.all_finite() == false)
+                return 1.;
         }
+        else
+        {
+            if (d1.all_finite() == true)
+                return 1.;
+
+            if (d2.all_finite() == true)
+                return 1.;
+
+            if (d3.all_finite() == true)
+                return 1.;
+
+            if (v1.all_finite() == true)
+                return 1.;
+
+            if (v2.all_finite() == true)
+                return 1.;
+
+            if (v3.all_finite() == true)
+                return 1.;
+        }
+
+        // check dimmensions
+        if (d1.is_square() == false || v1.is_square() == false 
+            || d2.is_square() == false || v2.is_square() == false 
+            || d3.is_square() == false || v3.is_square() == false)
+        {
+            return 1.0;
+        };
+
+        // check if flags are set
+        if (has_struct_diag(d1) == false)
+            return 1.;
+
+        if (has_struct_diag(d2) == false)
+            return 1.;
+
+        if (has_struct_diag(d3) == false)
+            return 1.;
+
+        Real dif    = 0.;
+        Matrix one  = ones(1, 1, v3.get_value_code());
+
+        // check correct factorizations of all variants
+
+        // variant 1: Ax = lBx
+        Matrix mat1_check1  = (one * mat2) * v1 * d1;   
+
+        dif                 += norm_1(mat1_check1 - (one * mat1) * v1);
+        Real tol1           = error_mult(500.0, mat2, v1, d1) 
+                            + error_mult(500.0, mat1, v1);
+
+        if (dif < tol1)
+            dif             = 0.;
+        else
+            return dif;
+
+        Matrix mat2_check1  = ctrans(v1) * mat2 * v1;   
+                        
+        dif                 += norm_1(mat2_check1 - eye(size));
+        Real tol2           = error_mult(500.0, v1, mat2, v1);
+
+        if (dif < tol2)
+            dif             = 0.;
+        else
+            return dif;
+
+        // variant 2: ABx = lx
+        Matrix mat1_check2  = (one * mat1) * mat2 * v2;
+
+        dif                 += norm_1(mat1_check2 - v2 * d2);
+        Real tol3           = error_mult(500.0, mat1, mat2, v2) + error_mult(500.0, v2, d2);
+
+        if (dif < tol3)
+            dif             = 0.;
+        else
+            return dif;
+
+        Matrix mat2_check2  = ctrans(v2) * mat2 * v2;        
+
+        dif                 += norm_1(mat2_check2 - eye(size));
+        Real tol4           = error_mult(500.0, v2, mat2, v2);
+
+        if (dif < tol4)
+            dif             = 0.;
+        else
+            return dif;
+
+        // variant 3: BAx = lx
+        Matrix mat1_check3  = (one * mat2) * mat1 * v3;
+
+        dif                 += norm_1(mat1_check3 - v3 * d3);
+        Real tol5           = error_mult(500.0, mat2, mat1, v3) + error_mult(500.0, v3, d3);
+
+        if (dif < tol5)
+            dif             = 0.;
+        else
+            return dif;
+
+        Matrix chol_mat2;
+        permvec perm;
+                    
+        Matrix mat2_check3i = linsolve(one * mat2, v3);
+        Matrix mat2_check3  = ctrans(v3) * mat2_check3i;
+
+        dif                 += norm_1(mat2_check3 - eye(size));
+        Real tol6           = error_mult(10000.0, v3, mat2_check3i);
+
+        if (dif < tol6)
+            dif             = 0.;
+
         return dif;
     }
     catch(const std::exception& ex)
@@ -690,6 +772,170 @@ Real test_function_gen_sym_eigen::eval_mat(const Matrix& randmat1,const Matrix& 
     };
 };
 Real test_function_gen_sym_eigen::eval_scalar(const Scalar&,const Scalar&, int)
+{
+    return 0;
+};
+
+//----------------------------------------------------------------------------
+//                  test_function_geigs
+//----------------------------------------------------------------------------
+Real test_function_geigs::eval_mat(const Matrix& mat1_in,const Matrix& mat2_in,int code)
+{
+    (void)code;
+
+    if (mat1_in.is_square() == false)
+        return 0.;
+
+    if (mat2_in.is_square() == false)
+        return 0.;
+
+    if (mat1_in.rows() != mat2_in.rows())
+        return 0.;
+
+    Matrix matA     = mat1_in;
+    Matrix matB     = herprod(mat2_in);
+
+    //make mat2 posdef
+    Integer size    = matB.rows();
+    
+    value_code vc1  = matA.get_value_code();
+    value_code vc2  = matB.get_value_code();
+
+    Real diag       = sqrt(constants::eps(vc2)) * norm_1(matB);
+    matB            = matB + Float(diag) * speye(size, size, vc2);
+
+    //Real diag     = sqrt(constants::eps(vc2)) * norm_1(matB);
+    Real diagB      = 1.e-1 * norm_1(matB);
+    matB            = matB + Float(diagB) * speye(size, size, vc2);
+
+    Real diagA      = 1.e-1 * norm_1(matA);
+    matA            = matA + Float(diagA) * speye(size, size, vc1);
+
+    // max_trials to accommodate non-determinism of ARPACK
+    Integer max_trials = 5;
+    Integer k       = std::max(0, std::min(5, size - 3));
+    
+    Matrix U;
+    Matrix T;
+    bool conv = false;
+
+    try
+    {
+        for (int trial = 0; trial < max_trials; trial++)
+        {
+            matcl::options opts{opt::speigs::return_nonconvergent(true)};
+            tie(U,T,conv) = pbschur(matA, matB, false, k, cluster_type::LM, opts);
+
+            if (conv == true)
+                break;
+        }
+        
+        if (conv == false)
+        {
+            matcl::options opts{opt::speigs::return_nonconvergent(false)};
+            tie(U,T,conv) = pbschur(matA, matB, false, k, cluster_type::LM, opts);
+        }
+    }
+    catch(const error::invalid_speigs_k&)
+    {
+        //problem is too small
+        return 0.0;
+    }
+    catch(const error::error_nonposdef&)
+    {
+        return 0.;
+    }
+    catch(const error::error_singular&)
+    {
+        return 0.;
+    }
+    catch(const error::error_size_geig& ex)
+    {
+        m_is_error  = true;
+        m_error     = static_cast<const error::matcl_exception_linalg&>(ex).what();
+        return 1.;
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error  = true;
+        m_error     = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error  = true;
+        m_error     = "unknown error";
+        return 1.;
+    };
+        
+    try
+    {
+        check_struct(U);
+        check_struct(T);
+
+        // check finitness
+        if (matA.all_finite() == true && matB.all_finite() == true)
+        {
+            if (U.all_finite() == false)
+                return 1.0;
+
+            if (T.all_finite() == false)
+                return 1.0;
+        }
+        else
+        {
+            if (U.all_finite() == true)
+                return 1.0;
+
+            if (T.all_finite() == true)
+                return 1.0;
+        };
+
+        if (has_struct_qtriu(T) == false)
+            return 1.0;
+
+        Real dif    = 0.;
+
+        // check correctness
+        Matrix mt_1     = matA * U;
+        Matrix mt_2     = U * T;
+
+        dif             += norm_1(mt_1 - mt_2);
+        Real tol1       = error_mult(500.0, matA, U) + error_mult(500.0, U, T);
+
+        if (dif < tol1)
+            dif = 0.0;
+        else
+            return dif;
+
+        Matrix mt3      = ctrans(U) * matB * U;
+        dif             += norm_1(mt3 - eye(U.cols()));
+        Real tol3       = error_mult(1000.0, ctrans(U), matB, U);
+
+        if (dif < tol3)
+            dif         = 0.0;
+        else
+            return dif;
+
+        return dif;
+    }
+    catch(const std::exception& ex)
+    {
+        m_is_error = true;
+        m_error = ex.what();
+        return 1.;
+    }
+    catch(...)
+    {
+        m_is_error = true;
+        m_error = "unknown error";
+        return 1.;
+    };
+
+    return 0;
+};
+
+Real test_function_geigs::eval_scalar(const Scalar&,const Scalar&, int)
 {
     return 0;
 };
