@@ -348,7 +348,7 @@ MATCL_LINALG_EXPORT pschur_return pschur(const linear_operator& A, const Integer
 /// perform partial Schur decomposition of a linear operator A in the form
 ///     A * U = U * T,  U' * B * U = I                          (1)
 /// where T is upper quasi triangular and B is hermitian and semi positive 
-/// definite; from (1) we have that U spans invariant subspace of the operator
+/// definite. From (1) we have that U spans invariant subspace of the operator
 /// A and eigenvalues of T are also eigenvalues of A. The partial Schur
 /// decomposition can be obtained by taking qr decompostion: Q*R = U, then
 ///     A * Q = Q * (R * T * R^-1), Q' * Q = I
@@ -364,14 +364,13 @@ MATCL_LINALG_EXPORT pschur_return pschur(const linear_operator& A, const Integer
 ///     A = inv[X - sigma*Y] * Y, B = Y or
 ///     A = inv[Y] * X, B = Y
 /// where sigma is a shift, such that X - sigma*Y is invertible, (such shift
-/// always exists if the matrix pair (X, Y) is regular), especially if Y is
-/// nearly singular or singular; however if Y can be factored into a Cholesky
-/// factorization Y = LL', then the pschur decomposition should be used for
-/// A = inv[L] * X * inv[L']
+/// always exists if the matrix pair (X, Y) is regular); however if Y can be
+/// factored into a Cholesky factorization Y = LL', then the pschur decomposition
+/// should be used for A = inv[L] * X * inv[L']
 ///
 ///     [U, T, conv] = pbschur(A, B, herm, k, ec, opts)
 /// A       - the linear operator of size N x N
-/// B       - the linear operator of size N x N, Bm ust be hermitian and
+/// B       - the linear operator of size N x N, B must be hermitian and
 ///           positive semi definite
 /// herm    = true: the operator A is hermitian with respect to inner product
 ///                 given by the operator B

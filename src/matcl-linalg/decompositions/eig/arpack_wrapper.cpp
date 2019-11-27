@@ -277,7 +277,18 @@ Integer arpack_wrapper<T>::do_arpack_loop(Mat_D& v)
             throw error::error_arpack(msg.str());
         }
 
-        if (ido == 1 || ido == -1)
+        if (ido == -1)
+        {
+            Integer from    = m_ipntr_ptr[0];
+            Integer to      = m_ipntr_ptr[1];
+
+            //eval Y = A * X 
+            matcl::Matrix x     = make_dense_foreign(N, 1, m_workd_ptr + from - 1, N);
+            matcl::Matrix y     = make_dense_foreign(N, 1, m_workd_ptr + to - 1, N);
+
+            m_A.mmul_right(x, trans_type::no_trans, y);
+        }
+        else if (ido == 1)
         {
             Integer from    = m_ipntr_ptr[0];
             Integer to      = m_ipntr_ptr[1];

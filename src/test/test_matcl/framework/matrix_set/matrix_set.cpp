@@ -750,6 +750,7 @@ Real matrix_set_bin::make(bin_function* func, options opts, const std::vector<ma
 
     for (int code = opts.first_matrix_code; code < size; code++)
     {
+        //disp(code);
         Real tmp = matrix_set_bin::make(matrices[code],func,show_partial_res,code);
 
         if (show_partial_res == false && tmp != 0.)

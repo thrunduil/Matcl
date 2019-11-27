@@ -37,49 +37,6 @@
 namespace matcl { namespace test
 {
 
-//TODO
-
-// return eps * norm_1(mat)
-static Real epsilon_mat(const Matrix& mat)
-{
-    value_code vc  = mat.get_value_code();
-
-    // add some small value when result is close to zero
-    Real mr         = std::sqrt(constants::min_real(vc));
-
-    Real ret        = constants::eps(vc) * norm_1(mat) + mr;
-    return ret;
-};
-
-static Real error_tolerance(Real mult, const Matrix& mat)
-{
-    Real tol = mult * (min(mat.rows(), mat.cols())) * epsilon_mat(mat);
-
-    return tol;
-};
-
-template<class V>
-static Matrix make_scalar(const V& v, value_code vc)
-{
-    switch (vc)
-    {
-        case value_code::v_integer:
-            return Matrix(convert_scalar<Integer>(v));
-        case value_code::v_float:
-            return Matrix(convert_scalar<Float>(v));
-        case value_code::v_real:
-            return Matrix(convert_scalar<Real>(v));
-        case value_code::v_float_complex:
-            return Matrix(convert_scalar<Float_complex>(v));
-        case value_code::v_complex:
-            return Matrix(convert_scalar<Complex>(v));
-        case value_code::v_object:
-            return Matrix(Object(v));
-        default:
-            throw std::runtime_error("invalid value code");
-    };
-}
-
 class test_linalg
 {
     linalg_functions_list&		tf;
@@ -626,6 +583,8 @@ Real test_function_norm::eval_mat(const Matrix& mat,bool ,int code)
 
             if (dif < error_tolerance(100.0, mat))
                 dif = 0.;
+            else
+                return dif;
         }
 
         dif     += (is_nan(val) == is_nan(val_f)) ? 0 : 1;
@@ -923,6 +882,8 @@ Real test_function_svd::eval_1(const Matrix& mat,int code, bool economy, svd_alg
         // take roundoff differences between different algorithms used into account
         if (dif < error_tolerance(100.0, mat))
             dif = 0;
+        else
+            return dif;
 
         // check finitenes of all results
         if (mat.all_finite() == true)
@@ -1102,6 +1063,8 @@ Real test_function_chol::eval(const Matrix& mat, bool upper)
 
         if (dif < error_tolerance(100.0, M1))
             dif = 0.0;
+        else
+            return dif;
 
         if (M1.is_square() == false)
             dif += 1;
@@ -1189,6 +1152,8 @@ Real test_function_chol_rr::eval(const Matrix& mat,bool upper)
 
         if (dif < error_tolerance(300.0, M1))
             dif = 0.0;
+        else
+            return dif;
 
         if (M1.is_square() == false)
             dif += 1;
@@ -1270,6 +1235,8 @@ Real test_function_cholmod::eval(const Matrix& mat,bool upper, bool show)
         
         if (dif < error_tolerance(10.0, M1))
             dif = 0.;
+        else
+            return dif;
 
         // check estimated rank is plausible
         if (est_rank.get_scalar<Integer>() < 0 || est_rank.get_scalar<Integer>() > N)
@@ -1561,8 +1528,7 @@ Real test_function_qr::eval_mat(const Matrix& mat,bool ,int code)
 
         if (dif < tol_U)
             dif     = 0.0;
-
-        if (dif != 0.0)
+        else
             return dif;
 
         // check correct factorizations
@@ -1773,6 +1739,8 @@ Real test_function_ldl::eval_1(const Matrix& mat_temp,int code, bool upper)
 
         if (dif < error_tolerance(100.0, mat))
             dif         = 0.0;         
+        else
+            return dif;
 
         dif             += norm_1(matherm(ph,ph) - mat_checkh_tr);               
 
@@ -1918,8 +1886,8 @@ Real test_function_linsolve::test_notrans(const Matrix& A,const Matrix& B, permv
 
         if (dif < 100. * tol * eps)
             dif         = 0.;
-                
-        return dif;
+
+        return dif;                
     }
     catch(error::error_lsolve& ex)
     {
@@ -2006,7 +1974,7 @@ Real test_function_linsolve::test_trans(const Matrix& A,const Matrix& B, permvec
 
         if (dif < 100. * tol * eps)
             dif         = 0.;
-                
+
         return dif;
     }
     catch(error::error_lsolve& ex)
@@ -2093,6 +2061,8 @@ Real test_function_linsolve::test_ctrans(const Matrix& A,const Matrix& B, permve
 
         if (dif < 100. * tol * eps)
             dif         = 0.;
+        else
+            return dif;
                 
         return dif;
     }
@@ -2247,8 +2217,8 @@ Real test_function_linsolve_rev::test_notrans(const Matrix& A,const Matrix& B, p
 
         if (dif < 100. * tol * eps)
             dif         = 0.;
-                
-        return dif;
+
+        return dif;                
     }
     catch(error::error_lsolve& ex)
     {
@@ -2725,6 +2695,8 @@ Real test_function_hess::eval_mat(const Matrix& mat,bool ,int code)
 
         if (dif < tol_U)
             dif         = 0.0;
+        else
+            return dif;
 
         // check correct factorizations
         Matrix mat_check1 = u2 * h1 * ctrans(u2);
@@ -2735,7 +2707,9 @@ Real test_function_hess::eval_mat(const Matrix& mat,bool ,int code)
 
         if (dif < error_tolerance(100.0, mat) )
             dif = 0.0;
-        
+        else
+            return dif;
+
         // check dimmensions
         if (h2.is_square() == false)
             dif += 1;
@@ -3015,6 +2989,8 @@ Real test_function_schur::eval_mat(const Matrix& mat,bool ,int code)
 
         if (dif < tol_U)
             dif         = 0.0;
+        else
+            return dif;
 
         //check if factorization is correct
         Matrix mat_check_sym_dc = v_sym_dc * d_sym_dc * ctrans(v_sym_dc);
@@ -3162,6 +3138,8 @@ Real test_function_eigs::eval_mat(const Matrix& mat,bool ,int code)
 
         if (dif < tol_U)
             dif         = 0.0;
+        else
+            return dif;
 
         // check correctness
         dif         += norm_1(mat * U - U * T);

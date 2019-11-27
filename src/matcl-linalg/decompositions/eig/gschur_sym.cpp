@@ -200,6 +200,14 @@ struct gschur_sym_str<Val, struct_banded>
         Integer KB          = B.number_superdiagonals();
         Integer NZ          = with_V? N : 1;
 
+        //hbgvd requires, that KB <= KA
+        if (KA < KB)
+        {
+            Mat Ar          = A.resize(A.rows(), A.cols(), -KB, KB); 
+            A.assign_to_fresh(Ar);
+            KA              = A.number_superdiagonals();
+        };
+
         Mat_R w(A.get_type(), N, 1);
         Mat_D Z(A.get_type(), NZ, NZ);
 
@@ -563,25 +571,32 @@ void gschur_sym_decomposition::compute(const Matrix &A, const Matrix &B, gschur_
         if (B > 0)
         {
             Matrix D, V;
-            V   = ones(1,1,vt);
+
+            Matrix one      = ones(1,1,vt);
+
+            Matrix Ac       = matcl::convert_value(A, vt);
+            Matrix Bc       = matcl::convert_value(B, vt);
+
+            Matrix sq_B     = sqrt(Bc);
+
             switch (type)
             {
                 case gschur_sym_type::A_B:
                 {
-                    D   = div(V*A,B);
-                    V   = div(V,sqrt(B));
+                    D   = div(Ac, Bc);
+                    V   = div(one, sq_B);
                     break;
                 }
                 case gschur_sym_type::AB:
                 {
-                    D   = (V * A) * B;
-                    V   = div(V,sqrt(B));
+                    D   = Ac * Bc;
+                    V   = div(one, sq_B);
                     break;
                 }
                 case gschur_sym_type::BA:
-                {
-                    D   = (V * B) * A;
-                    V   = V * sqrt(B);
+                {                    
+                    D   = Ac * Bc;
+                    V   = sq_B;
                     break;
                 };
             }

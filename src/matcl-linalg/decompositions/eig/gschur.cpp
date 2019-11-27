@@ -1016,163 +1016,22 @@ void gschur_decomposition::compute(const Matrix &A, const Matrix &B, bool with_Q
     {
         m_is_nan    = false;
     };
-    
+
     Integer A_ldiags    = get_ld(A,1);
     Integer A_udiags    = get_ud(A,1);
+
+    bool A_is_tril      = A_udiags == 0;
     bool A_is_triu      = A_ldiags == 0;
-    bool A_is_tril      = A_udiags == 1;
     bool B_is_triu      = is_triu(B);
     bool B_is_tril      = is_tril(B);
-    bool A_is_diag      = A_is_triu && A_is_tril;
-    bool B_is_diag      = B_is_triu && B_is_tril;
 
-    // both A and B trivial:    
-    if (A.structural_nnz() + B.structural_nnz() == 0 || (A_is_diag && B_is_diag))
-    {
-        if (with_QZ)
-        {
-            m_Q_factor  = speye(N,N,vt);
-            m_Z_factor  = m_Q_factor;
-        };
-        m_TA        = convert(A, matrix_traits::get_matrix_type(vt,A.get_struct_code()));
-        m_TB        = convert(B, matrix_traits::get_matrix_type(vt,B.get_struct_code()));
-        
-        m_alpha     = get_diag(m_TA);
-        m_beta      = get_diag(m_TB);
-        m_eig       = comp_eig(m_alpha, m_beta);
-    
-        return;
-    }
-
-    // B trivial/easy
-    if (B.structural_nnz() == 0 || B.get_struct().is_id())
-    {
-        schur_decomposition schur_obj;
-
-        if (is_complex_B == false)
-        {
-            schur_obj(A, schur_sym_alg::dc, with_QZ);
-        }
-        else
-        {
-            Matrix Ac   = convert(A,matrix_traits::get_matrix_type(vt,A.get_struct_code()));
-            schur_obj(std::move(Ac), schur_sym_alg::dc, with_QZ);
-        };
-
-        m_TA        = schur_obj.TA();
-        m_TB        = B;
-
-        if (with_QZ)
-        {
-            m_Q_factor  = schur_obj.U();
-            m_Z_factor  = schur_obj.U();        
-        };
-
-        m_TB.add_struct(predefined_struct_type::triu);
-        
-        m_alpha     = schur_obj.eig();
-        m_beta      = get_diag(m_TB);
-        m_eig       = comp_eig(m_alpha, m_beta);
-
-        test_factors();
-        return;
-    }
-    else if (is_unitary(B.get_struct()))
-    {
-        Matrix ABprim   = mmul(A,B, trans_type::no_trans, trans_type::conj_trans);
-
-        schur_decomposition schur_obj(ABprim, schur_sym_alg::dc, with_QZ);
-
-        m_TA          = schur_obj.TA();
-        m_TB          = speye(N,vt);
-        m_alpha       = schur_obj.eig();
-        m_beta        = get_diag(m_TB);
-        m_eig         = schur_obj.eig();
-
-        if (with_QZ)
-        {
-            m_Q_factor  = schur_obj.U();        
-            m_Z_factor  = mmul(B, m_Q_factor, trans_type::conj_trans);
-        };
-
-        test_factors();
-        return;
-    }
-
-    // A trivial/easy
-    if (A.structural_nnz() == 0 || A.get_struct().is_id())
-    {
-        schur_decomposition schur_obj;
-
-        if (is_complex_A == false)
-        {
-            schur_obj(B, schur_sym_alg::dc, with_QZ);
-        }
-        else
-        {
-            Matrix Bc   = convert(B,matrix_traits::get_matrix_type(vt,B.get_struct_code()));
-            schur_obj(std::move(Bc), schur_sym_alg::dc, with_QZ);
-        }
-
-        Matrix P        = schur_obj.TA();
-        
-        unitary_matrix UC;
-        tie(UC,m_TB)    = qr2(std::move(P));
-        m_TA            = mmul(A, UC, trans_type::no_trans, trans_type::conj_trans);
-
-        if (with_QZ)
-        {
-            Matrix U    = schur_obj.U();
-            m_Q_factor  = U * UC;
-            m_Z_factor  = U;
-        };
-
-        if (is_complex_A == false)
-            m_TA.add_struct(predefined_struct_type::qtriu);
-        else
-            m_TA.add_struct(predefined_struct_type::triu);
-
-        set_alpha_beta_eig();
-
-        test_factors();
-        return;
-    }
-    else if (is_unitary(A.get_struct()))
-    {
-        Matrix BAprim   = mmul(B,A, trans_type::no_trans, trans_type::conj_trans);
-
-        schur_decomposition schur_obj(BAprim, schur_sym_alg::dc, with_QZ);
-
-        Matrix P        = schur_obj.TA();
-
-        unitary_matrix UC;        
-        tie(UC,m_TB)    = qr2(std::move(P));
-
-        Matrix C        = UC.to_matrix();
-        m_TA            = ctrans(C);
-
-        if (with_QZ)
-        {
-            Matrix U    = schur_obj.U();     
-
-            m_Q_factor  = U * C;
-            m_Z_factor  = mmul(A,U,trans_type::conj_trans);
-        };
-        
-        m_TA.add_struct(predefined_struct_type::qtriu);
-        set_alpha_beta_eig();
-        
-        test_factors();
-        return;
-    }
-
-    bool is_fac_B   = B_is_triu;
-    bool is_fac_A   = A_is_triu  ||(is_complex == false && A.get_struct().is_qtriu());
+    bool is_fac_B       = B_is_triu;
+    bool is_fac_A       = A_is_triu  ||(is_complex == false && A.get_struct().is_qtriu());
 
     if(is_fac_B == true && is_fac_A == true)
     {
-        m_TA        = A;
-        m_TB        = B;
+        m_TA        = convert(A, matrix_traits::get_matrix_type(vt, A.get_struct_code()));
+        m_TB        = convert(B, matrix_traits::get_matrix_type(vt, B.get_struct_code()));
 
         if (A_is_triu)
             m_TA.add_struct(predefined_struct_type::triu);
@@ -1210,6 +1069,9 @@ void gschur_decomposition::compute(const Matrix &A, const Matrix &B, bool with_Q
         m_TA        = A(colon(end, -1, 1),colon(end, -1, 1));
         m_TB        = B(colon(end, -1, 1),colon(end, -1, 1));
 
+        m_TA        = convert(m_TA, matrix_traits::get_matrix_type(vt, m_TA.get_struct_code()));
+        m_TB        = convert(m_TB, matrix_traits::get_matrix_type(vt, m_TB.get_struct_code()));
+
         if (A_is_tril)
             m_TA.add_struct(predefined_struct_type::triu);
         else 
@@ -1240,6 +1102,118 @@ void gschur_decomposition::compute(const Matrix &A, const Matrix &B, bool with_Q
             m_Z_factor.add_struct(sf);
         };
 
+        return;
+    }
+
+    // B trivial/easy
+    if (B.structural_nnz() == 0 || B.get_struct().is_id())
+    {
+        Matrix Ac   = convert(A, matrix_traits::get_matrix_type(vt, A.get_struct_code()));
+
+        schur_decomposition schur_obj;
+        schur_obj(std::move(Ac), schur_sym_alg::dc, with_QZ);
+
+        m_TA        = schur_obj.TA();
+        m_TB        = convert(B, matrix_traits::get_matrix_type(vt, B.get_struct_code()));
+
+        if (with_QZ)
+        {
+            m_Q_factor  = schur_obj.U();
+            m_Z_factor  = schur_obj.U();
+        };
+
+        m_TB.add_struct(predefined_struct_type::triu);
+        
+        m_alpha     = schur_obj.eig();
+        m_beta      = get_diag(m_TB);
+        m_eig       = comp_eig(m_alpha, m_beta);
+
+        test_factors();
+        return;
+    }
+    else if (is_unitary(B.get_struct()))
+    {
+        Matrix ABprim   = mmul(A,B, trans_type::no_trans, trans_type::conj_trans);
+
+        schur_decomposition schur_obj(ABprim, schur_sym_alg::dc, with_QZ);
+
+        m_TA          = schur_obj.TA();
+        m_TB          = speye(N, vt);
+        m_alpha       = schur_obj.eig();
+        m_beta        = get_diag(m_TB);
+        m_eig         = schur_obj.eig();
+
+        if (with_QZ)
+        {
+            m_Q_factor  = schur_obj.U();        
+            m_Z_factor  = mmul(B, m_Q_factor, trans_type::conj_trans);
+        };
+
+        test_factors();
+        return;
+    }
+
+    // A trivial/easy
+    if (A.structural_nnz() == 0 || A.get_struct().is_id())
+    {
+        Matrix Bc   = convert(B,matrix_traits::get_matrix_type(vt,B.get_struct_code()));
+
+        schur_decomposition schur_obj;            
+        schur_obj(std::move(Bc), schur_sym_alg::dc, with_QZ);
+
+        Matrix P        = schur_obj.TA();
+        
+        unitary_matrix UC;
+        tie(UC, m_TB)   = qr2(std::move(P));
+        m_TA            = mmul(A, UC, trans_type::no_trans, trans_type::conj_trans);
+
+        if (with_QZ)
+        {
+            Matrix U    = schur_obj.U();
+            m_Q_factor  = U * UC;
+            m_Z_factor  = U;
+        };
+
+        if (is_complex_A == false)
+            m_TA.add_struct(predefined_struct_type::qtriu);
+        else
+            m_TA.add_struct(predefined_struct_type::triu);
+
+        set_alpha_beta_eig();
+
+        test_factors();
+        return;
+    }
+    else if (is_unitary(A.get_struct()))
+    {
+        Matrix BAprim   = mmul(B, A, trans_type::no_trans, trans_type::conj_trans);
+
+        schur_decomposition schur_obj(std::move(BAprim), schur_sym_alg::dc, with_QZ);
+
+        Matrix P        = schur_obj.TA();
+
+        unitary_matrix UC;        
+        tie(UC, m_TB)   = qr2(std::move(P));
+
+        Matrix C        = UC.to_matrix();
+        m_TA            = ctrans(C);
+
+        if (with_QZ)
+        {
+            Matrix U    = schur_obj.U();     
+
+            m_Q_factor  = U * C;
+            m_Z_factor  = mmul(A,U,trans_type::conj_trans);
+        };
+        
+        if (is_complex_A == false)
+            m_TA.add_struct(predefined_struct_type::qtriu);
+        else
+            m_TA.add_struct(predefined_struct_type::triu);
+
+        set_alpha_beta_eig();
+        
+        test_factors();
         return;
     }
 
@@ -1535,6 +1509,9 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
     Mat mat_TA      = m_TA.impl_unique<Mat>();
     Mat mat_TB      = m_TB.impl_unique<Mat>();
 
+    mat_TA.set_struct(struct_flag());
+    mat_TB.set_struct(struct_flag());
+
     Mat mat_Q       = Mat(ti::ti_type<Val>());
     Mat mat_Z       = Mat(ti::ti_type<Val>());
 
@@ -1542,6 +1519,9 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
     {
         mat_Q.assign_to_fresh(m_Q_factor.impl_unique<Mat>());
         mat_Z.assign_to_fresh(m_Z_factor.impl_unique<Mat>());
+
+        mat_Q.set_struct(struct_flag());
+        mat_Z.set_struct(struct_flag());
     };
 
     Val *r_TA       = mat_TA.ptr();
@@ -1618,29 +1598,35 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
     m_beta  = Matrix(beta,false);
     m_eig   = comp_eig(m_alpha,m_beta);
     
+    m_TA    = Matrix(mat_TA, true);
+    m_TB    = Matrix(mat_TB, true);
+
     if (md::is_complex<Val>::value == false)
     {
         Integer ld = get_ld(m_TA, 1);
 
         if (ld == 1)
-            m_TA.add_struct(md::predefined_struct::get_qtriu(m_TA.get_struct()));
+            m_TA.add_struct(predefined_struct_type::qtriu);
         else
-            m_TA.add_struct(md::predefined_struct::get_triu(m_TA.get_struct(),0,is_real_matrix(m_TA)));
+            m_TA.add_struct(predefined_struct_type::triu);        
     }
     else
     {
-        m_TA.add_struct(md::predefined_struct::get_triu(m_TA.get_struct(),0, is_real_matrix(m_TA)));
+        m_TA.add_struct(predefined_struct_type::triu);  
     };
 
-    m_TB.add_struct(md::predefined_struct::get_triu(m_TB.get_struct(),0, is_real_matrix(m_TB)));    
+    m_TB.add_struct(predefined_struct_type::triu);  
 
     if (m_has_QZ)
     {
         struct_flag sf_u;
         sf_u.set_user(unitary_flag());
 
-        m_Q_factor.add_struct(sf_u);
-        m_Z_factor.add_struct(sf_u);    
+        m_Q_factor  = Matrix(mat_Q, true);
+        m_Z_factor  = Matrix(mat_Z, true);
+
+        m_Q_factor.set_struct(sf_u);
+        m_Z_factor.set_struct(sf_u);    
     };
 
     return;
