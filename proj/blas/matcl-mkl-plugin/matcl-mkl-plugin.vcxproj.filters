@@ -9,14 +9,5 @@
     <ClCompile Include="..\..\..\src\blas\blas-mkl-plugin\blas_mkl_plugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\blas\blas-mkl-plugin\dsdot.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\blas\blas-mkl-plugin\scabs1.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\blas\blas-mkl-plugin\sdsdot.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

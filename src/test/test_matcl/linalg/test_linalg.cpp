@@ -29,6 +29,18 @@ int main(int argc, const char* argv[])
 {
     init_genrand(2);
     
+    test::test_setups(argc, argv);
+    
+    #ifdef WIN64
+        //std::string plugin_name  = "matcl-openblas-plugin-x64-Release.dll";
+        //std::string plugin_name  = "matcl-clapack-plugin-x64-Release.dll";
+        std::string plugin_name  = "matcl-mkl-plugin-x64-Release.dll";
+    #else
+        //std::string plugin_name  = "matcl-clapack-plugin-Win32-Release.dll";
+        //std::string plugin_name  = "matcl-openblas-plugin-Win32-Release.dll";
+        std::string plugin_name  = "matcl-mkl-plugin-Win32-Release.dll";
+    #endif
+
     //test::test_selector().add_selection(1,"full_matrices1");
     //test::test_selector().add_selection(1,"full_matrices2");
     //test::test_selector().add_selection(1,"sparse_matrices_true");    
@@ -43,8 +55,6 @@ int main(int argc, const char* argv[])
     //test::test_selector().add_selection(4,"unary");
     //test::test_selector().add_selection(4,"binary");
 
-    test::test_setups(argc, argv);
-    
     int ret = test::test_main_body(&test::test_all_linalg);
     
     if (ret != 0) 

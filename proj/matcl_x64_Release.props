@@ -23,7 +23,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>C:\coding\extern\boost_1_71_0;..\..\..\src\extern\magma\include;..\..\..\src\extern\$(Platform)\openblas\include;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\coding\extern\boost_1_71_0;..\..\..\src\extern\magma\include;..\..\..\src\extern\$(Platform)\openblas\include;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.5.281\windows\mkl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
@@ -32,7 +32,7 @@
       <AdditionalDependencies>libboost_thread.lib;libboost_serialization.lib;libboost_wserialization.lib;libboost_filesystem.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)/$(ProjectName)-$(Platform)-$(Configuration).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>C:\coding\extern\boost_1_71_0\stage\x64_release_multi\lib;..\..\..\src\extern\$(Platform)\flapack;..\..\..\src\extern\magma;..\..\..\src\extern\$(Platform)\openblas\;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.1\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\coding\extern\boost_1_71_0\stage\x64_release_multi\lib;..\..\..\src\extern\$(Platform)\flapack;..\..\..\src\extern\magma;..\..\..\src\extern\$(Platform)\openblas\;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.5.281\windows\mkl\lib\intel64_win;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.5.281\windows\compiler\lib\intel64_win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>

@@ -44,6 +44,11 @@ external libraries:
         - licence: BSD
         - source: http://www.openblas.net/
         - version: 0.3.7
+    3.  MKL: Intel's optimized BLAS library
+        - authors: 
+        - licence: BSD like
+        - source: https://software.intel.com/en-us/articles/free-ipsxe-tools-and-libraries
+        - version: 2019.0
 
 5.  MATCL-FILE:
     1. sqlite3 is a self-contained, high-reliability, embedded, full-featured, 

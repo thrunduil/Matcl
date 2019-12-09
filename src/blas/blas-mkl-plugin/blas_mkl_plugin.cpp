@@ -32,6 +32,11 @@
 
 #define CALL_SYNTAX(x) x
 
+#define FUNCTION_NAME_cdotc wrap_cdotc
+#define FUNCTION_NAME_cdotu wrap_cdotu
+#define FUNCTION_NAME_zdotc wrap_zdotc
+#define FUNCTION_NAME_zdotu wrap_zdotu
+
 // WARNING: OMP spport must be enabled
 
 class global_data
@@ -73,8 +78,6 @@ void global_data::set_num_threads(int n)
 
 bool global_data::are_user_threads_allowed()
 {
-    // false for MKL 9.x
-    //return false;
     return true;
 };
 
@@ -117,29 +120,47 @@ void force_initialization()
 
 const char* get_name()
 {
-    return "OPENBLAS";
+    return "MKL";
 };
 
-//#include "matcl-blas-lapack/blas/blas_lapack_fortran.h"
-
-//missing functions
-static d_type_wr 
-CALL_SYNTAX(sdsdot)(i_type_wr *n, s_type_wr *sb, s_type_wr *sx, i_type_wr *incx, 
-                    s_type_wr *sy, i_type_wr *incy)
+extern "C"
 {
-    return f2c::sdsdot_(n, sb, sx, incx, sy, incy);
-};
+    static c_type_wr wrap_cdotc(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                     i_type_wr *incy)
+    {
+        c_type_wr res;
 
-static d_type_wr 
-CALL_SYNTAX(dsdot)(i_type_wr *n, s_type_wr *sx, i_type_wr *incx, s_type_wr *sy, 
-                   i_type_wr *incy)
-{
-    return f2c::dsdot_(n, sx, incx, sy, incy);
-};
+        cdotc((MKL_Complex8*)&res, n, (MKL_Complex8*)cx, incx, (MKL_Complex8*)cy, incy);
+        return res;        
+    };
 
-static d_type_wr CALL_SYNTAX(scabs1)(c_type_wr *z__)
-{
-    return f2c::scabs1_((f2c::complex*)z__);
+    static c_type_wr wrap_cdotu(i_type_wr *n, c_type_wr *cx, i_type_wr *incx, c_type_wr *cy, 
+                 i_type_wr *incy)
+    {
+        c_type_wr res;
+
+        cdotu((MKL_Complex8*)&res, n, (MKL_Complex8*)cx, incx, (MKL_Complex8*)cy, incy);
+        return res;        
+    };
+
+    static z_type_wr wrap_zdotc(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy, 
+                     i_type_wr *incy)
+    {
+        z_type_wr res;
+
+        zdotc((MKL_Complex16*)&res, n, (MKL_Complex16*)cx, incx, (MKL_Complex16*)cy, incy);
+        return res;        
+    };
+
+    static z_type_wr wrap_zdotu(i_type_wr *n, z_type_wr *cx, i_type_wr *incx, z_type_wr *cy, 
+                     i_type_wr *incy)
+    {
+        z_type_wr res;
+
+        zdotu((MKL_Complex16*)&res, n, (MKL_Complex16*)cx, incx, (MKL_Complex16*)cy, incy);
+        return res;        
+    };
+
 };
 
 // generic stuff - the constructor which initializes all pointers to blas functions
