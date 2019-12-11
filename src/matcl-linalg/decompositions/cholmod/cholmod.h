@@ -54,20 +54,20 @@ class cholmod
 		real_type		m_norm_E;
 
 	public:
-        /// perform decomposition of the matrix mat using options opt;
-        /// on return mat represent the matrix U
+        // perform decomposition of the matrix mat using options opt;
+        // on return mat represent the matrix U
         cholmod(cholmod_matrix<T>& mat, const cholmod_options& opt);
 
-        /// standard destructor
+        // standard destructor
 		~cholmod();
 
-        /// estimated rank of the matrix
+        // estimated rank of the matrix
 		Integer         rank() const				{ return m_rank; };
 
-        /// return permutation vector
+        // return permutation vector
 		int_array		permutation() const			{ return m_piv;	};
 
-        /// return upper bound of norm 2 of correction matrix E
+        // return upper bound of norm 2 of correction matrix E
 		real_type		norm_correction() const		{ return m_norm_E; };
 };
 

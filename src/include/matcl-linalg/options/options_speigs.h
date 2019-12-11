@@ -26,9 +26,9 @@
 namespace matcl { namespace opt { namespace speigs
 {
 
-/// options for speigs_decomposition
+// options for speigs_decomposition
 
-/// return nonconvergent eigenvalues?
+// return nonconvergent eigenvalues?
 class return_nonconvergent : public option_base<bool, return_nonconvergent>
 {
     private:
@@ -46,10 +46,10 @@ class return_nonconvergent : public option_base<bool, return_nonconvergent>
         };
 };
 
-/// tolerance used to test convergence of eigenvalues;
-/// the relative accuracy of the i-th Ritz value l is considered acceptable if
-/// bounds <= tol * abs( l ), where bounds is the estimated precision of l
-/// default value: tol = eps; set negative tol to get default tolerance
+// tolerance used to test convergence of eigenvalues;
+// the relative accuracy of the i-th Ritz value l is considered acceptable if
+// bounds <= tol * abs( l ), where bounds is the estimated precision of l
+// default value: tol = eps; set negative tol to get default tolerance
 class tol : public option_base<Real, tol>
 {
     private:
@@ -68,7 +68,7 @@ class tol : public option_base<Real, tol>
         };
 };
 
-/// maximum number of iterations
+// maximum number of iterations
 class maxit : public option_base<Integer, maxit>
 {
     private:
@@ -87,11 +87,11 @@ class maxit : public option_base<Integer, maxit>
         };
 };
 
-/// how many Arnoldi vectors are generated at each iteration. There are always
-/// generated at least k + 3 Arnoldi vectors, where k is the number of eigenvalues
-/// to find. In order to obtain faster convergence, higher number is recommended,
-/// for example 2 * k + 1, however optimal number of Arnoldi vectors can only be
-/// determined empirically; if this value is negative than default value is used
+// how many Arnoldi vectors are generated at each iteration. There are always
+// generated at least k + 3 Arnoldi vectors, where k is the number of eigenvalues
+// to find. In order to obtain faster convergence, higher number is recommended,
+// for example 2 * k + 1, however optimal number of Arnoldi vectors can only be
+// determined empirically; if this value is negative than default value is used
 class n_arnoldi : public option_base<Integer, n_arnoldi>
 {
     private:

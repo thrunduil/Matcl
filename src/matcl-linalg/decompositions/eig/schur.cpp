@@ -413,7 +413,7 @@ struct schur_str<V,struct_banded>
 
         V* TA_ptr           = TA.rep_ptr() + TA.first_elem_diag(0);
 
-        /// rrr algorithm is not available for band matrices
+        // rrr algorithm is not available for band matrices
         if (alg == schur_sym_alg::rrr)
             alg = schur_sym_alg::dc;
 

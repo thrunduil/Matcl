@@ -62,6 +62,7 @@
     <ClInclude Include="..\..\..\src\test\test_matcl\matcl\test_set.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\test\test_matcl\matcl\other\hash_table_compile.cpp" />
     <ClCompile Include="..\..\..\src\test\test_matcl\matcl\test_functions_assign.cpp" />
     <ClCompile Include="..\..\..\src\test\test_matcl\matcl\test_functions_bin.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>

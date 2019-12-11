@@ -279,16 +279,16 @@ void hash_table<T,H,E,TV,A>::clear(bool call_destructors)
     n_removed		    = 0;
 
     value_type** entry_ptr;
-    value_type** end    = entries + m_capacity.value();
+    value_type** end_ptr = entries + m_capacity.value();
 
     if (call_destructors == false)
     {
-        for (entry_ptr = entries; entry_ptr < end; ++entry_ptr)
+        for (entry_ptr = entries; entry_ptr < end_ptr; ++entry_ptr)
             *entry_ptr = nullptr;
     }
     else
     {
-        for (entry_ptr = entries; entry_ptr < end; ++entry_ptr)
+        for (entry_ptr = entries; entry_ptr < end_ptr; ++entry_ptr)
         {
             if (*entry_ptr > details::mark_delete<value_type*>::value )
                 TV::free(*entry_ptr);
@@ -450,9 +450,9 @@ void hash_table<T,H,E,TV,A>::change_size(bool expand)
 
     size_t loc_delete   = 0;
     size_t loc_elems    = 0;
-    value_type** end    = entries + m_capacity.value();
+    value_type** end_ptr= entries + m_capacity.value();
 
-    for (value_type** entry_ptr = entries; entry_ptr < end; ++entry_ptr)
+    for (value_type** entry_ptr = entries; entry_ptr < end_ptr; ++entry_ptr)
     {
         if (*entry_ptr == details::mark_delete<value_type*>::value)
         {
@@ -525,13 +525,13 @@ hash_table<T,H,E,TV,A>::find_entry_impl(const Key_args& ... key) const
 
     value_type** first_deleted  = nullptr;
     value_type** begin          = entries + hash_value;
-    value_type** end            = entries + m_capacity.value();
+    value_type** end_ptr        = entries + m_capacity.value();
 
     value_type** pos;
 
     for (pos = begin; ;++pos, ++n_collisions)
     {
-        if (pos == end)
+        if (pos == end_ptr)
         {
             //move to first element
             pos = entries;

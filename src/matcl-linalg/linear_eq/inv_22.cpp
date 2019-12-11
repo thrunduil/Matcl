@@ -38,9 +38,9 @@ struct inv_22_impl
         V sin_l, sin_r;
         V sig_max, sig_min;
 
-        ///U * A * V' = S => A = U'*S*V, A * X = I => X = V'*inv(S)*U
-        ///   [ cos_l  sin_l ] [ A_11  A_12  ] [ cos_r -sin_r ]  =  [ sig_max   0      ]
-        ///   [-sin_l' cos_l ] [ A_21  A_22  ] [ sin_r' cos_r ]     [  0       sig_min ]
+        //U * A * V' = S => A = U'*S*V, A * X = I => X = V'*inv(S)*U
+        //   [ cos_l  sin_l ] [ A_11  A_12  ] [ cos_r -sin_r ]  =  [ sig_max   0      ]
+        //   [-sin_l' cos_l ] [ A_21  A_22  ] [ sin_r' cos_r ]     [  0       sig_min ]
         matcl::svd_22(A_11, A_12, A_21, A_22, cos_l, sin_l, cos_r, sin_r, sig_max, sig_min);
 
         if (sig_min != V(0.0))

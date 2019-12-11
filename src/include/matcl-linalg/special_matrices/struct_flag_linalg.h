@@ -26,7 +26,7 @@
 namespace matcl
 {
 
-/// structure flag for positive definite matrices (not necessary symmetric/hermitian)
+// structure flag for positive definite matrices (not necessary symmetric/hermitian)
 class MATCL_LINALG_EXPORT posdef_flag : public user_flag_config, public user_flag
 {
     public:
@@ -69,7 +69,7 @@ class MATCL_LINALG_EXPORT posdef_flag : public user_flag_config, public user_fla
         virtual bool        visit_plus(struct_flag sf_X, struct_flag sf_Y) const;
 };
 
-/// structure flag for positive semi-definite matrices (not necessary symmetric/hermitian)
+// structure flag for positive semi-definite matrices (not necessary symmetric/hermitian)
 class MATCL_LINALG_EXPORT semi_posdef_flag : public user_flag_config, public user_flag
 {
     public:

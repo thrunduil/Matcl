@@ -33,7 +33,7 @@ namespace matcl { namespace details
 namespace matcl
 {
 
-/// class for sparse QR decomposition using Givens rotations
+// class for sparse QR decomposition using Givens rotations
 class quern_solver
 {
     private:
@@ -45,21 +45,21 @@ class quern_solver
         bool        m_economy;
 
     public:
-        /// create sparse QR decomposition. QR = A or QR = A' if trans == true
-        /// trans = true is cheaper, so use this if QR=A' is required
+        // create sparse QR decomposition. QR = A or QR = A' if trans == true
+        // trans = true is cheaper, so use this if QR=A' is required
         quern_solver(const Matrix& A, bool with_q, bool economy, bool trans);
         quern_solver(Matrix&& A, bool with_q, bool economy, bool trans);
 
-        /// get the unitary matrix Q of size M x K, where K = M if economy = false,
-        /// and K = min(M,N) if economy = true, where A has size M x N; returned matrix 
-        /// is not created explicitly
+        // get the unitary matrix Q of size M x K, where K = M if economy = false,
+        // and K = min(M,N) if economy = true, where A has size M x N; returned matrix 
+        // is not created explicitly
         unitary_matrix  get_unitary_matrix() const;
 
-        /// get the sparse upper-triangular factor R. If R' is required 
-        /// use get_r_trans which is cheaper
+        // get the sparse upper-triangular factor R. If R' is required 
+        // use get_r_trans which is cheaper
         Matrix          get_r() const;
 
-        /// get the sparse lower-triangular factor R'
+        // get the sparse lower-triangular factor R'
         Matrix          get_r_trans() const;
 };
 

@@ -197,7 +197,7 @@ void scotch_wrapper::set_node_weights(const Matrix& W)
     m_has_weights   = true;
 };
 
-/// set partitioning strategy
+// set partitioning strategy
 void scotch_wrapper::set_strategy(scotch_strategy strategy)
 {
     switch (strategy)
@@ -522,7 +522,7 @@ Matrix scotch_wrapper::make_assign_impl(Integer n_part, const Matrix& proc_weigh
 
     for (Integer i = 0; i < num_proc; ++i)
     {
-        /// just rescale to obtain value 1 for processor with 0.1% share
+        // just rescale to obtain value 1 for processor with 0.1% share
         Real val        = std::max(1.0, 1000.0 * (abs(pw_real[i]) / pw_sum));
         pw_int[i]       = (Integer)val;
     }
@@ -579,7 +579,7 @@ Matrix scotch_wrapper::make_assign_fixed_impl(Integer n_part, const Matrix& proc
 
     for (Integer i = 0; i < num_proc; ++i)
     {
-        /// just rescale to obtain value 1 for processor with 0.1% share
+        // just rescale to obtain value 1 for processor with 0.1% share
         Real val        = std::max(1.0, 1000.0 * (abs(pw_real[i]) / pw_sum));
         pw_int[i]       = (Integer)val;
     }

@@ -452,20 +452,44 @@ struct get_scal2
 };
 
 template<class ret, class derived, bool const_access>
+struct extract_type_switch_nonunique_rvalue
+{};
+
+template<class ret, class derived>
+struct extract_type_switch_nonunique_rvalue<ret, derived, true>
+{
+    static const bool const_access = true;
+
+    template<class Matrix_Type, class ... Arg>
+    static ret make(typename enable_rvalue<Matrix_Type>::type mat, Arg&& ... args)
+    {        
+        return extract_type_switch<ret,derived,const_access>
+                    ::make<const Matrix_Type&>(mat, std::forward<Arg>(args)...);
+    };
+};
+
+template<class ret, class derived>
+struct extract_type_switch_nonunique_rvalue<ret, derived, false>
+{
+    static const bool const_access = false;
+
+    template<class Matrix_Type, class ... Arg>
+    static ret make(typename enable_rvalue<Matrix_Type>::type mat, Arg&& ... args)
+    {
+        return extract_type_switch<ret,derived,const_access>
+                    ::make<Matrix_Type&>(std::move(mat), std::forward<Arg>(args)...);
+    };
+};
+
+template<class ret, class derived, bool const_access>
 template<class Matrix_Type, class ... Arg>
 static ret extract_type_switch<ret,derived,const_access>
         ::make(typename enable_rvalue<Matrix_Type>::type mat, Arg&& ... args)
 {
-    using MT = typename hide_type<Matrix_Type>::type;
-
     if (mat.is_unique() == false)
     {
-        if (const_access == true)
-            return extract_type_switch::make<const Matrix_Type&>(std::move(mat),
-                                            std::forward<Arg>(args)...);
-        else
-            return extract_type_switch::make<Matrix_Type&>(std::move(mat), 
-                                            std::forward<Arg>(args)...);
+        return extract_type_switch_nonunique_rvalue<ret,derived,const_access>
+            ::make<Matrix_Type&&>(std::move(mat), std::forward<Arg>(args)...);
     };
 
     switch(mat.get_matrix_code())

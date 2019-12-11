@@ -28,39 +28,39 @@
 namespace matcl { namespace error
 {
  
-/// this class is throws if computation of eigenvectors in functions in hess_eig
-/// family failed, due to convergence failure; members of this class contain 
-/// information about current computation status and convergence status
+// this class is throws if computation of eigenvectors in functions in hess_eig
+// family failed, due to convergence failure; members of this class contain 
+// information about current computation status and convergence status
 class MATCL_LINALG_EXPORT hess_eig_failed : public matcl_exception_linalg
 {
     public:
-        /// current left eigenvectors if computed; matrix of size N x M, where N
-        /// is the size of hessenberg matrix and M is the number of selected eigenvalues
+        // current left eigenvectors if computed; matrix of size N x M, where N
+        // is the size of hessenberg matrix and M is the number of selected eigenvalues
         Matrix  m_VL;
 
-        /// current right eigenvectors if computed; matrix of size N x M, where N
-        /// is the size of hessenberg matrix and M is the number of selected eigenvalues
+        // current right eigenvectors if computed; matrix of size N x M, where N
+        // is the size of hessenberg matrix and M is the number of selected eigenvalues
         Matrix  m_VR;
 
-        /// integer matrix of size M; if i-th element is 0, then i-th left eigenvector
-        /// converged otherwise not converged
+        // integer matrix of size M; if i-th element is 0, then i-th left eigenvector
+        // converged otherwise not converged
         Matrix  m_fail_L;
 
-        /// integer matrix of size M; if i-th element is 0, then i-th right eigenvector
-        /// converged otherwise not converged
+        // integer matrix of size M; if i-th element is 0, then i-th right eigenvector
+        // converged otherwise not converged
         Matrix  m_fail_R;
 
-        /// true if left eigenvectors were computed
+        // true if left eigenvectors were computed
         bool    m_eval_L;
 
-        /// true if right eigenvectors were computed
+        // true if right eigenvectors were computed
         bool    m_eval_R;
 
-        /// number of eigenvectors which failed to converge
+        // number of eigenvectors which failed to converge
         Integer m_failed_eig;
 
     public:
-        /// standard constructor
+        // standard constructor
         hess_eig_failed(const Matrix& VL, const Matrix& VR, const Matrix& fail_L, const Matrix& fail_R, 
                         bool eval_L, bool eval_R, Integer failed_eig)
             : m_VL(VL), m_VR(VR), m_fail_L(fail_L), m_fail_R(fail_R), m_eval_L(eval_L), m_eval_R(eval_R)

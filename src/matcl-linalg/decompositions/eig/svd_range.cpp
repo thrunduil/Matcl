@@ -35,7 +35,7 @@
 namespace matcl { namespace details
 {
 
-/// commented out; gesvdx is generally broken and not faster than standard svd
+// commented out; gesvdx is generally broken and not faster than standard svd
 
 template<class V>
 struct singsel_str
@@ -269,34 +269,34 @@ void svd_range::eval2_index(mat_tup_3& ret, const Matrix& A, Integer IF, Integer
     ret = mat_tup_3(U, S, V);
 }
 
-/// compute selected singular values eigenvalues
-///     E = singsel_range(A, VL, VU);
-///     E = singsel_index(A, IF, IL);
-/// A       - an M x N matrix
-/// VL, VU  - find singular values in half-open interval (VL,VU], VL >= 0
-/// IF, IL  - find singular values with index IF through IL in set of
-///           all singular values sorted decreasingly
-/// E       - selected singular values sorted decreasingly 
-///
-/// not available for sparse and band matrices
+// compute selected singular values eigenvalues
+//     E = singsel_range(A, VL, VU);
+//     E = singsel_index(A, IF, IL);
+// A       - an M x N matrix
+// VL, VU  - find singular values in half-open interval (VL,VU], VL >= 0
+// IF, IL  - find singular values with index IF through IL in set of
+//           all singular values sorted decreasingly
+// E       - selected singular values sorted decreasingly 
+//
+// not available for sparse and band matrices
 MATCL_LINALG_EXPORT Matrix  singsel_range(const Matrix& A, Real VL, Real VU);
 MATCL_LINALG_EXPORT Matrix  singsel_range(Matrix&& A, Real VL, Real VU);
 MATCL_LINALG_EXPORT Matrix  singsel_index(const Matrix& A, Integer IF, Integer IL);
 MATCL_LINALG_EXPORT Matrix  singsel_index(Matrix&& A, Integer IF, Integer IL);
 
-/// compute selected singular values and singular vectors
-///     [U, S, V] = singsel_range2(A, VL, VU);
-///     [U, S, V] = singsel_index2(A, IF, IL);
-/// A       - a M x N matrix
-/// VL, VU  - find singular values in half-open interval (VL,VU], VL >= 0
-/// IF, IL  - find singular values with index IF through IL in set of
-///           all singular values sorted decreasingly
-/// U       - unitary matrix of size M x K, where K is number of selected
-///           singular values
-/// V       - unitary matrix of size N x K
-/// S       - diagonal matrix of size K x K with singular values sorted
-///           decreasingly
-/// not available for sparse and band matrices
+// compute selected singular values and singular vectors
+//     [U, S, V] = singsel_range2(A, VL, VU);
+//     [U, S, V] = singsel_index2(A, IF, IL);
+// A       - a M x N matrix
+// VL, VU  - find singular values in half-open interval (VL,VU], VL >= 0
+// IF, IL  - find singular values with index IF through IL in set of
+//           all singular values sorted decreasingly
+// U       - unitary matrix of size M x K, where K is number of selected
+//           singular values
+// V       - unitary matrix of size N x K
+// S       - diagonal matrix of size K x K with singular values sorted
+//           decreasingly
+// not available for sparse and band matrices
 MATCL_LINALG_EXPORT mat_tup_3  singsel_range2(const Matrix& A, Real VL, Real VU);
 MATCL_LINALG_EXPORT mat_tup_3  singsel_range2(Matrix&& A, Real VL, Real VU);
 MATCL_LINALG_EXPORT mat_tup_3  singsel_index2(const Matrix& A, Integer IF, Integer IL);

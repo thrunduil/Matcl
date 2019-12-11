@@ -377,7 +377,7 @@ dm_decomp::dm_decomp()
     m_split_cols    = mat_col().add(1).add(2);
 };
 
-/// performe Dulmage-Mendelsohn decomposition of a matrix
+// performe Dulmage-Mendelsohn decomposition of a matrix
 dm_decomp::dm_decomp(const Matrix& A)
 {
     details::dmperm_vis::make<const Matrix&>(A, *this);

@@ -26,60 +26,60 @@
 namespace matcl { namespace opt { namespace linsolve
 {
 
-/// pivoting strategy
+// pivoting strategy
 enum class pivot_type
 {
-    partial = 0,    /// maximum element in given row
-    rook,           /// maximum element in row and column
-    complete,       /// maximum element in a matrix
+    partial = 0,    // maximum element in given row
+    rook,           // maximum element in row and column
+    complete,       // maximum element in a matrix
 
     last
 };
 
-/// ordering method for Cholesky factorization
+// ordering method for Cholesky factorization
 enum class chol_ordering_type
 {
-    default_val,    /// default method used by given solver, usually this is the
-                    /// best ordering
-    natural,        /// no reordering
+    default_val,    // default method used by given solver, usually this is the
+                    // best ordering
+    natural,        // no reordering
 
-    amd,            /// use minimum degree (AMD)
-    cholmod_nested, /// use cholmod's nested dissection
+    amd,            // use minimum degree (AMD)
+    cholmod_nested, // use cholmod's nested dissection
 
     last
 };
 
-/// ordering method for lu (or ilu) factorization
-/// other ordering methods must be used explicitly by permuting the matrix and 
-/// selecting natural ordering; see matcl_graph.h for available reordering
-/// methods, usually colamd gives the best ordering
+// ordering method for lu (or ilu) factorization
+// other ordering methods must be used explicitly by permuting the matrix and 
+// selecting natural ordering; see matcl_graph.h for available reordering
+// methods, usually colamd gives the best ordering
 enum class lu_ordering_type
 {
-    natural,        /// no reordering
-    colamd,         /// use order_colamnd
+    natural,        // no reordering
+    colamd,         // use order_colamnd
 
     last
 };
 
-/// incomplete lu factorization type
+// incomplete lu factorization type
 enum class ilu_method
 {
-    silu,           /// standard pivoted ilu
-    milu,           /// modified ilu, diagonal entries of U factor are modified as
-                    /// U(i,i) := U(i,i) + sign(U(i,i)) * sum(dropped entries)
-    milu_abs,       /// modified ilu, diagonal entries of U factor are modified as
-                    /// U(i,i) := U(i,i) + sign(U(i,i)) * sum(|dropped entries|)
+    silu,           // standard pivoted ilu
+    milu,           // modified ilu, diagonal entries of U factor are modified as
+                    // U(i,i) := U(i,i) + sign(U(i,i)) * sum(dropped entries)
+    milu_abs,       // modified ilu, diagonal entries of U factor are modified as
+                    // U(i,i) := U(i,i) + sign(U(i,i)) * sum(|dropped entries|)
 
     last
 };
 
-/// LU solver used for LU factorization with partial pivoting
+// LU solver used for LU factorization with partial pivoting
 enum class lu_solver_type
 {
-    lusol,          /// use lusol, notice that lusol uses Markowitz pivoting strategy
-                    /// and ignores user provider ordering; lusol usually generates 
-                    /// sparser factors than superlu but is slower
-    superlu,        /// use superlu (default)
+    lusol,          // use lusol, notice that lusol uses Markowitz pivoting strategy
+                    // and ignores user provider ordering; lusol usually generates 
+                    // sparser factors than superlu but is slower
+    superlu,        // use superlu (default)
     last
 };
 
@@ -87,7 +87,7 @@ enum class lu_solver_type
 //              options for lu decomposition
 //---------------------------------------------------------
 
-/// pivoting strategy
+// pivoting strategy
 class pivot : public option_base<Integer, pivot>
 {
     private:
@@ -107,7 +107,7 @@ class pivot : public option_base<Integer, pivot>
         };
 };
 
-/// pivoting strategy
+// pivoting strategy
 class lu_solver : public option_base<Integer, lu_solver>
 {
     private:
@@ -128,11 +128,11 @@ class lu_solver : public option_base<Integer, lu_solver>
         };
 };
 
-/// tolerance used to test singularity of diagonal elements of the 
-/// U factor; element v is considered as zero if |v| < tol
-/// if tol is negative, then default tolerance is used,
-/// tol is set to 10.0 * eps * |A|_F / sqrt(min(M,N)), where
-/// |A|_F is the Frobenius norm of a MxN matrix
+// tolerance used to test singularity of diagonal elements of the 
+// U factor; element v is considered as zero if |v| < tol
+// if tol is negative, then default tolerance is used,
+// tol is set to 10.0 * eps * |A|_F / sqrt(min(M,N)), where
+// |A|_F is the Frobenius norm of a MxN matrix
 class tol : public option_base<Real, tol>
 {
     private:
@@ -150,8 +150,8 @@ class tol : public option_base<Real, tol>
         };
 };
 
-/// column pivot tolerance; given column is selected as a pivot if element 
-/// is greater than 1/tol_c * v, where v is maximul element in given row, 
+// column pivot tolerance; given column is selected as a pivot if element 
+// is greater than 1/tol_c * v, where v is maximul element in given row, 
 class tol_c : public option_base<Real, tol_c>
 {
     private:
@@ -170,8 +170,8 @@ class tol_c : public option_base<Real, tol_c>
         };
 };
 
-/// row pivot tolerance; given row is selected as a pivot if element 
-/// is greater than 1/tol_v * v, where v is maximul element in given column, 
+// row pivot tolerance; given row is selected as a pivot if element 
+// is greater than 1/tol_v * v, where v is maximul element in given column, 
 class tol_r : public option_base<Real, tol_r>
 {
     private:
@@ -190,9 +190,9 @@ class tol_r : public option_base<Real, tol_r>
         };
 };
 
-/// if this option is true, then the L factor can be
-/// any lower triangular matrix; then LU factorization
-/// of a lower triangular matrix A gives L = A, U = I
+// if this option is true, then the L factor can be
+// any lower triangular matrix; then LU factorization
+// of a lower triangular matrix A gives L = A, U = I
 class allow_nonunit_L : public option_base<bool, allow_nonunit_L>
 {
     private:
@@ -214,8 +214,8 @@ class allow_nonunit_L : public option_base<bool, allow_nonunit_L>
 //          options controling factorization used
 //          when creating linsolve object
 //---------------------------------------------------------
-/// if this option is true, then rank revealing factorizations will be
-/// used, i.e. rook pivoted lu or permuted Cholesky factorization
+// if this option is true, then rank revealing factorizations will be
+// used, i.e. rook pivoted lu or permuted Cholesky factorization
 class use_rr : public option_base<bool, use_rr>
 {
     private:
@@ -233,8 +233,8 @@ class use_rr : public option_base<bool, use_rr>
         };
 };
 
-/// if this option is true, then LDL factorization will be used
-/// for dense symmetric/hermitian indefinite matrices
+// if this option is true, then LDL factorization will be used
+// for dense symmetric/hermitian indefinite matrices
 class can_use_ldl : public option_base<bool, can_use_ldl>
 {
     private:
@@ -252,9 +252,9 @@ class can_use_ldl : public option_base<bool, can_use_ldl>
         };
 };
 
-/// if this option is true, then matrix is balanced first before
-/// factorization is performed; this option is not used by rank
-/// revealing factorizations
+// if this option is true, then matrix is balanced first before
+// factorization is performed; this option is not used by rank
+// revealing factorizations
 class do_balancing : public option_base<bool, do_balancing>
 {
     private:
@@ -272,11 +272,11 @@ class do_balancing : public option_base<bool, do_balancing>
         };
 };
 
-/// if this option is true, then matrix is balanced first before
-/// factorization is performed; balancing functions use small value
-/// tolerances based on tol_sing option; this option is used only 
-/// by rank revealing factorizations (i.e. lu with rook or complete
-/// pivoting, pivoted cholesky, pivoted qr)
+// if this option is true, then matrix is balanced first before
+// factorization is performed; balancing functions use small value
+// tolerances based on tol_sing option; this option is used only 
+// by rank revealing factorizations (i.e. lu with rook or complete
+// pivoting, pivoted cholesky, pivoted qr)
 class do_balancing_rr : public option_base<bool, do_balancing_rr>
 {
     private:
@@ -295,13 +295,13 @@ class do_balancing_rr : public option_base<bool, do_balancing_rr>
         };
 };
 
-/// control small diagonals corrections added to triangular factors T
-/// created when constructing linsolve object; if |d_ii| < tol, then
-/// i-th diagonal element is modified to sign(d_ii) * tol; if 
-/// min_diag_pivot = 0 then no correction is applied; if min_diag_pivot < 0
-/// then tol = -min_diag_pivot; if min_diag_pivot > 0, then 
-/// tol = eps^min_diag_pivot * max(|T|), where eps is epsilon for given 
-/// value type
+// control small diagonals corrections added to triangular factors T
+// created when constructing linsolve object; if |d_ii| < tol, then
+// i-th diagonal element is modified to sign(d_ii) * tol; if 
+// min_diag_pivot = 0 then no correction is applied; if min_diag_pivot < 0
+// then tol = -min_diag_pivot; if min_diag_pivot > 0, then 
+// tol = eps^min_diag_pivot * max(|T|), where eps is epsilon for given 
+// value type
 class tol_sing : public option_base<Real, tol_sing>
 {
     private:
@@ -323,9 +323,9 @@ class tol_sing : public option_base<Real, tol_sing>
 //      options controling solution phase in linsolve objects
 //---------------------------------------------------------------------
 
-/// if true then iterative refinement is performed; iterative refinement
-/// is performed inly for direct solvers when no diagonal corrections
-/// was added
+// if true then iterative refinement is performed; iterative refinement
+// is performed inly for direct solvers when no diagonal corrections
+// was added
 class use_ir : public option_base<bool, use_ir>
 {
     private:
@@ -343,13 +343,13 @@ class use_ir : public option_base<bool, use_ir>
         };
 };
 
-/// check componentwise forward error bound of computed solution, i.e.
-/// |Y - Y*|_inf / |Y|_inf <= ferr, where Y is computed solution and Y*
-/// is true solution; this options set required number of correct digits
-/// of large entries of the solution; if 0 then quality of the solution 
-/// is not tested; value +-k requires k correct digits; if estimated number
-/// of correct digits is less than k, then warning is issued if sign is positive
-/// and error is thrown is sign is negative
+// check componentwise forward error bound of computed solution, i.e.
+// |Y - Y*|_inf / |Y|_inf <= ferr, where Y is computed solution and Y*
+// is true solution; this options set required number of correct digits
+// of large entries of the solution; if 0 then quality of the solution 
+// is not tested; value +-k requires k correct digits; if estimated number
+// of correct digits is less than k, then warning is issued if sign is positive
+// and error is thrown is sign is negative
 class test_sol : public option_base<Integer, test_sol>
 {
     private:
@@ -370,12 +370,12 @@ class test_sol : public option_base<Integer, test_sol>
 //---------------------------------------------------------
 //          iterative refinement
 //---------------------------------------------------------
-/// iterative refinement is performed by explicitly calling 
-/// refinement functions from linsolve_obj
+// iterative refinement is performed by explicitly calling 
+// refinement functions from linsolve_obj
 
-/// maximum number of iterative refinement steps, values less 
-/// than 1 implies no iterative refinement; in case of 
-/// highly ill-conditioned problem value 100 is recommended
+// maximum number of iterative refinement steps, values less 
+// than 1 implies no iterative refinement; in case of 
+// highly ill-conditioned problem value 100 is recommended
 class refinement_iter : public option_base<Integer, refinement_iter>
 {
     private:
@@ -393,10 +393,10 @@ class refinement_iter : public option_base<Integer, refinement_iter>
         };
 };
 
-/// minimum error decrease allowed, iterative refinement is stopped if
-/// |dx_i|_inf / |dx_{i-1}|_inf >= refinement_rho, where |dx_i| is the 
-/// solution correction in step i; for highly ill-conditioned problems
-/// value 0.9 is recommended
+// minimum error decrease allowed, iterative refinement is stopped if
+// |dx_i|_inf / |dx_{i-1}|_inf >= refinement_rho, where |dx_i| is the 
+// solution correction in step i; for highly ill-conditioned problems
+// value 0.9 is recommended
 class refinement_rho : public option_base<Real, refinement_rho>
 {
     private:
@@ -418,11 +418,11 @@ class refinement_rho : public option_base<Real, refinement_rho>
 //---------------------------------------------------------
 //          balancing
 //---------------------------------------------------------
-/// balancing is only used when creating linsolve objects; explicit call
-/// to factorization routines never do balancing
+// balancing is only used when creating linsolve objects; explicit call
+// to factorization routines never do balancing
 
-/// maximum number of balancing iterations, values less 
-/// than 1 implies no balancing; 
+// maximum number of balancing iterations, values less 
+// than 1 implies no balancing; 
 class balancing_iter : public option_base<Integer, balancing_iter>
 {
     private:
@@ -440,9 +440,9 @@ class balancing_iter : public option_base<Integer, balancing_iter>
         };
 };
 
-/// tolenance used to check convergense of diagonal scale factors;
-/// negative value implies default tolerance used by algorithm, that use
-/// this option
+// tolenance used to check convergense of diagonal scale factors;
+// negative value implies default tolerance used by algorithm, that use
+// this option
 class balancing_tol : public option_base<Real, balancing_tol>
 {
     private:
@@ -463,8 +463,8 @@ class balancing_tol : public option_base<Real, balancing_tol>
 //---------------------------------------------------------
 //          reordering
 //---------------------------------------------------------
-/// ordering method used for Cholesky factorization, see
-/// chol_ordering_type for details
+// ordering method used for Cholesky factorization, see
+// chol_ordering_type for details
 class chol_ordering : public option_base<Integer, chol_ordering>
 {
     private:
@@ -484,8 +484,8 @@ class chol_ordering : public option_base<Integer, chol_ordering>
         };
 };
 
-/// ordering method used for LU factorization, see
-/// lu_ordering_type for details
+// ordering method used for LU factorization, see
+// lu_ordering_type for details
 class lu_ordering : public option_base<Integer, lu_ordering>
 {
     private:
@@ -507,9 +507,9 @@ class lu_ordering : public option_base<Integer, lu_ordering>
 //---------------------------------------------------------
 //          incomplete factorizations
 //---------------------------------------------------------
-/// elements lower that drop_tol are treated as zero; this
-/// value is used directly for L factor, for U factor tolerance
-/// |A(:,i)|_oo * drop_tol is used
+// elements lower that drop_tol are treated as zero; this
+// value is used directly for L factor, for U factor tolerance
+// |A(:,i)|_oo * drop_tol is used
 class drop_tol : public option_base<Real, drop_tol>
 {
     private:
@@ -528,9 +528,9 @@ class drop_tol : public option_base<Real, drop_tol>
         };
 };
 
-/// if some U(i,i) = 0, so that U is exactly singular, then a small number is 
-/// added to the diagonal entry, that is U(i,i) = |A(:,i)|_oo * diag_fill_tol ^ pow
-/// where pow is a factor depending on density of given column
+// if some U(i,i) = 0, so that U is exactly singular, then a small number is 
+// added to the diagonal entry, that is U(i,i) = |A(:,i)|_oo * diag_fill_tol ^ pow
+// where pow is a factor depending on density of given column
 class diag_fill_tol : public option_base<Real, diag_fill_tol>
 {
     private:
@@ -549,8 +549,8 @@ class diag_fill_tol : public option_base<Real, diag_fill_tol>
         };
 };
 
-/// expected upper bound on fill ratio, i.e. nnz(L+U-I)/nnz(A); it is not 
-/// guaranteed that actual fill ration will be not greater that fill_factor
+// expected upper bound on fill ratio, i.e. nnz(L+U-I)/nnz(A); it is not 
+// guaranteed that actual fill ration will be not greater that fill_factor
 class fill_factor : public option_base<Real, fill_factor>
 {
     private:

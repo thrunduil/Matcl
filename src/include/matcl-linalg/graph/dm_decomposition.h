@@ -26,35 +26,35 @@
 namespace matcl
 {
 
-/// finds the Dulmage-Mendelsohn decomposition of A; compute row and column
-/// permutations p, q such that A(p,q) has block upper triangular form; A(p,q)
-/// is decomposed into underdetermined, exactly determined, and overdetermined
-/// parts:
-///
-///     A(p,q) = [ A_11 A_12  A_13]
-///              [ 0    A_22  A_23]
-///              [ 0    0     A_33]
-///
-/// underdetermined part (A_11) is rectangular matrix of size HR x HC, HC > HR
-/// with maximum structural row rank; exactly determined part (A_22) is a square
-/// matrix with full structural rank and overdetermined part (A_33) is rectangular
-/// matrix of size VR x VC, VR > VC, with full structural column rank; some parts
-/// may be empty; 
-///
-/// matrices A_11, A_33, are further decomposed into block diagonal matrices with
-/// rectangular blocks of size m_i x n_i; in A_11 part m_i < n_i and i-th block 
-/// has structure [A_i, D_i], where D_i is square matrix with zero free diagonal, 
-/// m_i can be zero; in A_33 part m_i > n_i and i-th block has structure
-/// [D_i; A_i], where D_i is square matrix with zero free diagonal, n_i can be zero; 
-/// A_22 matrix is decomposed into block upper triangula matrices with square 
-/// diagonal blocks, each diagonal block has zero free diagonal
-///
-/// algorithm: A. Pothen and C.J. Fan, "Computing the Block Triangular form of a Sparse 
+// finds the Dulmage-Mendelsohn decomposition of A; compute row and column
+// permutations p, q such that A(p,q) has block upper triangular form; A(p,q)
+// is decomposed into underdetermined, exactly determined, and overdetermined
+// parts:
+//
+//     A(p,q) = [ A_11 A_12  A_13]
+//              [ 0    A_22  A_23]
+//              [ 0    0     A_33]
+//
+// underdetermined part (A_11) is rectangular matrix of size HR x HC, HC > HR
+// with maximum structural row rank; exactly determined part (A_22) is a square
+// matrix with full structural rank and overdetermined part (A_33) is rectangular
+// matrix of size VR x VC, VR > VC, with full structural column rank; some parts
+// may be empty; 
+//
+// matrices A_11, A_33, are further decomposed into block diagonal matrices with
+// rectangular blocks of size m_i x n_i; in A_11 part m_i < n_i and i-th block 
+// has structure [A_i, D_i], where D_i is square matrix with zero free diagonal, 
+// m_i can be zero; in A_33 part m_i > n_i and i-th block has structure
+// [D_i; A_i], where D_i is square matrix with zero free diagonal, n_i can be zero; 
+// A_22 matrix is decomposed into block upper triangula matrices with square 
+// diagonal blocks, each diagonal block has zero free diagonal
+//
+// algorithm: A. Pothen and C.J. Fan, "Computing the Block Triangular form of a Sparse 
 //             Matrix", ACM Trans. on Mathematical Software, 16 (4), pp 303-324, 1990.
 class MATCL_LINALG_EXPORT dm_decomp
 {
     public:
-        /// tuple of four integers
+        // tuple of four integers
         using int_tup_4 = tuple<Integer,Integer,Integer,Integer>;
 
     private:
@@ -70,97 +70,97 @@ class MATCL_LINALG_EXPORT dm_decomp
         friend struct details::dmperm_impl;
 
     public:
-        /// create uninitialized object
+        // create uninitialized object
         dm_decomp();
 
-        /// performe Dulmage-Mendelsohn decomposition of a matrix
+        // performe Dulmage-Mendelsohn decomposition of a matrix
         dm_decomp(const Matrix& A);
 
-        /// standard destructor
+        // standard destructor
         ~dm_decomp();
 
-        /// get row permutations p
+        // get row permutations p
         permvec     row_perms() const;
 
-        /// get column permutations q
+        // get column permutations q
         permvec     col_perms() const;
 
-        /// get number of connected components in underdetermined part A_11
+        // get number of connected components in underdetermined part A_11
         Integer     components_under() const;
 
-        /// get number of connected components in exactly determined part A_22
+        // get number of connected components in exactly determined part A_22
         Integer     components_square() const;
 
-        /// get number of connected components in exactly overdetermined part A_33
+        // get number of connected components in exactly overdetermined part A_33
         Integer     components_over() const;
 
-        /// get total number of connected components
+        // get total number of connected components
         Integer     components_total() const;
 
-        /// get indices of first row in diagonal blocks; integer matrix of
-        /// size (components_total() + 1) x 1
+        // get indices of first row in diagonal blocks; integer matrix of
+        // size (components_total() + 1) x 1
         Matrix      row_split() const;
 
-        /// get indices of first column in diagonal blocks; integer matrix of
-        /// size (components_total() + 1) x 1
+        // get indices of first column in diagonal blocks; integer matrix of
+        // size (components_total() + 1) x 1
         Matrix      col_split() const;
 
-        /// get number of rows of underdetermined part A_11
+        // get number of rows of underdetermined part A_11
         Integer     under_rows() const;
 
-        /// get number of columns of underdetermined part A_11
+        // get number of columns of underdetermined part A_11
         Integer     under_cols() const;
 
-        /// get number of rows and columns of exactly determined part A_22
+        // get number of rows and columns of exactly determined part A_22
         Integer     square_size() const;
 
-        /// get number of rows of overdetermined part A_33
+        // get number of rows of overdetermined part A_33
         Integer     over_rows() const;
 
-        /// get number of columns of overdetermined part A_33
+        // get number of columns of overdetermined part A_33
         Integer     over_cols() const;
 
-        /// get number of rows of the matrix A
+        // get number of rows of the matrix A
         Integer     rows() const;
 
-        /// get number of columns of the matrix A
+        // get number of columns of the matrix A
         Integer     cols() const;
 
-        /// return true if the matrix A has underdetermined part A_11
+        // return true if the matrix A has underdetermined part A_11
         bool        has_under() const;
 
-        /// return true if the matrix A has exactly determined part A_22
+        // return true if the matrix A has exactly determined part A_22
         bool        has_square() const;
 
-        /// return true if the matrix A has overdetermined part A_33
+        // return true if the matrix A has overdetermined part A_33
         bool        has_over() const;
 
-        /// return structural rank of the matrix A (see sprank function
-        /// for details)
+        // return structural rank of the matrix A (see sprank function
+        // for details)
         Integer     sprank() const;
 
-        /// return [first_row, last_row, first_col, last_col] boundary of
-        /// component number 1 <= comp <= components_under()
+        // return [first_row, last_row, first_col, last_col] boundary of
+        // component number 1 <= comp <= components_under()
         int_tup_4   get_component_under(Integer comp) const;
 
-        /// return [first_row, last_row, first_col, last_col] boundary of
-        /// component number 1 <= comp <= components_square()
+        // return [first_row, last_row, first_col, last_col] boundary of
+        // component number 1 <= comp <= components_square()
         int_tup_4   get_component_square(Integer comp) const;
 
-        /// return [first_row, last_row, first_col, last_col] boundary of
-        /// component number 1 <= comp <= components_over()
+        // return [first_row, last_row, first_col, last_col] boundary of
+        // component number 1 <= comp <= components_over()
         int_tup_4   get_component_over(Integer comp) const;
 
-        /// return [first_row, last_row, first_col, last_col] boundary of
-        /// underdetermined part A_11
+        // return [first_row, last_row, first_col, last_col] boundary of
+        // underdetermined part A_11
         int_tup_4   get_under_block() const;
 
-        /// return [first_row, last_row, first_col, last_col] boundary of
-        /// exactly determined part A_22
+        // return [first_row, last_row, first_col, last_col] boundary of
+        // exactly determined part A_22
         int_tup_4   get_square_block() const;
 
-        /// return [first_row, last_row, first_col, last_col] boundary of
-        /// overdetermined part A_33
+        // return [first_row, last_row, first_col, last_col] boundary of
+        // overdetermined part A_33
         int_tup_4   get_over_block() const;
 };
 

@@ -30,14 +30,14 @@ namespace matcl { namespace raw
 
 namespace md = matcl::details;
 
-/// perform Arnoldi reduction:
-///     A * V = V * H + r*E_{k}^T
-///     V' * V = I, V' * r = 0.
-/// where V is N x k matrix, H is k x k block upper Hessenberg matrix, r is a N x KB matrix
-/// E_k is k x KB matrix formed from last KB columns of identity matrix of size kxk
-///
-/// if lanczos = true, then Lanczos reduction is performed and H is additionally hermitian matrix. 
-/// The matrix A must be symmetric/hermitian.
+// perform Arnoldi reduction:
+//     A * V = V * H + r*E_{k}^T
+//     V' * V = I, V' * r = 0.
+// where V is N x k matrix, H is k x k block upper Hessenberg matrix, r is a N x KB matrix
+// E_k is k x KB matrix formed from last KB columns of identity matrix of size kxk
+//
+// if lanczos = true, then Lanczos reduction is performed and H is additionally hermitian matrix. 
+// The matrix A must be symmetric/hermitian.
 template<class T>
 class arnoldi_blk_impl
 {
@@ -62,37 +62,37 @@ class arnoldi_blk_impl
         Integer             continue_run(Integer k, Real tol);
         Integer             continue_run(const matcl::Matrix& v, Integer k, Real tol);
 
-        /// return number of rows of the operator A;
+        // return number of rows of the operator A;
         Integer             size() const;
 
-        /// return maximum number of Arnoldi vectors that can be computed
+        // return maximum number of Arnoldi vectors that can be computed
         Integer             max_k() const;
 
-        /// return maximum block size allowed
+        // return maximum block size allowed
         Integer             max_kb() const;
 
-        /// return number of computed Arnoldi vectors
+        // return number of computed Arnoldi vectors
         Integer             number_vectors() const;
 
-        /// return current block size
+        // return current block size
         Integer             current_block_size() const;
 
-        /// return block size of the initial vecto
+        // return block size of the initial vecto
         Integer             get_H_ldiags() const;
 
-        /// get N x k matrix with Arnoldi vectors
+        // get N x k matrix with Arnoldi vectors
         matcl::Matrix       get_V() const;
 
         mat_tup_2           get_V_as_reflectors() const;
 
-        /// get k x k upper hessenberg matrix, this matrix is symmetric if Lanczos
-        /// argorithm is used
+        // get k x k upper hessenberg matrix, this matrix is symmetric if Lanczos
+        // argorithm is used
         matcl::Matrix       get_H() const;
 
-        /// return N x 1 vector of residuals
+        // return N x 1 vector of residuals
         matcl::Matrix       get_resid() const;
 
-        /// return second norm of residuals
+        // return second norm of residuals
         TR                  get_norm_resid() const;
 
         const linear_operator& 

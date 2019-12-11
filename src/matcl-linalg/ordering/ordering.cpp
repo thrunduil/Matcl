@@ -455,7 +455,7 @@ struct visit_diag : public md::extract_type_switch<void, visit_diag,true>
 namespace matcl
 {
 
-/// nested dissection ordering of a square, symmetric matrix
+// nested dissection ordering of a square, symmetric matrix
 permvec matcl::order_nested_dissection(const Matrix& A)
 {
     if (A.is_square() == false)
@@ -466,7 +466,7 @@ permvec matcl::order_nested_dissection(const Matrix& A)
     //return petsc::reorder_sym(A, petsc_ordering::nd);
 };
 
-/// one-way dissection ordering of a square, symmetric matrix
+// one-way dissection ordering of a square, symmetric matrix
 permvec matcl::order_one_way_dissection(const Matrix& A)
 {
     if (A.is_square() == false)
@@ -477,7 +477,7 @@ permvec matcl::order_one_way_dissection(const Matrix& A)
     //return petsc::reorder_sym(A, petsc_ordering::w1d);
 }
 
-/// reverse Cuthill-McKee ordering of a square, symmetric matrix
+// reverse Cuthill-McKee ordering of a square, symmetric matrix
 permvec matcl::order_rcm(const Matrix& A)
 {
     if (A.is_square() == false)

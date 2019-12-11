@@ -28,13 +28,13 @@
 namespace matcl { namespace details 
 {
 
-/// which part of symmetric or hermitian matrix is stored
+// which part of symmetric or hermitian matrix is stored
 enum class triang_part
 {
     UPPER, LOWER
 };
 
-/// a simple representation of a symmetric or hermitian dense matrix
+// a simple representation of a symmetric or hermitian dense matrix
 template<class T> class cholmod_matrix
 {
     public:
@@ -49,10 +49,10 @@ template<class T> class cholmod_matrix
         triang_part         m_tr_type;
 
     public:
-        /// create Matrix from array data representing a symmetrix or hermitian
-        /// dense matrix of size M x N with leading dimension LD; tr_type informs
-        /// whether upper- or lower-triangular part of the matrix is stored in
-        /// array data
+        // create Matrix from array data representing a symmetrix or hermitian
+        // dense matrix of size M x N with leading dimension LD; tr_type informs
+        // whether upper- or lower-triangular part of the matrix is stored in
+        // array data
         cholmod_matrix(T* data, Integer M, Integer N, Integer LD, triang_part tr_type)
             :m_data(data),m_M(M),m_N(N),m_LD(LD),m_tr_type(tr_type)
         {
@@ -62,20 +62,20 @@ template<class T> class cholmod_matrix
             };
         };
 
-        /// get element at row i and column j; no checks are performed
+        // get element at row i and column j; no checks are performed
         T&                  operator()(Integer i,Integer j)         { return m_data[i+j*m_LD]; };
         const T&            operator()(Integer i,Integer j) const   { return m_data[i+j*m_LD]; };
 
-        /// number of rows of the matrix
+        // number of rows of the matrix
         Integer             rows() const                            { return m_M; };
 
-        /// number of columns of the matrix
+        // number of columns of the matrix
         Integer             cols() const                            { return m_N; };
 
-        /// leading dimension of the matrix
+        // leading dimension of the matrix
         Integer             ld() const                              { return m_LD; };
 
-        /// return which part of the matrix is stored
+        // return which part of the matrix is stored
         triang_part         triang_type() const                     { return m_tr_type; };
 };
 

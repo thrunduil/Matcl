@@ -30,18 +30,18 @@ namespace matcl { namespace raw
 
 namespace md = matcl::details;
 
-/// perform Arnoldi reduction:
-///     A * V = V * H + r*e_{k}^T
-///     V' * B * V = I, V' * B* r = 0.
-/// where V is N x k matrix, H is k x k upper Hessenberg matrix, r is a vector
-/// e_k is k x 1 vector with zeroes on all positions except last and 1 on the last
-/// position; B is semi positive definite matrix
-///
-/// if lanczos = true, then Lanczos reduction is performed and H is hermitian tridiagonal
-/// real matrix. The matrix A must be symmetric/hermitian with respect to inner product
-/// defined by the matrix B, i.e.
-///     B * A = A' * B, or equivalently < x,A y > = < A x,y >  
-/// where < z,w > = z'Bw (for example A = S * B, where S is symmetric/hermitian)
+// perform Arnoldi reduction:
+//     A * V = V * H + r*e_{k}^T
+//     V' * B * V = I, V' * B* r = 0.
+// where V is N x k matrix, H is k x k upper Hessenberg matrix, r is a vector
+// e_k is k x 1 vector with zeroes on all positions except last and 1 on the last
+// position; B is semi positive definite matrix
+//
+// if lanczos = true, then Lanczos reduction is performed and H is hermitian tridiagonal
+// real matrix. The matrix A must be symmetric/hermitian with respect to inner product
+// defined by the matrix B, i.e.
+//     B * A = A' * B, or equivalently < x,A y > = < A x,y >  
+// where < z,w > = z'Bw (for example A = S * B, where S is symmetric/hermitian)
 template<class T>
 class arnoldi_impl
 {
@@ -55,57 +55,57 @@ class arnoldi_impl
         arnoldi_impl& operator=(const arnoldi_impl&) = delete;
 
     public:
-        /// prepare Arnoldi process for matrix A; allow for storing at most max_k 
-        /// Arnoldi vectors; if lanczos = true, then call Lanczos version; in this
-        /// case A must be hermitian 
+        // prepare Arnoldi process for matrix A; allow for storing at most max_k 
+        // Arnoldi vectors; if lanczos = true, then call Lanczos version; in this
+        // case A must be hermitian 
         arnoldi_impl(const linear_operator& A, bool lanczos, Integer max_k);
-        /// version with B != I
+        // version with B != I
         arnoldi_impl(const linear_operator& A, const linear_operator& B, 
                      bool lanczos, Integer max_k);
 
         ~arnoldi_impl();
 
-        /// change maximum number of allowed Arnoldi vectors
+        // change maximum number of allowed Arnoldi vectors
         void                resize(Integer max_k);
 
-        /// discard all previously computer Arnoldi vectors; capacity is not changed
+        // discard all previously computer Arnoldi vectors; capacity is not changed
         void                clear();
 
-        /// perform Arnoldi process for the vector v; perform at most min(k, max_k)
-        /// steps; finish iterations if norm of residual vector is less than tol;
-        /// return number of steps performed; 
-        /// previous computations are discarded
+        // perform Arnoldi process for the vector v; perform at most min(k, max_k)
+        // steps; finish iterations if norm of residual vector is less than tol;
+        // return number of steps performed; 
+        // previous computations are discarded
         Integer             run(const matcl::Matrix& v, Integer k, Real tol);
 
-        /// perform additional k steps of the Arnoldi process
-        /// return number of steps performed
+        // perform additional k steps of the Arnoldi process
+        // return number of steps performed
         Integer             continue_run(Integer k, Real tol);
 
-        /// perform additional k steps of the Arnoldi process with new initial vector v
-        /// at the beginning the vector v is orthogonalized againts get_V()
-        /// return number of steps performed
+        // perform additional k steps of the Arnoldi process with new initial vector v
+        // at the beginning the vector v is orthogonalized againts get_V()
+        // return number of steps performed
         Integer             continue_run(const matcl::Matrix& v, Integer k, Real tol);
 
-        /// return number of rows of the operator A;
+        // return number of rows of the operator A;
         Integer             size() const;
 
-        /// return maximum number of Arnoldi vectors that can be computed
+        // return maximum number of Arnoldi vectors that can be computed
         Integer             max_k() const;
 
-        /// return number of computed Arnoldi vectors
+        // return number of computed Arnoldi vectors
         Integer             number_vectors() const;
 
-        /// get N x k matrix with Arnoldi vectors
+        // get N x k matrix with Arnoldi vectors
         matcl::Matrix       get_V() const;
 
-        /// get k x k upper hessenberg matrix, this matrix is symmetric if Lanczos
-        /// argorithm is used
+        // get k x k upper hessenberg matrix, this matrix is symmetric if Lanczos
+        // argorithm is used
         matcl::Matrix       get_H() const;
 
-        /// return N x 1 vector of residuals
+        // return N x 1 vector of residuals
         matcl::Matrix       get_resid() const;
 
-        /// return second norm of residuals
+        // return second norm of residuals
         TR                  get_norm_resid() const;
 
         const linear_operator& 

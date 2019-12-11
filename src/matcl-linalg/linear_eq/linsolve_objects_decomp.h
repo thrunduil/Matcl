@@ -166,15 +166,15 @@ class linsolve_obj_lu_dense : public linsolve_obj_base
 
         virtual data_ptr        convert(value_code new_val_code) const override;
 
-        /// create inverse matrix
+        // create inverse matrix
         virtual matcl::Matrix   inv() const override;
         virtual matcl::Matrix   base_matrix() const override;
 
-        /// solve op(A) * Y = X, where A is the matrix represented by this object
+        // solve op(A) * Y = X, where A is the matrix represented by this object
         virtual matcl::Matrix   solve(const Matrix& X, trans_type tA) const override;
         virtual matcl::Matrix   solve(Matrix&& X, trans_type tA) const override;
 
-        /// solve Y * op(A) = X, where A is the matrix represented by this object
+        // solve Y * op(A) = X, where A is the matrix represented by this object
         virtual matcl::Matrix   solve_rev(const Matrix& X, trans_type tA) const override;
         virtual matcl::Matrix   solve_rev(Matrix&& X, trans_type tA) const override;
 
@@ -230,11 +230,11 @@ class linsolve_obj_lu_band : public linsolve_obj_base
         virtual matcl::Matrix   inv() const override;
         virtual matcl::Matrix   base_matrix() const override;
 
-        /// solve op(A) * Y = X, where A is the matrix represented by this object
+        // solve op(A) * Y = X, where A is the matrix represented by this object
         virtual matcl::Matrix   solve(const Matrix& X, trans_type tA) const override;
         virtual matcl::Matrix   solve(Matrix&& X, trans_type tA) const override;
 
-        /// solve Y * op(A) = X, where A is the matrix represented by this object
+        // solve Y * op(A) = X, where A is the matrix represented by this object
         virtual matcl::Matrix   solve_rev(const Matrix& X, trans_type tA) const override;
         virtual matcl::Matrix   solve_rev(Matrix&& X, trans_type tA) const override;
 

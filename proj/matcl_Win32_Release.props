@@ -21,6 +21,7 @@
       <AdditionalIncludeDirectories>C:\coding\extern\boost_1_71_0;..\..\..\src\extern\magma\include;..\..\..\src\extern\$(Platform)\openblas\include;..\..\..\src\extern\$(Platform)\mpir;..\..\..\src\extern\$(Platform)\mpfr;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.5.281\windows\mkl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>

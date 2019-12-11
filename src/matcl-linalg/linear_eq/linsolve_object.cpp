@@ -1726,7 +1726,7 @@ mat_tup_2 linsolve_obj::norm_error_rev(const Matrix& Y, const Matrix& X, basic_v
 
 //TODO: move to matcl
 
-/// form abs(X) * abs(op(A)) + abs(Y)
+// form abs(X) * abs(op(A)) + abs(Y)
 Matrix mmul_abs_rev(const Matrix& A, const Matrix& X, trans_type tA, const Matrix& Y)
 {
     return mmul(abs(X), abs(A), trans_type::no_trans, tA) + abs(Y);

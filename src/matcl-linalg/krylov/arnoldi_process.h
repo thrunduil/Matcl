@@ -299,7 +299,7 @@ void baitr(bool SYM, Integer N, Integer K, Integer NP, Integer& KB, typename md:
     typename md::real_type<V>::type& SUMSQ, V* T, Integer LDT, Integer& NT, V* WORK, Integer LWORK, 
     callback_baitr<V>* callback, Integer& INFO);
 
-/// return block size used by baitr<V>
+// return block size used by baitr<V>
 template<class V>
 Integer baitr_block_size();
 

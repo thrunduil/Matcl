@@ -19,7 +19,7 @@
  */
 #pragma once
 
-/// export macros
+// export macros
 #ifdef MATCL_LINALG_EXPORTS
     #define MATCL_LINALG_EXPORT  __declspec(dllexport)
 #else

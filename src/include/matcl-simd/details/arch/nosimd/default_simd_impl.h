@@ -99,4 +99,6 @@ struct default_simd_bit_size<int64_t, 128>
 
 using maximum_tag = nosimd_tag;
 
+static const int maximum_bits   = 128;
+
 }}

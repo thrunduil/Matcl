@@ -62,7 +62,7 @@ namespace matcl { namespace details
                                             Mat& WL_R, Mat& WR_R, const Matrix& ind);
     };
 
-    /// apply unitary transformations to make symmetric tridiagonal matrix real
+    // apply unitary transformations to make symmetric tridiagonal matrix real
     template<class V>
     Matrix make_tridiag_subdiag_real(const Matrix& D1, V* ptr_U, bool is_D1_compl);
 }}

@@ -660,7 +660,7 @@ struct chol_impl<Complex,struct_sparse>
                 c.nmethods              = 1;
                 break;
             /*
-            ///metis is broken in cholmod
+            //metis is broken in cholmod
             case opt::ordering_type::metis:
                 c.method[0].ordering    = CHOLMOD_METIS;
                 c.postorder             = true;

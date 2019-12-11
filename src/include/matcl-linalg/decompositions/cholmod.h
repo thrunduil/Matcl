@@ -26,19 +26,19 @@
 namespace matcl
 {
 
-/// correction algorithm used by cholmod
+// correction algorithm used by cholmod
 struct correction_alg
 {
     enum type   { NONE, GMW, SE };
 };
 
-/// type of correction used by cholmod
+// type of correction used by cholmod
 struct correction_type
 {
     enum type   { TYPE_I,TYPE_II };
 };
         
-/// return type of cholmod
+// return type of cholmod
 using cholmod_return_type = tuple<Matrix,permvec, Integer, Real>;
 
 /**

@@ -109,7 +109,7 @@ class hash_table;
 // by a user, template argument track_value helps to do this
 template<class T,class hasher_ = default_hasher,class equaler_ = default_equaler,
          class track_value = default_track_value<T>, 
-         class allocator = default_allocator_simple<true, false, char>>
+         class allocator = default_allocator_simple<true, char>>
 class hash_table : private details::ht_base
 {
     public:

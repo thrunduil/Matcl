@@ -2139,7 +2139,7 @@ matcl::Matrix linsolve_obj_seq_2::solve(Matrix&& X, trans_type tA) const
     };
 };
 
-/// solve Y * op(A) = X, where A is the matrix represented by this object
+// solve Y * op(A) = X, where A is the matrix represented by this object
 matcl::Matrix linsolve_obj_seq_2::solve_rev(const Matrix& X, trans_type tA) const
 {
     if (tA == trans_type::no_trans)
@@ -2486,7 +2486,7 @@ matcl::Matrix linsolve_obj_seq_3::solve(Matrix&& X, trans_type tA) const
     };
 };
 
-/// solve Y * op(A) = X, where A is the matrix represented by this object
+// solve Y * op(A) = X, where A is the matrix represented by this object
 matcl::Matrix linsolve_obj_seq_3::solve_rev(const Matrix& X, trans_type tA) const
 {
     if (tA == trans_type::no_trans)

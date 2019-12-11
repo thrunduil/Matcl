@@ -25,30 +25,30 @@
 namespace matcl
 {
 
-/// type of gschur_sym decomposition
+// type of gschur_sym decomposition
 enum class gschur_sym_type
 {
-    A_B,        /// eigenproblem:   Ax  = lambda Bx
-    AB,         /// eigenproblem:   ABx = lambda x
-    BA          /// eigenproblem:   BAx = lambda x
+    A_B,        // eigenproblem:   Ax  = lambda Bx
+    AB,         // eigenproblem:   ABx = lambda x
+    BA          // eigenproblem:   BAx = lambda x
 };
 
-/// perform generalized Schur decomposition of the matrix pair (A,B) 
-/// where A and B are symmetric/hermitian and B is positive definite
-/// in the form:
-///
-/// type:       eigen problem:      decomposition:
-/// A_B:        Ax =  lambda Bx.   A * V = B * V * D    and V' * B * V = I;
-/// AB:         ABx = lambda x.    A * B * V = V * D    and V' * B * V = I;
-/// BA:         BAx = lambda x.    B * A * V = V * D    and V' * inv(B) * V = I
-///
-/// where V is square and D is diagonal matrix
-/// this solver reduce this problem to the standard symmetric eigenvalue
-/// problem implicitly inverting the matrix B, therefore B should be 
-/// sufficiently positive definite,
-///
-/// not available for sparse matrices; available for band matrices if decomposition
-/// type is A_B
+// perform generalized Schur decomposition of the matrix pair (A,B) 
+// where A and B are symmetric/hermitian and B is positive definite
+// in the form:
+//
+// type:       eigen problem:      decomposition:
+// A_B:        Ax =  lambda Bx.   A * V = B * V * D    and V' * B * V = I;
+// AB:         ABx = lambda x.    A * B * V = V * D    and V' * B * V = I;
+// BA:         BAx = lambda x.    B * A * V = V * D    and V' * inv(B) * V = I
+//
+// where V is square and D is diagonal matrix
+// this solver reduce this problem to the standard symmetric eigenvalue
+// problem implicitly inverting the matrix B, therefore B should be 
+// sufficiently positive definite,
+//
+// not available for sparse matrices; available for band matrices if decomposition
+// type is A_B
 class MATCL_LINALG_EXPORT gschur_sym_decomposition
 {
     public:
@@ -59,28 +59,28 @@ class MATCL_LINALG_EXPORT gschur_sym_decomposition
         //                      FACTORIZATION
         //------------------------------------------------------------------------
 
-        /// compute decomposition of the matrix pair A, B; if with_V is false, then
-        /// unitary matricex V is not computed        
+        // compute decomposition of the matrix pair A, B; if with_V is false, then
+        // unitary matricex V is not computed        
         gschur_sym_decomposition(const Matrix &A, const Matrix &B, gschur_sym_type type, bool with_V = true);
         gschur_sym_decomposition(Matrix &&A, const Matrix& B, gschur_sym_type type, bool with_V = true);
         gschur_sym_decomposition(const Matrix &A, Matrix&& B, gschur_sym_type type, bool with_V = true);
         gschur_sym_decomposition(Matrix&& A, Matrix&& B, gschur_sym_type type, bool with_V = true);
 
-        /// compute decomposition of another matrix pair; see constructor for details
+        // compute decomposition of another matrix pair; see constructor for details
         gschur_sym_decomposition&   operator()(const Matrix &A, const Matrix &B, gschur_sym_type type, 
                                                bool with_V = true);
         gschur_sym_decomposition&   operator()(Matrix&& A, const Matrix &B, gschur_sym_type type, bool with_V = true);
         gschur_sym_decomposition&   operator()(const Matrix &A, Matrix&& B, gschur_sym_type type, bool with_V = true);
         gschur_sym_decomposition&   operator()(Matrix&& A, Matrix&& B, gschur_sym_type type, bool with_V = true);
 
-        /// return the eigenvector matrix
+        // return the eigenvector matrix
         Matrix                  V() const;
                 
-        /// return the diagonal matrix D with eigenvalues on diagonal sorted in asceding
-        /// order
+        // return the diagonal matrix D with eigenvalues on diagonal sorted in asceding
+        // order
         Matrix                  D() const;
                         
-        /// return the generalized eigenvalues sorted in asceding order
+        // return the generalized eigenvalues sorted in asceding order
         Matrix                  eig() const;
         
     private:

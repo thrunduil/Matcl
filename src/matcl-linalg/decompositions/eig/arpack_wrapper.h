@@ -35,14 +35,14 @@ enum class kernel_type
 
 enum class arpack_output
 {
-    eig,        /// eigenvalues only
-    schur,      /// eigenvalues and schur vectors
-    ritz,       /// eigenvalues and ritz vectors
-    schur_ritz, /// eigenvalues, schur and ritz vectors
+    eig,        // eigenvalues only
+    schur,      // eigenvalues and schur vectors
+    ritz,       // eigenvalues and ritz vectors
+    schur_ritz, // eigenvalues, schur and ritz vectors
 };
 
-/// Helper class to perform arpack calls
-/// This class locks an arpack mutex for as long as it is in scope
+// Helper class to perform arpack calls
+// This class locks an arpack mutex for as long as it is in scope
 template<class T>
 class arpack_wrapper
 {
@@ -57,50 +57,50 @@ class arpack_wrapper
         arpack_wrapper& operator=(const arpack_wrapper&) = delete;
 
     public:
-        /// create standard version for Av = lambda*v problem
+        // create standard version for Av = lambda*v problem
         arpack_wrapper(const linear_operator& A, arpack_output out, Integer max_iter, Integer n_arnoldi,
                        Real tol);
 
-        /// create generalized version for Av = lambda*B*v problem
+        // create generalized version for Av = lambda*B*v problem
         arpack_wrapper(const linear_operator& A, const linear_operator& B, bool hermitian, 
                        arpack_output out, Integer max_iter, Integer n_arnoldi, Real tol);
 
         ~arpack_wrapper();
 
-        /// set initial vector
+        // set initial vector
         void                set_x0(const Matrix& x0);
 
-        /// set select type
+        // set select type
         void                set_cluster(cluster_type ec);
 
-        /// do all calculations; k is number of eigenvalues requested;
-        /// if return_nonconverged is true, then return also eigenvalues which have not converged
+        // do all calculations; k is number of eigenvalues requested;
+        // if return_nonconverged is true, then return also eigenvalues which have not converged
         void                calculate(Integer k, bool return_nonconverged);
 
-        /// size of the operators
+        // size of the operators
         Integer             size() const;
 
-        /// schur vectors
+        // schur vectors
         Matrix              get_U() const;
 
-        /// quasi-upper triangular matrix such that (A*B^-1) * U = U * T
+        // quasi-upper triangular matrix such that (A*B^-1) * U = U * T
         Matrix              get_T() const;
 
-        /// eigenvectors
+        // eigenvectors
         Matrix              get_V() const;
 
-        /// eigenvalues
+        // eigenvalues
         Matrix              get_D() const;
 
-        /// return true if all eigenvalues converged
+        // return true if all eigenvalues converged
         bool                get_converged() const;
 
         value_code          get_value_code() const;
 
-        /// return number of converged eigenvalues
+        // return number of converged eigenvalues
         Integer             number_converged_eigenvalues() const;
 
-        /// profiling statistics
+        // profiling statistics
         Integer             number_Arnoldi_iterations() const;
         Integer             number_operations_Ax() const;
         Integer             number_operations_Bx() const;
