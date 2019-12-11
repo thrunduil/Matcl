@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\dependency_impl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_checks.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_data.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_impl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\mkgen_fwd.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\has_function.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\utils.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\dependency.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\matrix.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\scalar.h" />
+    <ClInclude Include="..\..\..\src\mkgen\mkgen.h" />
+    <ClInclude Include="..\..\..\src\mkgen\mkgen_config.h" />
+    <ClInclude Include="..\..\..\src\mkgen\mkgen_fwd.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\dependency.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\dot_evaler.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\expr_evaler.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\local_storage.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\loop_promotion.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\storage_initializer.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\temp_storage.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\colon.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\expr_mult.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\expr_plus.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\for_expr.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_assign.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_call.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_mult.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_other.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_plus.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_temporary.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix_details.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix_printer.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\scalar2.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\utils\alignment.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\utils\op_count.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\utils\simd_utils.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\utils\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl" />
+    <None Include="..\..\..\src\mkgen\TODO\expression\ct_matrix_expr.inl" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{99CD95D5-D05E-4A17-8A0E-383D7879E7A5}</ProjectGuid>
+    <RootNamespace>symbolic</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\matcl_Win32_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="..\..\matcl_x64_Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);$(boost_dir)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);$(boost_lib_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FFT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FFT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>mkl_intel_c.lib;mkl_intel_thread.lib;mkl_core.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FFT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <OmitFramePointers>false</OmitFramePointers>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MATCL_FFT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <OmitFramePointers>false</OmitFramePointers>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>mkl_intel_ilp64.lib;mkl_intel_thread.lib;mkl_core.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ProjectReference />
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
