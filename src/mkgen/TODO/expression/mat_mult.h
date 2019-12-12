@@ -142,21 +142,18 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,4,Array_1, Array_2>
                                    list::list<elem_2_1,elem_2_2, elem_2_3, elem_2_4>>;
 };
 
-template<Integer K, class Array1, class Array2>
-struct mat_mult_array{};
-
 template<Integer K, class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mat_mult_array<K,Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mat_mult_array<K,Array1,Array2>, Row, Col>
 {
     using type = typename make_array_mat_mult<Row,Col,1,K,K,Array1,Array2>::type;
 };
 template<class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mat_mult_array<0,Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mat_mult_array<0,Array1,Array2>, Row, Col>
 {
     using type = zero;
 };
 template<class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mat_mult_array<1,Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mat_mult_array<1,Array1,Array2>, Row, Col>
 {
     using elem_1 = typename get_array_elem<Array1, Row, 1>::type;
     using elem_2 = typename get_array_elem<Array2, 1, Col>::type;
@@ -183,7 +180,7 @@ template<Integer M1, Integer N1_M2, class Array1, class Deps1,
         Integer N2, class Array2, class Deps2>
 struct mat_mult<ct_matrix<M1,N1_M2,Array1,Deps1>, ct_matrix<N1_M2,N2,Array2,Deps2>>
 {
-    using array_type    = mat_mult_array<N1_M2, Array1, Array2>;
+    using array_type    = mkd::mat_mult_array<N1_M2, Array1, Array2>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1, N2, array_type,deps>;
 };
@@ -225,11 +222,8 @@ struct mat_mult<ct_matrix<M1,N1,Array1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>>
 //----------------------------------------------------------------------------------
 //                              make_mult_rows
 //----------------------------------------------------------------------------------
-template<class Array1, class Array2>
-struct mult_rows_array{};
-
 template<class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mult_rows_array<Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mult_rows_array<Array1,Array2>, Row, Col>
 {
     using elem_1    = typename get_array_elem<Array1, Row, Col>::type;
     using elem_2    = typename get_array_elem<Array2, Row, 1>::type;
@@ -239,7 +233,7 @@ struct get_array_elem<mult_rows_array<Array1,Array2>, Row, Col>
 template<Integer M1_M2, Integer N1, class Array1, class Deps1, class Array2, class Deps2>
 struct make_mult_rows<ct_matrix<M1_M2,N1,Array1,Deps1>, ct_matrix<M1_M2,1,Array2,Deps2>>
 {
-    using array_type    = mult_rows_array<Array1, Array2>;
+    using array_type    = mkd::mult_rows_array<Array1, Array2>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1_M2, N1, array_type,deps>;
 };

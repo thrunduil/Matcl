@@ -237,11 +237,11 @@ struct storage_initializer_expand<Val, list::list<Mat_Colon, Mats...>,Colon_Type
         using subs_context  = typename Local_Storage::subs_context;
         using loop_context  = typename make_loop_context<elem>::type;
 
-        static const Integer off_c  = get_offset_colon<colon_assign>::value;
-        static const Integer step_c = get_step_colon<colon_assign>::value;
-        static const Integer pos    = get_pos_colon<1,Colon_Type>::value;        
+        static const Integer off_c  = colon_func::offset<colon_assign>::value;
+        static const Integer step_c = colon_func::step<colon_assign>::value;
+        static const Integer pos    = colon_func::index<1,Colon_Type>::value;        
         static const Integer offset = Step * (off_c + (pos-1)*step_c) + Offset; 
-        static const Integer step   = step_c * Step * get_step_colon<Colon_Type>::value;
+        static const Integer step   = step_c * Step * colon_func::step<Colon_Type>::value;
 
         using align_t               = typename link_alignment<Array_Aligned, 
                                         typename get_offset_alignment<Val,offset,step>::type> :: type;
@@ -266,10 +266,10 @@ struct storage_initializer_expand<Val, list::list<Mat_Colon, Mats...>,Colon_Type
     {        
         using elem = typename get_array_elem<array_type,Row,Col>::type;
         static const Integer pos0   = (Col - 1)*rows + Row;
-        static const Integer pos    = get_pos_colon<pos0,Colon_Type>::value;
+        static const Integer pos    = colon_func::index<pos0,Colon_Type>::value;
 
-        static const Integer off_c  = get_offset_colon<colon_assign>::value;
-        static const Integer step_c = get_step_colon<colon_assign>::value;
+        static const Integer off_c  = colon_func::offset<colon_assign>::value;
+        static const Integer step_c = colon_func::step<colon_assign>::value;
 
         static const Integer offset = Step * (off_c + (pos-1) * step_c) + Offset;
 
@@ -293,7 +293,7 @@ struct storage_initializer
     inline_initializer
     static void eval(Local_Storate& ls)
     {
-        using expand_vm             = typename expand_virtual_matrix2<Stored_Matrix>::type;
+        using expand_vm             = typename mkd::expand_virtual_matrix2<Stored_Matrix>::type;
 
         return storage_initializer_expand<Val,expand_vm, Colon_Type, Ret_Dep, Offset, Step>
             ::eval<Array_Align>(ls);
@@ -302,7 +302,7 @@ struct storage_initializer
     template<class Visitor>
     static void accept(Visitor& vis)
     {
-        using expand_vm             = typename expand_virtual_matrix2<Stored_Matrix>::type;
+        using expand_vm             = typename mkd::expand_virtual_matrix2<Stored_Matrix>::type;
 
         return storage_initializer_expand<Val,expand_vm, Colon_Type, Ret_Dep, Offset, Step>::accept(vis);
     };
@@ -420,7 +420,7 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,1>
     inline_initializer
     static void eval(const Local_Storage& ls)
     {
-        static const Integer pos    = get_pos_colon<Start,Colon>::value;
+        static const Integer pos    = colon_func::index<Start,Colon>::value;
         using mat_array             = typename Mat::array_type;
         using elem                  = typename get_array_elem<mat_array,Start,1>::type;
 
@@ -430,7 +430,7 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,1>
     template<class Visitor>
     static void accept(Visitor& vis)
     {
-        static const Integer pos    = get_pos_colon<Start,Colon>::value;
+        static const Integer pos    = colon_func::index<Start,Colon>::value;
         using mat_array             = typename Mat::array_type;
         using elem                  = typename get_array_elem<mat_array,Start,1>::type;
 
@@ -446,11 +446,11 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,2>
     {
         using mat_array             = typename Mat::array_type;
 
-        static const Integer pos1   = get_pos_colon<Start,Colon>::value;
+        static const Integer pos1   = colon_func::index<Start,Colon>::value;
         using elem1                 = typename get_array_elem<mat_array,Start,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos1,elem1>>::eval<Val>(ls);
 
-        static const Integer pos2   = get_pos_colon<Start+1,Colon>::value;
+        static const Integer pos2   = colon_func::index<Start+1,Colon>::value;
         using elem2                 = typename get_array_elem<mat_array,Start+1,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos2,elem2>>::eval<Val>(ls);
     };
@@ -460,11 +460,11 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,2>
     {
         using mat_array             = typename Mat::array_type;
 
-        static const Integer pos1   = get_pos_colon<Start,Colon>::value;
+        static const Integer pos1   = colon_func::index<Start,Colon>::value;
         using elem1                 = typename get_array_elem<mat_array,Start,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos1,elem1>>::accept(vis);
 
-        static const Integer pos2   = get_pos_colon<Start+1,Colon>::value;
+        static const Integer pos2   = colon_func::index<Start+1,Colon>::value;
         using elem2                 = typename get_array_elem<mat_array,Start+1,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos2,elem2>>::accept(vis);
     };
@@ -477,13 +477,13 @@ struct comp_initializer_1<Subject,assign_colon<Colon,Mat>>
     inline_initializer
     static void eval(const Local_Storage& ls)
     {
-        static const Integer size   = get_size_colon<Colon,Subject::size>::value;
+        static const Integer size   = colon_func::size<Colon,Subject::size>::value;
         comp_initializer_1_impl<Subject,Colon,Mat,1,size>::eval<Val>(ls);
     };
     template<class Visitor>
     static void accept(Visitor& vis)
     {
-        static const Integer size   = get_size_colon<Colon,Subject::size>::value;
+        static const Integer size   = colon_func::size<Colon,Subject::size>::value;
         comp_initializer_1_impl<Subject,Colon,Mat,1,size>::accept(vis);
     };
 };

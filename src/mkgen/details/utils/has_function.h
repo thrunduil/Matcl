@@ -69,7 +69,7 @@ struct has_static_member_function_##name<C, Ret (Args...)>                  \
     /* attempt to call it and see if the return type is correct */          \
     template<typename T>                                                    \
     static constexpr auto check(T*)                                         \
-        -> typename std::convertible<                                       \
+        -> typename std::is_convertible<                                    \
                             decltype( T::name( std::declval<Args>()... ) ), \
                             Ret>::type;                                     \
                                                                             \

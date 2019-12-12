@@ -206,7 +206,7 @@ struct temp_storage_elem_impl<Subs_Context, Val, Dep, true, Deps...>
         inline_lev_1
         friend const Val& get_impl(Subs_Context, tag, Data_Provider& dp, const Temp_Storage* ts)
         {
-            static const Integer pos    = get_pos_colon<Pos0, colon_type>::value;
+            static const Integer pos    = colon_func::index<Pos0, colon_type>::value;
             static const Integer pos0   = typename ret_tag::template get_offset<1,1>::value;
             static_assert(pos <= size, "invalid access");
             
@@ -218,7 +218,7 @@ struct temp_storage_elem_impl<Subs_Context, Val, Dep, true, Deps...>
         inline_lev_1
         friend void set_impl(Subs_Context, tag, Data_Provider& dp, Temp_Storage* ts, Val&& v)
         {
-            static const Integer pos    = get_pos_colon<Pos0, colon_type>::value;
+            static const Integer pos    = colon_func::index<Pos0, colon_type>::value;
             static const Integer pos0   = typename ret_tag::template get_offset<1,1>::value;
             static_assert(pos <= size, "invalid access");
 

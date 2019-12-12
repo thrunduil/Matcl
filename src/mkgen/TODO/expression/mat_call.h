@@ -28,7 +28,7 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
     using new_dep               = dep<Tag, rows * cols, dep_temp>;
     using temp_deps             = dps<new_dep>;
 
-    using array_type            = mat_temp_array<Tag, rows, cols, false>;
+    using array_type            = mkd::mat_temp_array<Tag, rows, cols, false>;
     using type                  = ct_matrix<rows, cols, array_type, temp_deps>;
 
     using child_deps            = Deps0;
@@ -72,13 +72,13 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
     template<class Subs_Context>
     friend void tag_printer(Tag, std::ostream& os, int tabs)
     {
-        print_tabs(os, tabs);
+        print_whitespace(os, tabs);
         os << "inline function with tag: ";
 
         Tag::print(os,details::prior_start);
         os << "; code:" << "\n";
 
-        print_tabs(os, tabs);
+        print_whitespace(os, tabs);
         os << std::string(80,'-') << "\n";
 
         using ret               = temp_output_mat<rows, cols, Tag>;
@@ -89,7 +89,7 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
 
         evaler_type::print(os, tabs+4);
 
-        print_tabs(os, tabs);
+        print_whitespace(os, tabs);
         os << std::string(80,'-') << "\n";
     };
 
@@ -195,12 +195,12 @@ struct get_arg_tag< mkd::temp_output_array<Tag,MR,MC>>
 };
 
 template<Integer M, Integer N, class Tag, Integer Rows, Integer Cols, bool Force, class Deps>
-struct is_value_matrix<ct_matrix<M,N,mat_temp_array<Tag, Rows, Cols, Force>,Deps>>
+struct is_value_matrix<ct_matrix<M,N, mkd::mat_temp_array<Tag, Rows, Cols, Force>,Deps>>
 {
     static const Integer value = true;
 };
 template<class Tag, Integer MR, Integer MC, bool Force>
-struct get_arg_tag<mat_temp_array<Tag,MR,MC,Force>>
+struct get_arg_tag<mkd::mat_temp_array<Tag,MR,MC,Force>>
 {
     using type = Tag;
 };
@@ -232,8 +232,8 @@ struct make_func_output
 {
     static const Integer rows   = Rows0;
     static const Integer cols   = Cols0;
-    static const Integer start  = get_offset_colon<Colon>::value + 1;
-    static const Integer step   = get_step_colon<Colon>::value * Base_Step;
+    static const Integer start  = colon_func::offset<Colon>::value + 1;
+    static const Integer step   = colon_func::step<Colon>::value * Base_Step;
 
     using type = make_func_output;
 };
@@ -248,7 +248,7 @@ struct make_call_external<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>, tru
     using new_dep               = dep<Tag, rows * cols, dep_temp>;
     using temp_deps             = dps<new_dep>;
 
-    using array_type            = mat_temp_array<Tag, rows, cols,false>;
+    using array_type            = mkd::mat_temp_array<Tag, rows, cols,false>;
     using type                  = ct_matrix<rows, cols, array_type, temp_deps>;
 
     using child_deps            = Deps0;
@@ -271,7 +271,7 @@ struct make_call_external<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>, tru
         static const Integer mat_rows   = get_mat_rows<subs, rows>::value;
         static const Integer mat_cols   = get_mat_cols<subs, cols>::value;
         static const Integer out_step   = ret_tag::step;
-        static const Integer out_start  = get_offset_colon<colon>::value;
+        static const Integer out_start  = colon_func::offset<colon>::value;
 
         using input             = typename make_func_input<M_arg, N_arg>::type;
         using output            = typename make_func_output<rows, cols, mat_rows, 
@@ -295,7 +295,7 @@ struct make_call_external<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>, tru
     template<class Subs_Context>
     friend void tag_printer(Tag, std::ostream& os, int tabs)
     {
-        print_tabs(os, tabs);
+        print_whitespace(os, tabs);
         os << "external call:" << "\n";
 
         using subs      = typename get_temporary_elem<Tag,Subs_Context>::type;
@@ -304,7 +304,7 @@ struct make_call_external<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>, tru
 
         using arg_tag   = typename get_arg_tag<Array_Arg>::type;
 
-        print_tabs(os, tabs);
+        print_whitespace(os, tabs);
         os << "[" << rows << "x" << cols << "] : ";
         ret_tag::print(os, details::prior_start);
         print_colon<colon>::eval(os);

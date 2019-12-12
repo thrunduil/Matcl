@@ -11,14 +11,8 @@ namespace matcl { namespace mkgen
 //----------------------------------------------------------------------------------
 //                              mat_plus
 //----------------------------------------------------------------------------------
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_plus_array{};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_scal_plus_array{};
-
 template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mat_plus_array<M,N,Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mat_plus_array<M,N,Array1,Array2>, Row, Col>
 {
     using elem_1    = typename get_array_elem<Array1, Row, Col>::type;
     using elem_2    = typename get_array_elem<Array2, Row, Col>::type;
@@ -27,7 +21,7 @@ struct get_array_elem<mat_plus_array<M,N,Array1,Array2>, Row, Col>
 };
 
 template<Integer M, Integer N, class Array1, class Array2,class Deps2, Integer Row, Integer Col>
-struct get_array_elem<mat_scal_plus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
+struct get_array_elem<mkd::mat_scal_plus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
 {
     using elem_1    = typename get_array_elem<Array1, Row, Col>::type;
     using elem_2    = ct_scalar<Array2,Deps2>;
@@ -38,7 +32,7 @@ struct get_array_elem<mat_scal_plus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, 
 template<Integer M1_M2, Integer N1_N2, class Array1, class Deps1, class Array2, class Deps2>
 struct mat_plus<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Array2,Deps2>>
 {
-    using array_type    = mat_plus_array<M1_M2, N1_N2, Array1, Array2>;
+    using array_type    = mkd::mat_plus_array<M1_M2, N1_N2, Array1, Array2>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1_M2, N1_N2, array_type,deps>;
 };
@@ -46,7 +40,7 @@ struct mat_plus<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Array
 template<Integer M1, Integer N1, class Array1, class Deps1, class Array2,class Deps2>
 struct mat_plus<ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Array2,Deps2>>
 {
-    using array_type    = mat_scal_plus_array<M1,N1,Array1, ct_scalar<Array2,Deps2>>;
+    using array_type    = mkd::mat_scal_plus_array<M1,N1,Array1, ct_scalar<Array2,Deps2>>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1, N1, array_type,deps>;
 };
@@ -54,7 +48,7 @@ struct mat_plus<ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Array2,Deps2>>
 template<Integer M1, Integer N1, class Array1, class Deps1, class Array2, class Deps2>
 struct mat_plus<ct_scalar<Array2,Deps2>, ct_matrix<M1,N1,Array1,Deps1>>
 {
-    using array_type    = mat_scal_plus_array<M1,N1,Array1, ct_scalar<Array2,Deps2>>;
+    using array_type    = mkd::mat_scal_plus_array<M1,N1,Array1, ct_scalar<Array2,Deps2>>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1, N1, array_type,deps>;
 };
@@ -81,16 +75,10 @@ struct mat_plus<ct_matrix<M1,N1,Array1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>>
 //                              mat_minus
 //----------------------------------------------------------------------------------
 template<Integer M, Integer N, class Array1, class Array2>
-struct mat_minus_array{};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_scal_minus_array{};
-
-template<Integer M, Integer N, class Array1, class Array2>
 struct scal_mat_minus_array{};
 
 template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mat_minus_array<M,N,Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mat_minus_array<M,N,Array1,Array2>, Row, Col>
 {
     using elem_1    = typename get_array_elem<Array1, Row, Col>::type;
     using elem_2    = typename get_array_elem<Array2, Row, Col>::type;
@@ -99,7 +87,7 @@ struct get_array_elem<mat_minus_array<M,N,Array1,Array2>, Row, Col>
 };
 
 template<Integer M, Integer N, class Array1, class Array2, class Deps2, Integer Row, Integer Col>
-struct get_array_elem<mat_scal_minus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
+struct get_array_elem<mkd::mat_scal_minus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
 {
     using elem_1    = typename get_array_elem<Array1, Row, Col>::type;
     using elem_2    = ct_scalar<Array2,Deps2>;
@@ -119,7 +107,7 @@ struct get_array_elem<scal_mat_minus_array<M,N,Array1, ct_scalar<Array2,Deps2>>,
 template<Integer M1_M2, Integer N1_N2, class Array1, class Deps1, class Array2, class Deps2>
 struct mat_minus<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Array2,Deps2>>
 {
-    using array_type    = mat_minus_array<M1_M2, N1_N2, Array1, Array2>;
+    using array_type    = mkd::mat_minus_array<M1_M2, N1_N2, Array1, Array2>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1_M2, N1_N2, array_type,deps>;
 };
@@ -127,7 +115,7 @@ struct mat_minus<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Arra
 template<Integer M1, Integer N1, class Array1, class Deps1, class Array2,class Deps2>
 struct mat_minus<ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Array2,Deps2>>
 {
-    using array_type    = mat_scal_minus_array<M1,N1,Array1,ct_scalar<Array2,Deps2>>;
+    using array_type    = mkd::mat_scal_minus_array<M1,N1,Array1,ct_scalar<Array2,Deps2>>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1, N1, array_type,deps>;
 };

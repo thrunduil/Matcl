@@ -23,11 +23,8 @@ struct temp_tag_base
 //----------------------------------------------------------------------------------
 //                              mat_temporary
 //----------------------------------------------------------------------------------
-template<class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force>
-struct mat_temp_array{};
-
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col, bool Force>
-struct get_array_elem<mat_temp_array<Tag, Mat_Rows,Mat_Cols,Force>, Row, Col>
+struct get_array_elem<mkd::mat_temp_array<Tag, Mat_Rows,Mat_Cols,Force>, Row, Col>
 {
     using type = get_temporary<Tag,Mat_Rows,Mat_Cols, Row,Col>;
 };
@@ -116,9 +113,9 @@ struct mat_temporary2
     using type = Mat;
 };
 template<Integer M1, Integer N1, class Deps, class Tag1, Integer Mat_Rows, Integer Mat_Cols, class Tag>
-struct mat_temporary2<ct_matrix<M1,N1,mat_temp_array<Tag1, Mat_Rows, Mat_Cols,false>,Deps>,Tag,true,true>
+struct mat_temporary2<ct_matrix<M1,N1,mkd::mat_temp_array<Tag1, Mat_Rows, Mat_Cols,false>,Deps>,Tag,true,true>
 {    
-    using array = mat_temp_array<Tag1, Mat_Rows, Mat_Cols,true>;
+    using array = mkd::mat_temp_array<Tag1, Mat_Rows, Mat_Cols,true>;
     using type  = ct_matrix<M1, N1, array, Deps>;
 };
 template<class Mat, class Tag, bool Force>
@@ -130,7 +127,7 @@ struct mat_temporary2<Mat, Tag, false, Force>
     using new_dep               = dep<Tag, M1 * N1, dep_temp>;
     using deps                  = dps<new_dep>;
 
-    using array_type            = mat_temp_array<Tag, M1, N1, Force>;
+    using array_type            = mkd::mat_temp_array<Tag, M1, N1, Force>;
     using type                  = ct_matrix<M1, N1, array_type,deps>;
 
     template<class Local_Storage, class Data_Provider, class Temp_Storage>
@@ -181,12 +178,12 @@ struct is_temporary_mat_array
     static const bool value = false;
 };
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols,bool Force>
-struct is_temporary_mat_array<mat_temp_array<Tag, Mat_Rows, Mat_Cols,Force>, true>
+struct is_temporary_mat_array<mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols,Force>, true>
 {
     static const bool value = true;
 };
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols,bool Force>
-struct is_temporary_mat_array<mat_temp_array<Tag, Mat_Rows, Mat_Cols,Force>, false>
+struct is_temporary_mat_array<mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols,Force>, false>
 {
     static const bool value = (Force == false);
 };

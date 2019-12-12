@@ -29,10 +29,10 @@ template<class Code_Gen, class Tag, class Colon, Integer R, Integer C>
 struct is_continuous<Code_Gen, modif2<Tag,Colon, R, C>>
 {
     static const bool allow_mone_step  = Code_Gen::simd_allow_negative_step;
-    static const bool value = ((get_step_colon<Colon>::value == 1 
-                                    || allow_mone_step && get_step_colon<Colon>::value == -1) 
+    static const bool value = ((colon_func::step<Colon>::value == 1 
+                                    || allow_mone_step && colon_func::step<Colon>::value == -1) 
                                && is_tag_continuous<Tag>::value)
-                            || get_size_colon<Colon,R*C>::value == 1;
+                            || colon_func::size<Colon,R*C>::value == 1;
 };
 
 //----------------------------------------------------------------------------------
@@ -92,13 +92,13 @@ struct enable_vectorization_array<Subs_Context,mkd::virtual_array<Tag,Assign_Lis
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,mat_assign_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_assign_array<M, N, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array2>::value;
 };
 template<class Subs_Context, Integer M,Integer N,class Array1,class Colon, 
     Integer M2, Integer N2, class Array2>
-struct enable_vectorization_array<Subs_Context,mat_assign_array_colon<M, N, Array1, Colon, M2, N2, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_assign_array_colon<M, N, Array1, Colon, M2, N2, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array2>::value;
 };
@@ -116,7 +116,7 @@ struct enable_vectorization_array<Subs_Context, mkd::sub_array_2<Array_t, Offset
 };
 
 template<class Subs_Context, class Ret_Tag>
-struct enable_vectorization_array<Subs_Context,empty_array<Ret_Tag>> 
+struct enable_vectorization_array<Subs_Context, mkd::empty_array<Ret_Tag>> 
 {
     static const bool value = false;
 };
@@ -156,13 +156,13 @@ struct enable_vectorization_array<Subs_Context, mkd::sub_array_1<Array_t, Offset
 };
 
 template<class Subs_Context, Integer K, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,mat_mult_array<K, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_mult_array<K, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,mat_plus_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_plus_array<M, N, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value 
                                 && enable_vectorization_array<Subs_Context,Array2>::value;
@@ -183,14 +183,14 @@ struct enable_vectorization_array<Subs_Context,div_array<Array1, Array2>>
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,mat_minus_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_minus_array<M, N, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value 
                                 && enable_vectorization_array<Subs_Context,Array2>::value;
 };
 
 template<class Subs_Context, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,mult_rows_array<Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mult_rows_array<Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value 
                                 && enable_vectorization_array<Subs_Context,Array2>::value;
@@ -227,13 +227,13 @@ struct enable_vectorization_array<Subs_Context,mat_uminus_array<M, N, Array>>
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,mat_scal_plus_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_scal_plus_array<M, N, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,mat_scal_minus_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_scal_minus_array<M, N, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
@@ -265,7 +265,7 @@ struct enable_vectorization_array<Subs_Context, details::scalar_ufunc_array<Tag,
 };
 
 template<class Subs_Context, class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force>
-struct enable_vectorization_array<Subs_Context,mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>> 
 {
     using code_gen          = typename Subs_Context::code_gen;
     using ret_subs          = decltype(get_substitution(Subs_Context(), Tag()));
@@ -281,7 +281,7 @@ struct enable_vectorization_array<Subs_Context, mkd::output_array<Tag>>
 };
 
 template<class Subs_Context, class Tag, Integer M, Integer N, class Array>
-struct enable_vectorization_array<Subs_Context,mat_ufunc_array<Tag, M, N, Array>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_ufunc_array<Tag, M, N, Array>> 
 {
     static const bool value = Tag::is_continuous;
 };
@@ -567,7 +567,7 @@ struct get_align_type<list::list<>>
 template<class Data_Provider, class Colon, Integer Offset, class Tag, class Ret_Tag>
 struct get_ret_offset
 {
-    static const Integer pos1   = get_pos_colon<Offset + 1, Colon>::value;
+    static const Integer pos1   = colon_func::index<Offset + 1, Colon>::value;
     static const Integer pos2   = typename Ret_Tag::template get_offset<1,1>::value;
     static const Integer value  = pos2+pos1-1;
 };
@@ -632,7 +632,7 @@ struct make_loop_context_data<Val,Data_Provider,Subs_Context, details::array_ite
     using ret_tag       = typename ret_subs::tag;
 
     static const Integer offset1    = Elem::get_offset;
-    static const Integer ret_step   = get_step_colon<colon>::value;
+    static const Integer ret_step   = colon_func::step<colon>::value;
     static const Integer offset     = get_ret_offset<Data_Provider,colon,offset1, tag, ret_tag>::value;
     using align_r                   = typename ret_tag::root_align_type;
 

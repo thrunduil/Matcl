@@ -41,7 +41,7 @@ class ct_scalar
     private:
         // check arguments
         using check1    = typename mkd::check_valid_scalar_data<Data>::type;
-        using check2    = typename mkd::check_scalar_deps<Deps>::type;
+        using check2    = typename mkd::check_deps<Deps>::type;
 
     public:
         // Data argument

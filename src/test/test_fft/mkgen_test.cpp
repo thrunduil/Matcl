@@ -5,6 +5,8 @@
 namespace matcl { namespace mkgen { namespace test
 {
 
+namespace mk = matcl::mkgen;
+
 struct basic_codegen
 {
     static const bool simd_enable                   = true;
@@ -19,7 +21,11 @@ struct basic_codegen
     static const int simd_bits                      = simd::maximum_bits;
 };
 
-struct empty_context{};
+struct empty_context
+{
+    using deps_temp     = mk::dps<>;
+    using code_gen      = basic_codegen;
+};
 
 struct tag_ret
 { 
@@ -54,6 +60,51 @@ void test_scalar()
     evaler_type::print(std::cout, 0);
     //evaler_type().eval(dp);
     */
+};
+
+void test_matrix()
+{
+    struct tag_TM_1{};
+    struct tag_TM_2{};
+    struct tag_TM_3{};
+
+    using colon1    = mk::colon<2>;
+    using colon2    = mk::colon_all;
+    using colon3    = mk::colon2<2,4>;
+    using colon4    = mk::colon3<2,2,4>;
+
+    using mat   = mk::gen_mat<5, 5, tag_TM_1>;
+    using e1    = decltype(mat::elem(colon<1>()));
+    using e2    = decltype(mat::elem(colon<1>(), colon<2>()));
+
+    using e3    = decltype(mat::sub(colon1()));
+    using e4    = decltype(mat::sub(colon2()));
+    using e5    = decltype(mat::sub(colon3()));
+    using e6    = decltype(mat::sub(colon4()));
+
+    using e11   = decltype(mat::sub(colon1(), colon1()));
+    using e21   = decltype(mat::sub(colon2(), colon1()));
+    using e31   = decltype(mat::sub(colon3(), colon1()));
+    using e41   = decltype(mat::sub(colon4(), colon1()));
+
+    using e12   = decltype(mat::sub(colon1(), colon2()));
+    using e22   = decltype(mat::sub(colon2(), colon2()));
+    using e32   = decltype(mat::sub(colon3(), colon2()));
+    using e42   = decltype(mat::sub(colon4(), colon2()));
+
+    using e13   = decltype(mat::sub(colon1(), colon3()));
+    using e23   = decltype(mat::sub(colon2(), colon3()));
+    using e33   = decltype(mat::sub(colon3(), colon3()));
+    using e43   = decltype(mat::sub(colon4(), colon3()));
+
+    using e14   = decltype(mat::sub(colon1(), colon4()));
+    using e24   = decltype(mat::sub(colon2(), colon4()));
+    using e34   = decltype(mat::sub(colon3(), colon4()));
+    using e44   = decltype(mat::sub(colon4(), colon4()));
+
+    using t1    = decltype(mat::make_temp<tag_TM_2, false>());
+    using t2    = decltype(mat::make_temp<tag_TM_3, true>());
+    //e44::print<empty_context>(std::cout, 0);
 };
 
 //TODO

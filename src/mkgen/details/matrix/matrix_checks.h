@@ -20,20 +20,26 @@
 
 #pragma once
 
-#include "mkgen/matrix/scalar.h"
-#include "mkgen/matrix/matrix.h"
-#include "mkgen/details/matrix/matrix_printer.h"
+#include "mkgen/details/mkgen_fwd.h"
+#include "mkgen/details/utils/has_function.h"
+#include "matcl-core/details/mpl.h"
 
-#include "mkgen/TODO/expression/ct_matrix_expr.inl"
-#include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/expression/mat_mult.h"
-#include "mkgen/TODO/expression/mat_plus.h"
-#include "mkgen/TODO/expression/mat_assign.h"
-#include "mkgen/TODO/expression/mat_temporary.h"
-#include "mkgen/TODO/expression/mat_other.h"
-#include "mkgen/TODO/evaler/temp_storage.h"
-#include "mkgen/TODO/evaler/expr_evaler.h"
-#include "mkgen/TODO/expression/for_expr.h"
-#include "mkgen/TODO/expression/mat_call.h"
-#include "mkgen/TODO/matrix/matrix.h"
-#include "mkgen/TODO/matrix/printer.h"
+namespace matcl { namespace mkgen { namespace details
+{
+
+//-----------------------------------------------------------------------
+//                      check_scalar_data
+//-----------------------------------------------------------------------
+// check if Data parameter supplied to ct_scalar is valid
+template<class Array_t>
+struct check_valid_matrix_array
+{
+    static const bool is_array  = std::is_base_of<mkd::matrix_array<Array_t>, Array_t>::value;
+
+    static_assert(is_array == true, "Array_t is not matrix_array<>");
+
+    using type  = typename Array_t::template check<void>;
+};
+
+
+}}}

@@ -171,6 +171,18 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h">
       <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_checks.h">
+      <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h">
+      <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_printer.h">
+      <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\virtual_matrix.h">
+      <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl">

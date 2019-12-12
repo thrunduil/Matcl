@@ -23,8 +23,7 @@
 #include <iosfwd>
 
 #include "mkgen/matrix/scalar.h"
-//#include "mkgen/TODO/utils/utils.h"
-//#include "mkgen/TODO/matrix/ct_matrix_details.h"
+#include "mkgen/details/matrix/matrix_checks.h"
 
 namespace matcl { namespace mkgen
 {
@@ -58,6 +57,11 @@ template<Integer M, Integer N, class Array_t, class Deps>
 struct ct_matrix
 {
     public:
+        // check arguments
+        using check1    = typename mkd::check_valid_matrix_array<Array_t>::type;
+        using check2    = typename mkd::check_deps<Deps>::type;
+
+    public:
         // number of rows
         static const Integer    rows        = M;
 
@@ -83,14 +87,14 @@ struct ct_matrix
         static auto elem(colon<Row>, colon<Col>) 
                                             -> ct_scalar<mkd::scalar_mat_elem_2<ct_matrix, Row, Col>, Deps>;
 
+        // get submatrix Mat(Colon_1)
+        template<class Colon_1>
+        static auto sub(Colon_1)            -> typename mkd::submatrix_maker_1<ct_matrix, Colon_1>::type;
+
         // get submatrix Mat(Colon_1, Colon_2)
         template<class Colon_1, class Colon_2>
         static auto sub(Colon_1, Colon_2)   -> typename mkd::submatrix_maker_2<ct_matrix, 
                                                     Colon_1, Colon_2>::type;
-
-        // get submatrix Mat(Colon_1)
-        template<class Colon_1>
-        static auto sub(Colon_1)            -> typename mkd::submatrix_maker_1<ct_matrix, Colon_1>::type;
 
         // build virtual matrix, this type must be a virtual_matrix
         //TODO
@@ -102,9 +106,9 @@ struct ct_matrix
         template<class Tag, bool Force = false>
         static auto make_temp()             -> typename mat_temporary<ct_matrix, Tag, Force>::type;
 
-        // print matrix
+        // print matrix; add nspaces white spaces at the beginning
         template<class Subs_Context>
-        static void print(std::ostream& os, int tabs);
+        static void print(std::ostream& os, int nspaces = 0);
 
         //TODO: add compute function
 };
@@ -112,6 +116,7 @@ struct ct_matrix
 //------------------------------------------------------------------------------
 //                      predefined matrices
 //------------------------------------------------------------------------------
+//TODO:
 
 //stores statically known data, accessible through tag argument
 template<Integer M, Integer N, class Tag>

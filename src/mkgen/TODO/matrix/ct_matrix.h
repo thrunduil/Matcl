@@ -3,6 +3,8 @@
 #include <iosfwd>
 
 #include "mkgen/matrix/scalar.h"
+#include "mkgen/details/mkgen_fwd.h"
+#include "mkgen/mkgen_fwd.h"
 
 namespace matcl { namespace mkgen
 {

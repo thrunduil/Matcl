@@ -129,16 +129,6 @@ struct check_scalar_data_tag_impl
 };
 
 //-----------------------------------------------------------------------
-//                      check_scalar_deps
-//-----------------------------------------------------------------------
-// check if Deps parameter supplied to ct_scalar is valid
-template<class Deps>
-struct check_scalar_deps
-{
-    using type = typename check_valid_dps<Deps>::type;
-};
-
-//-----------------------------------------------------------------------
 //                      check_computation_tag
 //-----------------------------------------------------------------------
 // check tag supplied to compute function

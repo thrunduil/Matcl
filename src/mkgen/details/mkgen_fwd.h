@@ -80,41 +80,9 @@ struct eval_loop_scalar;
 template<class Data>
 struct scalar_data;
 
-// check if Data is a valid scalar_data<> type
-template<class Data>
-struct check_valid_scalar_data;
-
-// check if Tag is a valid tag for scal_data_value<> type
-template<class Data>
-struct check_valid_scalar_data_tag;
-
-// check if Deps is a valid dps<> type
-template<class Deps>
-struct check_valid_dps;
-
-// check if Dep is a valid dep<> type
-template<class Dep>
-struct check_valid_dep;
-
-// check arguments passed to dep struct
-template<class Temp_Tag, Integer Size, class Type>
-struct check_dep_argument;
-
-// check arguments passed to dps struct
-template<class... T>
-struct check_dps_argument;
-
-// check dep Tag argument
-template<class Tag>
-struct check_valid_dep_tag;
-
-// check dep Size argument
-template<Integer Size>
-struct check_valid_dep_size;
-
-// check dep Type argument
-template<class Type>
-struct check_valid_dep_type;
+// store data in ct_matrix
+template<class Array>
+struct matrix_array;
 
 // make submatrix
 template<class Mat, class Colon_1, class Colon_2>
@@ -143,5 +111,21 @@ struct temp_output_array;
 // virtual_mat array
 template<class Tag, class... Assign_List>
 struct virtual_array;
+
+// dep check
+template<class Temp_Tag, Integer Size, class Type>
+struct check_dep_argument;
+
+template<class... T>
+struct check_dps_argument;
+
+template<class Tag>
+struct check_valid_dep_tag;
+
+template<Integer Size>
+struct check_valid_dep_size;
+
+template<class Type>
+struct check_valid_dep_type;
 
 }}}

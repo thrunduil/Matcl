@@ -402,7 +402,7 @@ struct local_storage
         static const Integer offb   = info::offset;    
         static const Integer rows   = info::rows;
 
-        static const Integer pos_colon  = get_pos_colon<Pos,colon>::value;
+        static const Integer pos_colon  = colon_func::index<Pos,colon>::value;
         static const Integer col        = (pos_colon-1) / rows + 1;
         static const Integer row        = (pos_colon-1) % rows + 1;
         static const Integer off        = typename tag::template get_offset<row,col>::value;        

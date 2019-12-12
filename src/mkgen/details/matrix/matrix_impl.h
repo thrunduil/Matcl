@@ -22,28 +22,31 @@
 
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/matrix/matrix_arrays.h"
-
+#include "mkgen/details/matrix/colon_func.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
 
-//TODO:
 //------------------------------------------------------------------------------
-//                      submatrix_maker
+//                      submatrix_maker_1
 //------------------------------------------------------------------------------
+// implements ct_matrix<>::sub(Colon_1)
 template<class Mat, class Colon_1>
 struct submatrix_maker_1
 {
     static_assert(dependent_false<Mat>::value, "class T must be ct_matrix");
 };
-template<Integer M, Integer N, class Array_t, class Deps, class Colon_1>
-struct submatrix_maker_1<ct_matrix<M,N,Array_t,Deps>,Colon_1>
-{
-    static const Integer size   = get_size_colon<Colon_1, M>::value;
-    static const Integer offset = get_offset_colon<Colon_1>::value;
-    static const Integer step   = get_step_colon<Colon_1>::value;
 
-    using new_array = sub_array_1<Array_t,offset,step>;
+template<Integer M, Integer N, class Array_t, class Deps, class Colon_1>
+struct submatrix_maker_1<ct_matrix<M, N, Array_t, Deps>, Colon_1>
+{
+    using dum                   = typename colon_func::check_colon<Colon_1, M * N>::type;
+
+    static const Integer size   = colon_func::size<Colon_1, M>::value;
+    static const Integer offset = colon_func::offset<Colon_1>::value;
+    static const Integer step   = colon_func::step<Colon_1>::value;
+
+    using new_array = sub_array_1<Array_t, offset, step>;
     using type      = ct_matrix<size,1,new_array,Deps>;
 };
 
@@ -56,14 +59,17 @@ struct submatrix_maker_2
 template<Integer M, Integer N, class Array_t, class Deps, class Colon_1, class Colon_2>
 struct submatrix_maker_2<ct_matrix<M,N,Array_t,Deps>,Colon_1,Colon_2>
 {
-    static const Integer size1      = get_size_colon<Colon_1, M>::value;
-    static const Integer size2      = get_size_colon<Colon_2, N>::value;
-    static const Integer offset1    = get_offset_colon<Colon_1>::value;
-    static const Integer offset2    = get_offset_colon<Colon_2>::value;
-    static const Integer step1      = get_step_colon<Colon_1>::value;
-    static const Integer step2      = get_step_colon<Colon_2>::value;
+    using dum1                      = typename colon_func::check_colon<Colon_1, M>::type;
+    using dum2                      = typename colon_func::check_colon<Colon_2, N>::type;
 
-    using new_array = mkd::sub_array_2<Array_t,offset1, offset2,step1,step2>;
+    static const Integer size1      = colon_func::size<Colon_1, M>::value;
+    static const Integer size2      = colon_func::size<Colon_2, N>::value;
+    static const Integer offset1    = colon_func::offset<Colon_1>::value;
+    static const Integer offset2    = colon_func::offset<Colon_2>::value;
+    static const Integer step1      = colon_func::step<Colon_1>::value;
+    static const Integer step2      = colon_func::step<Colon_2>::value;
+
+    using new_array = mkd::sub_array_2<Array_t, offset1, offset2, step1, step2>;
     using type      = ct_matrix<size1,size2,new_array,Deps>;
 };
 

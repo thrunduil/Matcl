@@ -25,27 +25,103 @@
 namespace matcl { namespace mkgen { namespace details
 {
 
-template<class Array_t, Integer Offset, Integer Step>
-struct sub_array_1 {};
+//-----------------------------------------------------------------------
+//                      matrix_array
+//-----------------------------------------------------------------------
+// base class for ct_matrix arrays
+template<class Data>
+struct matrix_array
+{
+    //TODO
+    //check arguments
+    template<class Dummy>
+    using check     = Dummy;
 
-template<class Array_t, Integer Offset1, Integer Offset2, Integer Step1, Integer step2>
-struct sub_array_2 {};
+    //TODO
+    /*
+    //check arguments
+    template<class Dummy>
+    using check     = typename details::check_scalar_data_impl<Data, Dummy>::type;
+    */
+};
+
+//-----------------------------------------------------------------------
+//                      arrays
+//-----------------------------------------------------------------------
+
+template<class Array_t, Integer Offset, Integer Step>
+struct sub_array_1 : public matrix_array<sub_array_1<Array_t, Offset, Step>>
+{};
+
+template<class Array_t, Integer Offset1, Integer Offset2, Integer Step1, Integer Step2>
+struct sub_array_2 : public matrix_array<sub_array_2<Array_t, Offset1, Offset2, Step1, Step2>>
+{};
 
 // const_mat array
 template<class Tag>                                     
-struct const_array{};
+struct const_array : public matrix_array<const_array<Tag>>
+{};
 
 template<class Tag>                                     
-struct gen_array{};
+struct gen_array : public matrix_array<gen_array<Tag>>
+{};
 
 template<class Tag> 
-struct output_array{};
+struct output_array : public matrix_array<output_array<Tag>>
+{};
 
 template<class Tag, Integer Rows, Integer Cols>
-struct temp_output_array{};
+struct temp_output_array : public matrix_array<temp_output_array<Tag, Rows, Cols>>
+{};
 
 template<class Tag, class... Assign_List>
-struct virtual_array {};
+struct virtual_array : public matrix_array<virtual_array<Tag, Assign_List ...>>
+{};
+
+template<class Tag, Integer M, Integer N, class Array>
+struct mat_ufunc_array : public matrix_array<mat_ufunc_array<Tag, M, N, Array>>
+{};
+
+template<Integer K, class Array1, class Array2>
+struct mat_mult_array : public matrix_array<mat_mult_array<K, Array1, Array2>>
+{};
+
+template<Integer M, Integer N, class Array1, class Array2>
+struct mat_scal_plus_array : public matrix_array<mat_scal_plus_array<M, N, Array1, Array2>>
+{};
+
+template<class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force>
+struct mat_temp_array : public matrix_array<mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>>
+{};
+
+template<Integer M, Integer N, class Array1, class Array2>
+struct mat_scal_minus_array : public matrix_array<mat_scal_minus_array<M, N, Array1, Array2>>
+{};
+
+template<Integer M, Integer N, class Array1, class Array2>
+struct mat_plus_array : public matrix_array<mat_plus_array<M, N, Array1, Array2>>
+{};
+
+template<Integer M, Integer N, class Array1, class Array2>
+struct mat_minus_array : public matrix_array<mat_minus_array<M, N, Array1, Array2>>
+{};
+
+template<class Array1, class Array2>
+struct mult_rows_array : public matrix_array<mult_rows_array<Array1, Array2>>
+{};
+
+template<class Ret_Tag>
+struct empty_array : public matrix_array<empty_array<Ret_Tag>>
+{};
+
+template<Integer M, Integer N, class Array1, class Array2>
+struct mat_assign_array : public matrix_array<mat_assign_array<M, N, Array1, Array2>>
+{};
+
+template<Integer M,Integer N,class Array1,class Colon, Integer M2, Integer N2, class Array2> 
+struct mat_assign_array_colon : public matrix_array<
+                                mat_assign_array_colon<M, N, Array1, Colon, M2, N2, Array2>>
+{};
 
 //TODO
 /*

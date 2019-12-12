@@ -4,7 +4,7 @@
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
 #include "mkgen/TODO/evaler/dependency.h"
-#include "mkgen/TODO/expression/colon.h"
+#include "mkgen/details/matrix/colon_func.h"
 
 namespace matcl { namespace mkgen
 {
@@ -60,13 +60,10 @@ struct expr_assign
 //                              mat_assign_array
 //----------------------------------------------------------------------------------
 template<Integer M, Integer N, class Array1, class Array2>
-struct mat_assign_array{};
-
-template<Integer M, Integer N, class Array1, class Array2>
 struct mat_scal_assign_array{};
 
 template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
-struct get_array_elem<mat_assign_array<M,N,Array1,Array2>, Row, Col>
+struct get_array_elem<mkd::mat_assign_array<M,N,Array1,Array2>, Row, Col>
 {
     static_assert(Row <= M && Col <= N, "invalid elem");
 
@@ -91,17 +88,14 @@ struct get_array_elem<mat_scal_assign_array<M,N,Array1, ct_scalar<Array2,Deps2>>
 //----------------------------------------------------------------------------------
 //                              mat_assign_array_colon
 //----------------------------------------------------------------------------------
-template<Integer M,Integer N,class Array1,class Colon, Integer M2, Integer N2, class Array2> 
-struct mat_assign_array_colon{};
-
 template<Integer M, Integer N, class Array1, class Colon, Integer M2, Integer N2, class Array2, 
         Integer Row, Integer Col>
-struct get_array_elem<mat_assign_array_colon<M,N,Array1,Colon, M2, N2, Array2>, Row, Col>
+struct get_array_elem<mkd::mat_assign_array_colon<M,N,Array1,Colon, M2, N2, Array2>, Row, Col>
 {
     static_assert(Row <= M2 && Col <= N2, "invalid elem");
 
     static const Integer Pos    = (Col-1)*M2 + Row;
-    static const Integer Pos_1  = get_pos_colon<Pos,Colon>::value;
+    static const Integer Pos_1  = colon_func::index<Pos,Colon>::value;
     static const Integer Col_1  = (Pos_1 - 1) / M + 1;
     static const Integer Row_1  = (Pos_1 - 1) % M + 1;
 
@@ -117,7 +111,7 @@ struct get_array_elem<mat_assign_array_colon<M,N,Array1,Colon, M2, N2, Array2>, 
 template<Integer M1_M2, Integer N1_N2, class Array1, class Deps1, class Array2, class Deps2>
 struct mat_assign<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Array2,Deps2>>
 {
-    using array_type    = mat_assign_array<M1_M2, N1_N2, Array1, Array2>;
+    using array_type    = mkd::mat_assign_array<M1_M2, N1_N2, Array1, Array2>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1_M2, N1_N2, array_type,deps>;
 };
@@ -430,9 +424,9 @@ template<class Tag, Integer M, Integer N, class Array, class Deps,
 struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array,Deps>,Assignments>, 
                     ct_matrix<M2,N2,Array2,Deps2>, Colon >
 {
-    static_assert(N2 == 1 && get_size_colon<Colon,M*N>::value == M2
-                  && get_first_colon<Colon,M*N>::value >= 1
-                  && get_last_colon<Colon,M*N>::value <= M*N, "invalid assignment");
+    static_assert(N2 == 1 && colon_func::size<Colon, M * N>::value == M2
+                  && colon_func::first<Colon,M*N>::value >= 1
+                  && colon_func::last<Colon,M*N>::value <= M*N, "invalid assignment");
 
     using old_matrix        = ct_matrix<M,N,Array,Deps>;
     using rhs_matrix        = ct_matrix<M2,N2,Array2,Deps2>;
@@ -511,80 +505,6 @@ struct assign_elem<ct_matrix<M,N,Array,Deps>,Row,Col>
 };
 
 //----------------------------------------------------------------------------------
-//                              expand_virtual_matrix
-//----------------------------------------------------------------------------------
-template<class Matrix>
-struct expand_virtual_matrix
-{
-    static_assert(details::dependent_false<Matrix>::value, 
-                "this type should not be instantiated");
-};
-template<class Matrix>
-struct expand_virtual_matrix2
-{
-    static_assert(details::dependent_false<Matrix>::value, 
-                "this type should not be instantiated");
-};
-template<Integer M, Integer N, class Array, class Deps>
-struct expand_virtual_matrix<ct_matrix<M,N,Array,Deps>>
-{
-    using type = list::list<ct_matrix<M,N,Array,Deps>>;
-};
-template<Integer M, Integer N, class Array, class Deps>
-struct expand_virtual_matrix2<ct_matrix<M,N,Array,Deps>>
-{
-    using type = list::list<list::list<colon_all, ct_matrix<M,N,Array,Deps>>>;
-};
-
-template<Integer M, Integer N, class Array1, class Deps, class Assign_Info>
-struct make_colon_assignment
-{
-    static_assert(details::dependent_false<Array1>::value, 
-                "this type should not be instantiated");
-};
-template<Integer M, Integer N, class Deps, class Assign_Info>
-struct make_colon_assignment2
-{
-    static_assert(details::dependent_false<Deps>::value, 
-                "this type should not be instantiated");
-};
-
-template<Integer M, Integer N, class Array1, class Deps, Integer M2, Integer N2, class Array2, class Colon_1>
-struct make_colon_assignment<M,N,Array1,Deps,assign_item<M,N,M2,N2,Array2,Colon_1>>
-{
-    using array_type    = mat_assign_array_colon<M,N,Array1, Colon_1, M2, N2, Array2>;
-    using type          = ct_matrix<M2,N2,array_type, Deps>;
-};
-template<Integer M, Integer N, class Deps, Integer M2, Integer N2, class Array2, class Colon_1>
-struct make_colon_assignment2<M,N,Deps,assign_item<M,N,M2,N2,Array2,Colon_1>>
-{
-    using type          = list::list<Colon_1, ct_matrix<M2,N2,Array2, Deps>>;
-};
-
-template<Integer M, Integer N, class Array1, class Deps, class ... Assign_List>
-struct expand_virtual_impl
-{
-    using type = list::list<typename make_colon_assignment<M,N,Array1,Deps,Assign_List>::type ... >;
-};
-template<Integer M, Integer N, class Deps, class ... Assign_List>
-struct expand_virtual_impl2
-{
-    using type = list::list<typename make_colon_assignment2<M,N,Deps,Assign_List>::type ... >;
-};
-
-template<Integer M, Integer N, class Array1, class Virt_Tag, class ... Assign_List, class Deps>
-struct expand_virtual_matrix<ct_matrix<M,N,mat_assign_array<M,N,Array1,
-            mkd::virtual_array<Virt_Tag, Assign_List...>>,Deps>>
-{
-    using type = typename expand_virtual_impl<M,N,Array1,Deps,Assign_List...>::type;
-};
-template<Integer M, Integer N, class Virt_Tag, class ... Assign_List, class Deps>
-struct expand_virtual_matrix2<ct_matrix<M,N,mkd::virtual_array<Virt_Tag, Assign_List...>,Deps>>
-{
-    using type = typename expand_virtual_impl2<M,N,Deps,Assign_List...>::type;
-};
-
-//----------------------------------------------------------------------------------
 //                              make_assign_info
 //----------------------------------------------------------------------------------
 template<class Mat>
@@ -616,8 +536,8 @@ struct assign_info
     //TODO: subs colon
     static const Integer step           = return_tag::step;
 
-    static const Integer return_step    = get_step_colon<colon_type>::value * step;
-    static const Integer return_offset  = get_offset_colon<colon_type>::value *step 
+    static const Integer return_step    = colon_func::step<colon_type>::value * step;
+    static const Integer return_offset  = colon_func::offset<colon_type>::value *step 
                                         + typename return_tag::template get_offset<1,1>::value;
 
     using ret_root_align                = typename return_tag::root_align_type;
@@ -630,7 +550,7 @@ struct make_assign_info
                 "this type should not be instantiated");
 };
 template<Integer M, Integer N, class Array1, class Array2, class Deps>
-struct make_assign_info<ct_matrix<M,N,mat_assign_array<M,N,Array1,Array2>,Deps>>
+struct make_assign_info<ct_matrix<M,N,mkd::mat_assign_array<M,N,Array1,Array2>,Deps>>
 {
     using lhs   = ct_matrix<M,N,Array1,Deps>;
     using rhs   = ct_matrix<M,N,Array2,Deps>;
@@ -638,7 +558,7 @@ struct make_assign_info<ct_matrix<M,N,mat_assign_array<M,N,Array1,Array2>,Deps>>
 };
 
 template<Integer M, Integer N, class Array1, Integer M2, Integer N2, class Colon, class Array2, class Deps>
-struct make_assign_info<ct_matrix<M2,N2,mat_assign_array_colon<M,N,Array1,Colon,M2,N2,Array2>,Deps>>
+struct make_assign_info<ct_matrix<M2,N2, mkd::mat_assign_array_colon<M,N,Array1,Colon,M2,N2,Array2>,Deps>>
 {
     using lhs   = ct_matrix<M,N,Array1,Deps>;
     using rhs   = ct_matrix<M2,N2,Array2,Deps>;

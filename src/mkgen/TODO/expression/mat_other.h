@@ -76,11 +76,8 @@ struct mat_ctrans<ct_scalar<Array,Deps>>
 //----------------------------------------------------------------------------------
 //                              func_unary
 //----------------------------------------------------------------------------------
-template<class Tag, Integer M, Integer N, class Array>
-struct mat_ufunc_array{};
-
 template<class Tag, Integer M, Integer N, class Array, Integer Row, Integer Col>
-struct get_array_elem<mat_ufunc_array<Tag,M,N,Array>, Row, Col>
+struct get_array_elem<mkd::mat_ufunc_array<Tag,M,N,Array>, Row, Col>
 {
     using elem      = typename get_array_elem<Array, Row, Col>::type;
     using new_item  = typename expr_ufunc<Tag,elem>::type;
@@ -98,7 +95,7 @@ struct get_array_elem<details::scalar_ufunc_array<Tag,Array,Deps>, Row, Col>
 template<class Tag, Integer M, Integer N, class Array, class Deps1>
 struct func_unary<Tag, ct_matrix<M,N,Array,Deps1>>
 {
-    using array_type    = mat_ufunc_array<Tag, M, N, Array>;
+    using array_type    = mkd::mat_ufunc_array<Tag, M, N, Array>;
     using type          = ct_matrix<M, N, array_type,Deps1>;
 };
 

@@ -36,7 +36,7 @@ struct is_temporary
     static const bool value = false;
 };
 template<Integer M, Integer N, class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force, class Deps>
-struct is_temporary<ct_matrix<M,N,mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>,Deps>>
+struct is_temporary<ct_matrix<M,N,mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>,Deps>>
 {
     //for now only temporary matrix are market as temporary, virtual matrices of temporaries
     //are ignored
@@ -240,7 +240,7 @@ struct make_final_tags<Tag, list::list<Item, Items...>>
 };
 
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols, class Subs_Context>
-struct get_temp_tags<mat_temp_array<Tag, Mat_Rows, Mat_Cols, false>, Subs_Context>
+struct get_temp_tags<mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols, false>, Subs_Context>
 {
     using mat       = decltype(get_stored_matrix<Subs_Context>(Tag()));
     using array     = typename mat::array_type;
@@ -248,7 +248,7 @@ struct get_temp_tags<mat_temp_array<Tag, Mat_Rows, Mat_Cols, false>, Subs_Contex
     using type      = typename make_final_tags<Tag, dep_tags>::type;
 };
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols, class Subs_Context>
-struct get_temp_tags<mat_temp_array<Tag, Mat_Rows, Mat_Cols, true>, Subs_Context>
+struct get_temp_tags<mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols, true>, Subs_Context>
 {
     using type = list::list<>;
 };
@@ -463,9 +463,6 @@ struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag,MR,MC>,Ret_DPS>,
     using additional_deps   = typename merge_deps<Ret_DPS, removed_deps>::type;
 };
 
-template<class Ret_Tag>
-struct empty_array{};
-
 template<Integer M, Integer N, class Ret_Tag, class Ret_DPS, 
         Integer M2, Integer N2, class Expr_Array, class Expr_DPS, class Ret_Mat_Subs, class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>,
@@ -474,7 +471,7 @@ struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>,
     //final expression is empty but temporary storage is in output Array
     static_assert(M == M2 && N == N2, "invalid assignment");
     
-    using array_type        = empty_array<Ret_Tag>;
+    using array_type        = mkd::empty_array<Ret_Tag>;
     using dps_all           = typename merge_deps<Ret_DPS, Expr_DPS>::type;
     using matrix_type       = ct_matrix<M, N, array_type, dps_all>;
     using return_subs       = typename list::elem_at_pos<Ret_Mat_Subs,0>::type;
@@ -492,7 +489,7 @@ struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag, MR, MC>,Ret_DPS
     //final expression is empty but temporary storage is in output Array
     static_assert(M == M2 && N == N2, "invalid assignment");
     
-    using array_type        = empty_array<Ret_Tag>;
+    using array_type        = mkd::empty_array<Ret_Tag>;
     using matrix_type       = ct_matrix<M, N, array_type, Expr_DPS>;
     using return_subs       = typename list::elem_at_pos<Ret_Mat_Subs,0>::type;
     using removed_deps      = typename list::elem_at_pos<Ret_Mat_Subs,1>::type;
@@ -654,7 +651,7 @@ struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N,Array,Deps>, Elems
     }
 };
 template<class Val, Integer M, Integer N, class Ret_Tag, class Deps, class ... Elems>
-struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N,empty_array<Ret_Tag>,Deps>, Elems...>>
+struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N, mkd::empty_array<Ret_Tag>,Deps>, Elems...>>
 {
     template<class Local_Storage>
     inline_initializer
@@ -693,15 +690,16 @@ struct expr_evaler_elems<Val, ct_matrix<M,N,Array,Deps>>
     static void eval(Local_Storage& ls)
     {
         using matrix_type   = ct_matrix<M,N,Array,Deps>;
-        using expand_vm     = typename expand_virtual_matrix<matrix_type>::type;
+        using expand_vm     = typename mkd::expand_virtual_matrix<matrix_type>::type;
 
         return expr_evaler_elems_expand<Val,expand_vm>::eval(ls);
     };
+
     template<class Visitor>
     static void accept(Visitor& vis)
     {
         using matrix_type   = ct_matrix<M,N,Array,Deps>;
-        using expand_vm     = typename expand_virtual_matrix<matrix_type>::type;
+        using expand_vm     = typename mkd::expand_virtual_matrix<matrix_type>::type;
 
         return expr_evaler_elems_expand<Val,expand_vm>::accept(vis);
     }

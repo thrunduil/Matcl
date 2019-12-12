@@ -99,4 +99,11 @@ struct check_valid_dep_type
     using type  = void;
 };
 
+// check if Deps parameter is valid dps type
+template<class Deps>
+struct check_deps
+{
+    using type = typename check_valid_dps<Deps>::type;
+};
+
 }}};
