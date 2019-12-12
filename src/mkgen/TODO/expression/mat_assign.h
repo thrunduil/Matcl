@@ -4,6 +4,7 @@
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
 #include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/TODO/expression/colon.h"
 
 namespace matcl { namespace mkgen
 {
@@ -361,29 +362,29 @@ struct get_assignment<Row,Col>
 };
 
 template<Integer Row, Integer Col, class Tag, class ... Args>
-struct get_array_elem<virtual_array<Tag, Args...> , Row, Col>
+struct get_array_elem<mkd::virtual_array<Tag, Args...> , Row, Col>
 {
     using type = typename get_assignment<Row, Col, Args...>::type;
 };
 
 template<Integer M1, Integer N1, class Tag, class Deps1,
             Integer M2, Integer N2, class Array2, class Deps2, class Colon_1, class ... Args>
-struct mat_virtual_assign_1<ct_matrix<M1,N1,virtual_array<Tag, Args...>,Deps1>, 
+struct mat_virtual_assign_1<ct_matrix<M1,N1,mkd::virtual_array<Tag, Args...>,Deps1>, 
         ct_matrix<M2,N2,Array2,Deps2>, Colon_1>
 {
     using item      = assign_item<M1, N1, M2, N2, Array2, Colon_1>;
-    using array_type= virtual_array<Tag, item, Args...>;
+    using array_type= mkd::virtual_array<Tag, item, Args...>;
     using deps      = typename link_deps<Deps1, Deps2>::type;
     using type      = ct_matrix<M1, N1, array_type,deps>;
 };
 
 template<Integer M1, Integer N1, class Deps1, class Tag, class Array2, class Deps2,
     class Colon_1, class ... Args>
-struct mat_virtual_assign_1<ct_matrix<M1,N1,virtual_array<Tag, Args...>,Deps1>, 
+struct mat_virtual_assign_1<ct_matrix<M1,N1,mkd::virtual_array<Tag, Args...>,Deps1>, 
                             ct_scalar<Array2,Deps2>, Colon_1>
 {
     using item          = assign_item_scalar<M1, N1, ct_scalar<Array2,Deps2>, Colon_1>;
-    using array_type    = virtual_array<Tag, item, Args...>;
+    using array_type    = mkd::virtual_array<Tag, item, Args...>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1, N1, array_type,deps>;
 };
@@ -416,7 +417,7 @@ struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array,Deps>,Assignments>,
     using old_matrix        = ct_matrix<M,N,Array,Deps>;
 
     using new_assign        = assign_colon_scal<Pos,scalar>;
-    using new_assignments   = typename push_back<Assignments,new_assign>::type;
+    using new_assignments   = typename list::push_back<Assignments,new_assign>::type;
     using new_deps          = typename link_deps<Deps, Scal_Deps>::type;
     using new_matrix        = ct_matrix<M,N,Array,new_deps>;
 
@@ -438,7 +439,7 @@ struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array,Deps>,Assignments>,
     using colon_type        = Colon;
 
     using new_assign        = assign_colon<colon_type,rhs_matrix>;
-    using new_assignments   = typename push_back<Assignments,new_assign>::type;
+    using new_assignments   = typename list::push_back<Assignments,new_assign>::type;
     using new_deps          = typename link_deps<Deps, Deps2>::type;
     using new_matrix        = ct_matrix<M,N,Array,new_deps>;
 
@@ -459,7 +460,7 @@ struct make_comp_result<computation<Tag, ct_matrix<M,N,Array,Deps>, Assignments_
 
     using type              = ct_matrix<M,N,Array,new_deps>;
 
-    static_assert(is_member<new_dep,Deps>::value == false, "computation tag in use");    
+    static_assert(list::is_member<new_dep,Deps>::value == false, "computation tag in use");    
 
     template<class Local_Storage, class Data_Provider, class Temp_Storage>
     inline_initializer
@@ -527,12 +528,12 @@ struct expand_virtual_matrix2
 template<Integer M, Integer N, class Array, class Deps>
 struct expand_virtual_matrix<ct_matrix<M,N,Array,Deps>>
 {
-    using type = list<ct_matrix<M,N,Array,Deps>>;
+    using type = list::list<ct_matrix<M,N,Array,Deps>>;
 };
 template<Integer M, Integer N, class Array, class Deps>
 struct expand_virtual_matrix2<ct_matrix<M,N,Array,Deps>>
 {
-    using type = list<list<colon_all, ct_matrix<M,N,Array,Deps>>>;
+    using type = list::list<list::list<colon_all, ct_matrix<M,N,Array,Deps>>>;
 };
 
 template<Integer M, Integer N, class Array1, class Deps, class Assign_Info>
@@ -557,28 +558,28 @@ struct make_colon_assignment<M,N,Array1,Deps,assign_item<M,N,M2,N2,Array2,Colon_
 template<Integer M, Integer N, class Deps, Integer M2, Integer N2, class Array2, class Colon_1>
 struct make_colon_assignment2<M,N,Deps,assign_item<M,N,M2,N2,Array2,Colon_1>>
 {
-    using type          = list<Colon_1, ct_matrix<M2,N2,Array2, Deps>>;
+    using type          = list::list<Colon_1, ct_matrix<M2,N2,Array2, Deps>>;
 };
 
 template<Integer M, Integer N, class Array1, class Deps, class ... Assign_List>
 struct expand_virtual_impl
 {
-    using type = list<typename make_colon_assignment<M,N,Array1,Deps,Assign_List>::type ... >;
+    using type = list::list<typename make_colon_assignment<M,N,Array1,Deps,Assign_List>::type ... >;
 };
 template<Integer M, Integer N, class Deps, class ... Assign_List>
 struct expand_virtual_impl2
 {
-    using type = list<typename make_colon_assignment2<M,N,Deps,Assign_List>::type ... >;
+    using type = list::list<typename make_colon_assignment2<M,N,Deps,Assign_List>::type ... >;
 };
 
 template<Integer M, Integer N, class Array1, class Virt_Tag, class ... Assign_List, class Deps>
 struct expand_virtual_matrix<ct_matrix<M,N,mat_assign_array<M,N,Array1,
-            virtual_array<Virt_Tag, Assign_List...>>,Deps>>
+            mkd::virtual_array<Virt_Tag, Assign_List...>>,Deps>>
 {
     using type = typename expand_virtual_impl<M,N,Array1,Deps,Assign_List...>::type;
 };
 template<Integer M, Integer N, class Virt_Tag, class ... Assign_List, class Deps>
-struct expand_virtual_matrix2<ct_matrix<M,N,virtual_array<Virt_Tag, Assign_List...>,Deps>>
+struct expand_virtual_matrix2<ct_matrix<M,N,mkd::virtual_array<Virt_Tag, Assign_List...>,Deps>>
 {
     using type = typename expand_virtual_impl2<M,N,Deps,Assign_List...>::type;
 };
@@ -593,12 +594,12 @@ struct make_return_dep
                 "this type should not be instantiated");
 };
 template<Integer M, Integer N, class Tag, class Dep>
-struct make_return_dep<ct_matrix<M,N,output_array<Tag>,Dep>>
+struct make_return_dep<ct_matrix<M,N, mkd::output_array<Tag>,Dep>>
 {
     using type          = extern_dep<Tag>;
 };
 template<Integer M, Integer N, class Output_Tag, Integer MR, Integer MC, class Dep>
-struct make_return_dep<ct_matrix<M,N,temp_output_array<Output_Tag, MR, MC>,Dep>>
+struct make_return_dep<ct_matrix<M,N, mkd::temp_output_array<Output_Tag, MR, MC>,Dep>>
 {
     using type          = temp_dep<Output_Tag, MR, MC>;
 };

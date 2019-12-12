@@ -1,10 +1,30 @@
+/*
+ *  This file is a part of Matrix Computation Library (MATCL)
+ *
+ *  Copyright (c) Pawe³ Kowal 2019
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
 #pragma once
 
 #include <iosfwd>
 
-#include "mkgen/TODO/utils/utils.h"
 #include "mkgen/matrix/scalar.h"
-#include "mkgen/TODO/matrix/ct_matrix_details.h"
+//#include "mkgen/TODO/utils/utils.h"
+//#include "mkgen/TODO/matrix/ct_matrix_details.h"
 
 namespace matcl { namespace mkgen
 {
@@ -28,7 +48,7 @@ struct colon3{};
 
 // compile time matrix with size M x N storing symbolic elements in array Array_t.
 //
-// matrix 1x1 is not a scalar: for example multiplying 1x1 matrix and 2x2 matrix will
+// Matrix 1x1 is not a scalar, for example multiplying 1x1 matrix and 2x2 matrix will
 // produce an error. For a matrix with generic elements Array_t type is basically array<Tag>
 // with unique Tag for each matrix. For matrices containing symbolic expressions Array_t is
 // any type for which a template get_array_elem described below is specialized.
@@ -56,23 +76,21 @@ struct ct_matrix
     public:
         // get element at position Pos as a scalar
         template<Integer Pos>
-        static auto elem(colon<Pos>)        -> ct_scalar<details::scalar_data<details::scalar_mat_elem_1<ct_matrix, Pos>>, Deps>;
+        static auto elem(colon<Pos>)        -> ct_scalar<mkd::scalar_mat_elem_1<ct_matrix, Pos>, Deps>;
 
         // get element at row Row and column Col
         template<Integer Row, Integer Col>
         static auto elem(colon<Row>, colon<Col>) 
-                                            -> ct_scalar<details::scalar_data<details::scalar_mat_elem_2<ct_matrix, Row, Col>>, 
-                                                    Deps>;
+                                            -> ct_scalar<mkd::scalar_mat_elem_2<ct_matrix, Row, Col>, Deps>;
 
         // get submatrix Mat(Colon_1, Colon_2)
         template<class Colon_1, class Colon_2>
-        static auto sub(Colon_1, Colon_2)   -> typename details::submatrix_maker_2<ct_matrix, 
-                                                        Colon_1, Colon_2>::type;
+        static auto sub(Colon_1, Colon_2)   -> typename mkd::submatrix_maker_2<ct_matrix, 
+                                                    Colon_1, Colon_2>::type;
 
         // get submatrix Mat(Colon_1)
         template<class Colon_1>
-        static auto sub(Colon_1)            -> typename details::submatrix_maker_1<ct_matrix, 
-                                                        Colon_1>::type;
+        static auto sub(Colon_1)            -> typename mkd::submatrix_maker_1<ct_matrix, Colon_1>::type;
 
         // build virtual matrix, this type must be a virtual_matrix
         //TODO
@@ -91,6 +109,30 @@ struct ct_matrix
         //TODO: add compute function
 };
 
+//------------------------------------------------------------------------------
+//                      predefined matrices
+//------------------------------------------------------------------------------
+
+//stores statically known data, accessible through tag argument
+template<Integer M, Integer N, class Tag>
+using const_mat = ct_matrix<M,N, mkd::const_array<Tag>,empty_deps>;
+
+//stores generic data unknown statically, usually supplied by some data_provider
+template<Integer M, Integer N, class Tag>
+using gen_mat = ct_matrix<M,N, mkd::gen_array<Tag>, extern_deps<Tag>>;
+
+//stores results
+template<Integer M, Integer N, class Tag>
+using output_mat = ct_matrix<M,N, mkd::output_array<Tag>, extern_deps<Tag>>;
+
+template<Integer M, Integer N, class Tag>
+using temp_output_mat = ct_matrix<M,N, mkd::temp_output_array<Tag,M,N>, return_deps<Tag,M,N>>;
+
+//matrix for storing local computation results, without creating
+//runtime buffers.
+template<Integer M, Integer N, class Tag>
+using virtual_mat = ct_matrix<M,N, mkd::virtual_array<Tag>,empty_deps>;
+
 }}
 
-#include "mkgen/TODO/matrix/matrix.h"
+#include "mkgen/details/matrix/matrix_impl.h"

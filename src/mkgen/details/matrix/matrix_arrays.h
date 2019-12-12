@@ -20,19 +20,42 @@
 
 #pragma once
 
-#include "mkgen/matrix/scalar.h"
 #include "mkgen/matrix/matrix.h"
 
-#include "mkgen/TODO/expression/ct_matrix_expr.inl"
-#include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/expression/mat_mult.h"
-#include "mkgen/TODO/expression/mat_plus.h"
-#include "mkgen/TODO/expression/mat_assign.h"
-#include "mkgen/TODO/expression/mat_temporary.h"
-#include "mkgen/TODO/expression/mat_other.h"
-#include "mkgen/TODO/evaler/temp_storage.h"
-#include "mkgen/TODO/evaler/expr_evaler.h"
-#include "mkgen/TODO/matrix/matrix_printer.h"
-#include "mkgen/TODO/expression/for_expr.h"
-#include "mkgen/TODO/expression/mat_call.h"
-#include "mkgen/TODO/matrix/matrix.h"
+namespace matcl { namespace mkgen { namespace details
+{
+
+template<class Array_t, Integer Offset, Integer Step>
+struct sub_array_1 {};
+
+template<class Array_t, Integer Offset1, Integer Offset2, Integer Step1, Integer step2>
+struct sub_array_2 {};
+
+// const_mat array
+template<class Tag>                                     
+struct const_array{};
+
+template<class Tag>                                     
+struct gen_array{};
+
+template<class Tag> 
+struct output_array{};
+
+template<class Tag, Integer Rows, Integer Cols>
+struct temp_output_array{};
+
+template<class Tag, class... Assign_List>
+struct virtual_array {};
+
+//TODO
+/*
+// Symbolic Array of generic elements of type element<Tag, row, col, ...> for all 
+// pairs of (row, col) available in given matrix.
+template<class Tag>
+struct array {};
+
+template<class Tag>
+struct output_array {};
+*/
+
+}}}

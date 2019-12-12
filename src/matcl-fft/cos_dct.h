@@ -214,7 +214,7 @@ struct get_pos_cos_table<Base_Ind,2>
 };
 
 template<Integer M, Integer Base_Ind, Integer Step, class Scal>
-struct cos_value_tag
+struct cos_value_tag : mkd::scal_data_value_tag<cos_value_tag<M, Base_Ind, Step, Scal>>
 {
     static const Integer pos    = get_pos_cos_table<Base_Ind,Step>::value;
     static const bool           is_continuous   = true; 

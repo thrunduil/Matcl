@@ -32,10 +32,7 @@ using Integer   = matcl::Integer;
 //                              arrays
 //------------------------------------------------------------------------
 //data arrays
-template<class Tag>                                     struct array;
-template<class Tag>                                     struct output_array;
-template<class Tag>                                     struct const_array;
-template<class Tag, Integer Rows, Integer Cols>         struct temp_output_array;
+
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols,bool Force> 
                                                         struct mat_temp_array;
 
@@ -65,14 +62,10 @@ template<Integer M,Integer N,class Array1,class Array2> struct scal_mat_minus_ar
 template<Integer M, Integer N, class Array>             struct mat_uminus_array;
 
 //assignments
-template<class Tag, class... Assign_List>               struct virtual_array;
 template<Integer M,Integer N,class Array1,class Array2> struct mat_assign_array;
 template<Integer M,Integer N,class Array1,class Array2> struct mat_scal_assign_array;
 template<Integer M,Integer N,class Array1,class Colon, Integer M2, Integer N2, class Array2> 
                                                         struct mat_assign_array_colon;
-template<class Array_t, Integer Offset, Integer Step>   struct sub_array_1;
-template<class Array_t, Integer Offset1, Integer Offset2, Integer Step1, Integer step2>
-                                                        struct sub_array_2;
 
 //technical arrays
 template<class Ret_Tag>                                 struct empty_array;
@@ -84,10 +77,7 @@ template<class Ret_Tag>                                 struct empty_array;
 template<Integer M, Integer N, class Array_t, class Deps>
 struct ct_matrix;
 
-template<class ...Items>
-struct list;
-
-template<class Tag, class Mat, class Assignments = list<>>
+template<class Tag, class Mat, class Assignments = list::list<>>
 struct computation;
 
 template<Integer Pos> struct colon;
@@ -107,9 +97,6 @@ struct comp_assign_1;
 
 template<class Comp>
 struct make_comp_result;
-
-template<class Mat_L, class Mat_R, class Colon_1>
-struct mat_virtual_assign_1;
 
 template<class Mat_L, class Tag, bool Force>
 struct mat_temporary;
@@ -143,9 +130,6 @@ struct get_temporary;
 
 template<class Elem, Integer Step>
 struct element_step;
-
-template<class Array, Integer Row, Integer Col>
-struct get_array_elem;
 
 template<class Val, class Elem>
 struct loop_context_data_scalar;

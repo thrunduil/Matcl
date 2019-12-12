@@ -19,7 +19,7 @@ template<class It, Integer Pos, template<class Subject, class Context> class Exp
 struct eval_for
 {
     using new_context_item  = Item<It,Pos>;
-    using new_context       = typename mkgen::push_back<Context,new_context_item>::type;
+    using new_context       = typename list::push_back<Context,new_context_item>::type;
     using new_subject       = typename Expr<Subject, new_context>::type;
     using type              = new_subject;
 
@@ -72,7 +72,7 @@ struct for_impl<It, First, Last, 4, Expr, Subject, Context>
 };
 
 template<class It, Integer First, Integer Last, template<class Subject, class Context> class Expr,
-        class Subject, class Context = list<>>
+        class Subject, class Context = list::list<>>
 struct for_expr
 {
     using type      = typename for_impl<It,First,Last,Last-First+1,Expr,Subject,Context>::type;
@@ -87,18 +87,18 @@ struct get_from_context
     static_assert(details::dependent_false<It>::value, "this type should not be instantiated");
 };
 template<class It1, Integer Val, class ... Items, class It>
-struct get_from_context<list<Item<It1,Val>, Items...>, It>
+struct get_from_context<list::list<Item<It1,Val>, Items...>, It>
 {
     static const Integer value = Val;
 };
 template<class Item, class ... Items, class It>
-struct get_from_context<list<Item, Items...>, It>
+struct get_from_context<list::list<Item, Items...>, It>
 {
-    using context_next          = list<Items...>;
+    using context_next          = list::list<Items...>;
     static const Integer value  = get_from_context<context_next,It>::value;
 };
 template<class It>
-struct get_from_context<list<>, It>
+struct get_from_context<list::list<>, It>
 {
     static_assert(details::dependent_false<It>::value, "element not found in Context");
 };

@@ -5,6 +5,7 @@
 #include "mkgen/TODO/utils/utils.h"
 #include "mkgen/TODO/evaler/dependency.h"
 #include "mkgen/matrix/scalar.h"
+#include "mkgen/details/matrix/matrix_arrays.h"
 
 namespace matcl { namespace mkgen
 {
@@ -69,7 +70,7 @@ template<class Array, class Deps>
 struct mat_ctrans<ct_scalar<Array,Deps>>
 {
     using array_type    = details::scalar_ctrans_array<Array,Deps>;
-    using type          = ct_scalar<details::scalar_data<array_type>,Deps>;
+    using type          = ct_scalar<array_type, Deps>;
 };
 
 //----------------------------------------------------------------------------------
@@ -89,8 +90,7 @@ struct get_array_elem<mat_ufunc_array<Tag,M,N,Array>, Row, Col>
 template<class Tag, class Array, class Deps, Integer Row, Integer Col>
 struct get_array_elem<details::scalar_ufunc_array<Tag,Array,Deps>, Row, Col>
 {
-    //TODO
-    using elem      = typename ct_scalar<details::scalar_data<Array>,Deps>;
+    using elem      = typename ct_scalar<Array, Deps>;
     using new_item  = typename expr_ufunc<Tag,elem>::type;
     using type      = new_item;
 };
@@ -105,9 +105,8 @@ struct func_unary<Tag, ct_matrix<M,N,Array,Deps1>>
 template<class Tag, class Array, class Deps>
 struct func_unary<Tag, ct_scalar<Array,Deps>>
 {
-    //TODO
      using array_type   = details::scalar_ufunc_array<Tag,Array,Deps>;
-     using type         = ct_scalar<details::scalar_data<array_type>,Deps>;
+     using type         = ct_scalar<array_type, Deps>;
 };
 
 //----------------------------------------------------------------------------------
@@ -190,7 +189,7 @@ struct func_bin<Tag, ct_scalar<Array1,Deps1>, ct_scalar<Array2,Deps2>>
 {
     using array_type    = details::scalar_bfunc_array<Tag,ct_scalar<Array1,Deps1>,ct_scalar<Array2,Deps2>>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
-    using type          = ct_scalar<details::scalar_data<array_type>,deps>;
+    using type          = ct_scalar<array_type, deps>;
 };
 
 template<class Tag,Integer M1, Integer N1, Integer M2, Integer N2, class Array1, class Deps1,
@@ -214,23 +213,23 @@ struct get_elem<ct_matrix<M,N,Array,Deps1>,Row,Col>
 //                              get_array_elem
 //----------------------------------------------------------------------------------
 template<class Tag, Integer Row, Integer Col>
-struct get_array_elem<array<Tag>,Row,Col> 
+struct get_array_elem<mkd::gen_array<Tag>,Row,Col> 
 {
     using type = element<Tag,Row,Col>;
 };
 template<class Tag, Integer Row, Integer Col>
-struct get_array_elem<output_array<Tag>,Row,Col> 
+struct get_array_elem<mkd::output_array<Tag>,Row,Col> 
 {
     using type = element<Tag,Row,Col>;
 };
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col>
-struct get_array_elem<temp_output_array<Tag,Mat_Rows,Mat_Cols>,Row,Col> 
+struct get_array_elem<mkd::temp_output_array<Tag,Mat_Rows,Mat_Cols>,Row,Col> 
 {
     using type = get_temporary<Tag,Mat_Rows,Mat_Cols, Row,Col>;
 };
 
 template<class Tag, Integer Row, Integer Col>
-struct get_array_elem<const_array<Tag>,Row,Col> 
+struct get_array_elem<mkd::const_array<Tag>,Row,Col> 
 {
     using type = decltype(Tag::get_elem<Row,Col>());
 };
@@ -247,7 +246,7 @@ struct make_element_step<Elem,1>
 };
 
 template<class Array_t, Integer Offset, Integer Step, Integer Row, Integer Col>
-struct get_array_elem<sub_array_1<Array_t,Offset,Step>,Row,Col> 
+struct get_array_elem<mkd::sub_array_1<Array_t,Offset,Step>,Row,Col> 
 {
     static_assert(Col == 1, "this submatrix has only one column");
     static const Integer pos = Offset + (Row -1) * Step + 1;
@@ -257,7 +256,7 @@ struct get_array_elem<sub_array_1<Array_t,Offset,Step>,Row,Col>
 };
 template<class Array_t, Integer Offset1, Integer Offset2, Integer Step1, Integer Step2,
         Integer Row, Integer Col>
-struct get_array_elem<sub_array_2<Array_t,Offset1,Offset2,Step1,Step2>,Row,Col> 
+struct get_array_elem<mkd::sub_array_2<Array_t,Offset1,Offset2,Step1,Step2>,Row,Col> 
 {
     static const Integer row2 = Offset1 + (Row-1)*Step1 + 1;
     static const Integer col2 = Offset2 + (Col-1)*Step2 + 1;

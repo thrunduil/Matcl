@@ -68,7 +68,7 @@ struct init_storage_arrays_dep<Val,Pos,dep<Tag,0,dep_extern>>
 };
 
 template<class Val, Integer Pos, class Tag, class ... Tags>
-struct init_storage_arrays<Val,Pos,list<Tag,Tags...>>
+struct init_storage_arrays<Val,Pos,list::list<Tag,Tags...>>
 {
     template<class Data_Provider, class Temp_Storage, class Local_Storage>
     inline_initializer
@@ -77,12 +77,12 @@ struct init_storage_arrays<Val,Pos,list<Tag,Tags...>>
         using dep       = typename make_return_dep_from_tag<Tag>::type;
         init_storage_arrays_dep<Val,Pos,dep>::eval(dp,ev,ls);
 
-        init_storage_arrays<Val,Pos+1,list<Tags...>>::eval(dp,ev,ls);
+        init_storage_arrays<Val,Pos+1,list::list<Tags...>>::eval(dp,ev,ls);
     };
 };
 
 template<class Val, Integer Pos>
-struct init_storage_arrays<Val,Pos,list<>>
+struct init_storage_arrays<Val,Pos,list::list<>>
 {
     template<class Data_Provider, class Temp_Storage, class Local_Storage>
     static void eval(const Data_Provider& dp, Temp_Storage* ev, Local_Storage* ls)
@@ -100,7 +100,7 @@ struct init_storage_scalars
                   "this type should not be instantiated");
 };
 template<class Val, Integer Pos, class Tag, class ... Deps>
-struct init_storage_scalars<Val,Pos,list<Tag,Deps...>>
+struct init_storage_scalars<Val,Pos,list::list<Tag,Deps...>>
 {
     template<class Data_Provider, class Temp_Storage, class Local_Storage>
     inline_initializer
@@ -109,11 +109,11 @@ struct init_storage_scalars<Val,Pos,list<Tag,Deps...>>
         Val v = eval_scalar<Val>(Tag(), ls);
         ls->set_scalar<Tag>(v);
 
-        init_storage_scalars<Val,Pos+1,list<Deps...>>::eval(dp,ev,ls);
+        init_storage_scalars<Val,Pos+1,list::list<Deps...>>::eval(dp,ev,ls);
     };
 };
 template<class Val, Integer Pos>
-struct init_storage_scalars<Val,Pos,list<>>
+struct init_storage_scalars<Val,Pos,list::list<>>
 {
     template<class Data_Provider, class Temp_Storage, class Local_Storage>
     static void eval(Data_Provider& dp, Temp_Storage* ev, Local_Storage* ls)
@@ -131,30 +131,30 @@ struct make_array_deps
                   "this type should not be instantiated");
 };
 template<class Dep, class ... Deps>
-struct make_array_deps<list<Dep, Deps...>>
+struct make_array_deps<list::list<Dep, Deps...>>
 {
-    using list_1    = typename make_array_deps<list<Deps...>>::type;
-    using type      = typename push_front<list_1, Dep>::type;
+    using list_1    = typename make_array_deps<list::list<Deps...>>::type;
+    using type      = typename list::push_front<list_1, Dep>::type;
 };
 template<class Tag, class ... Deps>
-struct make_array_deps<list<dep<Tag,0,dep_scalar>, Deps...>>
+struct make_array_deps<list::list<dep<Tag,0,dep_scalar>, Deps...>>
 {
-    using type      = typename make_array_deps<list<Deps...>>::type;
+    using type      = typename make_array_deps<list::list<Deps...>>::type;
 };
 template<class Tag, class ... Deps>
-struct make_array_deps<list<dep<Tag,0,dep_computation>, Deps...>>
+struct make_array_deps<list::list<dep<Tag,0,dep_computation>, Deps...>>
 {
-    using type      = typename make_array_deps<list<Deps...>>::type;
+    using type      = typename make_array_deps<list::list<Deps...>>::type;
 };
 template<class ... Deps>
-struct make_array_deps<list<void, Deps...>>
+struct make_array_deps<list::list<void, Deps...>>
 {
-    using type      = typename make_array_deps<list<Deps...>>::type;
+    using type      = typename make_array_deps<list::list<Deps...>>::type;
 };
 template<>
-struct make_array_deps<list<>>
+struct make_array_deps<list::list<>>
 {
-    using type = list<>;
+    using type = list::list<>;
 };
 
 template<class Deps>
@@ -164,20 +164,20 @@ struct make_scalar_deps
                   "this type should not be instantiated");
 };
 template<class Dep, class ... Deps>
-struct make_scalar_deps<list<Dep, Deps...>>
+struct make_scalar_deps<list::list<Dep, Deps...>>
 {
-    using type      = typename make_scalar_deps<list<Deps...>>::type;
+    using type      = typename make_scalar_deps<list::list<Deps...>>::type;
 };
 template<class Tag, class ... Deps>
-struct make_scalar_deps<list<dep<Tag,0,dep_scalar>, Deps...>>
+struct make_scalar_deps<list::list<dep<Tag,0,dep_scalar>, Deps...>>
 {
-    using list_1    = typename make_scalar_deps<list<Deps...>>::type;
-    using type      = typename push_front<list_1, Tag>::type;
+    using list_1    = typename make_scalar_deps<list::list<Deps...>>::type;
+    using type      = typename list::push_front<list_1, Tag>::type;
 };
 template<>
-struct make_scalar_deps<list<>>
+struct make_scalar_deps<list::list<>>
 {
-    using type = list<>;
+    using type = list::list<>;
 };
 
 template<class Tag, Integer Offset, class Colon, Integer Rows>
@@ -239,23 +239,23 @@ struct make_array_info
                   "this type should not be instantiated");
 };
 template<class Subs_Context, class... Deps>
-struct make_array_info<Subs_Context, list<Deps...>>
+struct make_array_info<Subs_Context, list::list<Deps...>>
 {
-    using type = list<typename make_array_info_1<Subs_Context, Deps>::type...>;
+    using type = list::list<typename make_array_info_1<Subs_Context, Deps>::type...>;
 };
 
 template<class List, class Elem, bool Static>
 struct insert_elem{};
 
 template<class ... List, class Elem>
-struct insert_elem<list<List...>,Elem,true>
+struct insert_elem<list::list<List...>,Elem,true>
 {
-    using type = list<List...>;
+    using type = list::list<List...>;
 };
 template<class ... List, class Elem>
-struct insert_elem<list<List...>,Elem,false>
+struct insert_elem<list::list<List...>,Elem,false>
 {
-    using type = list<typename Elem::tag, List...>;
+    using type = list::list<typename Elem::tag, List...>;
 };
 
 template<class List_Deps>
@@ -265,10 +265,10 @@ struct make_array_tags
                   "this type should not be instantiated");
 };
 template<class... Info>
-struct make_array_tags<list<Info...>>
+struct make_array_tags<list::list<Info...>>
 {
-    using list_tags = list<typename Info::tag ... >;
-    using type      = typename get_unique_list<list_tags>::type;
+    using list_tags = list::list<typename Info::tag ... >;
+    using type      = typename list::unique_list<list_tags>::type;
 };
 
 template<class Subs_Type, class Dep, class Subs_Dep> 
@@ -346,7 +346,7 @@ struct make_deps_list<Subs_Context, dps<Deps...>>
 {
     using ret_tag   = typename get_return_subs<Subs_Context, Deps...>::type;
     using ret_dep   = typename make_return_dep_from_tag<ret_tag>::type;
-    using type      = list<ret_dep, Deps...>;
+    using type      = list::list<ret_dep, Deps...>;
 };
 
 
@@ -364,9 +364,9 @@ struct local_storage
     using array_info    = typename make_array_info<subs_context, array_deps>::type;
     using array_tags    = typename make_array_tags<array_info>::type;
 
-    using storage       = local_arrays<Val,list_size<array_tags>::value>;        
-    using storage_scal  = local_values<Val,list_size<scalar_deps>::value>;
-    using dep_return    = typename get_elem_at_pos<array_deps,0>::type;
+    using storage       = local_arrays<Val,list::size<array_tags>::value>;        
+    using storage_scal  = local_values<Val,list::size<scalar_deps>::value>;
+    using dep_return    = typename list::elem_at_pos<array_deps,0>::type;
     using return_tag    = typename dep_return::tag;
 
     storage         m_data;
@@ -394,8 +394,8 @@ struct local_storage
     inline_lev_1
     const Val& get_temp() const
     {
-        static const Integer pos    = get_elem_pos<array_deps,Dep>::value;
-        using info                  = typename get_elem_at_pos<array_info,pos>::type;
+        static const Integer pos    = list::elem_pos<array_deps,Dep>::value;
+        using info                  = typename list::elem_at_pos<array_info,pos>::type;
 
         using tag                   = typename info::tag;
         using colon                 = typename info::colon;
@@ -407,7 +407,7 @@ struct local_storage
         static const Integer row        = (pos_colon-1) % rows + 1;
         static const Integer off        = typename tag::template get_offset<row,col>::value;        
 
-        static const Integer pos2   = get_elem_pos<array_tags,tag>::value;
+        static const Integer pos2   = list::elem_pos<array_tags,tag>::value;
 
         return m_data.m_array[pos2][off + offb];
     };
@@ -418,12 +418,12 @@ struct local_storage
     {
         using dep_type              = extern_dep<Tag>;
         static const Integer off    = typename Tag::template get_offset<Row,Col>::value;        
-        static const Integer pos    = get_elem_pos<array_deps,dep_type>::value;
-        using info                  = typename get_elem_at_pos<array_info,pos>::type;
+        static const Integer pos    = list::elem_pos<array_deps,dep_type>::value;
+        using info                  = typename list::elem_at_pos<array_info,pos>::type;
 
         using tag                   = typename info::tag;
         static const Integer offb   = info::offset;    
-        static const Integer pos2   = get_elem_pos<array_tags,tag>::value;
+        static const Integer pos2   = list::elem_pos<array_tags,tag>::value;
 
         return m_data.m_array[pos2][off + offb];
     }
@@ -432,7 +432,7 @@ struct local_storage
     inline_lev_1
     const Val& get_return() const
     {
-        using dep_type              = typename get_elem_at_pos<array_deps,0>::type;
+        using dep_type              = typename list::elem_at_pos<array_deps,0>::type;
         static_assert(std::is_same<Tag,typename dep_type::tag>::value, "invalid tag");
 
         return get_extern<Tag,Row,Col>();
@@ -442,11 +442,11 @@ struct local_storage
     inline_lev_1
     const Val* get_array() const
     {
-        static const Integer pos    = get_elem_pos<array_deps,Dep>::value;
-        using info                  = typename get_elem_at_pos<array_info,pos>::type;
+        static const Integer pos    = list::elem_pos<array_deps,Dep>::value;
+        using info                  = typename list::elem_at_pos<array_info,pos>::type;
 
         using tag                   = typename info::tag;
-        static const Integer pos2   = get_elem_pos<array_tags,tag>::value;
+        static const Integer pos2   = list::elem_pos<array_tags,tag>::value;
 
         return m_data.m_array[pos2];
     };
@@ -455,7 +455,7 @@ struct local_storage
     inline_lev_1
     void set_scalar(const Val& v)
     {
-        static const Integer pos    = get_elem_pos<scalar_deps,Tag>::value;
+        static const Integer pos    = list::elem_pos<scalar_deps,Tag>::value;
         m_data_scal.m_array[pos]    = v;
     };
 
@@ -463,7 +463,7 @@ struct local_storage
     inline_lev_1
     Val get_scalar() const
     {
-        static const Integer pos    = get_elem_pos<scalar_deps,Tag>::value;
+        static const Integer pos    = list::elem_pos<scalar_deps,Tag>::value;
         return m_data_scal.m_array[pos];
     };
 

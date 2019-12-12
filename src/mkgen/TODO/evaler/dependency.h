@@ -30,13 +30,13 @@ template<class Dep1, class ...Deps1, class Deps2>
 struct get_unique<dps<Dep1, Deps1...>, Deps2>
 {    
     using type_1                = typename get_unique<dps<Deps1...>, Deps2>::type;
-    static const bool is_member = is_member<Dep1, Deps2>::value;
+    static const bool is_member = list::is_member<Dep1, Deps2>::value;
     using type                  = typename insert_new_dep<Dep1, type_1,is_member>::type;    
 };
 template<class Dep1, class Deps2>
 struct get_unique<dps<Dep1>, Deps2>
 {
-    static const bool is_member = is_member<Dep1, Deps2>::value;
+    static const bool is_member = list::is_member<Dep1, Deps2>::value;
     using type                  = typename std::conditional<is_member, dps<>, dps<Dep1>> :: type;
 };
 

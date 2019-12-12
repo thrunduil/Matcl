@@ -25,36 +25,55 @@
 namespace matcl { namespace mkgen { namespace details
 {
 
-//TODO: remove this type, not needed
+//-----------------------------------------------------------------------
+//                      scalar_data
+//-----------------------------------------------------------------------
+// base class for ct_scalar arrays
 template<class Data>
 struct scalar_data
-{    
-    using check1    = typename details::check_scalar_data_impl<Data>::type;
+{
+    //check arguments
+    template<class Dummy>
+    using check     = typename details::check_scalar_data_impl<Data, Dummy>::type;
 
-    using base_data = Data;
+    // ct_scalar arrays must implement:
+    // template<class Subs_Context>
+    // static void print(std::ostream& os, int prior);
+    // 
+    // template<class Val, class Local_Storage>
+    // static Val eval(const Local_Storage& ls);
+};
 
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {
-        Data::print<Subs_Context>(os,prior);
-    };
+//-----------------------------------------------------------------------
+//                      scal_data_value_tag
+//-----------------------------------------------------------------------
+// base class for Tags used in creating value_scalar
+template<class Tag>
+struct scal_data_value_tag
+{
+    //check arguments
+    template<class Dummy>
+    using check     = typename details::check_scalar_data_tag_impl<Tag, Dummy>::type;
 
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage& ls)
-    {
-        return Data::eval<Val, Local_Storage>(ls);
-    };
+    // Tag arrays must implement:
+    // template<class Subs_Context>
+    // static void print(std::ostream& os, int prior)
+    // {
+    //     Data::print<Subs_Context>(os,prior);
+    // };
+    // 
+    // template<class Value_type>
+    // static Value_type eval<Value_type>();
 };
 
 //-----------------------------------------------------------------------
 //                      scal_data_evaled
 //-----------------------------------------------------------------------
 template<class Data, class Tag>
-struct scal_data_evaled
+struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
 {
     // check arguments
-    using check1    = typename details::check_scalar_data_impl<Data>::type;
+    using check1    = typename details::check_scalar_data_impl<Data, void>::type;
     using check2    = typename details::check_computation_tag<Tag>::type;
 
     template<class Subs_Context>
@@ -84,7 +103,7 @@ struct scal_data_evaled
 //                      scal_data_rational
 //------------------------------------------------------------------------------
 template<Integer N, Integer D>
-struct scal_data_rational
+struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
 {
     static_assert(D != 0, " denominator cannot be zero");
 
@@ -117,9 +136,10 @@ struct scal_data_rational
 //                      scal_data_value
 //------------------------------------------------------------------------------
 template<class Tag, class Value_type>
-struct scal_data_value
+struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
 {
-    //TODO: add checks
+    //check
+    using check1    = typename mkd::check_valid_scalar_data_tag<Tag>::type;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
@@ -155,6 +175,30 @@ struct scal_data_value
 };
 
 //------------------------------------------------------------------------------
+//                      scalar_expr_data
+//------------------------------------------------------------------------------
+
+template<class Expr>
+struct scalar_expr_data : mkd::scalar_data<scalar_expr_data<Expr>>
+{
+    // check
+    using check_expr    = typename details::check_scalar_data_impl<Expr, void>::type;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os, int prior)
+    {
+        Expr::print<Subs_Context>(os,prior);
+    };
+
+    template<class Val, class Local_Storage>
+    inline_lev_1
+    static Val eval(const Local_Storage& ls)
+    {
+        return Expr::eval<Val, Local_Storage>(ls);
+    };
+};
+
+//------------------------------------------------------------------------------
 //                      matrix element as scalar
 //------------------------------------------------------------------------------
 template<class T, Integer Row, Integer Col>
@@ -165,12 +209,16 @@ struct scalar_mat_elem_2
 
 template<Integer M, Integer N, class Array_t, class Deps, Integer Row, Integer Col>
 struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
+             : mkd::scalar_data<scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>>
 {
-    // TODO
+    using elem_type = typename get_array_elem<Array_t,Row, Col>::type;
+
+    // check
+    using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
+    
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
     {
-        using elem = typename get_array_elem<Array_t,Row, col>::type;
         elem::print<Subs_Context>(os,prior);
     };
 
@@ -178,7 +226,6 @@ struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
     inline_expr
     static Val eval(const Local_Storage& ls)
     {
-        using elem = typename get_array_elem<Array_t, Row, col>::type;
         return elem::eval<Val>(ls);
     };
 };
@@ -191,26 +238,27 @@ struct scalar_mat_elem_1
 
 template<Integer M, Integer N, class Array_t, class Deps, Integer Pos>
 struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
+            : mkd::scalar_data<scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>>
 {
-    //TODO
     static const Integer col = (Pos-1)/M + 1;
     static const Integer row = Pos - (col-1) * M;
 
-    using matrix_type   = ct_matrix<M,N,Array_t, Deps>;
+    using elem_type     = typename get_array_elem<Array_t, row, col>::type;
+
+    // check
+    using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
 
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
-    {
-        using elem = typename get_array_elem<Array_t,row, col>::type;
-        elem::print<Subs_Context>(os,prior);
+    {        
+        elem_type::print<Subs_Context>(os,prior);
     };
     
     template<class Val, class Local_Storage>
     inline_expr
     static Val eval(const Local_Storage& ls)
     {
-        using elem = typename get_array_elem<Array_t,row, col>::type;
-        return elem::eval<Val>(ls);
+        return elem_type::eval<Val>(ls);
     };
     
     // TODO
@@ -218,20 +266,22 @@ struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
     template<class Visitor>
     static void accept(Visitor& vis)
     {
-        using elem = typename get_array_elem<Array_t,row, col>::type;
-        return elem::accept<Visitor>(vis);
+        return elem_type::accept<Visitor>(vis);
     };
     */
 };
 
 //TODO
 template<class Array, class Deps>
-struct scalar_ctrans_array{};
+struct scalar_ctrans_array : mkd::scalar_data<scalar_ctrans_array<Array, Deps>>
+{};
 
 template<class Tag, class Array, class Deps>
-struct scalar_ufunc_array{};
+struct scalar_ufunc_array : mkd::scalar_data<scalar_ufunc_array<Tag, Array, Deps>>
+{};
 
 template<class Tag, class Array1, class Array2>
-struct scalar_bfunc_array{};
+struct scalar_bfunc_array: mkd::scalar_data<scalar_bfunc_array<Tag, Array1, Array2>>
+{};
 
 }}}

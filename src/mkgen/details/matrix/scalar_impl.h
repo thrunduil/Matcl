@@ -23,6 +23,7 @@
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/details/matrix/scalar_data.h"
 #include "mkgen/details/utils/utils.h"
+#include "mkgen/utils/list.h"
 
 //TODO: move to details
 namespace matcl { namespace mkgen
@@ -44,10 +45,7 @@ struct make_evaled_scalar<Scalar_data, dps<Deps...>, Tag>
     using scalar    = ct_scalar<Scalar_data, dps<Deps...>>;
     using new_dep   = scalar_dep<Tag>;
 
-    using base_data = typename Scalar_data::base_data;
-    using array_base= mkd::scal_data_evaled<base_data, Tag>;
-    using array     = mkd::scalar_data<array_base>;
-    
+    using array     = mkd::scal_data_evaled<Scalar_data, Tag>;    
     using type      = ct_scalar<array, dps<new_dep, Deps...>>;
 
     template<class Val, class Local_Storage>
@@ -59,54 +57,48 @@ struct make_evaled_scalar<Scalar_data, dps<Deps...>, Tag>
 };
 
 template<Integer N, Integer D, class Tag>
-struct make_evaled_scalar<mkd::scalar_data<mkd::scal_data_rational<N,D>>, 
-                            empty_deps, Tag>
+struct make_evaled_scalar<mkd::scal_data_rational<N,D>, empty_deps, Tag>
 {
     // nothing to compute
     using data      = mkd::scal_data_rational<N,D>;
-    using type      = ct_scalar<mkd::scalar_data<data>, empty_deps>;
+    using type      = ct_scalar<data, empty_deps>;
 };
 
 template<class Data, class Tag_data, class Deps, class Tag>
-struct make_evaled_scalar<mkd::scalar_data<mkd::scal_data_evaled<Data, Tag_data>>, 
-                            Deps, Tag>
+struct make_evaled_scalar<mkd::scal_data_evaled<Data, Tag_data>, Deps, Tag>
 {
     // nothing to compute
     using data      = mkd::scal_data_evaled<Data, Tag_data>;
-    using type      = ct_scalar<mkd::scalar_data<data>, Deps>;
+    using type      = ct_scalar<data, Deps>;
 };
 
 template<class Data, class Value_type, class Deps, class Tag>
-struct make_evaled_scalar<mkd::scalar_data<mkd::scal_data_value<Data, Value_type>>, 
-                            Deps, Tag>
+struct make_evaled_scalar<mkd::scal_data_value<Data, Value_type>, Deps, Tag>
 {
     // nothing to compute
     using data      = mkd::scal_data_value<Data,Value_type>;
-    using type      = ct_scalar<mkd::scalar_data<data>, Deps>;
+    using type      = ct_scalar<data, Deps>;
 };
 
 //------------------------------------------------------------------------------
 //                      get_scalar_value
 //------------------------------------------------------------------------------
 template<Integer N, class Deps>
-struct get_scalar_value<ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N,1>>,
-                                    Deps>>
+struct get_scalar_value<ct_scalar<mkd::scal_data_rational<N,1>, Deps>>
 {
     template<class Val>
     static Val get()    { return Val(N); };
 };
 
 template<Integer N, Integer D, class Deps>
-struct get_scalar_value<ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N,D>>,
-                                    Deps>>
+struct get_scalar_value<ct_scalar<mkd::scal_data_rational<N,D>, Deps>>
 {
     template<class Val>
     static Val get()    { return Val(N) / Val(D); };
 };
 
 template<class Tag, class VT, class Deps>
-struct get_scalar_value<ct_scalar<mkd::scalar_data<mkd::scal_data_value<Tag, VT>>,
-                                    Deps>>
+struct get_scalar_value<ct_scalar<mkd::scal_data_value<Tag, VT>, Deps>>
 {
     using rep   = mkd::scal_data_value<Tag, VT>;
 
@@ -129,12 +121,11 @@ struct get_arrays_scalar
 {
     using scalar    = ct_scalar<Data,Deps>;
     using item      = array_item<scalar, Step, array_item_scalar>;
-    using type      = typename push_back<Arr_List,item> :: type;
+    using type      = typename list::push_back<Arr_List,item> :: type;
 };
 
 template<Integer N, Integer D, class Deps, Integer Step, class Arr_List>
-struct get_arrays_scalar<mkd::scalar_data<mkd::scal_data_rational<N,D>>,
-                            Deps, Step, Arr_List>
+struct get_arrays_scalar<mkd::scal_data_rational<N,D>, Deps, Step, Arr_List>
 {
     using type      = Arr_List;    
 };

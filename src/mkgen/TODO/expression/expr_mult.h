@@ -401,7 +401,7 @@ struct expr_dot_arrays_list<Step,Arr_List, Elem, Elems...>
 };
 
 template<Integer Step, class Arr_List, class ... Elems_1, class ... Elems_2>
-struct expr_dot_arrays<Step, Arr_List, list<Elems_1...>, list<Elems_2...>>
+struct expr_dot_arrays<Step, Arr_List, list::list<Elems_1...>, list::list<Elems_2...>>
 {
     using arr       = typename expr_dot_arrays_list<Step, Arr_List, Elems_1...>::type;
     using type      = typename expr_dot_arrays_list<0, arr, Elems_2...>::type;
@@ -414,14 +414,14 @@ struct expand_dot
                   "this type should not be instantiated");
 };
 template<>
-struct expand_dot<list<>,list<>>
+struct expand_dot<list::list<>,list::list<>>
 {
     using type      = zero;
 };
 template<class Elem_1, class ... Elems_1, class Elem_2, class ... Elems_2>
-struct expand_dot<list<Elem_1,Elems_1...>,list<Elem_2, Elems_2...>>
+struct expand_dot<list::list<Elem_1,Elems_1...>,list::list<Elem_2, Elems_2...>>
 {
-    using sum_2     = typename expand_dot<list<Elems_1...>,list<Elems_2...>>::type;
+    using sum_2     = typename expand_dot<list::list<Elems_1...>,list::list<Elems_2...>>::type;
     using mult      = typename make_mult<Elem_1,Elem_2>::type;
     using type      = typename make_plus<mult,sum_2>::type;
 };

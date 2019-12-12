@@ -8,11 +8,26 @@
 namespace matcl { namespace mkgen
 {
 
+template<class T, bool Is_scalar_data = mkd::is_valid_scalar_data<T>::value>
+struct make_scalar_data;
+
+template<class T>
+struct make_scalar_data<T, true>
+{
+    using type = T;
+};
+
+template<class T>
+struct make_scalar_data<T, false>
+{
+    using type = mkd::scalar_expr_data<T>;
+};
+
 template<class Expr_Type, class Deps>
 struct make_scalar
 {
-    //TODO
-    using type = ct_scalar<details::scalar_data<Expr_Type>,Deps>;
+    using scalar_data   = typename make_scalar_data<Expr_Type>::type;
+    using type = ct_scalar<scalar_data,Deps>;
 };
 
 template<class Expr_Type, class Deps1, class Deps2>
@@ -31,11 +46,11 @@ struct merge_dots
                   "this type should not be instantiated");
 };
 template<class ... Arg_11, class ... Arg_12, class ... Arg_21, class ... Arg_22>
-struct merge_dots<expr_dot<list<Arg_11...>, list<Arg_12...>>,
-                  expr_dot<list<Arg_21...>, list<Arg_22...>>>
+struct merge_dots<expr_dot<list::list<Arg_11...>, list::list<Arg_12...>>,
+                  expr_dot<list::list<Arg_21...>, list::list<Arg_22...>>>
 {
-    using type = expr_dot<list<Arg_11..., Arg_21...>,
-                          list<Arg_12..., Arg_22...>>;
+    using type = expr_dot<list::list<Arg_11..., Arg_21...>,
+                          list::list<Arg_12..., Arg_22...>>;
 };
 
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, Integer Length, 
@@ -63,7 +78,7 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,1,Array_1, Array_2>
     using elem_1 = typename get_array_elem<Array_1, Row, K_start>::type;
     using elem_2 = typename get_array_elem<Array_2, K_start, Col>::type;
     //using type = typename make_mult<elem_1,elem_2>::type;
-    using type   = expr_dot<list<elem_1>, list<elem_2>>;
+    using type   = expr_dot<list::list<elem_1>, list::list<elem_2>>;
 };
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
 struct make_array_mat_mult<Row,Col,K_start,K_end,2,Array_1, Array_2>
@@ -77,7 +92,7 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,2,Array_1, Array_2>
     //using new_item_2  = typename make_mult<elem_1_2,elem_2_2>::type;
 
     //using type        = typename make_plus<new_item_1, new_item_2>::type;
-    using type          = expr_dot<list<elem_1_1,elem_1_2>, list<elem_2_1,elem_2_2>>;
+    using type          = expr_dot<list::list<elem_1_1,elem_1_2>, list::list<elem_2_1,elem_2_2>>;
 };
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
 struct make_array_mat_mult<Row,Col,K_start,K_end,3,Array_1, Array_2>
@@ -97,8 +112,8 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,3,Array_1, Array_2>
     //using plus_23     = typename make_plus<new_item_2, new_item_3>::type;
     //using type        = typename make_plus<new_item_1, plus_23>::type;
 
-    using type          = expr_dot<list<elem_1_1,elem_1_2, elem_1_3>, 
-                                   list<elem_2_1,elem_2_2, elem_2_3>>;
+    using type          = expr_dot<list::list<elem_1_1,elem_1_2, elem_1_3>, 
+                                   list::list<elem_2_1,elem_2_2, elem_2_3>>;
 };
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
 struct make_array_mat_mult<Row,Col,K_start,K_end,4,Array_1, Array_2>
@@ -123,8 +138,8 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,4,Array_1, Array_2>
     //using plus_34     = typename make_plus<new_item_3, new_item_4>::type;
     //using type        = typename make_plus<plus_12, plus_34>::type;
 
-    using type          = expr_dot<list<elem_1_1,elem_1_2, elem_1_3, elem_1_4>, 
-                                   list<elem_2_1,elem_2_2, elem_2_3, elem_2_4>>;
+    using type          = expr_dot<list::list<elem_1_1,elem_1_2, elem_1_3, elem_1_4>, 
+                                   list::list<elem_2_1,elem_2_2, elem_2_3, elem_2_4>>;
 };
 
 template<Integer K, class Array1, class Array2>

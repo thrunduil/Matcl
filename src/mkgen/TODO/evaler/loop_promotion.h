@@ -62,7 +62,7 @@ struct simd_enable<Subs_Context,ct_matrix<M,N,Array_T,Deps>>
 };
 
 template<class Subs_Context, class Tag>
-struct enable_vectorization_array<Subs_Context,const_array<Tag>> 
+struct enable_vectorization_array<Subs_Context, mkd::const_array<Tag>> 
 {
     static const bool value = false;
 };
@@ -86,7 +86,7 @@ struct enable_vectorization_array<Subs_Context, details::scalar_ctrans_array<Arr
 };
 
 template<class Subs_Context, class Tag, class... Assign_List>
-struct enable_vectorization_array<Subs_Context,virtual_array<Tag,Assign_List...>> 
+struct enable_vectorization_array<Subs_Context,mkd::virtual_array<Tag,Assign_List...>> 
 {
     static const bool value = false;
 };
@@ -110,7 +110,7 @@ struct enable_vectorization_array<Subs_Context,mat_scal_assign_array<M, N, Array
 };
 
 template<class Subs_Context, class Array_t, Integer Offset1, Integer Offset2, Integer Step1, Integer Step2>
-struct enable_vectorization_array<Subs_Context,sub_array_2<Array_t, Offset1, Offset2, Step1, Step2>> 
+struct enable_vectorization_array<Subs_Context, mkd::sub_array_2<Array_t, Offset1, Offset2, Step1, Step2>> 
 {
     static const bool value = false;
 };
@@ -146,7 +146,7 @@ struct enable_vectorization_array<Subs_Context,scal_mat_bfunc_array<Tag, M, N, A
 };
 
 template<class Subs_Context, class Array_t, Integer Offset, Integer Step>
-struct enable_vectorization_array<Subs_Context,sub_array_1<Array_t, Offset, Step>> 
+struct enable_vectorization_array<Subs_Context, mkd::sub_array_1<Array_t, Offset, Step>> 
 {
     using code_gen  = typename Subs_Context::code_gen;
     static const bool allow_mone_step  = code_gen::simd_allow_negative_step;
@@ -245,7 +245,7 @@ struct enable_vectorization_array<Subs_Context,scal_mat_minus_array<M, N, Array1
 };
 
 template<class Subs_Context, class Tag, Integer Rows, Integer Cols>
-struct enable_vectorization_array<Subs_Context,temp_output_array<Tag, Rows, Cols>> 
+struct enable_vectorization_array<Subs_Context, mkd::temp_output_array<Tag, Rows, Cols>> 
 {
     using code_gen          = typename Subs_Context::code_gen;
     using ret_subs          = decltype(get_substitution(Subs_Context(), Tag()));
@@ -253,7 +253,7 @@ struct enable_vectorization_array<Subs_Context,temp_output_array<Tag, Rows, Cols
 };
 
 template<class Subs_Context, class Tag>
-struct enable_vectorization_array<Subs_Context,array<Tag>>
+struct enable_vectorization_array<Subs_Context, mkd::gen_array<Tag>>
 {
     static const bool value = Tag::is_continuous;
 };
@@ -273,7 +273,7 @@ struct enable_vectorization_array<Subs_Context,mat_temp_array<Tag, Mat_Rows, Mat
 };
 
 template<class Subs_Context, class Tag>
-struct enable_vectorization_array<Subs_Context,output_array<Tag>> 
+struct enable_vectorization_array<Subs_Context, mkd::output_array<Tag>> 
 {
     using code_gen          = typename Subs_Context::code_gen;
     using ret_subs          = decltype(get_substitution(Subs_Context(), Tag()));
@@ -299,7 +299,7 @@ struct loop_context
 template<class Elem>
 struct make_loop_context
 {
-    using array_collector   = typename Elem::template get_arrays<1,list<>>;
+    using array_collector   = typename Elem::template get_arrays<1,list::list<>>;
     using type              = loop_context<array_collector>;
 };
 
@@ -539,27 +539,27 @@ struct get_align_type
 };
 
 template<class Item, class ... Loop_Data>
-struct check_has_negative_step<list<Item, Loop_Data...>>
+struct check_has_negative_step<list::list<Item, Loop_Data...>>
 {
     static const bool value = (Item::step != 1 && Item::step != 0) 
-                            || check_has_negative_step<list<Loop_Data...>>::value;
+                            || check_has_negative_step<list::list<Loop_Data...>>::value;
 };
 template<>
-struct check_has_negative_step<list<>>
+struct check_has_negative_step<list::list<>>
 {
     static const bool value = false;
 };
 
 template<class Item, class ... Loop_Data>
-struct get_align_type<list<Item, Loop_Data...>>
+struct get_align_type<list::list<Item, Loop_Data...>>
 {
-    using align_tail    = typename get_align_type<list<Loop_Data...>>::type;
+    using align_tail    = typename get_align_type<list::list<Loop_Data...>>::type;
     using align_elem    = typename Item::align_type;
     using type          = typename link_alignment<align_tail,align_elem>::type;
 };
 
 template<>
-struct get_align_type<list<>>
+struct get_align_type<list::list<>>
 {
     using type          = align_full;
 };
@@ -650,37 +650,37 @@ struct collect_tags
 {};
 template<class Val, class Aligned_Root, Integer Step, Integer Offset, class Dep, 
         class ... Elems, class ... Arr, class List_Scal>
-struct collect_tags<list<loop_context_data<Val,Aligned_Root,Step,Offset,Dep>, Elems...>, list<Arr...>, List_Scal>
+struct collect_tags<list::list<loop_context_data<Val,Aligned_Root,Step,Offset,Dep>, Elems...>, list::list<Arr...>, List_Scal>
 {
-    using collector     = collect_tags<list<Elems...>,list<Dep,Arr...>, List_Scal>;
+    using collector     = collect_tags<list::list<Elems...>,list::list<Dep,Arr...>, List_Scal>;
     using array_list    = typename collector::array_list;
     using scalar_list   = typename collector::scalar_list;
 };
 template<class Val, class Elem,  class ... Elems, class List_Arr, class ... Scal>
-struct collect_tags<list<loop_context_data_scalar<Val,Elem>, Elems...>, List_Arr, list<Scal...> >
+struct collect_tags<list::list<loop_context_data_scalar<Val,Elem>, Elems...>, List_Arr, list::list<Scal...> >
 {
-    using collector     = collect_tags<list<Elems...>, List_Arr, list<Elem,Scal...> >;
+    using collector     = collect_tags<list::list<Elems...>, List_Arr, list::list<Elem,Scal...> >;
     using array_list    = typename collector::array_list;
     using scalar_list   = typename collector::scalar_list;
 };
 
 template<class List_Arr, class List_Scal>
-struct collect_tags<list<>, List_Arr, List_Scal>
+struct collect_tags<list::list<>, List_Arr, List_Scal>
 {
     using array_list    = List_Arr;
     using scalar_list   = List_Scal;
 };
 
 template<class Val, class Data_Provider, class Subs_Context, class ...Elems>
-struct make_loop_context_info<Val, Data_Provider, Subs_Context, list<Elems...>>
+struct make_loop_context_info<Val, Data_Provider, Subs_Context, list::list<Elems...>>
 {
-    using info          = list<typename make_loop_context_data<Val, Data_Provider, 
+    using info          = list::list<typename make_loop_context_data<Val, Data_Provider, 
                                 Subs_Context, Elems>::type...>;
-    using collector     = collect_tags<info, list<>, list<>>;
+    using collector     = collect_tags<info, list::list<>, list::list<>>;
     using tags_array    = typename collector::array_list;
     using tags_scal     = typename collector::scalar_list;
-    using unique_arrays = typename get_unique_list<tags_array>::type;
-    using unique_scal   = typename get_unique_list<tags_scal>::type;
+    using unique_arrays = typename list::unique_list<tags_array>::type;
+    using unique_scal   = typename list::unique_list<tags_scal>::type;
 };
 
 template<class Array_List>
@@ -690,9 +690,9 @@ struct remove_step
                   "this type should not be instantiated");
 };
 template<class ... Elems>
-struct remove_step<list<Elems...>>
+struct remove_step<list::list<Elems...>>
 {
-    using type = list<typename Elems::elem...>;
+    using type = list::list<typename Elems::elem...>;
 };
 
 template<class Val, class Ret_Align, Integer Ret_Step, Integer Ret_Offset>
@@ -733,7 +733,7 @@ struct loop_storage
 
     using ret_storage           = typename make_ret_storage<Val, Ret_Align, Ret_Step, Ret_Offset>::type;
 
-    static const Integer size   = list_size<array_tags_list>::value;
+    static const Integer size   = list::size<array_tags_list>::value;
     static const bool has_negative_step = check_has_negative_step<data_info>::value;
     using aligned_type          = typename get_align_type<data_info>::type;
 
@@ -741,10 +741,10 @@ struct loop_storage
     inline_lev_1
     static void get_value(Local_Storage& ls, Ret& ret, int off)
     {
-        static const Integer pos    = get_elem_pos<elems_list,Elem>::value;
-        using info                  = typename get_elem_at_pos<data_info,pos>::type;
+        static const Integer pos    = list::elem_pos<elems_list,Elem>::value;
+        using info                  = typename list::elem_at_pos<data_info,pos>::type;
         using dep                   = typename info::dep;
-        static const Integer pos_d  = get_elem_pos<unique_arrays,dep>::value;
+        static const Integer pos_d  = list::elem_pos<unique_arrays,dep>::value;
 
         using align_type            = typename info::align_type;
         static const Integer step   = info::step;
@@ -759,10 +759,10 @@ struct loop_storage
     inline_lev_1
     static void get_value_array(Local_Storage& ls, Ret& ret, int off, const Val* arr)
     {
-        static const Integer pos    = get_elem_pos<elems_list,Elem>::value;
-        using info                  = typename get_elem_at_pos<data_info,pos>::type;
+        static const Integer pos    = list::elem_pos<elems_list,Elem>::value;
+        using info                  = typename list::elem_at_pos<data_info,pos>::type;
         using dep                   = typename info::dep;
-        static const Integer pos_d  = get_elem_pos<unique_arrays,dep>::value;
+        static const Integer pos_d  = list::elem_pos<unique_arrays,dep>::value;
 
         using align_type            = typename info::align_type;
         static const Integer step   = info::step;

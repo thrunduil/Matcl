@@ -21,8 +21,10 @@
 #pragma once
 
 #include "mkgen/details/mkgen_fwd.h"
-#include "mkgen/TODO/matrix/ct_matrix_details.h"
 #include "mkgen/details/matrix/scalar_checks.h"
+#include "mkgen/matrix/dependency.h"
+#include "matcl-core/details/mpl.h"
+
 #include <iosfwd>
 
 namespace matcl { namespace mkgen
@@ -32,24 +34,27 @@ namespace mkd = matcl::mkgen::details;
 
 // compile time scalar value, which stores symbolic element in Data.
 // Deps is a type representing dependencies from runtime values; must be
-// specialization of dps type; Data must be specialization of scalar_data<T>
+// specialization of dps type; Data must be derived from scalar_data<Data>
 template<class Data, class Deps>
 class ct_scalar
 {
     private:
         // check arguments
-        using check1    = typename mkd::check_scalar_data<Data>::type;
+        using check1    = typename mkd::check_valid_scalar_data<Data>::type;
         using check2    = typename mkd::check_scalar_deps<Deps>::type;
 
     public:
         // Data argument
-        using data_type     = Data;
+        using data_type             = Data;
 
         // Deps argument
-        using deps_type     = Deps;
+        using dps_type              = Deps;
+
+        static const Integer rows   = 1;
+        static const Integer cols   = 1;
 
         // type of this class
-        using this_type     = ct_scalar<Data, Deps>;
+        using this_type             = ct_scalar<Data, Deps>;
 
         // print scalar
         template<class Subs_Context>
@@ -107,19 +112,16 @@ class ct_scalar
 //------------------------------------------------------------------------------
 // represent integer value Value
 template<Integer Value>
-using integer_scalar = ct_scalar<mkd::scalar_data<mkd::scal_data_rational<Value, 1>>, 
-                                    empty_deps>;
+using integer_scalar = ct_scalar<mkd::scal_data_rational<Value, 1>, empty_deps>;
 
 // represent rational value N / D
 template<Integer N, Integer D>
-using rational_scalar = ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N,D>>, 
-                                    empty_deps>;
+using rational_scalar = ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>;
 
 // scalar storing a value of type Value_type defined by the tag Tag; value
-// cannot depend on external data
+// cannot depend on external data; Tag must be derived from scal_data_value_tag
 template<class Tag, class Value_type>
-using value_scalar  = ct_scalar<mkd::scalar_data<mkd::scal_data_value<Tag, Value_type>>, 
-                                    empty_deps>;
+using value_scalar  = ct_scalar<mkd::scal_data_value<Tag, Value_type>, empty_deps>;
 
 //------------------------------------------------------------------------------
 //                      Predefined scalars
@@ -147,9 +149,9 @@ struct is_scalar<ct_scalar<T,D>>        {static const bool value = true; };
 template<class T> 
 struct is_value_scalar                  {static const bool value = false; };
 
+// TODO: scalar_data_value
 template<Integer N, Integer D> 
-struct is_value_scalar<ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N,D>>, 
-                                    empty_deps>>
+struct is_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
                                         {static const bool value = true; };
 
 //------------------------------------------------------------------------------
@@ -161,7 +163,7 @@ struct is_value_scalar<ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N,D>>,
 template<class Scal>
 struct get_scalar_value
 {
-    static_assert(details::dependent_false<Scal>::value,
+    static_assert(md::dependent_false<Scal>::value,
                   "this type should not be instantiated");
 
     template<class Val>

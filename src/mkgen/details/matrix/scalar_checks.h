@@ -30,6 +30,7 @@ namespace matcl { namespace mkgen { namespace details
 has_static_member_template_function_x(print)
 has_static_member_template_function_x(eval)
 
+//TODO
 struct subs_context_dummy
 {
 };
@@ -38,32 +39,29 @@ struct local_storage_dummy
 {
 };
 
+// return true if T can be passed to ct_scalar<T, ...>;
+template<class T>
+struct is_valid_scalar_data
+{
+    static const bool value = std::is_base_of<mkd::scalar_data<T>, T>::value;
+};
+
 //-----------------------------------------------------------------------
 //                      check_scalar_data
 //-----------------------------------------------------------------------
+// check if Data parameter supplied to ct_scalar is valid
 template<class Data>
 struct check_valid_scalar_data
 {
-    static_assert(matcl::details::dependent_false<Data>::value, "type is not scalar_data<>");
-};
+    static const bool is_scalar_data    = std::is_base_of<mkd::scalar_data<Data>, Data>::value;
 
-template<class Data>
-struct check_valid_scalar_data<scalar_data<Data>>
-{
-    // Data is already checked
-    using type = void;
+    static_assert(is_scalar_data == true, "type is not scalar_data<>");
+
+    using type  = typename Data::template check<void>;
 };
 
 // check if Data parameter supplied to ct_scalar is valid
-template<class Data>
-struct check_scalar_data
-{
-    // Data must be specialization of scalar_data<T>
-    using type = typename check_valid_scalar_data<Data>::type;
-};
-
-// check if Data parameter supplied to ct_scalar is valid
-template<class Data>
+template<class Data, class Ret>
 struct check_scalar_data_impl
 {
     // Data must implement:
@@ -86,8 +84,48 @@ struct check_scalar_data_impl
     static_assert(has_eval == true, "Data must implement function eval");
 
 
-    //TODO
-    using type = void;
+    using type = Ret;
+};
+
+//-----------------------------------------------------------------------
+//                      check_valid_scalar_data_tag
+//-----------------------------------------------------------------------
+// check if Tag parameter supplied to scal_data_value is valid
+template<class Tag>
+struct check_valid_scalar_data_tag
+{
+    static const bool is_valid_tag  = std::is_base_of<mkd::scal_data_value_tag<Tag>, Tag>::value;
+
+    static_assert(is_valid_tag == true, "Tag is not scal_data_value_tag<>");
+
+    using type  = typename Tag::template check<void>;
+};
+
+// check if Data parameter supplied to ct_scalar is valid
+template<class Tag, class Ret>
+struct check_scalar_data_tag_impl
+{
+    // Data must implement:
+
+    // template<class Subs_Context>
+    // static void print(std::ostream& os, int prior)
+    using func_print_type       = void (std::ostream& os, int prior);
+    static const bool has_print = has_static_member_template_function_print
+                                    <Tag, subs_context_dummy, func_print_type>::value;
+
+    static_assert(has_print == true, "Tag must implement function print");
+
+    // template<class Val>
+    // static Val eval();
+
+    using func_eval_type       = double ();
+    static const bool has_eval = has_static_member_template_function_eval
+                                    <Tag, double, func_eval_type>::value;
+
+    static_assert(has_eval == true, "Tag must implement function eval");
+
+
+    using type = Ret;
 };
 
 //-----------------------------------------------------------------------

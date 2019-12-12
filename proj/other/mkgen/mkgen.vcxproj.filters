@@ -34,6 +34,9 @@
     <Filter Include="Source Files\src\details\utils">
       <UniqueIdentifier>{f6062ff0-651d-453f-b75a-3ee4573fb072}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\utils">
+      <UniqueIdentifier>{1a6a18a7-1e42-48d9-b41d-a526b657a23f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mkgen\mkgen_config.h">
@@ -158,6 +161,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\utils\has_function.h">
       <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\utils\list.h">
+      <Filter>Source Files\src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_impl.h">
+      <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h">
+      <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

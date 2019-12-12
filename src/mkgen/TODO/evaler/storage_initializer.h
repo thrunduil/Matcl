@@ -174,7 +174,7 @@ struct storage_initializer_expand
 {};
 
 template<class Val, class Colon_Type, class Ret_Dep, Integer Offset, Integer Step>
-struct storage_initializer_expand<Val,list<>,Colon_Type,Ret_Dep, Offset,Step>
+struct storage_initializer_expand<Val,list::list<>,Colon_Type,Ret_Dep, Offset,Step>
 {
     template<class Array_Aligned, class Local_Storage>
     static void eval(Local_Storage& ls)
@@ -191,10 +191,10 @@ struct storage_initializer_expand<Val,list<>,Colon_Type,Ret_Dep, Offset,Step>
 
 template<class Val, class Mat_Colon, class ... Mats, class Colon_Type, class Ret_Dep, 
     Integer Offset, Integer Step>
-struct storage_initializer_expand<Val, list<Mat_Colon, Mats...>,Colon_Type,Ret_Dep,Offset,Step>
+struct storage_initializer_expand<Val, list::list<Mat_Colon, Mats...>,Colon_Type,Ret_Dep,Offset,Step>
 {
-    using colon_assign              = typename get_elem_at_pos<Mat_Colon,0>::type;
-    using matrix_type               = typename get_elem_at_pos<Mat_Colon,1>::type;
+    using colon_assign              = typename list::elem_at_pos<Mat_Colon,0>::type;
+    using matrix_type               = typename list::elem_at_pos<Mat_Colon,1>::type;
     static const Integer rows       = matrix_type::rows;
     static const Integer cols       = matrix_type::cols;
 
@@ -211,7 +211,7 @@ struct storage_initializer_expand<Val, list<Mat_Colon, Mats...>,Colon_Type,Ret_D
 
         eval_impl<Array_Aligned>(is_cont_t(), ls);
 
-        using list_type             = list<Mats...>;
+        using list_type             = list::list<Mats...>;
 
 
         using storate_initializer   = storage_initializer_expand
@@ -257,7 +257,7 @@ struct storage_initializer_expand<Val, list<Mat_Colon, Mats...>,Colon_Type,Ret_D
         storage_initializer_cols<Val, 1,rows,1,cols, cols>
             ::accept<storage_initializer_expand>(vis);
 
-        storage_initializer_expand<Val,list<Mats...>,Colon_Type,Ret_Dep,Offset,Step>::accept(vis);
+        storage_initializer_expand<Val,list::list<Mats...>,Colon_Type,Ret_Dep,Offset,Step>::accept(vis);
     };
 
     template<Integer Row, Integer Col, class Local_Storate>
@@ -489,9 +489,9 @@ struct comp_initializer_1<Subject,assign_colon<Colon,Mat>>
 };
 
 template<class Subject, class Assign_Type, class ... Items>
-struct comp_initializer_impl<Subject, list<Assign_Type, Items...>, 1>
+struct comp_initializer_impl<Subject, list::list<Assign_Type, Items...>, 1>
 {
-    using remaining_args    = list<Items...>;
+    using remaining_args    = list::list<Items...>;
 
     template<class Val, class Local_Storage>
     inline_initializer
@@ -507,9 +507,9 @@ struct comp_initializer_impl<Subject, list<Assign_Type, Items...>, 1>
     };
 };
 template<class Subject, class Assign_Type_1, class Assign_Type_2, class ... Items>
-struct comp_initializer_impl<Subject, list<Assign_Type_1, Assign_Type_2, Items...>, 2>
+struct comp_initializer_impl<Subject, list::list<Assign_Type_1, Assign_Type_2, Items...>, 2>
 {
-    using remaining_args = list<Items...>;
+    using remaining_args = list::list<Items...>;
 
     template<class Val, class Local_Storage>
     inline_initializer

@@ -281,7 +281,7 @@ void dct_kernels_test<M>::eval_versions()
     std::cout << std::string(80, '-') << "\n";
 
     {
-        using configs = mk::list<   
+        using configs = mk::list::list<   
                                     make_config<-2,true,true,0,0,0,0,2,2,2,2>,
                                     make_config<-3,true,true,0,0,0,0,2,4,2,2>,
                                     make_config<-4,true,true,0,0,0,0,2,2,4,2>,
@@ -346,7 +346,7 @@ struct eval_versions_impl
 {
     static void eval(Integer T, const double* X, double* Y, Integer N, Integer X_ld, Integer Y_ld, Integer& ver, Real t0)
     {
-        using config    = typename mk::get_elem_at_pos<Configs,Pos>::type;
+        using config    = typename mk::list::elem_at_pos<Configs,Pos>::type;
         using evaler    = Eval_Config<M,config>;
         Real t          = dct_kernels_test<M>::eval_ver<evaler>(T, X, Y, N, X_ld, Y_ld);
         std::cout       << "ver " << ver++ << ": " << t << " " << t / t0 << " " 
@@ -356,6 +356,7 @@ struct eval_versions_impl
             ::eval(T, X, Y, N, X_ld, Y_ld, ver, t0);
     };
 };
+
 template<Integer M, template<Integer M, class Config> class Eval_Config, class Configs, Integer Size>
 struct eval_versions_impl<M,Eval_Config,Configs,Size,Size>
 {
@@ -401,7 +402,7 @@ void dct_kernels_test<M>::eval_versions_1()
                         << print_config<Base_Config>() << "\n";
     int ver             = 1;
     
-    eval_versions_impl<M,Eval_Config,Configs,mk::list_size<Configs>::value,0>
+    eval_versions_impl<M,Eval_Config,Configs,mk::list::size<Configs>::value,0>
         ::eval(T, X, Y, N, X_ld, Y_ld, ver, t0);
   #endif
 };

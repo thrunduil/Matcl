@@ -31,9 +31,25 @@ namespace matcl { namespace mkgen
 template<class Data, class Deps> 
 class ct_scalar;
 
+// compile time matrix
+template<Integer M, Integer N, class Array_t, class Deps>
+struct ct_matrix;
+
 // compute result of ct_scalar::compute()
 template<class Data, class Deps, class Tag>
 struct make_evaled_scalar;
+
+// get element from an array
+template<class Array, Integer Row, Integer Col>
+struct get_array_elem;
+
+//TODO:
+template<class Mat_L, class Mat_R, class Colon_1>
+struct mat_virtual_assign_1;
+
+//TODO
+template<class Mat_L, class Tag, bool Force>
+struct mat_temporary;
 
 }}
 
@@ -68,6 +84,10 @@ struct scalar_data;
 template<class Data>
 struct check_valid_scalar_data;
 
+// check if Tag is a valid tag for scal_data_value<> type
+template<class Data>
+struct check_valid_scalar_data_tag;
+
 // check if Deps is a valid dps<> type
 template<class Deps>
 struct check_valid_dps;
@@ -95,5 +115,33 @@ struct check_valid_dep_size;
 // check dep Type argument
 template<class Type>
 struct check_valid_dep_type;
+
+// make submatrix
+template<class Mat, class Colon_1, class Colon_2>
+struct submatrix_maker_2;
+
+// make submatrix
+template<class Mat, class Colon_1>
+struct submatrix_maker_1;
+
+// const_mat array
+template<class Tag>                                     
+struct const_array;
+
+// gen_mat array
+template<class Tag>                                     
+struct gen_array;
+
+// output_mat array
+template<class Tag> 
+struct output_array;
+
+// temp_output_mat array
+template<class Tag, Integer Rows, Integer Cols>
+struct temp_output_array;
+
+// virtual_mat array
+template<class Tag, class... Assign_List>
+struct virtual_array;
 
 }}}

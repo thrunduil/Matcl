@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\dependency_impl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_checks.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_data.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_impl.h" />
@@ -60,6 +62,7 @@
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\op_count.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\simd_utils.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\utils.h" />
+    <ClInclude Include="..\..\..\src\mkgen\utils\list.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl" />

@@ -5,35 +5,55 @@
 namespace matcl { namespace mkgen { namespace test
 {
 
-struct tag_pi
+struct basic_codegen
 {
-    static constexpr double value = 3.14;
+    static const bool simd_enable                   = true;
+    static const bool simd_allow_negative_step      = true;
+    static const bool simd_allow_unaligned          = true;
+
+    static const bool simd_half_allow               = true;
+    static const bool simd_half_allow_negative_step = true;
+    static const bool simd_half_allow_unaligned     = true;
+
+    using simd_type                                 = simd::maximum_tag;
+    static const int simd_bits                      = simd::maximum_bits;
 };
 
-struct tag_2
-{
-    static constexpr double value = 2.0;
+struct empty_context{};
+
+struct tag_ret
+{ 
+    template<Integer Row, Integer Col>
+    using get_offset        = std::integral_constant<Integer, Row - 1>;
+
+    /*
+    static const bool           is_continuous   = true; 
+
+    static void     print(std::ostream& os) { os << "B"; }
+    
+    template<class T, Integer Offset, class DP>
+    static const double* restricted get_data_ptr(const DP& dp)
+    { 
+        return  dp.ptr_C + Offset;
+    }
+    */
 };
 
-template<class Tag>
-struct tag
+void test_scalar()
 {
-    static constexpr double value = Tag::value;
-};
+    // Define expression:    
+    using expr = decltype(integer_scalar<1>() + integer_scalar<2>());
+    expr::print<empty_context>(std::cout, 0);
 
-template<class T, class S>
-struct sum_tag
-{
-    static constexpr double value = T::value + S::value;
-};
+    /*
+    using ret               = output_mat<1, 1, array<tag_ret>>;
+    struct etag{};
 
-template<class Tag1, class Tag2>
-auto operator+(const tag<Tag1>& a, const tag<Tag2>& b) -> tag<sum_tag<Tag1, Tag2>>;
+    using evaler_type       = expr_evaler<etag, basic_codegen, ret, expr, double>;
 
-void test()
-{
-    using type = decltype(tag<tag_pi>() + tag<tag_2>());
-    std::cout << type::value << "\n";
+    evaler_type::print(std::cout, 0);
+    //evaler_type().eval(dp);
+    */
 };
 
 //TODO
@@ -148,20 +168,6 @@ struct tag_a
 };
 
 struct etag{};
-
-struct basic_codegen
-{
-    static const bool simd_enable                   = true;
-    static const bool simd_allow_negative_step      = true;
-    static const bool simd_allow_unaligned          = true;
-
-    static const bool simd_half_allow               = true;
-    static const bool simd_half_allow_negative_step = true;
-    static const bool simd_half_allow_unaligned     = true;
-
-    using simd_type                                 = simd::maximum_tag;
-    static const int simd_bits                      = simd::maximum_bits;
-};
 
 void test_gemm_eval()
 {

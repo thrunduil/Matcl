@@ -79,7 +79,7 @@ template<class Subs_Context, class Dep, class ... Deps, class Collected>
 struct collect_deps<Subs_Context,dps<Dep, Deps...>, Collected>
 {    
     using collected2        = typename collect_deps<Subs_Context,dps<Deps...>, Collected>::type;
-    static const bool is_1  = is_member<Dep, collected2>::value;
+    static const bool is_1  = list::is_member<Dep, collected2>::value;
     using type              = typename collect_deps2<Subs_Context, is_1, Dep, collected2>::type;
 };
 
@@ -227,7 +227,7 @@ struct is_temporary_virtual_array<With_Forced, Item, Args...>
 };
 
 template<class Tag, class ... Args, bool With_Forced>
-struct is_temporary_mat_array<virtual_array<Tag, Args...>, With_Forced >
+struct is_temporary_mat_array<mkd::virtual_array<Tag, Args...>, With_Forced >
 {
     //virtual array of temporary arrays is also temporary
     static const bool value = is_temporary_virtual_array<With_Forced, Args...>::value;
@@ -332,7 +332,7 @@ struct get_temporary_array
 {
     //substitution not taken into account
     using item      = details::array_item<Elem,Step, details::array_item_temp>;
-    using type      = typename push_back<Arr_List,item> :: type;
+    using type      = typename list::push_back<Arr_List,item> :: type;
 };
 
 template <class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col>

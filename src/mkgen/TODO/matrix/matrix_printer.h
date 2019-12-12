@@ -4,6 +4,7 @@
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
 #include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/TODO/matrix/ct_matrix_details.h"
 
 namespace matcl { namespace mkgen
 {
@@ -59,7 +60,7 @@ struct print_matrix_list
 };
 
 template<class Mat, class ... Matrix>
-struct print_matrix_list<list<Mat, Matrix...>>
+struct print_matrix_list<list::list<Mat, Matrix...>>
 {
     template<class Subs_Context>
     static void eval(std::ostream& os, int tabs)
@@ -71,13 +72,13 @@ struct print_matrix_list<list<Mat, Matrix...>>
             os << "\n";
         };
 
-        using list_type = list<Matrix...>;
+        using list_type = list::list<Matrix...>;
         using printer   = print_matrix_list<list_type>;
         printer::eval<Subs_Context>(os, tabs);
     };
 };
 template<>
-struct print_matrix_list<list<>>
+struct print_matrix_list<list::list<>>
 {
     template<class Subs_Context>
     static void eval(std::ostream& os, int tabs)
@@ -94,7 +95,7 @@ struct print_matrix_elems_expand
                 "this type should not be instantiated");
 };
 template<Integer Mat_Rows>
-struct print_matrix_elems_expand<list<>, Mat_Rows>
+struct print_matrix_elems_expand<list::list<>, Mat_Rows>
 {
     template<class Subs_Context>
     static void eval(std::ostream& os, int prior, int tabs)
@@ -112,13 +113,13 @@ struct print_matrix_elems_expand<list<>, Mat_Rows>
     };
 };
 template<class Mat_Colon, class ... Mats, Integer Mat_Rows>
-struct print_matrix_elems_expand<list<Mat_Colon, Mats...>,Mat_Rows>
+struct print_matrix_elems_expand<list::list<Mat_Colon, Mats...>,Mat_Rows>
 {
     template<class Subs_Context>
     static void eval(std::ostream& os, int prior, int tabs)
     {
-        using colon_assign          = typename get_elem_at_pos<Mat_Colon,0>::type;
-        using matrix_type           = typename get_elem_at_pos<Mat_Colon,1>::type;
+        using colon_assign          = typename list::elem_at_pos<Mat_Colon,0>::type;
+        using matrix_type           = typename list::elem_at_pos<Mat_Colon,1>::type;
         static const Integer M      = matrix_type::rows;
         static const Integer N      = matrix_type::cols;
         using code_gen              = typename Subs_Context::code_gen;
@@ -140,15 +141,15 @@ struct print_matrix_elems_expand<list<Mat_Colon, Mats...>,Mat_Rows>
             os << "\n";
         };
 
-        using printer   = print_matrix_elems_expand<list<Mats...>,Mat_Rows>;
+        using printer   = print_matrix_elems_expand<list::list<Mats...>,Mat_Rows>;
         printer::eval<Subs_Context>(os,prior,tabs);
     };
 
     template<class Tag, class Subs_Context>
     static void eval_dep(std::ostream& os, int tabs)
     {
-        using colon_assign      = typename get_elem_at_pos<Mat_Colon,0>::type;
-        using matrix_type       = typename get_elem_at_pos<Mat_Colon,1>::type;
+        using colon_assign      = typename list::elem_at_pos<Mat_Colon,0>::type;
+        using matrix_type       = typename list::elem_at_pos<Mat_Colon,1>::type;
 
         using code_gen          = typename Subs_Context::code_gen;
         using subs              = decltype(get_substitution(Subs_Context(),Tag()));
@@ -176,7 +177,7 @@ struct print_matrix_elems_expand<list<Mat_Colon, Mats...>,Mat_Rows>
             os << "\n";
         };
 
-        using printer = print_matrix_elems_expand<list<Mats...>,Mat_Rows>;
+        using printer = print_matrix_elems_expand<list::list<Mats...>,Mat_Rows>;
         printer::eval_dep<Tag,Subs_Context>(os,tabs);
     };
 };
@@ -188,7 +189,7 @@ struct print_matrix_elems
     static void eval(std::ostream& os, int prior, int tabs)
     {
         using expand_vm = typename expand_virtual_matrix2<Mat>::type;
-        Integer size    = list_size<expand_vm>::value;
+        Integer size    = list::size<expand_vm>::value;
         
         if (size > 1)
         {
@@ -209,7 +210,7 @@ struct print_matrix_elems
     static void eval_dep(std::ostream& os, int tabs)
     {
         using expand_vm = typename expand_virtual_matrix2<Mat>::type;
-        Integer size    = list_size<expand_vm>::value;
+        Integer size    = list::size<expand_vm>::value;
         
         if (size > 1)
         {
@@ -407,7 +408,7 @@ struct print_comp_assing_1<M,N,Array,Deps,assign_colon<Colon,Mat>>
     };
 };
 template<Integer M, Integer N, class Array, class Deps, class Assign_Type, class... Items>
-struct print_computations_assignments<ct_matrix<M,N,Array,Deps>,list<Assign_Type,Items...>>
+struct print_computations_assignments<ct_matrix<M,N,Array,Deps>,list::list<Assign_Type,Items...>>
 {
     template<class Subs_Context>
     static void eval(std::ostream& os, int tabs)
@@ -416,12 +417,12 @@ struct print_computations_assignments<ct_matrix<M,N,Array,Deps>,list<Assign_Type
 
         print_comp_assing_1<M,N,Array,Deps, Assign_Type>::eval<Subs_Context>(os,tabs);
 
-        using printer = print_computations_assignments<matrix, list<Items...>>;
+        using printer = print_computations_assignments<matrix, list::list<Items...>>;
         printer::eval<Subs_Context>(os,tabs);
     };
 };
 template<class Subject>
-struct print_computations_assignments<Subject,list<>>
+struct print_computations_assignments<Subject,list::list<>>
 {
     template<class Subs_Context>
     static void eval(std::ostream& os, int)

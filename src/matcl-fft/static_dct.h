@@ -464,6 +464,7 @@ struct make_cos_mat_dct2
     using T                     = mk::const_mat<M,M,tag_t<M>>;
     using type                  = decltype(cos_dct2<Scal>(T()));
 };
+
 template<Integer M, class Config, class Scal>
 struct make_cos_mat_dct2<M,Config,true, Scal>
 {

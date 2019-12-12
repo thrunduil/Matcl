@@ -26,27 +26,27 @@ struct get_modif_tag
                 "this type should not be instantiated");
 };
 template<class ... Modif, class Temp_Tag2, Integer Size, class Type>
-struct is_modified<list<Modif...>, dep<Temp_Tag2,Size,Type>>
+struct is_modified<list::list<Modif...>, dep<Temp_Tag2,Size,Type>>
 {
     static_assert(details::dependent_false<Temp_Tag2>::value, 
                 "this type should not be instantiated");
 };
 template<class Temp_Tag2, Integer Size, class Type>
-struct is_modified<list<>, dep<Temp_Tag2,Size,Type>>
+struct is_modified<list::list<>, dep<Temp_Tag2,Size,Type>>
 {
     static const bool value = false;
 };
 template<class Temp_Tag, class Colon, class ... Args, class Ret_Tag, Integer R, Integer C, bool Init,
          Integer Size, class Type>
-struct is_modified<list<dps_modif<Temp_Tag,Ret_Tag,Colon, R, C, Init>, Args...>, dep<Temp_Tag,Size,Type>>
+struct is_modified<list::list<dps_modif<Temp_Tag,Ret_Tag,Colon, R, C, Init>, Args...>, dep<Temp_Tag,Size,Type>>
 {
     static const bool value = true;
 };
 template<class Temp_Tag, class Colon, class ... Args, class Ret_Tag, Integer R, Integer C, bool Init,
         class Temp_Tag2, Integer Size, class Type>
-struct is_modified<list<dps_modif<Temp_Tag, Ret_Tag, Colon, R, C, Init>, Args...>, dep<Temp_Tag2, Size, Type>>
+struct is_modified<list::list<dps_modif<Temp_Tag, Ret_Tag, Colon, R, C, Init>, Args...>, dep<Temp_Tag2, Size, Type>>
 {
-    static const bool value = is_modified<list<Args...>, dep<Temp_Tag2, Size, Type>>::value;
+    static const bool value = is_modified<list::list<Args...>, dep<Temp_Tag2, Size, Type>>::value;
 };
 
 template<class Modif, class Dep>
@@ -69,15 +69,15 @@ struct get_modif_tag_impl
     using type = DPS_Modif_1;
 };
 template<class DPS_Modif_1, class DPS_Modif_2, class ... Args, class Dep>
-struct get_modif_tag_impl<DPS_Modif_1, list<DPS_Modif_2, Args...>, Dep, false>
+struct get_modif_tag_impl<DPS_Modif_1, list::list<DPS_Modif_2, Args...>, Dep, false>
 {
-    using type = typename get_modif_tag_impl<DPS_Modif_2, list<Args...>, Dep, 
+    using type = typename get_modif_tag_impl<DPS_Modif_2, list::list<Args...>, Dep, 
                             is_modif_one<DPS_Modif_2, Dep>::value>::type;
 };
 
 template<class Arg, class ... Args, class Dep>
-struct get_modif_tag<list<Arg, Args...>, Dep>
-    :get_modif_tag_impl<Arg, list<Args...>, Dep, is_modif_one<Arg,Dep>::value>
+struct get_modif_tag<list::list<Arg, Args...>, Dep>
+    :get_modif_tag_impl<Arg, list::list<Args...>, Dep, is_modif_one<Arg,Dep>::value>
 {};
 
 template<class Val, class Ret_Dep, Integer Pos>
@@ -562,7 +562,7 @@ class temporary_storage : temp_storage_parent<Parent_Storage>
             using assignments   = typename Computation::assignments;
             using subject       = typename Computation::subject;
 
-            comp_initializer<subject, assignments, list_size<assignments>::value, 
+            comp_initializer<subject, assignments, list::size<assignments>::value, 
                     temporary_storage> :: eval_comp<Val,Local_Storage>(ls, this);
         };
 
@@ -572,7 +572,7 @@ class temporary_storage : temp_storage_parent<Parent_Storage>
             using assignments   = typename Computation::assignments;
             using subject       = typename Computation::subject;
 
-            comp_initializer<subject, assignments, list_size<assignments>::value, 
+            comp_initializer<subject, assignments, list::size<assignments>::value, 
                     temporary_storage> :: accept<Visitor>(vis);
         };
 };

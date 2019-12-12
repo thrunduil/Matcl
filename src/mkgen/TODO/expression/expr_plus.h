@@ -3,6 +3,7 @@
 #include <type_traits>
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/TODO/matrix/rational.h"
+#include "mkgen/TODO/utils/utils.h"
 
 namespace matcl { namespace mkgen
 {
@@ -292,6 +293,7 @@ struct expr_plus
         vis.visit_plus();
     };
 };
+
 template<class T1, class T2>
 struct expr_minus
 {
@@ -372,12 +374,12 @@ template<class T1> struct make_plus<T1,zero>    { using type = T1; };
 template<>         struct make_plus<zero,zero>  { using type = zero; };
 
 template<Integer N1, Integer M1, class D1, Integer N2, Integer M2, class D2>
-struct make_plus<ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N1,M1>>,D1>,
-                 ct_scalar<mkd::scalar_data<mkd::scal_data_rational<N2,M2>>,D2>>
+struct make_plus<ct_scalar<mkd::scal_data_rational<N1,M1>, D1>,
+                 ct_scalar<mkd::scal_data_rational<N2,M2>, D2>>
 {
     using rat_op    = rational_plus<N1, M1, N2, M2>;
     using data_type = mkd::scal_data_rational<rat_op::nominator, rat_op::denominator>;
-    using type      = ct_scalar<mkd::scalar_data<data_type>,empty_deps>;
+    using type      = ct_scalar<data_type, empty_deps>;
 };
 
 template<class S1, class ...T1>
@@ -385,6 +387,7 @@ struct make_plus<expr_mult<S1,T1...>,zero>
 {
     using type  = expr_mult<S1,T1...>;
 };
+
 template<class ...T1>
 struct make_plus<expr_mult<mone,T1...>,zero>
 {
@@ -397,6 +400,7 @@ struct make_plus<expr_mult<S1,T1...>,T2>
     using ex1   = expr_mult<S1,T1...>;
     using type  = expr_plus<ex1, T2>;
 };
+
 template<class ...T1, class T2>
 struct make_plus<expr_mult<mone,T1...>,T2>
 {
@@ -409,6 +413,7 @@ struct make_plus<zero, expr_mult<S2,T2...>>
 {
     using type  = expr_mult<S2,T2...>;
 };
+
 template<class ...T2>
 struct make_plus<zero, expr_mult<mone,T2...>>
 {
@@ -421,6 +426,7 @@ struct make_plus<T1, expr_mult<S2,T2...>>
     using ex2   = expr_mult<S2,T2...>;
     using type  = expr_plus<T1, ex2>;
 };
+
 template<class T1, class ...T2>
 struct make_plus<T1, expr_mult<mone,T2...>>
 {
@@ -435,6 +441,7 @@ struct make_plus<expr_mult<S1,T1...>, expr_mult<S2,T2...>>
     using ex2   = expr_mult<S2,T2...>;
     using type  = expr_plus<ex1,ex2>;
 };
+
 template<class ...T1, class S2, class ...T2>
 struct make_plus<expr_mult<mone,T1...>, expr_mult<S2,T2...>>
 {
@@ -442,6 +449,7 @@ struct make_plus<expr_mult<mone,T1...>, expr_mult<S2,T2...>>
     using ex2   = expr_mult<S2,T2...>;
     using type  = expr_minus<ex2,ex1>;
 };
+
 template<class S1, class ...T1, class ...T2>
 struct make_plus<expr_mult<S1,T1...>, expr_mult<mone,T2...>>
 {
@@ -449,6 +457,7 @@ struct make_plus<expr_mult<S1,T1...>, expr_mult<mone,T2...>>
     using ex2   = typename normalize_mult_scal<one,T2...>::type;
     using type  = expr_minus<ex1,ex2>;
 };
+
 template<class ...T1, class ...T2>
 struct make_plus<expr_mult<mone,T1...>, expr_mult<mone,T2...>>
 {
@@ -466,6 +475,7 @@ struct make_plus<expr_mult<S1,T11,T12>, expr_mult<S2,T21,T22>>
     using ex2   = expr_mult<S2,T21,T22>;
     using type  = expr_plus<ex1,ex2>;
 };
+
 template<class T11, class T12, class S2, class T21, class T22>
 struct make_plus<expr_mult<mone,T11,T12>, expr_mult<S2,T21,T22>>
 {
@@ -473,6 +483,7 @@ struct make_plus<expr_mult<mone,T11,T12>, expr_mult<S2,T21,T22>>
     using ex2   = expr_mult<one,T11,T12>;    
     using type  = expr_minus<ex1,ex2>;
 };
+
 template<class S1, class T11, class T12, class T21, class T22>
 struct make_plus<expr_mult<S1,T11,T12>, expr_mult<mone,T21,T22>>
 {
@@ -480,6 +491,7 @@ struct make_plus<expr_mult<S1,T11,T12>, expr_mult<mone,T21,T22>>
     using ex2   = expr_mult<one,T21,T22>;
     using type  = expr_minus<ex1,ex2>;
 };
+
 template<class T11, class T12, class T21, class T22>
 struct make_plus<expr_mult<mone,T11,T12>, expr_mult<mone,T21,T22>>
 {
@@ -488,6 +500,7 @@ struct make_plus<expr_mult<mone,T11,T12>, expr_mult<mone,T21,T22>>
     using ex    = expr_plus<ex1,ex2>;
     using type  = typename make_mult<mone,ex>::type;
 };
+
 //S1*T*T12 + S2*T*T22
 template<class S1, class T, class T12, class S2, class T22>
 struct make_plus<expr_mult<S1,T,T12>, expr_mult<S2,T,T22>>
@@ -497,6 +510,7 @@ struct make_plus<expr_mult<S1,T,T12>, expr_mult<S2,T,T22>>
     using ex    = typename make_plus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T12, class S2, class T22>
 struct make_plus<expr_mult<mone,T,T12>, expr_mult<S2,T,T22>>
 {
@@ -505,6 +519,7 @@ struct make_plus<expr_mult<mone,T,T12>, expr_mult<S2,T,T22>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class S1, class T, class T12, class T22>
 struct make_plus<expr_mult<S1,T,T12>, expr_mult<mone,T,T22>>
 {
@@ -513,6 +528,7 @@ struct make_plus<expr_mult<S1,T,T12>, expr_mult<mone,T,T22>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T12, class T22>
 struct make_plus<expr_mult<mone,T,T12>, expr_mult<mone,T,T22>>
 {
@@ -530,6 +546,7 @@ struct make_plus<expr_mult<S1,T,T12>, expr_mult<S2,T21,T>>
     using ex    = typename make_plus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T12, class S2, class T21>
 struct make_plus<expr_mult<mone,T,T12>, expr_mult<S2,T21,T>>
 {
@@ -538,6 +555,7 @@ struct make_plus<expr_mult<mone,T,T12>, expr_mult<S2,T21,T>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class S1, class T, class T12, class T21>
 struct make_plus<expr_mult<S1,T,T12>, expr_mult<mone,T21,T>>
 {
@@ -546,6 +564,7 @@ struct make_plus<expr_mult<S1,T,T12>, expr_mult<mone,T21,T>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T12, class T21>
 struct make_plus<expr_mult<mone,T,T12>, expr_mult<mone,T21,T>>
 {
@@ -553,6 +572,7 @@ struct make_plus<expr_mult<mone,T,T12>, expr_mult<mone,T21,T>>
     using ex    = typename make_mult<T,ex3>::type;
     using type  = typename make_mult<mone,ex>::type;
 };
+
 //S1*T11*T + S2*T21*T
 template<class S1, class T, class T11, class S2, class T21>
 struct make_plus<expr_mult<S1,T11,T>, expr_mult<S2,T21,T>>
@@ -562,6 +582,7 @@ struct make_plus<expr_mult<S1,T11,T>, expr_mult<S2,T21,T>>
     using ex    = typename make_plus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T11, class S2, class T21>
 struct make_plus<expr_mult<mone,T11,T>, expr_mult<S2,T21,T>>
 {
@@ -570,6 +591,7 @@ struct make_plus<expr_mult<mone,T11,T>, expr_mult<S2,T21,T>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class S1, class T, class T11, class T21>
 struct make_plus<expr_mult<S1,T11,T>, expr_mult<mone,T21,T>>
 {
@@ -578,6 +600,7 @@ struct make_plus<expr_mult<S1,T11,T>, expr_mult<mone,T21,T>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T11, class T21>
 struct make_plus<expr_mult<mone,T11,T>, expr_mult<mone,T21,T>>
 {
@@ -585,6 +608,7 @@ struct make_plus<expr_mult<mone,T11,T>, expr_mult<mone,T21,T>>
     using ex    = typename make_mult<T,ex3>::type;
     using type  = typename make_mult<mone,ex>::type;
 };
+
 //S1*T11*T + S2*T*T22
 template<class S1, class T, class T11, class S2, class T22>
 struct make_plus<expr_mult<S1,T11,T>, expr_mult<S2,T,T22>>
@@ -594,6 +618,7 @@ struct make_plus<expr_mult<S1,T11,T>, expr_mult<S2,T,T22>>
     using ex    = typename make_plus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T11, class S2, class T22>
 struct make_plus<expr_mult<mone,T11,T>, expr_mult<S2,T,T22>>
 {
@@ -602,6 +627,7 @@ struct make_plus<expr_mult<mone,T11,T>, expr_mult<S2,T,T22>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class S1, class T, class T11, class T22>
 struct make_plus<expr_mult<S1,T11,T>, expr_mult<mone,T,T22>>
 {
@@ -610,6 +636,7 @@ struct make_plus<expr_mult<S1,T11,T>, expr_mult<mone,T,T22>>
     using ex    = typename make_minus<ex1,ex2>::type;
     using type  = typename make_mult<T,ex>::type;
 };
+
 template<class T, class T11, class T22>
 struct make_plus<expr_mult<mone,T11,T>, expr_mult<mone,T,T22>>
 {
@@ -640,8 +667,8 @@ struct is_div_mone
 };
 
 template<Integer M1, Integer D1, Integer M2, Integer D2, class Deps1, class Deps2>
-struct is_div_mone<ct_scalar<mkd::scalar_data<mkd::scal_data_rational<M1,D1>>, Deps1>,
-                   ct_scalar<mkd::scalar_data<mkd::scal_data_rational<M2,D2>>, Deps2>>
+struct is_div_mone<ct_scalar<mkd::scal_data_rational<M1,D1>, Deps1>,
+                   ct_scalar<mkd::scal_data_rational<M2,D2>, Deps2>>
 {
     static const bool value = (D1 == D2) && (M1 == -M2);
 };

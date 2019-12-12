@@ -43,7 +43,7 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
         using subs_context      = typename Temp_Storage::subs_context;
         using code_gen          = typename subs_context::code_gen;
         using ret_subs          = decltype(get_substitution(subs_context(), Tag()));
-        using rem_subs          = list<ret_subs,Deps0>;
+        using rem_subs          = list::list<ret_subs,Deps0>;
         using evaler_type       = expr_evaler_base<code_gen, ret, result, rem_subs>;       
         using val               = typename Temp_Storage::val_type;
         using evaler            = expr_evaler_impl<evaler_type, val, Temp_Storage>;
@@ -58,7 +58,7 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
         using subs_context      = typename Temp_Storage::subs_context;
         using code_gen          = typename subs_context::code_gen;
         using ret_subs          = decltype(get_substitution(subs_context(), Tag()));
-        using rem_subs          = list<ret_subs,Deps0>;
+        using rem_subs          = list::list<ret_subs,Deps0>;
         using evaler_type       = expr_evaler_base<code_gen, ret, result, rem_subs>;       
         using val               = typename Temp_Storage::val_type;
         using evaler            = expr_evaler_impl<evaler_type, val, Temp_Storage>;
@@ -84,7 +84,7 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
         using ret               = temp_output_mat<rows, cols, Tag>;
         using ret_subs          = decltype(get_substitution(Subs_Context(), Tag()));
         using code_gen          = typename Subs_Context::code_gen;
-        using rem_subs          = list<ret_subs,Deps0>;
+        using rem_subs          = list::list<ret_subs,Deps0>;
         using evaler_type       = expr_evaler_base<code_gen, ret, result, rem_subs>;
 
         evaler_type::print(os, tabs+4);
@@ -162,34 +162,34 @@ struct get_arg_tag
 };
 
 template<Integer M, Integer N, class Tag, class Deps>
-struct is_value_matrix<ct_matrix<M,N,array<Tag>,Deps>>
+struct is_value_matrix<ct_matrix<M,N, mkd::gen_array<Tag>,Deps>>
 {
     static const Integer value = true;
 };
 template<class Tag>
-struct get_arg_tag<array<Tag>>
+struct get_arg_tag<mkd::gen_array<Tag>>
 {
     using type = Tag;
 };
 
 template<Integer M, Integer N, class Tag, class Deps>
-struct is_value_matrix<ct_matrix<M,N,output_array<Tag>,Deps>>
+struct is_value_matrix<ct_matrix<M,N, mkd::output_array<Tag>,Deps>>
 {
     static const Integer value = true;
 };
 template<class Tag>
-struct get_arg_tag<output_array<Tag>>
+struct get_arg_tag<mkd::output_array<Tag>>
 {
     using type = Tag;
 };
 
 template<Integer M, Integer N, class Tag, Integer MR, Integer MC, class Deps>
-struct is_value_matrix<ct_matrix<M,N,temp_output_array<Tag,MR,MC>,Deps>>
+struct is_value_matrix<ct_matrix<M,N, mkd::temp_output_array<Tag,MR,MC>,Deps>>
 {
     static const Integer value = true;
 };
 template<class Tag, Integer MR, Integer MC>
-struct get_arg_tag<temp_output_array<Tag,MR,MC>>
+struct get_arg_tag< mkd::temp_output_array<Tag,MR,MC>>
 {
     using type = Tag;
 };

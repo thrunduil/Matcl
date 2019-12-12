@@ -166,7 +166,7 @@ struct element
     };
 
     template<Integer Step, class Arr_List>
-    using get_arrays    = typename push_back<Arr_List, details::array_item<element,Step * Tag::step,
+    using get_arrays    = typename list::push_back<Arr_List, details::array_item<element,Step * Tag::step,
                             details::array_item_extern>> :: type;
 
     template<class Visitor>
@@ -265,17 +265,6 @@ struct element_step
     };
 };
 
-// Symbolic Array of generic elements of type element<Tag, row, col, ...> for all 
-// pairs of (row, col) available in given matrix.
-template<class Tag>
-struct array {};
-
-template<class Tag>
-struct output_array {};
-
-template<class Tag, Integer Mat_Rows, Integer Mat_Cols>
-struct temp_output_array {};
-
 //------------------------------------------------------------------------------
 //                      Numerical Operations
 //------------------------------------------------------------------------------
@@ -373,6 +362,7 @@ struct expr_evaler;
 // leading dimension LD. if_expr user defines a new operator, which creates a matrix with 
 // symolic elements of new type stored in Array Array, then this class must be 
 // specialized to define how to access to given element.
+//TODO: check if return satisfy scalar_data requirement
 template<class Array, Integer Row, Integer Col>
 struct get_array_elem {};
 
