@@ -141,8 +141,11 @@ struct tag_cos_dct1
     static const bool           is_continuous   = true; 
     using                       root_align_type = mk::align_full; 
     static const Integer        step            = 1; 
-    template<Integer Row, Integer Col>
-    using                       get_offset      = std::integral_constant<Integer,Row - 1 + (Col - 1) * M>;
+
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        return Row - 1 + (Col - 1) * M;
+    };
 
     static void print(std::ostream& os, int prior)
     {
@@ -164,8 +167,11 @@ struct tag_cos_dct2
     static const bool           is_continuous   = true; 
     using                       root_align_type = mk::align_full; 
     static const Integer        step            = 1; 
-    template<Integer Row, Integer Col>
-    using                       get_offset      = std::integral_constant<Integer,Row - 1 + (Col - 1) * M>;
+
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        return Row - 1 + (Col - 1) * M;
+    };
 
     static void print(std::ostream& os, int prior)
     {
@@ -187,8 +193,11 @@ struct tag_cos_dct3
     static const bool           is_continuous   = true; 
     using                       root_align_type = mk::align_full; 
     static const Integer        step            = 1; 
-    template<Integer Row, Integer Col>
-    using                       get_offset      = std::integral_constant<Integer,Row - 1 + (Col - 1) * M>;
+
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        return Row - 1 + (Col - 1) * M;
+    };
 
     static void print(std::ostream& os, int prior)
     {
@@ -211,8 +220,10 @@ struct tag_cos_dct4
     using                       root_align_type = mk::align_full; 
     static const Integer        step            = 1; 
 
-    template<Integer Row, Integer Col>
-    using                       get_offset      = std::integral_constant<Integer,Row - 1 + (Col - 1) * M>;
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        return Row - 1 + (Col - 1) * M;
+    };
 
     static void print(std::ostream& os, int prior)
     {
@@ -260,8 +271,9 @@ template<Integer M, class Scal> struct tag_dct3     { static const bool is_conti
 template<Integer M, class Scal> struct tag_dct4     { static const bool is_continuous = false; };
 template<Integer M>             struct tag_dct4_2   { static const bool is_continuous = true; };
 
+//TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::expr_ufunc<tag_dct1<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct1<M,Scal>, mk::element<Tag, Row, Col>>
 {
     //C_k     = sum_{n=1}^{N-2} x_n*cos(pi*n*k/(N-1))
     static const Integer ind        = (Row-1) * (Col-1);
@@ -279,8 +291,9 @@ struct mk::expr_ufunc<tag_dct1<M,Scal>,mk::element<Tag, Row, Col>>
                                         negate, zero_v, one_v, mone_v, half_v, Scal>::type;
 };
 
+//TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::expr_ufunc<tag_dct2<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct2<M,Scal>,mk::element<Tag, Row, Col>>
 {
     //sum_{n=0}^{N-1} x_n*cos( pi*k*(2*n+1)/(2*N) )
     static const Integer ind        = (Row-1) * (2*(Col-1)+1);
@@ -298,8 +311,9 @@ struct mk::expr_ufunc<tag_dct2<M,Scal>,mk::element<Tag, Row, Col>>
                                         negate, zero_v, one_v, mone_v, half_v, Scal>::type;
 };
 
+//TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::expr_ufunc<tag_dct3<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct3<M,Scal>,mk::element<Tag, Row, Col>>
 {
     //sum_{n=0}^{N-1} x_n*cos( pi*n*(2*k+1)/(2*N) )
     static const Integer ind        = (Col-1) * (2*(Row-1)+1);
@@ -318,7 +332,7 @@ struct mk::expr_ufunc<tag_dct3<M,Scal>,mk::element<Tag, Row, Col>>
 };
 
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::expr_ufunc<tag_dct4<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct4<M,Scal>,mk::element<Tag, Row, Col>>
 {
     //sum_{n=0}^{N-1} x_n*cos( pi*(2*k+1)*(2*n+1)/(4*N) )
     static const Integer ind        = (2*(Row-1)+1) * (2*(Col-1)+1);
@@ -337,7 +351,7 @@ struct mk::expr_ufunc<tag_dct4<M,Scal>,mk::element<Tag, Row, Col>>
 };
 
 template<Integer M, class Tag, Integer Row, Integer Col>
-struct mk::expr_ufunc<tag_dct4_2<M>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct4_2<M>,mk::element<Tag, Row, Col>>
 {
     //cos ( pi * (2*n+1) / 4N )
     static const Integer ind        = 2*(Row-1) + 1;
@@ -373,6 +387,18 @@ auto cos_dct4_dct2(Mat) -> typename mk::func_unary<tag_dct4_2<Mat::rows>,Mat>::t
 template<Integer M>
 struct tag_t            
 { 
+    //TODO: remove
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        (void)Row;
+        (void)Col;
+        return 0;
+    };
+
+    //TODO: remove
+    using                       root_align_type = mk::align_full; 
+    static const Integer        step            = 1; 
+
     static void print(std::ostream& os,int) { os << "T"; }
 
     template<Integer Row, Integer Col>
@@ -461,7 +487,7 @@ struct func_dct4
 template<Integer M, class Config, bool Gen_Mat, class Scal>
 struct make_cos_mat_dct2
 {
-    using T                     = mk::const_mat<M,M,tag_t<M>>;
+    using T                     = mk::const_mat<M, M, tag_t<M>>;
     using type                  = decltype(cos_dct2<Scal>(T()));
 };
 
@@ -829,8 +855,11 @@ struct dct1_impl
         using                       root_align_type = mk::align_full; 
         static const Integer        step            = 1;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,Row - 1>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return Row - 1;
+        };
 
         static void                 print(std::ostream& os,int)             { os << "dct1_impl.y"; }
 
@@ -845,8 +874,11 @@ struct dct1_impl
         using                       root_align_type = mk::align_none; 
         static const Integer        step            = Out_Step;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,(Row - 1) * Out_Step>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return (Row - 1) * Out_Step;
+        };
 
         static void                 print(std::ostream& os,int)             { os << "dct1_impl.ret"; }
 
@@ -883,8 +915,11 @@ struct dct2_impl
         using                       root_align_type = mk::align_full; 
         static const Integer        step            = 1;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,Row - 1>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return Row - 1;
+        };
 
         static void                 print(std::ostream& os,int)             { os << "dct2_impl.y"; }
 
@@ -899,8 +934,11 @@ struct dct2_impl
         using                       root_align_type = mk::align_none; 
         static const Integer        step            = Out_Step;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,(Row - 1) * Out_Step>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return (Row - 1) * Out_Step;
+        };
 
         static void                 print(std::ostream& os,int)             { os << "dct2_impl.ret"; }
 
@@ -938,8 +976,11 @@ struct dct3_impl
         using                       root_align_type = mk::align_full; 
         static const Integer        step            = 1;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,Row - 1>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return Row - 1;
+        };
 
         static void                 print(std::ostream& os,int)             { os << "dct3_impl.y"; }
 
@@ -954,8 +995,11 @@ struct dct3_impl
         using                       root_align_type = mk::align_none; 
         static const Integer        step            = Out_Step;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,(Row - 1) * Out_Step>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return (Row - 1) * Out_Step;
+        };
 
         static void                 print(std::ostream& os,int)             { os << "dct3_impl.ret"; }
 
@@ -993,8 +1037,11 @@ struct dct4_impl
         using                       root_align_type = mk::align_full; 
         static const Integer        step            = 1;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,Row - 1>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return Row - 1;
+        };
 
         template<class Val, Integer Offset>
         static const Val* restricted
@@ -1008,8 +1055,11 @@ struct dct4_impl
         using                       root_align_type = mk::align_none; 
         static const Integer        step            = Out_Step;
 
-        template<Integer Row, Integer Col>
-        using                       get_offset      = std::integral_constant<Integer,(Row - 1) * Out_Step>;
+        static constexpr Integer get_offset(Integer Row, Integer Col)
+        {
+            (void)Col;
+            return (Row - 1) * Out_Step;
+        };
 
         template<class Val, Integer Offset>
         static Val* restricted      get_data_ptr(data_provider& dp)         { return dp.output + Offset * Out_Step; };

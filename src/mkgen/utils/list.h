@@ -68,7 +68,7 @@ struct is_list<list<Elem...>>
 template<class List, class Elem>
 struct push_back
 {
-    static_assert(details::dependent_false<List>::value,
+    static_assert(md::dependent_false<List>::value,
                   "List must be list<...> type");
 };
 
@@ -86,7 +86,7 @@ struct push_back<list<Elems...>, Elem>
 template<class List, class Elem>
 struct push_front
 {
-    static_assert(details::dependent_false<List>::value,
+    static_assert(md::dependent_false<List>::value,
                   "List must be list<...> type");
 };
 
@@ -103,7 +103,7 @@ struct push_front<list<Elems...>,Elem>
 template<class List>
 struct size
 {
-    static_assert(details::dependent_false<List>::value,
+    static_assert(md::dependent_false<List>::value,
                   "List must be list<...> type");
 };
 
@@ -120,7 +120,7 @@ struct size<list<Args...>>
 template<class Elem, class ... Elems>
 struct is_member_tuple
 {
-    static_assert(details::dependent_false<Elem>::value, 
+    static_assert(md::dependent_false<Elem>::value, 
                 "this type should not be instantiated");
 };
 
@@ -149,7 +149,7 @@ struct is_member_tuple<Elem, E1, E...>
 template<class Elem, class Container>
 struct is_member
 {
-    static_assert(details::dependent_false<Elem>::value, 
+    static_assert(md::dependent_false<Elem>::value, 
                 "this type should not be instantiated");
 };
 
@@ -165,7 +165,7 @@ struct is_member<Elem, Container<Elems...>>
 template<class List>
 struct unique_list
 {
-    static_assert(details::dependent_false<List>::value,
+    static_assert(md::dependent_false<List>::value,
                   "List must be list<...> type");
 };
 
@@ -196,7 +196,7 @@ struct unique_list<list<Elem>>
 template<class List, Integer Pos>
 struct elem_at_pos
 {
-    static_assert(details::dependent_false<List>::value,
+    static_assert(md::dependent_false<List>::value,
                   "List must be list<...> type");
 };
 
@@ -215,7 +215,7 @@ struct elem_at_pos<list<Elem, Elems...>, 0>
 template<Integer Pos>
 struct elem_at_pos<list<>, Pos>
 {
-    static_assert(details::dependent_value_false<Integer, Pos>::value,
+    static_assert(mkd::dependent_value_false<Integer, Pos>::value,
                   "invalid Pos");
 };
 
@@ -226,7 +226,7 @@ struct elem_at_pos<list<>, Pos>
 template<class List, class Elem, Integer Pos = 0>
 struct elem_pos
 {
-    static_assert(details::dependent_false<List>::value,
+    static_assert(md::dependent_false<List>::value,
                   "this type should not be instantiated");
 };
 
@@ -245,7 +245,7 @@ struct elem_pos<list<Elem1, T...>, Elem2, Pos>
 template<class Elem, Integer Pos>
 struct elem_pos<list<>, Elem, Pos> 
 {
-    static_assert(details::dependent_false<Elem>::value,
+    static_assert(md::dependent_false<Elem>::value,
                   "element not found in list");
 };
 

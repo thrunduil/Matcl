@@ -22,7 +22,7 @@ struct expr_mult
 };
 
 template<class S, class T2, class T3, class ... T>
-struct expr_mult<S,T2,T3,T...>
+struct expr_mult<S,T2,T3,T...> : public mkd::scalar_data<expr_mult<S,T2,T3,T...>>
 {
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
@@ -106,7 +106,7 @@ struct expr_mult<S,T2,T3,T...>
 };
 
 template<class S, class T2>
-struct expr_mult<S,T2>
+struct expr_mult<S,T2> : public mkd::scalar_data<expr_mult<S,T2>>
 {
     static_assert(std::is_same<S,one>::value == false,"invalid rep");
 
@@ -169,7 +169,7 @@ struct expr_mult<S,T2>
 template<class S1, class S2>
 struct make_mult_scal
 {
-    static_assert(details::dependent_false<S1>::value, 
+    static_assert(md::dependent_false<S1>::value, 
                 "this type should not be instantiated");
 };
 
@@ -363,7 +363,7 @@ struct make_div
 template<Integer Step, class Arr_List, class ... T>
 struct expr_mult_arrays
 {
-    static_assert(details::dependent_false<Arr_List>::value, 
+    static_assert(md::dependent_false<Arr_List>::value, 
                 "this type should not be instantiated");
 };
 template<Integer Step, class S, class ... T, class Arr_List>
@@ -384,7 +384,7 @@ struct expr_mult_arrays<Step, Arr_List>
 template<Integer Step, class Arr_List, class List_1, class List_2>
 struct expr_dot_arrays
 {
-    static_assert(details::dependent_false<List_1>::value,
+    static_assert(md::dependent_false<List_1>::value,
                   "this type should not be instantiated");
 };
 
@@ -410,7 +410,7 @@ struct expr_dot_arrays<Step, Arr_List, list::list<Elems_1...>, list::list<Elems_
 template<class List_1, class List_2>
 struct expand_dot
 {
-    static_assert(details::dependent_false<List_1>::value,
+    static_assert(md::dependent_false<List_1>::value,
                   "this type should not be instantiated");
 };
 template<>
@@ -427,7 +427,7 @@ struct expand_dot<list::list<Elem_1,Elems_1...>,list::list<Elem_2, Elems_2...>>
 };
 
 template<class List_1, class List_2>
-struct expr_dot
+struct expr_dot : public mkd::scalar_data<expr_dot<List_1, List_2>>
 {
     template<Integer Step, class Arr_List>
     using get_arrays    = typename expr_dot_arrays<Step, Arr_List, List_1, List_2> :: type;

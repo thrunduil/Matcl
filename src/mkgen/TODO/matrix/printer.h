@@ -100,7 +100,7 @@ struct print_comp_assing_1<M,N,Array,Deps, mkgen::assign_colon_scal<Pos,Scalar>>
     template<class Subs_Context>
     static void eval(std::ostream& os, int nspaces)
     {
-        using elem = typename get_array_elem<Array,row,col>::type;
+        using elem = typename Array :: template get_element<row,col>::type;
         print_whitespace(os,nspaces);
         elem::print<Subs_Context>(os, details::prior_start);
 
@@ -134,7 +134,7 @@ struct print_comp_assing_1_impl
     {
         static const Integer pos    = colon_func::index<Pos+1,Colon>::value;
         using mat_array             = typename Mat::array_type;
-        using elem                  = typename get_array_elem<mat_array,Pos+1,1>::type;
+        using elem                  = typename mat_array :: template get_element<Pos+1,1>::type;
 
         print_comp_assing_1<M,N,Array,Deps,assign_colon_scal<pos,elem>>
                     ::eval<Subs_Context>(os,nspaces);

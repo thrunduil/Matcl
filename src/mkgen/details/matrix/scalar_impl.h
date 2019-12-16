@@ -35,7 +35,7 @@ namespace matcl { namespace mkgen
 template<class Scalar_data, class Deps, class Tag>
 struct make_evaled_scalar
 {
-    static_assert(details::dependent_false<Scalar_data>::value, 
+    static_assert(md::dependent_false<Scalar_data>::value, 
                 "this type should not be instantiated");
 };
 

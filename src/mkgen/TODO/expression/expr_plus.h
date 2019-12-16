@@ -31,7 +31,7 @@ struct plus_list
 template<class T>
 struct plus_list_size
 {
-    static_assert(details::dependent_false<T>::value, 
+    static_assert(md::dependent_false<T>::value, 
                 "this type should not be instantiated");
 };
 template<class ...T>
@@ -43,13 +43,13 @@ struct plus_list_size<plus_list<T...>>
 template<class Plus_List, Integer N>
 struct eval_plus_list
 {
-    static_assert(details::dependent_false<Plus_List>::value, 
+    static_assert(md::dependent_false<Plus_List>::value, 
                 "this type should not be instantiated");
 };
 template<class Plus_List, Integer N>
 struct eval_loop_plus_list
 {
-    static_assert(details::dependent_false<Plus_List>::value, 
+    static_assert(md::dependent_false<Plus_List>::value, 
                 "this type should not be instantiated");
 };
 
@@ -247,7 +247,7 @@ struct make_flat_plus<expr_plus<T1,T2>>
 };
 
 template<class T1, class T2>
-struct expr_plus
+struct expr_plus : public mkd::scalar_data<expr_plus<T1, T2>>
 {
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
@@ -264,6 +264,7 @@ struct expr_plus
         if (prior > details::prior_plus)
             os << ")";
     };
+
     template<class Ret, class Local_Storage>
     inline_expr
     static Ret eval(const Local_Storage& ls)
@@ -295,7 +296,7 @@ struct expr_plus
 };
 
 template<class T1, class T2>
-struct expr_minus
+struct expr_minus : public mkd::scalar_data<expr_minus<T1, T2>>
 {
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
@@ -662,7 +663,7 @@ struct make_plus_2_impl<S1,S2,T11,T21,true>
 template<class S1, class S2>
 struct is_div_mone
 {
-    static_assert(details::dependent_false<S1>::value, 
+    static_assert(md::dependent_false<S1>::value, 
                 "this type should not be instantiated");
 };
 
@@ -719,6 +720,35 @@ struct make_plus<expr_mult<S,T1>, expr_mult<S,T2>>
     using type  = typename make_mult<S,ex>::type;
 };
 
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_plus_array_get_elem
+{};
+
+template<Integer M, Integer N, class Array1, class Array2,class Deps2, Integer Row, Integer Col>
+struct mat_scal_plus_array_get_elem<mkd::mat_scal_plus_array<M, N, Array1, 
+                                    ct_scalar<Array2, Deps2>>, Row, Col>
+{
+    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
+    using elem_2    = ct_scalar<Array2, Deps2>;
+    using new_item  = typename make_plus<elem_1,elem_2>::type;
+    //TODO:
+    using type      = typename correct_scalar_get_elem<new_item>::type;
+};
+
+template<class Array, Integer Row, Integer Col>
+struct mat_plus_array_get_elem
+{};
+
+template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
+struct mat_plus_array_get_elem<mkd::mat_plus_array<M,N,Array1,Array2>, Row, Col>
+{
+    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
+    using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
+    using new_item  = typename make_plus<elem_1,elem_2>::type;
+
+    using type      = typename correct_scalar_get_elem<new_item>::type;
+};
+
 //----------------------------------------------------------------------------------
 //                              make_minus
 //----------------------------------------------------------------------------------
@@ -734,6 +764,34 @@ template<class T1>
 struct make_uminus
 {
     using type = typename make_mult<mone,T1>::type;
+};
+
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_minus_array_get_elem
+{};
+
+template<Integer M, Integer N, class Array1, class Array2, class Deps2, Integer Row, Integer Col>
+struct mat_scal_minus_array_get_elem<mkd::mat_scal_minus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
+{
+    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
+    using elem_2    = ct_scalar<Array2,Deps2>;
+    using new_item  = typename make_minus<elem_1,elem_2>::type;
+
+    using type      = typename correct_scalar_get_elem<new_item>::type;
+};
+
+template<class Array, Integer Row, Integer Col>
+struct mat_minus_array_get_elem
+{};
+
+template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
+struct mat_minus_array_get_elem<mkd::mat_minus_array<M,N,Array1,Array2>, Row, Col>
+{
+    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
+    using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
+    using new_item  = typename make_minus<elem_1,elem_2>::type;
+
+    using type      = typename correct_scalar_get_elem<new_item>::type;
 };
 
 //----------------------------------------------------------------------------------

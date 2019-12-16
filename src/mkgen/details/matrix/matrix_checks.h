@@ -27,10 +27,32 @@
 namespace matcl { namespace mkgen { namespace details
 {
 
+template<class T>
+struct make_true_type
+{
+    using type = std::true_type;
+};
+
+template<class C>
+struct has_template_alias
+{                                                                          
+    /* attempt to call it */         
+    template<typename T>                                                   
+    static constexpr auto check(T*)                                        
+        -> typename make_true_type<typename T::template get_element_impl<1,1>>::type;
+                                                                           
+    template<typename>                                                     
+    static constexpr std::false_type check(...);                           
+                                                                           
+    using type  = decltype(check<C>(0));                                   
+                                                                           
+    static const bool value     = type::value;                             
+};
+
 //-----------------------------------------------------------------------
-//                      check_scalar_data
+//                      check_valid_matrix_array
 //-----------------------------------------------------------------------
-// check if Data parameter supplied to ct_scalar is valid
+// check if Array_t parameter supplied to ct_matrix is valid
 template<class Array_t>
 struct check_valid_matrix_array
 {
@@ -39,6 +61,24 @@ struct check_valid_matrix_array
     static_assert(is_array == true, "Array_t is not matrix_array<>");
 
     using type  = typename Array_t::template check<void>;
+};
+
+// check if Array_t parameter supplied to matrix_array is valid
+template<class Array, class Ret>
+struct check_matrix_array_impl
+{
+    // Array must implement:
+
+    // template<Integer Row, Integer Col>
+    // using get_element_impl   = [impl]
+
+    static const bool has_get   = has_template_alias<Array>::value;
+
+    static_assert(has_get == true, "Array must implement template alias get_element_impl");
+
+    using type = Ret;
+
+    // type T = get_element_impl<Row,Col>::type will be checked, when fully constructed
 };
 
 

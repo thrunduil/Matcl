@@ -37,6 +37,9 @@
     <Filter Include="Source Files\src\utils">
       <UniqueIdentifier>{1a6a18a7-1e42-48d9-b41d-a526b657a23f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\expression">
+      <UniqueIdentifier>{7567301a-fb8f-4d33-b22b-c41a4a8f1b25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mkgen\mkgen_config.h">
@@ -182,6 +185,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\virtual_matrix.h">
       <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\base_types.h">
+      <Filter>Source Files\src\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\mpl.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\expression\expressions.h">
+      <Filter>Source Files\src\expression</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

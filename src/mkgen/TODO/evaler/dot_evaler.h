@@ -32,7 +32,7 @@ struct split_list<Block_Size,Block_Size,Elems...>
 template<class List_1, class List_2, Integer Block_Size>
 struct make_blocks
 {
-    static_assert(details::dependent_false<List_1>::value, 
+    static_assert(md::dependent_false<List_1>::value, 
                 "this type should not be instantiated");
 };
 template<class ... List_1, class ... List_2, Integer Block_Size>
@@ -61,7 +61,7 @@ struct make_blocks<list::list<>,list::list<>, Block_Size>
 template<class List1, class List2, Integer Size>
 struct dot_evaler_impl
 {
-    static_assert(details::dependent_false<List1>::value, 
+    static_assert(md::dependent_false<List1>::value, 
                 "not implemented");
 };
 
@@ -201,7 +201,7 @@ struct dot_evaler_impl<List1, List2, 4>
 template<class Blocks, Integer N_Blocks>
 struct dot_evaler
 {
-    static_assert(details::dependent_false<Blocks>::value, 
+    static_assert(md::dependent_false<Blocks>::value, 
                 "not implemented");
 };
 template<class Blocks>

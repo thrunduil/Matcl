@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 #include "mkgen/TODO/evaler/storage_initializer.h"
 
 namespace matcl { namespace mkgen
@@ -15,20 +15,20 @@ namespace matcl { namespace mkgen
 template<class DSP_Modifier, class Dep>
 struct is_modified
 {
-    static_assert(details::dependent_false<DSP_Modifier>::value, 
+    static_assert(md::dependent_false<DSP_Modifier>::value, 
                 "this type should not be instantiated");
 };
 
 template<class DSP_Modifier_List, class Dep>
 struct get_modif_tag
 {
-    static_assert(details::dependent_false<DSP_Modifier_List>::value,
+    static_assert(md::dependent_false<DSP_Modifier_List>::value,
                 "this type should not be instantiated");
 };
 template<class ... Modif, class Temp_Tag2, Integer Size, class Type>
 struct is_modified<list::list<Modif...>, dep<Temp_Tag2,Size,Type>>
 {
-    static_assert(details::dependent_false<Temp_Tag2>::value, 
+    static_assert(md::dependent_false<Temp_Tag2>::value, 
                 "this type should not be instantiated");
 };
 template<class Temp_Tag2, Integer Size, class Type>
@@ -52,7 +52,7 @@ struct is_modified<list::list<dps_modif<Temp_Tag, Ret_Tag, Colon, R, C, Init>, A
 template<class Modif, class Dep>
 struct is_modif_one
 {
-    static_assert(details::dependent_false<Modif>::value,
+    static_assert(md::dependent_false<Modif>::value,
                   "this type should not be instantiated");
 };
 
@@ -207,7 +207,7 @@ struct temp_storage_elem_impl<Subs_Context, Val, Dep, true, Deps...>
         friend const Val& get_impl(Subs_Context, tag, Data_Provider& dp, const Temp_Storage* ts)
         {
             static const Integer pos    = colon_func::index<Pos0, colon_type>::value;
-            static const Integer pos0   = typename ret_tag::template get_offset<1,1>::value;
+            static const Integer pos0   = ret_tag::get_offset(1,1);
             static_assert(pos <= size, "invalid access");
             
             Val* storage                = get_ret_array<Val,ret_dep,pos0+pos-1>::eval(dp,ts);
@@ -219,7 +219,7 @@ struct temp_storage_elem_impl<Subs_Context, Val, Dep, true, Deps...>
         friend void set_impl(Subs_Context, tag, Data_Provider& dp, Temp_Storage* ts, Val&& v)
         {
             static const Integer pos    = colon_func::index<Pos0, colon_type>::value;
-            static const Integer pos0   = typename ret_tag::template get_offset<1,1>::value;
+            static const Integer pos0   = ret_tag::get_offset(1,1);
             static_assert(pos <= size, "invalid access");
 
             using ret_dep               = typename make_return_dep_from_tag<ret_tag>::type;
@@ -232,7 +232,7 @@ struct temp_storage_elem_impl<Subs_Context, Val, Dep, true, Deps...>
         inline_initializer
         static void init_temporary(std::true_type, Local_Storage& ls)
         {
-            static const Integer pos        = ret_tag::template get_offset<1, 1>::value;
+            static const Integer pos        = ret_tag::get_offset(1, 1);
             using align_r                   = ret_tag::root_align_type;
             static const Integer step       = ret_tag::step;
             using data_provider             = typename Local_Storage::data_provider;
@@ -273,7 +273,7 @@ struct temp_storage_elem_impl<Subs_Context, Val, Dep, true, Deps...>
 template<class Subs_Context, class Val, class ... Deps>
 struct temp_storage_elem
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 template<class Subs_Context, class Val, class Dep, class ... Deps>
@@ -414,7 +414,7 @@ struct temp_storage_initializer<Val, 2, dps<Dep1, Dep2, Deps...>>
 template<class Val, class DPS_Modifier, class Deps>
 struct temp_storage_members
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 template<class Subs_Context, class Val, class Dep, class ... Deps>
@@ -433,7 +433,7 @@ struct temp_storage_members<Val, DPS_Modifier, dps<>>
 template<class D>
 struct get_dps_length
 {
-    static_assert(details::dependent_false<D>::value,
+    static_assert(md::dependent_false<D>::value,
                   "this type should not be instantiated");
 };
 template<class ... Args>
@@ -463,13 +463,13 @@ struct empty_storage
     template<Integer Pos, class Data_Provider, class Dep, class Val>
     void set(Data_Provider& dp, Val&& val)
     {               
-        static_assert(details::dependent_false<Dep>::value, 
+        static_assert(md::dependent_false<Dep>::value, 
                 "temporary given by dep not found");
     };
     template<Integer Pos, class Data_Provider, class Dep>
     const Val& get(Data_Provider& dp) const
     {
-        static_assert(details::dependent_false<Dep>::value, 
+        static_assert(md::dependent_false<Dep>::value, 
                 "temporary given by dep not found");
     };
 };

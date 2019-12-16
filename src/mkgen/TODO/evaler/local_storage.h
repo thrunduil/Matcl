@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 
 namespace matcl { namespace mkgen
 {
@@ -32,14 +32,14 @@ struct local_values<Val,0>
 template<class Val, Integer Pos, class List_Tags>
 struct init_storage_arrays
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 
 template<class Val, Integer Pos, class Dep>
 struct init_storage_arrays_dep
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 template<class Val, Integer Pos, class Tag,Integer Size>
@@ -96,7 +96,7 @@ struct init_storage_arrays<Val,Pos,list::list<>>
 template<class Val, Integer Pos, class List_Deps>
 struct init_storage_scalars
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 template<class Val, Integer Pos, class Tag, class ... Deps>
@@ -127,7 +127,7 @@ struct init_storage_scalars<Val,Pos,list::list<>>
 template<class Deps>
 struct make_array_deps
 {
-    static_assert(details::dependent_false<Deps>::value,
+    static_assert(md::dependent_false<Deps>::value,
                   "this type should not be instantiated");
 };
 template<class Dep, class ... Deps>
@@ -160,7 +160,7 @@ struct make_array_deps<list::list<>>
 template<class Deps>
 struct make_scalar_deps
 {
-    static_assert(details::dependent_false<Deps>::value,
+    static_assert(md::dependent_false<Deps>::value,
                   "this type should not be instantiated");
 };
 template<class Dep, class ... Deps>
@@ -192,7 +192,7 @@ struct array_info
 template<class Subs, class Dep>
 struct make_array_info_temp
 {
-    static_assert(details::dependent_false<Subs>::value,
+    static_assert(md::dependent_false<Subs>::value,
                   "this type should not be instantiated");
 };
 template<class Tag, class Dep>
@@ -216,7 +216,7 @@ struct make_array_info_temp<modif2<Tag,Colon, Mat_Rows, Mat_Cols>, Dep>
 template<class Subs_Context, class Dep>
 struct make_array_info_1
 {
-    static_assert(details::dependent_false<Dep>::value,
+    static_assert(md::dependent_false<Dep>::value,
                   "this type should not be instantiated");
 };
 template<class Subs_Context, class Tag>
@@ -235,7 +235,7 @@ struct make_array_info_1<Subs_Context, dep<Tag,Size,dep_temp>>
 template<class Subs_Context, class List_Deps>
 struct make_array_info
 {
-    static_assert(details::dependent_false<List_Deps>::value,
+    static_assert(md::dependent_false<List_Deps>::value,
                   "this type should not be instantiated");
 };
 template<class Subs_Context, class... Deps>
@@ -261,7 +261,7 @@ struct insert_elem<list::list<List...>,Elem,false>
 template<class List_Deps>
 struct make_array_tags
 {
-    static_assert(details::dependent_false<List_Deps>::value,
+    static_assert(md::dependent_false<List_Deps>::value,
                   "this type should not be instantiated");
 };
 template<class... Info>
@@ -337,7 +337,7 @@ struct make_return_dep_from_tag<void>
 template<class Subs_Context, class Deps>
 struct make_deps_list
 {
-    static_assert(details::dependent_false<Subs_Context>::value,
+    static_assert(md::dependent_false<Subs_Context>::value,
                   "this type should not be instantiated");
 };
 
@@ -405,7 +405,7 @@ struct local_storage
         static const Integer pos_colon  = colon_func::index<Pos,colon>::value;
         static const Integer col        = (pos_colon-1) / rows + 1;
         static const Integer row        = (pos_colon-1) % rows + 1;
-        static const Integer off        = typename tag::template get_offset<row,col>::value;        
+        static const Integer off        = tag::get_offset(row,col);        
 
         static const Integer pos2   = list::elem_pos<array_tags,tag>::value;
 
@@ -417,7 +417,7 @@ struct local_storage
     const Val& get_extern() const
     {
         using dep_type              = extern_dep<Tag>;
-        static const Integer off    = typename Tag::template get_offset<Row,Col>::value;        
+        static const Integer off    = Tag::get_offset(Row,Col);        
         static const Integer pos    = list::elem_pos<array_deps,dep_type>::value;
         using info                  = typename list::elem_at_pos<array_info,pos>::type;
 

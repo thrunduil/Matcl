@@ -25,36 +25,11 @@
 
 namespace matcl { namespace mkgen 
 {
-
-using Integer   = matcl::Integer;
-
 //------------------------------------------------------------------------
 //                              arrays
 //------------------------------------------------------------------------
-
-//computation arrays
-template<class Array1, class Scalar2>                   struct mat_scal_mult_array;
-template<class Array1, class Array2>                    struct mult_cols_array;
-template<class Array1, class Array2>                    struct mult_array;
-template<class Array1, class Array2>                    struct div_array;
-template<class Array1, class Scal2>                     struct div_array_mat_scal;
-template<class Array2, class Scal1>                     struct div_array_scal_mat;
-template<Integer M, Integer N, class Array>             struct mat_trans_array;
-template<Integer M, Integer N, class Array>             struct mat_ctrans_array;
-template<class Tag, Integer M, Integer N, class Array1, class Array2>
-                                                        struct mat_bfunc_array;
-template<class Tag, Integer M, Integer N, class Array1, class Array2>
-                                                        struct mat_scal_bfunc_array;
-template<class Tag, Integer M, Integer N, class Array1, class Array2>
-                                                        struct scal_mat_bfunc_array;
-template<Integer M,Integer N,class Array1,class Array2> struct scal_mat_minus_array;
-template<Integer M, Integer N, class Array>             struct mat_uminus_array;
-
-//assignments
-template<Integer M,Integer N,class Array1,class Array2> struct mat_scal_assign_array;
-
 //technical arrays
-                                                        struct call_array_type;
+struct call_array_type;
 
 //------------------------------------------------------------------------
 //                              other
@@ -118,5 +93,8 @@ struct element_step;
 
 template<class Val, class Elem>
 struct loop_context_data_scalar;
+
+template<class T>
+struct correct_scalar_get_elem;
 
 }}

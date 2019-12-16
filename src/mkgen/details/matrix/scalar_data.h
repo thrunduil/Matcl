@@ -56,11 +56,7 @@ struct scal_data_value_tag
     using check     = typename details::check_scalar_data_tag_impl<Tag, Dummy>::type;
 
     // Tag arrays must implement:
-    // template<class Subs_Context>
-    // static void print(std::ostream& os, int prior)
-    // {
-    //     Data::print<Subs_Context>(os,prior);
-    // };
+    // static void print(std::ostream& os, int prior);
     // 
     // template<class Value_type>
     // static Value_type eval<Value_type>();
@@ -144,7 +140,7 @@ struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
     { 
-        Tag::print<Subs_Context>(os,prior);
+        Tag::print(os,prior);
     };
 
     template<class Val, class Local_Storage>
@@ -211,7 +207,7 @@ template<Integer M, Integer N, class Array_t, class Deps, Integer Row, Integer C
 struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
              : mkd::scalar_data<scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>>
 {
-    using elem_type = typename get_array_elem<Array_t,Row, Col>::type;
+    using elem_type = typename Array_t::template get_element<Row, Col>::type;
 
     // check
     using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
@@ -243,7 +239,7 @@ struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
     static const Integer col = (Pos-1)/M + 1;
     static const Integer row = Pos - (col-1) * M;
 
-    using elem_type     = typename get_array_elem<Array_t, row, col>::type;
+    using elem_type     = typename Array_t::template get_element<row, col>::type;
 
     // check
     using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;

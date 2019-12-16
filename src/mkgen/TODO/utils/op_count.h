@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 
 namespace matcl { namespace mkgen
 {

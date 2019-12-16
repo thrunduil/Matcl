@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\mkgen\details\base_types.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\dependency_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h" />
@@ -31,7 +32,9 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\virtual_matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\mkgen_fwd.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\has_function.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\mpl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\utils.h" />
+    <ClInclude Include="..\..\..\src\mkgen\expression\expressions.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\dependency.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\scalar.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix_details.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix_printer.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\scalar2.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\alignment.h" />

@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 #include "mkgen/TODO/evaler/loop_promotion.h"
 #include "matcl-simd/simd.h"
 #include "mkgen/TODO/evaler/local_storage.h"
@@ -233,7 +233,7 @@ struct storage_initializer_expand<Val, list::list<Mat_Colon, Mats...>,Colon_Type
     inline_initializer
     static void eval_impl(std::true_type, Local_Storage& ls)
     {
-        using elem          = typename get_array_elem<array_type,1,1>::type;
+        using elem          = typename array_type :: template get_element<1,1>::type;
         using subs_context  = typename Local_Storage::subs_context;
         using loop_context  = typename make_loop_context<elem>::type;
 
@@ -264,7 +264,7 @@ struct storage_initializer_expand<Val, list::list<Mat_Colon, Mats...>,Colon_Type
     inline_initializer
     static void init_elem(const Local_Storate& ls)
     {        
-        using elem = typename get_array_elem<array_type,Row,Col>::type;
+        using elem = typename array_type :: template get_element<Row,Col>::type;
         static const Integer pos0   = (Col - 1)*rows + Row;
         static const Integer pos    = colon_func::index<pos0,Colon_Type>::value;
 
@@ -280,7 +280,7 @@ struct storage_initializer_expand<Val, list::list<Mat_Colon, Mats...>,Colon_Type
     template<Integer Row, Integer Col, class Visitor>
     static void init_elem_accept(Visitor& vis)
     {        
-        using elem = typename get_array_elem<array_type,Row,Col>::type;
+        using elem = typename array_type :: template get_element<Row,Col>::type;
         elem::accept<Visitor>(vis);
         vis.visit_store();
     };
@@ -422,7 +422,7 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,1>
     {
         static const Integer pos    = colon_func::index<Start,Colon>::value;
         using mat_array             = typename Mat::array_type;
-        using elem                  = typename get_array_elem<mat_array,Start,1>::type;
+        using elem                  = typename mat_array :: template get_element<Start,1>::type;
 
         comp_initializer_1<Subject,assign_colon_scal<pos,elem>>::eval<Val>(ls);
     };
@@ -432,7 +432,7 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,1>
     {
         static const Integer pos    = colon_func::index<Start,Colon>::value;
         using mat_array             = typename Mat::array_type;
-        using elem                  = typename get_array_elem<mat_array,Start,1>::type;
+        using elem                  = typename mat_array :: template get_element<Start, 1>::type;
 
         comp_initializer_1<Subject,assign_colon_scal<pos,elem>>::accept(vis);
     };
@@ -447,11 +447,11 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,2>
         using mat_array             = typename Mat::array_type;
 
         static const Integer pos1   = colon_func::index<Start,Colon>::value;
-        using elem1                 = typename get_array_elem<mat_array,Start,1>::type;
+        using elem1                 = typename mat_array :: template get_element<Start,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos1,elem1>>::eval<Val>(ls);
 
         static const Integer pos2   = colon_func::index<Start+1,Colon>::value;
-        using elem2                 = typename get_array_elem<mat_array,Start+1,1>::type;
+        using elem2                 = typename mat_array :: template get_element<Start+1,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos2,elem2>>::eval<Val>(ls);
     };
 
@@ -461,11 +461,11 @@ struct comp_initializer_1_impl<Subject,Colon,Mat,Start,2>
         using mat_array             = typename Mat::array_type;
 
         static const Integer pos1   = colon_func::index<Start,Colon>::value;
-        using elem1                 = typename get_array_elem<mat_array,Start,1>::type;
+        using elem1                 = typename mat_array :: template get_element<Start,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos1,elem1>>::accept(vis);
 
         static const Integer pos2   = colon_func::index<Start+1,Colon>::value;
-        using elem2                 = typename get_array_elem<mat_array,Start+1,1>::type;
+        using elem2                 = typename mat_array :: template get_element<Start+1,1>::type;
         comp_initializer_1<Subject,assign_colon_scal<pos2,elem2>>::accept(vis);
     };
 };

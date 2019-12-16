@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 #include "mkgen/TODO/utils/op_count.h"
 
 namespace matcl { namespace mkgen
@@ -83,13 +83,13 @@ struct modif2
 template<class Modif, Integer Old>
 struct get_mat_rows
 {
-    static_assert(details::dependent_false<Modif>::value, 
+    static_assert(md::dependent_false<Modif>::value, 
                 "this type should not be instantiated");
 };
 template<class Modif, Integer Old>
 struct get_mat_cols
 {
-    static_assert(details::dependent_false<Modif>::value, 
+    static_assert(md::dependent_false<Modif>::value, 
                 "this type should not be instantiated");
 };
 template<class Tag, class Colon, Integer Mat_Rows, Integer Mat_Cols, Integer Old>
@@ -116,13 +116,13 @@ struct get_mat_cols<modif2<Tag,Colon,-1,-1>,Old>
 template<class Item1, class Colon>
 struct make_tag_colon
 {
-    static_assert(details::dependent_false<Item1>::value,
+    static_assert(md::dependent_false<Item1>::value,
                   "this type should not be instantiated");
 };
 template<class Colon1, class Colon2>
 struct link_colons
 {
-    static_assert(details::dependent_false<Colon1>::value,
+    static_assert(md::dependent_false<Colon1>::value,
                   "this type should not be instantiated");
 };
 template<Integer Start, Integer Step, Integer End>
@@ -164,7 +164,7 @@ struct make_tag_colon<modif<Tag1,Colon1,Init>,Colon2>
 template<class Tags1, class Colon_1>
 struct make_tags_colon
 {
-    static_assert(details::dependent_false<Tags1>::value,
+    static_assert(md::dependent_false<Tags1>::value,
                   "this type should not be instantiated");
 };
 template<class ... Tags1, class Colon_1>
@@ -181,7 +181,7 @@ struct make_tags_colon<list::list<>, Colon_1>
 template<class Tags1, class Tags2>
 struct link_tags
 {
-    static_assert(details::dependent_false<Tags1>::value,
+    static_assert(md::dependent_false<Tags1>::value,
                   "this type should not be instantiated");
 };
 template<class ... Tags1, class ... Tags2>
@@ -192,7 +192,7 @@ struct link_tags<list::list<Tags1...>,list::list<Tags2...>>
 
 template<class Subs_Context, Integer M1, Integer N1, Integer M2, Integer N2, class Array_T, 
         class Colon_1, class ... Assign_List>
-struct get_temp_tags_virtual<true, Subs_Context, assign_item<M1, N1, M2, N2, Array_T, Colon_1>,Assign_List...>
+struct get_temp_tags_virtual<true, Subs_Context, mkd::virtual_assign_item<M1, N1, M2, N2, Array_T, Colon_1>,Assign_List...>
 {
     using tags1     = typename get_temp_tags<Array_T,Subs_Context>::type;
     using tags_col  = typename make_tags_colon<tags1,Colon_1>::type;
@@ -225,7 +225,7 @@ struct get_temp_tags<mkd::virtual_array<Virt_Tag, Assign_List...>, Subs_Context>
 template<class Tag, class Dep_Tags>
 struct make_final_tags
 {
-    static_assert(details::dependent_false<Tag>::value,
+    static_assert(md::dependent_false<Tag>::value,
                   "this type should not be instantiated");
 };
 template<class Tag>
@@ -282,7 +282,7 @@ bool tag_need_initialization(Subs_Context sc, Tag tag)
 template<class Mod, class Ret_Tag, Integer Rows, Integer Cols, class Colon, class Subs_Context>
 struct make_dps_modif_1
 {
-    static_assert(details::dependent_false<Mod>::value,
+    static_assert(md::dependent_false<Mod>::value,
                   "this case is not implemented");
 };
 template<class Tag, class Colon_in, class Ret_Tag, Integer Rows, Integer Cols, 
@@ -308,7 +308,7 @@ struct make_dps_modif_1<modif<Tag,Colon_in,Init>,Ret_Tag,Rows,Cols,Colon_Ret, Su
 template<class Temp_Tags, class Ret_Tag, Integer R, Integer C, class Colon, class Subs_Context>
 struct make_dps_modifier
 {
-    static_assert(details::dependent_false<Temp_Tags>::value,
+    static_assert(md::dependent_false<Temp_Tags>::value,
                   "this case is not implemented");
 };
 template<class ...Items, class Ret_Tag, Integer R, Integer C, class Colon, class Subs_Context>
@@ -320,7 +320,7 @@ struct make_dps_modifier<list::list<Items...>, Ret_Tag, R, C, Colon, Subs_Contex
 template<class Array, class Ret_Tag0, Integer R0, Integer C0, class Return_Subs, class Subs_Context>
 struct dps_modifier_maker
 {
-    static_assert(details::dependent_false<Array>::value, 
+    static_assert(md::dependent_false<Array>::value, 
                 "this type should not be instantiated");
 };
 template<class Array, class Ret_Tag0, Integer R0, Integer C0, 
@@ -348,21 +348,21 @@ template<class Ret_Matrix, class Expr_Matrix, class Ret_Mat_Subs, class Subs_Con
         bool Is_Temp = is_temporary<Expr_Matrix>::value || is_virtual_temporary<Expr_Matrix, false>::value>
 struct final_expr
 {
-    static_assert(details::dependent_false<Ret_Matrix>::value, 
+    static_assert(md::dependent_false<Ret_Matrix>::value, 
                 "this type should not be instantiated");
 };
 
 template<class Matrix_Type, class Rem_Dps>
 struct add_removed_deps
 {
-    static_assert(details::dependent_false<Matrix_Type>::value, 
+    static_assert(md::dependent_false<Matrix_Type>::value, 
                 "this type should not be instantiated");
 };
 
 template<class Tag, class Return_Subs, class Subs_Context>
 struct make_empty_dps_maker
 {
-    static_assert(details::dependent_false<Return_Subs>::value, 
+    static_assert(md::dependent_false<Return_Subs>::value, 
                 "this type should not be instantiated");
 };
 template<class Tag, class Subs_Context>
@@ -397,6 +397,7 @@ struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>,Rem_Dps>
     using all_deps  = typename link_deps<Deps,Rem_Dps>::type;
     using type      = ct_matrix<Rows,Cols,Array,all_deps>;
 };
+
 template<Integer Rows, Integer Cols, class Array, class Deps>
 struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>,void>
 {
@@ -432,6 +433,21 @@ struct get_input_matrix
     using type  = decltype( get_matrix_input(T()) );
 };
 
+template<class Deps_or_void>
+struct make_dps_from_subs{};
+
+template<>
+struct make_dps_from_subs<void>
+{
+    using type = dps<>;
+};
+
+template<class ... Args>
+struct make_dps_from_subs<dps<Args...>>
+{
+    using type = dps<Args...>;
+};
+
 template<Integer M, Integer N, class Ret_Tag, class Ret_DPS, class Expr_Matrix, class Ret_Mat_Subs, 
         class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>, Expr_Matrix, Ret_Mat_Subs, Subs_Context,
@@ -445,8 +461,11 @@ struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>, Expr_Matri
     using removed_deps      = typename list::elem_at_pos<Ret_Mat_Subs,1>::type;
     using dps_modif_maker   = make_empty_dps_maker<Ret_Tag,return_subs,Subs_Context>;
     using matrix_type_deps  = typename add_removed_deps<matrix_type,removed_deps>::type;
-    using additional_deps   = typename merge_deps<Ret_DPS, removed_deps>::type;
+
+    using removed_deps_dps  = typename make_dps_from_subs<removed_deps>::type;
+    using additional_deps   = typename link_deps<Ret_DPS, removed_deps_dps>::type;
 };
+
 template<Integer M, Integer N, class Ret_Tag, Integer MR, Integer MC, class Ret_DPS, class Expr_Matrix, 
         class Ret_Mat_Subs, class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag,MR,MC>,Ret_DPS>, Expr_Matrix, Ret_Mat_Subs, 
@@ -460,7 +479,9 @@ struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag,MR,MC>,Ret_DPS>,
     using removed_deps      = typename list::elem_at_pos<Ret_Mat_Subs,1>::type;
     using dps_modif_maker   = make_empty_dps_maker<Ret_Tag,return_subs,Subs_Context>;
     using matrix_type_deps  = typename add_removed_deps<matrix_type,removed_deps>::type;
-    using additional_deps   = typename merge_deps<Ret_DPS, removed_deps>::type;
+
+    using removed_deps_dps  = typename make_dps_from_subs<removed_deps>::type;
+    using additional_deps   = typename link_deps<Ret_DPS, removed_deps_dps>::type;
 };
 
 template<Integer M, Integer N, class Ret_Tag, class Ret_DPS, 
@@ -472,15 +493,18 @@ struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>,
     static_assert(M == M2 && N == N2, "invalid assignment");
     
     using array_type        = mkd::empty_array<Ret_Tag>;
-    using dps_all           = typename merge_deps<Ret_DPS, Expr_DPS>::type;
+    using dps_all           = typename link_deps<Ret_DPS, Expr_DPS>::type;
     using matrix_type       = ct_matrix<M, N, array_type, dps_all>;
     using return_subs       = typename list::elem_at_pos<Ret_Mat_Subs,0>::type;
     using removed_deps      = typename list::elem_at_pos<Ret_Mat_Subs,1>::type;
 
     using dps_modif_maker   = dps_modifier_maker<Expr_Array, Ret_Tag, M, N, return_subs, Subs_Context>;
     using matrix_type_deps  = typename add_removed_deps<matrix_type,removed_deps>::type;
-    using additional_deps   = typename merge_deps<Ret_DPS, removed_deps>::type;
+
+    using removed_deps_dps  = typename make_dps_from_subs<removed_deps>::type;
+    using additional_deps   = typename link_deps<Ret_DPS, removed_deps_dps>::type;
 };
+
 template<Integer M, Integer N, class Ret_Tag, Integer MR, Integer MC, class Ret_DPS, 
         Integer M2, Integer N2, class Expr_Array, class Expr_DPS, class Ret_Mat_Subs, class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag, MR, MC>,Ret_DPS>,
@@ -617,7 +641,7 @@ struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N,Array,Deps>, Elems
         using assign_info   = typename make_assign_info<matrix_type>::type;
         using rhs           = typename assign_info::rhs;
         using rhs_array     = typename rhs::array_type;
-        using elem          = typename get_array_elem<rhs_array,1,1>::type;
+        using elem          = typename rhs_array::template get_element<1,1>::type;
         using subs_context  = typename Local_Storage::subs_context;
         using loop_context  = typename make_loop_context<elem>::type;
         using ret_colon     = typename assign_info::colon_type;
@@ -749,13 +773,13 @@ struct expr_evaler_elems_row<First_Row, Last_Row, 1, Array,Val,Col>
     inline_initializer
     static void eval(const Local_Storage& ls)
     {
-        using elem1 = typename get_array_elem<Array,First_Row,Col>::type;
+        using elem1 = typename Array::template get_element<First_Row,Col>::type;
         elem1::eval<Val>(ls);
     };
     template<class Visitor>
     static void accept(Visitor& vis)
     {
-        using elem1 = typename get_array_elem<Array,First_Row,Col>::type;
+        using elem1 = typename Array :: template get_element<First_Row,Col>::type;
         elem1::accept<Visitor>(vis);
     };
 };
@@ -766,19 +790,19 @@ struct expr_evaler_elems_row<First_Row, Last_Row, 2, Array,Val,Col>
     inline_initializer
     static void eval(const Local_Storage& ls)
     {
-        using elem1     = typename get_array_elem<Array,First_Row,Col>::type;
+        using elem1     = typename Array :: template get_element<First_Row, Col>::type;
         elem1::eval<Val>(ls);
 
-        using elem2     = typename get_array_elem<Array,First_Row+1,Col>::type;
+        using elem2     = Array :: template get_element<First_Row+1, Col>::type;
         elem2::eval<Val>(ls);
     };
     template<class Visitor>
     static void accept(Visitor& vis)
     {
-        using elem1     = typename get_array_elem<Array,First_Row,Col>::type;
+        using elem1     = typename Array :: template get_element<First_Row, Col>::type;
         elem1::accept<Visitor>(vis);
 
-        using elem2     = typename get_array_elem<Array,First_Row+1,Col>::type;
+        using elem2     = typename Array :: template get_element<First_Row+1,Col>::type;
         elem2::accept<Visitor>(vis);
     };
 };

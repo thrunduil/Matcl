@@ -30,6 +30,8 @@ namespace matcl { namespace mkgen { namespace details
 has_static_member_template_function_x(print)
 has_static_member_template_function_x(eval)
 
+has_static_member_function_x(print)
+
 //TODO
 struct subs_context_dummy
 {
@@ -47,15 +49,15 @@ struct is_valid_scalar_data
 };
 
 //-----------------------------------------------------------------------
-//                      check_scalar_data
+//                      check_valid_scalar_data
 //-----------------------------------------------------------------------
 // check if Data parameter supplied to ct_scalar is valid
 template<class Data>
 struct check_valid_scalar_data
 {
-    static const bool is_scalar_data    = std::is_base_of<mkd::scalar_data<Data>, Data>::value;
+    static const bool is_sd = std::is_base_of<mkd::scalar_data<Data>, Data>::value;
 
-    static_assert(is_scalar_data == true, "type is not scalar_data<>");
+    static_assert(is_sd == true, "type is not scalar_data<>");
 
     using type  = typename Data::template check<void>;
 };
@@ -83,7 +85,6 @@ struct check_scalar_data_impl
 
     static_assert(has_eval == true, "Data must implement function eval");
 
-
     using type = Ret;
 };
 
@@ -107,11 +108,10 @@ struct check_scalar_data_tag_impl
 {
     // Data must implement:
 
-    // template<class Subs_Context>
-    // static void print(std::ostream& os, int prior)
+    // static void print(std::ostream& os, int prior);
     using func_print_type       = void (std::ostream& os, int prior);
-    static const bool has_print = has_static_member_template_function_print
-                                    <Tag, subs_context_dummy, func_print_type>::value;
+    static const bool has_print = has_static_member_function_print
+                                    <Tag, func_print_type>::value;
 
     static_assert(has_print == true, "Tag must implement function print");
 

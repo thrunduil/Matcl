@@ -2,21 +2,7 @@
 
 #include "mkgen/mkgen_fwd.h"
 #include "mkgen/matrix/dependency.h"
-
-namespace matcl { namespace mkgen { namespace details
-{
-
-//allow use always false conditions in static_assert 
-//template<class T>
-//struct dependent_false          { static const bool value = false; };
-
-template<class... T>
-struct dependent_false_var      { static const bool value = false; };
-
-template<class T, T Val>
-struct dependent_value_false    { static const bool value = false; };
-
-}}}
+#include "mkgen/details/utils/mpl.h"
 
 namespace matcl { namespace mkgen
 {
@@ -64,7 +50,7 @@ struct find_case<false, Case_1, Case_2, Cases ...>
 template<class Case>
 struct find_case<false, Case>
 {
-    static_assert(details::dependent_false<Case>::value, "all conditions are false");
+    static_assert(md::dependent_false<Case>::value, "all conditions are false");
 };
 
 template<class Case, class ... Cases>
@@ -76,12 +62,6 @@ struct find_case<true, Case, Cases...>
 template<class Case, class ... Cases>
 struct static_switch<Case, Cases ...> : find_case<Case::value, Case, Cases...>::type
 {};
-
-template<class T>
-struct lazy_type
-{
-    using type = T;
-};
 
 template<bool Cond, class If_Expr_Type, class Else_Type>
 struct static_if

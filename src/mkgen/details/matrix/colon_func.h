@@ -33,7 +33,7 @@ namespace matcl { namespace mkgen { namespace colon_func
 template<class Colon, Integer M>
 struct check_colon
 {
-    static_assert(details::dependent_false<Colon>::value, "unknown colon type");
+    static_assert(md::dependent_false<Colon>::value, "unknown colon type");
 };
 
 template<Integer M>
@@ -83,7 +83,7 @@ struct check_colon<colon3<Start, Step, End>, M>
 template<class Colon, Integer M>
 struct size
 {
-    static_assert(details::dependent_false<Colon>::value, "unknown colon type");
+    static_assert(md::dependent_false<Colon>::value, "unknown colon type");
 };
 
 template<Integer M>
@@ -126,7 +126,7 @@ struct size<colon3<Start, Step, End>, M>
 template<class Colon, Integer M>
 struct first
 {
-    static_assert(details::dependent_false<Colon>::value, "unknown colon type");
+    static_assert(md::dependent_false<Colon>::value, "unknown colon type");
 };
 
 template<Integer M>
@@ -164,7 +164,7 @@ struct first<colon3<Start, Step, End>, M>
 template<class Colon, Integer M>
 struct last
 {
-    static_assert(details::dependent_false<Colon>::value, "unknown colon type");
+    static_assert(md::dependent_false<Colon>::value, "unknown colon type");
 };
 
 template<Integer M>
@@ -204,7 +204,7 @@ struct last<colon3<Start, Step, End>, M>
 template<class Colon>
 struct offset
 {
-    static_assert(details::dependent_false<Colon>::value, "unknown colon type");
+    static_assert(md::dependent_false<Colon>::value, "unknown colon type");
 };
 
 template<>
@@ -238,7 +238,7 @@ struct offset<colon3<Start, Step, End>>
 template<class Colon>
 struct step
 {
-    static_assert(details::dependent_false<Colon>::value, "unknown colon type");
+    static_assert(md::dependent_false<Colon>::value, "unknown colon type");
 };
 
 template<>
@@ -272,7 +272,7 @@ struct step<colon3<Start, Step, End>>
 template<Integer K, class Colon>
 struct index
 {
-    static_assert(details::dependent_false<Colon>::value,
+    static_assert(md::dependent_false<Colon>::value,
                   "this type should not be instantiated");
 };
 

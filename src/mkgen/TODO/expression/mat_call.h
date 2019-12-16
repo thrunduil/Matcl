@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 
 namespace matcl { namespace mkgen
 {
@@ -112,7 +112,7 @@ struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
 template<class Colon>
 struct print_colon
 {
-    static_assert(details::dependent_false<Colon>::value, 
+    static_assert(md::dependent_false<Colon>::value, 
                 "this type should not be instantiated");
 };
 template<>
@@ -151,13 +151,13 @@ struct print_colon<colon3<Start,Step,End>>
 template<class Mat>
 struct is_value_matrix
 {
-    static_assert(details::dependent_false<Mat>::value, 
+    static_assert(md::dependent_false<Mat>::value, 
                 "this type should not be instantiated");
 };
 template<class Arr>
 struct get_arg_tag
 {
-    static_assert(details::dependent_false<Arr>::value, 
+    static_assert(md::dependent_false<Arr>::value, 
                 "this type should not be instantiated");
 };
 
@@ -214,7 +214,7 @@ struct is_value_matrix<ct_matrix<M,N,Array,Deps>>
 template<class Tag, class Func, class Mat>
 struct make_call_external<Tag, Func, Mat, false>
 {
-    static_assert(details::dependent_false<Tag>::value, 
+    static_assert(md::dependent_false<Tag>::value, 
                 "argument must be value matrix");
 };
 

@@ -50,7 +50,7 @@ struct print_matrix_elems_impl;
 //--------------------------------------------------------
 
 // print n spaces
-void print_whitespace(std::ostream& os, int n)
+inline void print_whitespace(std::ostream& os, int n)
 {
     if (n > 0)
         os << std::string(n, ' ');
@@ -292,7 +292,7 @@ struct print_matrix_elems_impl
 
         print_whitespace(os, nspaces);
 
-        using elem = typename get_array_elem<Array,Row+1,Col+1>::type;
+        using elem = typename Array::template get_element<Row + 1, Col + 1>::type;
         elem::print<Subs_Context>(os,details::prior_start);
 
         os << "\n";
@@ -313,7 +313,8 @@ struct print_matrix_elems_impl
         print_subs(subs(), pos, os, Mat_Rows);
         os << " = ";
 
-        using elem = typename get_array_elem<Array,Row+1,Col+1>::type;
+        using elem = typename Array::template get_element<Row + 1, Col + 1>::type;
+
         elem::print<Subs_Context>(os,details::prior_start);
 
         os << "\n";

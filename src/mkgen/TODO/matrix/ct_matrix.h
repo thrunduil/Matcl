@@ -120,9 +120,10 @@ namespace matcl { namespace mkgen
 // This class represents a generic element of a matrix tagged with Tag at row
 // row, column col.
 template<class Tag, Integer Row, Integer Col>
-struct element
+struct element : public mkd::scalar_data<element<Tag, Row, Col>>
 {
-    static const Integer    get_offset      = typename Tag:: template get_offset<Row,Col>::value;
+    //TODO: add checks
+    static const Integer    get_offset      = Tag::get_offset(Row,Col);
     using                   root_align_type = typename Tag::root_align_type;
 
     using tag       = Tag;
@@ -211,7 +212,7 @@ struct get_offset_elem_step<expr_plus<T1,T2>>
 };
 
 template<class Elem, Integer Step>
-struct element_step
+struct element_step : public mkd::scalar_data<element_step<Elem, Step>>
 {
     // print element
     template<class Subs_Context>
@@ -323,16 +324,12 @@ struct mat_assign {};
 template<class Subject, class Mat, class Colon_1>
 struct comp_assign_1
 {
-    static_assert(details::dependent_false<Subject>::value, "this type should not be instantiated");
+    static_assert(md::dependent_false<Subject>::value, "this type should not be instantiated");
 };
 
 // Create temporary buffer 
 template<class Mat, class Tag, bool Force>
 struct mat_temporary;
-
-// subsassign operator to virtual matrix
-template<class Mat1, class Mat2, class Colon_1>
-struct mat_virtual_assign_1 {};
 
 // unary minus
 template<class Mat>
@@ -360,14 +357,8 @@ struct get_elem{};
 template<class Tag, class Code_Gen, class Ret_Matrix, class Matrix, class Val>
 struct expr_evaler;
 
-// get a type that represents an element at row row and column col in a matrix with
-// leading dimension LD. if_expr user defines a new operator, which creates a matrix with 
-// symolic elements of new type stored in Array Array, then this class must be 
-// specialized to define how to access to given element.
-//TODO: check if return satisfy scalar_data requirement
-template<class Array, Integer Row, Integer Col>
-struct get_array_elem {};
-
+//TODO
+#if 1
 //------------------------------------------------------------------------------
 //                      operator +
 //------------------------------------------------------------------------------
@@ -484,6 +475,7 @@ template<Integer M1, Integer N1, class Array1, class Deps1,
 auto        mult(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
                                         -> typename make_mult_mat<ct_matrix<M1,N1,Array1,Deps1>,
                                                     ct_matrix<M2,N2,Array2,Deps2>>::type;
+#endif
 
 //------------------------------------------------------------------------------
 //                      call

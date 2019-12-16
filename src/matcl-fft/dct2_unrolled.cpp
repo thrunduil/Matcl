@@ -43,8 +43,11 @@ struct tag_y
     using                       root_align_type = mk::align_full;
     static const Integer        step            = 1;
 
-    template<Integer Row, Integer Col>
-    using                       get_offset      = std::integral_constant<Integer,Row - 1>;
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        (void)Col;
+        return Row - 1;
+    };
 
     static void                 print(std::ostream& os,int)             { os << "y"; }
 
@@ -58,8 +61,11 @@ struct tag_ret
     using                       root_align_type = mk::align_full;
     static const Integer        step            = 1;
 
-    template<Integer Row, Integer Col>
-    using                       get_offset      = std::integral_constant<Integer,Row - 1>;
+    static constexpr Integer get_offset(Integer Row, Integer Col)
+    {
+        (void)Col;
+        return Row - 1;
+    };
 
     static void                 print(std::ostream& os,int) { os << "ret"; }
         

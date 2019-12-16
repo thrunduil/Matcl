@@ -49,8 +49,7 @@ struct colon3{};
 //
 // Matrix 1x1 is not a scalar, for example multiplying 1x1 matrix and 2x2 matrix will
 // produce an error. For a matrix with generic elements Array_t type is basically array<Tag>
-// with unique Tag for each matrix. For matrices containing symbolic expressions Array_t is
-// any type for which a template get_array_elem described below is specialized.
+// with unique Tag for each matrix. 
 // Deps is a type representing dependencies from runtime values; must be specialization
 // of dps type
 template<Integer M, Integer N, class Array_t, class Deps>
@@ -96,10 +95,10 @@ struct ct_matrix
         static auto sub(Colon_1, Colon_2)   -> typename mkd::submatrix_maker_2<ct_matrix, 
                                                     Colon_1, Colon_2>::type;
 
-        // build virtual matrix, this type must be a virtual_matrix
-        //TODO
+        // make assignment This(Colon_1) = Mat; 
+        // this type must be a virtual_matrix
         template<class Colon_1, class Mat>
-        static auto assign_1(Colon_1, Mat)  -> typename mat_virtual_assign_1<ct_matrix, Mat, Colon_1>::type;
+        static auto assign_1(Colon_1, Mat)  -> typename mkd::mat_virtual_assign_1<ct_matrix, Mat, Colon_1>::type;
 
         // store current results in temporary matrix (placed on the stack) if cond == true,
         // otherwise return this matrix.
@@ -110,6 +109,9 @@ struct ct_matrix
         template<class Subs_Context>
         static void print(std::ostream& os, int nspaces = 0);
 
+        template<class Colon>
+        constexpr auto operator()(Colon)    -> typename mkd::submatrix_maker_1<ct_matrix, Colon>::type
+                                            { return typename mkd::submatrix_maker_1<ct_matrix, Colon>::type ();};
         //TODO: add compute function
 };
 
@@ -137,6 +139,17 @@ using temp_output_mat = ct_matrix<M,N, mkd::temp_output_array<Tag,M,N>, return_d
 //runtime buffers.
 template<Integer M, Integer N, class Tag>
 using virtual_mat = ct_matrix<M,N, mkd::virtual_array<Tag>,empty_deps>;
+
+//------------------------------------------------------------------------------
+//                      isa functions
+//------------------------------------------------------------------------------
+// return true if T is ct_matrix
+template<class T>
+struct is_matrix;
+
+// return true if T is virtual ct_matrix, i.e. has type virtual_mat<M, N, Tag>
+template<class T>
+struct is_virtual_matrix;
 
 }}
 

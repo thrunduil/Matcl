@@ -134,15 +134,15 @@ using mtwo  = integer_scalar<-2>;
 using half  = rational_scalar<1,2>;
 
 //------------------------------------------------------------------------------
-//                      isa function
+//                      isa functions
 //------------------------------------------------------------------------------
  
 // return true if T is a scalar
 template<class T> 
 struct is_scalar                        {static const bool value = false; };
 
-template<class T, class D> 
-struct is_scalar<ct_scalar<T,D>>        {static const bool value = true; };
+template<class A, class D> 
+struct is_scalar<ct_scalar<A, D>>       {static const bool value = true; };
 
 // return true if T is a scalar with compile time known value
 // TODO: remove?

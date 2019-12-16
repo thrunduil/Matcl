@@ -4,7 +4,7 @@
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
 #include "mkgen/TODO/utils/alignment.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 
 namespace matcl { namespace mkgen
 {
@@ -16,18 +16,12 @@ struct temp_tag_base
     static const Integer step           = 1;
     using root_align_type               = align_full;
 
-    template<Integer Row, Integer Col>
-    using   get_offset                  = std::integral_constant<Integer,Row - 1>;
+    static constexpr Integer get_offset(Integer Row, Integer Col) { (void)Col; return Row - 1; }
 };
 
 //----------------------------------------------------------------------------------
 //                              mat_temporary
 //----------------------------------------------------------------------------------
-template<class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col, bool Force>
-struct get_array_elem<mkd::mat_temp_array<Tag, Mat_Rows,Mat_Cols,Force>, Row, Col>
-{
-    using type = get_temporary<Tag,Mat_Rows,Mat_Cols, Row,Col>;
-};
 
 template<class Subs_Context, class Dep>
 dps<> get_child_deps(Dep)
@@ -49,13 +43,13 @@ struct is_extern_dep<dep<Tag,0,dep_extern>>
 template<class Subs_Context, class New_Deps, class Collected>
 struct collect_deps
 {
-    static_assert(details::dependent_false<New_Deps>::value,
+    static_assert(md::dependent_false<New_Deps>::value,
                   "this type should not be instantiated");
 };
 template<class Deps_All, class Collected>
 struct collect_deps_temp
 {
-    static_assert(details::dependent_false<Deps_All>::value,
+    static_assert(md::dependent_false<Deps_All>::value,
                   "this type should not be instantiated");
 };
 
@@ -69,7 +63,7 @@ struct collect_deps2<Subs_Context, false, Dep, Collected>
 {
     using deps1     = decltype(get_child_deps<Subs_Context>(Dep()));
     using collect2  = typename collect_deps<Subs_Context, deps1, Collected>::type;
-    using type      = typename merge_deps<dps<Dep>, collect2>::type;
+    using type      = typename link_deps<dps<Dep>, collect2>::type;
 };
 
 template<class Subs_Context, class Dep, class ... Deps, class Collected>
@@ -197,16 +191,16 @@ struct is_temporary_virtual_array
 template<class Item, bool With_Forced>
 struct is_temporary_virtual_array_elem
 {
-    static_assert(details::dependent_false<Item>::value, 
+    static_assert(md::dependent_false<Item>::value, 
                 "this type should not be instantiated");
 };
 template<Integer M1, Integer N1, Integer M2, Integer N2, class Array2, class Colon_1, bool With_Forced>
-struct is_temporary_virtual_array_elem<assign_item<M1, N1, M2, N2, Array2, Colon_1>, With_Forced >
+struct is_temporary_virtual_array_elem<mkd::virtual_assign_item<M1, N1, M2, N2, Array2, Colon_1>, With_Forced >
 {
     static const bool value = is_temporary_mat_array<Array2,With_Forced>::value; 
 };
 template<Integer M1, Integer N1, class scalar1, class Colon_1, bool With_Forced>
-struct is_temporary_virtual_array_elem<assign_item_scalar<M1, N1, scalar1, Colon_1>, With_Forced>
+struct is_temporary_virtual_array_elem<mkd::virtual_assign_item_scalar<M1, N1, scalar1, Colon_1>, With_Forced>
 {
     static const bool value = false; 
 };
@@ -255,7 +249,7 @@ struct get_temporary_elem
 template<class Colon>
 struct get_pos_colon2
 {
-    static_assert(details::dependent_false<Colon>::value,
+    static_assert(md::dependent_false<Colon>::value,
                   "this type should not be instantiated");
 };
 template<>
@@ -333,7 +327,7 @@ struct get_temporary_array
 };
 
 template <class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col>
-struct get_temporary
+struct get_temporary : public mkd::scalar_data<get_temporary<Tag, Mat_Rows, Mat_Cols, Row, Col>>
 {
     using tag                   = Tag;
     static const Integer rows   = Mat_Rows;

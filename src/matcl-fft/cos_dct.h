@@ -237,7 +237,6 @@ struct cos_value_tag : mkd::scal_data_value_tag<cos_value_tag<M, Base_Ind, Step,
         return Val(cos_table<M,Step,Scal>::get().m_cos_table[pos]);
     };
 
-    template<class Subs_Context>
     static void print(std::ostream& os,int)
     {
         //os << "cos[" << pos << "]";
@@ -246,14 +245,6 @@ struct cos_value_tag : mkd::scal_data_value_tag<cos_value_tag<M, Base_Ind, Step,
 
     //TODO
     /*
-    template<class Loop_Storage, class Val, class Context>
-    inline_lev_1
-    static void eval_loop(Val& ret, Integer off, const Context& cont)
-    {
-        double* arr = cos_table<M,Step,Scal>::get().m_cos_table;
-        return Loop_Storage::get_value_array<Val, cos_value_tag>(cont, ret, off, arr);
-    };
-
     // TODO: simplify this
     template<Integer Step2, class Arr_List>
     using get_arrays    = typename mk::push_back<Arr_List, mk::details::array_item<cos_value_tag,Step2,

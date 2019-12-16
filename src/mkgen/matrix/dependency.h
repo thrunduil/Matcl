@@ -65,7 +65,7 @@ using return_dep = dep<Tag, R * C, dep_return>;
 //                     list of dependencies
 //------------------------------------------------------------------------
 
-// list of dependencies
+// list of dependencies; all items should be unique
 template<class... T>
 struct dps
 {
@@ -84,6 +84,26 @@ using temp_deps = dps<temp_dep<Tag, R, C>>;
 
 template<class Tag, Integer R, Integer C>
 using return_deps = dps<return_dep<Tag, R, C>>;
+
+//------------------------------------------------------------------------
+//                     isa functions
+//------------------------------------------------------------------------
+// return true if T is dps<...> type
+template<class T>
+struct is_dps;
+
+// return true if T is dep<...> type
+template<class T>
+struct is_dep;
+
+//------------------------------------------------------------------------
+//                     process dependencies
+//------------------------------------------------------------------------
+
+// construct list of unique dependencies dps<...> from two sets
+// of dependencies dps<...>
+template<class Deps_1, class Deps_2>
+struct link_deps;
 
 }}
 

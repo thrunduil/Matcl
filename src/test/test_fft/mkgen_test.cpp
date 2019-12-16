@@ -1,4 +1,5 @@
 #include "mkgen/mkgen.h"
+#include "mkgen/expression/expressions.h"
 
 #include <iostream>
 
@@ -62,9 +63,22 @@ void test_scalar()
     */
 };
 
+struct tag_TM_1
+{
+    static constexpr Integer get_offset(Integer Row, Integer Col) { return Row + Col; };
+    using root_align_type   = mk::align_full; 
+    static constexpr Integer step   = 1;
+    static const bool is_continuous = true;
+
+    static void print(std::ostream& os, int prior)
+    {
+        (void)prior;
+        os << "TM1";
+    };
+};
+
 void test_matrix()
 {
-    struct tag_TM_1{};
     struct tag_TM_2{};
     struct tag_TM_3{};
 
@@ -104,8 +118,43 @@ void test_matrix()
 
     using t1    = decltype(mat::make_temp<tag_TM_2, false>());
     using t2    = decltype(mat::make_temp<tag_TM_3, true>());
-    //e44::print<empty_context>(std::cout, 0);
+
+    e44::print<empty_context>(std::cout, 0);
 };
+
+void test_matrix2()
+{
+    using mat   = mk::gen_mat<5, 5, tag_TM_1>;
+    using scal  = mk::integer_scalar<4>;
+
+    static constexpr auto r1   = mat()(colon2<1,3>());
+    static constexpr auto r2   = mat()(colon2<2,4>());
+    //constexpr auto r3   = mk::add(r1, r2);
+
+    using t1    = decltype(mat()(colon2<1,3>()));
+    using t2    = decltype(r2);
+
+    //using e1    = decltype(mat() / mat());
+
+    //e1::print<empty_context>(std::cout, 0);
+};
+
+struct A {
+    int i;
+    constexpr A() : i(0) {};
+    constexpr A(int i) : i(i) {};
+    constexpr auto operator* (const A &a) const
+    {
+        return A(i * a.i);
+    }
+};
+
+int main2() 
+{
+    constexpr auto b = A(100) * A(200);
+    printf("%d", b.i);
+    return 0;
+}
 
 //TODO
 #if 0

@@ -11,8 +11,9 @@ namespace matcl { namespace mkgen
 //----------------------------------------------------------------------------------
 //                              expr_ufunc
 //----------------------------------------------------------------------------------
+
 template<class Tag, class Elem>
-struct expr_ufunc
+struct expr_ufunc : public mkd::scalar_data<expr_ufunc<Tag, Elem>>
 {
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
@@ -22,6 +23,7 @@ struct expr_ufunc
         os << "(";
         elem::print<Subs_Context>(os,details::prior_start);
     };
+
     template<class Val, class Local_Storage>
     inline_expr
     static Val eval(const Local_Storage& ls)
@@ -30,6 +32,13 @@ struct expr_ufunc
         Val tmp = Tag::eval<Val>(ls,v1);
         return tmp;
     };
+};
+
+// TODO:
+template<class Tag, class Elem>
+struct make_expr_ufunc
+{
+    using type = expr_ufunc<Tag, Elem>;
 };
 
 //----------------------------------------------------------------------------------

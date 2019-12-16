@@ -39,17 +39,117 @@ struct ct_matrix;
 template<class Data, class Deps, class Tag>
 struct make_evaled_scalar;
 
-// get element from an array
-template<class Array, Integer Row, Integer Col>
-struct get_array_elem;
-
-//TODO:
-template<class Mat_L, class Mat_R, class Colon_1>
-struct mat_virtual_assign_1;
-
 //TODO
 template<class Mat_L, class Tag, bool Force>
 struct mat_temporary;
+
+//TODO:
+template<class Tag, Integer Row, Integer Col>
+struct element;
+
+// TODO:
+template<class Array, Integer Row, Integer Col>
+struct sub_array_2_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_ufunc_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct sub_array_1_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_mult_array_get_elem;
+
+//TODO:
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_plus_array_get_elem;
+
+//TODO:
+template <class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col>
+struct get_temporary;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_minus_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_plus_array_get_elem;
+
+//TODO:
+template<class Array, Integer Row, Integer Col>
+struct mat_minus_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_assign_array_colon_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_assign_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mult_rows_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_assign_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_mult_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mult_cols_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mult_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct div_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct div_array_mat_scal_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct div_array_scal_mat_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_uminus_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct scal_mat_minus_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_trans_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_ctrans_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_bfunc_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct mat_scal_bfunc_array_get_elem;
+
+//TODO
+template<class Array, Integer Row, Integer Col>
+struct scal_mat_bfunc_array_get_elem;
 
 }}
 
@@ -112,7 +212,15 @@ struct temp_output_array;
 template<class Tag, class... Assign_List>
 struct virtual_array;
 
-// dep check
+// make virtual assignment Mat_L(Colon_1) = Mat_R
+template<class Mat_L, class Mat_R, class Colon_1>
+struct mat_virtual_assign_1;
+
+// implements virtual_array::get_element
+template<Integer Row, Integer Col, class... Items>
+struct get_virtual_array_assignment;
+
+// checks
 template<class Temp_Tag, Integer Size, class Type>
 struct check_dep_argument;
 

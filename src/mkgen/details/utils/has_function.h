@@ -21,6 +21,7 @@
 #pragma once
 
 #include "mkgen/details/mkgen_fwd.h"
+#include "matcl-core/details/mpl.h"
 #include <type_traits>
 
 // call has_member_function_x, where x is some identifier generates function
@@ -31,7 +32,7 @@
 template<class C, class T>                                                  \
 struct has_member_function_##name                                           \
 {                                                                           \
-    static_assert(details::dependent_false<C>::value,                       \
+    static_assert(matcl::details::dependent_false<C>::value,                \
             "second template parameter needs to be of function type.");     \
 };                                                                          \
 template<class C, class Ret, class... Args>                                 \
@@ -60,7 +61,7 @@ struct has_member_function_##name<C, Ret (Args...)>                         \
 template<class C, class T>                                                  \
     struct has_static_member_function_##name                                \
 {                                                                           \
-    static_assert(details::dependent_false<C>::value,                       \
+    static_assert(matcl::details::dependent_false<C>::value,                \
             "second template parameter needs to be of function type.");     \
 };                                                                          \
 template<class C, class Ret, class... Args>                                 \
@@ -89,7 +90,7 @@ struct has_static_member_function_##name<C, Ret (Args...)>                  \
 template<class C, class TArgs, class T>                                     \
 struct has_static_member_template_function_##name                           \
 {                                                                           \
-    static_assert(details::dependent_false<C>::value,                       \
+    static_assert(matcl::details::dependent_false<C>::value,                \
             "third template parameter needs to be of function type.");      \
 };                                                                          \
 template<class C, class TArgs, class Ret, class... Args>                    \

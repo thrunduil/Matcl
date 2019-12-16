@@ -3,7 +3,7 @@
 #include "mkgen/TODO/matrix/ct_matrix.h"
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 
 namespace matcl { namespace mkgen
 {
@@ -84,7 +84,7 @@ struct for_expr
 template<class Context, class It>
 struct get_from_context
 {
-    static_assert(details::dependent_false<It>::value, "this type should not be instantiated");
+    static_assert(md::dependent_false<It>::value, "this type should not be instantiated");
 };
 template<class It1, Integer Val, class ... Items, class It>
 struct get_from_context<list::list<Item<It1,Val>, Items...>, It>
@@ -100,7 +100,7 @@ struct get_from_context<list::list<Item, Items...>, It>
 template<class It>
 struct get_from_context<list::list<>, It>
 {
-    static_assert(details::dependent_false<It>::value, "element not found in Context");
+    static_assert(md::dependent_false<It>::value, "element not found in Context");
 };
 
 //------------------------------------------------------------------------------

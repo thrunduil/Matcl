@@ -3,6 +3,7 @@
 #include "fft_tests.h"
 #include "dct_tests.h"
 #include "dct_tests_perf.h"
+#include "mkgen_test.h"
 
 #include "matcl-matrep\matcl_matrep.h"
 #include "matcl-fft/matcl_fft.h"
@@ -21,6 +22,10 @@ using namespace matcl;
 
 int main()
 {
+    {
+        matcl::mkgen::test::test_matrix2();
+    };
+
     for (int i = 2; i < 10; ++i)
     {
         Matrix A = randn(i, 1);

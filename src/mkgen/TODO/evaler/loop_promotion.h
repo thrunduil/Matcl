@@ -5,7 +5,7 @@
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
 #include "mkgen/TODO/utils/simd_utils.h"
-#include "mkgen/TODO/evaler/dependency.h"
+#include "mkgen/matrix/dependency.h"
 #include "mkgen/TODO/evaler/loop_promotion.h"
 #include "matcl-simd/simd.h"
 
@@ -42,14 +42,14 @@ struct is_continuous<Code_Gen, modif2<Tag,Colon, R, C>>
 template<class Subs_Context, class Stored_Matrix>
 struct simd_enable
 {
-    static_assert(details::dependent_false<Stored_Matrix>::value,
+    static_assert(md::dependent_false<Stored_Matrix>::value,
                   "this type should not be instantiated");
 };
 
 template<class Subs_Context, class Array_T>
 struct enable_vectorization_array
 {
-    static_assert(details::dependent_false<Array_T>::value,
+    static_assert(md::dependent_false<Array_T>::value,
                   "this type should not be instantiated");
 };
 
@@ -68,19 +68,19 @@ struct enable_vectorization_array<Subs_Context, mkd::const_array<Tag>>
 };
 
 template<class Subs_Context, Integer M, Integer N, class Array>
-struct enable_vectorization_array<Subs_Context,mat_trans_array<M, N, Array>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_trans_array<M, N, Array>> 
 {
     static const bool value = false;
 };
 
 template<class Subs_Context, Integer M, Integer N, class Array>
-struct enable_vectorization_array<Subs_Context,mat_ctrans_array<M, N, Array>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_ctrans_array<M, N, Array>> 
 {
     static const bool value = false;
 };
 
 template<class Subs_Context, class Array, class Deps>
-struct enable_vectorization_array<Subs_Context, details::scalar_ctrans_array<Array, Deps>> 
+struct enable_vectorization_array<Subs_Context, mkd::scalar_ctrans_array<Array, Deps>> 
 {
     static const bool value = false;
 };
@@ -104,7 +104,7 @@ struct enable_vectorization_array<Subs_Context, mkd::mat_assign_array_colon<M, N
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,mat_scal_assign_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_scal_assign_array<M, N, Array1, Array2>> 
 {
     static const bool value = false;
 };
@@ -122,25 +122,25 @@ struct enable_vectorization_array<Subs_Context, mkd::empty_array<Ret_Tag>>
 };
 
 template<class Subs_Context>
-struct enable_vectorization_array<Subs_Context,call_array_type> 
+struct enable_vectorization_array<Subs_Context, call_array_type> 
 {
     static const bool value = false;
 };
 
 template<class Subs_Context, class Tag, Integer M, Integer N, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,mat_bfunc_array<Tag, M, N, Array1, Array2>>
+struct enable_vectorization_array<Subs_Context, mkd::mat_bfunc_array<Tag, M, N, Array1, Array2>>
 {
     static const bool value = false;
 };
 
 template<class Subs_Context, class Tag, Integer M, Integer N, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,mat_scal_bfunc_array<Tag, M, N, Array1, Array2>>
+struct enable_vectorization_array<Subs_Context, mkd::mat_scal_bfunc_array<Tag, M, N, Array1, Array2>>
 {
     static const bool value = false;
 };
 
 template<class Subs_Context, class Tag, Integer M, Integer N, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,scal_mat_bfunc_array<Tag, M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::scal_mat_bfunc_array<Tag, M, N, Array1, Array2>> 
 {
     static const bool value = false;
 };
@@ -169,14 +169,14 @@ struct enable_vectorization_array<Subs_Context, mkd::mat_plus_array<M, N, Array1
 };
 
 template<class Subs_Context, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,mult_array<Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mult_array<Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value 
                                 && enable_vectorization_array<Subs_Context,Array2>::value;
 };
 
 template<class Subs_Context, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,div_array<Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::div_array<Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value 
                                 && enable_vectorization_array<Subs_Context,Array2>::value;
@@ -197,31 +197,31 @@ struct enable_vectorization_array<Subs_Context, mkd::mult_rows_array<Array1, Arr
 };
 
 template<class Subs_Context, class Array1, class Scalar2>
-struct enable_vectorization_array<Subs_Context,mat_scal_mult_array<Array1, Scalar2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_scal_mult_array<Array1, Scalar2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
 
 template<class Subs_Context, class Array1, class Array2>
-struct enable_vectorization_array<Subs_Context,mult_cols_array<Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::mult_cols_array<Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
 
 template<class Subs_Context, class Array1, class Scal2>
-struct enable_vectorization_array<Subs_Context,div_array_mat_scal<Array1, Scal2>> 
+struct enable_vectorization_array<Subs_Context, mkd::div_array_mat_scal<Array1, Scal2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
 
 template<class Subs_Context, class Array2, class Scal1>
-struct enable_vectorization_array<Subs_Context,div_array_scal_mat<Array2, Scal1>> 
+struct enable_vectorization_array<Subs_Context, mkd::div_array_scal_mat<Array2, Scal1>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array2>::value;
 };
 
 template<class Subs_Context, Integer M, Integer N, class Array>
-struct enable_vectorization_array<Subs_Context,mat_uminus_array<M, N, Array>> 
+struct enable_vectorization_array<Subs_Context, mkd::mat_uminus_array<M, N, Array>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array>::value;
 };
@@ -239,7 +239,7 @@ struct enable_vectorization_array<Subs_Context, mkd::mat_scal_minus_array<M, N, 
 };
 
 template<class Subs_Context, Integer M,Integer N,class Array1,class Array2>
-struct enable_vectorization_array<Subs_Context,scal_mat_minus_array<M, N, Array1, Array2>> 
+struct enable_vectorization_array<Subs_Context, mkd::scal_mat_minus_array<M, N, Array1, Array2>> 
 {
     static const bool value = enable_vectorization_array<Subs_Context,Array1>::value;
 };
@@ -309,7 +309,7 @@ struct make_loop_context
 template<class Val, class Ret, bool Is_Aligned, Integer Step, Integer Offset>
 struct value_getter
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 
@@ -394,7 +394,7 @@ struct value_getter<Val,Val,Is_Aligned,-1, Offset>
 template<class Val, class Ret, bool Is_Aligned, Integer Step, Integer Offset>
 struct value_setter
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 
@@ -480,7 +480,7 @@ struct value_setter<Val,Val,Is_Aligned,Step, Offset>
 template<class Val, class Data_Provider, class Subs_Context, class Array_Tags_List>
 struct make_loop_context_info
 {
-    static_assert(details::dependent_false<Array_Tags_List>::value,
+    static_assert(md::dependent_false<Array_Tags_List>::value,
                   "this type should not be instantiated");
 };
 
@@ -528,13 +528,13 @@ struct loop_data_ret_unaligned
 template<class Data_Info>
 struct check_has_negative_step
 {
-    static_assert(details::dependent_false<Data_Info>::value,
+    static_assert(md::dependent_false<Data_Info>::value,
                   "this type should not be instantiated");
 };
 template<class Data_Info>
 struct get_align_type
 {
-    static_assert(details::dependent_false<Data_Info>::value,
+    static_assert(md::dependent_false<Data_Info>::value,
                   "this type should not be instantiated");
 };
 
@@ -568,7 +568,7 @@ template<class Data_Provider, class Colon, Integer Offset, class Tag, class Ret_
 struct get_ret_offset
 {
     static const Integer pos1   = colon_func::index<Offset + 1, Colon>::value;
-    static const Integer pos2   = typename Ret_Tag::template get_offset<1,1>::value;
+    static const Integer pos2   = Ret_Tag::get_offset(1,1);
     static const Integer value  = pos2+pos1-1;
 };
 template<class Data_Provider, class Colon, Integer Offset, class Tag>
@@ -608,7 +608,7 @@ struct make_dep<get_temporary<Tag,Rows,Cols,Row,Col>>
 template<class Val, class Data_Provider, class Subs_Context, class Elem>
 struct make_loop_context_data
 {
-    static_assert(details::dependent_false<Val>::value,
+    static_assert(md::dependent_false<Val>::value,
                   "this type should not be instantiated");
 };
 
@@ -686,7 +686,7 @@ struct make_loop_context_info<Val, Data_Provider, Subs_Context, list::list<Elems
 template<class Array_List>
 struct remove_step
 {
-    static_assert(details::dependent_false<Array_List>::value,
+    static_assert(md::dependent_false<Array_List>::value,
                   "this type should not be instantiated");
 };
 template<class ... Elems>

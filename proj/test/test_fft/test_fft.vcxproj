@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\src\test\test_fft\dct_tests.h" />
     <ClInclude Include="..\..\..\src\test\test_fft\dct_tests_perf.h" />
     <ClInclude Include="..\..\..\src\test\test_fft\fft_tests.h" />
+    <ClInclude Include="..\..\..\src\test\test_fft\mkgen_test.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\linalg\linalg\linalg.vcxproj">

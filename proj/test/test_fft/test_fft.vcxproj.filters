@@ -32,5 +32,8 @@
     <ClInclude Include="..\..\..\src\test\test_fft\fft_tests.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\test\test_fft\mkgen_test.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

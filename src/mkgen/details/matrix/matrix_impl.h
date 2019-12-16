@@ -28,37 +28,50 @@ namespace matcl { namespace mkgen { namespace details
 {
 
 //------------------------------------------------------------------------------
+//                      forward declarations
+//------------------------------------------------------------------------------
+template<class Array>
+struct is_virtual_matrix_array;
+
+//------------------------------------------------------------------------------
 //                      submatrix_maker_1
 //------------------------------------------------------------------------------
 // implements ct_matrix<>::sub(Colon_1)
-template<class Mat, class Colon_1>
+template<class A, class Colon_1>
 struct submatrix_maker_1
 {
-    static_assert(dependent_false<Mat>::value, "class T must be ct_matrix");
-};
+    static const bool is_mat    = is_matrix<A>::value;
+    static_assert(is_mat == true, "A must be ct_matrix");
 
-template<Integer M, Integer N, class Array_t, class Deps, class Colon_1>
-struct submatrix_maker_1<ct_matrix<M, N, Array_t, Deps>, Colon_1>
-{
+    static const Integer M      = A::rows;
+    static const Integer N      = A::cols;
+    using array_t               = typename A::array_type;
+    using deps                  = typename A::dps_type;
+
     using dum                   = typename colon_func::check_colon<Colon_1, M * N>::type;
 
     static const Integer size   = colon_func::size<Colon_1, M>::value;
     static const Integer offset = colon_func::offset<Colon_1>::value;
     static const Integer step   = colon_func::step<Colon_1>::value;
 
-    using new_array = sub_array_1<Array_t, offset, step>;
-    using type      = ct_matrix<size,1,new_array,Deps>;
+    using new_array = sub_array_1<array_t, offset, step>;
+    using type      = ct_matrix<size,1, new_array, deps>;
 };
 
-template<class Mat, class Colon_1, class Colon_2>
+//------------------------------------------------------------------------------
+//                      submatrix_maker_2
+//------------------------------------------------------------------------------
+template<class A, class Colon_1, class Colon_2>
 struct submatrix_maker_2
 {
-    static_assert(dependent_false<Mat>::value, "class T must be ct_matrix");
-};
+    static const bool is_mat    = is_matrix<A>::value;
+    static_assert(is_mat == true, "A must be ct_matrix");
 
-template<Integer M, Integer N, class Array_t, class Deps, class Colon_1, class Colon_2>
-struct submatrix_maker_2<ct_matrix<M,N,Array_t,Deps>,Colon_1,Colon_2>
-{
+    static const Integer M          = A::rows;
+    static const Integer N          = A::cols;
+    using array_t                   = typename A::array_type;
+    using deps                      = typename A::dps_type;
+
     using dum1                      = typename colon_func::check_colon<Colon_1, M>::type;
     using dum2                      = typename colon_func::check_colon<Colon_2, N>::type;
 
@@ -69,8 +82,60 @@ struct submatrix_maker_2<ct_matrix<M,N,Array_t,Deps>,Colon_1,Colon_2>
     static const Integer step1      = colon_func::step<Colon_1>::value;
     static const Integer step2      = colon_func::step<Colon_2>::value;
 
-    using new_array = mkd::sub_array_2<Array_t, offset1, offset2, step1, step2>;
-    using type      = ct_matrix<size1,size2,new_array,Deps>;
+    using new_array = mkd::sub_array_2<array_t, offset1, offset2, step1, step2>;
+    using type      = ct_matrix<size1, size2, new_array, deps>;
+};
+
+//------------------------------------------------------------------------------
+//                      is_virtual_matrix_array
+//------------------------------------------------------------------------------
+
+// return true if Array is virtual_array<Tag, Assigns...>
+template<class Array>
+struct is_virtual_matrix_array
+{
+    static const bool value = false;
+};
+
+template<class Tag, class... Assign_List>
+struct is_virtual_matrix_array<mkd::virtual_array<Tag, Assign_List...>>
+{
+    static const bool value = true;
 };
 
 }}}
+
+namespace matcl { namespace mkgen
+{
+
+//------------------------------------------------------------------------------
+//                      isa functions
+//------------------------------------------------------------------------------
+
+// return true if T is ct_matrix
+template<class T>
+struct mkgen::is_matrix
+{
+    static const bool value = false;
+};
+
+template<Integer M, Integer N, class Array_t, class Deps>
+struct mkgen::is_matrix<ct_matrix<M, N, Array_t, Deps>>
+{
+    static const bool value = true;
+};
+
+// return true if T is virtual ct_matrix, i.e. has type virtual_mat<M, N, Tag>
+template<class T>
+struct mkgen::is_virtual_matrix
+{
+    static const bool value = false;
+};
+
+template<Integer M, Integer N, class Array_t, class Deps>
+struct mkgen::is_virtual_matrix<ct_matrix<M, N, Array_t, Deps>>
+{
+    static const bool value = mkd::is_virtual_matrix_array<Array_t>::value;
+};
+
+}}
