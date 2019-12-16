@@ -23,11 +23,10 @@
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/matrix/matrix_printer.h"
+#include "mkgen/expression/expressions.h"
 
 #include "mkgen/TODO/expression/ct_matrix_expr.inl"
 #include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/expression/mat_mult.h"
-#include "mkgen/TODO/expression/mat_plus.h"
 #include "mkgen/TODO/expression/mat_assign.h"
 #include "mkgen/TODO/expression/mat_temporary.h"
 #include "mkgen/TODO/expression/mat_other.h"

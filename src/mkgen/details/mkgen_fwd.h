@@ -59,29 +59,9 @@ struct mat_ufunc_array_get_elem;
 template<class Array, Integer Row, Integer Col>
 struct sub_array_1_get_elem;
 
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_mult_array_get_elem;
-
-//TODO:
-template<class Array, Integer Row, Integer Col>
-struct mat_scal_plus_array_get_elem;
-
 //TODO:
 template <class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col>
 struct get_temporary;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_scal_minus_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_plus_array_get_elem;
-
-//TODO:
-template<class Array, Integer Row, Integer Col>
-struct mat_minus_array_get_elem;
 
 //TODO
 template<class Array, Integer Row, Integer Col>
@@ -93,43 +73,7 @@ struct mat_assign_array_get_elem;
 
 //TODO
 template<class Array, Integer Row, Integer Col>
-struct mult_rows_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
 struct mat_scal_assign_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_scal_mult_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mult_cols_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mult_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct div_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct div_array_mat_scal_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct div_array_scal_mat_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_uminus_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct scal_mat_minus_array_get_elem;
 
 //TODO
 template<class Array, Integer Row, Integer Col>
@@ -173,7 +117,7 @@ template<class Elem, Integer Step, class Type>
 struct array_item;
 
 // implements ct_scalar::eval_loop
-template<class Loop_Storage, class Data, class Deps>
+template<class Loop_Storage, class Data>
 struct eval_loop_scalar;
 
 // store data in ct_scalar
@@ -219,6 +163,34 @@ struct mat_virtual_assign_1;
 // implements virtual_array::get_element
 template<Integer Row, Integer Col, class... Items>
 struct get_virtual_array_assignment;
+
+// implements matrix or scalar addition
+template<class Mat1, class Mat2>
+struct mat_plus_impl;
+
+// implements matrix or scalar substraction
+template<class Mat1, class Mat2>
+struct mat_minus_impl;
+
+// implements matrix or scalar multiplication
+template<class Mat, class Mat2>
+struct mat_mult_impl;
+
+// implements matrix or scalar element by element division
+template<class Mat, class Mat2>
+struct mat_div_impl;
+
+// implements mult_rows function
+template<class Mat, class D>
+struct mult_rows_impl;
+
+// implements mult_cols function
+template<class Mat, class D>
+struct mult_cols_impl;
+
+// implements mul function
+template<class Mat, class D>
+struct mul_impl;
 
 // checks
 template<class Temp_Tag, Integer Size, class Type>

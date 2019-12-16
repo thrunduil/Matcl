@@ -1,6 +1,4 @@
 /*
-
-
  *  This file is a part of Matrix Computation Library (MATCL)
  *
  *  Copyright (c) Pawe³ Kowal 2019
@@ -25,92 +23,110 @@
 #include <iosfwd>
 
 #include "mkgen/matrix/matrix.h"
-
-namespace matcl { namespace mkgen { namespace details
-{
-
-template<class M1, class M2>
-struct enable_expr_2 :
-    public md::enable_if
-            <	(is_scalar<M1>::value || is_matrix<M1>::value)
-                && (is_scalar<M2>::value || is_matrix<M2>::value),
-                const void*
-            >
-{};
-
-}}}
+#include "mkgen/details/utils/mpl.h"
 
 namespace matcl { namespace mkgen
 {
 
+// A + B, where A, B is a ct_matrix or ct_scalar
 template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_expr_2<Matrix_1, Matrix_2>::type>
-constexpr auto operator+(const Matrix_1&, const Matrix_2&) 
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto operator+(const Matrix_1& A, const Matrix_2& B) 
 { 
-    using ret_type  = typename mat_plus<Matrix_1, Matrix_2>::type;
+    (void)A; 
+    (void)B;
+    using ret_type  = typename mkd::mat_plus_impl<Matrix_1, Matrix_2>::type;
     return std::declval<ret_type>();
 };
 
+// A - B, where A, B is a ct_matrix or ct_scalar
 template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_expr_2<Matrix_1, Matrix_2>::type>
-constexpr auto operator-(Matrix_1, Matrix_2) 
-{ 
-    using ret_type  = typename mat_minus<Matrix_1, Matrix_2>::type;
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto operator-(const Matrix_1& A, const Matrix_2& B) 
+{
+    (void)A; 
+    (void)B;
+
+    using ret_type  = typename mkd::mat_minus_impl<Matrix_1, Matrix_2>::type;
     return std::declval<ret_type>();
 };
 
+// matrix multiplication A * B, where A, B is a ct_matrix or ct_scalar
 template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_expr_2<Matrix_1, Matrix_2>::type>
-constexpr auto operator*(Matrix_1, Matrix_2) 
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto operator*(const Matrix_1& A, const Matrix_2& B) 
 { 
-    using ret_type  = typename mat_mult<Matrix_1, Matrix_2>::type;
+    (void)A; 
+    (void)B;
+    
+    using ret_type  = typename mkd::mat_mult_impl<Matrix_1, Matrix_2>::type;
     return std::declval<ret_type>();
 };
 
+// element-by-element division A / B, where A, B is a ct_matrix or ct_scalar
 template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_expr_2<Matrix_1, Matrix_2>::type>
-constexpr auto operator/(Matrix_1, Matrix_2) 
-{ 
-    using ret_type  = typename mat_div<Matrix_1, Matrix_2>::type;
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto operator/(const Matrix_1& A, const Matrix_2& B) 
+{
+    (void)A; 
+    (void)B;
+
+    using ret_type  = typename mkd::mat_div_impl<Matrix_1, Matrix_2>::type;
     return std::declval<ret_type>();
 };
 
-#if 0
-//------------------------------------------------------------------------------
-//                      mult elem by elem
-//------------------------------------------------------------------------------
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        mult_rows(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename make_mult_rows<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
+// multiply k-th element in given row of a matrix A by k-th element of a matrix B,
+// where B is rows x 1 matrix, and A is rows x cols
+// in Matlab's notation A .* (B * J), J = ones(1, cols)
+template<class Matrix_1, class Matrix_2,
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto mult_rows(const Matrix_1& A, const Matrix_2& B) 
+{
+    (void)A; 
+    (void)B;
 
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        mult_cols(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename make_mult_cols<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
+    using ret_type  = typename mkd::mult_rows_impl<Matrix_1, Matrix_2>::type;
+    return std::declval<ret_type>();
+};
 
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        mult(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename make_mult_mat<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
+// multiply k-th element in given column of a matrix A by k-th element of a matrix B,
+// where B is cols x 1 matrix, and A is rows x cols
+// in Matlab's notation A .* (J * B'), J = ones(1, rows), where A has size rows x cols
+template<class Matrix_1, class Matrix_2,
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto mult_cols(const Matrix_1& A, const Matrix_2& B) 
+{
+    (void)A; 
+    (void)B;
 
-//------------------------------------------------------------------------------
-//                      call
-//------------------------------------------------------------------------------
-template<class Tag, template<class Arg> class Func,
-         Integer M1, Integer N1, class Array1, class Deps1>
-auto        call_inline(ct_matrix<M1, N1, Array1, Deps1>)
-                                        -> typename make_call_inline<Tag, Func, 
-                                                ct_matrix<M1, N1, Array1, Deps1>> :: type;
+    using ret_type  = typename mkd::mult_cols_impl<Matrix_1, Matrix_2>::type;
+    return std::declval<ret_type>();
+};
 
-template<class Tag, class Func,
-         Integer M1, Integer N1, class Array1, class Deps1>
-auto        call_external(ct_matrix<M1, N1, Array1, Deps1>)
-                                        -> typename make_call_external<Tag, Func, 
-                                                ct_matrix<M1, N1, Array1, Deps1>> :: type;
+// element-by-element multiplication
+template<class Matrix_1, class Matrix_2,
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+constexpr auto mul(const Matrix_1& A, const Matrix_2& B) 
+{
+    (void)A; 
+    (void)B;
 
-#endif
+    using ret_type  = typename mkd::mul_impl<Matrix_1, Matrix_2>::type;
+    return std::declval<ret_type>();
+};
+
+// -A, where A is a ct_matrix or ct_scalar
+template<class Matrix_1,
+        class Enable = typename mkd::enable_matscal_1<Matrix_1>::type>
+constexpr auto operator-(const Matrix_1& A) 
+{
+    (void)A; 
+
+    using ret_type  = typename mkd::mat_uminus_impl<Matrix_1>::type;
+    return std::declval<ret_type>();
+};
+
 }}
+
+#include "mkgen/details/expressions/mat_mult_impl.h"
+#include "mkgen/details/expressions/mat_plus_impl.h"

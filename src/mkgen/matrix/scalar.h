@@ -94,7 +94,7 @@ class ct_scalar
         inline_lev_1
         static void eval_loop(Ret& ret, Integer off, const Local_Storage& cont)
         {
-            mkd::eval_loop_scalar<Loop_Storage, Data, Deps>::eval<Ret>(ret,off,cont);
+            mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
         };
 
         //TODO

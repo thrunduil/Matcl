@@ -145,24 +145,6 @@ struct mat_ufunc_array : public matrix_array<mat_ufunc_array<Tag, M, N, Array>>
     using get_element_impl  = mat_ufunc_array_get_elem<this_type, Row, Col>;
 };
 
-template<Integer K, class Array1, class Array2>
-struct mat_mult_array : public matrix_array<mat_mult_array<K, Array1, Array2>>
-{
-    using this_type = mat_mult_array<K, Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_mult_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_scal_plus_array : public matrix_array<mat_scal_plus_array<M, N, Array1, Array2>>
-{
-    using this_type = mat_scal_plus_array<M, N, Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_scal_plus_array_get_elem<this_type, Row, Col>;
-};
-
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force>
 struct mat_temp_array : public matrix_array<mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>>
 {
@@ -170,42 +152,6 @@ struct mat_temp_array : public matrix_array<mat_temp_array<Tag, Mat_Rows, Mat_Co
 
     template<Integer Row, Integer Col>
     using get_element_impl  = mkd::lazy_type<get_temporary<Tag, Mat_Rows, Mat_Cols, Row, Col>>;
-};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_scal_minus_array : public matrix_array<mat_scal_minus_array<M, N, Array1, Array2>>
-{
-    using this_type = mat_scal_minus_array<M, N, Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_scal_minus_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_plus_array : public matrix_array<mat_plus_array<M, N, Array1, Array2>>
-{
-    using this_type = mat_plus_array<M, N, Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_plus_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct mat_minus_array : public matrix_array<mat_minus_array<M, N, Array1, Array2>>
-{
-    using this_type = mat_minus_array<M, N, Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_minus_array_get_elem<this_type, Row, Col>;
-};
-
-template<class Array1, class Array2>
-struct mult_rows_array : public matrix_array<mult_rows_array<Array1, Array2>>
-{
-    using this_type = mult_rows_array<Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mult_rows_array_get_elem<this_type, Row, Col>;
 };
 
 template<class Ret_Tag>
@@ -244,78 +190,6 @@ struct mat_scal_assign_array : public matrix_array<
 
     template<Integer Row, Integer Col>
     using get_element_impl  = mat_scal_assign_array_get_elem<this_type, Row, Col>;
-};
-
-template<class Array1, class Scalar2>
-struct mat_scal_mult_array : public matrix_array<mat_scal_mult_array<Array1, Scalar2>>
-{
-    using this_type = mat_scal_mult_array<Array1, Scalar2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_scal_mult_array_get_elem<this_type, Row, Col>;
-};
-
-template<class Array1, class Array2>
-struct mult_cols_array : public matrix_array<mult_cols_array<Array1, Array2>>
-{
-    using this_type = mult_cols_array<Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mult_cols_array_get_elem<this_type, Row, Col>;
-};
-
-template<class Array1, class Array2>
-struct mult_array : public matrix_array<mult_array<Array1, Array2>>
-{
-    using this_type = mult_array<Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mult_array_get_elem<this_type, Row, Col>;
-};
-
-template<class Array1, class Array2>
-struct div_array : public matrix_array<div_array<Array1, Array2>>
-{
-    using this_type = div_array<Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = div_array_get_elem<this_type, Row, Col>;
-};
-
-template<class Array1, class Scal2>
-struct div_array_mat_scal : public matrix_array<div_array_mat_scal<Array1, Scal2>>
-{
-    using this_type = div_array_mat_scal<Array1, Scal2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = div_array_mat_scal_get_elem<this_type, Row, Col>;
-};
-
-template<class Array2, class Scal1>
-struct div_array_scal_mat : public matrix_array<div_array_scal_mat<Array2, Scal1>>
-{
-    using this_type = div_array_scal_mat<Array2, Scal1>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = div_array_scal_mat_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array>
-struct mat_uminus_array : public matrix_array<mat_uminus_array<M, N, Array>>
-{
-    using this_type = mat_uminus_array<M, N, Array>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_uminus_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array1, class Array2>
-struct scal_mat_minus_array : public matrix_array<scal_mat_minus_array<M, N, Array1, Array2>>
-{
-    using this_type = scal_mat_minus_array<M, N, Array1, Array2>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = scal_mat_minus_array_get_elem<this_type, Row, Col>;
 };
 
 template<Integer M, Integer N, class Array>

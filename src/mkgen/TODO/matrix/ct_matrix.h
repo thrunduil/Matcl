@@ -5,6 +5,7 @@
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/details/mkgen_fwd.h"
 #include "mkgen/mkgen_fwd.h"
+#include "mkgen/expression/expressions.h"
 
 namespace matcl { namespace mkgen
 {
@@ -156,9 +157,11 @@ struct element : public mkd::scalar_data<element<Tag, Row, Col>>
     //get data of type Val associated with this element supplied by data_provided
     template<class Val, class Local_Storage>
     inline_lev_1
-    static const Val& eval(const Local_Storage& ls)
+    //static const Val& eval(const Local_Storage& ls) TODO
+    static Val eval(const Local_Storage& ls)
     {
-        return ls.get_extern<Tag,Row,Col>();
+        //return ls.get_extern<Tag,Row,Col>();
+        return Val(ls.get_extern<Tag,Row,Col>());
     };
 
     template<class Loop_Storage, class Val, class Local_Storage>
@@ -271,25 +274,6 @@ struct element_step : public mkd::scalar_data<element_step<Elem, Step>>
 //------------------------------------------------------------------------------
 //                      Numerical Operations
 //------------------------------------------------------------------------------
-// matrix or scalar multiplication
-template<class Mat, class Mat2>
-struct mat_mult {};
-
-// matrix or scalar element by element division
-template<class Mat, class Mat2>
-struct mat_div {};
-
-// Mat .* (D * J), J = ones(1, cols)
-template<class Mat, class D>
-struct make_mult_rows {};
-
-// Mat .* (J * D), J = ones(rows, 1)
-template<class Mat, class D>
-struct make_mult_cols {};
-
-// Mat1 .* mat2
-template<class Mat1, class Mat2>
-struct make_mult_mat {};
 
 template<class Tag, template<class Arg> class Func, class Mat1>
 struct make_call_inline {};
@@ -299,14 +283,6 @@ struct is_value_matrix;
 
 template<class Tag, class Func, class Mat1, bool Is_Value = is_value_matrix<Mat1>::value>
 struct make_call_external {};
-
-// matrix or scalar addition
-template<class Mat1, class Mat2>
-struct mat_plus {};
-
-// matrix or scalar substraction
-template<class Mat1, class Mat2>
-struct mat_minus {};
 
 // matrix transposition
 template<class Mat1>
@@ -331,10 +307,6 @@ struct comp_assign_1
 template<class Mat, class Tag, bool Force>
 struct mat_temporary;
 
-// unary minus
-template<class Mat>
-struct unary_minus {};
-
 // unary function with Tag tag applied to matrix or scalar Mat
 template<class Tag, class Mat>
 struct func_unary {};
@@ -356,126 +328,6 @@ struct get_elem{};
 // are performed on values of type Val.
 template<class Tag, class Code_Gen, class Ret_Matrix, class Matrix, class Val>
 struct expr_evaler;
-
-//TODO
-#if 1
-//------------------------------------------------------------------------------
-//                      operator +
-//------------------------------------------------------------------------------
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator+(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_plus<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<Integer M1, Integer N1, class Array1, class Deps1, class Data2, class Deps2>
-auto        operator+(ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_plus<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-template<class Data1,class Deps1, Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator+(ct_scalar<Data1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_plus<ct_scalar<Data1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<class Data1, class Deps1, class Data2, class Deps2>
-auto        operator+(ct_scalar<Data1,Deps1>,ct_scalar<Data2,Deps2>)
-                                        -> typename mat_plus<ct_scalar<Data1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-//------------------------------------------------------------------------------
-//                      operator -
-//------------------------------------------------------------------------------
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator-(ct_matrix<M1,N1,Array1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_minus<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<Integer M1, Integer N1, class Array1, class Deps1, class Data2, class Deps2>
-auto        operator-(ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_minus<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-template<class Data1,class Deps1,Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator-(ct_scalar<Data1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_minus<ct_scalar<Data1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<class Data1, class Deps1, class Data2, class Deps2>
-auto        operator-(ct_scalar<Data1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_minus<ct_scalar<Data1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-//------------------------------------------------------------------------------
-//                      operator *
-//------------------------------------------------------------------------------
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator*(ct_matrix<M1,N1,Array1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_mult<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<Integer M1, Integer N1, class Array1, class Deps1, class Data2, class Deps2>
-auto        operator*(ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_mult<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-template<class Data1,class Deps1, Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator*(ct_scalar<Data1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_mult<ct_scalar<Data1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<class Data1, class Deps1, class Data2, class Deps2>
-auto        operator*(ct_scalar<Data1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_mult<ct_scalar<Data1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-//------------------------------------------------------------------------------
-//                      operator /
-//------------------------------------------------------------------------------
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator/(ct_matrix<M1,N1,Array1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_div<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<Integer M1, Integer N1, class Array1, class Deps1, class Data2, class Deps2>
-auto        operator/(ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_div<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-template<class Data1,class Deps1, Integer M2, Integer N2, class Array2, class Deps2>
-auto        operator/(ct_scalar<Data1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename mat_div<ct_scalar<Data1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<class Data1, class Deps1, class Data2, class Deps2>
-auto        operator/(ct_scalar<Data1,Deps1>, ct_scalar<Data2,Deps2>)
-                                        -> typename mat_div<ct_scalar<Data1,Deps1>,
-                                                    ct_scalar<Data2,Deps2>>::type;
-
-//------------------------------------------------------------------------------
-//                      mult elem by elem
-//------------------------------------------------------------------------------
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        mult_rows(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename make_mult_rows<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        mult_cols(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename make_mult_cols<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
-auto        mult(ct_matrix<M1,N1,Array1,Deps1>,ct_matrix<M2,N2,Array2,Deps2>)
-                                        -> typename make_mult_mat<ct_matrix<M1,N1,Array1,Deps1>,
-                                                    ct_matrix<M2,N2,Array2,Deps2>>::type;
-#endif
 
 //------------------------------------------------------------------------------
 //                      call

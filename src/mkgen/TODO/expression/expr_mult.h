@@ -180,6 +180,7 @@ struct make_mult_scal<rational_scalar<N1,D1>, rational_scalar<N2,D2>>
     using type  = rational_scalar<op::nominator,op::denominator>;
 };
 
+//TODO: rename
 template<class T1, class T2, bool Is_Scal_1, bool Is_Scal_2>
 struct make_mult
 {
@@ -350,6 +351,12 @@ struct make_inv<half>
     using type = two;
 };
 
+template<Integer N, Integer D>
+struct make_inv<mkd::scal_data_rational<N, D>>
+{
+    using type = mkd::scal_data_rational<D, N>;
+};
+
 template<class T1, class T2>
 struct make_div
 {
@@ -465,5 +472,56 @@ struct expr_dot : public mkd::scalar_data<expr_dot<List_1, List_2>>
         dot_evaler::eval<Loop_Storage>(ret,offset,cont);
     };
 };
+
+//TODO: remove
+template<class Expr_Type,
+        bool Is_scalar_data = mkd::is_valid_scalar_data<Expr_Type>::value>
+struct get_scalar_data
+{
+    static_assert(md::dependent_false<Expr_Type>::value, "class T must be ct_scalar or scalar_data");
+};
+
+template<class Expr_type>
+struct get_scalar_data<Expr_type, true>
+{
+    using type = Expr_type;
+};
+
+template<class Data, class Deps>
+struct get_scalar_data<ct_scalar<Data, Deps>, false>
+{
+    using type = Data;
+};
+
+//TODO: remove
+template<class Scal1, class Scal2>
+struct make_mult_root
+{
+    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
+    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
+
+    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
+
+    using type0     = typename make_mult<Scal1, Scal2>::type;
+
+    // TODO: remove this call
+    using type      = typename correct_scalar_get_elem<type0>::type;
+};
+
+//TODO: remove
+template<class Scal1, class Scal2>
+struct make_div_root
+{
+    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
+    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
+
+    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
+
+    using type0     = typename make_div<Scal1, Scal2>::type;
+
+    // TODO: remove this call
+    using type      = typename correct_scalar_get_elem<type0>::type;
+};
+
 
 }}

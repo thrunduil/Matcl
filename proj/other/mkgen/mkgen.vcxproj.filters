@@ -40,6 +40,9 @@
     <Filter Include="Source Files\src\expression">
       <UniqueIdentifier>{7567301a-fb8f-4d33-b22b-c41a4a8f1b25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\details\expressions">
+      <UniqueIdentifier>{5dc170f7-4905-4a34-ae59-c7993dbe97c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mkgen\mkgen_config.h">
@@ -197,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\expression\expressions.h">
       <Filter>Source Files\src\expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_mult_impl.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_plus_impl.h">
+      <Filter>Source Files\src\details\expressions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -124,19 +124,6 @@ void test_matrix()
 
 void test_matrix2()
 {
-    using mat   = mk::gen_mat<5, 5, tag_TM_1>;
-    using scal  = mk::integer_scalar<4>;
-
-    static constexpr auto r1   = mat()(colon2<1,3>());
-    static constexpr auto r2   = mat()(colon2<2,4>());
-    //constexpr auto r3   = mk::add(r1, r2);
-
-    using t1    = decltype(mat()(colon2<1,3>()));
-    using t2    = decltype(r2);
-
-    //using e1    = decltype(mat() / mat());
-
-    //e1::print<empty_context>(std::cout, 0);
 };
 
 struct A {

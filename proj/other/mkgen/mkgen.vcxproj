@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mkgen\details\base_types.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_mult_impl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_plus_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\dependency_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h" />

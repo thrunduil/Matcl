@@ -139,7 +139,7 @@ struct get_arrays_scalar<scal_data_value<Data, VT>, Deps,Step,Arr_List>
 //-----------------------------------------------------------------------
 //                         eval_loop_scalar
 //-----------------------------------------------------------------------
-template<class Loop_Storage, class Data, class Deps>
+template<class Loop_Storage, class Data>
 struct eval_loop_scalar
 {
     template<class Ret, class Local_Storage>

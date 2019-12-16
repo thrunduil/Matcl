@@ -85,6 +85,19 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
         return Val(ls.get_scalar<Tag>());
     };
 
+    //TODO: remove?
+    // append to Arr_List all arrays required by this scalar
+    template<Integer Step, class Arr_List>
+    using get_arrays    = Arr_List;
+
+    // TODO: remove?
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_lev_1
+    static void eval_loop(Ret& ret, Integer off, const Local_Storage& cont)
+    {
+        mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
+    };
+
     /*
     TODO
     template<class Visitor>
@@ -200,7 +213,7 @@ struct scalar_expr_data : mkd::scalar_data<scalar_expr_data<Expr>>
 template<class T, Integer Row, Integer Col>
 struct scalar_mat_elem_2 
 {
-    static_assert(dependent_false<T>::value, "class T must be ct_matrix");
+    static_assert(md::dependent_false<T>::value, "class T must be ct_matrix");
 };
 
 template<Integer M, Integer N, class Array_t, class Deps, Integer Row, Integer Col>
@@ -229,7 +242,7 @@ struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
 template<class T, Integer Pos>
 struct scalar_mat_elem_1 
 {
-    static_assert(dependent_false<T>::value, "class T must be ct_matrix");
+    static_assert(md::dependent_false<T>::value, "class T must be ct_matrix");
 };
 
 template<Integer M, Integer N, class Array_t, class Deps, Integer Pos>

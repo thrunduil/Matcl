@@ -350,6 +350,7 @@ struct expr_minus : public mkd::scalar_data<expr_minus<T1, T2>>
 //----------------------------------------------------------------------------------
 //                              make_plus
 //----------------------------------------------------------------------------------
+
 template<class Scal, class ... Elems>
 struct normalize_mult_scal
 {
@@ -720,35 +721,6 @@ struct make_plus<expr_mult<S,T1>, expr_mult<S,T2>>
     using type  = typename make_mult<S,ex>::type;
 };
 
-template<class Array, Integer Row, Integer Col>
-struct mat_scal_plus_array_get_elem
-{};
-
-template<Integer M, Integer N, class Array1, class Array2,class Deps2, Integer Row, Integer Col>
-struct mat_scal_plus_array_get_elem<mkd::mat_scal_plus_array<M, N, Array1, 
-                                    ct_scalar<Array2, Deps2>>, Row, Col>
-{
-    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
-    using elem_2    = ct_scalar<Array2, Deps2>;
-    using new_item  = typename make_plus<elem_1,elem_2>::type;
-    //TODO:
-    using type      = typename correct_scalar_get_elem<new_item>::type;
-};
-
-template<class Array, Integer Row, Integer Col>
-struct mat_plus_array_get_elem
-{};
-
-template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
-struct mat_plus_array_get_elem<mkd::mat_plus_array<M,N,Array1,Array2>, Row, Col>
-{
-    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
-    using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
-    using new_item  = typename make_plus<elem_1,elem_2>::type;
-
-    using type      = typename correct_scalar_get_elem<new_item>::type;
-};
-
 //----------------------------------------------------------------------------------
 //                              make_minus
 //----------------------------------------------------------------------------------
@@ -766,34 +738,6 @@ struct make_uminus
     using type = typename make_mult<mone,T1>::type;
 };
 
-template<class Array, Integer Row, Integer Col>
-struct mat_scal_minus_array_get_elem
-{};
-
-template<Integer M, Integer N, class Array1, class Array2, class Deps2, Integer Row, Integer Col>
-struct mat_scal_minus_array_get_elem<mkd::mat_scal_minus_array<M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
-{
-    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
-    using elem_2    = ct_scalar<Array2,Deps2>;
-    using new_item  = typename make_minus<elem_1,elem_2>::type;
-
-    using type      = typename correct_scalar_get_elem<new_item>::type;
-};
-
-template<class Array, Integer Row, Integer Col>
-struct mat_minus_array_get_elem
-{};
-
-template<Integer M, Integer N, class Array1, class Array2, Integer Row, Integer Col>
-struct mat_minus_array_get_elem<mkd::mat_minus_array<M,N,Array1,Array2>, Row, Col>
-{
-    using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
-    using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
-    using new_item  = typename make_minus<elem_1,elem_2>::type;
-
-    using type      = typename correct_scalar_get_elem<new_item>::type;
-};
-
 //----------------------------------------------------------------------------------
 //                              expr_plus_arrays
 //----------------------------------------------------------------------------------
@@ -809,6 +753,50 @@ struct expr_minus_arrays
 {
     using arr_1 = typename T1::template get_arrays<Step, Arr_List>;
     using type  = typename T2::template get_arrays<Step, arr_1>;
+};
+
+//TODO: remove
+template<class Scal1, class Scal2>
+struct make_plus_root
+{
+    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
+    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
+
+    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
+
+    using type0     = typename make_plus<Scal1, Scal2>::type;
+
+    // TODO: remove this call
+    using type      = typename correct_scalar_get_elem<type0>::type;
+};
+
+//TODO: remove
+template<class Scal1, class Scal2>
+struct make_minus_root
+{
+    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
+    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
+
+    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
+
+    using type0     = typename make_minus<Scal1, Scal2>::type;
+
+    // TODO: remove this call
+    using type      = typename correct_scalar_get_elem<type0>::type;
+};
+
+//TODO: remove
+template<class Scal1>
+struct make_uminus_root
+{
+    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
+
+    static_assert(is_sd1 == true, "scalar_data required");
+
+    using type0     = typename make_uminus<Scal1>::type;
+
+    // TODO: remove this call
+    using type      = typename correct_scalar_get_elem<type0>::type;
 };
 
 }}

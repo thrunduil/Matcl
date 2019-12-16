@@ -109,9 +109,6 @@ struct ct_matrix
         template<class Subs_Context>
         static void print(std::ostream& os, int nspaces = 0);
 
-        template<class Colon>
-        constexpr auto operator()(Colon)    -> typename mkd::submatrix_maker_1<ct_matrix, Colon>::type
-                                            { return typename mkd::submatrix_maker_1<ct_matrix, Colon>::type ();};
         //TODO: add compute function
 };
 
