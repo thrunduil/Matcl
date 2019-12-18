@@ -54,9 +54,6 @@
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\dependency.h">
       <Filter>Source Files\src\TODO\evaler</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\dot_evaler.h">
-      <Filter>Source Files\src\TODO\evaler</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\expr_evaler.h">
       <Filter>Source Files\src\TODO\evaler</Filter>
     </ClInclude>
@@ -75,48 +72,6 @@
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\temp_storage.h">
       <Filter>Source Files\src\TODO\evaler</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\colon.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\expr_mult.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\expr_plus.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\for_expr.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_assign.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_call.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_mult.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_other.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_plus.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_temporary.h">
-      <Filter>Source Files\src\TODO\expression</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix_details.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix_printer.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\alignment.h">
       <Filter>Source Files\src\TODO\utils</Filter>
     </ClInclude>
@@ -132,14 +87,8 @@
     <ClInclude Include="..\..\..\src\mkgen\matrix\matrix.h">
       <Filter>Source Files\src\matrix</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\matrix\scalar.h">
       <Filter>Source Files\src\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\scalar2.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\mkgen_fwd.h">
       <Filter>Source Files\src\details</Filter>
@@ -195,9 +144,6 @@
     <ClInclude Include="..\..\..\src\mkgen\details\utils\mpl.h">
       <Filter>Source Files\src\details\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\expression\expressions.h">
       <Filter>Source Files\src\expression</Filter>
     </ClInclude>
@@ -206,6 +152,57 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_plus_impl.h">
       <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\for_expr.h">
+      <Filter>Source Files\src\TODO\expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_assign.h">
+      <Filter>Source Files\src\TODO\expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_call.h">
+      <Filter>Source Files\src\TODO\expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_other.h">
+      <Filter>Source Files\src\TODO\expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_temporary.h">
+      <Filter>Source Files\src\TODO\expression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_mult.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_plus.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_mult_scalar_data.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_plus_scalar_data.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\rational.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_dot_scalar_data.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\dot_evaler.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\scal_data_value_tags.h">
+      <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

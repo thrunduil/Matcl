@@ -63,6 +63,7 @@ static const int prior_start    = 0;
 static const int prior_assign   = 10;
 static const int prior_plus     = 20;
 static const int prior_mult     = 30;
+static const int prior_pow      = 40;
 
 //--------------------------------------------------------
 //              print_matrix_list

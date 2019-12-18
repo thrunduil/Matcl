@@ -20,6 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mkgen\details\base_types.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\dot_evaler.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_dot_scalar_data.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_mult.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_mult_scalar_data.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_plus.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_plus_scalar_data.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_mult_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_plus_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h" />
@@ -31,10 +37,12 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_checks.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_data.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_impl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\scal_data_value_tags.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\virtual_matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\mkgen_fwd.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\has_function.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\mpl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\rational.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\utils.h" />
     <ClInclude Include="..\..\..\src\mkgen\expression\expressions.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\dependency.h" />
@@ -44,30 +52,21 @@
     <ClInclude Include="..\..\..\src\mkgen\mkgen_config.h" />
     <ClInclude Include="..\..\..\src\mkgen\mkgen_fwd.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\dependency.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\dot_evaler.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\expr_evaler.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\local_storage.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\loop_promotion.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\storage_initializer.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\evaler\temp_storage.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\colon.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\expr_mult.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\expr_plus.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\for_expr.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_assign.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_call.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_mult.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_other.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_plus.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_temporary.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix_details.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix_printer.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\scalar2.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\alignment.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\op_count.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\simd_utils.h" />

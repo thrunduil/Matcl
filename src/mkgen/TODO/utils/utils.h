@@ -7,14 +7,6 @@
 namespace matcl { namespace mkgen
 {
 
-template<class T> struct is_plus_expr                   {static const bool value = false; };
-template<class T1, class T2> 
-                  struct is_plus_expr<expr_plus<T1,T2>> {static const bool value = true; };
-
-template<class T> struct is_mult_expr                   {static const bool value = false; };
-template<class... T> 
-                  struct is_mult_expr<expr_mult<T...>>  {static const bool value = true; };
-
 
 template<class T> struct is_scalar_expr                 
 { 
@@ -63,17 +55,6 @@ template<class Case, class ... Cases>
 struct static_switch<Case, Cases ...> : find_case<Case::value, Case, Cases...>::type
 {};
 
-template<bool Cond, class If_Expr_Type, class Else_Type>
-struct static_if
-{
-    using type = If_Expr_Type;
-};
-
-template<class If_Expr_Type, class Else_Type>
-struct static_if<false,If_Expr_Type,Else_Type>
-{
-    using type = Else_Type;
-};
 
 //----------------------------------------------------------------------------------
 //                              stack_array

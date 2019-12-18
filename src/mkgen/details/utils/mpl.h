@@ -22,6 +22,7 @@
 
 #include "mkgen/mkgen_fwd.h"
 #include "mkgen/matrix/dependency.h"
+#include "mkgen/details/utils/mpl_impl.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
@@ -61,6 +62,14 @@ struct enable_matscal_1 :
                 const void*
             >
 {};
+
+// return true if T1 is ordered less, than T2,
+// ordering is based on type names
+template<class T1, class T2>
+struct less_types
+{
+    static const bool value = less_impl::less_impl<T1, T2>();
+};
 
 }}}
 

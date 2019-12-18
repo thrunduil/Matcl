@@ -5,7 +5,6 @@
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/details/mkgen_fwd.h"
 #include "mkgen/mkgen_fwd.h"
-#include "mkgen/expression/expressions.h"
 
 namespace matcl { namespace mkgen
 {
@@ -208,7 +207,7 @@ struct get_offset_elem_step<element_step<Elem,Step>>
     static const Integer value = Elem::get_offset;
 };
 template<class T1, class T2>
-struct get_offset_elem_step<expr_plus<T1,T2>>
+struct get_offset_elem_step<mkd::expr_plus_scalar_data<T1,T2>>
 {
     //TODO: remove this
     static const Integer value = 0;

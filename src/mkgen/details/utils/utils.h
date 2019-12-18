@@ -42,4 +42,36 @@ struct array_item_scalar{};
 struct array_item_temp{};
 struct array_item_extern{};
 
+//-----------------------------------------------------------------------
+//                         isa functions
+//-----------------------------------------------------------------------
+// return true if T is expr_plus_scalar_data<...>
+template<class T> 
+struct is_plus_expr                                 {static const bool value = false; };
+
+template<class T1, class T2> 
+struct is_plus_expr<expr_plus_scalar_data<T1,T2>>   {static const bool value = true; };
+
+// return true if T is expr_mult_scalar_data<...>
+template<class T> 
+struct is_mult_expr                                 {static const bool value = false; };
+
+template<class... T> 
+struct is_mult_expr<expr_mult_scalar_data<T...>>    {static const bool value = true; };
+
+//-----------------------------------------------------------------------
+//                         static if
+//-----------------------------------------------------------------------
+template<bool Cond, class If_Expr_Type, class Else_Type>
+struct static_if
+{
+    using type = If_Expr_Type;
+};
+
+template<class If_Expr_Type, class Else_Type>
+struct static_if<false, If_Expr_Type, Else_Type>
+{
+    using type = Else_Type;
+};
+
 }}}

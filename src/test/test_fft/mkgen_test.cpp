@@ -122,26 +122,67 @@ void test_matrix()
     e44::print<empty_context>(std::cout, 0);
 };
 
-void test_matrix2()
-{
-};
+template<class A, class B>
+struct test;
 
-struct A {
-    int i;
-    constexpr A() : i(0) {};
-    constexpr A(int i) : i(i) {};
-    constexpr auto operator* (const A &a) const
+struct tag_pi : mk::scal_data_const_value_tag<tag_pi>
+{
+    static void print(std::ostream& os, int prior)
     {
-        return A(i * a.i);
+        (void)prior;
+        os << "pi";
+    };
+
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Val(3.1415);
     }
 };
 
-int main2() 
+struct tag_e : mk::scal_data_const_value_tag<tag_e>
 {
-    constexpr auto b = A(100) * A(200);
-    printf("%d", b.i);
-    return 0;
-}
+    static void print(std::ostream& os, int prior)
+    {
+        (void)prior;
+        os << "e";
+    };
+
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Val(2.7187);
+    }
+};
+
+struct tag_one : mk::scal_data_const_value_tag<tag_one>
+{
+    static void print(std::ostream& os, int prior)
+    {
+        (void)prior;
+        os << "1";
+    };
+
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Val(1.0);
+    }
+};
+
+void test_matrix2()
+{
+    using val_pi    = mk::const_value_scalar<tag_pi, double>;
+    using val_1     = mk::const_value_scalar<tag_one, double>;
+    using val_e     = mk::const_value_scalar<tag_e, double>;
+
+    using res       = decltype((val_pi() * val_1() - val_e())/val_e());
+    res::print<empty_context>(std::cout, 0);
+
+    std::cout << res::data_type::value<double>() << "\n";
+    static_assert(res::data_type::value<double>() != 1.0);
+};
+
 
 //TODO
 #if 0

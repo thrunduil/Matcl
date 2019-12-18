@@ -31,6 +31,7 @@ namespace matcl { namespace mkgen
 {
 
 namespace mkd = matcl::mkgen::details;
+namespace mk  = matcl::mkgen;
 
 // compile time scalar value, which stores symbolic element in Data.
 // Deps is a type representing dependencies from runtime values; must be
@@ -114,14 +115,22 @@ class ct_scalar
 template<Integer Value>
 using integer_scalar = ct_scalar<mkd::scal_data_rational<Value, 1>, empty_deps>;
 
-// represent rational value N / D
+// represent rational value N / D, where D > 0
 template<Integer N, Integer D>
 using rational_scalar = ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>;
 
 // scalar storing a value of type Value_type defined by the tag Tag; value
+// cannot depend on external data; Tag must be derived from scal_data_const_value_tag
+// Tag::value() must evaluate at compile time
+template<class Tag, class Value_type>
+using const_value_scalar    = ct_scalar<mkd::scal_data_const_value<Tag, Value_type>, 
+                                        empty_deps>;
+
+// scalar storing a value of type Value_type defined by the tag Tag; value
 // cannot depend on external data; Tag must be derived from scal_data_value_tag
 template<class Tag, class Value_type>
-using value_scalar  = ct_scalar<mkd::scal_data_value<Tag, Value_type>, empty_deps>;
+using value_scalar          = ct_scalar<mkd::scal_data_value<Tag, Value_type>, 
+                                        empty_deps>;
 
 //------------------------------------------------------------------------------
 //                      Predefined scalars
@@ -145,13 +154,15 @@ template<class A, class D>
 struct is_scalar<ct_scalar<A, D>>       {static const bool value = true; };
 
 // return true if T is a scalar with compile time known value
-// TODO: remove?
 template<class T> 
 struct is_value_scalar                  {static const bool value = false; };
 
-// TODO: scalar_data_value
 template<Integer N, Integer D> 
 struct is_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
+                                        {static const bool value = true; };
+
+template<class Tag, class Val> 
+struct is_value_scalar<mkd::scal_data_const_value<Tag,Val>>
                                         {static const bool value = true; };
 
 //------------------------------------------------------------------------------
@@ -159,7 +170,8 @@ struct is_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
 //------------------------------------------------------------------------------
 
 // get value stored in scalar Scal of type Val.
-// Scal must be a value scalar, i.e. integer_scalar, rational_scalar, or value_scalar
+// Scal must be a value scalar, i.e. integer_scalar, rational_scalar, value_scalar,
+// or const_value_scalar
 template<class Scal>
 struct get_scalar_value
 {
@@ -167,7 +179,7 @@ struct get_scalar_value
                   "this type should not be instantiated");
 
     template<class Val>
-    static Val get();
+    static constexpr Val value();
 };
 
 }}

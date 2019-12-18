@@ -1,0 +1,410 @@
+/*
+ *  This file is a part of Matrix Computation Library (MATCL)
+ *
+ *  Copyright (c) Pawe³ Kowal 2019
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+#pragma once
+
+#include "mkgen/matrix/scalar.h"
+
+namespace matcl { namespace mkgen { namespace details
+{
+
+//----------------------------------------------------------------------------------
+//                              forward declarations
+//----------------------------------------------------------------------------------
+
+template<Integer Step, class Arr_List, class ...Mult_Items>
+struct expr_mult_arrays;
+
+template<class T, Integer K>
+struct mult_item;
+
+//----------------------------------------------------------------------------------
+//                              checks
+//----------------------------------------------------------------------------------
+
+template<class T>
+struct check_mult_item
+{
+    static_assert(md::dependent_false<T>::value, "mult_item required");
+};
+
+template<class T, Integer K>
+struct check_mult_item<mult_item<T, K>>
+{
+    using type = void;
+};
+
+//----------------------------------------------------------------------------------
+//                              mult_item
+//----------------------------------------------------------------------------------
+template<class T, Integer K>
+struct mult_item
+{
+    static const bool is_vs = mkd::is_value_scalar_data<T>::value;
+    static_assert(is_vs == false, "value scalar unexpected");
+
+    static const bool is_sd = mkd::is_valid_scalar_data<T>::value;
+    static_assert(is_sd == true, "scalar data required");
+
+    static_assert(K != 0, "invalid exponent");
+
+    static const Integer exponent   = K;
+    using base                      = T;
+
+    template<Integer Step, class Arr_List>
+    using get_arrays                = typename T::template get_arrays<Step, Arr_List>;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os, int prior)
+    {
+        if constexpr(K == 1)
+        {
+            if (prior > details::prior_mult)
+                os << "(";
+
+            T::print<Subs_Context>(os, details::prior_mult);
+
+            if (prior > details::prior_mult)
+                os << ")";
+        }
+        else
+        {
+            if (prior > details::prior_pow)
+                os << "(";
+
+            T::print<Subs_Context>(os, details::prior_pow);
+
+            os << "^" << K;
+
+            if (prior > details::prior_pow)
+                os << ")";
+        };
+    };
+
+    template<class Ret, class Local_Storage>
+    inline_expr
+    static Ret eval(const Local_Storage& ls)
+    {
+        //TODO: powers
+        return T::eval<Ret>(ls);
+    };
+
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_expr
+    static void eval_loop(Ret& ret, Integer offset, const Local_Storage& cont)
+    {
+        //TODO: powers
+        Ret val1;
+        T::eval_loop<Loop_Storage,Ret>(val1,offset,cont);
+
+        ret = val1;
+    };
+};
+
+//----------------------------------------------------------------------------------
+//                              expr_mult_tail
+//----------------------------------------------------------------------------------
+template<class T1, class ... T>
+struct expr_mult_tail
+{
+    template<class Subs_Context>
+    static void print(std::ostream& os, int prior)
+    {
+        if (prior > details::prior_mult)
+            os << "(";
+
+        T1::print<Subs_Context>(os, details::prior_mult);
+        os << "*";
+ 
+        using tail  = expr_mult_tail<T...>;
+
+        tail::print<Subs_Context>(os, details::prior_mult);
+
+        if (prior > details::prior_mult)
+            os << ")";
+    };
+
+    template<class Ret, class Local_Storage>
+    inline_expr
+    static Ret eval(const Local_Storage& ls)
+    {
+        using tail  = expr_mult_tail<T...>;
+        return T1::eval<Ret>(ls) * tail::eval<Ret>(ls);
+    };
+
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_expr
+    static void eval_loop(Ret& ret, Integer offset, const Local_Storage& cont)
+    {
+        using tail  = expr_mult_tail<T...>;
+
+        Ret val1;
+        Ret val2;
+
+        T1::eval_loop<Loop_Storage,Ret>(val1, offset,cont);            
+        tail::eval_loop<Loop_Storage,Ret>(val2, offset,cont);
+
+        ret = val1 * val2;
+    };
+
+    template<class Visitor>
+    static void accept(Visitor& vis)
+    {
+        using tail  = expr_mult_tail<T...>;
+
+        T1::accept<Visitor>(vis);
+        tail::accept<Visitor>(vis);
+        vis.visit_mult();
+    };
+};
+
+template<class T1>
+struct expr_mult_tail<T1>
+{
+    template<class Subs_Context>
+    static void print(std::ostream& os, int prior)
+    {
+        if (prior > details::prior_mult)
+            os << "(";
+
+        T1::print<Subs_Context>(os, details::prior_mult);
+
+        if (prior > details::prior_mult)
+            os << ")";
+    };
+
+    template<class Ret, class Local_Storage>
+    inline_expr
+    static Ret eval(const Local_Storage& ls)
+    {
+        return T1::eval<Ret>(ls);
+    };
+
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_expr
+    static void eval_loop(Ret& ret, Integer offset, const Local_Storage& cont)
+    {
+        Ret val1;
+        T1::eval_loop<Loop_Storage,Ret>(val1, offset,cont);
+        ret = val1;
+    };
+
+    template<class Visitor>
+    static void accept(Visitor& vis)
+    {
+        T1::accept<Visitor>(vis);
+        vis.visit_mult();
+    };
+};
+
+//----------------------------------------------------------------------------------
+//                              expr_mult_scalar_data
+//----------------------------------------------------------------------------------
+template<class ... T>
+struct expr_mult_scalar_data
+{
+    static_assert(md::dependent_false_var<T...>::value, 
+                "this type should not be instantiated");
+};
+
+// representation of mult expression as S * T1^i1 * T2^i2 * ...
+// where S is a value scalar, and T1, ... are scalar_data and ik is integer
+template<class S, class T2, class T3, class ... T>
+struct expr_mult_scalar_data<S,T2,T3,T...> : public mkd::scalar_data<expr_mult_scalar_data<S,T2,T3,T...>>
+{
+    static const bool is_vs = mkd::is_value_scalar_data<S>::value;
+    static_assert(is_vs == true, "value scalar reqired");
+
+    static_assert(mkd::is_scalar_data_zero<S>::value == false, "invalid rep");
+
+    using ch1           = typename check_mult_item<T2>::type;
+    using ch2           = typename check_mult_item<T3>::type;
+    using ch3           = list::list<typename check_mult_item<T>::type ...>;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os, int prior)
+    {
+        if (prior > details::prior_mult)
+            os << "(";
+
+        if constexpr(mkd::is_scalar_data_one<S>::value == false)
+        {
+            if constexpr(mkd::is_scalar_data_mone<S>::value == true)
+            {
+                os << "-";
+            }
+            else
+            {
+                S::print<Subs_Context>(os, details::prior_mult);
+                os << "*";
+            };
+        };
+
+        using tail  = expr_mult_tail<T2, T3, T...>;
+
+        tail::print<Subs_Context>(os, details::prior_mult);
+
+        if (prior > details::prior_mult)
+            os << ")";
+    };
+
+    template<class Ret, class Local_Storage>
+    inline_expr
+    static Ret eval(const Local_Storage& ls)
+    {
+        using tail  = expr_mult_tail<T2, T3, T...>;
+
+        if constexpr(mkd::is_scalar_data_one<S>::value == true)
+            return tail::eval<Ret>(ls);
+        else
+            return S::eval<Ret>(ls) * tail::eval<Ret>(ls);
+    };
+
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_expr
+    static void eval_loop(Ret& ret, Integer offset, const Local_Storage& cont)
+    {
+        using tail  = expr_mult_tail<T2, T3, T...>;
+
+        if constexpr(mkd::is_scalar_data_one<S>::value == true)
+        {            
+            return tail::eval_loop<Loop_Storage, Ret>(ret, offset,cont);
+        }
+        else
+        {
+            Ret val1;
+            Ret val2;
+
+            S::eval_loop<Loop_Storage,Ret>(val1, offset,cont);            
+            tail::eval_loop<Loop_Storage,Ret>(val2, offset,cont);
+
+            ret = val1 * val2;
+        };
+    };
+
+    template<Integer Step, class Arr_List>
+    using get_arrays    = typename expr_mult_arrays<Step, Arr_List, S,T2,T3,T...> :: type;
+
+    template<class Visitor>
+    static void accept(Visitor& vis)
+    {
+        using tail  = expr_mult_tail<T2, T3, T...>;
+
+        if constexpr(mkd::is_scalar_data_one<S>::value == true)
+        {
+            tail::accept<Visitor>(vis);
+        }
+        else
+        {
+            S::accept<Visitor>(vis);
+            tail::accept<Visitor>(vis);
+            vis.visit_mult();
+        };
+    };
+};
+
+template<class S, class T2>
+struct expr_mult_scalar_data<S,T2> : public mkd::scalar_data<expr_mult_scalar_data<S,T2>>
+{
+    static const bool is_vs = mkd::is_value_scalar_data<S>::value;
+    static_assert(is_vs == true, "value scalar reqired");
+
+    static_assert(mkd::is_scalar_data_zero<S>::value == false, "invalid rep");
+    static_assert(mkd::is_scalar_data_one<S>::value == false,"invalid rep");    
+
+    using ch1           = typename check_mult_item<T2>::type;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os, int prior)
+    {
+        if (prior > details::prior_mult)
+            os << "(";
+
+        if constexpr(mkd::is_scalar_data_mone<S>::value == true)
+        {
+            os << "-";
+        }
+        else
+        {
+            S::print<Subs_Context>(os, details::prior_mult);
+            os << "*";
+        };
+
+        T2::print<Subs_Context>(os, details::prior_mult);
+
+        if (prior > details::prior_mult)
+            os << ")";
+    };
+    
+    template<class Ret, class Local_Storage>
+    inline_expr
+    static Ret eval(const Local_Storage& ls)
+    {
+        return S::eval<Ret>(ls) * T2::eval<Ret>(ls);
+    };
+
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_expr
+    static void eval_loop(Ret& ret, Integer offset, const Local_Storage& cont)
+    {
+        Ret val1;
+        Ret val2;
+        S::eval_loop<Loop_Storage,Ret>(val1,offset,cont);
+        T2::eval_loop<Loop_Storage,Ret>(val2,offset,cont);
+
+        ret = val1 * val2;
+    };
+
+    template<Integer Step, class Arr_List>
+    using get_arrays    = typename expr_mult_arrays<Step, Arr_List, S, T2>::type;
+
+    template<class Visitor>
+    static void accept(Visitor& vis)
+    {
+        S::accept<Visitor>(vis);
+        T2::accept<Visitor>(vis);
+        vis.visit_mult();            
+    };
+};
+
+//----------------------------------------------------------------------------------
+//                              expr_mult_arrays
+//----------------------------------------------------------------------------------
+template<Integer Step, class Arr_List, class ... T>
+struct expr_mult_arrays
+{
+    static_assert(md::dependent_false<Arr_List>::value, 
+                "this type should not be instantiated");
+};
+
+template<Integer Step, class S, class ... T, class Arr_List>
+struct expr_mult_arrays<Step, Arr_List, S, T...>
+{
+    using arr_1 = typename expr_mult_arrays<Step, Arr_List, T...>::type;
+    using type  = typename S::template get_arrays<Step, arr_1>;
+};
+
+template<Integer Step, class Arr_List>
+struct expr_mult_arrays<Step, Arr_List>
+{
+    using type = Arr_List;
+};
+
+}}}

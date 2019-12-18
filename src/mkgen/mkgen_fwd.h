@@ -62,16 +62,7 @@ template<class Mat_L, class Tag, bool Force>
 struct mat_temporary;
 
 template<class T1, class T2>
-struct expr_plus;
-
-template<class T1, class T2>
 struct expr_minus;
-
-template<class ... T>
-struct expr_mult;
-
-template<class List_1, class List_2>
-struct expr_dot;
 
 template<class T, bool With_Forced>
 struct is_temporary_mat;
@@ -94,6 +85,7 @@ struct element_step;
 template<class Val, class Elem>
 struct loop_context_data_scalar;
 
+//TODO: remove
 template<class T>
 struct correct_scalar_get_elem;
 

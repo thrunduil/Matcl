@@ -20,6 +20,7 @@
 #pragma once
 
 #include "mkgen/expression/expressions.h"
+#include "mkgen/details/expressions/expr_plus.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
@@ -116,7 +117,7 @@ struct mat_scal_plus_array_get_elem<mkd::mat_scal_plus_array<M, N, Array1, Array
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = Array2;
 
-    using type      = typename make_plus_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_plus_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -129,7 +130,7 @@ struct mat_plus_array_get_elem<mkd::mat_plus_array<M,N,Array1,Array2>, Row, Col>
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
 
-    using type      = typename make_plus_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_plus_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -142,7 +143,7 @@ struct mat_minus_array_get_elem<mkd::mat_minus_array<M,N,Array1,Array2>, Row, Co
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
     
-    using type      = typename make_minus_root<elem_1, elem_2>::type;
+    using type      = typename mkd::make_minus_root<elem_1, elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -155,7 +156,7 @@ struct mat_scal_minus_array_get_elem<mkd::mat_scal_minus_array<M, N, Array1, Arr
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = Array2;
     
-    using type      = typename make_minus_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_minus_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -168,7 +169,7 @@ struct scal_mat_minus_array_get_elem<mkd::scal_mat_minus_array<M,N,Array1, Array
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = Array2;
 
-    using type      = typename make_minus_root<elem_2,elem_1>::type;
+    using type      = typename mkd::make_minus_root<elem_2,elem_1>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -229,7 +230,7 @@ struct mat_plus_impl<ct_scalar<Array1, Deps1>, ct_scalar<Array2, Deps2>>
     using scal_1    = Array1;
     using scal_2    = Array2;
 
-    using plus_type = typename make_plus_root<scal_1, scal_2>::type;
+    using plus_type = typename mkd::make_plus_root<scal_1, scal_2>::type;
     using deps      = typename link_deps<Deps1, Deps2>::type;
     
     using type      = ct_scalar<plus_type, deps>;
@@ -281,7 +282,7 @@ struct mat_minus_impl<ct_scalar<Array1,Deps1>, ct_scalar<Array2,Deps2>>
     using scal_1        = Array1;
     using scal_2        = Array2;
 
-    using minus_type    = typename make_minus_root<scal_1,scal_2>::type;
+    using minus_type    = typename mkd::make_minus_root<scal_1,scal_2>::type;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     
     using type          = ct_scalar<minus_type, deps>;

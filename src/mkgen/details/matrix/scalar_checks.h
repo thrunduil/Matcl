@@ -29,6 +29,7 @@ namespace matcl { namespace mkgen { namespace details
 
 has_static_member_template_function_x(print)
 has_static_member_template_function_x(eval)
+has_static_member_template_function_x(value)
 
 has_static_member_function_x(print)
 
@@ -89,22 +90,23 @@ struct check_scalar_data_impl
 };
 
 //-----------------------------------------------------------------------
-//                      check_valid_scalar_data_tag
+//                      check_valid_const_data_tag
 //-----------------------------------------------------------------------
-// check if Tag parameter supplied to scal_data_value is valid
+// check if Tag parameter supplied to scal_data_const_value is valid
 template<class Tag>
-struct check_valid_scalar_data_tag
+struct check_valid_const_data_tag
 {
-    static const bool is_valid_tag  = std::is_base_of<mkd::scal_data_value_tag<Tag>, Tag>::value;
+    static const bool is_valid_tag  = std::is_base_of<mk::scal_data_const_value_tag<Tag>, Tag>
+                                                ::value;
 
-    static_assert(is_valid_tag == true, "Tag is not scal_data_value_tag<>");
+    static_assert(is_valid_tag == true, "Tag is not scal_data_const_value_tag<>");
 
     using type  = typename Tag::template check<void>;
 };
 
-// check if Data parameter supplied to ct_scalar is valid
+// check if Tag parameter supplied to scal_data_const_value_tag is valid
 template<class Tag, class Ret>
-struct check_scalar_data_tag_impl
+struct check_const_data_tag_impl
 {
     // Data must implement:
 
@@ -116,14 +118,57 @@ struct check_scalar_data_tag_impl
     static_assert(has_print == true, "Tag must implement function print");
 
     // template<class Val>
-    // static Val eval();
+    // static constexpr Val value();
 
     using func_eval_type       = double ();
-    static const bool has_eval = has_static_member_template_function_eval
+    static const bool has_eval = has_static_member_template_function_value
                                     <Tag, double, func_eval_type>::value;
 
-    static_assert(has_eval == true, "Tag must implement function eval");
+    static_assert(has_eval == true, "Tag must implement function value()");
 
+    //check if Tag::value() is constexpr
+    static_assert(Tag::template value<double>() != std::numeric_limits<double>::quiet_NaN(), 
+                  "Tag::value must be constexpr");
+
+    using type = Ret;
+};
+
+//-----------------------------------------------------------------------
+//                      check_valid_data_tag
+//-----------------------------------------------------------------------
+// check if Tag parameter supplied to scal_data_value is valid
+template<class Tag>
+struct check_valid_data_tag
+{
+    static const bool is_valid_tag  = std::is_base_of<mk::scal_data_value_tag<Tag>, Tag>
+                                                ::value;
+
+    static_assert(is_valid_tag == true, "Tag is not scal_data_value_tag<>");
+
+    using type  = typename Tag::template check<void>;
+};
+
+// check if Tag parameter supplied to scal_data_const_value_tag is valid
+template<class Tag, class Ret>
+struct check_data_tag_impl
+{
+    // Data must implement:
+
+    // static void print(std::ostream& os, int prior);
+    using func_print_type       = void (std::ostream& os, int prior);
+    static const bool has_print = has_static_member_function_print
+                                    <Tag, func_print_type>::value;
+
+    static_assert(has_print == true, "Tag must implement function print");
+
+    // template<class Val>
+    // static Val value();
+
+    using func_eval_type       = double ();
+    static const bool has_eval = has_static_member_template_function_value
+                                    <Tag, double, func_eval_type>::value;
+
+    static_assert(has_eval == true, "Tag must implement function value()");
 
     using type = Ret;
 };

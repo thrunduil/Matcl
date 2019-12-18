@@ -21,9 +21,8 @@
 #pragma once
 
 #include "mkgen/expression/expressions.h"
-
-//TODO: remove
-#include "mkgen/TODO/expression/expr_mult.h"
+#include "mkgen/details/expressions/expr_mult.h"
+#include "mkgen/details/expressions/expr_dot_scalar_data.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
@@ -159,7 +158,7 @@ struct mat_mult_array_get_elem<mkd::mat_mult_array<K, Array1, Array2>, Row, Col>
 template<class Array1, class Array2, Integer Row, Integer Col>
 struct mat_mult_array_get_elem<mkd::mat_mult_array<0, Array1, Array2>, Row, Col>
 {
-    using type  = typename zero :: data_type;
+    using type  = zero_sd;
 };
 
 template<class Array1, class Array2, Integer Row, Integer Col>
@@ -171,7 +170,7 @@ struct mat_mult_array_get_elem<mkd::mat_mult_array<1, Array1, Array2>, Row, Col>
     //TODO: why element_step?
     using elem_s = element_step<elem_2,0>;
 
-    using type  = typename make_mult_root<elem_1,elem_s>::type;
+    using type  = typename mkd::make_mult_root<elem_1,elem_s>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -184,7 +183,7 @@ struct mat_scal_mult_array_get_elem<mkd::mat_scal_mult_array<Array1, Array2>, Ro
     using elem_1    = typename Array1 :: template get_element<Row,Col>::type;
     using elem_2    = Array2;
 
-    using type      = typename make_mult_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_mult_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -197,7 +196,7 @@ struct mult_rows_array_get_elem<mkd::mult_rows_array<Array1,Array2>, Row, Col>
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename Array2 :: template get_element<Row, 1>::type;
 
-    using type      = typename make_mult_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_mult_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -210,7 +209,7 @@ struct mult_cols_array_get_elem<mkd::mult_cols_array<Array1,Array2>, Row, Col>
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename Array2 :: template get_element<1, Col>::type;
 
-    using type      = typename make_mult_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_mult_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -223,7 +222,7 @@ struct mult_array_get_elem<mkd::mult_array<Array1,Array2>, Row, Col>
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename Array2 :: template get_elemend<Row, Col>::type;
 
-    using type      = typename make_mult_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_mult_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -236,7 +235,7 @@ struct div_array_get_elem<mkd::div_array<Array1, Array2>, Row, Col>
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename Array2 :: template get_element<Row, Col>::type;
 
-    using type      = typename make_div_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_div_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -249,7 +248,7 @@ struct div_array_mat_scal_get_elem<mkd::div_array_mat_scal<Array1, Scal2>, Row, 
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = Scal2;
 
-    using type      = typename make_div_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_div_root<elem_1,elem_2>::type;
 };
 
 template<class Array, Integer Row, Integer Col>
@@ -262,7 +261,7 @@ struct div_array_scal_mat_get_elem<mkd::div_array_scal_mat<Array2, Scal1>, Row, 
     using elem_1    = Scal1;
     using elem_2    = typename Array2 :: template get_element<Row, Col>::type;    
     
-    using type      = typename make_div_root<elem_1,elem_2>::type;
+    using type      = typename mkd::make_div_root<elem_1,elem_2>::type;
 };
 
 //----------------------------------------------------------------------------------
@@ -311,7 +310,7 @@ struct mat_mult_impl<ct_scalar<Array1, Deps1>, ct_scalar<Array2, Deps2>>
     using scal_1    = Array1;
     using scal_2    = Array2;
 
-    using mult_type = typename make_mult_root<scal_1, scal_2>::type;
+    using mult_type = typename mkd::make_mult_root<scal_1, scal_2>::type;
     using deps      = typename link_deps<Deps1, Deps2>::type;
     using type      = ct_scalar<mult_type, deps>;
 };
@@ -371,7 +370,7 @@ struct mult_rows_impl<ct_scalar<Array1, Deps1>, ct_scalar<Array2, Deps2>>
     using scal_1    = Array1;
     using scal_2    = Array2;
 
-    using mult_type = typename make_mult_root<scal_1, scal_2>::type;
+    using mult_type = typename mkd::make_mult_root<scal_1, scal_2>::type;
     using deps      = typename link_deps<Deps1, Deps2>::type;
     using type      = ct_scalar<mult_type, deps>;
 };
@@ -431,7 +430,7 @@ struct mult_cols_impl<ct_scalar<Array1, Deps1>, ct_scalar<Array2, Deps2>>
     using scal_1    = Array1;
     using scal_2    = Array2;
 
-    using mult_type = typename make_mult_root<scal_1, scal_2>::type;
+    using mult_type = typename mkd::make_mult_root<scal_1, scal_2>::type;
     using deps      = typename link_deps<Deps1, Deps2>::type;
     using type      = ct_scalar<mult_type, deps>;
 };
@@ -488,7 +487,7 @@ struct mul_impl<ct_scalar<Array1, Deps1>, ct_scalar<Array2, Deps2>>
     using scal_1    = Array1;
     using scal_2    = Array2;
 
-    using mult_type = typename make_mult_root<scal_1, scal_2>::type;
+    using mult_type = typename mkd::make_mult_root<scal_1, scal_2>::type;
     using deps      = typename link_deps<Deps1, Deps2>::type;
     using type      = ct_scalar<mult_type, deps>;
 };
@@ -537,7 +536,7 @@ struct mat_div_impl<ct_scalar<Array1,Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 template<class Array1, class Deps1, class Array2, class Deps2>
 struct mat_div_impl<ct_scalar<Array1, Deps1>, ct_scalar<Array2, Deps2>>
 {
-    using div_type      = typename make_div_root<Array1, Array2>::type;
+    using div_type      = typename mkd::make_div_root<Array1, Array2>::type;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_scalar<div_type,deps>;
 };
@@ -562,7 +561,7 @@ struct make_array_mat_mult
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
 struct make_array_mat_mult<Row,Col,K_start,K_end,0,Array_1, Array_2>
 {
-    using type = zero :: data_type;
+    using type = zero_sd;
 };
 
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
@@ -570,8 +569,7 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,1,Array_1, Array_2>
 {
     using elem_1 = typename Array_1 :: template get_element<Row, K_start>::type;
     using elem_2 = typename Array_2 :: template get_element<K_start, Col>::type;
-    //using type = typename make_mult<elem_1,elem_2>::type;
-    using type   = expr_dot<list::list<elem_1>, list::list<elem_2>>;
+    using type   = expr_dot_scalar_data<list::list<elem_1>, list::list<elem_2>>;
 };
 
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
@@ -579,14 +577,11 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,2,Array_1, Array_2>
 {
     using elem_1_1      = typename Array_1 :: template get_element<Row, K_start>::type;
     using elem_2_1      = typename Array_2 :: template get_element<K_start, Col>::type;
-    //using new_item_1  = typename make_mult<elem_1_1,elem_2_1>::type;
 
     using elem_1_2      = typename Array_1 :: template get_element<Row, K_start+1>::type;
     using elem_2_2      = typename Array_2 :: template get_element<K_start+1, Col>::type;
-    //using new_item_2  = typename make_mult<elem_1_2,elem_2_2>::type;
 
-    //using type        = typename make_plus<new_item_1, new_item_2>::type;
-    using type          = expr_dot<list::list<elem_1_1,elem_1_2>, list::list<elem_2_1,elem_2_2>>;
+    using type          = expr_dot_scalar_data<list::list<elem_1_1,elem_1_2>, list::list<elem_2_1,elem_2_2>>;
 };
 
 template<Integer Row, Integer Col, Integer K_start, Integer K_end, class Array_1, class Array_2>
@@ -594,20 +589,14 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,3,Array_1, Array_2>
 {
     using elem_1_1      = typename Array_1 :: template get_element<Row, K_start>::type;
     using elem_2_1      = typename Array_2 :: template get_element<K_start, Col>::type;
-    //using new_item_1  = typename make_mult<elem_1_1, elem_2_1>::type;
 
     using elem_1_2      = typename Array_1 :: template get_element<Row, K_start + 1>::type;
     using elem_2_2      = typename Array_2 :: template get_element<K_start + 1, Col>::type;
-    //using new_item_2  = typename make_mult<elem_1_2, elem_2_2>::type;
 
     using elem_1_3      = typename Array_1 :: template get_element<Row, K_start+2>::type;
     using elem_2_3      = typename Array_2 :: template get_element<K_start+2, Col>::type;
-    //using new_item_3  = typename make_mult<elem_1_3,elem_2_3>::type;
 
-    //using plus_23     = typename make_plus<new_item_2, new_item_3>::type;
-    //using type        = typename make_plus<new_item_1, plus_23>::type;
-
-    using type          = expr_dot<list::list<elem_1_1,elem_1_2, elem_1_3>, 
+    using type          = expr_dot_scalar_data<list::list<elem_1_1,elem_1_2, elem_1_3>, 
                                    list::list<elem_2_1,elem_2_2, elem_2_3>>;
 };
 
@@ -616,25 +605,17 @@ struct make_array_mat_mult<Row,Col,K_start,K_end,4,Array_1, Array_2>
 {
     using elem_1_1      = typename Array_1 :: template get_element<Row, K_start>::type;
     using elem_2_1      = typename Array_2 :: template get_element<K_start, Col>::type;
-    //using new_item_1  = typename make_mult<elem_1_1, elem_2_1>::type;
 
     using elem_1_2      = typename Array_1 :: template get_element<Row, K_start + 1>::type;
     using elem_2_2      = typename Array_2 :: template get_element<K_start + 1, Col>::type;
-    //using new_item_2  = typename make_mult<elem_1_2, elem_2_2>::type;
 
     using elem_1_3      = typename Array_1 :: template get_element<Row, K_start + 2>::type;
     using elem_2_3      = typename Array_2 :: template get_element<K_start + 2, Col>::type;
-    //using new_item_3  = typename make_mult<elem_1_3, elem_2_3>::type;
 
     using elem_1_4      = typename Array_1 :: template get_element<Row, K_start+3>::type;
     using elem_2_4      = typename Array_2 :: template get_element<K_start+3, Col>::type;
-    //using new_item_4  = typename make_mult<elem_1_4,elem_2_4>::type;
 
-    //using plus_12     = typename make_plus<new_item_1, new_item_2>::type;
-    //using plus_34     = typename make_plus<new_item_3, new_item_4>::type;
-    //using type        = typename make_plus<plus_12, plus_34>::type;
-
-    using type          = expr_dot<list::list<elem_1_1,elem_1_2, elem_1_3, elem_1_4>, 
+    using type          = expr_dot_scalar_data<list::list<elem_1_1,elem_1_2, elem_1_3, elem_1_4>, 
                                    list::list<elem_2_1,elem_2_2, elem_2_3, elem_2_4>>;
 };
 
@@ -649,10 +630,10 @@ struct merge_dots
 };
 
 template<class ... Arg_11, class ... Arg_12, class ... Arg_21, class ... Arg_22>
-struct merge_dots<expr_dot<list::list<Arg_11...>, list::list<Arg_12...>>,
-                  expr_dot<list::list<Arg_21...>, list::list<Arg_22...>>>
+struct merge_dots<expr_dot_scalar_data<list::list<Arg_11...>, list::list<Arg_12...>>,
+                  expr_dot_scalar_data<list::list<Arg_21...>, list::list<Arg_22...>>>
 {
-    using type = expr_dot<list::list<Arg_11..., Arg_21...>,
+    using type = expr_dot_scalar_data<list::list<Arg_11..., Arg_21...>,
                           list::list<Arg_12..., Arg_22...>>;
 };
 

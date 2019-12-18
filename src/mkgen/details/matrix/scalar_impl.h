@@ -73,6 +73,14 @@ struct make_evaled_scalar<mkd::scal_data_evaled<Data, Tag_data>, Deps, Tag>
 };
 
 template<class Data, class Value_type, class Deps, class Tag>
+struct make_evaled_scalar<mkd::scal_data_const_value<Data, Value_type>, Deps, Tag>
+{
+    // nothing to compute
+    using data      = mkd::scal_data_const_value<Data,Value_type>;
+    using type      = ct_scalar<data, Deps>;
+};
+
+template<class Data, class Value_type, class Deps, class Tag>
 struct make_evaled_scalar<mkd::scal_data_value<Data, Value_type>, Deps, Tag>
 {
     // nothing to compute
@@ -83,18 +91,23 @@ struct make_evaled_scalar<mkd::scal_data_value<Data, Value_type>, Deps, Tag>
 //------------------------------------------------------------------------------
 //                      get_scalar_value
 //------------------------------------------------------------------------------
-template<Integer N, class Deps>
-struct get_scalar_value<ct_scalar<mkd::scal_data_rational<N,1>, Deps>>
-{
-    template<class Val>
-    static Val get()    { return Val(N); };
-};
 
 template<Integer N, Integer D, class Deps>
 struct get_scalar_value<ct_scalar<mkd::scal_data_rational<N,D>, Deps>>
 {
+    using rat   = mkd::scal_data_rational<N,D>;
+
     template<class Val>
-    static Val get()    { return Val(N) / Val(D); };
+    static constexpr Val value()    { return rat::value<Val>(); };
+};
+
+template<class Tag, class VT, class Deps>
+struct get_scalar_value<ct_scalar<mkd::scal_data_const_value<Tag, VT>, Deps>>
+{
+    using rep   = mkd::scal_data_const_value<Tag, VT>;
+
+    template<class Val>
+    static constexpr Val value()    { return rep::value<Val>(); };
 };
 
 template<class Tag, class VT, class Deps>
@@ -103,7 +116,7 @@ struct get_scalar_value<ct_scalar<mkd::scal_data_value<Tag, VT>, Deps>>
     using rep   = mkd::scal_data_value<Tag, VT>;
 
     template<class Val>
-    static Val get()    { return rep::eval<Val>(); };
+    static Val value()              { return rep::value<Val>(); };
 };
 
 }}
@@ -128,6 +141,12 @@ template<Integer N, Integer D, class Deps, Integer Step, class Arr_List>
 struct get_arrays_scalar<mkd::scal_data_rational<N,D>, Deps, Step, Arr_List>
 {
     using type      = Arr_List;    
+};
+
+template<class Data, class VT, class Deps, Integer Step, class Arr_List>
+struct get_arrays_scalar<scal_data_const_value<Data, VT>, Deps,Step,Arr_List>
+{
+    using type      = Arr_List;
 };
 
 template<class Data, class VT, class Deps, Integer Step, class Arr_List>

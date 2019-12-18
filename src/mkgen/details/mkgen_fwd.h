@@ -100,9 +100,14 @@ struct scal_mat_bfunc_array_get_elem;
 namespace matcl { namespace mkgen { namespace details
 {
     
-// represents a scalar storing rational values
+// represents a scalar storing rational values N / D
 template<Integer N, Integer D>
 struct scal_data_rational;
+
+// represents a scalar storing values of type Value_type
+// known at compile time
+template<class Tag, class Value_type>
+struct scal_data_const_value;
 
 // represents a scalar storing values of type Value_type
 template<class Tag, class Value_type>
@@ -191,6 +196,18 @@ struct mult_cols_impl;
 // implements mul function
 template<class Mat, class D>
 struct mul_impl;
+
+// representation of mult expression
+template<class ... T>
+struct expr_mult_scalar_data;
+
+// representation of plus expression
+template<class T1, class T2>
+struct expr_plus_scalar_data;
+
+// TODO: remove
+template<class ... T>
+struct expr_div;
 
 // checks
 template<class Temp_Tag, Integer Size, class Type>

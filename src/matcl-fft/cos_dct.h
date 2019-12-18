@@ -26,7 +26,7 @@ struct cos_table
 
         void initialize()
         {
-            Real scal       = mk::get_scalar_value<Scal>::get<Real>();
+            Real scal       = mk::get_scalar_value<Scal>::value<Real>();
 
             if constexpr(Step == 1)
             {
@@ -66,7 +66,7 @@ struct cos_table_dct4
 
         void initialize()
         {
-            double scal         = mk::get_scalar_value<Scal>::get<double>();
+            double scal         = mk::get_scalar_value<Scal>::value<double>();
 
             //sum_{n=0}^{N-1} x_n*cos( pi*(2*k+1)*(2*n+1)/(4*N) )
             for (Integer i = 0, k = 0; i < M; ++i)
@@ -102,7 +102,7 @@ struct cos_table_dct1
 
         void initialize()
         {
-            double scal         = mk::get_scalar_value<Scal>::get<double>();
+            double scal         = mk::get_scalar_value<Scal>::value<double>();
 
             //sum_{n=1}^{N-2} x_n*cos(pi*n*k/(N-1))
 
@@ -141,7 +141,7 @@ struct cos_table_dct2
 
         void initialize()
         {
-            double scal         = mk::get_scalar_value<Scal>::get<double>();
+            double scal         = mk::get_scalar_value<Scal>::value<double>();
 
             //sum_{n=0}^{N-1} x_n*cos( pi*k*(2*n+1)/(2*N) )
             for (Integer i = 0, k = 0; i < M; ++i)
@@ -175,7 +175,7 @@ struct cos_table_dct3
 
         void initialize()
         {
-            double scal         = mk::get_scalar_value<Scal>::get<double>();
+            double scal         = mk::get_scalar_value<Scal>::value<double>();
 
             //sum_{n=1}^{N-1} x_n*cos( pi*n*(2*k+1)/(2*N) )
             for (Integer i = 1, k = 0; i < M; ++i)
@@ -214,7 +214,7 @@ struct get_pos_cos_table<Base_Ind,2>
 };
 
 template<Integer M, Integer Base_Ind, Integer Step, class Scal>
-struct cos_value_tag : mkd::scal_data_value_tag<cos_value_tag<M, Base_Ind, Step, Scal>>
+struct cos_value_tag : mk::scal_data_value_tag<cos_value_tag<M, Base_Ind, Step, Scal>>
 {
     static const Integer pos    = get_pos_cos_table<Base_Ind,Step>::value;
     static const bool           is_continuous   = true; 
@@ -232,7 +232,7 @@ struct cos_value_tag : mkd::scal_data_value_tag<cos_value_tag<M, Base_Ind, Step,
 
     template<class Val>
     inline_lev_1
-    static Val eval()
+    static constexpr Val value()
     {
         return Val(cos_table<M,Step,Scal>::get().m_cos_table[pos]);
     };
@@ -292,7 +292,7 @@ struct get_element_cos<M,Base_Ind,Step,true, false,false,false,false,Scal>
     using tag       = cos_value_tag<M, Base_Ind, Step, Scal>;
     using scal_tag  = tag;
     using type_cos  = mk::value_scalar<scal_tag, double>;
-    using type      = typename mk::make_mult<mk::mone, type_cos>::type;
+    using type      = decltype(mk::mone() * type_cos());
 };
 
 template<Integer M, Integer Base_Ind, Integer Step, bool Negate,class Scal>
@@ -304,25 +304,25 @@ struct get_element_cos<M,Base_Ind,Step,Negate,true,false,false,false,Scal>
 template<Integer M, Integer Base_Ind, Integer Step, bool Negate,class Scal>
 struct get_element_cos<M,Base_Ind,Step,Negate,false,true,false,false,Scal>
 {
-    using type = typename mk::make_mult<mk::one,Scal>::type;
+    using type = decltype(mk::one() * Scal());
 };
 
 template<Integer M, Integer Base_Ind, Integer Step, bool Negate,class Scal>
 struct get_element_cos<M,Base_Ind,Step,Negate,false,false,true,false,Scal>
 {
-    using type = typename mk::make_mult<mk::mone,Scal>::type;
+    using type = decltype(mk::mone() * Scal());
 };
 
 template<Integer M, Integer Base_Ind, Integer Step, class Scal>
 struct get_element_cos<M,Base_Ind,Step,false,false,false,false,true,Scal>
 {
-    using type = typename mk::make_mult<mk::half,Scal>::type;
+    using type = decltype(mk::half() * Scal());
 };
 
 template<Integer M, Integer Base_Ind, Integer Step, class Scal>
 struct get_element_cos<M,Base_Ind,Step,true,false,false,false,true,Scal>
 {
-    using type = typename mk::make_mult<mk::rational_scalar<-1,2>,Scal>::type;
+    using type = decltype(mk::rational_scalar<-1,2>() * Scal());
 };
 
 };};
