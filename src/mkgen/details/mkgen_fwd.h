@@ -43,10 +43,6 @@ struct make_evaled_scalar;
 template<class Mat_L, class Tag, bool Force>
 struct mat_temporary;
 
-//TODO:
-template<class Tag, Integer Row, Integer Col>
-struct element;
-
 // TODO:
 template<class Array, Integer Row, Integer Col>
 struct sub_array_2_get_elem;
@@ -198,16 +194,12 @@ template<class Mat, class D>
 struct mul_impl;
 
 // representation of mult expression
-template<class ... T>
-struct expr_mult_scalar_data;
+template<bool Flag, class S, class ... T>
+struct expr_mult_sd;
 
 // representation of plus expression
-template<class T1, class T2>
-struct expr_plus_scalar_data;
-
-// TODO: remove
-template<class ... T>
-struct expr_div;
+template<bool Flag, class S, class ... T>
+struct expr_plus_sd;
 
 // checks
 template<class Temp_Tag, Integer Size, class Type>

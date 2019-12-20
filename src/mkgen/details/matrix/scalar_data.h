@@ -42,6 +42,12 @@ struct scalar_data
     // 
     // template<class Val, class Local_Storage>
     // static Val eval(const Local_Storage& ls);
+    //
+    // template<class Visitor>
+    // static void accept(Visitor& vis);
+    //
+    // template<class Void>
+    // using simplify;
 
     //TODO: remove or implement
     // append to Arr_List all arrays required by this scalar
@@ -59,6 +65,8 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
     using check1    = typename details::check_scalar_data_impl<Data, void>::type;
     using check2    = typename details::check_computation_tag<Tag>::type;
 
+    using this_type = scal_data_evaled<Data, Tag>;
+
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
     {
@@ -72,6 +80,15 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
         return Val(ls.get_scalar<Tag>());
     };
 
+    template<class Visitor>
+    static void accept(Visitor& vis)
+    {
+        return Data::accept<Visitor>(vis);
+    };
+
+    template<class Void>
+    using simplify  = this_type;
+
     //TODO: remove?
     // append to Arr_List all arrays required by this scalar
     template<Integer Step, class Arr_List>
@@ -84,15 +101,6 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
     {
         mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
     };
-
-    /*
-    TODO
-    template<class Visitor>
-    static void accept(Visitor& vis)
-    {
-        return Data::accept<Visitor>(vis);
-    };
-    */
 };
 
 //------------------------------------------------------------------------------
@@ -127,6 +135,15 @@ struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
         return Val(N) / Val(D); 
     };
 
+    template<class Visitor>
+    static void accept(Visitor&)
+    { 
+        return; 
+    };
+
+    template<class Void>
+    using simplify  = this_type;
+
     // TODO: remove?
     template<class Loop_Storage, class Ret, class Local_Storage>
     inline_lev_1
@@ -134,15 +151,6 @@ struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
     {
         mkd::eval_loop_scalar<Loop_Storage, this_type>::eval<Ret>(ret,off,cont);
     };
-
-    //TODO
-    /*
-    template<class Visitor>
-    static void accept(Visitor&)
-    { 
-        return; 
-    };
-    */
 };
 
 //------------------------------------------------------------------------------
@@ -153,6 +161,8 @@ struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value
 {
     //check
     using check1    = typename mkd::check_valid_const_data_tag<Tag>::type;
+
+    using this_type = scal_data_const_value<Tag, Value_type>;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
@@ -173,14 +183,14 @@ struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value
         return Tag::value<Value_type>();
     };
 
-    //TODO
-    /*
     template<class Visitor>
     static void accept(Visitor&)
     { 
         return; 
     };
-    */
+
+    template<class Void>
+    using simplify  = this_type;
 };
 
 //------------------------------------------------------------------------------
@@ -191,6 +201,8 @@ struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
 {
     //check
     using check1    = typename mkd::check_valid_data_tag<Tag>::type;
+
+    using this_type = scal_data_value<Tag, Value_type>;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
@@ -211,38 +223,14 @@ struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
         return Tag::value<Value_type>();
     };
 
-    //TODO
-    /*
     template<class Visitor>
     static void accept(Visitor&)
     { 
         return; 
     };
-    */
-};
 
-//------------------------------------------------------------------------------
-//                      scalar_expr_data
-//------------------------------------------------------------------------------
-
-template<class Expr>
-struct scalar_expr_data : mkd::scalar_data<scalar_expr_data<Expr>>
-{
-    // check
-    using check_expr    = typename details::check_scalar_data_impl<Expr, void>::type;
-
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {
-        Expr::print<Subs_Context>(os,prior);
-    };
-
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage& ls)
-    {
-        return Expr::eval<Val, Local_Storage>(ls);
-    };
+    template<class Void>
+    using simplify  = this_type;
 };
 
 //------------------------------------------------------------------------------
@@ -259,6 +247,7 @@ struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
              : mkd::scalar_data<scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>>
 {
     using elem_type = typename Array_t::template get_element<Row, Col>::type;
+    using this_type = scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>;
 
     // check
     using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
@@ -275,6 +264,16 @@ struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
     {
         return elem::eval<Val>(ls);
     };
+
+    template<class Visitor>
+    static void accept(Visitor& vis)
+    {
+        return elem_type::accept<Visitor>(vis);
+    };
+
+    //TODO
+    template<class Void>
+    using simplify      = this_type;
 };
 
 template<class T, Integer Pos>
@@ -291,6 +290,7 @@ struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
     static const Integer row = Pos - (col-1) * M;
 
     using elem_type     = typename Array_t::template get_element<row, col>::type;
+    using this_type     = scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>;
 
     // check
     using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
@@ -308,14 +308,15 @@ struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
         return elem_type::eval<Val>(ls);
     };
     
-    // TODO
-    /*
     template<class Visitor>
     static void accept(Visitor& vis)
     {
         return elem_type::accept<Visitor>(vis);
     };
-    */
+
+    //TODO
+    template<class Void>
+    using simplify      = this_type;
 };
 
 //TODO
@@ -376,6 +377,18 @@ template<class Tag, class Val>
 struct is_scalar_data_one<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(1)); };
 
+
+// return true if T is scalar_data that represents value -1
+template<class T>
+struct is_scalar_data_mone              { static const bool value = false; };
+
+template<>
+struct is_scalar_data_mone<mkd::scal_data_rational<-1, 1>>
+                                        { static const bool value = true; };
+
+template<class Tag, class Val>
+struct is_scalar_data_mone<mkd::scal_data_const_value<Tag, Val>>
+                                        { static const bool value = (Tag::value<Val>() == Val(-1)); };
 
 }}}
 

@@ -168,7 +168,7 @@ struct mat_mult_array_get_elem<mkd::mat_mult_array<1, Array1, Array2>, Row, Col>
     using elem_2 = typename Array2 :: template get_element<1, Col>::type;
 
     //TODO: why element_step?
-    using elem_s = element_step<elem_2,0>;
+    using elem_s = mkd::element_step<elem_2,0>;
 
     using type  = typename mkd::make_mult_root<elem_1,elem_s>::type;
 };

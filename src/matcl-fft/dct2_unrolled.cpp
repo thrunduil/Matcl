@@ -5,6 +5,8 @@
 #include "static_dct.h"
 #include "dct_kernels_test.h"
 
+#include "matcl-matrep/matcl_matrep.h"
+
 #define ENABLE_IACA 0
 
 #if ENABLE_IACA == 1
@@ -34,7 +36,6 @@ struct default_dct_config
     static const Integer max_genmat_dct3            = 4;    
     static const Integer max_genmat_dct4            = 4;
 };
-
 
 
 struct tag_y
@@ -355,7 +356,7 @@ MATCL_FFT_EXPORT void fft::test_dct_II()
     test_type::test_perf();
   #endif
 
-  #if 0
+  #if 1
     static const Integer M      = 3;
     static const Integer M_OFF  = 1;
     #define DO_DEBUG 1
@@ -438,14 +439,14 @@ MATCL_FFT_EXPORT void fft::test_dct_II()
   #endif
 
   #if DO_DEBUG
-    disp(odyn::fft::dct1(x,1));
-    disp(div(odyn::fft::dct1(x,1),y));
+    disp(matcl::fft::dct1(x,1));
+    disp(div(matcl::fft::dct1(x,1), y));
   #endif
 
     matcl::tic();
     for(int i = 0; i < T; ++i)
     {
-        Matrix Y        = odyn::fft::dct1(x,1);
+        Matrix loc       = matcl::fft::dct1(x,1);
     }
     Real t3 = matcl::toc();
 

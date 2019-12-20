@@ -22,6 +22,7 @@
 
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/utils/mpl.h"
+#include "mkgen/details/matrix/element.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
@@ -106,7 +107,7 @@ struct gen_array : public matrix_array<gen_array<Tag>>
     using this_type     = gen_array<Tag>;
 
     template<Integer Row, Integer Col>
-    using get_element_impl  = mkd::lazy_type<element<Tag, Row, Col>>;
+    using get_element_impl  = mkd::lazy_type<mkd::element<Tag, Row, Col>>;
 };
 
 template<class Tag> 
@@ -115,7 +116,7 @@ struct output_array : public matrix_array<output_array<Tag>>
     using this_type     = output_array<Tag>;
 
     template<Integer Row, Integer Col>
-    using get_element_impl  = mkd::lazy_type<element<Tag, Row, Col>>;
+    using get_element_impl  = mkd::lazy_type<mkd::element<Tag, Row, Col>>;
 };
 
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols>

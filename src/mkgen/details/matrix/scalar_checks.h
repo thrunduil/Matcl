@@ -30,6 +30,8 @@ namespace matcl { namespace mkgen { namespace details
 has_static_member_template_function_x(print)
 has_static_member_template_function_x(eval)
 has_static_member_template_function_x(value)
+has_static_member_function_x(accept)
+has_template_alias_x(simplify)
 
 has_static_member_function_x(print)
 
@@ -39,6 +41,10 @@ struct subs_context_dummy
 };
 
 struct local_storage_dummy
+{
+};
+
+struct visitor_dummy
 {
 };
 
@@ -85,6 +91,20 @@ struct check_scalar_data_impl
                                     <Data, double, func_eval_type>::value;
 
     static_assert(has_eval == true, "Data must implement function eval");
+
+    // template<class Visitor>
+    // static void accept(Visitor& vis);
+    using func_accept_type      = void (visitor_dummy&);
+    static const bool has_accept= has_static_member_function_accept
+                                    <Data, func_accept_type>::value;
+
+    static_assert(has_accept == true, "Data must implement function accept");
+
+    // template<class Void>
+    // using simplify;
+
+    static const bool has_simpl = has_template_alias_simplify<Data, void>::value;
+    static_assert(has_simpl == true, "Data must implement template alias: simplify");
 
     using type = Ret;
 };

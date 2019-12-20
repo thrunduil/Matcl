@@ -168,18 +168,6 @@
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_temporary.h">
       <Filter>Source Files\src\TODO\expression</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h">
-      <Filter>Source Files\src\TODO\matrix</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_mult.h">
       <Filter>Source Files\src\details\expressions</Filter>
     </ClInclude>
@@ -202,6 +190,18 @@
       <Filter>Source Files\src\details\expressions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scal_data_value_tags.h">
+      <Filter>Source Files\src\details\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\computation.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h">
+      <Filter>Source Files\src\TODO\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\element.h">
       <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
   </ItemGroup>

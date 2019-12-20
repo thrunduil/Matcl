@@ -61,9 +61,6 @@ struct make_comp_result;
 template<class Mat_L, class Tag, bool Force>
 struct mat_temporary;
 
-template<class T1, class T2>
-struct expr_minus;
-
 template<class T, bool With_Forced>
 struct is_temporary_mat;
 
@@ -79,14 +76,7 @@ struct modif2;
 template <class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Col>
 struct get_temporary;
 
-template<class Elem, Integer Step>
-struct element_step;
-
 template<class Val, class Elem>
 struct loop_context_data_scalar;
-
-//TODO: remove
-template<class T>
-struct correct_scalar_get_elem;
 
 }}

@@ -30,6 +30,7 @@
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_plus_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\dependency_impl.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\matrix\element.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_checks.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_impl.h" />
@@ -63,10 +64,9 @@
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_call.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_other.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\expression\mat_temporary.h" />
+    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\computation.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\ct_matrix.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\printer.h" />
-    <ClInclude Include="..\..\..\src\mkgen\TODO\matrix\rational.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\alignment.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\op_count.h" />
     <ClInclude Include="..\..\..\src\mkgen\TODO\utils\simd_utils.h" />

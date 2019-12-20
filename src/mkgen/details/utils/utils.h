@@ -45,19 +45,19 @@ struct array_item_extern{};
 //-----------------------------------------------------------------------
 //                         isa functions
 //-----------------------------------------------------------------------
-// return true if T is expr_plus_scalar_data<...>
+// return true if T is expr_plus_sd<...>
 template<class T> 
 struct is_plus_expr                                 {static const bool value = false; };
 
-template<class T1, class T2> 
-struct is_plus_expr<expr_plus_scalar_data<T1,T2>>   {static const bool value = true; };
+template<bool Flag, class ... T> 
+struct is_plus_expr<expr_plus_sd<Flag, T...>>       {static const bool value = true; };
 
-// return true if T is expr_mult_scalar_data<...>
+// return true if T is expr_mult_sd<...>
 template<class T> 
 struct is_mult_expr                                 {static const bool value = false; };
 
-template<class... T> 
-struct is_mult_expr<expr_mult_scalar_data<T...>>    {static const bool value = true; };
+template<bool Flag, class... T> 
+struct is_mult_expr<expr_mult_sd<Flag, T...>>       {static const bool value = true; };
 
 //-----------------------------------------------------------------------
 //                         static if

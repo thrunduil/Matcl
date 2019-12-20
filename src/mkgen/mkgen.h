@@ -34,5 +34,5 @@
 #include "mkgen/TODO/evaler/expr_evaler.h"
 #include "mkgen/TODO/expression/for_expr.h"
 #include "mkgen/TODO/expression/mat_call.h"
-#include "mkgen/TODO/matrix/matrix.h"
+#include "mkgen/TODO/matrix/computation.h"
 #include "mkgen/TODO/matrix/printer.h"

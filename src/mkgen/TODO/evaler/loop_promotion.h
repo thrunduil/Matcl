@@ -595,7 +595,7 @@ struct make_dep
     using type  = dep<Elem,0,dep_extern>;
 };
 template<class Tag, Integer Row, Integer Col>
-struct make_dep<element<Tag,Row,Col>>
+struct make_dep<mkd::element<Tag,Row,Col>>
 {
     using type = dep<Tag,0,dep_extern>;
 };

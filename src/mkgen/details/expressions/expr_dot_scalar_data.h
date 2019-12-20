@@ -60,8 +60,14 @@ struct expand_dot;
 template<class List_1, class List_2>
 struct expr_dot_scalar_data : public mkd::scalar_data<expr_dot_scalar_data<List_1, List_2>>
 {
+    using this_type     = expr_dot_scalar_data<List_1, List_2>;
+
     template<Integer Step, class Arr_List>
     using get_arrays    = typename expr_dot_arrays<Step, Arr_List, List_1, List_2> :: type;
+
+    //TODO
+    template<class Void>
+    using simplify      = this_type;
 
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)

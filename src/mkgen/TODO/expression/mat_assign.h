@@ -22,6 +22,8 @@ struct expr_assign_arrays
 template<class T1, class T2>
 struct expr_assign : public mkd::scalar_data<expr_assign<T1, T2>>
 {
+    using this_type     = expr_assign<T1, T2>;
+
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
     {
@@ -57,6 +59,10 @@ struct expr_assign : public mkd::scalar_data<expr_assign<T1, T2>>
 
     template<Integer Step, class Arr_List>
     using get_arrays    = typename expr_assign_arrays<Step, Arr_List, T1, T2> :: type;
+
+    //TODO
+    template<class Void>
+    using simplify      = this_type;
 };
 
 template<class Array, Integer Row, Integer Col>

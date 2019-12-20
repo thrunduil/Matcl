@@ -36,6 +36,35 @@ namespace mk = matcl::mkgen;
 template<class S, class ... T>
 struct make_mult_normalize_impl;
 
+template<class S, class T>
+struct make_mult_normalize_plus;
+
+template<class S, class T>
+struct make_mult_plus_impl;
+
+template<class S, class T, bool Can_accumulate>
+struct make_mult_plus_impl_acc;
+
+// defined in expr_plus_scalar_data
+template<class List_mult, class List_plus, class S, class ... PI>
+struct mult_plus_items;
+
+// defined in expr_plus_scalar_data
+template<class Plus_expr>
+struct can_accumulate_scalling;
+
+template<class S, class ... T>
+struct make_expr_plus_sd;
+
+template<class S, class List>
+struct make_expr_plus_list;
+
+template<class S, class List>
+struct make_mult_plus_add_items;
+
+template<class Scal1, class Scal2>
+struct make_plus_root;
+
 //----------------------------------------------------------------------------------
 //                              make_mult_scal
 //----------------------------------------------------------------------------------
@@ -97,43 +126,69 @@ struct make_mult_impl
                   && is_value_scalar_data<T2>::value == false,
                   "this case should be already processed");
 
-    using it1       = mult_item<T1, 1>;
-    using it2       = mult_item<T2, 1>;
-    using type      = expr_mult_scalar_data<one_sd, it1, it2>;
+    using T1s       = typename T1 :: template simplify<void>; 
+    using T2s       = typename T2 :: template simplify<void>;
+
+    static const bool modif = (std::is_same<T1s, T1>::value == false)
+                            || (std::is_same<T2s, T2>::value == false);
+
+    using type0  = typename mkd::static_if
+                        <   modif == true,
+                            make_mult_impl<T1s, T2s>,
+                            make_expr_mult_sd<one_sd, mult_item<T1s, 1>, mult_item<T2s, 1>>
+                        >::type;
+    using type  = typename type0 :: type;
 };
 
-template<class S1, class ... T1, class S2, class ... T2>
-struct make_mult_impl<expr_mult_scalar_data<S1, T1...>, 
-                      expr_mult_scalar_data<S2, T2...>, false, false>
+template<bool F1, class S1, class ... T1, 
+         bool F2, class S2, class ... T2>
+struct make_mult_impl<expr_mult_sd<F1, S1, T1...>, 
+                      expr_mult_sd<F2, S2, T2...>, false, false>
 {
     using S     = typename make_mult_scal<S1, S2>::type;
-    using type  = expr_mult_scalar_data<S, T1..., T2...>;
+    using type  = typename make_expr_mult_sd<S, T1..., T2...> :: type;
 };
 
-template<class S1, class ... T1, class T2>
-struct make_mult_impl<expr_mult_scalar_data<S1, T1...>, T2, false, false>
+template<bool F1, class S1, class ... T1, class T2>
+struct make_mult_impl<expr_mult_sd<F1, S1, T1...>, T2, false, false>
 {
     static_assert(is_mult_expr<T2>::value == false
                   && is_value_scalar_data<T2>::value == false,
                   "this case should be already processed");
 
-    using it2       = mult_item<T2, 1>;
-    using type = expr_mult_scalar_data<S1, T1..., it2>;
+    using T2s       = typename T2 :: template simplify<void>;
+
+    static const bool modif = (std::is_same<T2s, T2>::value == false);
+
+    using type0  = typename mkd::static_if
+                        <   modif == true,
+                            make_mult_impl<expr_mult_sd<F1, S1, T1...>, T2s>,
+                            make_expr_mult_sd<S1, T1 ..., mult_item<T2s, 1>>
+                        >::type;
+    using type  = typename type0 :: type;
 };
 
-template<class T1, class S2, class ... T2>
-struct make_mult_impl<T1, expr_mult_scalar_data<S2, T2...>, false, false>
+template<class T1, bool F2, class S2, class ... T2>
+struct make_mult_impl<T1, expr_mult_sd<F2, S2, T2...>, false, false>
 {
     static_assert(is_mult_expr<T1>::value == false
                   && is_value_scalar_data<T1>::value == false,
                   "this case should be already processed");
 
-    using it1       = mult_item<T1, 1>;
-    using type = expr_mult_scalar_data<S2, T1, T2...>;
+    using T1s       = typename T1 :: template simplify<void>;
+
+    static const bool modif = (std::is_same<T1s, T1>::value == false);
+
+    using type0  = typename mkd::static_if
+                        <   modif == true,
+                            make_mult_impl<T1s, expr_mult_sd<F2, S2, T2 ...>>,
+                            make_expr_mult_sd<S2, mult_item<T1s, 1>, T2 ...>
+                        >::type;
+    using type  = typename type0 :: type;
 };
 
-template<class S1, class ... T1, class S2>
-struct make_mult_impl<expr_mult_scalar_data<S1, T1...>, S2, false, true>
+template<bool F1, class S1, class ... T1, class S2>
+struct make_mult_impl<expr_mult_sd<F1, S1, T1...>, S2, false, true>
 {
     static_assert(is_value_scalar_data<S2>::value == true,
                   "invalid arguments");
@@ -150,8 +205,16 @@ struct make_mult_impl<T1, S2, false, true>
                   && is_value_scalar_data<S2>::value == true,
                   "this case should be already processed");
 
-    using it1   = mult_item<T1, 1>;
-    using type  = typename make_mult_normalize_impl<S2, it1>::type;
+    using T1s       = typename T1 :: template simplify<void>;
+
+    static const bool modif = (std::is_same<T1s, T1>::value == false);
+
+    using type0  = typename mkd::static_if
+                        <   modif == true,
+                            make_mult_impl<T1s, S2>,
+                            make_mult_normalize_impl<S2, mult_item<T1s, 1>>
+                        >::type;
+    using type  = typename type0 :: type;
 };
 
 template<class S1, class T2>
@@ -175,16 +238,18 @@ struct make_mult_impl<S1, S2, true, true>
 //----------------------------------------------------------------------------------
 // make S * T1 * ... * Tk, where S is a value scalar_data and Ti are nonvalue scalar data
 // if S == 0, then return 0, if S == 1 and k = 1, then return T1
+// for all types Ti, Ti::simplify<> should already be called; can return plus expression
 template<class S, class ... T>
 struct make_mult_normalize_impl
 {
     static const bool is_zero   = mkd::is_scalar_data_zero<S>::value;
 
-    using type  = typename mkd::static_if
+    using type0  = typename mkd::static_if
                         <   is_zero == true,
-                            zero_sd,
-                            expr_mult_scalar_data<S, T...>
+                            mkd::lazy_type<zero_sd>,
+                            make_expr_mult_sd<S, T...>
                         >::type;
+    using type  = typename type0 :: type;
 };
 
 template<class S, class It>
@@ -195,15 +260,119 @@ struct make_mult_normalize_impl<S, It>
     static const Integer K      = It::exponent;
     using T                     = typename It::base; 
 
-    using type  = typename mkd::static_if
+    using type0  = typename mkd::static_if
                         <   is_zero == true,
-                            zero_sd,
+                            mkd::lazy_type<zero_sd>,
                             typename mkd::static_if
                                 <   is_one == true && K == 1,
-                                    T,
-                                    expr_mult_scalar_data<S, It>
+                                    mkd::lazy_type<T>,
+                                    make_mult_normalize_plus<S, It>
                                 >::type
                         >::type;
+
+    using type  = typename type0 :: type;
+};
+
+//----------------------------------------------------------------------------------
+//                              make_mult_normalize_plus
+//----------------------------------------------------------------------------------
+// make S * (T1)^k, where S is a value scalar_data and T1 is plus expr
+// convert this to plus_item, when k = 1 and T1 can accumulate constant
+// (i.e. all scalling of plus_items are nontrivial)
+// T1::simplify<> should be already called; may return plus expr
+template<class S, class It>
+struct make_mult_normalize_plus
+{
+    static const bool is_zero   = mkd::is_scalar_data_zero<S>::value;
+    static const bool is_one    = mkd::is_scalar_data_one<S>::value;
+
+    static_assert(is_zero == false && is_one == false, "this case should already be processed");
+
+    static const Integer K      = It::exponent;
+    using T                     = typename It::base; 
+
+    static const bool is_add    = mkd::is_plus_expr<T>::value;
+
+    using type0  = typename mkd::static_if
+                        <   is_add == false || K != 1,
+                            make_expr_mult_sd<S, It>,
+                            make_mult_plus_impl<S, T>
+                        >::type;
+
+    using type  = typename type0 :: type;
+};
+
+//----------------------------------------------------------------------------------
+//                              make_mult_plus_impl
+//----------------------------------------------------------------------------------
+// make S * T1, where S is a value scalar_data and T1 is plus expr
+// T1::simplify must already be called; may return plus expression
+template<class S, class T>
+struct make_mult_plus_impl
+{
+    static_assert(md::dependent_false<S>::value, "plus_expr required");
+};
+
+// expr_plus must have SP != 0, or SP == 0 and sizeof(TP) > 1
+// expr_plus::simplify must already be called
+template<class S, bool F, class SP, class ... TP>
+struct make_mult_plus_impl<S, expr_plus_sd<F, SP, TP...>>
+{
+    using plus_expr             = expr_plus_sd<F, SP, TP...>;
+    static const bool can_acc   = can_accumulate_scalling<plus_expr>::value;
+
+    using type  = typename make_mult_plus_impl_acc<S, plus_expr, can_acc>::type;
+};
+
+// Plus_expr::simplify<> must already be called;
+// can return plus expression
+template<class S, class Plus_expr, bool Can_accumulate>
+struct make_mult_plus_impl_acc
+{
+    using type = typename make_expr_mult_sd<S, mult_item<Plus_expr, 1>> :: type;
+};
+
+// expr_plus_sd<...>::simplify<> must already be called
+template<class S, bool F, class SP, class ... TP>
+struct make_mult_plus_impl_acc<S, expr_plus_sd<F, SP, TP...>, true>
+{
+    // expr_plus must have SP != 0, or SP == 0 and sizeof(TP) > 1, also S != 0
+    // therefore resulting expression remains expr_plus_sd and no further simplifications
+    // can occur (ignoring possible underflows)
+    using plus_items    = list::list<>;
+    using mult_items    = list::list<>;
+
+    using expanded      = typename mult_plus_items<mult_items, plus_items, S, TP ...>::type;
+
+    using mult_items_ret= typename list::elem_at_pos<expanded, 0>::type;
+    using plus_items_ret= typename list::elem_at_pos<expanded, 1>::type;    
+
+    using S_ret         = typename make_mult_scal<S, SP>::type;
+    using type1         = typename make_expr_plus_list<S_ret, mult_items_ret> ::type;
+
+    using type          = typename make_mult_plus_add_items<type1, plus_items_ret>::type;
+};
+
+//----------------------------------------------------------------------------------
+//                              make_mult_plus_add_items
+//----------------------------------------------------------------------------------
+template<class Type, class List>
+struct make_mult_plus_add_items
+{
+    static_assert(md::dependent_false<Type>::value, "list::list<...> expected");
+};
+
+template<class Type, class It1, class ... It>
+struct make_mult_plus_add_items<Type, list::list<It1, It...>>
+{
+    using type1 = typename make_plus_root<Type, It1>::type;
+    using type  = typename make_mult_plus_add_items<type1, list::list<It...>>::type;
+};
+
+template<class Type>
+struct make_mult_plus_add_items<Type, list::list<>>
+{
+    using type = Type;
 };
 
 //----------------------------------------------------------------------------------
@@ -235,7 +404,7 @@ struct make_inv_scal<mkd::scal_data_const_value<Tag1,Val1>>
 //----------------------------------------------------------------------------------
 //                              make_inv_impl
 //----------------------------------------------------------------------------------
-template<class T1, bool Is_Scal_1>
+template<class T1, bool Is_Scal_1 = is_value_scalar_data<T1>::value>
 struct make_inv_impl
 {
     static_assert(md::dependent_false<S1>::value, 
@@ -245,15 +414,24 @@ struct make_inv_impl
 template<class T1>
 struct make_inv_impl<T1, false>
 {
-    using type      = expr_mult_scalar_data<one_sd, mult_item<T1, -1>>;
+    using T1s       = typename T1 :: template simplify<void>;
+
+    static const bool modif = (std::is_same<T1s, T1>::value == false);
+
+    using type0  = typename mkd::static_if
+                        <   modif == true,
+                            make_inv_impl<T1s>,
+                            make_expr_mult_sd<one_sd, mult_item<T1s, -1>>
+                        >::type;
+    using type  = typename type0 :: type;
 };
 
-template<class S1, class ... T1>
-struct make_inv_impl<expr_mult_scalar_data<S1, T1...>, false>
+template<bool F1, class S1, class ... T1>
+struct make_inv_impl<expr_mult_sd<F1, S1, T1...>, false>
 {
     using S1_inv    = typename make_inv_impl<S1, true>::type;
-    using type      = expr_mult_scalar_data<S1_inv, 
-                        typename make_inv_impl<T1, false>::type ...>;
+    using type      = typename make_expr_mult_sd<S1_inv, 
+                                typename make_inv_impl<T1, false>::type ...> :: type;
 };
 
 template<class T>

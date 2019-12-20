@@ -273,7 +273,7 @@ template<Integer M>             struct tag_dct4_2   { static const bool is_conti
 
 //TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::make_expr_ufunc<tag_dct1<M,Scal>, mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct1<M,Scal>, mkd::element<Tag, Row, Col>>
 {
     //C_k     = sum_{n=1}^{N-2} x_n*cos(pi*n*k/(N-1))
     static const Integer ind        = (Row-1) * (Col-1);
@@ -293,7 +293,7 @@ struct mk::make_expr_ufunc<tag_dct1<M,Scal>, mk::element<Tag, Row, Col>>
 
 //TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::make_expr_ufunc<tag_dct2<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct2<M,Scal>,mkd::element<Tag, Row, Col>>
 {
     //sum_{n=0}^{N-1} x_n*cos( pi*k*(2*n+1)/(2*N) )
     static const Integer ind        = (Row-1) * (2*(Col-1)+1);
@@ -313,7 +313,7 @@ struct mk::make_expr_ufunc<tag_dct2<M,Scal>,mk::element<Tag, Row, Col>>
 
 //TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::make_expr_ufunc<tag_dct3<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct3<M,Scal>,mkd::element<Tag, Row, Col>>
 {
     //sum_{n=0}^{N-1} x_n*cos( pi*n*(2*k+1)/(2*N) )
     static const Integer ind        = (Col-1) * (2*(Row-1)+1);
@@ -332,7 +332,7 @@ struct mk::make_expr_ufunc<tag_dct3<M,Scal>,mk::element<Tag, Row, Col>>
 };
 
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
-struct mk::make_expr_ufunc<tag_dct4<M,Scal>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct4<M,Scal>,mkd::element<Tag, Row, Col>>
 {
     //sum_{n=0}^{N-1} x_n*cos( pi*(2*k+1)*(2*n+1)/(4*N) )
     static const Integer ind        = (2*(Row-1)+1) * (2*(Col-1)+1);
@@ -351,7 +351,7 @@ struct mk::make_expr_ufunc<tag_dct4<M,Scal>,mk::element<Tag, Row, Col>>
 };
 
 template<Integer M, class Tag, Integer Row, Integer Col>
-struct mk::make_expr_ufunc<tag_dct4_2<M>,mk::element<Tag, Row, Col>>
+struct mk::make_expr_ufunc<tag_dct4_2<M>,mkd::element<Tag, Row, Col>>
 {
     //cos ( pi * (2*n+1) / 4N )
     static const Integer ind        = 2*(Row-1) + 1;
@@ -402,7 +402,7 @@ struct tag_t
     static void print(std::ostream& os,int) { os << "T"; }
 
     template<Integer Row, Integer Col>
-    static mk::element<tag_t,Row,Col> get_elem();
+    static mkd::element<tag_t,Row,Col> get_elem();
 };
 
 template<class Output, class Input>

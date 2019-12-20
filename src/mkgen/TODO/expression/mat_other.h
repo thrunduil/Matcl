@@ -6,6 +6,7 @@
 #include "mkgen/matrix/dependency.h"
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/details/matrix/matrix_arrays.h"
+#include "mkgen/details/matrix/element.h"
 
 namespace matcl { namespace mkgen
 {
@@ -182,7 +183,7 @@ struct get_elem<ct_matrix<M,N,Array,Deps1>,Row,Col>
 template<class Elem, Integer Step>
 struct make_element_step
 {
-    using type = element_step<Elem,Step>;
+    using type = mkd::element_step<Elem,Step>;
 };
 template<class Elem>
 struct make_element_step<Elem,1>

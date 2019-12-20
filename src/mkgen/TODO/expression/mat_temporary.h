@@ -135,9 +135,11 @@ struct mat_temporary2<Mat, Tag, false, Force>
         using val_type          = typename Temp_Storage::val_type;
         init_temporary_impl<Mat>(subs_context(), new_dep(), ls);
     };    
+
     template<class Visitor, class Temp_Storage>
     friend void tag_initializer_accept(Tag, Visitor& vis, Temp_Storage* ts)
     {
+        (void)ts;
         using subs_context      = typename Temp_Storage::subs_context;
         init_temporary_impl_accept<Mat>(subs_context(), new_dep(), vis);
     };
@@ -330,6 +332,8 @@ template <class Tag, Integer Mat_Rows, Integer Mat_Cols, Integer Row, Integer Co
 struct get_temporary : public mkd::scalar_data<get_temporary<Tag, Mat_Rows, Mat_Cols, Row, Col>>
 {
     using tag                   = Tag;
+    using this_type             = get_temporary<Tag, Mat_Rows, Mat_Cols, Row, Col>;
+
     static const Integer rows   = Mat_Rows;
     static const Integer cols   = Mat_Cols;
     static const Integer pos    = (Col - 1) * Mat_Rows + Row;
@@ -338,6 +342,10 @@ struct get_temporary : public mkd::scalar_data<get_temporary<Tag, Mat_Rows, Mat_
 
     template<Integer Step, class Arr_List>
     using get_arrays    = typename get_temporary_array<Step, Arr_List, get_temporary> :: type;
+
+    //TODO
+    template<class Void>
+    using simplify              = this_type;
 
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)

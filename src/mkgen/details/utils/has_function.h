@@ -24,6 +24,17 @@
 #include "matcl-core/details/mpl.h"
 #include <type_traits>
 
+namespace has_func_utils
+{
+
+template<class T>
+struct make_true_type
+{
+    using type = std::true_type;
+};
+
+}
+
 // call has_member_function_x, where x is some identifier generates function
 // that check, whether class C has member function
 //          Ret x(Arg1 arg1, ..., Argk argk)
@@ -102,6 +113,28 @@ struct has_static_member_template_function_##name<C, TArgs, Ret (Args...)>  \
         -> typename std::is_convertible<                                    \
              decltype( T::template name<TArgs>( std::declval<Args>()... )), \
              Ret>::type;                                                    \
+                                                                            \
+    template<typename>                                                      \
+    static constexpr std::false_type check(...);                            \
+                                                                            \
+    using type  = decltype(check<C>(0));                                    \
+                                                                            \
+    static const bool value     = type::value;                              \
+};
+
+// call has_template_alias_x, where x is some identifier generates
+// function that check, whether class C has template alias
+//          template<class ... Args>
+//          using x;
+#define has_template_alias_x(name)                                          \
+template<class C, class ... Args>                                           \
+struct has_template_alias_##name                                            \
+{                                                                           \
+    /* attempt to call it */                                                \
+    template<typename T>                                                    \
+    static constexpr auto check(T*)                                         \
+        -> typename has_func_utils::make_true_type                          \
+                <typename T::template name<Args...>>::type;                 \
                                                                             \
     template<typename>                                                      \
     static constexpr std::false_type check(...);                            \
