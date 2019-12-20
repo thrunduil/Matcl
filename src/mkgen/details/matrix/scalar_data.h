@@ -48,6 +48,9 @@ struct scalar_data
     //
     // template<class Void>
     // using simplify;
+    //
+    // template<class Void>
+    // static const bool is_simplified;
 
     //TODO: remove or implement
     // append to Arr_List all arrays required by this scalar
@@ -88,6 +91,8 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
 
     template<class Void>
     using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 
     //TODO: remove?
     // append to Arr_List all arrays required by this scalar
@@ -144,6 +149,8 @@ struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
     template<class Void>
     using simplify  = this_type;
 
+    static constexpr bool is_simplified()   { return true; };
+
     // TODO: remove?
     template<class Loop_Storage, class Ret, class Local_Storage>
     inline_lev_1
@@ -191,6 +198,8 @@ struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value
 
     template<class Void>
     using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 };
 
 //------------------------------------------------------------------------------
@@ -231,6 +240,8 @@ struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
 
     template<class Void>
     using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 };
 
 //------------------------------------------------------------------------------
@@ -274,6 +285,8 @@ struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
     //TODO
     template<class Void>
     using simplify      = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 };
 
 template<class T, Integer Pos>
@@ -317,6 +330,8 @@ struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
     //TODO
     template<class Void>
     using simplify      = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 };
 
 //TODO

@@ -95,6 +95,8 @@ struct element : public mkd::scalar_data<element<Tag, Row, Col>>
     template<class Void>
     using simplify      = this_type;
 
+    static constexpr bool is_simplified()   { return true; };
+
     template<class Visitor>
     static void accept_assign(Visitor& vis)
     {
@@ -159,6 +161,8 @@ struct element_step : public mkd::scalar_data<element_step<Elem, Step>>
 
     template<class Void>
     using simplify      = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 
     template<class Visitor>
     static void accept_assign(Visitor& vis)

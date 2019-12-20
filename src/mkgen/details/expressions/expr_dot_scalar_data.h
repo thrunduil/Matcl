@@ -69,6 +69,8 @@ struct expr_dot_scalar_data : public mkd::scalar_data<expr_dot_scalar_data<List_
     template<class Void>
     using simplify      = this_type;
 
+    static constexpr bool is_simplified()   { return true; };
+
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
     {

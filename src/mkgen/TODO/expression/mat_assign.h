@@ -63,6 +63,8 @@ struct expr_assign : public mkd::scalar_data<expr_assign<T1, T2>>
     //TODO
     template<class Void>
     using simplify      = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 };
 
 template<class Array, Integer Row, Integer Col>

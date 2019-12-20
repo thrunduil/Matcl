@@ -347,6 +347,8 @@ struct get_temporary : public mkd::scalar_data<get_temporary<Tag, Mat_Rows, Mat_
     template<class Void>
     using simplify              = this_type;
 
+    static constexpr bool is_simplified()   { return true; };
+
     template<class Subs_Context>
     static void print(std::ostream& os, int prior)
     {

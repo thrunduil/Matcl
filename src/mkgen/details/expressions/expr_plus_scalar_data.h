@@ -41,6 +41,9 @@ struct plus_item;
 template<class M>
 struct plus_item_mult;
 
+template<class Expr>
+struct simplify_expr_plus;
+
 //----------------------------------------------------------------------------------
 //                              checks
 //----------------------------------------------------------------------------------
@@ -85,6 +88,9 @@ struct plus_item
 
     static const bool is_mult    = mkd::is_mult_expr<T>::value;
     static_assert(is_mult == false, "mult expression not allowed");
+
+    static const bool is_simpl  = T::is_simplified();
+    static_assert(is_simpl == true, "subexpression not simplified");
 
     using scalling      = S;
     using base          = T;
@@ -166,6 +172,9 @@ struct plus_item_mult
 {
     static const bool is_mult    = mkd::is_mult_expr<M>::value;
     static_assert(is_mult == true, "mult expression required");
+
+    static const bool is_simpl  = M::is_simplified();
+    static_assert(is_simpl == true, "subexpression not simplified");
 
     using scalling      = typename M :: scalling;
     using base          = typename M :: base;
@@ -354,7 +363,7 @@ struct plus_item_to_mult<plus_item<S, T>>
     using type0  = typename mkd::static_if
                         <   is_one == true,
                             mkd::lazy_type<T>,
-                            make_expr_mult_sd<S, mult_item<T, 1>>
+                            make_expr_mult_sd<true, S, mult_item<T, 1>>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -527,9 +536,10 @@ struct expr_plus_sd : public mkd::scalar_data<expr_plus_sd<Flag, S, T ...>>
     template<Integer Step, class Arr_List>
     using get_arrays    = typename expr_plus_arrays<Step, Arr_List, T...> :: type;
 
-    //TODO: impl
     template<class Void>
-    using simplify      = this_type;
+    using simplify      = typename simplify_expr_plus<this_type>::type;
+
+    static constexpr bool is_simplified()   { return Flag; };
 
     template<class Visitor>
     static void accept(Visitor& vis)
@@ -553,33 +563,41 @@ struct expr_plus_sd : public mkd::scalar_data<expr_plus_sd<Flag, S, T ...>>
 //                              make_expr_plus_sd
 //----------------------------------------------------------------------------------
 // it is assumed that T::simplify<void> was called
-template<class S, class ... T>
+// // if Is_simpl == true, then also expr_plus was simplified previously
+template<bool Is_simpl, class S, class ... T>
 struct make_expr_plus_sd
+{
+    static_assert(sizeof...(T) > 0, "invalid list of items");
+    using type = expr_plus_sd<false, S, T...>;
+};
+
+template<class S, class ... T>
+struct make_expr_plus_sd<true, S, T...>
 {
     static_assert(sizeof...(T) > 0, "invalid list of items");
 
     //TODO:
-    using type = expr_plus_sd<false, S, T...>;
+    using type = expr_plus_sd<true, S, T...>;
 };
 
 // it is assumed that T::simplify<void> was called for every element in the list List
 // List contains valid plus_items
-template<class S, class List>
+// If Is_simpl == true, then expr_plus<S, T...> was simplified previously
+template<bool Is_simpl, class S, class List>
 struct make_expr_plus_list
 {
     static_assert(md::dependent_false<S>::value, "list::list<...> required");
 };
 
-template<class S, class ... It>
-struct make_expr_plus_list<S, list::list<It...>>
+template<bool Is_simpl, class S, class ... It>
+struct make_expr_plus_list<Is_simpl, S, list::list<It...>>
 {
     static_assert(sizeof...(It) > 1, "this case should already be processed");
-
-    using type   = typename make_expr_plus_sd<S, It ...> :: type;
+    using type   = typename make_expr_plus_sd<Is_simpl, S, It ...> :: type;
 };
 
-template<class S, class It>
-struct make_expr_plus_list<S, list::list<It>>
+template<bool Is_simpl, class S, class It>
+struct make_expr_plus_list<Is_simpl, S, list::list<It>>
 {
     // expression 0 + It can be simplified further
 
@@ -588,12 +606,12 @@ struct make_expr_plus_list<S, list::list<It>>
     using type   = typename mkd::static_if
                         <   is_zero == true,
                             plus_item_to_mult<It>,
-                            make_expr_plus_sd<S, It>
+                            make_expr_plus_sd<true, S, It>
                         > ::type :: type;
 };
 
-template<class S>
-struct make_expr_plus_list<S, list::list<>>
+template<bool Is_simpl, class S>
+struct make_expr_plus_list<Is_simpl, S, list::list<>>
 {
     using type  = S;
 };
@@ -637,6 +655,28 @@ struct can_simplify_plus<S, T>
     static const bool sc_zero   = mkd::is_scalar_data_zero<S>::value;
 
     static const bool value     = (sc_zero == true);
+};
+
+//----------------------------------------------------------------------------------
+//                              simplify_expr_plus
+//----------------------------------------------------------------------------------
+template<class Expr>
+struct simplify_expr_plus
+{
+    static_assert(md::dependent_false<Expr>::value, "expr_plus required");
+};
+
+template<class S, class ... T>
+struct simplify_expr_plus<expr_plus_sd<false, S, T...>>
+{
+    //TODO: implement
+    using type = expr_plus_sd<true, S, T...>;
+};
+
+template<class S, class ... T>
+struct simplify_expr_plus<expr_plus_sd<true, S, T...>>
+{
+    using type = expr_plus_sd<true, S, T...>;
 };
 
 }}}

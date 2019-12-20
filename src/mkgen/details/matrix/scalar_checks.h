@@ -32,6 +32,7 @@ has_static_member_template_function_x(eval)
 has_static_member_template_function_x(value)
 has_static_member_function_x(accept)
 has_template_alias_x(simplify)
+has_constexpr_static_member_function_x(is_simplified)
 
 has_static_member_function_x(print)
 
@@ -105,6 +106,13 @@ struct check_scalar_data_impl
 
     static const bool has_simpl = has_template_alias_simplify<Data, void>::value;
     static_assert(has_simpl == true, "Data must implement template alias: simplify");
+
+    // static constexpr bool is_simplified();
+
+    using func_accept_is_simpl  = bool ();
+    static const bool has_issimpl = has_constexpr_static_member_function_is_simplified
+                                    <Data, func_accept_is_simpl>::value;
+    static_assert(has_issimpl == true, "Data must implement consexpr function: is_simplified");
 
     using type = Ret;
 };

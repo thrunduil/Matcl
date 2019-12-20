@@ -33,7 +33,7 @@ namespace mk = matcl::mkgen;
 //----------------------------------------------------------------------------------
 //                              forward declarations
 //----------------------------------------------------------------------------------
-template<class S, class ... T>
+template<bool Is_simpl, class S, class ... T>
 struct make_mult_normalize_impl;
 
 template<class S, class T>
@@ -53,10 +53,10 @@ struct mult_plus_items;
 template<class Plus_expr>
 struct can_accumulate_scalling;
 
-template<class S, class ... T>
+template<bool Is_simpl, class S, class ... T>
 struct make_expr_plus_sd;
 
-template<class S, class List>
+template<bool Is_simpl, class S, class List>
 struct make_expr_plus_list;
 
 template<class S, class List>
@@ -135,7 +135,7 @@ struct make_mult_impl
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_mult_impl<T1s, T2s>,
-                            make_expr_mult_sd<one_sd, mult_item<T1s, 1>, mult_item<T2s, 1>>
+                            make_expr_mult_sd<false, one_sd, mult_item<T1s, 1>, mult_item<T2s, 1>>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -146,7 +146,7 @@ struct make_mult_impl<expr_mult_sd<F1, S1, T1...>,
                       expr_mult_sd<F2, S2, T2...>, false, false>
 {
     using S     = typename make_mult_scal<S1, S2>::type;
-    using type  = typename make_expr_mult_sd<S, T1..., T2...> :: type;
+    using type  = typename make_expr_mult_sd<false, S, T1..., T2...> :: type;
 };
 
 template<bool F1, class S1, class ... T1, class T2>
@@ -163,7 +163,7 @@ struct make_mult_impl<expr_mult_sd<F1, S1, T1...>, T2, false, false>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_mult_impl<expr_mult_sd<F1, S1, T1...>, T2s>,
-                            make_expr_mult_sd<S1, T1 ..., mult_item<T2s, 1>>
+                            make_expr_mult_sd<false, S1, T1 ..., mult_item<T2s, 1>>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -182,7 +182,7 @@ struct make_mult_impl<T1, expr_mult_sd<F2, S2, T2...>, false, false>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_mult_impl<T1s, expr_mult_sd<F2, S2, T2 ...>>,
-                            make_expr_mult_sd<S2, mult_item<T1s, 1>, T2 ...>
+                            make_expr_mult_sd<false, S2, mult_item<T1s, 1>, T2 ...>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -194,7 +194,7 @@ struct make_mult_impl<expr_mult_sd<F1, S1, T1...>, S2, false, true>
                   "invalid arguments");
 
     using S     = typename make_mult_scal<S1, S2>::type;
-    using type  = typename make_mult_normalize_impl<S, T1...>::type;
+    using type  = typename make_mult_normalize_impl<F1, S, T1...>::type;
 };
 
 template<class T1, class S2>
@@ -212,7 +212,7 @@ struct make_mult_impl<T1, S2, false, true>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_mult_impl<T1s, S2>,
-                            make_mult_normalize_impl<S2, mult_item<T1s, 1>>
+                            make_mult_normalize_impl<true, S2, mult_item<T1s, 1>>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -239,7 +239,8 @@ struct make_mult_impl<S1, S2, true, true>
 // make S * T1 * ... * Tk, where S is a value scalar_data and Ti are nonvalue scalar data
 // if S == 0, then return 0, if S == 1 and k = 1, then return T1
 // for all types Ti, Ti::simplify<> should already be called; can return plus expression
-template<class S, class ... T>
+// If Is_simpl == true, then expr_mult<S, T...> was simplified previously
+template<bool Is_simpl, class S, class ... T>
 struct make_mult_normalize_impl
 {
     static const bool is_zero   = mkd::is_scalar_data_zero<S>::value;
@@ -247,13 +248,13 @@ struct make_mult_normalize_impl
     using type0  = typename mkd::static_if
                         <   is_zero == true,
                             mkd::lazy_type<zero_sd>,
-                            make_expr_mult_sd<S, T...>
+                            make_expr_mult_sd<Is_simpl, S, T...>
                         >::type;
     using type  = typename type0 :: type;
 };
 
-template<class S, class It>
-struct make_mult_normalize_impl<S, It>
+template<bool Is_simpl, class S, class It>
+struct make_mult_normalize_impl<Is_simpl, S, It>
 {
     static const bool is_zero   = mkd::is_scalar_data_zero<S>::value;
     static const bool is_one    = mkd::is_scalar_data_one<S>::value;
@@ -295,7 +296,7 @@ struct make_mult_normalize_plus
 
     using type0  = typename mkd::static_if
                         <   is_add == false || K != 1,
-                            make_expr_mult_sd<S, It>,
+                            make_expr_mult_sd<true, S, It>,
                             make_mult_plus_impl<S, T>
                         >::type;
 
@@ -329,13 +330,15 @@ struct make_mult_plus_impl<S, expr_plus_sd<F, SP, TP...>>
 template<class S, class Plus_expr, bool Can_accumulate>
 struct make_mult_plus_impl_acc
 {
-    using type = typename make_expr_mult_sd<S, mult_item<Plus_expr, 1>> :: type;
+    using type = typename make_expr_mult_sd<true, S, mult_item<Plus_expr, 1>> :: type;
 };
 
 // expr_plus_sd<...>::simplify<> must already be called
 template<class S, bool F, class SP, class ... TP>
 struct make_mult_plus_impl_acc<S, expr_plus_sd<F, SP, TP...>, true>
 {
+    static_assert(F == true, "simplify was not called");
+
     // expr_plus must have SP != 0, or SP == 0 and sizeof(TP) > 1, also S != 0
     // therefore resulting expression remains expr_plus_sd and no further simplifications
     // can occur (ignoring possible underflows)
@@ -348,7 +351,7 @@ struct make_mult_plus_impl_acc<S, expr_plus_sd<F, SP, TP...>, true>
     using plus_items_ret= typename list::elem_at_pos<expanded, 1>::type;    
 
     using S_ret         = typename make_mult_scal<S, SP>::type;
-    using type1         = typename make_expr_plus_list<S_ret, mult_items_ret> ::type;
+    using type1         = typename make_expr_plus_list<F, S_ret, mult_items_ret> ::type;
 
     using type          = typename make_mult_plus_add_items<type1, plus_items_ret>::type;
 };
@@ -421,7 +424,7 @@ struct make_inv_impl<T1, false>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_inv_impl<T1s>,
-                            make_expr_mult_sd<one_sd, mult_item<T1s, -1>>
+                            make_expr_mult_sd<false, one_sd, mult_item<T1s, -1>>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -430,7 +433,7 @@ template<bool F1, class S1, class ... T1>
 struct make_inv_impl<expr_mult_sd<F1, S1, T1...>, false>
 {
     using S1_inv    = typename make_inv_impl<S1, true>::type;
-    using type      = typename make_expr_mult_sd<S1_inv, 
+    using type      = typename make_expr_mult_sd<false, S1_inv, 
                                 typename make_inv_impl<T1, false>::type ...> :: type;
 };
 

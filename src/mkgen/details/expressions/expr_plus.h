@@ -29,7 +29,7 @@ namespace matcl { namespace mkgen { namespace details
 //----------------------------------------------------------------------------------
 //                              forward declarations
 //----------------------------------------------------------------------------------
-template<class S, class ... T>
+template<bool F, class S, class ... T>
 struct make_plus_normalize_impl;
 
 //----------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ struct make_plus_impl
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_plus_impl<T1s, T2s>,
-                            make_expr_plus_sd<zero_sd, 
+                            make_expr_plus_sd<false, zero_sd, 
                                 typename make_plus_item<T1s> :: type, 
                                 typename make_plus_item<T2s> :: type>
                         >::type;
@@ -114,7 +114,7 @@ template<bool F1, class S1, class ...T1,
 struct make_plus_impl<expr_plus_sd<F1, S1, T1...>, expr_plus_sd<F2, S2, T2...>, false, false>
 {
     using S     = typename make_plus_scal<S1, S2>::type;
-    using type  = typename make_expr_plus_sd<S, T1..., T2 ...> :: type;
+    using type  = typename make_expr_plus_sd<false, S, T1..., T2 ...> :: type;
 };
 
 template<bool F1, class S1, class ...T1, class T2>
@@ -131,7 +131,7 @@ struct make_plus_impl<expr_plus_sd<F1, S1,T1...>, T2, false, false>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_plus_impl<expr_plus_sd<F1, S1, T1...>, T2s>,
-                            make_expr_plus_sd<S1, T1..., 
+                            make_expr_plus_sd<false, S1, T1..., 
                                 typename make_plus_item<T2s> :: type>
                         >::type;
     using type  = typename type0 :: type;
@@ -151,7 +151,7 @@ struct make_plus_impl<T1, expr_plus_sd<F2, S2, T2...>, false, false>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_plus_impl<T1s, expr_plus_sd<F2, S2, T2 ...>>,
-                            make_expr_plus_sd<S2, typename make_plus_item<T1> :: type, T2 ...>
+                            make_expr_plus_sd<false, S2, typename make_plus_item<T1> :: type, T2 ...>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -163,7 +163,7 @@ struct make_plus_impl<expr_plus_sd<F1, S1, T1...>, S2, false, true>
                   "invalid arguments");
 
     using S     = typename make_plus_scal<S1, S2>::type;
-    using type  = typename make_plus_normalize_impl<S, T1...>::type;
+    using type  = typename make_plus_normalize_impl<F1, S, T1...>::type;
 };
 
 template<class T1, class S2>
@@ -181,7 +181,7 @@ struct make_plus_impl<T1, S2, false, true>
     using type0  = typename mkd::static_if
                         <   modif == true,
                             make_plus_impl<T1s, S2>,
-                            make_plus_normalize_impl<S2, typename make_plus_item<T1s>::type>
+                            make_plus_normalize_impl<true, S2, typename make_plus_item<T1s>::type>
                         >::type;
     using type  = typename type0 :: type;
 };
@@ -228,21 +228,22 @@ struct make_uminus_impl
 // make S + T1 + ... + Tk, where S is a value scalar_data and Ti are nonvalue scalar data
 // if S == 0 and k = 1, then return T1; 
 // for all types Ti, Ti::simplify<> should already be called
-template<class S, class ... T>
+// If Is_simpl == true, then expr_plus<S, T...> was simplified previously
+template<bool Is_simpl, class S, class ... T>
 struct make_plus_normalize_impl
 {
-    using type  = typename make_expr_plus_sd<S, T...> :: type;
+    using type  = typename make_expr_plus_sd<Is_simpl, S, T...> :: type;
 };
 
-template<class S, class T>
-struct make_plus_normalize_impl<S, T>
+template<bool Is_simpl, class S, class T>
+struct make_plus_normalize_impl<Is_simpl, S, T>
 {
     static const bool is_zero   = mkd::is_scalar_data_zero<S>::value;
 
     using type0  = typename mkd::static_if
                         <   is_zero == true,
                             plus_item_to_mult<T>,
-                            make_expr_plus_sd<S, T>
+                            make_expr_plus_sd<true, S, T>
                         >::type;
 
     using type  = typename type0 :: type;

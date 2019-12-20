@@ -143,3 +143,32 @@ struct has_template_alias_##name                                            \
                                                                             \
     static const bool value     = type::value;                              \
 };
+
+// call has_static_member_function_x, where x is some identifier generates
+// function that check, whether class C has member function
+//          static Ret x(Arg1 arg1, ..., Argk argk)
+// TODO
+#define has_constexpr_static_member_function_x(name)                        \
+template<class C, class T>                                                  \
+struct has_constexpr_static_member_function_##name                          \
+{                                                                           \
+    static_assert(matcl::details::dependent_false<C>::value,                \
+            "second template parameter needs to be of function type.");     \
+};                                                                          \
+template<class C, class Ret, class... Args>                                 \
+struct has_constexpr_static_member_function_##name<C, Ret (Args...)>        \
+{                                                                           \
+    /* attempt to call it and see if the return type is correct */          \
+    template<typename T>                                                    \
+    static constexpr auto check(T*)                                         \
+        -> typename std::is_convertible<                                    \
+                            decltype( T::name( std::declval<Args>()... ) ), \
+                            Ret>::type;                                     \
+                                                                            \
+    template<typename>                                                      \
+    static constexpr std::false_type check(...);                            \
+                                                                            \
+    using type  = decltype(check<C>(0));                                    \
+                                                                            \
+    static const bool value     = type::value;                              \
+};

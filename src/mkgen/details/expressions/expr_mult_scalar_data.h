@@ -38,6 +38,9 @@ struct can_simplify_mult;
 template<class T, Integer K>
 struct mult_item;
 
+template<class Expr>
+struct simplify_expr_mult;
+
 //----------------------------------------------------------------------------------
 //                              checks
 //----------------------------------------------------------------------------------
@@ -50,7 +53,7 @@ struct check_mult_item
 
 template<class T, Integer K>
 struct check_mult_item<mult_item<T, K>>
-{
+{    
     using type = void;
 };
 
@@ -70,6 +73,9 @@ struct mult_item
 
     static const bool is_mult   = mkd::is_mult_expr<T>::value;
     static_assert(is_mult == false, "mult expression not allowed");
+
+    static const bool is_simpl  = T::is_simplified();
+    static_assert(is_simpl == true, "subexpression not simplified");
 
     static const Integer exponent   = K;
     using base                      = T;
@@ -295,9 +301,10 @@ struct expr_mult_sd : public mkd::scalar_data<expr_mult_sd<Flag, S, T...>>
     template<Integer Step, class Arr_List>
     using get_arrays    = typename expr_mult_arrays<Step, Arr_List, T...> :: type;
 
-    // TODO: impl
     template<class Void>
-    using simplify  = this_type;
+    using simplify      = typename simplify_expr_mult<this_type>::type;;
+
+    static constexpr bool is_simplified()   { return Flag; };
 
     template<class Visitor>
     static void accept(Visitor& vis)
@@ -319,11 +326,18 @@ struct expr_mult_sd : public mkd::scalar_data<expr_mult_sd<Flag, S, T...>>
 //                              make_expr_mult_sd
 //----------------------------------------------------------------------------------
 // it is assumed that T::simplify<void> was called
-template<class S, class ... T>
+// if Is_simpl == true, then also expr_mult was simplified previously
+template<bool Is_simpl, class S, class ... T>
 struct make_expr_mult_sd
 {
-    //TODO:
     using type = expr_mult_sd<false, S, T...>;
+};
+
+template<class S, class ... T>
+struct make_expr_mult_sd<true, S, T...>
+{
+    //TODO
+    using type = expr_mult_sd<true, S, T...>;
 };
 
 //----------------------------------------------------------------------------------
@@ -375,6 +389,28 @@ struct can_simplify_mult<S, T>
 
     static const bool value     = (sc_zero == true) 
                                 || (is_one == true && pow_one == true);
+};
+
+//----------------------------------------------------------------------------------
+//                              simplify_expr_mult
+//----------------------------------------------------------------------------------
+template<class Expr>
+struct simplify_expr_mult
+{
+    static_assert(md::dependent_false<Expr>::value, "expr_mult required");
+};
+
+template<class S, class ... T>
+struct simplify_expr_mult<expr_mult_sd<false, S, T...>>
+{
+    //TODO: implement
+    using type = expr_mult_sd<true, S, T...>;
+};
+
+template<class S, class ... T>
+struct simplify_expr_mult<expr_mult_sd<true, S, T...>>
+{
+    using type = expr_mult_sd<true, S, T...>;
 };
 
 }}}
