@@ -24,6 +24,7 @@
 
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/utils/mpl.h"
+#include "mkgen/details/utils/enablers.h"
 
 namespace matcl { namespace mkgen
 {

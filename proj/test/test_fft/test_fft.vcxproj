@@ -24,11 +24,14 @@
     <ClCompile Include="..\..\..\src\test\test_fft\fft_tests.cpp" />
     <ClCompile Include="..\..\..\src\test\test_fft\main.cpp" />
     <ClCompile Include="..\..\..\src\test\test_fft\mkgen_test.cpp" />
+    <ClCompile Include="..\..\..\src\test\test_fft\test_random.cpp" />
+    <ClCompile Include="..\..\..\src\test\test_fft\sort_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\test\test_fft\dct_tests.h" />
     <ClInclude Include="..\..\..\src\test\test_fft\dct_tests_perf.h" />
     <ClInclude Include="..\..\..\src\test\test_fft\fft_tests.h" />
+    <ClInclude Include="..\..\..\src\test\test_fft\metarnd.h" />
     <ClInclude Include="..\..\..\src\test\test_fft\mkgen_test.h" />
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,7 @@ struct scalar_data
 {
     //check arguments
     template<class Dummy>
-    using check     = typename details::check_scalar_data_impl<Data, Dummy>::type;
+    using check_scalar_data = typename details::check_scalar_data_impl<Data, Dummy>::type;
 
     // ct_scalar arrays must implement:
     // template<class Subs_Context>
@@ -56,6 +56,178 @@ struct scalar_data
     // append to Arr_List all arrays required by this scalar
     template<Integer Step, class Arr_List>
     using get_arrays    = Arr_List;
+};
+
+//------------------------------------------------------------------------------
+//                      scal_data_rational
+//------------------------------------------------------------------------------
+// represent rational value N / D, where D > 0
+template<Integer N, Integer D>
+struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
+{
+    static_assert(D > 0, " denominator must be positive");
+
+    using this_type = scal_data_rational<N, D>;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os,int)
+    { 
+        os << N; 
+        if constexpr(D != 1)
+            os << "/" << D;
+    };
+
+    template<class Val, class Local_Storage>
+    inline_lev_1
+    static Val eval(const Local_Storage&)
+    { 
+        return Val(N) / Val(D); 
+    };
+
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Val(double(N) / double(D)); 
+    };
+
+    template<class Visitor>
+    static void accept(Visitor&)
+    { 
+        return; 
+    };
+
+    template<class Void>
+    using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
+
+    // TODO: remove?
+    template<class Loop_Storage, class Ret, class Local_Storage>
+    inline_lev_1
+    static void eval_loop(Ret& ret, Integer off, const Local_Storage& cont)
+    {
+        mkd::eval_loop_scalar<Loop_Storage, this_type>::eval<Ret>(ret,off,cont);
+    };
+};
+
+//------------------------------------------------------------------------------
+//                      scal_data_const_value
+//------------------------------------------------------------------------------
+template<class Tag, class Value_type>
+struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value_type>>
+{
+    //check
+    using check1    = typename mkd::check_valid_const_data_tag<Tag>::type;
+
+    using this_type = scal_data_const_value<Tag, Value_type>;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os,int prior)
+    { 
+        Tag::print(os,prior);
+    };
+
+    template<class Val, class Local_Storage>
+    inline_lev_1
+    static Val eval(const Local_Storage&)
+    { 
+        return Val(Tag::value<Value_type>());
+    };
+
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Tag::value<Value_type>();
+    };
+
+    template<class Visitor>
+    static void accept(Visitor&)
+    { 
+        return; 
+    };
+
+    template<class Void>
+    using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
+};
+
+//------------------------------------------------------------------------------
+//                      scal_data_value
+//------------------------------------------------------------------------------
+template<class Tag, class Value_type>
+struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
+{
+    //check
+    using check1    = typename mkd::check_valid_data_tag<Tag>::type;
+
+    using this_type = scal_data_value<Tag, Value_type>;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os,int prior)
+    { 
+        Tag::print(os,prior);
+    };
+
+    template<class Val, class Local_Storage>
+    inline_lev_1
+    static Val eval(const Local_Storage&)
+    { 
+        return Val(Tag::value<Value_type>());
+    };
+
+    template<class Val>
+    static Val value()
+    {
+        return Tag::value<Value_type>();
+    };
+
+    template<class Visitor>
+    static void accept(Visitor&)
+    { 
+        return; 
+    };
+
+    template<class Void>
+    using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
+};
+
+//------------------------------------------------------------------------------
+//                      scal_data_gen_value
+//------------------------------------------------------------------------------
+template<class Tag>
+struct scal_data_gen_value : mkd::scalar_data<scal_data_gen_value<Tag>>
+{
+    //check
+    using check2    = typename mkd::check_valid_gen_data_tag<Tag>::type;
+
+    using this_type = scal_data_gen_value<Tag>;
+
+    template<class Subs_Context>
+    static void print(std::ostream& os,int prior)
+    { 
+        Tag::print(os, prior);
+    };
+
+    template<class Val, class Local_Storage>
+    inline_lev_1
+    static Val eval(const Local_Storage& ls)
+    { 
+        return Tag::eval<Val, Local_Storage>(ls);
+    };
+
+    template<class Visitor>
+    static void accept(Visitor&)
+    { 
+        return; 
+    };
+
+    template<class Void>
+    using simplify  = this_type;
+
+    static constexpr bool is_simplified()   { return true; };
 };
 
 //-----------------------------------------------------------------------
@@ -106,142 +278,6 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
     {
         mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
     };
-};
-
-//------------------------------------------------------------------------------
-//                      scal_data_rational
-//------------------------------------------------------------------------------
-// represent rational value N / D, where D > 0
-template<Integer N, Integer D>
-struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
-{
-    static_assert(D > 0, " denominator must be positive");
-
-    using this_type = scal_data_rational<N, D>;
-
-    template<class Subs_Context>
-    static void print(std::ostream& os,int)
-    { 
-        os << N; 
-        if constexpr(D != 1)
-            os << "/" << D;
-    };
-
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage&)
-    { 
-        return Val(N) / Val(D); 
-    };
-
-    template<class Val>
-    static constexpr Val value()
-    {
-        return Val(N) / Val(D); 
-    };
-
-    template<class Visitor>
-    static void accept(Visitor&)
-    { 
-        return; 
-    };
-
-    template<class Void>
-    using simplify  = this_type;
-
-    static constexpr bool is_simplified()   { return true; };
-
-    // TODO: remove?
-    template<class Loop_Storage, class Ret, class Local_Storage>
-    inline_lev_1
-    static void eval_loop(Ret& ret, Integer off, const Local_Storage& cont)
-    {
-        mkd::eval_loop_scalar<Loop_Storage, this_type>::eval<Ret>(ret,off,cont);
-    };
-};
-
-//------------------------------------------------------------------------------
-//                      scal_data_const_value
-//------------------------------------------------------------------------------
-template<class Tag, class Value_type>
-struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value_type>>
-{
-    //check
-    using check1    = typename mkd::check_valid_const_data_tag<Tag>::type;
-
-    using this_type = scal_data_const_value<Tag, Value_type>;
-
-    template<class Subs_Context>
-    static void print(std::ostream& os,int prior)
-    { 
-        Tag::print(os,prior);
-    };
-
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage&)
-    { 
-        return Tag::value<Value_type>();
-    };
-
-    template<class Val>
-    static constexpr Val value()
-    {
-        return Tag::value<Value_type>();
-    };
-
-    template<class Visitor>
-    static void accept(Visitor&)
-    { 
-        return; 
-    };
-
-    template<class Void>
-    using simplify  = this_type;
-
-    static constexpr bool is_simplified()   { return true; };
-};
-
-//------------------------------------------------------------------------------
-//                      scal_data_value
-//------------------------------------------------------------------------------
-template<class Tag, class Value_type>
-struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
-{
-    //check
-    using check1    = typename mkd::check_valid_data_tag<Tag>::type;
-
-    using this_type = scal_data_value<Tag, Value_type>;
-
-    template<class Subs_Context>
-    static void print(std::ostream& os,int prior)
-    { 
-        Tag::print(os,prior);
-    };
-
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage&)
-    { 
-        return Tag::value<Value_type>();
-    };
-
-    template<class Val>
-    static Val value()
-    {
-        return Tag::value<Value_type>();
-    };
-
-    template<class Visitor>
-    static void accept(Visitor&)
-    { 
-        return; 
-    };
-
-    template<class Void>
-    using simplify  = this_type;
-
-    static constexpr bool is_simplified()   { return true; };
 };
 
 //------------------------------------------------------------------------------
@@ -368,6 +404,10 @@ template<class Tag, class Val>
 struct is_value_scalar_data<mkd::scal_data_const_value<Tag,Val>>
                                         {static const bool value = true; };
 
+template<class Tag, class Val> 
+struct is_value_scalar_data<mkd::scal_data_value<Tag,Val>>
+                                        {static const bool value = true; };
+
 // return true if T is scalar_data that represents value 0
 template<class T>
 struct is_scalar_data_zero              { static const bool value = false; };
@@ -419,7 +459,8 @@ struct scal_data_const_value_tag
 {
     //check arguments
     template<class Dummy>
-    using check     = typename details::check_const_data_tag_impl<Tag, Dummy>::type;
+    using check_scal_data_const_value_tag
+                    = typename details::check_const_data_tag_impl<Tag, Dummy>::type;
 
     // Tag arrays must implement:
     // static void print(std::ostream& os, int prior);
@@ -437,13 +478,31 @@ struct scal_data_value_tag
 {
     //check arguments
     template<class Dummy>
-    using check     = typename details::check_data_tag_impl<Tag, Dummy>::type;
+    using check_scal_data_value_tag = typename details::check_data_tag_impl<Tag, Dummy>::type;
 
     // Tag arrays must implement:
     // static void print(std::ostream& os, int prior);
     // 
     // template<class Val>
     // static Val value();
+};
+
+//-----------------------------------------------------------------------
+//                      scal_data_gen_value_tag
+//-----------------------------------------------------------------------
+// base class for Tags used in creating gen_scalar
+template<class Tag>
+struct scal_data_gen_value_tag
+{
+    //check arguments
+    template<class Dummy>
+    using check_scal_data_gen_value_tag = typename details::check_gen_data_tag_impl<Tag, Dummy>::type;
+
+    // Tag arrays must implement:
+    // static void print(std::ostream& os, int prior);
+    // 
+    // template<class Val, class Local_Storage>
+    // static Val eval(const Local_Storage& ls);
 };
 
 }}

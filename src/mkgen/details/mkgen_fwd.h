@@ -109,6 +109,10 @@ struct scal_data_const_value;
 template<class Tag, class Value_type>
 struct scal_data_value;
 
+// represents a scalar storing external values
+template<class Tag>
+struct scal_data_gen_value;
+
 // append to Arr_List all arrays required by this scalar; 
 // implements ct_scalar::get_arrays
 template<class Data, class Deps, Integer Step, class Arr_List>

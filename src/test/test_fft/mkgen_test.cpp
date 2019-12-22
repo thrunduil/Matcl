@@ -127,6 +127,7 @@ struct test;
 
 struct tag_pi : mk::scal_data_const_value_tag<tag_pi>
               , mk::scal_data_value_tag<tag_pi>
+              , mk::scal_data_gen_value_tag<tag_pi>
 {
     static void print(std::ostream& os, int prior)
     {
@@ -139,6 +140,14 @@ struct tag_pi : mk::scal_data_const_value_tag<tag_pi>
     {
         return Val(3.1415);
     }
+
+    template<class Val, class Local_Storage>
+    inline_lev_1
+    static Val eval(const Local_Storage&)
+    { 
+        return value<Val>(); 
+    };
+
 };
 
 struct tag_e : mk::scal_data_const_value_tag<tag_e>
@@ -171,20 +180,26 @@ struct tag_one : mk::scal_data_const_value_tag<tag_one>
     }
 };
 
+struct local_storage_dummy
+{};
 
 void test_matrix2()
 {
+    local_storage_dummy ls;
+
     {
-        using val_pi    = mk::value_scalar<tag_pi, double>;
+        using val_pi    = mk::gen_scalar<tag_pi>;
 
         using res       = decltype(two() *( half()*(one() + val_pi()) - two()* val_pi()));
         res::print<empty_context>(std::cout, 0);
+        std::cout << " " << res::eval<double>(ls) << "\n";
     };
     {
-        using val_pi    = mk::value_scalar<tag_pi, double>;
+        using val_pi    = mk::gen_scalar<tag_pi>;
 
         using res       = decltype(two() *( half()*val_pi() - two()* val_pi()));
         res::print<empty_context>(std::cout, 0);
+        std::cout << " " << res::eval<double>(ls) << "\n";
     };
 
     {

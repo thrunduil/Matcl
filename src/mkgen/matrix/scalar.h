@@ -98,14 +98,11 @@ class ct_scalar
             mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
         };
 
-        //TODO
-        /*
         template<class Visitor>
         static void accept(Visitor& vis)
         {
             return Data::accept<Visitor>(vis);
         };
-        */
 };
 
 //------------------------------------------------------------------------------
@@ -132,6 +129,11 @@ template<class Tag, class Value_type>
 using value_scalar          = ct_scalar<mkd::scal_data_value<Tag, Value_type>, 
                                         empty_deps>;
 
+// stores generic data unknown statically, usually supplied by some data_provider
+// Tag must be derived from scal_data_gen_value_tag
+template<class Tag>
+using gen_scalar            = ct_scalar<mkd::scal_data_gen_value<Tag>, extern_deps<Tag>>;
+
 //------------------------------------------------------------------------------
 //                      Predefined scalars
 //------------------------------------------------------------------------------
@@ -155,6 +157,19 @@ struct is_scalar<ct_scalar<A, D>>       {static const bool value = true; };
 
 // return true if T is a scalar with compile time known value
 template<class T> 
+struct is_const_value_scalar            {static const bool value = false; };
+
+template<Integer N, Integer D> 
+struct is_const_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
+                                        {static const bool value = true; };
+
+template<class Tag, class Val> 
+struct is_const_value_scalar<mkd::scal_data_const_value<Tag,Val>>
+                                        {static const bool value = true; };
+
+// return true if T is a scalar storing value not dependent on external
+// data
+template<class T> 
 struct is_value_scalar                  {static const bool value = false; };
 
 template<Integer N, Integer D> 
@@ -163,6 +178,10 @@ struct is_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
 
 template<class Tag, class Val> 
 struct is_value_scalar<mkd::scal_data_const_value<Tag,Val>>
+                                        {static const bool value = true; };
+
+template<class Tag, class Val> 
+struct is_value_scalar<mkd::scal_data_value<Tag,Val>>
                                         {static const bool value = true; };
 
 //------------------------------------------------------------------------------

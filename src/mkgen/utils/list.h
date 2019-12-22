@@ -61,6 +61,23 @@ struct is_list<list<Elem...>>
 };
 
 //-------------------------------------------------------------------------
+//                      concat
+//-------------------------------------------------------------------------
+// concatenate two lists
+template<class L1, class L2>
+struct concat
+{
+    static_assert(md::dependent_false<L1>::value,
+                  "list<...> type required");
+};
+
+template<class ... Elems1, class ... Elems2>
+struct concat<list<Elems1 ...>, list<Elems2 ...>>
+{
+    using type = list<Elems1..., Elems2 ...>;
+};
+
+//-------------------------------------------------------------------------
 //                      push_back
 //-------------------------------------------------------------------------
 

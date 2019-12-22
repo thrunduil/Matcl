@@ -21,65 +21,35 @@
 #pragma once
 
 #include "mkgen/mkgen_fwd.h"
+#include "mkgen/details/utils/mpl.h"
+#include "mkgen/matrix/scalar.h"
+#include "mkgen/matrix/matrix.h"
 
-namespace matcl { namespace mkgen { namespace details { namespace less_impl
+namespace matcl { namespace mkgen { namespace details
 {
 
 //----------------------------------------------------------------------------------
-//                              less_impl
+//                              enablers
 //----------------------------------------------------------------------------------
 
-// length of null-terminated string
-constexpr size_t cstrlen(const char* p) 
-{
-    size_t len = 0;
-    while (*p) 
-    {
-        ++len;
-        ++p;
-    }
-    
-    return len;
-}
+// enable when M1 and M2 are matrix or scalar
+template<class M1, class M2>
+struct enable_matscal_2 :
+    public md::enable_if
+            <	(is_scalar<M1>::value || is_matrix<M1>::value)
+                && (is_scalar<M2>::value || is_matrix<M2>::value),
+                const void*
+            >
+{};
 
-template<class T>
-struct type_name
-{
-    static constexpr char* name() 
-    { 
-        #if defined (_MSC_VER)
-            return __FUNCSIG__; 
-        #else
-            return __PRETTY_FUNCTION__;
-        #endif
-    };
-};
+// enable when M1 is matrix or scalar
+template<class M1, class M2>
+struct enable_matscal_1 :
+    public md::enable_if
+            <	(is_scalar<M1>::value || is_matrix<M1>::value),
+                const void*
+            >
+{};
 
-template<class T1, class T2>
-constexpr bool less_impl()
-{
-    const char* A   = type_name<T1>::name();
-    const char* B   = type_name<T2>::name();
-
-    size_t a_len    = cstrlen(A);
-    size_t b_len    = cstrlen(B);
-
-    if (a_len < b_len)
-        return true;
-
-    if (a_len > b_len)
-        return false;
-
-    // a_len == b_len
-
-    for (size_t i = 0; i < a_len; ++i) 
-    {
-        if (A[i] != B[i]) 
-            return A[i] < B[i];
-    }
-
-    return false;
-}
-
-}}}}
+}}}
 

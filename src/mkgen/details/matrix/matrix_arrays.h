@@ -45,7 +45,7 @@ struct matrix_array
 {
     //check arguments
     template<class Dummy>
-    using check     = typename details::check_matrix_array_impl<Data, Dummy>::type;
+    using check_matrix_array = typename details::check_matrix_array_impl<Data, Dummy>::type;
 
     // ct_matrix arrays must implement:
     //

@@ -67,7 +67,7 @@ struct check_valid_scalar_data
 
     static_assert(is_sd == true, "type is not scalar_data<>");
 
-    using type  = typename Data::template check<void>;
+    using type  = typename Data::template check_scalar_data<void>;
 };
 
 // check if Data parameter supplied to ct_scalar is valid
@@ -129,7 +129,7 @@ struct check_valid_const_data_tag
 
     static_assert(is_valid_tag == true, "Tag is not scal_data_const_value_tag<>");
 
-    using type  = typename Tag::template check<void>;
+    using type  = typename Tag::template check_scal_data_const_value_tag<void>;
 };
 
 // check if Tag parameter supplied to scal_data_const_value_tag is valid
@@ -173,7 +173,7 @@ struct check_valid_data_tag
 
     static_assert(is_valid_tag == true, "Tag is not scal_data_value_tag<>");
 
-    using type  = typename Tag::template check<void>;
+    using type  = typename Tag::template check_scal_data_value_tag<void>;
 };
 
 // check if Tag parameter supplied to scal_data_const_value_tag is valid
@@ -197,6 +197,46 @@ struct check_data_tag_impl
                                     <Tag, double, func_eval_type>::value;
 
     static_assert(has_eval == true, "Tag must implement function value()");
+
+    using type = Ret;
+};
+
+//-----------------------------------------------------------------------
+//                      check_valid_gen_data_tag
+//-----------------------------------------------------------------------
+// check if Tag parameter supplied to scal_data_gen_value is valid
+template<class Tag>
+struct check_valid_gen_data_tag
+{
+    static const bool is_valid_tag  = std::is_base_of<mk::scal_data_gen_value_tag<Tag>, Tag>
+                                                ::value;
+
+    static_assert(is_valid_tag == true, "Tag is not scal_data_gen_value_tag<>");
+
+    using type  = typename Tag::template check_scal_data_gen_value_tag<void>;
+};
+
+// check if Tag parameter supplied to scal_data_gen_value_tag is valid
+template<class Tag, class Ret>
+struct check_gen_data_tag_impl
+{
+    // Data must implement:
+
+    // static void print(std::ostream& os, int prior);
+    using func_print_type       = void (std::ostream& os, int prior);
+    static const bool has_print = has_static_member_function_print
+                                    <Tag, func_print_type>::value;
+
+    static_assert(has_print == true, "Tag must implement function print");
+
+    // template<class Val, class Local_Storage>
+    // static Val eval(const Local_Storage& ls);
+
+    using func_eval_type       = double (const local_storage_dummy&);
+    static const bool has_eval = has_static_member_template_function_eval
+                                    <Tag, double, func_eval_type>::value;
+
+    static_assert(has_eval == true, "Tag must implement function eval");
 
     using type = Ret;
 };

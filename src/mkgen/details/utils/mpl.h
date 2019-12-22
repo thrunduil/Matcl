@@ -21,15 +21,21 @@
 #pragma once
 
 #include "mkgen/mkgen_fwd.h"
-#include "mkgen/matrix/dependency.h"
-#include "mkgen/details/utils/mpl_impl.h"
+#include "mkgen/details/utils/less_types_impl.h"
+#include "mkgen/details/utils/merge_sort_impl.h"
+#include "mkgen/details/utils/random_impl.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
 
+//----------------------------------------------------------------------------------
+//                              utils
+//----------------------------------------------------------------------------------
+
 //allow use always false conditions in static_assert 
+// already defined in "matcl-core/details/mpl.h"
 //template<class T>
-//struct dependent_false          { static const bool value = false; };
+//struct dependent_false        { static const bool value = false; };
 
 template<class... T>
 struct dependent_false_var      { static const bool value = false; };
@@ -44,25 +50,9 @@ struct lazy_type
     using type = T;
 };
 
-// enable when M1 and M2 are matrix or scalar
-template<class M1, class M2>
-struct enable_matscal_2 :
-    public md::enable_if
-            <	(is_scalar<M1>::value || is_matrix<M1>::value)
-                && (is_scalar<M2>::value || is_matrix<M2>::value),
-                const void*
-            >
-{};
-
-// enable when M1 is matrix or scalar
-template<class M1, class M2>
-struct enable_matscal_1 :
-    public md::enable_if
-            <	(is_scalar<M1>::value || is_matrix<M1>::value),
-                const void*
-            >
-{};
-
+//----------------------------------------------------------------------------------
+//                              type comparison
+//----------------------------------------------------------------------------------
 // return true if T1 is ordered less, than T2,
 // ordering is based on type names
 template<class T1, class T2>
@@ -71,5 +61,67 @@ struct less_types
     static const bool value = less_impl::less_impl<T1, T2>();
 };
 
+//----------------------------------------------------------------------------------
+//                              merge_sort
+//----------------------------------------------------------------------------------
+
+// sort list of types TL = list<...> according to comparison function
+// Compare; return sorted list of types;
+// Compare must implement:
+//
+//      template<class T1, class T2>
+//      static constexpr bool value = [impl]
+//
+// which should return true if T1 < T2
+template<class Compare, class TL>
+struct merge_sort
+{
+    using type      = typename merge_sort_impl :: merge_sort<Compare, TL>::type;
+};
+
+//----------------------------------------------------------------------------------
+//                              random number
+//----------------------------------------------------------------------------------
+
+// random number generator before use must be initialized with this function
+//      using RG = initialize<Engine>::type
+template<class Engine>
+struct initialize;
+
+// class storing random state
+template<class Engine>
+struct random_state
+{
+    // check if engine is initialized
+    static_assert(random_impl::is_initialized<Engine>::value, "initialize not called");
+
+    // get current random number
+    using value_type                = decltype(Engine::value);
+    static const value_type value   = Engine::value;
+
+    // generate next random number; next has type random_state<Engine>
+    using next                      = typename random_impl::make_next<Engine>::type;
+};
+
+// constant integer generated based on current time
+constexpr int get_time_seed()   { return random_impl::time_seed; };
+
+// linear congruential engine
+// generate random numbers according to
+//  v(i) = (a * v(i-1) + c) % m
+//  v(0) = seed
+// If m == 0, then m = 2^64
+// default parameters are taken from Knuth’s LCG MMIX algorithm, which
+// performs well according to 
+//      Bhattacharjee, Kamalika, Krishnendu Maity, and Sukanta Das. 
+//      "A Search for Good Pseudo-random Number Generators: Survey and Empirical
+//      Studies." arXiv preprint arXiv:1811.04035 (2018).
+template<uint64_t seed = get_time_seed(),
+         uint64_t a = 6364136223846793005ULL,
+         uint64_t c = 1442695040888963407ULL,
+         uint64_t m = 0ULL>
+struct LCE;
+
 }}}
 
+#include "mkgen/details/utils/random_impl_engines.h"

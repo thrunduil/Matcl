@@ -204,6 +204,21 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\element.h">
       <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\less_types_impl.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\merge_sort_impl.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\random_impl.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\enablers.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\utils\random_impl_engines.h">
+      <Filter>Source Files\src\details\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl">

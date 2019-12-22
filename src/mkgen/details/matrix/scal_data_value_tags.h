@@ -26,9 +26,10 @@
 namespace matcl { namespace mkgen { namespace details
 {
 
-// convert rational number to scalar value
+// convert rational number to constant scalar value
 template<Integer N, Integer D>
-struct scal_data_value_tag_rational: mk::scal_data_const_value_tag<scal_data_value_tag_rational<N, D>>
+struct scal_data_const_value_tag_rational
+    : mk::scal_data_const_value_tag<scal_data_const_value_tag_rational<N, D>>
 {
     using rational  = mkd::scal_data_rational<N, D>;
 
@@ -41,9 +42,42 @@ struct scal_data_value_tag_rational: mk::scal_data_const_value_tag<scal_data_val
     static constexpr Val value()    { return rational::value<Val>(); }
 };
 
+// convert rational number to scalar value
+template<Integer  N, Integer D>
+struct scal_data_value_tag_rational
+    : mk::scal_data_value_tag<scal_data_value_tag_rational<N, D>>
+{
+    using rational  = mkd::scal_data_rational<N, D>;
+
+    static void print(std::ostream& os, int prior)
+    {
+        rational::print(os, prior);
+    };
+
+    template<class Val>
+    static Val value()              { return rational::value<Val>(); }
+};
+
+// convert constant scalar value to scalar value
+template<class Tag, class Val>
+struct scal_data_value_tag_const
+    : mk::scal_data_value_tag<scal_data_value_tag_const<Tag, Val>>
+{
+    using const_scal    = mkd::scal_data_const_value<Tag, Val>;
+
+    static void print(std::ostream& os, int prior)
+    {
+        const_scal::print(os, prior);
+    };
+
+    template<class Val_loc>
+    static Val_loc value()          { return const_scal::value<Val_loc>(); }
+};
+
 // tag representing multiplication Tag1 x Tag2
 template<class Tag1, class Tag2>
-struct scal_data_value_tag_mult : mk::scal_data_const_value_tag<scal_data_value_tag_mult<Tag1, Tag2>>
+struct scal_data_const_value_tag_mult 
+    : mk::scal_data_const_value_tag<scal_data_const_value_tag_mult<Tag1, Tag2>>
 {
     //check
     using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
@@ -59,9 +93,29 @@ struct scal_data_value_tag_mult : mk::scal_data_const_value_tag<scal_data_value_
     static constexpr Val value()    { return Tag1::value<Val>() * Tag2::value<Val>(); }
 };
 
-// tag representing multiplication Tag1 + Tag2
+// tag representing multiplication Tag1 x Tag2
 template<class Tag1, class Tag2>
-struct scal_data_value_tag_plus : mk::scal_data_const_value_tag<scal_data_value_tag_plus<Tag1, Tag2>>
+struct scal_data_value_tag_mult 
+    : mk::scal_data_value_tag<scal_data_value_tag_mult<Tag1, Tag2>>
+{
+    //check
+    using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
+    using check2    = typename mkd::check_valid_data_tag<Tag2>::type;
+
+    static void print(std::ostream& os, int prior)
+    {
+        (void)prior;
+        os << "scalar(" << value<double>() << ")";
+    };
+
+    template<class Val>
+    static Val value()  { return Tag1::value<Val>() * Tag2::value<Val>(); }
+};
+
+// tag representing addition Tag1 + Tag2
+template<class Tag1, class Tag2>
+struct scal_data_const_value_tag_plus 
+    : mk::scal_data_const_value_tag<scal_data_const_value_tag_plus<Tag1, Tag2>>
 {
     //check
     using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
@@ -77,9 +131,29 @@ struct scal_data_value_tag_plus : mk::scal_data_const_value_tag<scal_data_value_
     static constexpr Val value()    { return Tag1::value<Val>() + Tag2::value<Val>(); }
 };
 
+// tag representing addition Tag1 + Tag2
+template<class Tag1, class Tag2>
+struct scal_data_value_tag_plus 
+    : mk::scal_data_value_tag<scal_data_value_tag_plus<Tag1, Tag2>>
+{
+    //check
+    using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
+    using check2    = typename mkd::check_valid_data_tag<Tag2>::type;
+
+    static void print(std::ostream& os, int prior)
+    {
+        (void)prior;
+        os << "scalar(" << value<double>() << ")";
+    };
+
+    template<class Val>
+    static Val value()  { return Tag1::value<Val>() + Tag2::value<Val>(); }
+};
+
 // tag representing division 1 / Tag1
 template<class Tag1>
-struct scal_data_value_tag_inv : mk::scal_data_const_value_tag<scal_data_value_tag_inv<Tag1>>
+struct scal_data_const_value_tag_inv 
+    : mk::scal_data_const_value_tag<scal_data_const_value_tag_inv<Tag1>>
 {
     //check
     using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
@@ -94,6 +168,24 @@ struct scal_data_value_tag_inv : mk::scal_data_const_value_tag<scal_data_value_t
 
     template<class Val>
     static constexpr Val value()    { return Val(1) / Tag1::value<Val>(); }
+};
+
+// tag representing division 1 / Tag1
+template<class Tag1>
+struct scal_data_value_tag_inv 
+    : mk::scal_data_value_tag<scal_data_value_tag_inv<Tag1>>
+{
+    //check
+    using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
+
+    static void print(std::ostream& os, int prior)
+    {
+        (void)prior;
+        os << "scalar(" << value<double>() << ")";
+    };
+
+    template<class Val>
+    static Val value()  { return Val(1) / Tag1::value<Val>(); }
 };
 
 }}}
