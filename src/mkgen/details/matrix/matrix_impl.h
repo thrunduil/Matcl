@@ -157,7 +157,7 @@ struct mkgen::is_matrix
     static const bool value = false;
 };
 
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, class Deps>
 struct mkgen::is_matrix<ct_matrix<M, N, Array_t, Deps>>
 {
     static const bool value = true;
@@ -170,7 +170,7 @@ struct mkgen::is_virtual_matrix
     static const bool value = false;
 };
 
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, class Deps>
 struct mkgen::is_virtual_matrix<ct_matrix<M, N, Array_t, Deps>>
 {
     static const bool value = mkd::is_virtual_matrix_array<Array_t>::value;

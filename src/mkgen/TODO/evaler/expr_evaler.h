@@ -48,7 +48,7 @@ struct is_virtual_temporary
 {
     static const bool value = false;
 };
-template<Integer M, Integer N, class Array, class Deps, bool With_Forced>
+template<Integer M, Integer N, Mat_array Array, class Deps, bool With_Forced>
 struct is_virtual_temporary<ct_matrix<M, N, Array, Deps>,With_Forced>
 {
     static const bool value = is_temporary_mat_array<Array, With_Forced>::value;
@@ -391,14 +391,14 @@ struct make_empty_dps_maker<Tag, modif2<Ret_Tag, Colon, Rows, Cols>,Subs_Context
     };
 };
 
-template<Integer Rows, Integer Cols, class Array, class Deps, class Rem_Dps>
+template<Integer Rows, Integer Cols, Mat_array Array, class Deps, class Rem_Dps>
 struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>,Rem_Dps>
 {
     using all_deps  = typename link_deps<Deps,Rem_Dps>::type;
     using type      = ct_matrix<Rows,Cols,Array,all_deps>;
 };
 
-template<Integer Rows, Integer Cols, class Array, class Deps>
+template<Integer Rows, Integer Cols, Mat_array Array, class Deps>
 struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>,void>
 {
     using type      = ct_matrix<Rows,Cols,Array,Deps>;
@@ -616,7 +616,7 @@ template<class Val, class Mat>
 struct expr_evaler_elems
 {};
 
-template<class Val, Integer M, Integer N, class Array, class Deps, class ... Elems>
+template<class Val, Integer M, Integer N, Mat_array Array, class Deps, class ... Elems>
 struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N,Array,Deps>, Elems...>>
 {
     using matrix_type   = ct_matrix<M,N,Array,Deps>;
@@ -706,7 +706,7 @@ struct expr_evaler_elems_expand<Val, list::list<>>
     }
 };
 
-template<class Val, Integer M, Integer N, class Array, class Deps>
+template<class Val, Integer M, Integer N, Mat_array Array, class Deps>
 struct expr_evaler_elems<Val, ct_matrix<M,N,Array,Deps>>
 {
     template<class Local_Storage>

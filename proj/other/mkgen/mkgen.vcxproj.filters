@@ -222,6 +222,12 @@
     <ClInclude Include="..\..\..\src\mkgen\matrix\concepts.h">
       <Filter>Source Files\src\matrix</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\matrix\predefined_matrices.h">
+      <Filter>Source Files\src\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\matrix\base_types.h">
+      <Filter>Source Files\src\matrix</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl">

@@ -273,8 +273,8 @@ struct mat_mult_impl
     static_assert(md::dependent_false<M1>::value, "M1, M2 must be ct_matrix or ct_scalar");
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1,
-        Integer M2, Integer N2, class Array2, class Deps2>
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1,
+        Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mat_mult_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     static_assert(N1 == M2, "conconformant matrix sizes");
@@ -286,7 +286,7 @@ struct mat_mult_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2,
     using type          = ct_matrix<M1, N2, array_type, deps>;
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
          class Array2, class Deps2>
 struct mat_mult_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> >
 {
@@ -296,7 +296,7 @@ struct mat_mult_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> >
 };
 
 template<class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mat_mult_impl<ct_scalar<Array1,Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     using array_type    = mkd::mat_scal_mult_array<Array2, Array1>;
@@ -324,8 +324,8 @@ struct mult_rows_impl
     static_assert(md::dependent_false<M1>::value, "M1, M2 must be ct_matrix or ct_scalar");
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mult_rows_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2,N2,Array2,Deps2>>
 {
     static_assert(M1 == M2, "conconformant matrix sizes");
@@ -338,7 +338,7 @@ struct mult_rows_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2,N2,Array2,D
     using type          = ct_matrix<M1_M2, N1, array_type,deps>;
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
          class Array2, class Deps2>
 struct mult_rows_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> >
 {
@@ -352,7 +352,7 @@ struct mult_rows_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> 
 };
 
 template<class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mult_rows_impl<ct_scalar<Array1,Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     static_assert(M2 == 1 && N2 == 1, "1x1 matrix expected");
@@ -384,8 +384,8 @@ struct mult_cols_impl
     static_assert(md::dependent_false<M1>::value, "M1, M2 must be ct_matrix or ct_scalar");
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mult_cols_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     static_assert(N1 == M2, "conconformant matrix sizes");
@@ -398,7 +398,7 @@ struct mult_cols_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2
     using type          = ct_matrix<M1, N1_M2, array_type,deps>;
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
          class Array2, class Deps2>
 struct mult_cols_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> >
 {
@@ -412,7 +412,7 @@ struct mult_cols_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> 
 };
 
 template<class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mult_cols_impl<ct_scalar<Array1,Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     static_assert(M2 == 1 && N2 == 1, "1x1 matrix expected");
@@ -444,8 +444,8 @@ struct mul_impl
     static_assert(md::dependent_false<M1>::value, "M1, M2 must be ct_matrix or ct_scalar");
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1,
-         Integer M2, Integer N2, class Array2, class Deps2>
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1,
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mul_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     static_assert(M1 == M2, "conconformant matrix sizes");
@@ -459,7 +459,7 @@ struct mul_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2, Deps
     using type          = ct_matrix<M1_M2, N1_N2, array_type,deps>;
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
          class Array2, class Deps2>
 struct mul_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> >
 {
@@ -471,7 +471,7 @@ struct mul_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2> >
 };
 
 template<class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mul_impl<ct_scalar<Array1,Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     using A             = ct_scalar<Array1,Deps1>;
@@ -501,8 +501,8 @@ struct mat_div_impl
     static_assert(md::dependent_false<M1>::value, "M1, M2 must be ct_matrix or ct_scalar");
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
-         Integer M2, Integer N2, class Array2, class Deps2>
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
+         Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mat_div_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     static_assert(M1 == M2, "conconformant matrix sizes");
@@ -516,7 +516,7 @@ struct mat_div_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_matrix<M2, N2, Array2, 
     using type          = ct_matrix<M1_M2, N1_N2, array_type,deps>;
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, 
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, 
         class Array2,class Deps2>
 struct mat_div_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2>>
 {
@@ -525,7 +525,7 @@ struct mat_div_impl<ct_matrix<M1, N1, Array1, Deps1>, ct_scalar<Array2,Deps2>>
     using type          = ct_matrix<M1, N1, array_type,deps>;
 };
 
-template<class Array1, class Deps1, Integer M2, Integer N2, class Array2, class Deps2>
+template<class Array1, class Deps1, Integer M2, Integer N2, Mat_array Array2, class Deps2>
 struct mat_div_impl<ct_scalar<Array1,Deps1>, ct_matrix<M2, N2, Array2, Deps2>>
 {
     using array_type    = mkd::div_array_scal_mat<Array2, Array1>;

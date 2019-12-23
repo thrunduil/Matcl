@@ -32,7 +32,7 @@ template<class Data, class Deps>
 class ct_scalar;
 
 // compile time matrix
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, class Deps>
 struct ct_matrix;
 
 // compute result of ct_scalar::compute()
@@ -47,12 +47,6 @@ struct scal_data_value_tag;
 
 template<class Tag>
 struct scal_data_gen_value_tag;
-
-template<class Tag>
-struct matrix_data_const_value_tag;
-
-template<class Tag>
-struct matrix_data_value_tag;
 
 //TODO
 template<class Mat_L, class Tag, bool Force>
@@ -135,10 +129,6 @@ struct eval_loop_scalar;
 // store data in ct_scalar
 template<class Data>
 struct scalar_data;
-
-// store data in ct_matrix
-template<class Array>
-struct matrix_array;
 
 // make submatrix
 template<class Mat, class Colon_1, class Colon_2>

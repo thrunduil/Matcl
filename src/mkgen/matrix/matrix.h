@@ -23,7 +23,6 @@
 #include <iosfwd>
 
 #include "mkgen/matrix/scalar.h"
-#include "mkgen/details/matrix/matrix_checks.h"
 #include "mkgen/matrix/concepts.h"
 
 namespace matcl { namespace mkgen
@@ -49,16 +48,14 @@ struct colon3{};
 // compile time matrix with size M x N storing symbolic elements in array Array_t.
 //
 // Matrix 1x1 is not a scalar, for example multiplying 1x1 matrix and 2x2 matrix will
-// produce an error. For a matrix with generic elements Array_t type is basically array<Tag>
-// with unique Tag for each matrix. 
+// produce an error. Array_t must be derived from matrix_array
 // Deps is a type representing dependencies from runtime values; must be specialization
 // of dps type
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, class Deps>
 struct ct_matrix
 {
-    public:
+    private:
         // check arguments
-        using check1    = typename mkd::check_valid_matrix_array<Array_t>::type;
         using check2    = typename mkd::check_deps<Deps>::type;
 
     public:
@@ -132,7 +129,7 @@ using value_mat = ct_matrix<M, N, mkd::matrix_array_value<Tag, Value_type>, empt
 
 //stores generic data unknown statically, usually supplied by some data_provider
 template<Integer M, Integer N, class Tag>
-using gen_mat = ct_matrix<M,N, mkd::gen_array<Tag>, extern_deps<Tag>>;
+using gen_mat = ct_matrix<M, N, mkd::gen_array<Tag>, extern_deps<Tag>>;
 
 //stores results
 template<Integer M, Integer N, class Tag>

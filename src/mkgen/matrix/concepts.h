@@ -24,24 +24,25 @@
 #include <concepts>
 
 #include "matcl-core/matrix/scalar_types.h"
-
-namespace matcl { namespace mkgen
-{
-
-namespace mk = matcl :: mkgen;
+#include "mkgen/matrix/base_types.h"
 
 //------------------------------------------------------------------------------
 //                      fordward declarations
 //------------------------------------------------------------------------------
-template<class Tag>
-struct matrix_data_const_value_tag;
+namespace matcl { namespace mkgen
+{
 
-template<class Tag>
-struct matrix_data_value_tag;
+    namespace details
+    {
+        namespace mkd = matcl :: mkgen :: details;
+    };
 
-template<class T, class V, Integer Row, Integer Col>
-concept has_static_member_value = 
-    requires { {T::template value<V, Row, Col>()} -> std::convertible_to<V>; };
+    namespace mk    = matcl :: mkgen;
+    namespace mkd   = matcl :: mkgen :: details;
+}}
+
+namespace matcl { namespace mkgen
+{
 
 //------------------------------------------------------------------------------
 //                      matrix tags
@@ -55,7 +56,7 @@ concept has_static_member_value =
 template<class Tag>
 concept Tag_matrix_const_data = std::is_base_of<mk::matrix_data_const_value_tag<Tag>,
                                             Tag>::value
-                              && has_static_member_value<Tag, double, 1, 1>;
+                              && matrix_data_const_value_tag_check :: template is_valid<Tag>;
 
 // concept of Tag used to create value_mat
 // Tag must be derived from matrix_data_value_tag<Tag> and implement:
@@ -64,7 +65,15 @@ concept Tag_matrix_const_data = std::is_base_of<mk::matrix_data_const_value_tag<
 //    static V value();
 template<class Tag>
 concept Tag_matrix_data = std::is_base_of<mk::matrix_data_value_tag<Tag>, Tag>::value
-                        && has_static_member_value<Tag, double, 1, 1>;
+                        && matrix_data_value_tag_check :: template is_valid<Tag>;
+
+//------------------------------------------------------------------------------
+//                      matrix arrays
+//------------------------------------------------------------------------------
+// concept of matrix array
+template<class Arr>
+concept Mat_array   = std::is_base_of<mkd::matrix_array<Arr>, Arr>::value
+                    && mkd::matrix_array_check::template is_valid<Arr>;
 
 }}
 

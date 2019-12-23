@@ -38,28 +38,8 @@ template<class Data, Integer Row, Integer Col>
 struct matrix_array_get_elem;
 
 //-----------------------------------------------------------------------
-//                      matrix_array
+//                      matrix_array impl
 //-----------------------------------------------------------------------
-// base class for ct_matrix arrays
-template<class Data>
-struct matrix_array
-{
-    //check arguments
-    template<class Dummy>
-    using check_matrix_array = typename details::check_matrix_array_impl<Data, Dummy>::type;
-
-    // ct_matrix arrays must implement:
-    //
-    //  template<Integer Row, Integer Col>
-    //  using get_element_impl   = [impl]
-    // 
-    // where T := get_element_impl<Row, Col>::type return type of element at (Row, Col)
-    // T must be derived from scalar_data<T> (and satisfy scalar_data requirements)
-
-    template<Integer Row, Integer Col>
-    using get_element  = matrix_array_get_elem<Data, Row, Col>;
-};
-
 template<class Data, Integer Row, Integer Col>
 struct matrix_array_get_elem
 {
@@ -132,7 +112,7 @@ struct matrix_array_const_value : public matrix_array<matrix_array_const_value<T
 };
 
 template<class Tag>                                     
-struct gen_array : public matrix_array<gen_array<Tag>>
+struct gen_array : public mkd::matrix_array<gen_array<Tag>>
 {
     using this_type     = gen_array<Tag>;
 
@@ -257,43 +237,4 @@ struct error_access_to_empty_array
                 "access to elements of empty_array is not allowed; this array should not be used explicitly");
 };
 
-//TODO
-/*
-// Symbolic Array of generic elements of type element<Tag, row, col, ...> for all 
-// pairs of (row, col) available in given matrix.
-template<class Tag>
-struct array {};
-*/
-
 }}}
-
-namespace matcl { namespace mkgen 
-{
-
-//-----------------------------------------------------------------------
-//                      matrix_data_const_value_tag
-//-----------------------------------------------------------------------
-// base class for Tags used in creating const_value_mat
-template<class Tag>
-struct matrix_data_const_value_tag
-{
-    // Tag must implement:
-    // 
-    // template<class Val, Integer Row, Integer Col>
-    // static constexpr Val value();
-};
-
-//-----------------------------------------------------------------------
-//                      matrix_data_value_tag
-//-----------------------------------------------------------------------
-// base class for Tags used in creating value_mat
-template<class Tag>
-struct matrix_data_value_tag
-{
-    // Tag must implement:
-    // 
-    // template<class Val, Integer Row, Integer Col>
-    // static Val value();
-};
-
-}}

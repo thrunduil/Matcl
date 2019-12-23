@@ -51,8 +51,10 @@
     <ClInclude Include="..\..\..\src\mkgen\details\utils\rational.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\utils.h" />
     <ClInclude Include="..\..\..\src\mkgen\expression\expressions.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\base_types.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\dependency.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\matrix.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\predefined_matrices.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\scalar.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\concepts.h" />
     <ClInclude Include="..\..\..\src\mkgen\mkgen.h" />

@@ -1,5 +1,6 @@
 #include "mkgen/mkgen.h"
 #include "mkgen/expression/expressions.h"
+#include "mkgen/details/matrix/matrix_arrays.h"
 
 #include <iostream>
 

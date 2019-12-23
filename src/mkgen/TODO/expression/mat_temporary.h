@@ -226,7 +226,7 @@ struct is_temporary_mat_array<mkd::virtual_array<Tag, Args...>, With_Forced >
     static const bool value = is_temporary_virtual_array<With_Forced, Args...>::value;
 };
 
-template<Integer M1, Integer N1, class Array1, class Deps1, bool With_Forced>
+template<Integer M1, Integer N1, Mat_array Array1, class Deps1, bool With_Forced>
 struct is_temporary_mat<ct_matrix<M1, N1, Array1, Deps1>,With_Forced>
 {
     static const bool value = is_temporary_mat_array<Array1,With_Forced>::value;

@@ -15,7 +15,7 @@ namespace matcl { namespace mkgen
 struct call_array_type{};
 
 template<class Tag, template<class Arg> class Func, 
-         Integer M_arg, Integer N_arg, class Array_Arg, class Deps0>
+         Integer M_arg, Integer N_arg, Mat_array Array_Arg, class Deps0>
 struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
 {
     //remove dependencies
@@ -205,7 +205,7 @@ struct get_arg_tag<mkd::mat_temp_array<Tag,MR,MC,Force>>
     using type = Tag;
 };
 
-template<Integer M, Integer N, class Array, class Deps>
+template<Integer M, Integer N, Mat_array Array, class Deps>
 struct is_value_matrix<ct_matrix<M,N,Array,Deps>>
 {
     static const Integer value = false;
@@ -238,7 +238,7 @@ struct make_func_output
     using type = make_func_output;
 };
 
-template<class Tag, class Func, Integer M_arg, Integer N_arg, class Array_Arg, class Deps0>
+template<class Tag, class Func, Integer M_arg, Integer N_arg, Mat_array Array_Arg, class Deps0>
 struct make_call_external<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>, true>
 {
     using return_size           = typename Func::template return_size<M_arg, N_arg>;
