@@ -219,6 +219,9 @@
     <ClInclude Include="..\..\..\src\mkgen\details\utils\random_impl_engines.h">
       <Filter>Source Files\src\details\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\func_impl.h">
+      <Filter>Source Files\src\details\expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl">

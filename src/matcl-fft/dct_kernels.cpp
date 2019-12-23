@@ -9,7 +9,8 @@ namespace matcl { namespace fft
 //                          dct1_kernel
 //-----------------------------------------------------------------------
 template<Integer M, class Test>
-MATCL_FFT_EXPORT void dct1_kernel(const double* in, double* out, Integer N, Integer in_ld, Integer out_ld)
+MATCL_FFT_EXPORT void dct1_kernel(const double* in, double* out, Integer N, 
+                                  Integer in_ld, Integer out_ld)
 {
     using evaler    = dct1_evaler_type<M>;
 

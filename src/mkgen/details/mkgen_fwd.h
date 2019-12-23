@@ -49,10 +49,6 @@ struct sub_array_2_get_elem;
 
 //TODO
 template<class Array, Integer Row, Integer Col>
-struct mat_ufunc_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
 struct sub_array_1_get_elem;
 
 //TODO:
@@ -70,14 +66,6 @@ struct mat_assign_array_get_elem;
 //TODO
 template<class Array, Integer Row, Integer Col>
 struct mat_scal_assign_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_trans_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_ctrans_array_get_elem;
 
 //TODO
 template<class Array, Integer Row, Integer Col>

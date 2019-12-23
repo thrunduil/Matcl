@@ -271,6 +271,7 @@ template<Integer M, class Scal> struct tag_dct3     { static const bool is_conti
 template<Integer M, class Scal> struct tag_dct4     { static const bool is_continuous = false; };
 template<Integer M>             struct tag_dct4_2   { static const bool is_continuous = true; };
 
+/*
 //TODO: reimplement
 template<Integer M, class Scal, class Tag, Integer Row, Integer Col>
 struct mk::make_expr_ufunc<tag_dct1<M,Scal>, mkd::element<Tag, Row, Col>>
@@ -368,7 +369,25 @@ struct mk::make_expr_ufunc<tag_dct4_2<M>,mkd::element<Tag, Row, Col>>
     using type                      = typename matcl::fft::get_element_cos<4*M, base_ind, step,
                                             negate,zero_v, one_v, mone_v, half_v, two>::type;
 };
+*/
 
+template<Integer Rows, class Scal>
+using cos_dct1  = mk::func_unary<tag_dct1<Rows,Scal>>;
+
+template<Integer Rows, class Scal>
+using cos_dct2  = mk::func_unary<tag_dct2<Rows,Scal>>;
+
+template<Integer Rows, class Scal>
+using cos_dct3  = mk::func_unary<tag_dct3<Rows,Scal>>;
+
+template<Integer Rows, class Scal>
+using cos_dct4  = mk::func_unary<tag_dct4<Rows,Scal>>;
+
+template<Integer Rows>
+using cos_dct4_dct2  = mk::func_unary<tag_dct4_2<Rows>>;
+
+//TODO
+/*
 template<class Scal, class Mat>
 auto cos_dct1(Mat)      -> typename mk::func_unary<tag_dct1<Mat::rows,Scal>,Mat>::type;
 
@@ -383,6 +402,7 @@ auto cos_dct4(Mat)      -> typename mk::func_unary<tag_dct4<Mat::rows,Scal>,Mat>
 
 template<class Mat>
 auto cos_dct4_dct2(Mat) -> typename mk::func_unary<tag_dct4_2<Mat::rows>,Mat>::type;
+*/
 
 template<Integer M>
 struct tag_t            
@@ -488,7 +508,7 @@ template<Integer M, class Config, bool Gen_Mat, class Scal>
 struct make_cos_mat_dct2
 {
     using T                     = mk::const_mat<M, M, tag_t<M>>;
-    using type                  = decltype(cos_dct2<Scal>(T()));
+    using type                  = decltype(cos_dct2<M,Scal>::eval(T()));
 };
 
 template<Integer M, class Config, class Scal>
@@ -575,7 +595,7 @@ template<Integer M, class Config, bool Gen_Mat, class Scal>
 struct make_cos_mat_dct3
 {
     using T                     = mk::const_mat<M,M,tag_t<M>>;
-    using type                  = decltype(cos_dct3<Scal>(T::sub(mk::colon_all(), mk::colon2<2,M>())) );
+    using type                  = decltype(cos_dct3<M, Scal>::eval(T::sub(mk::colon_all(), mk::colon2<2,M>())) );
 };
 template<Integer M, class Config, class Scal>
 struct make_cos_mat_dct3<M,Config,true, Scal>
@@ -662,7 +682,7 @@ template<Integer M, class Config, bool Gen_Mat, class Scal>
 struct make_cos_mat_dct4
 {
     using T                     = mk::const_mat<M,M,tag_t<M>>;
-    using type                  = decltype(cos_dct4<Scal>(T()));
+    using type                  = decltype(cos_dct4<M, Scal>::eval(T()));
 };
 template<Integer M, class Config, class Scal>
 struct make_cos_mat_dct4<M,Config,true, Scal>
@@ -739,8 +759,9 @@ template<Integer M, class Config, bool Gen_Mat, class Scal>
 struct make_cos_mat_dct1
 {
     using T                     = mk::const_mat<M,M,tag_t<M>>;
-    using type                  = decltype(cos_dct1<Scal>(T::sub(mk::colon_all(), mk::colon2<2,M-1>())) );
+    using type                  = decltype(cos_dct1<M, Scal>::eval(T::sub(mk::colon_all(), mk::colon2<2,M-1>())) );
 };
+
 template<Integer M, class Config, class Scal>
 struct make_cos_mat_dct1<M,Config,true,Scal>
 {

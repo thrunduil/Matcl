@@ -67,24 +67,6 @@ struct enable_vectorization_array<Subs_Context, mkd::const_array<Tag>>
     static const bool value = false;
 };
 
-template<class Subs_Context, Integer M, Integer N, class Array>
-struct enable_vectorization_array<Subs_Context, mkd::mat_trans_array<M, N, Array>> 
-{
-    static const bool value = false;
-};
-
-template<class Subs_Context, Integer M, Integer N, class Array>
-struct enable_vectorization_array<Subs_Context, mkd::mat_ctrans_array<M, N, Array>> 
-{
-    static const bool value = false;
-};
-
-template<class Subs_Context, class Array, class Deps>
-struct enable_vectorization_array<Subs_Context, mkd::scalar_ctrans_array<Array, Deps>> 
-{
-    static const bool value = false;
-};
-
 template<class Subs_Context, class Tag, class... Assign_List>
 struct enable_vectorization_array<Subs_Context,mkd::virtual_array<Tag,Assign_List...>> 
 {

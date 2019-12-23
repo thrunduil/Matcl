@@ -7,39 +7,6 @@ namespace matcl { namespace mkgen
 {
 
 //----------------------------------------------------------------------------------
-//                              expr_ufunc
-//----------------------------------------------------------------------------------
-
-template<class Tag, class Elem>
-struct expr_ufunc : public mkd::scalar_data<expr_ufunc<Tag, Elem>>
-{
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {
-        Tag::print(os,details::prior_start);
-
-        os << "(";
-        elem::print<Subs_Context>(os,details::prior_start);
-    };
-
-    template<class Val, class Local_Storage>
-    inline_expr
-    static Val eval(const Local_Storage& ls)
-    {
-        Val v1  = elem::eval<Val>(ls);
-        Val tmp = Tag::eval<Val>(ls,v1);
-        return tmp;
-    };
-};
-
-// TODO:
-template<class Tag, class Elem>
-struct make_expr_ufunc
-{
-    using type = expr_ufunc<Tag, Elem>;
-};
-
-//----------------------------------------------------------------------------------
 //                              expr_bfunc
 //----------------------------------------------------------------------------------
 template<class Tag, class Elem1, class Elem2>
@@ -64,28 +31,6 @@ struct expr_bfunc
         Val v2  = elem2::eval<Val>(ls);
         Val tmp = Tag::eval<Val>(ls, v1, v2);
         return tmp;
-    };
-};
-
-//----------------------------------------------------------------------------------
-//                              expr_ctrans
-//----------------------------------------------------------------------------------
-template<class Elem>
-struct expr_ctrans
-{
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {
-        os << "conj" << "(";
-        elem::print<Subs_Context>(os,details::prior_start);
-        os << ")";
-    };
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage& ls)
-    {
-        Val v1  = elem::eval<Val>(ls);
-        return conj(v1);
     };
 };
 

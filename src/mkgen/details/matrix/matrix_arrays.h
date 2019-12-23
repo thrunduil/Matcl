@@ -137,15 +137,6 @@ struct virtual_array : public matrix_array<virtual_array<Tag, Assign_List ...>>
     using get_element_impl  = mkd::get_virtual_array_assignment<Row, Col, Assign_List ...>;
 };
 
-template<class Tag, Integer M, Integer N, class Array>
-struct mat_ufunc_array : public matrix_array<mat_ufunc_array<Tag, M, N, Array>>
-{
-    using this_type = mat_ufunc_array<Tag, M, N, Array>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_ufunc_array_get_elem<this_type, Row, Col>;
-};
-
 template<class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force>
 struct mat_temp_array : public matrix_array<mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>>
 {
@@ -191,24 +182,6 @@ struct mat_scal_assign_array : public matrix_array<
 
     template<Integer Row, Integer Col>
     using get_element_impl  = mat_scal_assign_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array>
-struct mat_trans_array : public matrix_array<mat_trans_array<M, N, Array>>
-{
-    using this_type = mat_trans_array<M, N, Array>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_trans_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array>
-struct mat_ctrans_array : public matrix_array<mat_ctrans_array<M, N, Array>>
-{
-    using this_type = mat_ctrans_array<M, N, Array>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_ctrans_array_get_elem<this_type, Row, Col>;
 };
 
 template<class Tag, Integer M, Integer N, class Array1, class Array2>

@@ -371,10 +371,6 @@ struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
 };
 
 //TODO
-template<class Array, class Deps>
-struct scalar_ctrans_array : mkd::scalar_data<scalar_ctrans_array<Array, Deps>>
-{};
-
 template<class Tag, class Array, class Deps>
 struct scalar_ufunc_array : mkd::scalar_data<scalar_ufunc_array<Tag, Array, Deps>>
 {};
