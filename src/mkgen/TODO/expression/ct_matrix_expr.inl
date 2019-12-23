@@ -67,26 +67,4 @@ struct expr_bfunc
     };
 };
 
-//----------------------------------------------------------------------------------
-//                              expr_ctrans
-//----------------------------------------------------------------------------------
-template<class Elem>
-struct expr_ctrans
-{
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {
-        os << "conj" << "(";
-        elem::print<Subs_Context>(os,details::prior_start);
-        os << ")";
-    };
-    template<class Val, class Local_Storage>
-    inline_lev_1
-    static Val eval(const Local_Storage& ls)
-    {
-        Val v1  = elem::eval<Val>(ls);
-        return conj(v1);
-    };
-};
-
 }}

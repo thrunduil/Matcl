@@ -21,6 +21,7 @@
 #pragma once
 
 #include "mkgen/matrix/dependency.h"
+#include "mkgen/utils/list.h"
 
 namespace matcl { namespace mkgen { namespace details
 {

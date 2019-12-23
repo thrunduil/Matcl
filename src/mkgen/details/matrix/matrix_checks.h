@@ -81,5 +81,4 @@ struct check_matrix_array_impl
     // type T = get_element_impl<Row,Col>::type will be checked, when fully constructed
 };
 
-
 }}}

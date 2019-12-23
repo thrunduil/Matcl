@@ -24,6 +24,7 @@
 
 #include "mkgen/matrix/scalar.h"
 #include "mkgen/details/matrix/matrix_checks.h"
+#include "mkgen/matrix/concepts.h"
 
 namespace matcl { namespace mkgen
 {
@@ -79,12 +80,12 @@ struct ct_matrix
     public:
         // get element at position Pos as a scalar
         template<Integer Pos>
-        static auto elem(colon<Pos>)        -> ct_scalar<mkd::scalar_mat_elem_1<ct_matrix, Pos>, Deps>;
+        static auto elem(colon<Pos>)        -> typename mkd::submatrix_elem_1<ct_matrix, Pos>::type;
 
         // get element at row Row and column Col
         template<Integer Row, Integer Col>
         static auto elem(colon<Row>, colon<Col>) 
-                                            -> ct_scalar<mkd::scalar_mat_elem_2<ct_matrix, Row, Col>, Deps>;
+                                            -> typename mkd::submatrix_elem_2<ct_matrix, Row, Col>::type;
 
         // get submatrix Mat(Colon_1)
         template<class Colon_1>
@@ -115,11 +116,19 @@ struct ct_matrix
 //------------------------------------------------------------------------------
 //                      predefined matrices
 //------------------------------------------------------------------------------
-//TODO:
 
-//stores statically known data, accessible through tag argument
-template<Integer M, Integer N, class Tag>
-using const_mat = ct_matrix<M,N, mkd::const_array<Tag>,empty_deps>;
+// matrix storing a value of type Value_type defined by the tag Tag; value
+// cannot depend on external data; Tag must be derived from matrix_data_const_value_tag
+// Tag::get_elem<Row,Col> must evaluate at compile time
+template<Integer M, Integer N, Tag_matrix_const_data Tag, class Value_type>
+using const_value_mat = ct_matrix<M, N, mkd::matrix_array_const_value<Tag,Value_type>, empty_deps>;
+
+// matrix storing a values of type Value_type defined by the tag Tag; values
+// cannot depend on external data; Tag must be derived from matrix_data_value_tag
+template<Integer M, Integer N, Tag_matrix_data Tag, class Value_type>
+using value_mat = ct_matrix<M, N, mkd::matrix_array_value<Tag, Value_type>, empty_deps>;
+
+//TODO:
 
 //stores generic data unknown statically, usually supplied by some data_provider
 template<Integer M, Integer N, class Tag>

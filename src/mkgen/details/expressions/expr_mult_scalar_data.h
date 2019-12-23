@@ -232,7 +232,7 @@ struct expr_mult_sd : public mkd::scalar_data<expr_mult_sd<Flag, S, T...>>
     // checks    
     using ch1               = list::list<typename check_mult_item<T>::type ...>;
 
-    static const bool simp  = typename can_simplify_mult<S, T...>::value;
+    static const bool simp  = can_simplify_mult<S, T...>::value;
     static_assert(simp == false, "invalid rep");
 
     using this_type         = expr_mult_sd<Flag, S, T...>;

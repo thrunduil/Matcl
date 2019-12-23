@@ -54,6 +54,7 @@
     <ClInclude Include="..\..\..\src\mkgen\matrix\dependency.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\scalar.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\concepts.h" />
     <ClInclude Include="..\..\..\src\mkgen\mkgen.h" />
     <ClInclude Include="..\..\..\src\mkgen\mkgen_config.h" />
     <ClInclude Include="..\..\..\src\mkgen\mkgen_fwd.h" />
@@ -146,6 +147,7 @@
       <PreprocessorDefinitions>MATCL_FFT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
@@ -158,6 +160,7 @@
       <PreprocessorDefinitions>MATCL_FFT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>mkl_intel_c.lib;mkl_intel_thread.lib;mkl_core.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -172,6 +175,7 @@
       </PrecompiledHeaderFile>
       <OmitFramePointers>false</OmitFramePointers>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
@@ -185,6 +189,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <OmitFramePointers>false</OmitFramePointers>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>mkl_intel_ilp64.lib;mkl_intel_thread.lib;mkl_core.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>

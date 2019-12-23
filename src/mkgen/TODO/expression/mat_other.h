@@ -12,62 +12,6 @@ namespace matcl { namespace mkgen
 {
 
 //----------------------------------------------------------------------------------
-//                              mat_trans
-//----------------------------------------------------------------------------------
-template<Integer M, Integer N, class Array,class Deps1>
-struct mat_trans<ct_matrix<M,N,Array,Deps1>>
-{
-    using array_type    = mkd::mat_trans_array<M, N, Array>;
-    using type          = ct_matrix<N, M, array_type,Deps1>;
-};
-
-template<class Array, class Deps>
-struct mat_trans<ct_scalar<Array,Deps>>
-{
-    using type          = ct_scalar<Array,Deps>;
-};
-
-template<class Array, Integer Row, Integer Col>
-struct mat_trans_array_get_elem
-{};
-
-template<Integer M, Integer N, class Array, Integer Row, Integer Col>
-struct mat_trans_array_get_elem<mkd::mat_trans_array<M, N, Array>, Row, Col>
-{
-    using elem  = typename Array :: template get_element<Col, Row>::type;
-    using type  = elem;
-};
-
-//----------------------------------------------------------------------------------
-//                              mat_ctrans
-//----------------------------------------------------------------------------------
-template<Integer M, Integer N, class Array,class Deps1>
-struct mat_ctrans<ct_matrix<M,N,Array,Deps1>>
-{
-    using array_type    = mkd::mat_ctrans_array<M, N, Array>;
-    using type          = ct_matrix<N, M, array_type,Deps1>;
-};
-
-template<class Array, class Deps>
-struct mat_ctrans<ct_scalar<Array,Deps>>
-{
-    using array_type    = mkd::scalar_ctrans_array<Array,Deps>;
-    using type          = ct_scalar<array_type, Deps>;
-};
-
-template<class Array, Integer Row, Integer Col>
-struct mat_ctrans_array_get_elem
-{};
-
-template<Integer M, Integer N, class Array, Integer Row, Integer Col>
-struct mat_ctrans_array_get_elem<mkd::mat_ctrans_array<M,N,Array>, Row, Col>
-{
-    using elem      = typename Array :: template get_element<Col, Row>::type;
-    using new_item  = typename expr_ctrans<elem>::type; 
-    using type      = new_item;   
-};
-
-//----------------------------------------------------------------------------------
 //                              func_unary
 //----------------------------------------------------------------------------------
 
@@ -251,14 +195,6 @@ struct sub_array_1_get_elem<mkd::sub_array_1<Array_t, Offset, Step>, Row, Col>
 
 //TODO
 #if 0
-template<class Array, class Deps, Integer Row, Integer Col>
-struct get_array_elem<details::scalar_ctrans_array<Array, Deps>, Row, Col>
-{
-    //TODO:
-    using elem      = ct_scalar<Array,Deps>;
-    using new_item  = typename expr_ctrans<elem>::type;
-    using type      = new_item;
-};
 
 template<class Tag, class Array, class Deps, Integer Row, Integer Col>
 struct get_array_elem<details::scalar_ufunc_array<Tag,Array,Deps>, Row, Col>

@@ -127,14 +127,6 @@ struct is_value_matrix;
 template<class Tag, class Func, class Mat1, bool Is_Value = is_value_matrix<Mat1>::value>
 struct make_call_external {};
 
-// matrix transposition
-template<class Mat1>
-struct mat_trans {};
-
-// matrix conjugate transposition
-template<class Mat1>
-struct mat_ctrans {};
-
 // assignment operator
 template<class Mat1, class Mat2>
 struct mat_assign {};

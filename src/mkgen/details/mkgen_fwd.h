@@ -21,7 +21,7 @@
 #pragma once
 
 #include "mkgen/mkgen_config.h"
-#include "matcl-core/matrix/scalar_types.h"
+#include "mkgen/matrix/concepts.h"
 #include "mkgen/matrix/scalar.h"
 
 namespace matcl { namespace mkgen
@@ -38,6 +38,21 @@ struct ct_matrix;
 // compute result of ct_scalar::compute()
 template<class Data, class Deps, class Tag>
 struct make_evaled_scalar;
+
+template<class Tag>
+struct scal_data_const_value_tag;
+
+template<class Tag>
+struct scal_data_value_tag;
+
+template<class Tag>
+struct scal_data_gen_value_tag;
+
+template<class Tag>
+struct matrix_data_const_value_tag;
+
+template<class Tag>
+struct matrix_data_value_tag;
 
 //TODO
 template<class Mat_L, class Tag, bool Force>
@@ -70,14 +85,6 @@ struct mat_assign_array_get_elem;
 //TODO
 template<class Array, Integer Row, Integer Col>
 struct mat_scal_assign_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_trans_array_get_elem;
-
-//TODO
-template<class Array, Integer Row, Integer Col>
-struct mat_ctrans_array_get_elem;
 
 //TODO
 template<class Array, Integer Row, Integer Col>
@@ -141,9 +148,21 @@ struct submatrix_maker_2;
 template<class Mat, class Colon_1>
 struct submatrix_maker_1;
 
-// const_mat array
-template<class Tag>                                     
-struct const_array;
+// get element from a matrix
+template<class Mat, Integer Pos>
+struct submatrix_elem_1;
+
+// get element from a matrix
+template<class Mat, Integer Row, Integer Col>
+struct submatrix_elem_2;
+
+// value_mat array
+template<Tag_matrix_data Tag, class Value_type>                                     
+struct matrix_array_value;
+
+// const_value_mat array
+template<Tag_matrix_const_data Tag, class Value_type>                                     
+struct matrix_array_const_value;
 
 // gen_mat array
 template<class Tag>                                     

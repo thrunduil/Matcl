@@ -83,12 +83,6 @@ struct scal_data_const_value_tag_mult
     using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
     using check2    = typename mkd::check_valid_const_data_tag<Tag2>::type;
 
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "const(" << value<double>() << ")";
-    };
-
     template<class Val>
     static constexpr Val value()    { return Tag1::value<Val>() * Tag2::value<Val>(); }
 };
@@ -101,12 +95,6 @@ struct scal_data_value_tag_mult
     //check
     using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
     using check2    = typename mkd::check_valid_data_tag<Tag2>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "scalar(" << value<double>() << ")";
-    };
 
     template<class Val>
     static Val value()  { return Tag1::value<Val>() * Tag2::value<Val>(); }
@@ -121,12 +109,6 @@ struct scal_data_const_value_tag_plus
     using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
     using check2    = typename mkd::check_valid_const_data_tag<Tag2>::type;
 
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "const(" << value<double>() << ")";
-    };
-
     template<class Val>
     static constexpr Val value()    { return Tag1::value<Val>() + Tag2::value<Val>(); }
 };
@@ -139,12 +121,6 @@ struct scal_data_value_tag_plus
     //check
     using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
     using check2    = typename mkd::check_valid_data_tag<Tag2>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "scalar(" << value<double>() << ")";
-    };
 
     template<class Val>
     static Val value()  { return Tag1::value<Val>() + Tag2::value<Val>(); }
@@ -160,12 +136,6 @@ struct scal_data_const_value_tag_inv
 
     static_assert(Tag1::value<double>() != 0, "inversion of zero");
 
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "const(" << value<double>() << ")";
-    };
-
     template<class Val>
     static constexpr Val value()    { return Val(1) / Tag1::value<Val>(); }
 };
@@ -177,12 +147,6 @@ struct scal_data_value_tag_inv
 {
     //check
     using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "scalar(" << value<double>() << ")";
-    };
 
     template<class Val>
     static Val value()  { return Val(1) / Tag1::value<Val>(); }

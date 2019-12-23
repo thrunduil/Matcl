@@ -23,6 +23,7 @@
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/utils/mpl.h"
 #include "mkgen/details/matrix/element.h"
+#include "mkgen/details/matrix/scalar_data.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
@@ -90,15 +91,44 @@ struct sub_array_2 : public matrix_array<sub_array_2<Array_t, Offset1, Offset2, 
     using get_element_impl  = sub_array_2_get_elem<this_type, Row, Col>;
 };
 
-// const_mat array
-template<class Tag>                                     
-struct const_array : public matrix_array<const_array<Tag>>
+// value_mat array
+template<Tag_matrix_data Tag, class Value_type, Integer Row, Integer Col>
+struct matrix_array_value_get_elem 
+        : mk::scal_data_value_tag<matrix_array_value_get_elem<Tag, Value_type, Row, Col>>
 {
-    using this_type = const_array<Tag>;
+    using this_type = matrix_array_value_get_elem<Tag, Value_type, Row, Col>;
+    using type      = scal_data_value<this_type, Value_type>;
 
-    //TODO
+    template<class Val>
+    static Val value()
+    {
+        return Val(Tag::value<Value_type, Row, Col>());
+    };
+};
+
+template<Tag_matrix_data Tag, class Value_type>                                     
+struct matrix_array_value : public matrix_array<matrix_array_value<Tag, Value_type>>
+{
+    using this_type = matrix_array_value<Tag, Value_type>;
+
     template<Integer Row, Integer Col>
-    using get_element_impl  = mkd::lazy_type<decltype(Tag::get_elem<Row,Col>())>;
+    using get_element_impl  = matrix_array_value_get_elem<Tag, Value_type, Row, Col>;
+};
+
+// cont_value_mat array
+template<Tag_matrix_const_data Tag, class Value_type, Integer Row, Integer Col>
+struct matrix_array_const_value_get_elem
+{
+    //TODO
+};
+
+template<Tag_matrix_const_data Tag, class Value_type>                                     
+struct matrix_array_const_value : public matrix_array<matrix_array_const_value<Tag, Value_type>>
+{
+    using this_type = matrix_array_const_value<Tag, Value_type>;
+
+    template<Integer Row, Integer Col>
+    using get_element_impl  = matrix_array_const_value_get_elem<Tag, Value_type, Row, Col>;
 };
 
 template<class Tag>                                     
@@ -193,24 +223,6 @@ struct mat_scal_assign_array : public matrix_array<
     using get_element_impl  = mat_scal_assign_array_get_elem<this_type, Row, Col>;
 };
 
-template<Integer M, Integer N, class Array>
-struct mat_trans_array : public matrix_array<mat_trans_array<M, N, Array>>
-{
-    using this_type = mat_trans_array<M, N, Array>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_trans_array_get_elem<this_type, Row, Col>;
-};
-
-template<Integer M, Integer N, class Array>
-struct mat_ctrans_array : public matrix_array<mat_ctrans_array<M, N, Array>>
-{
-    using this_type = mat_ctrans_array<M, N, Array>;
-
-    template<Integer Row, Integer Col>
-    using get_element_impl  = mat_ctrans_array_get_elem<this_type, Row, Col>;
-};
-
 template<class Tag, Integer M, Integer N, class Array1, class Array2>
 struct mat_bfunc_array : public matrix_array<mat_bfunc_array<Tag, M, N, Array1, Array2>>
 {
@@ -254,3 +266,34 @@ struct array {};
 */
 
 }}}
+
+namespace matcl { namespace mkgen 
+{
+
+//-----------------------------------------------------------------------
+//                      matrix_data_const_value_tag
+//-----------------------------------------------------------------------
+// base class for Tags used in creating const_value_mat
+template<class Tag>
+struct matrix_data_const_value_tag
+{
+    // Tag must implement:
+    // 
+    // template<class Val, Integer Row, Integer Col>
+    // static constexpr Val value();
+};
+
+//-----------------------------------------------------------------------
+//                      matrix_data_value_tag
+//-----------------------------------------------------------------------
+// base class for Tags used in creating value_mat
+template<class Tag>
+struct matrix_data_value_tag
+{
+    // Tag must implement:
+    // 
+    // template<class Val, Integer Row, Integer Col>
+    // static Val value();
+};
+
+}}

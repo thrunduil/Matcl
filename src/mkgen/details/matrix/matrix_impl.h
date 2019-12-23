@@ -87,6 +87,44 @@ struct submatrix_maker_2
 };
 
 //------------------------------------------------------------------------------
+//                      submatrix_elem_1
+//------------------------------------------------------------------------------
+// implements ct_matrix<>:: elem(colon<Pos>)
+template<class A, Integer Pos>
+struct submatrix_elem_1
+{
+    static const bool is_mat    = is_matrix<A>::value;
+    static_assert(is_mat == true, "A must be ct_matrix");
+
+    static const Integer rows = A :: rows;
+    static const Integer col = (Pos-1)/rows + 1;
+    static const Integer row = Pos - (col-1) * rows;
+
+    using array_t       = typename A :: array_type;
+    using deps_t        = typename A :: dps_type;
+
+    using elem_type     = typename array_t::template get_element<row, col>::type;
+    using type          = ct_scalar<elem_type, deps_t>;
+};
+
+//------------------------------------------------------------------------------
+//                      submatrix_elem_2
+//------------------------------------------------------------------------------
+// implements ct_matrix<>:: elem(colon<Row>, colon<Col>) 
+template<class A, Integer Row, Integer Col>
+struct submatrix_elem_2
+{
+    static const bool is_mat    = is_matrix<A>::value;
+    static_assert(is_mat == true, "A must be ct_matrix");
+
+    using array_t       = typename A :: array_type;
+    using deps_t        = typename A :: dps_type;
+
+    using elem_type     = typename array_t::template get_element<Row, Col>::type;
+    using type          = ct_scalar<elem_type, deps_t>;
+};
+
+//------------------------------------------------------------------------------
 //                      is_virtual_matrix_array
 //------------------------------------------------------------------------------
 

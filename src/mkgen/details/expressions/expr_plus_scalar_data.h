@@ -465,7 +465,7 @@ struct expr_plus_sd : public mkd::scalar_data<expr_plus_sd<Flag, S, T ...>>
     // checks    
     using ch1               = list::list<typename check_plus_item<T>::type ...>;
 
-    static const bool simp  = typename can_simplify_plus<S, T...>::value;
+    static const bool simp  = can_simplify_plus<S, T...>::value;
     static_assert(simp == false, "invalid rep simpl");
 
     using this_type         = expr_plus_sd<Flag, S, T ...>;

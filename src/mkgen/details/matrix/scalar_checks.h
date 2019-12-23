@@ -27,6 +27,8 @@
 namespace matcl { namespace mkgen { namespace details
 {
 
+namespace mk = matcl :: mkgen;
+
 has_static_member_template_function_x(print)
 has_static_member_template_function_x(eval)
 has_static_member_template_function_x(value)
@@ -124,8 +126,9 @@ struct check_scalar_data_impl
 template<class Tag>
 struct check_valid_const_data_tag
 {
-    static const bool is_valid_tag  = std::is_base_of<mk::scal_data_const_value_tag<Tag>, Tag>
-                                                ::value;
+    using tag_type  = Tag;
+    using base_type = mk::scal_data_const_value_tag<tag_type>;
+    static const bool is_valid_tag  = std::is_base_of<base_type, tag_type>::value;
 
     static_assert(is_valid_tag == true, "Tag is not scal_data_const_value_tag<>");
 
@@ -137,13 +140,6 @@ template<class Tag, class Ret>
 struct check_const_data_tag_impl
 {
     // Data must implement:
-
-    // static void print(std::ostream& os, int prior);
-    using func_print_type       = void (std::ostream& os, int prior);
-    static const bool has_print = has_static_member_function_print
-                                    <Tag, func_print_type>::value;
-
-    static_assert(has_print == true, "Tag must implement function print");
 
     // template<class Val>
     // static constexpr Val value();
@@ -182,13 +178,6 @@ struct check_data_tag_impl
 {
     // Data must implement:
 
-    // static void print(std::ostream& os, int prior);
-    using func_print_type       = void (std::ostream& os, int prior);
-    static const bool has_print = has_static_member_function_print
-                                    <Tag, func_print_type>::value;
-
-    static_assert(has_print == true, "Tag must implement function print");
-
     // template<class Val>
     // static Val value();
 
@@ -208,12 +197,15 @@ struct check_data_tag_impl
 template<class Tag>
 struct check_valid_gen_data_tag
 {
-    static const bool is_valid_tag  = std::is_base_of<mk::scal_data_gen_value_tag<Tag>, Tag>
+    using tag_type  = Tag;
+    using base_type = mk::scal_data_gen_value_tag<tag_type>;
+
+    static const bool is_valid_tag  = std::is_base_of<base_type, tag_type>
                                                 ::value;
 
     static_assert(is_valid_tag == true, "Tag is not scal_data_gen_value_tag<>");
 
-    using type  = typename Tag::template check_scal_data_gen_value_tag<void>;
+    using type  = typename tag_type::template check_scal_data_gen_value_tag<void>;
 };
 
 // check if Tag parameter supplied to scal_data_gen_value_tag is valid
@@ -221,13 +213,6 @@ template<class Tag, class Ret>
 struct check_gen_data_tag_impl
 {
     // Data must implement:
-
-    // static void print(std::ostream& os, int prior);
-    using func_print_type       = void (std::ostream& os, int prior);
-    static const bool has_print = has_static_member_function_print
-                                    <Tag, func_print_type>::value;
-
-    static_assert(has_print == true, "Tag must implement function print");
 
     // template<class Val, class Local_Storage>
     // static Val eval(const Local_Storage& ls);
