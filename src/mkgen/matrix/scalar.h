@@ -21,7 +21,6 @@
 #pragma once
 
 #include "mkgen/details/mkgen_fwd.h"
-#include "mkgen/details/matrix/scalar_checks.h"
 #include "mkgen/matrix/dependency.h"
 #include "matcl-core/details/mpl.h"
 #include "mkgen/matrix/concepts.h"
@@ -65,39 +64,25 @@ class ct_scalar
         // However if this scalar represents some computation (for example multiplication
         // of two scalars), then such computation will be performed explicitly (otherwise it
         // will be performed each time when given scalar is used)
-        template<class Tag>
+        template<Tag_comp Tag>
         static auto compute() -> typename make_evaled_scalar<Data, Deps, Tag>::type;
+
+        template<class Visitor>
+        static void accept(Visitor& vis)
+        {
+            return Data::accept<Visitor>(vis);
+        };
 
     public:
         //-----------------------------------------------------------------------
         //                      internal use only
         //-----------------------------------------------------------------------
-
-        // append to Arr_List all arrays required by this scalar
-        template<Integer Step, class Arr_List>
-        using get_arrays    = typename mkd::get_arrays_scalar<Data, Deps, Step, Arr_List>::type;
-
         //get value of type Val associated with this element; called internally
         template<class Val, class Local_Storage>
         inline_lev_1
         static Val eval(const Local_Storage& ls)
         {
             return Data::eval<Val>(ls);
-        };
-
-        // evaluate expression using data in arrays starting at position off and store
-        // result in ret variable. TODO
-        template<class Loop_Storage, class Ret, class Local_Storage>
-        inline_lev_1
-        static void eval_loop(Ret& ret, Integer off, const Local_Storage& cont)
-        {
-            mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
-        };
-
-        template<class Visitor>
-        static void accept(Visitor& vis)
-        {
-            return Data::accept<Visitor>(vis);
         };
 };
 
@@ -110,7 +95,7 @@ using integer_scalar = ct_scalar<mkd::scal_data_rational<Value, 1>, empty_deps>;
 
 // represent rational value N / D, where D > 0
 template<Integer N, Integer D>
-using rational_scalar = ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>;
+using rational_scalar = ct_scalar<mkd::scal_data_rational<N, D>, empty_deps>;
 
 // scalar storing a value of type Value_type defined by the tag Tag; value
 // cannot depend on external data; Tag must be derived from scal_data_const_value_tag

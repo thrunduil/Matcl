@@ -62,7 +62,7 @@ struct make_expr_plus_list;
 template<class S, class List>
 struct make_mult_plus_add_items;
 
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_plus_root;
 
 //----------------------------------------------------------------------------------
@@ -525,37 +525,25 @@ struct make_div_impl
 
 // representation of  Scal1 x Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_mult_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     static const bool is_val_1  = is_value_scalar_data<Scal1>::value;
     static const bool is_val_2  = is_value_scalar_data<Scal2>::value;
 
     using type                  = typename make_mult_impl<Scal1, Scal2, is_val_1, is_val_2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 // representation of  Scal1 / Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_div_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     using type                  = typename make_div_impl<Scal1, Scal2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 }}}

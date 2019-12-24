@@ -32,14 +32,14 @@ namespace matcl { namespace mkgen
 //-----------------------------------------------------------------------
 //                          make_evaled_scalar
 //-----------------------------------------------------------------------
-template<Scal_data Scalar_data, DPS Deps, class Tag>
+template<Scal_data Scalar_data, DPS Deps, Tag_comp Tag>
 struct make_evaled_scalar
 {
     static_assert(md::dependent_false<Scalar_data>::value, 
                 "this type should not be instantiated");
 };
 
-template<Scal_data Scalar_data, class ... Deps, class Tag>
+template<Scal_data Scalar_data, class ... Deps, Tag_comp Tag>
 struct make_evaled_scalar<Scalar_data, dps<Deps...>, Tag>
 {
     using scalar    = ct_scalar<Scalar_data, dps<Deps...>>;
@@ -56,7 +56,7 @@ struct make_evaled_scalar<Scalar_data, dps<Deps...>, Tag>
     };
 };
 
-template<Integer N, Integer D, class Tag>
+template<Integer N, Integer D, Tag_comp Tag>
 struct make_evaled_scalar<mkd::scal_data_rational<N,D>, empty_deps, Tag>
 {
     // nothing to compute
@@ -64,7 +64,7 @@ struct make_evaled_scalar<mkd::scal_data_rational<N,D>, empty_deps, Tag>
     using type      = ct_scalar<data, empty_deps>;
 };
 
-template<Scal_data Data, class Tag_data, DPS Deps, class Tag>
+template<Scal_data Data, class Tag_data, DPS Deps, Tag_comp Tag>
 struct make_evaled_scalar<mkd::scal_data_evaled<Data, Tag_data>, Deps, Tag>
 {
     // nothing to compute
@@ -72,7 +72,7 @@ struct make_evaled_scalar<mkd::scal_data_evaled<Data, Tag_data>, Deps, Tag>
     using type      = ct_scalar<data, Deps>;
 };
 
-template<class Data, class Value_type, DPS Deps, class Tag>
+template<class Data, class Value_type, DPS Deps, Tag_comp Tag>
 struct make_evaled_scalar<mkd::scal_data_const_value<Data, Value_type>, Deps, Tag>
 {
     // nothing to compute
@@ -80,7 +80,7 @@ struct make_evaled_scalar<mkd::scal_data_const_value<Data, Value_type>, Deps, Ta
     using type      = ct_scalar<data, Deps>;
 };
 
-template<class Data, class Value_type, DPS Deps, class Tag>
+template<class Data, class Value_type, DPS Deps, Tag_comp Tag>
 struct make_evaled_scalar<mkd::scal_data_value<Data, Value_type>, Deps, Tag>
 {
     // nothing to compute

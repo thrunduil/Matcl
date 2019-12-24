@@ -311,49 +311,32 @@ struct make_plus_normalize_impl<Is_simpl, S, T>
 
 // representation of  Scal1 + Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_plus_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     using type      = typename make_plus_impl<Scal1, Scal2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 // representation of  Scal1 - Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_minus_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     using type      = typename make_minus_impl<Scal1, Scal2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 // representation of  -Scal1, where Scal1 is scalar_data, return
 // scalar_data type
-template<class Scal1>
+template<Scal_data Scal1>
 struct make_uminus_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-
-    static_assert(is_sd1 == true, "scalar_data required");
-
     using type      = typename make_uminus_impl<Scal1>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 }}};

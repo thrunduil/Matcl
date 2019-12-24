@@ -9,7 +9,6 @@ namespace matcl { namespace mkgen { namespace test
 
 namespace mk = matcl::mkgen;
 
-
 struct basic_codegen
 {
     static const bool simd_enable                   = true;

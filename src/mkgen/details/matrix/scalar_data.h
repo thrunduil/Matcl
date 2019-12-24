@@ -21,7 +21,6 @@
 #pragma once
 
 #include "mkgen/details/mkgen_fwd.h"
-#include "mkgen/details/matrix/scalar_checks.h"
 #include "mkgen/matrix/base_types.h"
 
 namespace matcl { namespace mkgen { namespace details
@@ -195,12 +194,9 @@ struct scal_data_gen_value : mkd::scalar_data<scal_data_gen_value<Tag>>
 //-----------------------------------------------------------------------
 //                      scal_data_evaled
 //-----------------------------------------------------------------------
-template<Scal_data Data, class Tag>
+template<Scal_data Data, Tag_comp Tag>
 struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
 {
-    // check arguments
-    using check2    = typename details::check_computation_tag<Tag>::type;
-
     using this_type = scal_data_evaled<Data, Tag>;
 
     template<class Subs_Context>

@@ -68,7 +68,7 @@ concept Tag_scalar_value    = std::is_base_of<mk::scal_data_value_tag<Tag>, Tag>
 template<class Tag>
 concept Tag_scalar_gen_value = std::is_base_of<mk::scal_data_gen_value_tag<Tag>, 
                                     Tag>::value
-                            && scal_data_gen_value_tag_check :: template is_valid<Tag>;
+                            && mk::scal_data_gen_value_tag_check :: template is_valid<Tag>;
 
 //------------------------------------------------------------------------------
 //                      matrix tags
@@ -88,6 +88,14 @@ concept Tag_matrix_const_data = std::is_base_of<mk::matrix_data_const_value_tag
 template<class Tag>
 concept Tag_matrix_data = std::is_base_of<mk::matrix_data_value_tag<Tag>, Tag>::value
                         && matrix_data_value_tag_check :: template is_valid<Tag>;
+
+//------------------------------------------------------------------------------
+//                      other tags
+//------------------------------------------------------------------------------
+
+//TODO
+template<class Tag>
+concept Tag_comp    = true;
 
 //------------------------------------------------------------------------------
 //                      matrix arrays

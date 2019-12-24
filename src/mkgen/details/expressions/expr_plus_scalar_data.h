@@ -35,7 +35,7 @@ struct expr_plus_arrays;
 template<class S, class ... T>
 struct can_simplify_plus;
 
-template<class S, class T>
+template<Scal_data S, class T>
 struct plus_item;
 
 template<class M>
@@ -53,7 +53,7 @@ struct check_plus_item
     static_assert(md::dependent_false<T>::value, "plus_item required");
 };
 
-template<class S, class T>
+template<Scal_data S, class T>
 struct check_plus_item<plus_item<S, T>>
 {
     using type = void;
@@ -68,7 +68,7 @@ struct check_plus_item<plus_item_mult<M>>
 //----------------------------------------------------------------------------------
 //                              plus_item
 //----------------------------------------------------------------------------------
-template<class S, class T>
+template<Scal_data S, class T>
 struct plus_item
 {
     static const bool is_vs1 = mkd::is_value_scalar_data<S>::value;
@@ -76,9 +76,6 @@ struct plus_item
 
     static const bool is_vs2 = mkd::is_value_scalar_data<T>::value;
     static_assert(is_vs2 == false, "value scalar unexpected");
-
-    static const bool is_sd = mkd::is_valid_scalar_data<T>::value;
-    static_assert(is_sd == true, "scalar data required");
 
     static const bool is_0  = mkd::is_scalar_data_zero<S>::value;
     static_assert(is_0 == false, "invalid scalling");
@@ -237,7 +234,7 @@ struct mult_plus_item
     static_assert(md::dependent_false<S>::value, "plus_item required");
 };
 
-template<class S, class SP, class TP>
+template<class S, Scal_data SP, class TP>
 struct mult_plus_item<S, plus_item<SP, TP>>
 {
     static_assert(mkd::is_plus_expr<TP>::value == false, "unexpected plus expression");
@@ -355,7 +352,7 @@ struct plus_item_to_mult<plus_item_mult<M>>
     using type = M;
 };
 
-template<class S, class T>
+template<Scal_data S, class T>
 struct plus_item_to_mult<plus_item<S, T>>
 {
     static const bool is_one    = mkd::is_scalar_data_one<S>::value;

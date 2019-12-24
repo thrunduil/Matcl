@@ -36,7 +36,7 @@ template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 struct ct_matrix;
 
 // compute result of ct_scalar::compute()
-template<Scal_data Data, DPS Deps, class Tag>
+template<Scal_data Data, DPS Deps, Tag_comp Tag>
 struct make_evaled_scalar;
 
 //TODO

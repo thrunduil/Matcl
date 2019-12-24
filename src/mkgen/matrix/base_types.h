@@ -92,6 +92,11 @@ concept has_static_member_template_function_print =
     requires { T :: template print<Subs_ctx>(std::declval<std::ostream&>(), 
                                                 std::declval<int>()); };
 
+template<class T>
+concept has_static_member_function_print = 
+    requires { T :: template print(std::declval<std::ostream&>(), 
+                                                std::declval<int>()); };
+
 template<class T, class Val, class Local_Storage>
 concept has_static_member_template_function_eval = 
     requires { {T :: template eval<Val, Local_Storage>
@@ -339,8 +344,8 @@ template<class Tag>
 struct scal_data_gen_value_tag_check_impl
 {
     static const bool value 
-        = mkd::has_static_member_template_function_print<Arr, subs_context_dummy>
-        && mkd::has_static_member_template_function_eval<Arr, double, local_storage_dummy>;
+        = mkd::has_static_member_function_print<Tag>
+        && mkd::has_static_member_template_function_eval<Tag, double, mkd::local_storage_dummy>;
 };
 
 struct scal_data_gen_value_tag_check

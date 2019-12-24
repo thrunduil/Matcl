@@ -35,7 +35,7 @@ struct expr_mult_arrays;
 template<class S, class ... T>
 struct can_simplify_mult;
 
-template<class T, Integer K>
+template<Scal_data T, Integer K>
 struct mult_item;
 
 template<class Expr>
@@ -51,7 +51,7 @@ struct check_mult_item
     static_assert(md::dependent_false<T>::value, "mult_item required");
 };
 
-template<class T, Integer K>
+template<Scal_data T, Integer K>
 struct check_mult_item<mult_item<T, K>>
 {    
     using type = void;
@@ -60,14 +60,11 @@ struct check_mult_item<mult_item<T, K>>
 //----------------------------------------------------------------------------------
 //                              mult_item
 //----------------------------------------------------------------------------------
-template<class T, Integer K>
+template<Scal_data T, Integer K>
 struct mult_item
 {
     static const bool is_vs = mkd::is_value_scalar_data<T>::value;
     static_assert(is_vs == false, "value scalar unexpected");
-
-    static const bool is_sd = mkd::is_valid_scalar_data<T>::value;
-    static_assert(is_sd == true, "scalar data required");
 
     static_assert(K != 0, "invalid exponent");
 
