@@ -28,25 +28,16 @@ namespace matcl { namespace mkgen
 {
 
 // compile time scalar value
-template<class Data, class Deps> 
+template<Scal_data Data, DPS Deps> 
 class ct_scalar;
 
 // compile time matrix
-template<Integer M, Integer N, Mat_array Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 struct ct_matrix;
 
 // compute result of ct_scalar::compute()
-template<class Data, class Deps, class Tag>
+template<Scal_data Data, DPS Deps, class Tag>
 struct make_evaled_scalar;
-
-template<class Tag>
-struct scal_data_const_value_tag;
-
-template<class Tag>
-struct scal_data_value_tag;
-
-template<class Tag>
-struct scal_data_gen_value_tag;
 
 //TODO
 template<class Mat_L, class Tag, bool Force>
@@ -103,20 +94,20 @@ struct scal_data_rational;
 
 // represents a scalar storing values of type Value_type
 // known at compile time
-template<class Tag, class Value_type>
+template<Tag_scalar_const_value Tag, class Value_type>
 struct scal_data_const_value;
 
 // represents a scalar storing values of type Value_type
-template<class Tag, class Value_type>
+template<Tag_scalar_value Tag, class Value_type>
 struct scal_data_value;
 
 // represents a scalar storing external values
-template<class Tag>
+template<Tag_scalar_gen_value Tag>
 struct scal_data_gen_value;
 
 // append to Arr_List all arrays required by this scalar; 
 // implements ct_scalar::get_arrays
-template<class Data, class Deps, Integer Step, class Arr_List>
+template<Scal_data Data, DPS Deps, Integer Step, class Arr_List>
 struct get_arrays_scalar;
 
 template<class Elem, Integer Step, class Type>
@@ -125,10 +116,6 @@ struct array_item;
 // implements ct_scalar::eval_loop
 template<class Loop_Storage, class Data>
 struct eval_loop_scalar;
-
-// store data in ct_scalar
-template<class Data>
-struct scalar_data;
 
 // make submatrix
 template<class Mat, class Colon_1, class Colon_2>

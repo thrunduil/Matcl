@@ -385,7 +385,7 @@ namespace matcl { namespace mkgen
 //              print matrix
 //--------------------------------------------------------
 
-template<Integer M, Integer N, Mat_array Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 template<class Subs_Context>
 void ct_matrix<M, N, Array_t, Deps>::print(std::ostream& os, int nspaces)
 {

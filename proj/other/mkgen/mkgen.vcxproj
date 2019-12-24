@@ -32,7 +32,6 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\dependency_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\element.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h" />
-    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_checks.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_printer.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scalar_checks.h" />
@@ -55,6 +54,7 @@
     <ClInclude Include="..\..\..\src\mkgen\matrix\dependency.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\predefined_matrices.h" />
+    <ClInclude Include="..\..\..\src\mkgen\matrix\predefined_scalars.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\scalar.h" />
     <ClInclude Include="..\..\..\src\mkgen\matrix\concepts.h" />
     <ClInclude Include="..\..\..\src\mkgen\mkgen.h" />

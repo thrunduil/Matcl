@@ -126,9 +126,6 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_arrays.h">
       <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\details\matrix\matrix_checks.h">
-      <Filter>Source Files\src\details\matrix</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h">
       <Filter>Source Files\src\details\matrix</Filter>
     </ClInclude>
@@ -226,6 +223,9 @@
       <Filter>Source Files\src\matrix</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\matrix\base_types.h">
+      <Filter>Source Files\src\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\matrix\predefined_scalars.h">
       <Filter>Source Files\src\matrix</Filter>
     </ClInclude>
   </ItemGroup>

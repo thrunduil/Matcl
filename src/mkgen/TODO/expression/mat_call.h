@@ -15,7 +15,7 @@ namespace matcl { namespace mkgen
 struct call_array_type{};
 
 template<class Tag, template<class Arg> class Func, 
-         Integer M_arg, Integer N_arg, Mat_array Array_Arg, class Deps0>
+         Integer M_arg, Integer N_arg, Mat_array Array_Arg, DPS Deps0>
 struct make_call_inline<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>>
 {
     //remove dependencies
@@ -161,7 +161,7 @@ struct get_arg_tag
                 "this type should not be instantiated");
 };
 
-template<Integer M, Integer N, class Tag, class Deps>
+template<Integer M, Integer N, class Tag, DPS Deps>
 struct is_value_matrix<ct_matrix<M,N, mkd::gen_array<Tag>,Deps>>
 {
     static const Integer value = true;
@@ -172,7 +172,7 @@ struct get_arg_tag<mkd::gen_array<Tag>>
     using type = Tag;
 };
 
-template<Integer M, Integer N, class Tag, class Deps>
+template<Integer M, Integer N, class Tag, DPS Deps>
 struct is_value_matrix<ct_matrix<M,N, mkd::output_array<Tag>,Deps>>
 {
     static const Integer value = true;
@@ -183,8 +183,8 @@ struct get_arg_tag<mkd::output_array<Tag>>
     using type = Tag;
 };
 
-template<Integer M, Integer N, class Tag, Integer MR, Integer MC, class Deps>
-struct is_value_matrix<ct_matrix<M,N, mkd::temp_output_array<Tag,MR,MC>,Deps>>
+template<Integer M, Integer N, class Tag, Integer MR, Integer MC, DPS Deps>
+struct is_value_matrix<ct_matrix<M,N, mkd::temp_output_array<Tag,MR,MC>, Deps>>
 {
     static const Integer value = true;
 };
@@ -194,7 +194,7 @@ struct get_arg_tag< mkd::temp_output_array<Tag,MR,MC>>
     using type = Tag;
 };
 
-template<Integer M, Integer N, class Tag, Integer Rows, Integer Cols, bool Force, class Deps>
+template<Integer M, Integer N, class Tag, Integer Rows, Integer Cols, bool Force, DPS Deps>
 struct is_value_matrix<ct_matrix<M,N, mkd::mat_temp_array<Tag, Rows, Cols, Force>,Deps>>
 {
     static const Integer value = true;
@@ -205,7 +205,7 @@ struct get_arg_tag<mkd::mat_temp_array<Tag,MR,MC,Force>>
     using type = Tag;
 };
 
-template<Integer M, Integer N, Mat_array Array, class Deps>
+template<Integer M, Integer N, Mat_array Array, DPS Deps>
 struct is_value_matrix<ct_matrix<M,N,Array,Deps>>
 {
     static const Integer value = false;
@@ -238,7 +238,7 @@ struct make_func_output
     using type = make_func_output;
 };
 
-template<class Tag, class Func, Integer M_arg, Integer N_arg, Mat_array Array_Arg, class Deps0>
+template<class Tag, class Func, Integer M_arg, Integer N_arg, Mat_array Array_Arg, DPS Deps0>
 struct make_call_external<Tag, Func, ct_matrix<M_arg,N_arg,Array_Arg,Deps0>, true>
 {
     using return_size           = typename Func::template return_size<M_arg, N_arg>;

@@ -53,7 +53,7 @@ struct enable_vectorization_array
                   "this type should not be instantiated");
 };
 
-template<class Subs_Context, Integer M, Integer N, Mat_array Array_T, class Deps>
+template<class Subs_Context, Integer M, Integer N, Mat_array Array_T, DPS Deps>
 struct simd_enable<Subs_Context,ct_matrix<M,N,Array_T,Deps>>
 {
     using codegen           = typename Subs_Context::code_gen;

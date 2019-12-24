@@ -9,6 +9,7 @@ namespace matcl { namespace mkgen { namespace test
 
 namespace mk = matcl::mkgen;
 
+
 struct basic_codegen
 {
     static const bool simd_enable                   = true;
@@ -122,9 +123,6 @@ void test_matrix()
 
     e44::print<empty_context>(std::cout, 0);
 };
-
-template<class A, class B>
-struct test;
 
 struct tag_pi : mk::scal_data_const_value_tag<tag_pi>
               , mk::scal_data_value_tag<tag_pi>

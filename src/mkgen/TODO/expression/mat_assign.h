@@ -111,10 +111,10 @@ template<class Array, Integer Row, Integer Col>
 struct mat_scal_assign_array_get_elem
 {};
 
-template<Integer M, Integer N, class Array1, class Array2, class Deps2,
+template<Integer M, Integer N, class Array1, Scal_data Array2, DPS Deps2,
         Integer Row, Integer Col>
 struct mat_scal_assign_array_get_elem<mkd::mat_scal_assign_array<M,N, Array1, 
-                            ct_scalar<Array2,Deps2>>, Row, Col>
+                            ct_scalar<Array2, Deps2>>, Row, Col>
 {
     static_assert(Row <= M && Col <= N, "invalid elem");
 
@@ -127,7 +127,7 @@ struct mat_scal_assign_array_get_elem<mkd::mat_scal_assign_array<M,N, Array1,
 //----------------------------------------------------------------------------------
 //                              mat_assign
 //----------------------------------------------------------------------------------
-template<Integer M1_M2, Integer N1_N2, Mat_array Array1, class Deps1, Mat_array Array2, class Deps2>
+template<Integer M1_M2, Integer N1_N2, Mat_array Array1, DPS Deps1, Mat_array Array2, DPS Deps2>
 struct mat_assign<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Array2,Deps2>>
 {
     using array_type    = mkd::mat_assign_array<M1_M2, N1_N2, Array1, Array2>;
@@ -135,16 +135,17 @@ struct mat_assign<ct_matrix<M1_M2,N1_N2,Array1,Deps1>, ct_matrix<M1_M2,N1_N2,Arr
     using type          = ct_matrix<M1_M2, N1_N2, array_type,deps>;
 };
 
-template<Integer M1, Integer N1, Mat_array Array1, class Deps1, class Array2, class Deps2>
-struct mat_assign<ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Array2,Deps2>>
+template<Integer M1, Integer N1, Mat_array Array1, DPS Deps1, 
+            Scal_data Array2, DPS Deps2>
+struct mat_assign<ct_matrix<M1,N1,Array1,Deps1>, ct_scalar<Array2, Deps2>>
 {
     using array_type    = mkd::mat_scal_assign_array<M1, N1, Array1, ct_scalar<Array2,Deps2>>;
     using deps          = typename link_deps<Deps1, Deps2>::type;
     using type          = ct_matrix<M1, N1, array_type,deps>;
 };
 
-template<Integer M1, Integer N1, Integer M2, Integer N2, Mat_array Array1, class Deps1, 
-            Mat_array Array2, class Deps2>
+template<Integer M1, Integer N1, Integer M2, Integer N2, Mat_array Array1, DPS Deps1, 
+            Mat_array Array2, DPS Deps2>
 struct mat_assign<ct_matrix<M1,N1,Array1,Deps1>, ct_matrix<M2,N2,Array2,Deps2>>
 {
     static_assert(M1 == M2 && N1 == N2, "invalid matrix operation, check size of matrices");
@@ -159,10 +160,10 @@ struct assign_colon_scal{};
 template<class Colon, class Matrix>
 struct assign_colon{};
 
-template<class Tag, Integer M, Integer N, Mat_array Array, class Deps,
-        class Assignments, class RHS_Tag, class Scal_Deps, Integer Pos>
-struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array,Deps>,Assignments>, 
-                    ct_scalar<RHS_Tag,Scal_Deps>, colon<Pos> >
+template<class Tag, Integer M, Integer N, Mat_array Array, DPS Deps,
+        class Assignments, Scal_data RHS_Tag, DPS Scal_Deps, Integer Pos>
+struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array, Deps>,Assignments>, 
+                    ct_scalar<RHS_Tag, Scal_Deps>, colon<Pos> >
 {
     static_assert(Pos >= 1 && Pos <= M * N, "invalid position");
 
@@ -177,8 +178,8 @@ struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array,Deps>,Assignments>,
     using type              = computation<Tag,new_matrix,new_assignments>;
 };
 
-template<class Tag, Integer M, Integer N, Mat_array Array, class Deps,
-        class Assignments, Integer M2, Integer N2, Mat_array Array2, class Deps2, 
+template<class Tag, Integer M, Integer N, Mat_array Array, DPS Deps,
+        class Assignments, Integer M2, Integer N2, Mat_array Array2, DPS Deps2, 
         class Colon>
 struct comp_assign_1<computation<Tag, ct_matrix<M,N,Array,Deps>,Assignments>, 
                     ct_matrix<M2,N2,Array2,Deps2>, Colon >
@@ -204,7 +205,7 @@ struct make_comp_result
 {
     static_assert(md::dependent_false<Comp>::value, "this type should not be instantiated");
 };
-template<class Tag, Integer M, Integer N, Mat_array Array, class Deps, class Assignments_List>
+template<class Tag, Integer M, Integer N, Mat_array Array, DPS Deps, class Assignments_List>
 struct make_comp_result<computation<Tag, ct_matrix<M,N,Array,Deps>, Assignments_List>>
 {
     using new_dep           = dep<Tag,0,dep_computation>;
@@ -245,7 +246,7 @@ struct assign_elem
     static_assert(md::dependent_false<Matrix>::value, 
                 "this type should not be instantiated");
 };
-template<Integer M, Integer N, Mat_array Array, class Deps, Integer Row, Integer Col>
+template<Integer M, Integer N, Mat_array Array, DPS Deps, Integer Row, Integer Col>
 struct assign_elem<ct_matrix<M,N,Array,Deps>,Row,Col>
 {
     template<class Val, class Local_Storage>
@@ -272,12 +273,12 @@ struct make_return_dep
     static_assert(md::dependent_false<Mat>::value, 
                 "this type should not be instantiated");
 };
-template<Integer M, Integer N, class Tag, class Dep>
-struct make_return_dep<ct_matrix<M,N, mkd::output_array<Tag>,Dep>>
+template<Integer M, Integer N, class Tag, DPS Dep>
+struct make_return_dep<ct_matrix<M,N, mkd::output_array<Tag>, Dep>>
 {
     using type          = extern_dep<Tag>;
 };
-template<Integer M, Integer N, class Output_Tag, Integer MR, Integer MC, class Dep>
+template<Integer M, Integer N, class Output_Tag, Integer MR, Integer MC, DPS Dep>
 struct make_return_dep<ct_matrix<M,N, mkd::temp_output_array<Output_Tag, MR, MC>,Dep>>
 {
     using type          = temp_dep<Output_Tag, MR, MC>;
@@ -308,7 +309,7 @@ struct make_assign_info
     static_assert(md::dependent_false<Mat>::value, 
                 "this type should not be instantiated");
 };
-template<Integer M, Integer N, class Array1, class Array2, class Deps>
+template<Integer M, Integer N, class Array1, class Array2, DPS Deps>
 struct make_assign_info<ct_matrix<M,N,mkd::mat_assign_array<M,N,Array1,Array2>,Deps>>
 {
     using lhs   = ct_matrix<M,N,Array1,Deps>;
@@ -316,7 +317,7 @@ struct make_assign_info<ct_matrix<M,N,mkd::mat_assign_array<M,N,Array1,Array2>,D
     using type  = assign_info<lhs,rhs,colon_all>;
 };
 
-template<Integer M, Integer N, class Array1, Integer M2, Integer N2, class Colon, class Array2, class Deps>
+template<Integer M, Integer N, class Array1, Integer M2, Integer N2, class Colon, class Array2, DPS Deps>
 struct make_assign_info<ct_matrix<M2,N2, mkd::mat_assign_array_colon<M,N,Array1,Colon,M2,N2,Array2>,Deps>>
 {
     using lhs   = ct_matrix<M,N,Array1,Deps>;

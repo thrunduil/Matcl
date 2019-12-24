@@ -29,19 +29,6 @@ namespace matcl { namespace mkgen { namespace details
 //-----------------------------------------------------------------------
 //                      checks dependency
 //-----------------------------------------------------------------------
-template<class Deps>
-struct check_valid_dps
-{
-    static_assert(md::dependent_false<Deps>::value, "type is not dps<>");
-};
-
-template<class ...T>
-struct check_valid_dps<dps<T...>>
-{
-    // arguments T are already checked
-    using type = void;
-};
-
 template<class Dep>
 struct check_valid_dep
 {
@@ -98,13 +85,6 @@ struct check_valid_dep_type
     static_assert(value == true, "invalid type argument passed to dep<>");
 
     using type  = void;
-};
-
-// check if Deps parameter is valid dps type
-template<class Deps>
-struct check_deps
-{
-    using type = typename check_valid_dps<Deps>::type;
 };
 
 //-----------------------------------------------------------------------

@@ -106,7 +106,7 @@ struct mat_temporary2
 {
     using type = Mat;
 };
-template<Integer M1, Integer N1, class Deps, class Tag1, Integer Mat_Rows, Integer Mat_Cols, class Tag>
+template<Integer M1, Integer N1, DPS Deps, class Tag1, Integer Mat_Rows, Integer Mat_Cols, class Tag>
 struct mat_temporary2<ct_matrix<M1,N1,mkd::mat_temp_array<Tag1, Mat_Rows, Mat_Cols,false>,Deps>,Tag,true,true>
 {    
     using array = mkd::mat_temp_array<Tag1, Mat_Rows, Mat_Cols,true>;
@@ -226,7 +226,7 @@ struct is_temporary_mat_array<mkd::virtual_array<Tag, Args...>, With_Forced >
     static const bool value = is_temporary_virtual_array<With_Forced, Args...>::value;
 };
 
-template<Integer M1, Integer N1, Mat_array Array1, class Deps1, bool With_Forced>
+template<Integer M1, Integer N1, Mat_array Array1, DPS Deps1, bool With_Forced>
 struct is_temporary_mat<ct_matrix<M1, N1, Array1, Deps1>,With_Forced>
 {
     static const bool value = is_temporary_mat_array<Array1,With_Forced>::value;

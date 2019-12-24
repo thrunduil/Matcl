@@ -20,31 +20,20 @@
 
 #pragma once
 
-#include "mkgen/details/mkgen_fwd.h"
-#include "mkgen/details/utils/has_function.h"
-#include "matcl-core/details/mpl.h"
+#include "mkgen/matrix/scalar.h"
 
-namespace matcl { namespace mkgen { namespace details
+namespace matcl { namespace mkgen
 {
 
-namespace mk = matcl :: mkgen;
+//------------------------------------------------------------------------------
+//                      Predefined scalars
+//------------------------------------------------------------------------------
+using zero  = integer_scalar<0>;
+using one   = integer_scalar<1>;
+using two   = integer_scalar<2>;
+using mone  = integer_scalar<-1>;
+using mtwo  = integer_scalar<-2>; 
+using half  = rational_scalar<1,2>;
 
-// return true if T can be passed to ct_scalar<T, ...>;
-template<class T>
-struct is_valid_scalar_data
-{
-    static const bool value = std::is_base_of<mkd::scalar_data<T>, T>::value;
-};
 
-//-----------------------------------------------------------------------
-//                      check_computation_tag
-//-----------------------------------------------------------------------
-// check tag supplied to compute function
-template<class Tag>
-struct check_computation_tag
-{
-    // TODO: collect requirements
-    using type = void;
-};
-
-}}}
+}}

@@ -51,13 +51,9 @@ struct colon3{};
 // produce an error. Array_t must be derived from matrix_array
 // Deps is a type representing dependencies from runtime values; must be specialization
 // of dps type
-template<Integer M, Integer N, Mat_array Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 struct ct_matrix
 {
-    private:
-        // check arguments
-        using check2    = typename mkd::check_deps<Deps>::type;
-
     public:
         // number of rows
         static const Integer    rows        = M;

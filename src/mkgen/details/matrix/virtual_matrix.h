@@ -111,8 +111,8 @@ struct mat_virtual_assign_1
     static_assert(md::dependent_false<A>::value, "invalid arguments");
 };
 
-template<Integer M1, Integer N1, Mat_array Array_1, class Deps_1, 
-         Integer M2, Integer N2, Mat_array Array_2, class Deps_2, 
+template<Integer M1, Integer N1, Mat_array Array_1, DPS Deps_1, 
+         Integer M2, Integer N2, Mat_array Array_2, DPS Deps_2, 
          class Colon_1>
 struct mat_virtual_assign_1<ct_matrix<M1, N1, Array_1, Deps_1>,
                             ct_matrix<M2, N2, Array_2, Deps_2>, Colon_1>
@@ -133,8 +133,8 @@ struct mat_virtual_assign_1<ct_matrix<M1, N1, Array_1, Deps_1>,
     using type          = ct_matrix<M1, N1, array_type, deps>;
 };
 
-template<Integer M1, Integer N1, Mat_array Array_1, class Deps_1, 
-         class Array_2, class Deps_2, class Colon_1>
+template<Integer M1, Integer N1, Mat_array Array_1, DPS Deps_1, 
+         Scal_data Array_2, DPS Deps_2, class Colon_1>
 struct mat_virtual_assign_1<ct_matrix<M1, N1, Array_1, Deps_1>,
                             ct_scalar<Array_2,Deps_2>, Colon_1>
 {
@@ -406,14 +406,14 @@ struct make_colon_assignment2
                 "this type should not be instantiated");
 };
 
-template<Integer M, Integer N, class Array1, class Deps, Integer M2, Integer N2, class Array2, class Colon_1>
+template<Integer M, Integer N, class Array1, DPS Deps, Integer M2, Integer N2, class Array2, class Colon_1>
 struct make_colon_assignment<M, N, Array1, Deps, virtual_assign_item<M, N, M2, N2, Array2, Colon_1>>
 {
     using array_type    = mkd::mat_assign_array_colon<M, N, Array1, Colon_1, M2, N2, Array2>;
     using type          = ct_matrix<M2, N2, array_type, Deps>;
 };
 
-template<Integer M, Integer N, class Deps, Integer M2, Integer N2, class Array2, class Colon_1>
+template<Integer M, Integer N, DPS Deps, Integer M2, Integer N2, class Array2, class Colon_1>
 struct make_colon_assignment2<M, N, Deps, virtual_assign_item<M, N, M2, N2, Array2, Colon_1>>
 {
     using type          = list::list<Colon_1, ct_matrix<M2,N2,Array2, Deps>>;
@@ -430,13 +430,13 @@ struct expand_virtual_matrix
                 "this type should not be instantiated");
 };
 
-template<Integer M, Integer N, Mat_array Array, class Deps>
+template<Integer M, Integer N, Mat_array Array, DPS Deps>
 struct expand_virtual_matrix<ct_matrix<M, N, Array, Deps>>
 {
     using type = list::list<ct_matrix<M, N, Array, Deps>>;
 };
 
-template<Integer M, Integer N, class Array1, class Virt_Tag, class ... Assign_List, class Deps>
+template<Integer M, Integer N, class Array1, class Virt_Tag, class ... Assign_List, DPS Deps>
 struct expand_virtual_matrix<ct_matrix<M, N, 
         mkd::mat_assign_array<M, N, Array1, mkd::virtual_array<Virt_Tag, Assign_List...>>, Deps>>
 {
@@ -459,13 +459,13 @@ struct expand_virtual_matrix2
                 "this type should not be instantiated");
 };
 
-template<Integer M, Integer N, Mat_array Array, class Deps>
+template<Integer M, Integer N, Mat_array Array, DPS Deps>
 struct expand_virtual_matrix2<ct_matrix<M, N, Array, Deps>>
 {
     using type = list::list<list::list<colon_all, ct_matrix<M, N, Array, Deps>>>;
 };
 
-template<Integer M, Integer N, class Virt_Tag, class ... Assign_List, class Deps>
+template<Integer M, Integer N, class Virt_Tag, class ... Assign_List, DPS Deps>
 struct expand_virtual_matrix2<ct_matrix<M, N, mkd::virtual_array<Virt_Tag, Assign_List...>, Deps>>
 {
     using type = typename expand_virtual_impl2<M,N,Deps,Assign_List...>::type;

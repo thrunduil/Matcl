@@ -18,13 +18,13 @@ struct is_output_matrix
     static const bool value = false;
 };
 
-template<class Output_Tag, Integer M, Integer N, class Deps>
+template<class Output_Tag, Integer M, Integer N, DPS Deps>
 struct is_output_matrix<ct_matrix<M,N, mkd::output_array<Output_Tag>, Deps>>
 {
     static const bool value = true;
 };
 
-template<class Output_Tag, Integer M, Integer N, Integer MR, Integer MC, class Deps>
+template<class Output_Tag, Integer M, Integer N, Integer MR, Integer MC, DPS Deps>
 struct is_output_matrix<ct_matrix<M,N, mkd::temp_output_array<Output_Tag, MR, MC>, Deps>>
 {
     static const bool value = true;
@@ -35,7 +35,7 @@ struct is_temporary
 {
     static const bool value = false;
 };
-template<Integer M, Integer N, class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force, class Deps>
+template<Integer M, Integer N, class Tag, Integer Mat_Rows, Integer Mat_Cols, bool Force, DPS Deps>
 struct is_temporary<ct_matrix<M,N,mkd::mat_temp_array<Tag, Mat_Rows, Mat_Cols, Force>,Deps>>
 {
     //for now only temporary matrix are market as temporary, virtual matrices of temporaries
@@ -48,7 +48,7 @@ struct is_virtual_temporary
 {
     static const bool value = false;
 };
-template<Integer M, Integer N, Mat_array Array, class Deps, bool With_Forced>
+template<Integer M, Integer N, Mat_array Array, DPS Deps, bool With_Forced>
 struct is_virtual_temporary<ct_matrix<M, N, Array, Deps>,With_Forced>
 {
     static const bool value = is_temporary_mat_array<Array, With_Forced>::value;
@@ -391,14 +391,14 @@ struct make_empty_dps_maker<Tag, modif2<Ret_Tag, Colon, Rows, Cols>,Subs_Context
     };
 };
 
-template<Integer Rows, Integer Cols, Mat_array Array, class Deps, class Rem_Dps>
-struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>,Rem_Dps>
+template<Integer Rows, Integer Cols, Mat_array Array, DPS Deps, DPS Rem_Dps>
+struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>, Rem_Dps>
 {
     using all_deps  = typename link_deps<Deps,Rem_Dps>::type;
     using type      = ct_matrix<Rows,Cols,Array,all_deps>;
 };
 
-template<Integer Rows, Integer Cols, Mat_array Array, class Deps>
+template<Integer Rows, Integer Cols, Mat_array Array, DPS Deps>
 struct add_removed_deps<ct_matrix<Rows,Cols,Array,Deps>,void>
 {
     using type      = ct_matrix<Rows,Cols,Array,Deps>;
@@ -448,7 +448,7 @@ struct make_dps_from_subs<dps<Args...>>
     using type = dps<Args...>;
 };
 
-template<Integer M, Integer N, class Ret_Tag, class Ret_DPS, class Expr_Matrix, class Ret_Mat_Subs, 
+template<Integer M, Integer N, class Ret_Tag, DPS Ret_DPS, class Expr_Matrix, class Ret_Mat_Subs, 
         class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>, Expr_Matrix, Ret_Mat_Subs, Subs_Context,
         false>
@@ -466,7 +466,7 @@ struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>, Expr_Matri
     using additional_deps   = typename link_deps<Ret_DPS, removed_deps_dps>::type;
 };
 
-template<Integer M, Integer N, class Ret_Tag, Integer MR, Integer MC, class Ret_DPS, class Expr_Matrix, 
+template<Integer M, Integer N, class Ret_Tag, Integer MR, Integer MC, DPS Ret_DPS, class Expr_Matrix, 
         class Ret_Mat_Subs, class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag,MR,MC>,Ret_DPS>, Expr_Matrix, Ret_Mat_Subs, 
         Subs_Context, false>
@@ -484,8 +484,8 @@ struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag,MR,MC>,Ret_DPS>,
     using additional_deps   = typename link_deps<Ret_DPS, removed_deps_dps>::type;
 };
 
-template<Integer M, Integer N, class Ret_Tag, class Ret_DPS, 
-        Integer M2, Integer N2, class Expr_Array, class Expr_DPS, class Ret_Mat_Subs, class Subs_Context>
+template<Integer M, Integer N, class Ret_Tag, DPS Ret_DPS, 
+        Integer M2, Integer N2, class Expr_Array, DPS Expr_DPS, class Ret_Mat_Subs, class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>,
                   ct_matrix<M2,N2,Expr_Array,Expr_DPS>,Ret_Mat_Subs, Subs_Context, true>
 {
@@ -505,8 +505,8 @@ struct final_expr<ct_matrix<M,N, mkd::output_array<Ret_Tag>,Ret_DPS>,
     using additional_deps   = typename link_deps<Ret_DPS, removed_deps_dps>::type;
 };
 
-template<Integer M, Integer N, class Ret_Tag, Integer MR, Integer MC, class Ret_DPS, 
-        Integer M2, Integer N2, class Expr_Array, class Expr_DPS, class Ret_Mat_Subs, class Subs_Context>
+template<Integer M, Integer N, class Ret_Tag, Integer MR, Integer MC, DPS Ret_DPS, 
+        Integer M2, Integer N2, class Expr_Array, DPS Expr_DPS, class Ret_Mat_Subs, class Subs_Context>
 struct final_expr<ct_matrix<M,N, mkd::temp_output_array<Ret_Tag, MR, MC>,Ret_DPS>,
                   ct_matrix<M2,N2,Expr_Array,Expr_DPS>,Ret_Mat_Subs, Subs_Context, true>
 {
@@ -616,7 +616,7 @@ template<class Val, class Mat>
 struct expr_evaler_elems
 {};
 
-template<class Val, Integer M, Integer N, Mat_array Array, class Deps, class ... Elems>
+template<class Val, Integer M, Integer N, Mat_array Array, DPS Deps, class ... Elems>
 struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N,Array,Deps>, Elems...>>
 {
     using matrix_type   = ct_matrix<M,N,Array,Deps>;
@@ -674,7 +674,7 @@ struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N,Array,Deps>, Elems
         expr_evaler_elems_expand<Val,list::list<Elems...>>::accept<Visitor>(vis);
     }
 };
-template<class Val, Integer M, Integer N, class Ret_Tag, class Deps, class ... Elems>
+template<class Val, Integer M, Integer N, class Ret_Tag, DPS Deps, class ... Elems>
 struct expr_evaler_elems_expand<Val, list::list<ct_matrix<M,N, mkd::empty_array<Ret_Tag>,Deps>, Elems...>>
 {
     template<class Local_Storage>
@@ -706,7 +706,7 @@ struct expr_evaler_elems_expand<Val, list::list<>>
     }
 };
 
-template<class Val, Integer M, Integer N, Mat_array Array, class Deps>
+template<class Val, Integer M, Integer N, Mat_array Array, DPS Deps>
 struct expr_evaler_elems<Val, ct_matrix<M,N,Array,Deps>>
 {
     template<class Local_Storage>

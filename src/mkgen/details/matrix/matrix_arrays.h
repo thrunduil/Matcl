@@ -24,6 +24,7 @@
 #include "mkgen/details/utils/mpl.h"
 #include "mkgen/details/matrix/element.h"
 #include "mkgen/details/matrix/scalar_data.h"
+#include "mkgen/matrix/scalar.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
@@ -46,7 +47,7 @@ struct matrix_array_get_elem
     using type  = typename Data :: template get_element_impl<Row, Col>::type;
 
     // type must be scalar_data
-    using check1    = typename mkd::check_valid_scalar_data<type>::type;
+    static_assert(Scal_data<type>, "Data must be a valid scalar_data");
 };
 
 //-----------------------------------------------------------------------
@@ -72,12 +73,22 @@ struct sub_array_2 : public matrix_array<sub_array_2<Array_t, Offset1, Offset2, 
 };
 
 // value_mat array
-template<Tag_matrix_data Tag, class Value_type, Integer Row, Integer Col>
-struct matrix_array_value_get_elem 
-        : mk::scal_data_value_tag<matrix_array_value_get_elem<Tag, Value_type, Row, Col>>
+template<class Tag, class Value_type, Integer Row, Integer Col>
+struct ma_value_get_elem_scalar
+        : mk::scal_data_value_tag<ma_value_get_elem_scalar<Tag, Value_type, Row, Col>>
 {
-    using this_type = matrix_array_value_get_elem<Tag, Value_type, Row, Col>;
-    using type      = scal_data_value<this_type, Value_type>;
+    template<class Val>
+    static Val value()
+    {
+        return Val(Tag::value<Value_type, Row, Col>());
+    };
+};
+
+template<class Tag, class Value_type, Integer Row, Integer Col>
+struct matrix_array_value_get_elem
+{
+    using type      = scal_data_value<ma_value_get_elem_scalar<Tag, Value_type, Row, Col>, 
+                                        Value_type>;
 
     template<class Val>
     static Val value()
@@ -89,24 +100,38 @@ struct matrix_array_value_get_elem
 template<Tag_matrix_data Tag, class Value_type>                                     
 struct matrix_array_value : public matrix_array<matrix_array_value<Tag, Value_type>>
 {
-    using this_type = matrix_array_value<Tag, Value_type>;
-
     template<Integer Row, Integer Col>
     using get_element_impl  = matrix_array_value_get_elem<Tag, Value_type, Row, Col>;
 };
 
 // cont_value_mat array
-template<Tag_matrix_const_data Tag, class Value_type, Integer Row, Integer Col>
+template<class Tag, class Value_type, Integer Row, Integer Col>
+struct ma_const_value_get_elem
+        : mk::scal_data_const_value_tag<ma_const_value_get_elem<Tag, Value_type, Row, Col>>
+{
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Val(Tag::value<Value_type, Row, Col>());
+    };
+};
+
+template<class Tag, class Value_type, Integer Row, Integer Col>
 struct matrix_array_const_value_get_elem
 {
-    //TODO
+    using type      = scal_data_const_value<ma_const_value_get_elem<Tag, Value_type, 
+                                Row, Col>, Value_type>;
+
+    template<class Val>
+    static constexpr Val value()
+    {
+        return Val(Tag::value<Value_type, Row, Col>());
+    };
 };
 
 template<Tag_matrix_const_data Tag, class Value_type>                                     
 struct matrix_array_const_value : public matrix_array<matrix_array_const_value<Tag, Value_type>>
 {
-    using this_type = matrix_array_const_value<Tag, Value_type>;
-
     template<Integer Row, Integer Col>
     using get_element_impl  = matrix_array_const_value_get_elem<Tag, Value_type, Row, Col>;
 };

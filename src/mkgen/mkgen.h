@@ -21,6 +21,7 @@
 #pragma once
 
 #include "mkgen/matrix/scalar.h"
+#include "mkgen/matrix/predefined_scalars.h"
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/matrix/matrix_printer.h"
 #include "mkgen/expression/expressions.h"
