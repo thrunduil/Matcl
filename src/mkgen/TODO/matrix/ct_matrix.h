@@ -142,6 +142,7 @@ struct comp_assign_1
 template<class Mat, class Tag, bool Force>
 struct mat_temporary;
 
+
 // unary function with Tag tag applied to matrix or scalar Mat
 template<class Tag, class Mat>
 struct func_unary {};
