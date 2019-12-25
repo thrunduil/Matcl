@@ -43,7 +43,7 @@ struct enable_matscal_2 :
 {};
 
 // enable when M1 is matrix or scalar
-template<class M1, class M2>
+template<class M1>
 struct enable_matscal_1 :
     public md::enable_if
             <	(is_scalar<M1>::value || is_matrix<M1>::value),

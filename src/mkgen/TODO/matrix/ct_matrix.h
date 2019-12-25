@@ -142,16 +142,6 @@ struct comp_assign_1
 template<class Mat, class Tag, bool Force>
 struct mat_temporary;
 
-
-// unary function with Tag tag applied to matrix or scalar Mat
-template<class Tag, class Mat>
-struct func_unary {};
-
-// binary element-wise function with tag tag applied to matrices or scalars
-// Mat1 and mat2
-template<class Tag, class Mat1, class Mat2>
-struct func_bin {};
-
 //------------------------------------------------------------------------------
 //                      Working with matrices
 //------------------------------------------------------------------------------

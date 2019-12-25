@@ -127,7 +127,40 @@ constexpr auto operator-(const Matrix_1& A)
     return std::declval<ret_type>();
 };
 
+// unary function with Tag tag applied to matrix or scalar A
+template<class Tag>
+struct func_unary
+{
+    template<class Matrix_1, 
+        class Enable = typename mkd::enable_matscal_1<Matrix_1>::type>
+    static constexpr auto eval(const Matrix_1& A)
+    {
+        (void)A;
+        using ret_type  = typename mkd::func_unary_impl<Tag, Matrix_1>::type;
+
+        return std::declval<ret_type>();
+    };
+};
+
+// binary element-wise function with tag tag applied to matrices or scalars
+// A and B
+template<class Tag>
+struct func_binary
+{
+    template<class Matrix_1, class Matrix_2,
+        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+    constexpr auto operator()(const Matrix_1& A, const Matrix_1& B)
+    {
+        (void)A;
+        (void)B;
+        using ret_type  = typename mkd::func_binary_impl<Tag, Matrix_1, Matrix_1>::type;
+
+        return std::declval<ret_type>();
+    };
+};
+
 }}
 
 #include "mkgen/details/expressions/mat_mult_impl.h"
 #include "mkgen/details/expressions/mat_plus_impl.h"
+#include "mkgen/details/expressions/func_impl.h"

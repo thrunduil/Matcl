@@ -26,6 +26,7 @@
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_mult_scalar_data.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_plus.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\expr_plus_scalar_data.h" />
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\func_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_mult_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\expressions\mat_plus_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\colon_func.h" />
