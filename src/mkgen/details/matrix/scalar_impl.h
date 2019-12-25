@@ -72,19 +72,19 @@ struct make_evaled_scalar<mkd::scal_data_evaled<Data, Tag_data>, Deps, Tag>
     using type      = ct_scalar<data, Deps>;
 };
 
-template<class Data, class Value_type, DPS Deps, Tag_comp Tag>
-struct make_evaled_scalar<mkd::scal_data_const_value<Data, Value_type>, Deps, Tag>
+template<Tag_scalar_cvalue Data, Value Val_t, DPS Deps, Tag_comp Tag>
+struct make_evaled_scalar<mkd::scal_data_const_value<Data, Val_t>, Deps, Tag>
 {
     // nothing to compute
-    using data      = mkd::scal_data_const_value<Data, Value_type>;
+    using data      = mkd::scal_data_const_value<Data, Val_t>;
     using type      = ct_scalar<data, Deps>;
 };
 
-template<class Data, class Value_type, DPS Deps, Tag_comp Tag>
-struct make_evaled_scalar<mkd::scal_data_value<Data, Value_type>, Deps, Tag>
+template<Tag_scalar_value Data, Value Val_t, DPS Deps, Tag_comp Tag>
+struct make_evaled_scalar<mkd::scal_data_value<Data, Val_t>, Deps, Tag>
 {
     // nothing to compute
-    using data      = mkd::scal_data_value<Data,Value_type>;
+    using data      = mkd::scal_data_value<Data,Val_t>;
     using type      = ct_scalar<data, Deps>;
 };
 
@@ -101,7 +101,7 @@ struct get_scalar_value<ct_scalar<mkd::scal_data_rational<N,D>, Deps>>
     static constexpr Val value()    { return rat::value<Val>(); };
 };
 
-template<class Tag, class VT, DPS Deps>
+template<Tag_scalar_cvalue Tag, Value VT, DPS Deps>
 struct get_scalar_value<ct_scalar<mkd::scal_data_const_value<Tag, VT>, Deps>>
 {
     using rep   = mkd::scal_data_const_value<Tag, VT>;
@@ -110,7 +110,7 @@ struct get_scalar_value<ct_scalar<mkd::scal_data_const_value<Tag, VT>, Deps>>
     static constexpr Val value()    { return rep::value<Val>(); };
 };
 
-template<class Tag, class VT, DPS Deps>
+template<Tag_scalar_value Tag, Value VT, DPS Deps>
 struct get_scalar_value<ct_scalar<mkd::scal_data_value<Tag, VT>, Deps>>
 {
     using rep   = mkd::scal_data_value<Tag, VT>;
@@ -143,13 +143,15 @@ struct get_arrays_scalar<mkd::scal_data_rational<N,D>, Deps, Step, Arr_List>
     using type      = Arr_List;    
 };
 
-template<class Data, class VT, DPS Deps, Integer Step, class Arr_List>
+template<Tag_scalar_cvalue Data, Value VT, DPS Deps, 
+         Integer Step, class Arr_List>
 struct get_arrays_scalar<scal_data_const_value<Data, VT>, Deps, Step, Arr_List>
 {
     using type      = Arr_List;
 };
 
-template<class Data, class VT, DPS Deps, Integer Step, class Arr_List>
+template<Tag_scalar_value Data, Value VT, DPS Deps, Integer Step, 
+         class Arr_List>
 struct get_arrays_scalar<scal_data_value<Data, VT>, Deps, Step,Arr_List>
 {
     using type      = Arr_List;

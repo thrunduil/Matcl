@@ -80,19 +80,18 @@ struct ct_matrix
         static auto elem(colon<Row>, colon<Col>) 
                                             -> typename mkd::submatrix_elem_2<ct_matrix, Row, Col>::type;
 
-        // get submatrix Mat(Colon_1)
-        template<class Colon_1>
-        static auto sub(Colon_1)            -> typename mkd::submatrix_maker_1<ct_matrix, Colon_1>::type;
+        // get submatrix Mat(Col_t)
+        template<Colon Col_t>
+        static auto sub(Col_t)              -> typename mkd::submatrix_maker_1<ct_matrix, Col_t>::type;
 
-        // get submatrix Mat(Colon_1, Colon_2)
-        template<class Colon_1, class Colon_2>
-        static auto sub(Colon_1, Colon_2)   -> typename mkd::submatrix_maker_2<ct_matrix, 
-                                                    Colon_1, Colon_2>::type;
+        // get submatrix Mat(Col_1, Col_2)
+        template<Colon Col_1, Colon Col_2>
+        static auto sub(Col_1, Col_2)       -> typename mkd::submatrix_maker_2<ct_matrix, Col_1, Col_2>::type;
 
-        // make assignment This(Colon_1) = Mat; 
+        // make assignment This(Col_t) = Mat; 
         // this type must be a virtual_matrix
-        template<class Colon_1, class Mat>
-        static auto assign_1(Colon_1, Mat)  -> typename mkd::mat_virtual_assign_1<ct_matrix, Mat, Colon_1>::type;
+        template<Colon Col_t, Matrix_or_scalar Mat>
+        static auto assign_1(Col_t, Mat)    -> typename mkd::mat_virtual_assign_1<ct_matrix, Mat, Col_t>::type;
 
         // store current results in temporary matrix (placed on the stack) if cond == true,
         // otherwise return this matrix.
@@ -113,13 +112,13 @@ struct ct_matrix
 // matrix storing a value of type Value_type defined by the tag Tag; value
 // cannot depend on external data; Tag must be derived from matrix_data_const_value_tag
 // Tag::get_elem<Row,Col> must evaluate at compile time
-template<Integer M, Integer N, Tag_matrix_const_data Tag, class Value_type>
-using const_value_mat = ct_matrix<M, N, mkd::matrix_array_const_value<Tag,Value_type>, empty_deps>;
+template<Integer M, Integer N, Tag_matrix_cdata Tag, Value Val_t>
+using const_value_mat = ct_matrix<M, N, mkd::matrix_array_const_value<Tag, Val_t>, empty_deps>;
 
 // matrix storing a values of type Value_type defined by the tag Tag; values
 // cannot depend on external data; Tag must be derived from matrix_data_value_tag
-template<Integer M, Integer N, Tag_matrix_data Tag, class Value_type>
-using value_mat = ct_matrix<M, N, mkd::matrix_array_value<Tag, Value_type>, empty_deps>;
+template<Integer M, Integer N, Tag_matrix_data Tag, Value Val_t>
+using value_mat = ct_matrix<M, N, mkd::matrix_array_value<Tag, Val_t>, empty_deps>;
 
 //TODO:
 

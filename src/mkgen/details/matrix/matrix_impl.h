@@ -37,7 +37,7 @@ struct is_virtual_matrix_array;
 //                      submatrix_maker_1
 //------------------------------------------------------------------------------
 // implements ct_matrix<>::sub(Colon_1)
-template<class A, class Colon_1>
+template<Matrix A, Colon Colon_1>
 struct submatrix_maker_1
 {
     static const bool is_mat    = is_matrix<A>::value;
@@ -61,7 +61,7 @@ struct submatrix_maker_1
 //------------------------------------------------------------------------------
 //                      submatrix_maker_2
 //------------------------------------------------------------------------------
-template<class A, class Colon_1, class Colon_2>
+template<Matrix A, Colon Colon_1, Colon Colon_2>
 struct submatrix_maker_2
 {
     static const bool is_mat    = is_matrix<A>::value;
@@ -90,7 +90,7 @@ struct submatrix_maker_2
 //                      submatrix_elem_1
 //------------------------------------------------------------------------------
 // implements ct_matrix<>:: elem(colon<Pos>)
-template<class A, Integer Pos>
+template<Matrix A, Integer Pos>
 struct submatrix_elem_1
 {
     static const bool is_mat    = is_matrix<A>::value;
@@ -111,7 +111,7 @@ struct submatrix_elem_1
 //                      submatrix_elem_2
 //------------------------------------------------------------------------------
 // implements ct_matrix<>:: elem(colon<Row>, colon<Col>) 
-template<class A, Integer Row, Integer Col>
+template<Matrix A, Integer Row, Integer Col>
 struct submatrix_elem_2
 {
     static const bool is_mat    = is_matrix<A>::value;

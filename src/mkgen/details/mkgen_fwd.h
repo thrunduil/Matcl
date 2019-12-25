@@ -94,15 +94,15 @@ struct scal_data_rational;
 
 // represents a scalar storing values of type Value_type
 // known at compile time
-template<Tag_scalar_const_value Tag, class Value_type>
+template<Tag_scalar_cvalue Tag, Value Val_t>
 struct scal_data_const_value;
 
 // represents a scalar storing values of type Value_type
-template<Tag_scalar_value Tag, class Value_type>
+template<Tag_scalar_value Tag, Value Val_t>
 struct scal_data_value;
 
 // represents a scalar storing external values
-template<Tag_scalar_gen_value Tag>
+template<Tag_scalar_gvalue Tag>
 struct scal_data_gen_value;
 
 // append to Arr_List all arrays required by this scalar; 
@@ -118,27 +118,27 @@ template<class Loop_Storage, class Data>
 struct eval_loop_scalar;
 
 // make submatrix
-template<class Mat, class Colon_1, class Colon_2>
+template<Matrix Mat, Colon Colon_1, Colon Colon_2>
 struct submatrix_maker_2;
 
 // make submatrix
-template<class Mat, class Colon_1>
+template<Matrix Mat, Colon Colon_1>
 struct submatrix_maker_1;
 
 // get element from a matrix
-template<class Mat, Integer Pos>
+template<Matrix Mat, Integer Pos>
 struct submatrix_elem_1;
 
 // get element from a matrix
-template<class Mat, Integer Row, Integer Col>
+template<Matrix Mat, Integer Row, Integer Col>
 struct submatrix_elem_2;
 
 // value_mat array
-template<Tag_matrix_data Tag, class Value_type>                                     
+template<Tag_matrix_data Tag, Value Val_t>                                     
 struct matrix_array_value;
 
 // const_value_mat array
-template<Tag_matrix_const_data Tag, class Value_type>                                     
+template<Tag_matrix_cdata Tag, Value Val_t>                                     
 struct matrix_array_const_value;
 
 // gen_mat array
@@ -158,7 +158,7 @@ template<class Tag, class... Assign_List>
 struct virtual_array;
 
 // make virtual assignment Mat_L(Colon_1) = Mat_R
-template<class Mat_L, class Mat_R, class Colon_1>
+template<Matrix Mat_L, Matrix_or_scalar Mat_R, Colon Colon_1>
 struct mat_virtual_assign_1;
 
 // implements virtual_array::get_element

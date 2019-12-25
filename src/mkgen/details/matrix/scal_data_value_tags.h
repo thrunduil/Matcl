@@ -59,7 +59,7 @@ struct scal_data_value_tag_rational
 };
 
 // convert constant scalar value to scalar value
-template<Tag_scalar_const_value Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct scal_data_value_tag_const
     : mk::scal_data_value_tag<scal_data_value_tag_const<Tag, Val>>
 {
@@ -75,7 +75,7 @@ struct scal_data_value_tag_const
 };
 
 // tag representing multiplication Tag1 x Tag2
-template<Tag_scalar_const_value Tag1, Tag_scalar_const_value Tag2>
+template<Tag_scalar_cvalue Tag1, Tag_scalar_cvalue Tag2>
 struct scal_data_const_value_tag_mult 
     : mk::scal_data_const_value_tag<scal_data_const_value_tag_mult<Tag1, Tag2>>
 {
@@ -93,7 +93,7 @@ struct scal_data_value_tag_mult
 };
 
 // tag representing addition Tag1 + Tag2
-template<Tag_scalar_const_value Tag1, Tag_scalar_const_value Tag2>
+template<Tag_scalar_cvalue Tag1, Tag_scalar_cvalue Tag2>
 struct scal_data_const_value_tag_plus 
     : mk::scal_data_const_value_tag<scal_data_const_value_tag_plus<Tag1, Tag2>>
 {
@@ -111,7 +111,7 @@ struct scal_data_value_tag_plus
 };
 
 // tag representing division 1 / Tag1
-template<Tag_scalar_const_value Tag1>
+template<Tag_scalar_cvalue Tag1>
 struct scal_data_const_value_tag_inv 
     : mk::scal_data_const_value_tag<scal_data_const_value_tag_inv<Tag1>>
 {

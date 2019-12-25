@@ -73,67 +73,67 @@ struct sub_array_2 : public matrix_array<sub_array_2<Array_t, Offset1, Offset2, 
 };
 
 // value_mat array
-template<class Tag, class Value_type, Integer Row, Integer Col>
+template<Tag_matrix_data Tag, Value Val_t, Integer Row, Integer Col>
 struct ma_value_get_elem_scalar
-        : mk::scal_data_value_tag<ma_value_get_elem_scalar<Tag, Value_type, Row, Col>>
+        : mk::scal_data_value_tag<ma_value_get_elem_scalar<Tag, Val_t, Row, Col>>
 {
-    template<class Val>
-    static Val value()
+    template<class Val_loc>
+    static Val_loc value()
     {
-        return Val(Tag::value<Value_type, Row, Col>());
+        return Val_loc(Tag::value<Val_t, Row, Col>());
     };
 };
 
-template<class Tag, class Value_type, Integer Row, Integer Col>
+template<Tag_matrix_data Tag, Value Val_t, Integer Row, Integer Col>
 struct matrix_array_value_get_elem
 {
-    using type      = scal_data_value<ma_value_get_elem_scalar<Tag, Value_type, Row, Col>, 
-                                        Value_type>;
+    using type      = scal_data_value<ma_value_get_elem_scalar
+                            <Tag, Val_t, Row, Col>, Val_t>;
 
-    template<class Val>
-    static Val value()
+    template<class Val_loc>
+    static Val_loc value()
     {
-        return Val(Tag::value<Value_type, Row, Col>());
+        return Val_loc(Tag::value<Val_t, Row, Col>());
     };
 };
 
-template<Tag_matrix_data Tag, class Value_type>                                     
-struct matrix_array_value : public matrix_array<matrix_array_value<Tag, Value_type>>
+template<Tag_matrix_data Tag, Value Val_t>                                     
+struct matrix_array_value : public matrix_array<matrix_array_value<Tag, Val_t>>
 {
     template<Integer Row, Integer Col>
-    using get_element_impl  = matrix_array_value_get_elem<Tag, Value_type, Row, Col>;
+    using get_element_impl  = matrix_array_value_get_elem<Tag, Val_t, Row, Col>;
 };
 
 // cont_value_mat array
-template<class Tag, class Value_type, Integer Row, Integer Col>
-struct ma_const_value_get_elem
-        : mk::scal_data_const_value_tag<ma_const_value_get_elem<Tag, Value_type, Row, Col>>
+template<Tag_matrix_cdata Tag, Value Val_t, Integer Row, Integer Col>
+struct ma_const_value_get_elem_scalar
+    : mk::scal_data_const_value_tag<ma_const_value_get_elem_scalar<Tag, Val_t, Row, Col>>
 {
-    template<class Val>
-    static constexpr Val value()
+    template<class Val_loc>
+    static constexpr Val_loc value()
     {
-        return Val(Tag::value<Value_type, Row, Col>());
+        return Val_loc(Tag::value<Val_t, Row, Col>());
     };
 };
 
-template<class Tag, class Value_type, Integer Row, Integer Col>
+template<Tag_matrix_cdata Tag, Value Val_t, Integer Row, Integer Col>
 struct matrix_array_const_value_get_elem
 {
-    using type      = scal_data_const_value<ma_const_value_get_elem<Tag, Value_type, 
-                                Row, Col>, Value_type>;
+    using type      = scal_data_const_value<ma_const_value_get_elem_scalar
+                            <Tag, Val_t, Row, Col>, Val_t>;
 
-    template<class Val>
-    static constexpr Val value()
+    template<class Val_loc>
+    static constexpr Val_loc value()
     {
-        return Val(Tag::value<Value_type, Row, Col>());
+        return Val_loc(Tag::value<Val_t, Row, Col>());
     };
 };
 
-template<Tag_matrix_const_data Tag, class Value_type>                                     
-struct matrix_array_const_value : public matrix_array<matrix_array_const_value<Tag, Value_type>>
+template<Tag_matrix_cdata Tag, Value Val_t>                                     
+struct matrix_array_const_value : public matrix_array<matrix_array_const_value<Tag, Val_t>>
 {
     template<Integer Row, Integer Col>
-    using get_element_impl  = matrix_array_const_value_get_elem<Tag, Value_type, Row, Col>;
+    using get_element_impl  = matrix_array_const_value_get_elem<Tag, Val_t, Row, Col>;
 };
 
 template<class Tag>                                     

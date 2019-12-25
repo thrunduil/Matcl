@@ -81,29 +81,29 @@ struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
 //------------------------------------------------------------------------------
 //                      scal_data_const_value
 //------------------------------------------------------------------------------
-template<Tag_scalar_const_value Tag, class Value_type>
-struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value_type>>
+template<Tag_scalar_cvalue Tag, Value Val_t>
+struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Val_t>>
 {
-    using this_type = scal_data_const_value<Tag, Value_type>;
+    using this_type = scal_data_const_value<Tag, Val_t>;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
     { 
         (void)prior;
-        os << "const(" << Tag :: value<Value_type>() << ")";
+        os << "const(" << Tag :: value<Val_t>() << ")";
     };
 
-    template<class Val, class Local_Storage>
+    template<class Val_loc, class Local_Storage>
     inline_lev_1
-    static Val eval(const Local_Storage&)
+    static Val_loc eval(const Local_Storage&)
     { 
-        return Val(Tag::value<Value_type>());
+        return Val_loc(Tag::value<Val_t>());
     };
 
-    template<class Val>
-    static constexpr Val value()
+    template<class Val_loc>
+    static constexpr Val_loc value()
     {
-        return Tag::value<Value_type>();
+        return Val_loc(Tag::value<Val_t>());
     };
 
     template<class Visitor>
@@ -121,29 +121,29 @@ struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value
 //------------------------------------------------------------------------------
 //                      scal_data_value
 //------------------------------------------------------------------------------
-template<Tag_scalar_value Tag, class Value_type>
-struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
+template<Tag_scalar_value Tag, Value Val_t>
+struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Val_t>>
 {
-    using this_type = scal_data_value<Tag, Value_type>;
+    using this_type = scal_data_value<Tag, Val_t>;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
     { 
         (void)prior;
-        os << "scalar(" << Tag :: value<Value_type>() << ")";
+        os << "scalar(" << Tag :: value<Val_t>() << ")";
     };
 
-    template<class Val, class Local_Storage>
+    template<class Val_loc, class Local_Storage>
     inline_lev_1
-    static Val eval(const Local_Storage&)
+    static Val_loc eval(const Local_Storage&)
     { 
-        return Val(Tag::value<Value_type>());
+        return Val_loc(Tag::value<Val_t>());
     };
 
-    template<class Val>
-    static Val value()
+    template<class Val_loc>
+    static Val_loc value()
     {
-        return Tag::value<Value_type>();
+        return Tag::value<Val_t>();
     };
 
     template<class Visitor>
@@ -161,7 +161,7 @@ struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
 //------------------------------------------------------------------------------
 //                      scal_data_gen_value
 //------------------------------------------------------------------------------
-template<Tag_scalar_gen_value Tag>
+template<Tag_scalar_gvalue Tag>
 struct scal_data_gen_value : mkd::scalar_data<scal_data_gen_value<Tag>>
 {
     using this_type = scal_data_gen_value<Tag>;
@@ -263,11 +263,11 @@ template<Integer N, Integer D>
 struct is_value_scalar_data<mkd::scal_data_rational<N,D>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
+template<Tag_scalar_cvalue Tag, Value Val> 
 struct is_value_scalar_data<mkd::scal_data_const_value<Tag, Val>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
+template<Tag_scalar_value Tag, Value Val> 
 struct is_value_scalar_data<mkd::scal_data_value<Tag,Val>>
                                         {static const bool value = true; };
 
@@ -279,7 +279,7 @@ template<>
 struct is_scalar_data_zero<mkd::scal_data_rational<0, 1>>
                                         { static const bool value = true; };
 
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct is_scalar_data_zero<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(0)); };
 
@@ -291,7 +291,7 @@ template<>
 struct is_scalar_data_one<mkd::scal_data_rational<1, 1>>
                                         { static const bool value = true; };
 
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct is_scalar_data_one<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(1)); };
 
@@ -304,7 +304,7 @@ template<>
 struct is_scalar_data_mone<mkd::scal_data_rational<-1, 1>>
                                         { static const bool value = true; };
 
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct is_scalar_data_mone<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(-1)); };
 

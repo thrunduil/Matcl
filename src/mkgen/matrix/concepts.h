@@ -51,9 +51,9 @@ namespace matcl { namespace mkgen
 // Tag must be derived from scal_data_const_value_tag<Tag>; 
 // see scal_data_const_value_tag for other requirements
 template<class Tag>
-concept Tag_scalar_const_value = std::is_base_of<mk::scal_data_const_value_tag<Tag>,
+concept Tag_scalar_cvalue   = std::is_base_of<mk::scal_data_const_value_tag<Tag>,
                                     Tag>::value
-                                && scal_data_const_value_tag_check :: template is_valid<Tag>;
+                            && scal_data_const_value_tag_check :: template is_valid<Tag>;
 
 // concept of Tag used to create value_scalar
 // Tag must be derived from scal_data_value_tag<Tag>; see scal_data_value_tag for
@@ -66,7 +66,7 @@ concept Tag_scalar_value    = std::is_base_of<mk::scal_data_value_tag<Tag>, Tag>
 // Tag must be derived from scal_data_gen_value_tag<Tag>; see scal_data_gen_value_tag
 // for other requirements
 template<class Tag>
-concept Tag_scalar_gen_value = std::is_base_of<mk::scal_data_gen_value_tag<Tag>, 
+concept Tag_scalar_gvalue   = std::is_base_of<mk::scal_data_gen_value_tag<Tag>, 
                                     Tag>::value
                             && mk::scal_data_gen_value_tag_check :: template is_valid<Tag>;
 
@@ -78,7 +78,7 @@ concept Tag_scalar_gen_value = std::is_base_of<mk::scal_data_gen_value_tag<Tag>,
 // Tag must be derived from matrix_data_const_value_tag<Tag>; 
 // see matrix_data_const_value_tag for other requirements
 template<class Tag>
-concept Tag_matrix_const_data = std::is_base_of<mk::matrix_data_const_value_tag
+concept Tag_matrix_cdata    = std::is_base_of<mk::matrix_data_const_value_tag
                                     <Tag>, Tag>::value
                               && matrix_data_const_value_tag_check :: template is_valid<Tag>;
 
@@ -98,7 +98,7 @@ template<class Tag>
 concept Tag_comp    = true;
 
 //------------------------------------------------------------------------------
-//                      matrix arrays
+//                      arrays
 //------------------------------------------------------------------------------
 // concept of matrix array
 // Mat_array must be derived from matrix_array<Mat_array>; see matrix_array for
@@ -107,16 +107,12 @@ template<class Arr>
 concept Mat_array   = std::is_base_of<mkd::matrix_array<Arr>, Arr>::value
                     && mkd::matrix_array_check::template is_valid<Arr>;
 
-//------------------------------------------------------------------------------
-//                      scalar arrays
-//------------------------------------------------------------------------------
 // concept of scalar data
 // Scal_data must be derived from scalar_data<Scal_data>; see scalar_data for
 // other requirements
 template<class Arr>
 concept Scal_data   = std::is_base_of<mkd::scalar_data<Arr>, Arr>::value
                     && mkd::scalar_data_check::template is_valid<Arr>;
-
 
 //------------------------------------------------------------------------------
 //                      other
@@ -125,6 +121,33 @@ concept Scal_data   = std::is_base_of<mkd::scalar_data<Arr>, Arr>::value
 // DPS must have dps<...> type
 template<class Deps>
 concept DPS   = mkd::dps_check<Deps>::value;
+
+//TODO:
+template<class Val>
+concept Value = std::is_same<Val, float> :: value
+              || std::is_same<Val, double> :: value;
+
+//------------------------------------------------------------------------------
+//                      toplevel
+//------------------------------------------------------------------------------
+// concept of ct_scalar
+template<class S>
+concept Scalar          = true;
+
+template<class S>
+concept Value_scalar    = true;
+
+// concept of ct_matrix
+template<class S>
+concept Matrix          = true;
+
+// Matrix or Scalar
+template<class M>
+concept Matrix_or_scalar= Matrix<M> || Scalar<M>;
+
+// concept of colon
+template<class C>
+concept Colon           = true;
 
 }}
 

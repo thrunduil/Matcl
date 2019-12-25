@@ -262,13 +262,13 @@ struct enable_vectorization_array<Subs_Context, mkd::mat_ufunc_array<Tag, M, N, 
     static const bool value = Tag::is_continuous;
 };
 
-template<class Subs_Context, Tag_matrix_const_data Tag, class Val>
+template<class Subs_Context, Tag_matrix_cdata Tag, Value Val>
 struct enable_vectorization_array<Subs_Context, mkd::matrix_array_const_value<Tag, Val>> 
 {
     static const bool value = false;
 };
 
-template<class Subs_Context, Tag_matrix_data Tag, class Val>
+template<class Subs_Context, Tag_matrix_data Tag, Value Val>
 struct enable_vectorization_array<Subs_Context, mkd::matrix_array_value<Tag, Val>> 
 {
     static const bool value = false;
