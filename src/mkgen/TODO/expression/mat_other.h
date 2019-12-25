@@ -105,6 +105,8 @@ struct correct_scalar_get_elem<ct_scalar<Data, Deps>>
     using type = Data;
 };
 
+//TODO
+/*
 template<class Array, Integer Row, Integer Col>
 struct mat_ufunc_array_get_elem
 {};
@@ -117,6 +119,7 @@ struct mat_ufunc_array_get_elem<mkd::mat_ufunc_array<Tag, M, N, Array>, Row, Col
     using new_item  = typename make_expr_ufunc<Tag,elem>::type;
     using type      = typename correct_scalar_get_elem<new_item>::type;
 };
+*/
 
 template<class Array, Integer Row, Integer Col>
 struct sub_array_1_get_elem

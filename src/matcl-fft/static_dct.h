@@ -368,7 +368,6 @@ struct mat_dct4 : mk::matrix_data_value_tag<mat_dct4<M, Scal>>
         return mk::get_scalar_value<scalar_type>::value<Val>();
     };
 };
-*/
 
 template<Integer Rows, class Scal>
 using cos_dct1  = mk::func_unary<tag_dct1<Rows,Scal>>;
