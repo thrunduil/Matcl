@@ -159,13 +159,13 @@ struct expr_evaler;
 //                      call
 //------------------------------------------------------------------------------
 template<class Tag, template<class Arg> class Func,
-         Integer M1, Integer N1, class Array1, class Deps1>
+         Integer M1, Integer N1, Mat_array Array1, DPS Deps1>
 auto        call_inline(ct_matrix<M1, N1, Array1, Deps1>)
                                         -> typename make_call_inline<Tag, Func, 
                                                 ct_matrix<M1, N1, Array1, Deps1>> :: type;
 
 template<class Tag, class Func,
-         Integer M1, Integer N1, class Array1, class Deps1>
+         Integer M1, Integer N1, Mat_array Array1, DPS Deps1>
 auto        call_external(ct_matrix<M1, N1, Array1, Deps1>)
                                         -> typename make_call_external<Tag, Func, 
                                                 ct_matrix<M1, N1, Array1, Deps1>> :: type;

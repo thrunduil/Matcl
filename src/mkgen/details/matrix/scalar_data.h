@@ -21,42 +21,10 @@
 #pragma once
 
 #include "mkgen/details/mkgen_fwd.h"
+#include "mkgen/matrix/base_types.h"
 
 namespace matcl { namespace mkgen { namespace details
 {
-
-//-----------------------------------------------------------------------
-//                      scalar_data
-//-----------------------------------------------------------------------
-// base class for ct_scalar arrays
-template<class Data>
-struct scalar_data
-{
-    //check arguments
-    template<class Dummy>
-    using check_scalar_data = typename details::check_scalar_data_impl<Data, Dummy>::type;
-
-    // ct_scalar arrays must implement:
-    // template<class Subs_Context>
-    // static void print(std::ostream& os, int prior);
-    // 
-    // template<class Val, class Local_Storage>
-    // static Val eval(const Local_Storage& ls);
-    //
-    // template<class Visitor>
-    // static void accept(Visitor& vis);
-    //
-    // template<class Void>
-    // using simplify;
-    //
-    // template<class Void>
-    // static const bool is_simplified;
-
-    //TODO: remove or implement
-    // append to Arr_List all arrays required by this scalar
-    template<Integer Step, class Arr_List>
-    using get_arrays    = Arr_List;
-};
 
 //------------------------------------------------------------------------------
 //                      scal_data_rational
@@ -113,31 +81,29 @@ struct scal_data_rational : mkd::scalar_data<scal_data_rational<N, D>>
 //------------------------------------------------------------------------------
 //                      scal_data_const_value
 //------------------------------------------------------------------------------
-template<class Tag, class Value_type>
-struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value_type>>
+template<Tag_scalar_cvalue Tag, Value Val_t>
+struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Val_t>>
 {
-    //check
-    using check1    = typename mkd::check_valid_const_data_tag<Tag>::type;
-
-    using this_type = scal_data_const_value<Tag, Value_type>;
+    using this_type = scal_data_const_value<Tag, Val_t>;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
     { 
-        Tag::print(os,prior);
+        (void)prior;
+        os << "const(" << Tag :: value<Val_t>() << ")";
     };
 
-    template<class Val, class Local_Storage>
+    template<class Val_loc, class Local_Storage>
     inline_lev_1
-    static Val eval(const Local_Storage&)
+    static Val_loc eval(const Local_Storage&)
     { 
-        return Val(Tag::value<Value_type>());
+        return Val_loc(Tag::value<Val_t>());
     };
 
-    template<class Val>
-    static constexpr Val value()
+    template<class Val_loc>
+    static constexpr Val_loc value()
     {
-        return Tag::value<Value_type>();
+        return Val_loc(Tag::value<Val_t>());
     };
 
     template<class Visitor>
@@ -155,31 +121,29 @@ struct scal_data_const_value : mkd::scalar_data<scal_data_const_value<Tag, Value
 //------------------------------------------------------------------------------
 //                      scal_data_value
 //------------------------------------------------------------------------------
-template<class Tag, class Value_type>
-struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
+template<Tag_scalar_value Tag, Value Val_t>
+struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Val_t>>
 {
-    //check
-    using check1    = typename mkd::check_valid_data_tag<Tag>::type;
-
-    using this_type = scal_data_value<Tag, Value_type>;
+    using this_type = scal_data_value<Tag, Val_t>;
 
     template<class Subs_Context>
     static void print(std::ostream& os,int prior)
     { 
-        Tag::print(os,prior);
+        (void)prior;
+        os << "scalar(" << Tag :: value<Val_t>() << ")";
     };
 
-    template<class Val, class Local_Storage>
+    template<class Val_loc, class Local_Storage>
     inline_lev_1
-    static Val eval(const Local_Storage&)
+    static Val_loc eval(const Local_Storage&)
     { 
-        return Val(Tag::value<Value_type>());
+        return Val_loc(Tag::value<Val_t>());
     };
 
-    template<class Val>
-    static Val value()
+    template<class Val_loc>
+    static Val_loc value()
     {
-        return Tag::value<Value_type>();
+        return Tag::value<Val_t>();
     };
 
     template<class Visitor>
@@ -197,12 +161,9 @@ struct scal_data_value : mkd::scalar_data<scal_data_value<Tag, Value_type>>
 //------------------------------------------------------------------------------
 //                      scal_data_gen_value
 //------------------------------------------------------------------------------
-template<class Tag>
+template<Tag_scalar_gvalue Tag>
 struct scal_data_gen_value : mkd::scalar_data<scal_data_gen_value<Tag>>
 {
-    //check
-    using check2    = typename mkd::check_valid_gen_data_tag<Tag>::type;
-
     using this_type = scal_data_gen_value<Tag>;
 
     template<class Subs_Context>
@@ -233,13 +194,9 @@ struct scal_data_gen_value : mkd::scalar_data<scal_data_gen_value<Tag>>
 //-----------------------------------------------------------------------
 //                      scal_data_evaled
 //-----------------------------------------------------------------------
-template<class Data, class Tag>
+template<Scal_data Data, Tag_comp Tag>
 struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
 {
-    // check arguments
-    using check1    = typename details::check_scalar_data_impl<Data, void>::type;
-    using check2    = typename details::check_computation_tag<Tag>::type;
-
     using this_type = scal_data_evaled<Data, Tag>;
 
     template<class Subs_Context>
@@ -280,96 +237,6 @@ struct scal_data_evaled : mkd::scalar_data<scal_data_evaled<Data, Tag>>
     };
 };
 
-//------------------------------------------------------------------------------
-//                      matrix element as scalar
-//------------------------------------------------------------------------------
-template<class T, Integer Row, Integer Col>
-struct scalar_mat_elem_2 
-{
-    static_assert(md::dependent_false<T>::value, "class T must be ct_matrix");
-};
-
-template<Integer M, Integer N, class Array_t, class Deps, Integer Row, Integer Col>
-struct scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>
-             : mkd::scalar_data<scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>>
-{
-    using elem_type = typename Array_t::template get_element<Row, Col>::type;
-    using this_type = scalar_mat_elem_2<ct_matrix<M, N, Array_t, Deps>, Row, Col>;
-
-    // check
-    using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
-    
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {
-        elem::print<Subs_Context>(os,prior);
-    };
-
-    template<class Val, class Local_Storage>
-    inline_expr
-    static Val eval(const Local_Storage& ls)
-    {
-        return elem::eval<Val>(ls);
-    };
-
-    template<class Visitor>
-    static void accept(Visitor& vis)
-    {
-        return elem_type::accept<Visitor>(vis);
-    };
-
-    //TODO
-    template<class Void>
-    using simplify      = this_type;
-
-    static constexpr bool is_simplified()   { return true; };
-};
-
-template<class T, Integer Pos>
-struct scalar_mat_elem_1 
-{
-    static_assert(md::dependent_false<T>::value, "class T must be ct_matrix");
-};
-
-template<Integer M, Integer N, class Array_t, class Deps, Integer Pos>
-struct scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>
-            : mkd::scalar_data<scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>>
-{
-    static const Integer col = (Pos-1)/M + 1;
-    static const Integer row = Pos - (col-1) * M;
-
-    using elem_type     = typename Array_t::template get_element<row, col>::type;
-    using this_type     = scalar_mat_elem_1<ct_matrix<M, N, Array_t, Deps>, Pos>;
-
-    // check
-    using check_elem    = typename details::check_scalar_data_impl<elem_type, void>::type;
-
-    template<class Subs_Context>
-    static void print(std::ostream& os, int prior)
-    {        
-        elem_type::print<Subs_Context>(os,prior);
-    };
-    
-    template<class Val, class Local_Storage>
-    inline_expr
-    static Val eval(const Local_Storage& ls)
-    {
-        return elem_type::eval<Val>(ls);
-    };
-    
-    template<class Visitor>
-    static void accept(Visitor& vis)
-    {
-        return elem_type::accept<Visitor>(vis);
-    };
-
-    //TODO
-    template<class Void>
-    using simplify      = this_type;
-
-    static constexpr bool is_simplified()   { return true; };
-};
-
 //TODO
 template<class Tag, class Array, class Deps>
 struct scalar_ufunc_array : mkd::scalar_data<scalar_ufunc_array<Tag, Array, Deps>>
@@ -396,11 +263,11 @@ template<Integer N, Integer D>
 struct is_value_scalar_data<mkd::scal_data_rational<N,D>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
-struct is_value_scalar_data<mkd::scal_data_const_value<Tag,Val>>
+template<Tag_scalar_cvalue Tag, Value Val> 
+struct is_value_scalar_data<mkd::scal_data_const_value<Tag, Val>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
+template<Tag_scalar_value Tag, Value Val> 
 struct is_value_scalar_data<mkd::scal_data_value<Tag,Val>>
                                         {static const bool value = true; };
 
@@ -412,7 +279,7 @@ template<>
 struct is_scalar_data_zero<mkd::scal_data_rational<0, 1>>
                                         { static const bool value = true; };
 
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct is_scalar_data_zero<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(0)); };
 
@@ -424,7 +291,7 @@ template<>
 struct is_scalar_data_one<mkd::scal_data_rational<1, 1>>
                                         { static const bool value = true; };
 
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct is_scalar_data_one<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(1)); };
 
@@ -437,68 +304,8 @@ template<>
 struct is_scalar_data_mone<mkd::scal_data_rational<-1, 1>>
                                         { static const bool value = true; };
 
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct is_scalar_data_mone<mkd::scal_data_const_value<Tag, Val>>
                                         { static const bool value = (Tag::value<Val>() == Val(-1)); };
 
 }}}
-
-namespace matcl { namespace mkgen 
-{
-
-//-----------------------------------------------------------------------
-//                      scal_data_const_value_tag
-//-----------------------------------------------------------------------
-// base class for Tags used in creating const_value_scalar
-template<class Tag>
-struct scal_data_const_value_tag
-{
-    //check arguments
-    template<class Dummy>
-    using check_scal_data_const_value_tag
-                    = typename details::check_const_data_tag_impl<Tag, Dummy>::type;
-
-    // Tag arrays must implement:
-    // static void print(std::ostream& os, int prior);
-    // 
-    // template<class Val>
-    // static constexpr Val value();
-};
-
-//-----------------------------------------------------------------------
-//                      scal_data_value_tag
-//-----------------------------------------------------------------------
-// base class for Tags used in creating value_scalar
-template<class Tag>
-struct scal_data_value_tag
-{
-    //check arguments
-    template<class Dummy>
-    using check_scal_data_value_tag = typename details::check_data_tag_impl<Tag, Dummy>::type;
-
-    // Tag arrays must implement:
-    // static void print(std::ostream& os, int prior);
-    // 
-    // template<class Val>
-    // static Val value();
-};
-
-//-----------------------------------------------------------------------
-//                      scal_data_gen_value_tag
-//-----------------------------------------------------------------------
-// base class for Tags used in creating gen_scalar
-template<class Tag>
-struct scal_data_gen_value_tag
-{
-    //check arguments
-    template<class Dummy>
-    using check_scal_data_gen_value_tag = typename details::check_gen_data_tag_impl<Tag, Dummy>::type;
-
-    // Tag arrays must implement:
-    // static void print(std::ostream& os, int prior);
-    // 
-    // template<class Val, class Local_Storage>
-    // static Val eval(const Local_Storage& ls);
-};
-
-}}

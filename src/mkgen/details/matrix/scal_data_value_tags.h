@@ -59,7 +59,7 @@ struct scal_data_value_tag_rational
 };
 
 // convert constant scalar value to scalar value
-template<class Tag, class Val>
+template<Tag_scalar_cvalue Tag, Value Val>
 struct scal_data_value_tag_const
     : mk::scal_data_value_tag<scal_data_value_tag_const<Tag, Val>>
 {
@@ -75,115 +75,57 @@ struct scal_data_value_tag_const
 };
 
 // tag representing multiplication Tag1 x Tag2
-template<class Tag1, class Tag2>
+template<Tag_scalar_cvalue Tag1, Tag_scalar_cvalue Tag2>
 struct scal_data_const_value_tag_mult 
     : mk::scal_data_const_value_tag<scal_data_const_value_tag_mult<Tag1, Tag2>>
 {
-    //check
-    using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
-    using check2    = typename mkd::check_valid_const_data_tag<Tag2>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "const(" << value<double>() << ")";
-    };
-
     template<class Val>
     static constexpr Val value()    { return Tag1::value<Val>() * Tag2::value<Val>(); }
 };
 
 // tag representing multiplication Tag1 x Tag2
-template<class Tag1, class Tag2>
+template<Tag_scalar_value Tag1, Tag_scalar_value Tag2>
 struct scal_data_value_tag_mult 
     : mk::scal_data_value_tag<scal_data_value_tag_mult<Tag1, Tag2>>
 {
-    //check
-    using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
-    using check2    = typename mkd::check_valid_data_tag<Tag2>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "scalar(" << value<double>() << ")";
-    };
-
     template<class Val>
     static Val value()  { return Tag1::value<Val>() * Tag2::value<Val>(); }
 };
 
 // tag representing addition Tag1 + Tag2
-template<class Tag1, class Tag2>
+template<Tag_scalar_cvalue Tag1, Tag_scalar_cvalue Tag2>
 struct scal_data_const_value_tag_plus 
     : mk::scal_data_const_value_tag<scal_data_const_value_tag_plus<Tag1, Tag2>>
 {
-    //check
-    using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
-    using check2    = typename mkd::check_valid_const_data_tag<Tag2>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "const(" << value<double>() << ")";
-    };
-
     template<class Val>
     static constexpr Val value()    { return Tag1::value<Val>() + Tag2::value<Val>(); }
 };
 
 // tag representing addition Tag1 + Tag2
-template<class Tag1, class Tag2>
+template<Tag_scalar_value Tag1, Tag_scalar_value Tag2>
 struct scal_data_value_tag_plus 
     : mk::scal_data_value_tag<scal_data_value_tag_plus<Tag1, Tag2>>
 {
-    //check
-    using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
-    using check2    = typename mkd::check_valid_data_tag<Tag2>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "scalar(" << value<double>() << ")";
-    };
-
     template<class Val>
     static Val value()  { return Tag1::value<Val>() + Tag2::value<Val>(); }
 };
 
 // tag representing division 1 / Tag1
-template<class Tag1>
+template<Tag_scalar_cvalue Tag1>
 struct scal_data_const_value_tag_inv 
     : mk::scal_data_const_value_tag<scal_data_const_value_tag_inv<Tag1>>
 {
-    //check
-    using check1    = typename mkd::check_valid_const_data_tag<Tag1>::type;
-
     static_assert(Tag1::value<double>() != 0, "inversion of zero");
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "const(" << value<double>() << ")";
-    };
 
     template<class Val>
     static constexpr Val value()    { return Val(1) / Tag1::value<Val>(); }
 };
 
 // tag representing division 1 / Tag1
-template<class Tag1>
+template<Tag_scalar_value Tag1>
 struct scal_data_value_tag_inv 
     : mk::scal_data_value_tag<scal_data_value_tag_inv<Tag1>>
 {
-    //check
-    using check1    = typename mkd::check_valid_data_tag<Tag1>::type;
-
-    static void print(std::ostream& os, int prior)
-    {
-        (void)prior;
-        os << "scalar(" << value<double>() << ")";
-    };
-
     template<class Val>
     static Val value()  { return Val(1) / Tag1::value<Val>(); }
 };

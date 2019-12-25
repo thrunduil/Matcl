@@ -50,8 +50,9 @@ struct make_plus_scal<scal_data_rational<N1, D1>, scal_data_rational<N2, D2>>
     using type  = scal_data_rational<op::nominator,op::denominator>;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_plus_scal<mkd::scal_data_const_value<Tag1,Val1>, 
+template<Tag_scalar_cvalue Tag1, Value Val1, 
+         Tag_scalar_cvalue Tag2, Value Val2>
+struct make_plus_scal<mkd::scal_data_const_value<Tag1, Val1>, 
                       mkd::scal_data_const_value<Tag2, Val2>>
 {
     using val   = decltype(std::declval<Val1>() + std::declval<Val2>());
@@ -60,8 +61,9 @@ struct make_plus_scal<mkd::scal_data_const_value<Tag1,Val1>,
     using type  = scal_data_const_value<tag, val>;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_plus_scal<mkd::scal_data_value<Tag1,Val1>, 
+template<Tag_scalar_value Tag1, Value Val1, 
+         Tag_scalar_value Tag2, Value Val2>
+struct make_plus_scal<mkd::scal_data_value<Tag1, Val1>, 
                       mkd::scal_data_value<Tag2, Val2>>
 {
     using val   = decltype(std::declval<Val1>() + std::declval<Val2>());
@@ -70,8 +72,9 @@ struct make_plus_scal<mkd::scal_data_value<Tag1,Val1>,
     using type  = scal_data_value<tag, val>;
 };
 
-template<class Tag1, class Val1, Integer N2, Integer D2>
-struct make_plus_scal<mkd::scal_data_const_value<Tag1,Val1>, 
+template<Tag_scalar_cvalue Tag1, Value Val1, 
+         Integer N2, Integer D2>
+struct make_plus_scal<mkd::scal_data_const_value<Tag1, Val1>, 
                       mkd::scal_data_rational<N2, D2>>
 {
     using tag1  = mkd::scal_data_const_value<Tag1,Val1>;
@@ -81,9 +84,10 @@ struct make_plus_scal<mkd::scal_data_const_value<Tag1,Val1>,
     using type  = typename make_plus_scal<tag1, tag2> :: type;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_plus_scal<mkd::scal_data_const_value<Tag1,Val1>, 
-                      mkd::scal_data_value<Tag2,Val2>>
+template<Tag_scalar_cvalue Tag1, Value Val1, 
+         Tag_scalar_value Tag2, Value Val2>
+struct make_plus_scal<mkd::scal_data_const_value<Tag1, Val1>, 
+                      mkd::scal_data_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_value<scal_data_value_tag_const<Tag1, Val1>, Val1>;
     using tag2  = mkd::scal_data_value<Tag2,Val2>;
@@ -91,9 +95,10 @@ struct make_plus_scal<mkd::scal_data_const_value<Tag1,Val1>,
     using type  = typename make_plus_scal<tag1, tag2> :: type;
 };
 
-template<Integer N1, Integer D1, class Tag2, class Val2>
+template<Integer N1, Integer D1, 
+         Tag_scalar_cvalue Tag2, Value Val2>
 struct make_plus_scal<mkd::scal_data_rational<N1, D1>, 
-                      mkd::scal_data_const_value<Tag2,Val2>>
+                      mkd::scal_data_const_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_const_value
                         <scal_data_const_value_tag_rational<N1, D1>, double>;
@@ -102,7 +107,7 @@ struct make_plus_scal<mkd::scal_data_rational<N1, D1>,
     using type  = typename make_plus_scal<tag1, tag2> :: type;
 };
 
-template<Integer N1, Integer D1, class Tag2, class Val2>
+template<Integer N1, Integer D1, Tag_scalar_value Tag2, Value Val2>
 struct make_plus_scal<mkd::scal_data_rational<N1, D1>, 
                       mkd::scal_data_value<Tag2,Val2>>
 {
@@ -113,8 +118,8 @@ struct make_plus_scal<mkd::scal_data_rational<N1, D1>,
     using type  = typename make_plus_scal<tag1, tag2> :: type;
 };
 
-template<class Tag1, class Val1, Integer N2, Integer D2>
-struct make_plus_scal<mkd::scal_data_value<Tag1,Val1>, 
+template<Tag_scalar_value Tag1, Value Val1, Integer N2, Integer D2>
+struct make_plus_scal<mkd::scal_data_value<Tag1, Val1>, 
                       mkd::scal_data_rational<N2, D2>>
 {
     using tag1  = mkd::scal_data_value<Tag1,Val1>;
@@ -124,9 +129,10 @@ struct make_plus_scal<mkd::scal_data_value<Tag1,Val1>,
     using type  = typename make_plus_scal<tag1, tag2> :: type;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_plus_scal<mkd::scal_data_value<Tag1,Val1>, 
-                      mkd::scal_data_const_value<Tag2,Val2>>
+template<Tag_scalar_value Tag1, Value Val1, 
+         Tag_scalar_cvalue Tag2, Value Val2>
+struct make_plus_scal<mkd::scal_data_value<Tag1, Val1>, 
+                      mkd::scal_data_const_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_value<Tag1, Val1>;
     using tag2  = mkd::scal_data_value<scal_data_value_tag_const<Tag2, Val2>, Val2>;
@@ -311,49 +317,32 @@ struct make_plus_normalize_impl<Is_simpl, S, T>
 
 // representation of  Scal1 + Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_plus_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     using type      = typename make_plus_impl<Scal1, Scal2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 // representation of  Scal1 - Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_minus_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     using type      = typename make_minus_impl<Scal1, Scal2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 // representation of  -Scal1, where Scal1 is scalar_data, return
 // scalar_data type
-template<class Scal1>
+template<Scal_data Scal1>
 struct make_uminus_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-
-    static_assert(is_sd1 == true, "scalar_data required");
-
     using type      = typename make_uminus_impl<Scal1>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 }}};

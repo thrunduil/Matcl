@@ -16,12 +16,13 @@ struct computation
         using assignments   = Assignments_List;
 
     public:
+        //TODO: Assignments_List?
         template<Integer Pos>
-        static auto elem(colon<Pos>)        -> ct_scalar<mkd::scalar_mat_elem_1<Matrix, Pos>, deps>;
+        static auto elem(colon<Pos>)        -> typename mkd::submatrix_elem_1<Matrix, Pos>::type;
 
         template<Integer Row, Integer Col>
         static auto elem(colon<Row>, colon<Col>) 
-                                            -> ct_scalar<mkd::scalar_mat_elem_2<Matrix, Row, Col>, deps>;
+                                            -> typename mkd::submatrix_elem_2<Matrix, Row, Col>::type;
 
         template<class Colon_1, class Mat>
         static auto assign(Colon_1, Mat)    -> typename comp_assign_1<computation, Mat, Colon_1>::type;

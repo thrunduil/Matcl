@@ -21,19 +21,19 @@
 #pragma once
 
 #include "mkgen/matrix/scalar.h"
-#include "mkgen/matrix/predefined_scalars.h"
-#include "mkgen/matrix/matrix.h"
-#include "mkgen/details/matrix/matrix_printer.h"
-#include "mkgen/expression/expressions.h"
 
-#include "mkgen/TODO/expression/ct_matrix_expr.inl"
-#include "mkgen/TODO/utils/utils.h"
-#include "mkgen/TODO/expression/mat_assign.h"
-#include "mkgen/TODO/expression/mat_temporary.h"
-#include "mkgen/TODO/expression/mat_other.h"
-#include "mkgen/TODO/evaler/temp_storage.h"
-#include "mkgen/TODO/evaler/expr_evaler.h"
-#include "mkgen/TODO/expression/for_expr.h"
-#include "mkgen/TODO/expression/mat_call.h"
-#include "mkgen/TODO/matrix/computation.h"
-#include "mkgen/TODO/matrix/printer.h"
+namespace matcl { namespace mkgen
+{
+
+//------------------------------------------------------------------------------
+//                      Predefined scalars
+//------------------------------------------------------------------------------
+using zero  = integer_scalar<0>;
+using one   = integer_scalar<1>;
+using two   = integer_scalar<2>;
+using mone  = integer_scalar<-1>;
+using mtwo  = integer_scalar<-2>; 
+using half  = rational_scalar<1,2>;
+
+
+}}

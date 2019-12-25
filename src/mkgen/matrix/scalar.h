@@ -21,29 +21,21 @@
 #pragma once
 
 #include "mkgen/details/mkgen_fwd.h"
-#include "mkgen/details/matrix/scalar_checks.h"
 #include "mkgen/matrix/dependency.h"
 #include "matcl-core/details/mpl.h"
+#include "mkgen/matrix/concepts.h"
 
 #include <iosfwd>
 
 namespace matcl { namespace mkgen
 {
 
-namespace mkd = matcl::mkgen::details;
-namespace mk  = matcl::mkgen;
-
 // compile time scalar value, which stores symbolic element in Data.
 // Deps is a type representing dependencies from runtime values; must be
 // specialization of dps type; Data must be derived from scalar_data<Data>
-template<class Data, class Deps>
+template<Scal_data Data, DPS Deps>
 class ct_scalar
 {
-    private:
-        // check arguments
-        using check1    = typename mkd::check_valid_scalar_data<Data>::type;
-        using check2    = typename mkd::check_deps<Deps>::type;
-
     public:
         // Data argument
         using data_type             = Data;
@@ -69,18 +61,19 @@ class ct_scalar
         // However if this scalar represents some computation (for example multiplication
         // of two scalars), then such computation will be performed explicitly (otherwise it
         // will be performed each time when given scalar is used)
-        template<class Tag>
+        template<Tag_comp Tag>
         static auto compute() -> typename make_evaled_scalar<Data, Deps, Tag>::type;
+
+        template<class Visitor>
+        static void accept(Visitor& vis)
+        {
+            return Data::accept<Visitor>(vis);
+        };
 
     public:
         //-----------------------------------------------------------------------
         //                      internal use only
         //-----------------------------------------------------------------------
-
-        // append to Arr_List all arrays required by this scalar
-        template<Integer Step, class Arr_List>
-        using get_arrays    = typename mkd::get_arrays_scalar<Data, Deps, Step, Arr_List>::type;
-
         //get value of type Val associated with this element; called internally
         template<class Val, class Local_Storage>
         inline_lev_1
@@ -88,61 +81,35 @@ class ct_scalar
         {
             return Data::eval<Val>(ls);
         };
-
-        // evaluate expression using data in arrays starting at position off and store
-        // result in ret variable. TODO
-        template<class Loop_Storage, class Ret, class Local_Storage>
-        inline_lev_1
-        static void eval_loop(Ret& ret, Integer off, const Local_Storage& cont)
-        {
-            mkd::eval_loop_scalar<Loop_Storage, Data>::eval<Ret>(ret,off,cont);
-        };
-
-        template<class Visitor>
-        static void accept(Visitor& vis)
-        {
-            return Data::accept<Visitor>(vis);
-        };
 };
 
 //------------------------------------------------------------------------------
 //                      Value scalars
 //------------------------------------------------------------------------------
 // represent integer value Value
-template<Integer Value>
-using integer_scalar = ct_scalar<mkd::scal_data_rational<Value, 1>, empty_deps>;
+template<Integer Val>
+using integer_scalar = ct_scalar<mkd::scal_data_rational<Val, 1>, empty_deps>;
 
 // represent rational value N / D, where D > 0
 template<Integer N, Integer D>
-using rational_scalar = ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>;
+using rational_scalar = ct_scalar<mkd::scal_data_rational<N, D>, empty_deps>;
 
 // scalar storing a value of type Value_type defined by the tag Tag; value
 // cannot depend on external data; Tag must be derived from scal_data_const_value_tag
 // Tag::value() must evaluate at compile time
-template<class Tag, class Value_type>
-using const_value_scalar    = ct_scalar<mkd::scal_data_const_value<Tag, Value_type>, 
+template<Tag_scalar_cvalue Tag, Value Val_t>
+using const_value_scalar    = ct_scalar<mkd::scal_data_const_value<Tag, Val_t>, 
                                         empty_deps>;
 
 // scalar storing a value of type Value_type defined by the tag Tag; value
 // cannot depend on external data; Tag must be derived from scal_data_value_tag
-template<class Tag, class Value_type>
-using value_scalar          = ct_scalar<mkd::scal_data_value<Tag, Value_type>, 
-                                        empty_deps>;
+template<Tag_scalar_value Tag, Value Val_t>
+using value_scalar          = ct_scalar<mkd::scal_data_value<Tag, Val_t>, empty_deps>;
 
 // stores generic data unknown statically, usually supplied by some data_provider
 // Tag must be derived from scal_data_gen_value_tag
-template<class Tag>
+template<Tag_scalar_gvalue Tag>
 using gen_scalar            = ct_scalar<mkd::scal_data_gen_value<Tag>, extern_deps<Tag>>;
-
-//------------------------------------------------------------------------------
-//                      Predefined scalars
-//------------------------------------------------------------------------------
-using zero  = integer_scalar<0>;
-using one   = integer_scalar<1>;
-using two   = integer_scalar<2>;
-using mone  = integer_scalar<-1>;
-using mtwo  = integer_scalar<-2>; 
-using half  = rational_scalar<1,2>;
 
 //------------------------------------------------------------------------------
 //                      isa functions
@@ -152,7 +119,7 @@ using half  = rational_scalar<1,2>;
 template<class T> 
 struct is_scalar                        {static const bool value = false; };
 
-template<class A, class D> 
+template<Scal_data A, DPS D> 
 struct is_scalar<ct_scalar<A, D>>       {static const bool value = true; };
 
 // return true if T is a scalar with compile time known value
@@ -163,8 +130,8 @@ template<Integer N, Integer D>
 struct is_const_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
-struct is_const_value_scalar<mkd::scal_data_const_value<Tag,Val>>
+template<Tag_scalar_cvalue Tag, Value Val> 
+struct is_const_value_scalar<mkd::scal_data_const_value<Tag, Val>>
                                         {static const bool value = true; };
 
 // return true if T is a scalar storing value not dependent on external
@@ -176,11 +143,11 @@ template<Integer N, Integer D>
 struct is_value_scalar<ct_scalar<mkd::scal_data_rational<N,D>, empty_deps>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
+template<Tag_scalar_cvalue Tag, Value Val> 
 struct is_value_scalar<mkd::scal_data_const_value<Tag,Val>>
                                         {static const bool value = true; };
 
-template<class Tag, class Val> 
+template<Tag_scalar_value Tag, Value Val> 
 struct is_value_scalar<mkd::scal_data_value<Tag,Val>>
                                         {static const bool value = true; };
 
@@ -191,7 +158,7 @@ struct is_value_scalar<mkd::scal_data_value<Tag,Val>>
 // get value stored in scalar Scal of type Val.
 // Scal must be a value scalar, i.e. integer_scalar, rational_scalar, value_scalar,
 // or const_value_scalar
-template<class Scal>
+template<Value_scalar Scal>
 struct get_scalar_value
 {
     static_assert(md::dependent_false<Scal>::value,

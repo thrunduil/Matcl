@@ -53,18 +53,11 @@ struct enable_vectorization_array
                   "this type should not be instantiated");
 };
 
-template<class Subs_Context, Integer M, Integer N, class Array_T, class Deps>
 struct simd_enable<Subs_Context,ct_matrix<M,N,Array_T,Deps>>
 {
     using codegen           = typename Subs_Context::code_gen;
     static const bool value = codegen::simd_enable
                             && enable_vectorization_array<Subs_Context,Array_T>::value;
-};
-
-template<class Subs_Context, class Tag>
-struct enable_vectorization_array<Subs_Context, mkd::const_array<Tag>> 
-{
-    static const bool value = false;
 };
 
 template<class Subs_Context, class Tag, class... Assign_List>
@@ -266,6 +259,18 @@ template<class Subs_Context, class Tag, Integer M, Integer N, class Array>
 struct enable_vectorization_array<Subs_Context, mkd::mat_ufunc_array<Tag, M, N, Array>> 
 {
     static const bool value = Tag::is_continuous;
+};
+
+template<class Subs_Context, Tag_matrix_cdata Tag, Value Val>
+struct enable_vectorization_array<Subs_Context, mkd::matrix_array_const_value<Tag, Val>> 
+{
+    static const bool value = false;
+};
+
+template<class Subs_Context, Tag_matrix_data Tag, Value Val>
+struct enable_vectorization_array<Subs_Context, mkd::matrix_array_value<Tag, Val>> 
+{
+    static const bool value = false;
 };
 
 //----------------------------------------------------------------------------------

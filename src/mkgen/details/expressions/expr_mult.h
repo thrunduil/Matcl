@@ -62,7 +62,7 @@ struct make_expr_plus_list;
 template<class S, class List>
 struct make_mult_plus_add_items;
 
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_plus_root;
 
 //----------------------------------------------------------------------------------
@@ -83,8 +83,9 @@ struct make_mult_scal<scal_data_rational<N1, D1>, scal_data_rational<N2, D2>>
     using type  = scal_data_rational<op::nominator,op::denominator>;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_mult_scal<mkd::scal_data_const_value<Tag1,Val1>, 
+template<Tag_scalar_cvalue Tag1, Value Val1, 
+         Tag_scalar_cvalue Tag2, Value Val2>
+struct make_mult_scal<mkd::scal_data_const_value<Tag1, Val1>, 
                       mkd::scal_data_const_value<Tag2, Val2>>
 {
     using val   = decltype(std::declval<Val1>() * std::declval<Val2>());
@@ -93,8 +94,9 @@ struct make_mult_scal<mkd::scal_data_const_value<Tag1,Val1>,
     using type  = scal_data_const_value<tag, val>;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_mult_scal<mkd::scal_data_value<Tag1,Val1>, 
+template<Tag_scalar_value Tag1, Value Val1, 
+         Tag_scalar_value Tag2, Value Val2>
+struct make_mult_scal<mkd::scal_data_value<Tag1, Val1>, 
                       mkd::scal_data_value<Tag2, Val2>>
 {
     using val   = decltype(std::declval<Val1>() * std::declval<Val2>());
@@ -103,8 +105,9 @@ struct make_mult_scal<mkd::scal_data_value<Tag1,Val1>,
     using type  = scal_data_value<tag, val>;
 };
 
-template<class Tag1, class Val1, Integer N2, Integer D2>
-struct make_mult_scal<mkd::scal_data_const_value<Tag1,Val1>, 
+template<Tag_scalar_cvalue Tag1, Value Val1, 
+         Integer N2, Integer D2>
+struct make_mult_scal<mkd::scal_data_const_value<Tag1, Val1>, 
                       mkd::scal_data_rational<N2, D2>>
 {
     using tag1  = mkd::scal_data_const_value<Tag1,Val1>;
@@ -114,9 +117,10 @@ struct make_mult_scal<mkd::scal_data_const_value<Tag1,Val1>,
     using type  = typename make_mult_scal<tag1, tag2> :: type;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_mult_scal<mkd::scal_data_const_value<Tag1,Val1>, 
-                      mkd::scal_data_value<Tag2,Val2>>
+template<Tag_scalar_cvalue Tag1, Value Val1, 
+         Tag_scalar_value Tag2, Value Val2>
+struct make_mult_scal<mkd::scal_data_const_value<Tag1, Val1>, 
+                      mkd::scal_data_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_value<scal_data_value_tag_const<Tag1, Val1>, Val1>;
     using tag2  = mkd::scal_data_value<Tag2,Val2>;
@@ -124,9 +128,9 @@ struct make_mult_scal<mkd::scal_data_const_value<Tag1,Val1>,
     using type  = typename make_mult_scal<tag1, tag2> :: type;
 };
 
-template<Integer N1, Integer D1, class Tag2, class Val2>
+template<Integer N1, Integer D1, Tag_scalar_cvalue Tag2, Value Val2>
 struct make_mult_scal<mkd::scal_data_rational<N1, D1>, 
-                      mkd::scal_data_const_value<Tag2,Val2>>
+                      mkd::scal_data_const_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_const_value
                         <scal_data_const_value_tag_rational<N1, D1>, double>;
@@ -135,9 +139,9 @@ struct make_mult_scal<mkd::scal_data_rational<N1, D1>,
     using type  = typename make_mult_scal<tag1, tag2> :: type;
 };
 
-template<Integer N1, Integer D1, class Tag2, class Val2>
+template<Integer N1, Integer D1, Tag_scalar_value Tag2, Value Val2>
 struct make_mult_scal<mkd::scal_data_rational<N1, D1>, 
-                      mkd::scal_data_value<Tag2,Val2>>
+                      mkd::scal_data_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_value
                         <scal_data_value_tag_rational<N1, D1>, double>;
@@ -146,8 +150,8 @@ struct make_mult_scal<mkd::scal_data_rational<N1, D1>,
     using type  = typename make_mult_scal<tag1, tag2> :: type;
 };
 
-template<class Tag1, class Val1, Integer N2, Integer D2>
-struct make_mult_scal<mkd::scal_data_value<Tag1,Val1>, 
+template<Tag_scalar_value Tag1, Value Val1, Integer N2, Integer D2>
+struct make_mult_scal<mkd::scal_data_value<Tag1, Val1>, 
                       mkd::scal_data_rational<N2, D2>>
 {
     using tag1  = mkd::scal_data_value<Tag1,Val1>;
@@ -157,9 +161,10 @@ struct make_mult_scal<mkd::scal_data_value<Tag1,Val1>,
     using type  = typename make_mult_scal<tag1, tag2> :: type;
 };
 
-template<class Tag1, class Val1, class Tag2, class Val2>
-struct make_mult_scal<mkd::scal_data_value<Tag1,Val1>, 
-                      mkd::scal_data_const_value<Tag2,Val2>>
+template<Tag_scalar_value Tag1, Value Val1, 
+         Tag_scalar_cvalue Tag2, Value Val2>
+struct make_mult_scal<mkd::scal_data_value<Tag1, Val1>, 
+                      mkd::scal_data_const_value<Tag2, Val2>>
 {
     using tag1  = mkd::scal_data_value<Tag1, Val1>;
     using tag2  = mkd::scal_data_value<scal_data_value_tag_const<Tag2, Val2>, Val2>;
@@ -451,15 +456,15 @@ struct make_inv_scal<scal_data_rational<N1, D1>>
     using type  = scal_data_rational<D1 * scal, N1 * scal>;
 };
 
-template<class Tag1, class Val1>
-struct make_inv_scal<mkd::scal_data_const_value<Tag1,Val1>>
+template<Tag_scalar_cvalue Tag1, Value Val1>
+struct make_inv_scal<mkd::scal_data_const_value<Tag1, Val1>>
 {
     using tag   = scal_data_const_value_tag_inv<Tag1>;
     using type  = scal_data_const_value<tag, Val1>;
 };
 
-template<class Tag1, class Val1>
-struct make_inv_scal<mkd::scal_data_value<Tag1,Val1>>
+template<Tag_scalar_value Tag1, Value Val1>
+struct make_inv_scal<mkd::scal_data_value<Tag1, Val1>>
 {
     using tag   = scal_data_value_tag_inv<Tag1>;
     using type  = scal_data_value<tag, Val1>;
@@ -524,37 +529,25 @@ struct make_div_impl
 
 // representation of  Scal1 x Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_mult_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     static const bool is_val_1  = is_value_scalar_data<Scal1>::value;
     static const bool is_val_2  = is_value_scalar_data<Scal2>::value;
 
     using type                  = typename make_mult_impl<Scal1, Scal2, is_val_1, is_val_2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 // representation of  Scal1 / Scal2, where Scal1, Scal2 are scalar_data, return
 // scalar_data type
-template<class Scal1, class Scal2>
+template<Scal_data Scal1, Scal_data Scal2>
 struct make_div_root
 {
-    static const bool is_sd1    = mkd::is_valid_scalar_data<Scal1>::value;
-    static const bool is_sd2    = mkd::is_valid_scalar_data<Scal2>::value;
-
-    static_assert(is_sd1 == true && is_sd2 == true, "scalar_data required");
-
     using type                  = typename make_div_impl<Scal1, Scal2>::type;
 
-    static const bool is_sdret  = mkd::is_valid_scalar_data<type>::value;
-    static_assert(is_sdret == true, "type should be scalar_data");
+    static_assert(Scal_data<type>, "type should be scalar_data");
 };
 
 }}}

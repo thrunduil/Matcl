@@ -37,7 +37,7 @@ struct is_virtual_matrix_array;
 //                      submatrix_maker_1
 //------------------------------------------------------------------------------
 // implements ct_matrix<>::sub(Colon_1)
-template<class A, class Colon_1>
+template<Matrix A, Colon Colon_1>
 struct submatrix_maker_1
 {
     static const bool is_mat    = is_matrix<A>::value;
@@ -61,7 +61,7 @@ struct submatrix_maker_1
 //------------------------------------------------------------------------------
 //                      submatrix_maker_2
 //------------------------------------------------------------------------------
-template<class A, class Colon_1, class Colon_2>
+template<Matrix A, Colon Colon_1, Colon Colon_2>
 struct submatrix_maker_2
 {
     static const bool is_mat    = is_matrix<A>::value;
@@ -84,6 +84,44 @@ struct submatrix_maker_2
 
     using new_array = mkd::sub_array_2<array_t, offset1, offset2, step1, step2>;
     using type      = ct_matrix<size1, size2, new_array, deps>;
+};
+
+//------------------------------------------------------------------------------
+//                      submatrix_elem_1
+//------------------------------------------------------------------------------
+// implements ct_matrix<>:: elem(colon<Pos>)
+template<Matrix A, Integer Pos>
+struct submatrix_elem_1
+{
+    static const bool is_mat    = is_matrix<A>::value;
+    static_assert(is_mat == true, "A must be ct_matrix");
+
+    static const Integer rows = A :: rows;
+    static const Integer col = (Pos-1)/rows + 1;
+    static const Integer row = Pos - (col-1) * rows;
+
+    using array_t       = typename A :: array_type;
+    using deps_t        = typename A :: dps_type;
+
+    using elem_type     = typename array_t::template get_element<row, col>::type;
+    using type          = ct_scalar<elem_type, deps_t>;
+};
+
+//------------------------------------------------------------------------------
+//                      submatrix_elem_2
+//------------------------------------------------------------------------------
+// implements ct_matrix<>:: elem(colon<Row>, colon<Col>) 
+template<Matrix A, Integer Row, Integer Col>
+struct submatrix_elem_2
+{
+    static const bool is_mat    = is_matrix<A>::value;
+    static_assert(is_mat == true, "A must be ct_matrix");
+
+    using array_t       = typename A :: array_type;
+    using deps_t        = typename A :: dps_type;
+
+    using elem_type     = typename array_t::template get_element<Row, Col>::type;
+    using type          = ct_scalar<elem_type, deps_t>;
 };
 
 //------------------------------------------------------------------------------
@@ -119,7 +157,7 @@ struct mkgen::is_matrix
     static const bool value = false;
 };
 
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 struct mkgen::is_matrix<ct_matrix<M, N, Array_t, Deps>>
 {
     static const bool value = true;
@@ -132,7 +170,7 @@ struct mkgen::is_virtual_matrix
     static const bool value = false;
 };
 
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 struct mkgen::is_virtual_matrix<ct_matrix<M, N, Array_t, Deps>>
 {
     static const bool value = mkd::is_virtual_matrix_array<Array_t>::value;

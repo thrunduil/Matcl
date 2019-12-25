@@ -21,22 +21,22 @@
 #pragma once
 
 #include "mkgen/mkgen_config.h"
-#include "matcl-core/matrix/scalar_types.h"
+#include "mkgen/matrix/concepts.h"
 #include "mkgen/matrix/scalar.h"
 
 namespace matcl { namespace mkgen
 {
 
 // compile time scalar value
-template<class Data, class Deps> 
+template<Scal_data Data, DPS Deps> 
 class ct_scalar;
 
 // compile time matrix
-template<Integer M, Integer N, class Array_t, class Deps>
+template<Integer M, Integer N, Mat_array Array_t, DPS Deps>
 struct ct_matrix;
 
 // compute result of ct_scalar::compute()
-template<class Data, class Deps, class Tag>
+template<Scal_data Data, DPS Deps, Tag_comp Tag>
 struct make_evaled_scalar;
 
 //TODO
@@ -90,20 +90,20 @@ struct scal_data_rational;
 
 // represents a scalar storing values of type Value_type
 // known at compile time
-template<class Tag, class Value_type>
+template<Tag_scalar_cvalue Tag, Value Val_t>
 struct scal_data_const_value;
 
 // represents a scalar storing values of type Value_type
-template<class Tag, class Value_type>
+template<Tag_scalar_value Tag, Value Val_t>
 struct scal_data_value;
 
 // represents a scalar storing external values
-template<class Tag>
+template<Tag_scalar_gvalue Tag>
 struct scal_data_gen_value;
 
 // append to Arr_List all arrays required by this scalar; 
 // implements ct_scalar::get_arrays
-template<class Data, class Deps, Integer Step, class Arr_List>
+template<Scal_data Data, DPS Deps, Integer Step, class Arr_List>
 struct get_arrays_scalar;
 
 template<class Elem, Integer Step, class Type>
@@ -113,25 +113,29 @@ struct array_item;
 template<class Loop_Storage, class Data>
 struct eval_loop_scalar;
 
-// store data in ct_scalar
-template<class Data>
-struct scalar_data;
-
-// store data in ct_matrix
-template<class Array>
-struct matrix_array;
-
 // make submatrix
-template<class Mat, class Colon_1, class Colon_2>
+template<Matrix Mat, Colon Colon_1, Colon Colon_2>
 struct submatrix_maker_2;
 
 // make submatrix
-template<class Mat, class Colon_1>
+template<Matrix Mat, Colon Colon_1>
 struct submatrix_maker_1;
 
-// const_mat array
-template<class Tag>                                     
-struct const_array;
+// get element from a matrix
+template<Matrix Mat, Integer Pos>
+struct submatrix_elem_1;
+
+// get element from a matrix
+template<Matrix Mat, Integer Row, Integer Col>
+struct submatrix_elem_2;
+
+// value_mat array
+template<Tag_matrix_data Tag, Value Val_t>                                     
+struct matrix_array_value;
+
+// const_value_mat array
+template<Tag_matrix_cdata Tag, Value Val_t>                                     
+struct matrix_array_const_value;
 
 // gen_mat array
 template<class Tag>                                     
@@ -150,7 +154,7 @@ template<class Tag, class... Assign_List>
 struct virtual_array;
 
 // make virtual assignment Mat_L(Colon_1) = Mat_R
-template<class Mat_L, class Mat_R, class Colon_1>
+template<Matrix Mat_L, Matrix_or_scalar Mat_R, Colon Colon_1>
 struct mat_virtual_assign_1;
 
 // implements virtual_array::get_element

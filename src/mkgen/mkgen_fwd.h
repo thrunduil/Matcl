@@ -34,9 +34,6 @@ struct call_array_type;
 //------------------------------------------------------------------------
 //                              other
 //------------------------------------------------------------------------
-template<Integer M, Integer N, class Array_t, class Deps>
-struct ct_matrix;
-
 template<class Tag, class Mat, class Assignments = list::list<>>
 struct computation;
 

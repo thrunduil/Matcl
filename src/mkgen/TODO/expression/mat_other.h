@@ -29,9 +29,10 @@ template<class Array, Integer Row, Integer Col>
 struct mat_scal_bfunc_array_get_elem
 {};
 
-template<class Tag,Integer M, Integer N, class Array1, class Array2, class Deps2,
+template<class Tag,Integer M, Integer N, class Array1, Scal_data Array2, DPS Deps2,
         Integer Row, Integer Col>
-struct mat_scal_bfunc_array_get_elem<mkd::mat_scal_bfunc_array<Tag,M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
+struct mat_scal_bfunc_array_get_elem<mkd::mat_scal_bfunc_array<Tag,M,N,Array1, 
+                    ct_scalar<Array2, Deps2>>, Row, Col>
 {
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename ct_scalar<Array2,Deps2>;
@@ -43,9 +44,10 @@ template<class Array, Integer Row, Integer Col>
 struct scal_mat_bfunc_array_get_elem
 {};
 
-template<class Tag,Integer M, Integer N, class Array1, class Array2, class Deps2,
+template<class Tag,Integer M, Integer N, class Array1, Scal_data Array2, DPS Deps2,
         Integer Row, Integer Col>
-struct scal_mat_bfunc_array_get_elem<mkd::scal_mat_bfunc_array<Tag,M,N,Array1, ct_scalar<Array2,Deps2>>, Row, Col>
+struct scal_mat_bfunc_array_get_elem<mkd::scal_mat_bfunc_array<Tag,M,N,Array1, 
+            ct_scalar<Array2, Deps2>>, Row, Col>
 {
     using elem_1    = typename Array1 :: template get_element<Row, Col>::type;
     using elem_2    = typename ct_scalar<Array2,Deps2>;
@@ -56,7 +58,7 @@ struct scal_mat_bfunc_array_get_elem<mkd::scal_mat_bfunc_array<Tag,M,N,Array1, c
 //----------------------------------------------------------------------------------
 //                              get_elem
 //----------------------------------------------------------------------------------
-template<Integer M, Integer N, class Array, class Deps1, Integer Row, Integer Col>
+template<Integer M, Integer N, Mat_array Array, DPS Deps1, Integer Row, Integer Col>
 struct get_elem<ct_matrix<M,N,Array,Deps1>,Row,Col>
 {
     static_assert(Row >= 1 && Col >= 1 && Row <= M && Col <= N, "invalid element");
@@ -89,6 +91,33 @@ struct sub_array_2_get_elem<mkd::sub_array_2<Array_t,Offset1,Offset2,Step1,Step2
     using type      = typename make_element_step<type_1,Step1>::type;
 };
 
+// get_elem requires scalar_data<> return, not scalar
+// TODO: remove this function
+template<class T>
+struct correct_scalar_get_elem
+{
+    using type = T;
+};
+
+template<Scal_data Data, DPS Deps>
+struct correct_scalar_get_elem<ct_scalar<Data, Deps>>
+{
+    using type = Data;
+};
+
+template<class Array, Integer Row, Integer Col>
+struct mat_ufunc_array_get_elem
+{};
+
+template<class Tag, Integer M, Integer N, class Array, 
+        Integer Row, Integer Col>
+struct mat_ufunc_array_get_elem<mkd::mat_ufunc_array<Tag, M, N, Array>, Row, Col>
+{
+    using elem      = typename Array :: template get_element<Row, Col>::type;
+    using new_item  = typename make_expr_ufunc<Tag,elem>::type;
+    using type      = typename correct_scalar_get_elem<new_item>::type;
+};
+
 template<class Array, Integer Row, Integer Col>
 struct sub_array_1_get_elem
 {};
@@ -115,7 +144,7 @@ struct get_array_elem<details::scalar_ufunc_array<Tag,Array,Deps>, Row, Col>
     using type      = new_item;
 };
 
-template<class Tag,class Array1, class Deps1, class Array2, class Deps2, Integer Row, Integer Col>
+template<class Tag,Scal_data Array1, DPS Deps1, Scal_data Array2, DPS Deps2, Integer Row, Integer Col>
 struct get_array_elem<details::scalar_bfunc_array<Tag,ct_scalar<Array1,Deps1>,ct_scalar<Array2,Deps2>>, Row, Col>
 {
     using elem_1    = typename ct_scalar<Array1,Deps1>;

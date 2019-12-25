@@ -1,5 +1,6 @@
 #include "mkgen/mkgen.h"
 #include "mkgen/expression/expressions.h"
+#include "mkgen/details/matrix/matrix_arrays.h"
 
 #include <iostream>
 
@@ -121,9 +122,6 @@ void test_matrix()
 
     e44::print<empty_context>(std::cout, 0);
 };
-
-template<class A, class B>
-struct test;
 
 struct tag_pi : mk::scal_data_const_value_tag<tag_pi>
               , mk::scal_data_value_tag<tag_pi>

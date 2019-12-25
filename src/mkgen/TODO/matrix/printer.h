@@ -50,7 +50,7 @@ struct print_computations_assignments
                 "this type should not be instantiated");
 };
 
-template<Integer M, Integer N, class Array, class Deps, class Assign_Type,
+template<Integer M, Integer N, Mat_array Array, DPS Deps, class Assign_Type,
                 class... Items>
 struct print_computations_assignments<ct_matrix<M, N, Array,Deps>,
                     list::list<Assign_Type, Items...>>
@@ -89,7 +89,7 @@ struct print_comp_assing_1
                 "this type should not be instantiated");
 };
 
-template<Integer M, Integer N, class Array, class Deps, Integer Pos, class Scalar>
+template<Integer M, Integer N, Mat_array Array, DPS Deps, Integer Pos, class Scalar>
 struct print_comp_assing_1<M,N,Array,Deps, mkgen::assign_colon_scal<Pos,Scalar>>
 {
     using matrix = ct_matrix<M,N,Array,Deps>;
