@@ -25,6 +25,7 @@
 #include "matcl-core/lib_functions/constants.h"
 #include "matcl-matrep/lib_functions/manip.h"
 #include "matcl-internals/base/utils.h"
+#include "matcl-matrep/details/matrix.inl"
 
 namespace matcl { namespace details
 {

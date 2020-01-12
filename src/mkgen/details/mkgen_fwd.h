@@ -154,7 +154,7 @@ template<class Tag, class... Assign_List>
 struct virtual_array;
 
 // make virtual assignment Mat_L(Colon_1) = Mat_R
-template<Matrix Mat_L, Matrix_or_scalar Mat_R, Colon Colon_1>
+template<Matrix Mat_L, Mat_or_scalar Mat_R, Colon Colon_1>
 struct mat_virtual_assign_1;
 
 // implements virtual_array::get_element

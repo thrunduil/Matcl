@@ -90,7 +90,7 @@ struct ct_matrix
 
         // make assignment This(Col_t) = Mat; 
         // this type must be a virtual_matrix
-        template<Colon Col_t, Matrix_or_scalar Mat>
+        template<Colon Col_t, Mat_or_scalar Mat>
         static auto assign_1(Col_t, Mat)    -> typename mkd::mat_virtual_assign_1<ct_matrix, Mat, Col_t>::type;
 
         // store current results in temporary matrix (placed on the stack) if cond == true,

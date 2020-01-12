@@ -72,6 +72,16 @@ inline M& details::get_functor<M>::get_ref(matrix_container_base* cont)
 };
 
 template<class M>
+inline M&& details::get_functor<M>::move_from_rvalue(matrix_container_base* cont)
+{
+	using value_type    = typename M::value_type;
+	using struct_type   = typename M::struct_type;
+	using type          = details::matrix_container<value_type,struct_type>;
+
+    return static_cast<type*>(cont)->move_from_rvalue();
+};
+
+template<class M>
 inline void details::get_functor<M>::destroy(matrix_container_base* cont)
 {
 	using value_type    = typename M::value_type;

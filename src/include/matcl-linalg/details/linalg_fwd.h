@@ -23,7 +23,8 @@ namespace matcl { namespace details
 {
 
 class ksp_solver_impl;
-class scotch_partit_impl;
+class scotch_graph_impl;
+class scotch_mesh_impl;
 class metis_impl;
 
 template<class V, class S>

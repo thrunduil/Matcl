@@ -212,7 +212,7 @@ struct make_adj_impl
     {
         if (mat.nnz() == 0)
         {
-            ret         = Matrix(mat,false);
+            ret         = Matrix(mat, false);
             return;
         };
 

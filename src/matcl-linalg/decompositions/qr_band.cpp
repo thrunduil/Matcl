@@ -445,7 +445,7 @@ void lapack::gbbqr2(i_type m, i_type n, i_type ml, i_type mu, Val* a,
         i_type mh   = std::min( ml + 1, m - j + 1 );
 
         //  Generate reflector H(j) to annihilate A(j+1:j+mh-1,j).
-        lapack::larfg( mh, &a[ml+mu+1-1 +(j-1)*lda], &a[ml+mu+1+std::min(1,ml)-1 + (j-1)*lda], 1, 
+        lapack::larfg( mh, &a[ml+mu +(j-1)*lda], &a[ml+mu+1+std::min(1,ml)-1 + (j-1)*lda], 1, 
                       &tau[j-1]);
 
         i_type nh   = std::min( n - j, mu + ml );
@@ -453,16 +453,16 @@ void lapack::gbbqr2(i_type m, i_type n, i_type ml, i_type mu, Val* a,
         //  Apply reflector H(j) to rest of matrix: A(j:j+mh-1,j+1:j+nh).
         if ( 0 < nh )
         {
-            Val diag = a[ml+mu+1-1 + (j-1)*lda];
+            Val diag = a[ml+mu + (j-1)*lda];
 
-            a[ml+mu+1-1+(j-1)*lda]  = Val(1.0);
+            a[ml+mu + (j-1)*lda]  = Val(1.0);
 
             Val tau_conj            = conj(tau[j-1]);
 
-            lapack::larf("left", mh, nh, &a[ml+mu+1-1 +(j-1)*lda], 1, &tau_conj,
-                &a[ml+mu-1+(j+1-1)*lda], lda - 1, work);
+            lapack::larf("left", mh, nh, &a[ml+mu +(j-1)*lda], 1, &tau_conj,
+                &a[ml+mu-1 + j*lda], lda - 1, work);
 
-            a[ml+mu+1-1+(j-1)*lda]  = diag;
+            a[ml+mu + (j-1)*lda]  = diag;
         };
     };
 
@@ -644,7 +644,7 @@ void gebqr2(i_type m, i_type n, i_type ml, i_type mu, Val* a, i_type lda, Val* t
             Val tau_conj        = conj(tau[j-1]);
 
             lapack::larf("left", mh, nh, &a[j-1 +(j-1)*lda], 1, &tau_conj, 
-                         &a[j-1 + (j+1-1)*lda], lda, work);
+                         &a[j-1 + j * lda], lda, work);
 
             a[j-1 + (j-1)*lda]  = diag;
         };        

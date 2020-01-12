@@ -103,7 +103,7 @@ struct merge<Compare, merge<Compare, L11, L12>, merge<Compare, L21, L22>>
     using A         = merge<Compare, L11, L12>;
     using B         = merge<Compare, L21, L22>;
 
-    static const bool cond  = Compare::value<typename A :: head, typename B :: head>;
+    static const bool cond  = Compare::template value<typename A :: head, typename B :: head>;
 
     using merger    = merge_impl<cond, Compare, A, B>;
 

@@ -132,18 +132,18 @@ concept Value = std::is_same<Val, float> :: value
 //------------------------------------------------------------------------------
 // concept of ct_scalar
 template<class S>
-concept Scalar          = true;
+concept Scalar          = is_scalar<S>::value;
 
 template<class S>
 concept Value_scalar    = true;
 
 // concept of ct_matrix
-template<class S>
-concept Matrix          = true;
+template<class M>
+concept Matrix          = is_matrix<M>::value;
 
 // Matrix or Scalar
 template<class M>
-concept Matrix_or_scalar= Matrix<M> || Scalar<M>;
+concept Mat_or_scalar   = Matrix<M> || Scalar<M>;
 
 // concept of colon
 template<class C>

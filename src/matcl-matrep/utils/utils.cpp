@@ -24,6 +24,7 @@
 #include "matcl-internals/container/mat_s.h"
 #include "matcl-matrep/lib_functions/matrix_gen.h"
 #include "matcl-core/matrix/matrix_traits.h"
+#include "matcl-matrep/details/matrix.inl"
 
 namespace matcl { namespace details
 {
@@ -50,13 +51,13 @@ unit_matrix<val_type,struct_sparse>::eval(tinfo_t ret_ti, Integer m)
 {
     (void)ret_ti;
     Matrix tmp = matcl::speye(m,matrix_traits::value_code<val_type>::value);
-    return tmp.get_impl<matrix_type>();
+    return tmp.move_impl<matrix_type>().move();
 };
 
 unit_matrix<Object,struct_sparse>::matrix_type unit_matrix<Object,struct_sparse>::eval(tinfo_t ret_ti, Integer m)
 {
     Matrix tmp = matcl::speye(ti::ti_object(ret_ti), m);
-    return tmp.get_impl<matrix_type>();
+    return tmp.move_impl<matrix_type>().move();
 };
 
 template<class val_type>

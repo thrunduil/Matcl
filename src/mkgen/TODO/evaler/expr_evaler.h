@@ -190,11 +190,11 @@ struct link_tags<list::list<Tags1...>,list::list<Tags2...>>
     using type = list::list<Tags1...,Tags2...>;
 };
 
-template<class Subs_Context, Integer M1, Integer N1, Integer M2, Integer N2, class Array_T, 
+template<class Subs_Context, Integer M1, Integer N1, Integer M2, Integer N2, class Array_t, 
         class Colon_1, class ... Assign_List>
-struct get_temp_tags_virtual<true, Subs_Context, mkd::virtual_assign_item<M1, N1, M2, N2, Array_T, Colon_1>,Assign_List...>
+struct get_temp_tags_virtual<true, Subs_Context, mkd::virtual_assign_item<M1, N1, M2, N2, Array_t, Colon_1>,Assign_List...>
 {
-    using tags1     = typename get_temp_tags<Array_T,Subs_Context>::type;
+    using tags1     = typename get_temp_tags<Array_t,Subs_Context>::type;
     using tags_col  = typename make_tags_colon<tags1,Colon_1>::type;
     using tags2     = typename get_temp_tags_virtual<true,Subs_Context, Assign_List...>::type;
     using type      = typename link_tags<tags_col, tags2>::type;

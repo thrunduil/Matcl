@@ -28,6 +28,7 @@
 #include "matcl-matrep/func/raw/raw_manip.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
 #include "matcl-internals/func/converter.h"
+#include "matcl-matrep/details/matrix.inl"
 
 namespace matcl { namespace algorithm { namespace details
 {
@@ -344,10 +345,11 @@ struct change_submatrix_0_impl
     using value_type    = typename SM::value_type;
     using value_type_B  = typename M2::value_type;
 
-    static SM eval_dense(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_dense(const SM& A, const md::colon_info& ci, const M2& B,
+                           Matrix& ret)
     {
         if (ci.is_double_mat_colon() == true)
-            return eval_dense_dc(A, ci, B);
+            return eval_dense_dc(A, ci, B, ret);
 
         using value_type    = typename SM::value_type;
         using value_type_B  = typename M2::value_type;
@@ -563,14 +565,14 @@ struct change_submatrix_0_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_sparse_impl(const SM& A, const md::colon_info& ci, 
-                               const value_type_B* ptr_B0, Integer* pos_B)
+    static void eval_sparse_impl(const SM& A, const md::colon_info& ci, 
+                    const value_type_B* ptr_B0, Integer* pos_B, Matrix& ret)
     {
         if (ci.is_double_mat_colon() == true)
-            return eval_sparse_dc_impl(A, ci, ptr_B0, pos_B);
+            return eval_sparse_dc_impl(A, ci, ptr_B0, pos_B, ret);
 
         Integer r = A.rows(), c = A.cols();
         const raw::details::sparse_ccs<value_type>& Ad = A.rep();
@@ -789,10 +791,11 @@ struct change_submatrix_0_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_dense_dc(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_dense_dc(const SM& A, const md::colon_info& ci, const M2& B,
+                              Matrix& ret)
     {
         using value_type    = typename SM::value_type;
         using value_type_B  = typename M2::value_type;
@@ -961,11 +964,11 @@ struct change_submatrix_0_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_sparse_dc_impl(const SM& A, const md::colon_info& ci, 
-                                  const value_type_B* ptr_B0, Integer* pos_B)
+    static void eval_sparse_dc_impl(const SM& A, const md::colon_info& ci, 
+                    const value_type_B* ptr_B0, Integer* pos_B, Matrix& ret)
     {
         Integer r = A.rows();
         Integer c = A.cols();
@@ -1142,10 +1145,11 @@ struct change_submatrix_0_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_sparse(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_sparse(const SM& A, const md::colon_info& ci, const M2& B,
+                            Matrix& ret)
     {
         using Mat_I         = raw::Matrix<Integer, struct_dense>;
 
@@ -1173,10 +1177,11 @@ struct change_submatrix_0_impl
         Integer* pos_B              = ind.ptr();
         const value_type_B* ptr_B0  = Bd.ptr_x();
 
-        return eval_sparse_impl(A, ci, ptr_B0, pos_B);
+        return eval_sparse_impl(A, ci, ptr_B0, pos_B, ret);
     };
 
-    static SM eval_band(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_band(const SM& A, const md::colon_info& ci, const M2& B,
+                          Matrix& ret)
     {
         using Mat_I         = raw::Matrix<Integer, struct_dense>;
         
@@ -1203,14 +1208,15 @@ struct change_submatrix_0_impl
         Integer* pos_B              = ind.ptr();
         const value_type_B* ptr_B0  = B.rep_ptr();
 
-        return eval_sparse_impl(A, ci, ptr_B0, pos_B);
+        return eval_sparse_impl(A, ci, ptr_B0, pos_B, ret);
     };
 };
 
 template<class SM,class M2>
 struct change_submatrix_1_impl
 {
-    static SM eval_dense(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_dense(const SM& A, const md::colon_info& ci, const M2& B,
+                           Matrix& ret)
     {
         using value_type = typename SM::value_type;
 
@@ -1343,10 +1349,11 @@ struct change_submatrix_1_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_sparse(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_sparse(const SM& A, const md::colon_info& ci, const M2& B,
+                            Matrix& ret)
     {        
         using value_type    = typename SM::value_type;
         using value_type_B  = typename M2::value_type;
@@ -1489,48 +1496,52 @@ struct change_submatrix_1_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_banded(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_banded(const SM& A, const md::colon_info& ci, const M2& B,
+                            Matrix& ret)
     {
         using val_type      = typename SM::value_type;
         using SparseMatrix  = raw::Matrix<val_type,struct_sparse>;
 
         SparseMatrix sB = raw::converter<SM,M2>::eval(B,A.get_type());
-        return change_submatrix_1_impl<SM,SparseMatrix>::eval_sparse(A,ci,sB);
+        return change_submatrix_1_impl<SM,SparseMatrix>::eval_sparse(A, ci, sB, ret);
     };
 };
 
 template<class SM, class M2>
 struct change_submatrix_20_impl
 {
-    static SM eval_dense(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_dense(const SM& A, const md::colon_info& c_in, const M2& B, 
+                         Matrix& ret)
     {
         if (imult(c_in.rows(),c_in.cols()) < A.rows())
-            return eval_w(A,c_in,B);
+            return eval_w(A, c_in, B, ret);
         else
-            return eval_s(A,c_in,B);
+            return eval_s(A, c_in, B, ret);
     };
 
-    static SM eval_sparse(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_sparse(const SM& A, const md::colon_info& c_in, const M2& B,
+                            Matrix& ret)
     {
         if (imult(c_in.rows(),c_in.cols()) < A.rows())
-            return eval_sparse_w(A,c_in,B);
+            return eval_sparse_w(A, c_in, B, ret);
         else
-            return eval_sparse_s(A,c_in,B);
+            return eval_sparse_s(A, c_in, B, ret);
     };
 
-    static SM eval_banded(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_banded(const SM& A, const md::colon_info& c_in, const M2& B,
+                            Matrix& ret)
     {
         using val_type      = typename SM::value_type;
         using SparseMatrix  = raw::Matrix<val_type,struct_sparse>;
 
         SparseMatrix sB = raw::converter<SM,M2>::eval(B,A.get_type());
-        return change_submatrix_20_impl<SM,SparseMatrix>::eval_sparse(A,c_in,sB);
+        return change_submatrix_20_impl<SM,SparseMatrix>::eval_sparse(A, c_in, sB, ret);
     }
 
-    static SM eval_w(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_w(const SM& A, const md::colon_info& c_in, const M2& B, Matrix& ret)
     {
         //M2 is dense
         using value_type    = typename SM::value_type;
@@ -1685,10 +1696,11 @@ struct change_submatrix_20_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_sparse_w(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_sparse_w(const SM& A, const md::colon_info& c_in, const M2& B, 
+                        Matrix& ret)
     {
         using value_type    = typename SM::value_type;
         using value_type_B  = typename M2::value_type;
@@ -1853,10 +1865,11 @@ struct change_submatrix_20_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     }
 
-    static SM eval_s(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_s(const SM& A, const md::colon_info& c_in, const M2& B, 
+                       Matrix& ret)
     {
         //M2 is dense
         using value_type = typename SM::value_type;
@@ -1965,10 +1978,11 @@ struct change_submatrix_20_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
     
-    static SM eval_sparse_s(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_sparse_s(const SM& A, const md::colon_info& c_in, const M2& B, 
+                              Matrix& ret)
     {
         using value_type    = typename SM::value_type;
         using value_type_B  = typename M2::value_type;
@@ -2076,17 +2090,18 @@ struct change_submatrix_20_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 };
 
 template<class SM, class M2>
 struct change_submatrix_21_impl
 {
-    static SM eval_dense(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_dense(const SM& A, const md::colon_info& c_in, const M2& B, 
+                           Matrix& ret)
     {
         if (c_in.r_start == 1 && c_in.r_end == A.rows() && c_in.r_step == 1)
-            return change_cols_dense(A,c_in,B);
+            return change_cols_dense(A, c_in, B, ret);
 
         using value_type        = typename SM::value_type;
         using value_type_B      = typename M2::value_type;
@@ -2216,13 +2231,14 @@ struct change_submatrix_21_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_sparse(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void eval_sparse(const SM& A, const md::colon_info& c_in, const M2& B,
+                            Matrix& ret)
     {
         if (c_in.r_start == 1 && c_in.r_end == A.rows() && c_in.r_step == 1)
-            return change_cols_sparse(A,c_in,B);
+            return change_cols_sparse(A, c_in, B, ret);
 
         using value_type            = typename SM::value_type;
         using value_type_B          = typename M2::value_type;
@@ -2376,19 +2392,21 @@ struct change_submatrix_21_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_banded(const SM& A, const md::colon_info& ci, const M2& B)
+    static void eval_banded(const SM& A, const md::colon_info& ci, const M2& B,
+                            Matrix& ret)
     {
         using val_type      = typename SM::value_type;
         using SparseMatrix  = raw::Matrix<val_type,struct_sparse>;
 
         SparseMatrix sB = raw::converter<SM,M2>::eval(B,A.get_type());
-        return change_submatrix_21_impl<SM,SparseMatrix>::eval_sparse(A,ci,sB);
+        return change_submatrix_21_impl<SM,SparseMatrix>::eval_sparse(A, ci, sB, ret);
     };
     
-    static SM change_cols_dense(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void change_cols_dense(const SM& A, const md::colon_info& c_in, const M2& B,
+                                  Matrix& ret)
     {
         using value_type    = typename SM::value_type;
 
@@ -2450,10 +2468,11 @@ struct change_submatrix_21_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
     
-    static SM change_cols_sparse(const SM& A, const md::colon_info& c_in, const M2& B)
+    static void change_cols_sparse(const SM& A, const md::colon_info& c_in, const M2& B,
+                                   Matrix& ret)
     {
         using value_type        = typename SM::value_type;
         using value_type_B      = typename M2::value_type;
@@ -2514,86 +2533,104 @@ struct change_submatrix_21_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 };
 
 template<class SM1,class DM2>
-SM1 change_submatrix_dense_functor<SM1,DM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                   const DM2& B)
+void change_submatrix_dense_functor<SM1,DM2>::eval(const SM1& A, const md::colon_info& ci, 
+                                                   const DM2& B, Matrix& ret)
 {
     if (ci.rows() == 0 || ci.cols() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_submatrix_20_impl<SM1,DM2>::eval_dense(A,ci,B);
+        return change_submatrix_20_impl<SM1,DM2>::eval_dense(A, ci, B, ret);
     else
-        return change_submatrix_21_impl<SM1,DM2>::eval_dense(A,ci,B);
+        return change_submatrix_21_impl<SM1,DM2>::eval_dense(A, ci, B, ret);
 };
 
 template<class SM1,class SM2>
-SM1 change_submatrix_functor<SM1,SM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                             const SM2& B)
+void change_submatrix_functor<SM1,SM2>::eval(const SM1& A, const md::colon_info& ci, 
+                                             const SM2& B, Matrix& ret)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    }
 
     if (ci.r_flag == 0)
-        return change_submatrix_20_impl<SM1,SM2>::eval_sparse(A,ci,B);
+        return change_submatrix_20_impl<SM1,SM2>::eval_sparse(A, ci, B, ret);
     else
-        return change_submatrix_21_impl<SM1,SM2>::eval_sparse(A,ci,B);
+        return change_submatrix_21_impl<SM1,SM2>::eval_sparse(A, ci, B, ret);
 };
 
 template<class SM1,class BM2>
-SM1 change_submatrix_band_functor<SM1,BM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                  const BM2& B)
+void change_submatrix_band_functor<SM1,BM2>::eval(const SM1& A, const md::colon_info& ci, 
+                                                  const BM2& B, Matrix& ret)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_submatrix_20_impl<SM1,BM2>::eval_banded(A,ci,B);
+        return change_submatrix_20_impl<SM1,BM2>::eval_banded(A, ci, B, ret);
     else
-        return change_submatrix_21_impl<SM1,BM2>::eval_banded(A,ci,B);
+        return change_submatrix_21_impl<SM1,BM2>::eval_banded(A, ci, B, ret);
 };
 
 template<class SM1,class DM2>
-SM1 change_submatrix_dense_functor_2<SM1,DM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                     const DM2& B)
+void change_submatrix_dense_functor_2<SM1,DM2>::eval(const SM1& A, const md::colon_info& ci, 
+                                                     const DM2& B, Matrix& ret)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_submatrix_0_impl<SM1,DM2>::eval_dense(A,ci,B);
+        return change_submatrix_0_impl<SM1,DM2>::eval_dense(A, ci, B, ret);
     else
-        return change_submatrix_1_impl<SM1,DM2>::eval_dense(A,ci,B);
+        return change_submatrix_1_impl<SM1,DM2>::eval_dense(A, ci, B, ret);
 };
 
 template<class SM1,class BM2>
-SM1 change_submatrix_band_functor_2<SM1,BM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                    const BM2& B)
+void change_submatrix_band_functor_2<SM1,BM2>::eval(const SM1& A, const md::colon_info& ci, 
+                                                    const BM2& B, Matrix& ret)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_submatrix_0_impl<SM1,BM2>::eval_band(A,ci,B);
+        return change_submatrix_0_impl<SM1,BM2>::eval_band(A, ci, B, ret);
     else
-        return change_submatrix_1_impl<SM1,BM2>::eval_banded(A,ci,B);
+        return change_submatrix_1_impl<SM1,BM2>::eval_banded(A, ci, B, ret);
 };
 
 template<class SM1,class SM2>
-SM1 change_submatrix_functor_2<SM1,SM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                               const SM2& B)
+void change_submatrix_functor_2<SM1,SM2>::eval(const SM1& A, const md::colon_info& ci, 
+                                               const SM2& B, Matrix& ret)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_submatrix_0_impl<SM1,SM2>::eval_sparse(A,ci,B);
+        return change_submatrix_0_impl<SM1,SM2>::eval_sparse(A, ci, B, ret);
     else
-        return change_submatrix_1_impl<SM1,SM2>::eval_sparse(A,ci,B);
+        return change_submatrix_1_impl<SM1,SM2>::eval_sparse(A, ci, B, ret);
 };
 
 template struct change_submatrix_functor<matcl::raw::integer_sparse,matcl::raw::integer_sparse>;

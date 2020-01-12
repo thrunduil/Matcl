@@ -199,32 +199,30 @@ struct make_ufunc_root
 //----------------------------------------------------------------------------------
 //                              func_unary_impl
 //----------------------------------------------------------------------------------
-template<class Tag, class M1>
+template<class Tag, Mat_or_scalar M1>
 struct func_unary_impl
 {
     static_assert(md::dependent_false<M1>::value, "M1 must be ct_matrix or ct_scalar");
 };
 
-template<class Tag, Integer M, Integer N, class Array,class Deps1>
+template<class Tag, Integer M, Integer N, Mat_array Array, DPS Deps1>
 struct func_unary_impl<Tag, ct_matrix<M, N, Array, Deps1>>
 {
     using array_type    = mkd::mat_ufunc_array<Tag, M, N, Array>;
     using type          = ct_matrix<M, N, array_type, Deps1>;
 };
 
+template<class Tag, Scal_data Array, DPS Deps>
+struct func_unary_impl<Tag, ct_scalar<Array, Deps>>
+{
+    using ufunc_type    = typename make_ufunc_root<Tag, Array>::type;
+    using type          = ct_scalar<ufunc_type, Deps>;
+};
+
 }}}
 
 #if 0
-//----------------------------------------------------------------------------------
-//                              func_unary
-//----------------------------------------------------------------------------------
 /*
-template<class Tag, class Array, class Deps>
-struct func_unary<Tag, ct_scalar<Array,Deps>>
-{
-     using array_type   = details::scalar_ufunc_array<Tag,Array,Deps>;
-     using type         = ct_scalar<array_type, Deps>;
-};
 
 //----------------------------------------------------------------------------------
 //                              func_bin

@@ -49,7 +49,7 @@ struct scotch_init
 
 static scotch_init scotch_initializer;
 
-scotch_wrapper::scotch_wrapper(const Matrix& A, bool use_weights)
+scotch_graph_wrapper::scotch_graph_wrapper(const Matrix& A, bool use_weights)
     : m_strategy(default_strategy()), m_has_weights(false), m_seed(0)
     , m_use_edge_weights(use_weights), m_A(make_adjancency_matrix(A))
     , m_node_weights(ti::ti_empty()), m_edge_weights(ti::ti_empty())
@@ -64,10 +64,10 @@ scotch_wrapper::scotch_wrapper(const Matrix& A, bool use_weights)
         wrappers_utils().build_edge_weights(m_edge_weights, m_A, true, 1000);
 };
 
-scotch_wrapper::~scotch_wrapper()
+scotch_graph_wrapper::~scotch_graph_wrapper()
 {};
 
-void scotch_wrapper::correct_load(Real& lb) const
+void scotch_graph_wrapper::correct_load(Real& lb) const
 {
     if (lb < 0.0)
         lb  = 0.0;
@@ -75,12 +75,12 @@ void scotch_wrapper::correct_load(Real& lb) const
         lb = 1.0;
 }
 
-Integer scotch_wrapper::default_strategy() const
+Integer scotch_graph_wrapper::default_strategy() const
 {
     return SCOTCH_STRATQUALITY | SCOTCH_STRATSAFETY;    
 };
 
-void scotch_wrapper::init_arch(std::shared_ptr<SCOTCH_Arch>& arch_data)
+void scotch_graph_wrapper::init_arch(std::shared_ptr<SCOTCH_Arch>& arch_data)
 {
     SCOTCH_Arch* arch = new SCOTCH_Arch();
     int err = SCOTCH_archInit(arch);
@@ -94,7 +94,7 @@ void scotch_wrapper::init_arch(std::shared_ptr<SCOTCH_Arch>& arch_data)
 };
 
 template<class V>
-void scotch_wrapper::init_graph(std::shared_ptr<SCOTCH_Graph>& graph_data)
+void scotch_graph_wrapper::init_graph(std::shared_ptr<SCOTCH_Graph>& graph_data)
 {
     using VR            = typename md::real_type<V>::type;
     using Mat_S         = raw::Matrix<V,struct_sparse>;
@@ -142,7 +142,7 @@ void scotch_wrapper::init_graph(std::shared_ptr<SCOTCH_Graph>& graph_data)
     //SCOTCH_graphCheck(graph);
 };
 
-void scotch_wrapper::init_strategy(std::shared_ptr<SCOTCH_Strat>& strat_data)
+void scotch_graph_wrapper::init_strategy(std::shared_ptr<SCOTCH_Strat>& strat_data)
 {
     SCOTCH_Strat* strat = new SCOTCH_Strat();
     int err = SCOTCH_stratInit(strat);
@@ -158,7 +158,7 @@ void scotch_wrapper::init_strategy(std::shared_ptr<SCOTCH_Strat>& strat_data)
     strat_data.reset(strat, &strategy_deleter);
 };
 
-void scotch_wrapper::arch_deleter(SCOTCH_Arch* arch)
+void scotch_graph_wrapper::arch_deleter(SCOTCH_Arch* arch)
 {
     if (arch)
     {
@@ -167,7 +167,7 @@ void scotch_wrapper::arch_deleter(SCOTCH_Arch* arch)
     };
 };
 
-void scotch_wrapper::graph_deleter(SCOTCH_Graph* graph)
+void scotch_graph_wrapper::graph_deleter(SCOTCH_Graph* graph)
 {
     if (graph)
     {
@@ -176,7 +176,7 @@ void scotch_wrapper::graph_deleter(SCOTCH_Graph* graph)
     };
 };
 
-void scotch_wrapper::strategy_deleter(SCOTCH_Strat* strat)
+void scotch_graph_wrapper::strategy_deleter(SCOTCH_Strat* strat)
 {
     if (strat)
     {
@@ -185,7 +185,7 @@ void scotch_wrapper::strategy_deleter(SCOTCH_Strat* strat)
     };
 };
 
-void scotch_wrapper::set_node_weights(const Matrix& W)
+void scotch_graph_wrapper::set_node_weights(const Matrix& W)
 {
     if (W.is_vector() == false)
         throw error::vector_required(W.rows(), W.cols());
@@ -198,7 +198,7 @@ void scotch_wrapper::set_node_weights(const Matrix& W)
 };
 
 // set partitioning strategy
-void scotch_wrapper::set_strategy(scotch_strategy strategy)
+void scotch_graph_wrapper::set_strategy(scotch_strategy strategy)
 {
     switch (strategy)
     {
@@ -217,21 +217,19 @@ void scotch_wrapper::set_strategy(scotch_strategy strategy)
     };
 };
 
-void scotch_wrapper::set_seed(Integer s)
+void scotch_graph_wrapper::set_seed(Integer s)
 {
     m_seed = s;
     SCOTCH_randomSeed(s);
 };
 
-Integer scotch_wrapper::get_seed() const
+Integer scotch_graph_wrapper::get_seed() const
 {
     return m_seed;
 };
 
 struct visit_make_partition : public md::extract_type_switch<Matrix, visit_make_partition,true>
 {
-    using base_type = md::extract_type_switch<Matrix, visit_make_partition,true>;
-
     template<class Mat, class Owner, class ... Args>
     static Matrix eval(const matcl::Matrix&, const Mat&, Owner& owner,
                      Args&& ... args)
@@ -249,8 +247,6 @@ struct visit_make_partition : public md::extract_type_switch<Matrix, visit_make_
 
 struct visit_make_partition_fixed : public md::extract_type_switch<Matrix, visit_make_partition_fixed,true>
 {
-    using base_type = md::extract_type_switch<Matrix, visit_make_partition_fixed,true>;
-
     template<class Mat, class Owner, class ... Args>
     static Matrix eval(const matcl::Matrix&, const Mat&, Owner& owner,
                      Args&& ... args)
@@ -268,8 +264,6 @@ struct visit_make_partition_fixed : public md::extract_type_switch<Matrix, visit
 
 struct visit_make_coloring : public md::extract_type_switch<Matrix, visit_make_coloring,true>
 {
-    using base_type = md::extract_type_switch<Matrix, visit_make_coloring,true>;
-
     template<class Mat, class Owner, class ... Args>
     static Matrix eval(const matcl::Matrix&, const Mat&, Owner& owner,
                      Args&& ... args)
@@ -287,8 +281,6 @@ struct visit_make_coloring : public md::extract_type_switch<Matrix, visit_make_c
 
 struct visit_make_ordering : public md::extract_type_switch<void, visit_make_ordering,true>
 {
-    using base_type = md::extract_type_switch<Matrix, visit_make_ordering,true>;
-
     template<class Mat, class Owner, class ... Args>
     static void eval(const matcl::Matrix&, const Mat&, Owner& owner,
                      Args&& ... args)
@@ -306,8 +298,6 @@ struct visit_make_ordering : public md::extract_type_switch<void, visit_make_ord
 
 struct visit_make_separator : public md::extract_type_switch<Matrix, visit_make_separator,true>
 {
-    using base_type = md::extract_type_switch<Matrix, visit_make_separator,true>;
-
     template<class Mat, class Owner, class ... Args>
     static Matrix eval(const matcl::Matrix&, const Mat&, Owner& owner,
                      Args&& ... args)
@@ -325,8 +315,6 @@ struct visit_make_separator : public md::extract_type_switch<Matrix, visit_make_
 
 struct visit_make_separator_fixed : public md::extract_type_switch<Matrix, visit_make_separator_fixed,true>
 {
-    using base_type = md::extract_type_switch<Matrix, visit_make_separator_fixed,true>;
-
     template<class Mat, class Owner, class ... Args>
     static Matrix eval(const matcl::Matrix&, const Mat&, Owner& owner,
                      Args&& ... args)
@@ -342,7 +330,7 @@ struct visit_make_separator_fixed : public md::extract_type_switch<Matrix, visit
     };
 };
 
-Matrix scotch_wrapper::make_assign(Integer n_part, Real lb)
+Matrix scotch_graph_wrapper::make_assign(Integer n_part, Real lb)
 {
     Integer N           = m_A.rows();
     n_part              = std::max(1, std::min(n_part, N));
@@ -351,7 +339,7 @@ Matrix scotch_wrapper::make_assign(Integer n_part, Real lb)
     return make_assign(n_part, proc_weights, lb);
 };
 
-Matrix scotch_wrapper::make_assign_fixed(Integer n_part, const Matrix& fixed, Real lb)
+Matrix scotch_graph_wrapper::make_assign_fixed(Integer n_part, const Matrix& fixed, Real lb)
 {
     Integer N           = m_A.rows();
     n_part              = std::max(1, std::min(n_part, N));
@@ -360,7 +348,7 @@ Matrix scotch_wrapper::make_assign_fixed(Integer n_part, const Matrix& fixed, Re
     return make_assign_fixed(n_part, proc_weights, fixed, lb);
 };
 
-Matrix scotch_wrapper::make_assign(Integer n_part, const Matrix& proc_weights, Real lb)
+Matrix scotch_graph_wrapper::make_assign(Integer n_part, const Matrix& proc_weights, Real lb)
 {
     int num_nodes       = m_A.rows();
     n_part              = std::min(std::max(1, n_part), num_nodes);
@@ -369,18 +357,21 @@ Matrix scotch_wrapper::make_assign(Integer n_part, const Matrix& proc_weights, R
         throw error::invalid_size2(proc_weights.rows(), proc_weights.cols(), n_part, 1);
     
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
 
     if (n_part == 1)
+    {
+        value_code vc   = matrix_traits::real_value_type(vc0);
+        vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+
         return ones(num_nodes, 1, vc);
+    };
 
     Matrix dum = zeros(0,0,vc0);
 
     return visit_make_partition::make<const Matrix&>(dum, *this, n_part, proc_weights, lb);
 };
 
-Matrix scotch_wrapper::make_assign_fixed(Integer n_part, const Matrix& proc_weights, 
+Matrix scotch_graph_wrapper::make_assign_fixed(Integer n_part, const Matrix& proc_weights, 
                             const Matrix& fixed0, Real lb)
 {
     int num_nodes       = m_A.rows();
@@ -390,113 +381,120 @@ Matrix scotch_wrapper::make_assign_fixed(Integer n_part, const Matrix& proc_weig
         throw error::invalid_size2(proc_weights.rows(), proc_weights.cols(), n_part, 1);
     
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
-
     Matrix fixed        = make_fixed(fixed0, n_part);
 
     if (n_part == 1)
+    {
+        value_code vc   = matrix_traits::real_value_type(vc0);
+        vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+
         return ones(num_nodes, 1, vc);
+    };
 
     Matrix dum = zeros(0,0,vc0);
 
     return visit_make_partition_fixed::make<const Matrix&>(dum, *this, n_part, proc_weights, fixed, lb);
 }
         
-Matrix scotch_wrapper::edge_separator(Integer n_part, Real lb)
+Matrix scotch_graph_wrapper::edge_separator(Integer n_part, Real lb)
 {
     int num_nodes       = m_A.rows();
     n_part              = std::min(std::max(1, n_part), num_nodes);
 
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
 
     if (n_part == 1)
+    {
+        value_code vc   = matrix_traits::real_value_type(vc0);
+        vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+
         return ones(num_nodes, 1, vc);
+    };
 
     Matrix dum = zeros(0,0,vc0);
 
     return visit_make_separator::make<const Matrix&>(dum, *this, n_part, false, false, lb);
 };
 
-Matrix scotch_wrapper::make_clustering(Integer n_part, Real lb)
+Matrix scotch_graph_wrapper::make_clustering(Integer n_part, Real lb)
 {
     int num_nodes       = m_A.rows();
     n_part              = std::min(std::max(1, n_part), num_nodes);
 
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
 
     if (n_part == 1)
+    {
+        value_code vc   = matrix_traits::real_value_type(vc0);
+        vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+
         return ones(num_nodes, 1, vc);
+    };
 
     Matrix dum = zeros(0,0,vc0);
 
     return visit_make_separator::make<const Matrix&>(dum, *this, n_part, false, true, lb);
 };
 
-Matrix scotch_wrapper::edge_separator_fixed(Integer n_part, const Matrix& fixed0, Real lb)
+Matrix scotch_graph_wrapper::edge_separator_fixed(Integer n_part, const Matrix& fixed0, Real lb)
 {
     int num_nodes       = m_A.rows();
     n_part              = std::min(std::max(1, n_part), num_nodes);
 
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
-
     Matrix fixed        = make_fixed(fixed0, n_part);
 
     if (n_part == 1)
+    {
+        value_code vc   = matrix_traits::real_value_type(vc0);
+        vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+
         return ones(num_nodes, 1, vc);
+    };
 
     Matrix dum = zeros(0,0,vc0);
 
     return visit_make_separator_fixed::make<const Matrix&>(dum, *this, n_part, fixed, lb);
 };
 
-Matrix scotch_wrapper::node_separator(Integer n_part, Real lb)
+Matrix scotch_graph_wrapper::node_separator(Integer n_part, Real lb)
 {
     int num_nodes       = m_A.rows();
     n_part              = std::min(std::max(1, n_part), num_nodes);
 
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
 
     if (n_part == 1)
+    {
+        value_code vc   = matrix_traits::real_value_type(vc0);
+        vc              = matrix_traits::unify_value_types(vc, value_code::v_float);
+
         return ones(num_nodes, 1, vc);
+    };
 
     Matrix dum = zeros(0,0,vc0);
 
     return visit_make_separator::make<const Matrix&>(dum, *this, n_part, true, false, lb);
 };
 
-Matrix scotch_wrapper::make_coloring()
+Matrix scotch_graph_wrapper::make_coloring()
 {
     value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
-
-    Matrix dum = zeros(0,0,vc0);
+    Matrix dum          = zeros(0,0,vc0);
 
     return visit_make_coloring::make<const Matrix&>(dum, *this);
 };
 
-void scotch_wrapper::make_ordering(bool ext, permvec& p, Integer& nblocks, Matrix& blocks, Matrix& tree)
+void scotch_graph_wrapper::make_ordering(bool ext, permvec& p, Integer& nblocks, Matrix& blocks, Matrix& tree)
 {
-    value_code vc0      = m_A.get_value_code();
-    value_code vc       = matrix_traits::real_value_type(vc0);
-    vc                  = matrix_traits::unify_value_types(vc, value_code::v_float);
-
-    Matrix dum = zeros(0,0,vc0);
+    value_code vc0  = m_A.get_value_code();
+    Matrix dum      = zeros(0, 0, vc0);
 
     return visit_make_ordering::make<const Matrix&>(dum, *this, ext, p, nblocks, blocks, tree);
 };
 
 template<class V>
-Matrix scotch_wrapper::make_assign_impl(Integer n_part, const Matrix& proc_weights, Real lb)
+Matrix scotch_graph_wrapper::make_assign_impl(Integer n_part, const Matrix& proc_weights, Real lb)
 {
     using VR            = typename md::real_type<V>::type;
     using Mat_S         = raw::Matrix<V,struct_sparse>;
@@ -553,7 +551,7 @@ Matrix scotch_wrapper::make_assign_impl(Integer n_part, const Matrix& proc_weigh
 };
 
 template<class V>
-Matrix scotch_wrapper::make_assign_fixed_impl(Integer n_part, const Matrix& proc_weights, 
+Matrix scotch_graph_wrapper::make_assign_fixed_impl(Integer n_part, const Matrix& proc_weights, 
                             Matrix& fixed, Real lb)
 {
     using VR            = typename md::real_type<V>::type;
@@ -610,7 +608,7 @@ Matrix scotch_wrapper::make_assign_fixed_impl(Integer n_part, const Matrix& proc
 };
 
 template<class V>
-Matrix scotch_wrapper::make_coloring_impl()
+Matrix scotch_graph_wrapper::make_coloring_impl()
 {
     using VR            = typename md::real_type<V>::type;
     using Mat_S         = raw::Matrix<V,struct_sparse>;
@@ -637,7 +635,7 @@ Matrix scotch_wrapper::make_coloring_impl()
 };
 
 template<class V>
-void scotch_wrapper::make_ordering_impl(bool ext, permvec& p, Integer& nblocks, Matrix& blocks,
+void scotch_graph_wrapper::make_ordering_impl(bool ext, permvec& p, Integer& nblocks, Matrix& blocks,
                             Matrix& tree)
 {
     using VR            = typename md::real_type<V>::type;
@@ -701,7 +699,7 @@ void scotch_wrapper::make_ordering_impl(bool ext, permvec& p, Integer& nblocks, 
 };
 
 template<class V>
-Matrix scotch_wrapper::make_separator_impl(Integer n_part, bool node_sep, bool cluster, Real lb)
+Matrix scotch_graph_wrapper::make_separator_impl(Integer n_part, bool node_sep, bool cluster, Real lb)
 {
     using VR            = typename md::real_type<V>::type;
     using Mat_S         = raw::Matrix<V,struct_sparse>;
@@ -749,7 +747,7 @@ Matrix scotch_wrapper::make_separator_impl(Integer n_part, bool node_sep, bool c
 };
 
 template<class V>
-Matrix scotch_wrapper::make_separator_fixed_impl(Integer n_part, Matrix& fixed, Real lb)
+Matrix scotch_graph_wrapper::make_separator_fixed_impl(Integer n_part, Matrix& fixed, Real lb)
 {
     using VR            = typename md::real_type<V>::type;
     using Mat_S         = raw::Matrix<V,struct_sparse>;
@@ -781,13 +779,13 @@ Matrix scotch_wrapper::make_separator_fixed_impl(Integer n_part, Matrix& fixed, 
 
 };
 
-void scotch_wrapper::check_error(int err, const std::string& msg)
+void scotch_graph_wrapper::check_error(int err, const std::string& msg)
 {
     if (err)
         throw error::scotch_error(msg);
 }
 
-Matrix scotch_wrapper::make_fixed(const Matrix& fixed, Integer n_part)
+Matrix scotch_graph_wrapper::make_fixed(const Matrix& fixed, Integer n_part)
 {
     Integer N   = m_A.rows();
 

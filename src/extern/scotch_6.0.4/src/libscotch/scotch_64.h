@@ -58,8 +58,8 @@
 /**                                                        **/
 /************************************************************/
 
-#ifndef SCOTCH_H
-#define SCOTCH_H
+#ifndef SCOTCH64_H
+#define SCOTCH64_H
 
 #include "scotch_config.h"
 
@@ -110,27 +110,27 @@ objects, computed at compile-time by program
 proper padding                               +*/
 
 typedef struct {
-  double                    dummy[5];
+  double                    dummy[8];
 } SCOTCH_Arch;
 
 typedef struct {
-  double                    dummy[1];
+  double                    dummy[2];
 } SCOTCH_Geom;
 
 typedef struct {
-  double                    dummy[8];
+  double                    dummy[13];
 } SCOTCH_Graph;
 
 typedef struct {
-  double                    dummy[10];
+  double                    dummy[15];
 } SCOTCH_Mesh;
 
 typedef struct {
-  double                    dummy[2];
+  double                    dummy[4];
 } SCOTCH_Mapping;
 
 typedef struct {
-  double                    dummy[8];
+  double                    dummy[12];
 } SCOTCH_Ordering;
 
 typedef struct {
@@ -164,10 +164,6 @@ SCOTCH_EXPORT int                         SCOTCH_archTorus2   (SCOTCH_Arch * con
 SCOTCH_EXPORT int                         SCOTCH_archTorus3   (SCOTCH_Arch * const, const SCOTCH_Num, const SCOTCH_Num, const SCOTCH_Num);
 SCOTCH_EXPORT int                         SCOTCH_archVcmplt   (SCOTCH_Arch * const);
 SCOTCH_EXPORT int                         SCOTCH_archVhcub    (SCOTCH_Arch * const);
-
-// MODIFIED: PK, add external error handler
-typedef void (*ErrorHandler)(const char* msg);
-SCOTCH_EXPORT void                        SCOTCH_installErrorHandler(ErrorHandler);
 
 SCOTCH_EXPORT void                        SCOTCH_errorProg    (const char * const);
 SCOTCH_EXPORT void                        SCOTCH_errorPrint   (const char * const, ...);
@@ -297,4 +293,4 @@ SCOTCH_EXPORT void                        SCOTCH_version      (int * const, int 
 }
 #endif /* __cplusplus */
 
-#endif /* SCOTCH_H */
+#endif /* SCOTCH64_H */

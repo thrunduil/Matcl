@@ -26,11 +26,15 @@
 namespace matcl
 {
 
+//-----------------------------------------------------------------------
+//                          scotch
+//-----------------------------------------------------------------------
 scotch::scotch()
-    :m_impl(new details::scotch_partit_impl(1.0, false))
+    :m_impl(new details::scotch_graph_impl(1.0, false))
 {}
+
 scotch::scotch(const Matrix& A, bool use_weights)
-    :m_impl(new details::scotch_partit_impl(A, use_weights))
+    :m_impl(new details::scotch_graph_impl(A, use_weights))
 {}
 
 scotch::~scotch()
@@ -45,6 +49,7 @@ void scotch::set_seed(Integer s)
 {
     m_impl->set_seed(s);
 };
+
 Integer scotch::get_seed() const
 {
     return m_impl->get_seed();
@@ -59,6 +64,7 @@ Matrix scotch::assign(Integer n_part, Real load_balance)
 {
     return m_impl->make_assign(n_part, load_balance);
 };
+
 Matrix scotch::assign(Integer n_part, const Matrix& work_share, Real load_balance)
 {
     return m_impl->make_assign(n_part, work_share, load_balance);
@@ -88,11 +94,13 @@ Matrix scotch::assign_fixed(Integer n_part, const Matrix& fixed, Real load_balan
 {
     return m_impl->make_assign_fixed(n_part, fixed, load_balance);
 };
+
 Matrix scotch::assign_fixed(Integer n_part, const Matrix& work_shares, 
                     const Matrix& fixed, Real load_balance)
 {
     return m_impl->make_assign_fixed(n_part, work_shares, fixed, load_balance);
 };
+
 Matrix scotch::edge_separator_fixed(Integer n_part, const Matrix& fixed, Real lb)
 {
     return m_impl->edge_separator_fixed(n_part, fixed, lb);
@@ -115,6 +123,36 @@ scotch::order_ext_ret scotch::ordering_ext()
 
     m_impl->make_ordering(true, p, nblocks, blocks, tree);
     return order_ext_ret(p, nblocks, blocks, tree);
+};
+
+//-----------------------------------------------------------------------
+//                          scotch_mesh
+//-----------------------------------------------------------------------
+scotch_mesh::scotch_mesh()
+    :m_impl(new details::scotch_mesh_impl(1.0))
+{}
+
+scotch_mesh::scotch_mesh(const Matrix& A)
+    :m_impl(new details::scotch_mesh_impl(A))
+{}
+
+scotch_mesh::~scotch_mesh()
+{};
+
+void scotch_mesh::set_seed(Integer s)
+{
+    m_impl->set_seed(s);
+};
+
+Integer scotch_mesh::get_seed() const
+{
+    return m_impl->get_seed();
+};
+
+void scotch_mesh::ordering()
+{
+    m_impl->make_ordering();
+    return;
 };
 
 };

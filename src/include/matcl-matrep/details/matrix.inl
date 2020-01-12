@@ -215,7 +215,7 @@ template<class M>
 inline const M Matrix::impl() const
 {
     matcl::mat_code mat_type = matrix_traits::mat_type_info_type<M>::matrix_code;
-    Matrix tmp = convert(*this,mat_type);
+    Matrix tmp = convert(*this, mat_type);
     return tmp.get_impl<M>();
 };
 

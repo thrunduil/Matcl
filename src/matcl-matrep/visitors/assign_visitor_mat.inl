@@ -496,7 +496,11 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_sparse>
         };
 
         const M1& mat2 = A.get_impl<M1>();
-        A = Matrix(algorithm::change_submatrix_2(mat2,ci,B),true);
+
+        Matrix ret;
+        algorithm::change_submatrix_2(ret, mat2, ci, B);
+
+        A = ret;
         return A;
     };
 
@@ -530,7 +534,11 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_sparse>
         };
 
         const M1& mat2 = A.get_impl<M1>();
-        A = Matrix(algorithm::change_submatrix(mat2,ci,B),true);
+
+        Matrix ret;
+        algorithm::change_submatrix(ret, mat2, ci, B);
+        
+        A = ret;
         return A;
     };
 
@@ -1340,28 +1348,28 @@ struct assign_mat_impl<M1,M2,val_type,false>
 template<class M1, class M2, bool is_band>
 struct change_submatrix_dense_help
 {
-    static M1 eval(const M1& A,const colon_info& ci, const M2& B)
+    static void eval(Matrix& ret, const M1& A,const colon_info& ci, const M2& B)
     {
-        return algorithm::change_submatrix_dense(A,ci,B);
+        return algorithm::change_submatrix_dense(ret, A, ci, B);
     };
 
-    static M1 eval_2(const M1& A,const colon_info& ci, const M2& B)
+    static void eval_2(Matrix& ret, const M1& A,const colon_info& ci, const M2& B)
     {
-        return algorithm::change_submatrix_dense_2(A,ci,B);
+        return algorithm::change_submatrix_dense_2(ret, A, ci, B);
     };
 };
 
 template<class M1, class M2>
 struct change_submatrix_dense_help<M1,M2,true>
 {
-    static M1 eval(const M1& A,const colon_info& ci, const M2& B)
+    static void eval(Matrix& ret, const M1& A,const colon_info& ci, const M2& B)
     {
-        return algorithm::change_submatrix_band(A,ci,B);
+        return algorithm::change_submatrix_band(ret, A, ci, B);
     };
 
-    static M1 eval_2(const M1& A,const colon_info& ci, const M2& B)
+    static void eval_2(Matrix& ret, const M1& A,const colon_info& ci, const M2& B)
     {
-        return algorithm::change_submatrix_band_2(A,ci,B);
+        return algorithm::change_submatrix_band_2(ret, A, ci, B);
     };
 };
 
@@ -1400,7 +1408,10 @@ struct assign_mat_sp_nonsp
 
         static const bool is_band = std::is_same<struct_type,struct_banded>::value;
 
-        A = Matrix(change_submatrix_dense_help<M1,M2,is_band>::eval_2(mat2,ci,B),true);
+        Matrix ret;
+        change_submatrix_dense_help<M1,M2,is_band>::eval_2(ret, mat2, ci, B);
+
+        A = ret;
         return A;
     };
 
@@ -1431,7 +1442,10 @@ struct assign_mat_sp_nonsp
         M1& mat2 = A.get_impl_unique<M1>();
         
         static const bool is_band = std::is_same<struct_type,struct_banded>::value;
-        A = Matrix(change_submatrix_dense_help<M1,M2,is_band>::eval(mat2,ci,B),true);
+        Matrix ret;
+        change_submatrix_dense_help<M1,M2,is_band>::eval(ret, mat2, ci, B);
+
+        A = ret;
         return A;
     };
 };

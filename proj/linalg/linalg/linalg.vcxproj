@@ -188,7 +188,8 @@
     <ClCompile Include="..\..\..\src\matcl-linalg\ordering\partitioning.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\ordering\part_wrappers_utils.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch.cpp" />
-    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_wrapper.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_graph_wrapper.cpp" />
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_mesh_wrapper.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\matrix_functors.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\struct_flag_linalg.cpp" />
     <ClCompile Include="..\..\..\src\matcl-linalg\special_matrices\unitary_matrix.cpp" />

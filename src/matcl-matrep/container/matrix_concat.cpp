@@ -1346,7 +1346,7 @@ Matrix mat_row::build_matrix_inplace()
             {
                 using MT = raw::integer_sparse;
 
-                MT tmp = mat.get_impl_unique<MT>();
+                MT& tmp = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 
@@ -1373,8 +1373,8 @@ Matrix mat_row::build_matrix_inplace()
         {
             if (is_sparse)
             {
-                using MT = raw::float_sparse;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::float_sparse;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 
@@ -1401,8 +1401,8 @@ Matrix mat_row::build_matrix_inplace()
         {
             if (is_sparse)
             {
-                using MT = raw::real_sparse;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::real_sparse;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 
@@ -1429,8 +1429,8 @@ Matrix mat_row::build_matrix_inplace()
         {
             if (is_sparse)
             {
-                using MT = raw::float_complex_sparse;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::float_complex_sparse;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 
@@ -1457,8 +1457,8 @@ Matrix mat_row::build_matrix_inplace()
         {
             if (is_sparse)
             {
-                using MT = raw::complex_sparse;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::complex_sparse;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 
@@ -1485,8 +1485,8 @@ Matrix mat_row::build_matrix_inplace()
         {
             if (is_sparse)
             {
-                using MT = raw::object_sparse;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::object_sparse;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 

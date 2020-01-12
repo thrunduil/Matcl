@@ -164,6 +164,7 @@ struct maxmatch_weight_impl<V,struct_sparse, false>
             V val       = ptr_du[i];
             sum         += val;
         };
+
         for (Integer i = 0; i < N; ++i)
         {
             V val       = ptr_dv[i];
@@ -214,6 +215,79 @@ struct maxmatch_weight_vis : public extract_type_switch<void, maxmatch_weight_vi
     static void eval_scalar(const Matrix&, const Object&, ret_type&)
     {
         throw error::object_value_type_not_allowed("maxmatch_weight");
+    };
+
+    template<class T>
+    static void eval_scalar(const Matrix& handle, const T& v, ret_type& ret)
+    {
+        using Mat = raw::Matrix<T,struct_dense>;
+        Mat m(ti::get_ti(v), v, 1, 1);
+        return eval<Mat>(handle, m, ret);
+    };
+};
+
+//TODO
+template<class V, class S>
+struct separator_perm_impl
+{
+    using Mat       = raw::Matrix<V,S>;
+    using VR        = typename md::real_type<V>::type;
+    using ret_type  = tuple<permvec, permvec>;
+
+    static void eval(const Mat& A, ret_type& ret)
+    {
+        using Mat_S = raw::Matrix<VR,struct_sparse>;
+        Mat_S As    = raw::converter<Mat_S, Mat>::eval(A);
+        return separator_perm_impl<VR,struct_sparse>::eval(As, ret);
+    };
+};
+
+template<class V>
+struct separator_perm_impl<V,struct_sparse>
+{
+    using S         = struct_sparse;
+    using Mat       = raw::Matrix<V,S>;
+    using Mat_D     = raw::Matrix<V,struct_dense>;
+    using VR        = typename md::real_type<V>::type;
+    using ret_type  = tuple<permvec,permvec>;
+
+    static void eval(const Mat& A, ret_type& ret)
+    {
+        if (A.nnz() == 0)
+        {
+            permvec p   = permvec::identity(A.rows());
+            permvec q   = permvec::identity(A.cols());
+
+            ret = ret_type(p, q);
+            return;
+        };
+
+        //TODO
+        throw;
+    }
+};
+
+struct separator_perm_vis : public extract_type_switch<void, separator_perm_vis,true>
+{
+    using ret_type = tuple<permvec, permvec>;
+
+    template<class T>
+    static void eval(const Matrix&, const T& mat, ret_type& ret)
+    {
+        using V = typename T::value_type;
+        using S = typename T::struct_type;
+        return separator_perm_impl<V,S>::eval(mat, ret);
+    };
+
+    template<class S>
+    static void eval(const Matrix&, const raw::Matrix<Object,S>&, ret_type&)
+    {
+        throw error::object_value_type_not_allowed("separator_perm");
+    };
+
+    static void eval_scalar(const Matrix&, const Object&, ret_type&)
+    {
+        throw error::object_value_type_not_allowed("separator_perm");
     };
 
     template<class T>
@@ -332,6 +406,14 @@ tuple<permvec, permvec> matcl::rowsmatch_to_perms(const Matrix& r, Integer n_col
     permvec ret_c   = permvec::from_matrix(Matrix(pc,false));
 
     return tuple<permvec, permvec>(ret_r, ret_c);
+};
+
+//TODO
+tuple<permvec, permvec> matcl::separator_perm(const Matrix& mat)
+{
+    tuple<permvec, permvec> ret;
+    details::separator_perm_vis::make<const Matrix&>(mat, ret);
+    return ret;
 };
 
 };

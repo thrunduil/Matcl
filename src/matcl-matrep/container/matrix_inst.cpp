@@ -340,6 +340,27 @@ namespace details
     };
 
     template<class T>
+    struct constructor_helper_impl<raw::sparse_matrix_base<T>, false>
+    {        
+        using arg_type  = raw::sparse_matrix_base<T>;
+        using mat_type  = raw::Matrix<T, struct_sparse>;
+
+        static bool eval(const arg_type& val, bool allow_conv, matrix_base& mat)
+        {            
+            mat_type vm   = mat_type(val);
+
+            return constructor_helper_impl<mat_type, false>::eval(vm, allow_conv, mat);
+        };
+
+        static bool eval(arg_type&& val,bool allow_conv, matrix_base& mat)
+        {
+            mat_type vm   = mat_type(std::move(val));
+
+            return constructor_helper_impl<mat_type, false>::eval(std::move(vm), allow_conv, mat);
+        };
+    };
+
+    template<class T>
     struct constructor_helper_impl<T,true>
     {
         static bool eval(const T& val,bool ,matrix_base& mat)
@@ -701,6 +722,13 @@ namespace matcl
     template MATCL_MATREP_EXPORT Complex*                  Matrix::get_array_unique<Complex>();
     template MATCL_MATREP_EXPORT Float_complex*            Matrix::get_array_unique<Float_complex>();
     template MATCL_MATREP_EXPORT Object*                   Matrix::get_array_unique<Object>();
+
+    template MATCL_MATREP_EXPORT md::constructor_helper<raw::sparse_matrix_base<Integer>>;
+    template MATCL_MATREP_EXPORT md::constructor_helper<raw::sparse_matrix_base<Float>>;
+    template MATCL_MATREP_EXPORT md::constructor_helper<raw::sparse_matrix_base<Real>>;
+    template MATCL_MATREP_EXPORT md::constructor_helper<raw::sparse_matrix_base<Complex>>;
+    template MATCL_MATREP_EXPORT md::constructor_helper<raw::sparse_matrix_base<Float_complex>>;
+    template MATCL_MATREP_EXPORT md::constructor_helper<raw::sparse_matrix_base<Object>>;
 };
 
 #pragma warning( pop )

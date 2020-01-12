@@ -582,9 +582,6 @@
     <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch.cpp">
       <Filter>Source Files\src\ordering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_wrapper.cpp">
-      <Filter>Source Files\src\ordering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\matcl-linalg\norms_error\cond.cpp">
       <Filter>Source Files\src\norms_error</Filter>
     </ClCompile>
@@ -593,6 +590,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\matcl-linalg\decompositions\quern\matcl_quern_solver.cpp">
       <Filter>Source Files\src\decompositions\quern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_graph_wrapper.cpp">
+      <Filter>Source Files\src\ordering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\matcl-linalg\ordering\scotch_mesh_wrapper.cpp">
+      <Filter>Source Files\src\ordering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

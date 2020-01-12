@@ -46,19 +46,19 @@ struct simd_enable
                   "this type should not be instantiated");
 };
 
-template<class Subs_Context, class Array_T>
+template<class Subs_Context, class Array_t>
 struct enable_vectorization_array
 {
-    static_assert(md::dependent_false<Array_T>::value,
+    static_assert(md::dependent_false<Array_t>::value,
                   "this type should not be instantiated");
 };
 
-template<class Subs_Context, Integer M, Integer N, Mat_array Array_T, DPS Deps>
-struct simd_enable<Subs_Context,ct_matrix<M,N,Array_T,Deps>>
+template<class Subs_Context, Integer M, Integer N, Mat_array Array_t, DPS Deps>
+struct simd_enable<Subs_Context,ct_matrix<M,N,Array_t,Deps>>
 {
     using codegen           = typename Subs_Context::code_gen;
     static const bool value = codegen::simd_enable
-                            && enable_vectorization_array<Subs_Context,Array_T>::value;
+                            && enable_vectorization_array<Subs_Context,Array_t>::value;
 };
 
 template<class Subs_Context, class Tag, class... Assign_List>
@@ -278,10 +278,10 @@ struct enable_vectorization_array<Subs_Context, mkd::matrix_array_value<Tag, Val
 //                              loop_context
 //----------------------------------------------------------------------------------
 
-template<class Array_Tags_List>
+template<class Array_tags_List>
 struct loop_context
 {
-    using array_tags_list   = Array_Tags_List;
+    using array_tags_list   = Array_tags_List;
 };
 
 template<class Elem>
@@ -465,10 +465,10 @@ struct value_setter<Val,Val,Is_Aligned,Step, Offset>
 //----------------------------------------------------------------------------------
 //                             loop_context_data
 //----------------------------------------------------------------------------------
-template<class Val, class Data_Provider, class Subs_Context, class Array_Tags_List>
+template<class Val, class Data_Provider, class Subs_Context, class Array_tags_List>
 struct make_loop_context_info
 {
-    static_assert(md::dependent_false<Array_Tags_List>::value,
+    static_assert(md::dependent_false<Array_tags_List>::value,
                   "this type should not be instantiated");
 };
 

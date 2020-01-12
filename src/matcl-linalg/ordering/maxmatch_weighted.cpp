@@ -21,6 +21,7 @@
 #include "maxmatch_weighted.h"
 #include <algorithm>
 #include "matcl-core/lib_functions/constants.h"
+#include "matcl-core/matrix/scalar_types.h"
 
 namespace matcl { namespace constants
 {
@@ -32,6 +33,7 @@ Integer inf<Integer>()
 };
 
 }};
+
 namespace matcl { namespace details
 {
 
@@ -83,8 +85,8 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 template<class V>
 void hungarian_init_heurisitic(bool min, Integer m, Integer n, const Integer* ptr, const Integer* row, 
-        const V* val, Integer& num, Integer* iperm, Integer* jperm, V* dualu, V* d, Integer* l,
-        Integer* search_from);
+        const V* val, Integer& num, Integer* iperm, Integer* jperm, V* dualu, V* d, Integer* work_l,
+        Integer* work_search_from);
 
 template<class V>
 void heap_update(Integer idx, Integer N, Integer* Q, V* D, Integer* L);
@@ -96,17 +98,17 @@ template<class V>
 void heap_delete(Integer lpos, Integer& qlen, Integer m, Integer* Q, V* D, Integer* L);
 
 template<class V>
-void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer* ptr0, const Integer* row0, 
-                const V* val0, Integer* iperm, Integer* jperm, Integer& num, V* dualu, V* dualv, Integer* iwork,
+void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer* ptr_c, const Integer* rows, 
+                const V* vals, Integer* iperm, Integer* jperm, Integer& num, V* dualu, V* dualv, Integer* iwork,
                 V* work)
 {
-    Integer* l      = iwork + m*0;
-    Integer* q      = iwork + m*1;
-    Integer* pr     = iwork + m*2 + n*0;
-    Integer* out    = iwork + m*2 + n*1;
-    Integer* search = iwork + m*2 + n*2;
+    Integer* l      = iwork + m * 0;
+    Integer* q      = iwork + m * 1;
+    Integer* pr     = iwork + m * 2 + n * 0;
+    Integer* out    = iwork + m * 2 + n * 1;
+    Integer* search = iwork + m * 2 + n * 2;
 
-    iwork           = iwork + m*2 + n*3;
+    iwork           = iwork + m * 2 + n * 3;
 
     V*      d       = work;
     work            = d + std::max(m,n);
@@ -114,10 +116,12 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
     num             = 0;
     for (Integer i = 0; i < m; ++i)
         iperm[i]    = 0;
+    
     for (Integer i = 0; i < n; ++i)
         jperm[i]    = 0;
 
-   hungarian_init_heurisitic(minimum, m, n, ptr0, row0, val0, num, iperm, jperm, dualu, d, l, search);
+   hungarian_init_heurisitic(minimum, m, n, ptr_c, rows, vals, num, iperm, jperm, dualu, d, 
+                             l, search);
 
    if(num == std::min(m,n)) 
        goto lab_1000; // If we got a complete matching, we're done
@@ -158,10 +162,10 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
         pr[j-1]             = -1;
 
         // Scan column j
-        for (Integer k = ptr0[j-1]+1; k <= ptr0[j+1-1]+1-1; ++k)
+        for (Integer k = ptr_c[j-1]+1; k <= ptr_c[j]; ++k)
         {
-            Integer i       = row0[k-1]+1;
-            V vt            = minimum? val0[k-1] : -val0[k-1];
+            Integer i       = rows[k-1]+1;
+            V vt            = minimum? vals[k-1] : -vals[k-1];
             V dnew          = vt - dualu[i-1];
             
             if(dnew >= csp) 
@@ -191,7 +195,7 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
         for (Integer kk = 1; kk <= q0; ++kk)
         {
             Integer k       = q[kk-1];
-            Integer i       = row0[k-1]+1;
+            Integer i       = rows[k-1]+1;
 
             if (csp <= d[i-1])
             {
@@ -264,18 +268,18 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
 
             // Scan column that matches with row q0
             j                   = iperm[q0-1];
-            V vt                = minimum ? val0[jperm[j-1]-1] : -val0[jperm[j-1]-1];
+            V vt                = minimum ? vals[jperm[j-1]-1] : -vals[jperm[j-1]-1];
             V vj                = dq0 - vt + dualu[q0-1];
 
-            for (Integer k = ptr0[j-1]+1; k <= ptr0[j+1-1]+1-1; ++k)
+            for (Integer k = ptr_c[j-1]+1; k <= ptr_c[j]; ++k)
             {
-                Integer i       = row0[k-1]+1;
+                Integer i       = rows[k-1]+1;
 
                 if(l[i-1] >= up)
                     continue;
 
                 // dnew is new cost
-                vt              = minimum ? val0[k-1] : -val0[k-1];
+                vt              = minimum ? vals[k-1] : -vals[k-1];
                 V dnew          = vj + vt - dualu[i-1];
 
                 // Do not update d[i-1] if dnew ge cost of shortest path
@@ -338,7 +342,7 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
 
         // Find augmenting path by tracing backward in pr; update iperm,jperm
         num             = num + 1;
-        Integer i       = row0[isp-1]+1;
+        Integer i       = rows[isp-1]+1;
         iperm[i-1]      = jsp;
         jperm[jsp-1]    = isp;
         j               = jsp;
@@ -351,7 +355,7 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
                 break;
 
             Integer k   = out[j-1];
-            i           = row0[k-1]+1;
+            i           = rows[k-1]+1;
             iperm[i-1]  = jj;
             jperm[jj-1] = k;
             j           = jj;
@@ -386,9 +390,9 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
     {
         Integer k       = jperm[j-1];
 
-        V vt            = minimum ? val0[k-1] : -val0[k-1];
+        V vt            = minimum ? vals[k-1] : -vals[k-1];
         if(k != 0)
-            dualv[j-1]  = vt - dualu[row0[k-1]+1-1];
+            dualv[j-1]  = vt - dualu[rows[k-1]];
         else
             dualv[j-1]  = V(0.0);
     };
@@ -420,6 +424,7 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
     {
         for (Integer j = 0; j < m; ++j)
             dualu[j]    = -dualu[j];
+        
         for (Integer j = 0; j < n; ++j)
             dualv[j]    = -dualv[j];
     };
@@ -432,9 +437,9 @@ void details::hungarian_match(bool minimum, Integer m, Integer n, const Integer*
 // on the restriction of the graph to the matched rows and columns.
 
 template<class V>
-void hungarian_init_heurisitic(bool minimum, Integer m, Integer n, const Integer* ptr0, 
-        const Integer* row0, const V* val0, Integer& num, Integer* iperm, Integer* jperm, 
-        V* dualu, V* d, Integer* l, Integer* search_from)
+void hungarian_init_heurisitic(bool minimum, Integer m, Integer n, const Integer* cols, 
+        const Integer* rows, const V* vals, Integer& num, Integer* iperm, Integer* jperm, 
+        V* dualu, V* work_d, Integer* work_l, Integer* work_search_from)
 {
     // Set up initial matching on smallest entry in each row (as far as possible)
     //
@@ -443,49 +448,52 @@ void hungarian_init_heurisitic(bool minimum, Integer m, Integer n, const Integer
         dualu[i]    = constants::inf<V>();
 
     for (Integer i = 0; i < m; ++i)
-        l[i]        = 0;
+        work_l[i]   = -1;
 
-    for (Integer j = 1; j <= n; ++j)
+    V mult          = minimum ? V(1) : V(-1);
+
+    for (Integer j = 0; j < n; ++j)
     {
-        for (Integer k = ptr0[j-1]+1; k <= ptr0[j+1-1]+1-1; ++k)
+        for (Integer k = cols[j]; k < cols[j + 1]; ++k)
         {
-            Integer i   = row0[k-1]+1;
-            V vt        = minimum ? val0[k-1] : -val0[k-1];
-            if (vt > dualu[i-1])
+            Integer i   = rows[k];
+            V vt        = mult * vals[k];
+            
+            if (vt > dualu[i])
                 continue;
 
-            dualu[i-1]  = vt;       // Initialize dual variables
-            iperm[i-1]  = j;        // Record col
-            l[i-1]      = k;        // Record posn in row(:)
+            dualu[i]    = vt;       // Initialize dual variables
+            iperm[i]    = j + 1;    // Record col
+            work_l[i]   = k;        // Record posn in row(:)
         };
     };
 
     // Loop over rows in turn. If we can match on smallest entry in row (i.e.
     // column not already matched) then do so. Avoid matching on dense columns
     // as this makes Hungarian algorithm take longer.
-    for (Integer i = 1; i <= m; ++i)
+    for (Integer i = 0; i < m; ++i)
     {
         // Smallest entry in row i is (i,j)
-        Integer j   = iperm[i-1];
+        Integer j   = iperm[i] - 1;
 
          // skip empty rows
-        if(j == 0)
+        if(j == -1)
             continue;
 
-        iperm[i-1]  = 0;
+        iperm[i]    = 0;
 
          // If we've already matched column j, skip this row
-        if (jperm[j-1] != 0)
+        if (jperm[j] != 0)
             continue;
 
         // Don't choose cheap assignment from dense columns
-        if (ptr0[j+1-1]-ptr0[j-1]  >  m/10 && m > 50)
+        if (cols[j + 1] - cols[j]  >  m/10 && m > 50)
             continue;
 
         // Assignment of column j to row i
         num         = num + 1;
-        iperm[i-1]  = j;
-        jperm[j-1]  = l[i-1];
+        iperm[i]    = j + 1;
+        jperm[j]    = work_l[i] + 1;
     };
 
     // If we already have a complete matching, we're already done
@@ -494,44 +502,43 @@ void hungarian_init_heurisitic(bool minimum, Integer m, Integer n, const Integer
 
     // Scan unassigned columns; improve assignment
     for (Integer i = 0; i < n; ++i)
-        d[i]        = V(0.0);
+        work_d[i]   = V(0.0);
 
     for (Integer i = 0; i < n; ++i)
-        search_from[i]  = ptr0[i]+1;
+        work_search_from[i] = cols[i];
     
     //improve_assign: &
-    for (Integer j = 1; j <= n; ++j)
+    for (Integer j = 0; j < n; ++j)
     {
          // column j already matched
-        if (jperm[j-1] != 0)
+        if (jperm[j] != 0)
             continue;
 
         // column j is empty
-        if (ptr0[j-1]+1 > ptr0[j+1-1]+1-1)
+        if (cols[j] >= cols[j + 1])
             continue;
 
         // Find smallest value of di = a_ij - u_i in column j
         // In case of a tie, prefer first unmatched, then first matched row.
-        Integer i0  = row0[ptr0[j-1]+1 -1]+1;
-        V vt        = minimum ? val0[ptr0[j-1]+1 -1] : -val0[ptr0[j-1]+1 -1];
-        V vj        = vt - dualu[i0-1];
-        Integer k0  = ptr0[j-1]+1;
+        Integer i0  = rows[cols[j]];
+        V vt        = mult * vals[cols[j]];
+        V vj        = vt - dualu[i0];
+        Integer k0  = cols[j];
 
-        for (Integer k = ptr0[j-1]+1+1; k <= ptr0[j+1-1]+1-1; ++k)
+        for (Integer k = cols[j] + 1; k < cols[j + 1]; ++k)
         {
-            Integer i   = row0[k-1]+1;
-            vt          = minimum ? val0[k-1] : -val0[k-1];
-            V di        = vt - dualu[i-1];
+            Integer i   = rows[k];
+            vt          = mult * vals[k];
+            V di        = vt - dualu[i];
 
             if(di > vj)
                 continue;
 
             if(di == vj && di != constants::inf<V>())
             {
-                if(iperm[i-1] != 0 || iperm[i0-1] == 0)
+                if(iperm[i] != 0 || iperm[i0] == 0)
                     continue;
             };
-
 
             vj          = di;
             i0          = i;
@@ -539,15 +546,15 @@ void hungarian_init_heurisitic(bool minimum, Integer m, Integer n, const Integer
         };
 
         // Record value of matching on (i0,j)
-        d[j-1]          = vj;
+        work_d[j]       = vj;
 
         // If row i is unmatched, then match on (i0,j) immediately
-        if (iperm[i0-1] == 0)
+        if (iperm[i0] == 0)
         {
             num                 = num + 1;
-            jperm[j-1]          = k0;
-            iperm[i0-1]         = j;
-            search_from[j-1]    = k0 + 1;
+            jperm[j]            = k0 + 1;
+            iperm[i0]           = j + 1;
+            work_search_from[j] = k0 + 1;
             continue;
         };
 
@@ -556,44 +563,44 @@ void hungarian_init_heurisitic(bool minimum, Integer m, Integer n, const Integer
         // jj looking for an unmatched row ii that improves value of matching. If
         // one exists, then augment along length 2 path (i,j)->(ii,jj)
         
-        for (Integer k = k0; k <= ptr0[j+1-1]+1-1; ++k)
+        for (Integer k = k0; k < cols[j + 1]; ++k)
         {
-            Integer i   = row0[k-1]+1;
-            vt          = minimum ? val0[k-1] : -val0[k-1];
+            Integer i   = rows[k];
+            vt          = mult * vals[k];
 
             // Not a tie for vj value
-            if (vt - dualu[i-1] > vj)
+            if (vt - dualu[i] > vj)
                 continue; 
 
-            Integer jj  = iperm[i-1];
+            Integer jj = iperm[i] - 1;
             // Scan remaining part of assigned column jj
             
-            for (Integer kk = search_from[jj-1]; kk <= ptr0[jj+1-1]+1-1; ++kk)
+            for (Integer kk = work_search_from[jj]; kk < cols[jj + 1]; ++kk)
             {                
-                Integer ii  = row0[kk-1]+1;
+                Integer ii  = rows[kk];
 
-                if (iperm[ii-1] > 0)
+                if (iperm[ii] > 0)
                     continue; // row ii already matched
 
-                vt          = minimum ? val0[kk-1] : -val0[kk-1];
+                vt          = mult * vals[kk];
 
-                if (vt - dualu[ii-1] <= d[jj-1])
+                if (vt - dualu[ii] <= work_d[jj])
                 {
                     // By matching on (i,j) and (ii,jj) we do better than existing
                     // matching on (i,jj) alone.
-                    jperm[jj-1]         = kk;
-                    iperm[ii-1]         = jj;
-                    search_from[jj-1]   = kk + 1;
+                    jperm[jj]           = kk + 1;
+                    iperm[ii]           = jj + 1;
+                    work_search_from[jj]= kk + 1;
                     num                 = num + 1;
-                    jperm[j-1]          = k;
-                    iperm[i-1]          = j;
-                    search_from[j-1]    = k + 1;
+                    jperm[j]            = k + 1;
+                    iperm[i]            = j + 1;
+                    work_search_from[j] = k + 1;
 
                     goto lab_improve_assign;
                 };
             };
 
-            search_from[jj-1]   = ptr0[jj+1-1]+1;
+            work_search_from[jj]    = cols[jj + 1];
         };
 
       lab_improve_assign:
@@ -719,7 +726,7 @@ void heap_delete(Integer pos0, Integer& QLEN, Integer N, Integer* Q, V* D, Integ
 
         if (child < QLEN)
         {
-            V DR        = D[Q[child+1-1]-1];
+            V DR        = D[Q[child]-1];
 
             if (DK > DR)
             {

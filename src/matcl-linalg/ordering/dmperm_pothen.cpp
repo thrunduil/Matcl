@@ -110,7 +110,7 @@ int maxmatch(Integer nrows, Integer ncols, const Integer* colstr0, const Integer
 
       lab_100:    
         nextrw              = nxtchp[col-1];
-        lastrw              = colstr0[col+1-1] - 1 + 1;
+        lastrw              = colstr0[col] - 1 + 1;
 
         if  (nextrw > 0 )
         {
@@ -632,7 +632,7 @@ void mmc13e(Integer nrows , Integer ncols , Integer nhcols, Integer nhrows, Inte
                     // yet been encountered or until all edges are
                     // exhausted.                    
 
-                    for (xcol = trycol[frow-1]; xcol <= rowstr0[frow+1-1]-1+1; ++xcol)
+                    for (xcol = trycol[frow-1]; xcol <= rowstr0[frow]-1+1; ++xcol)
                     {
                         scol        = colind0[xcol-1]+1;
                         if ( colmrk[scol-1] == 0 )

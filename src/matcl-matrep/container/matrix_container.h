@@ -120,7 +120,8 @@ class matrix_container : public matrix_container_base
         void                    call_destructor()           { m_matrix.~Matrix(); };
 
         Matrix&                 get()                       { return m_matrix;};
-        const Matrix&           get() const                 { return m_matrix;};    
+        const Matrix&           get() const                 { return m_matrix;};
+        Matrix&&                move_from_rvalue()          { return std::move(m_matrix); };
 
         Integer                 rows_impl() const           { return m_matrix.rows(); }; 
         Integer                 cols_impl() const           { return m_matrix.cols(); };

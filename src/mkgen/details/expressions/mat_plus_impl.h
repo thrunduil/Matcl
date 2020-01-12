@@ -294,7 +294,7 @@ struct mat_minus_impl<ct_scalar<Array1,Deps1>, ct_scalar<Array2,Deps2>>
 //----------------------------------------------------------------------------------
 //                              mat_uminus_impl
 //----------------------------------------------------------------------------------
-template<class M1>
+template<Mat_or_scalar M1>
 struct mat_uminus_impl
 {
     static_assert(md::dependent_false<M1>::value, "M1 must be ct_matrix or ct_scalar");

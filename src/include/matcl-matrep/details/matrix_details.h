@@ -58,6 +58,9 @@ namespace matcl { namespace details
             //can be casted to rvalue reference. Reference is invalidated when rvalue_holder
             //is destroyed.
             matrix_type&                get();
+
+            // move stored raw matrix
+            matrix_type&&               move() &&;
     };
 
     template<class M>
@@ -68,6 +71,7 @@ namespace matcl { namespace details
         static MATCL_MATREP_EXPORT rvalue_holder<M>
                                                 eval_move(matrix_base& mat);
         static MATCL_MATREP_EXPORT M&           get_ref(matrix_container_base*);
+        static MATCL_MATREP_EXPORT M&&          move_from_rvalue(matrix_container_base*);
         static MATCL_MATREP_EXPORT void         destroy(matrix_container_base*);
     };
 
@@ -258,6 +262,12 @@ template<class Mat>
 inline Mat& matcl::details::rvalue_holder<Mat>::get()
 { 
     return get_functor<Mat>::get_ref(m_container); 
+}
+
+template<class Mat>
+inline Mat&& matcl::details::rvalue_holder<Mat>::move() &&
+{ 
+    return get_functor<Mat>::move_from_rvalue(m_container); 
 }
 
 };

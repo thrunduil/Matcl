@@ -25,6 +25,9 @@
     <ProjectReference Include="..\blas\matcl-clapack-plugin\matcl-clapack-plugin.vcxproj">
       <Project>{b5074f59-7ce6-4a17-93e7-bbc0611ea7ac}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\linalg\linalg\linalg.vcxproj">
+      <Project>{2a3c5cb0-d520-4699-b114-17709ffcca46}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\matcl\matcl-core\matcl-core.vcxproj">
       <Project>{4be517fa-056d-4070-91ec-c33f3274ae38}</Project>
     </ProjectReference>

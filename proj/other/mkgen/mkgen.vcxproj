@@ -41,7 +41,6 @@
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\scal_data_value_tags.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\matrix\virtual_matrix.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\mkgen_fwd.h" />
-    <ClInclude Include="..\..\..\src\mkgen\details\utils\enablers.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\has_function.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\merge_sort_impl.h" />
     <ClInclude Include="..\..\..\src\mkgen\details\utils\mpl.h" />

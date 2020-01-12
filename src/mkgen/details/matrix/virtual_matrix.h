@@ -105,7 +105,7 @@ struct is_assignment_valid_scalar
 //                              mat_virtual_assign_1
 //----------------------------------------------------------------------------------
 // make virtual matrix assignment A(Colon_1) = B
-template<Matrix A, Matrix_or_scalar B, Colon Colon_1>
+template<Matrix A, Mat_or_scalar B, Colon Colon_1>
 struct mat_virtual_assign_1
 {
     static_assert(md::dependent_false<A>::value, "invalid arguments");

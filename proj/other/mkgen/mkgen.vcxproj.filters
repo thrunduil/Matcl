@@ -210,9 +210,6 @@
     <ClInclude Include="..\..\..\src\mkgen\details\utils\random_impl.h">
       <Filter>Source Files\src\details\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\mkgen\details\utils\enablers.h">
-      <Filter>Source Files\src\details\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\mkgen\details\utils\random_impl_engines.h">
       <Filter>Source Files\src\details\utils</Filter>
     </ClInclude>
@@ -228,6 +225,7 @@
     <ClInclude Include="..\..\..\src\mkgen\matrix\predefined_scalars.h">
       <Filter>Source Files\src\matrix</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\mkgen\details\expressions\func_impl.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\mkgen\TODO\evaler\simd_limit.inl">

@@ -205,4 +205,7 @@ MATCL_LINALG_EXPORT tuple<permvec, permvec> colsmatch_to_perms(const Matrix& c, 
 // p, q:   row and column permutation vectors
 MATCL_LINALG_EXPORT tuple<permvec, permvec> dmperm(const Matrix& A);
 
+//TODO
+MATCL_LINALG_EXPORT tuple<permvec, permvec> separator_perm(const matcl::Matrix& A);
+
 };

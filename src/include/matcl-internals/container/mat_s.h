@@ -66,6 +66,8 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
 
         sparse_matrix_base(const sparse_matrix_base&&) = delete;
         sparse_matrix_base(sparse_matrix_base&&);
+
+        //TODO: make copy constructor deleted
         sparse_matrix_base(const sparse_matrix_base&);
 
         explicit sparse_matrix_base(const sparse_ccs &d) : m_data(d) {}

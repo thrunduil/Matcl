@@ -24,14 +24,12 @@
 
 #include "mkgen/matrix/matrix.h"
 #include "mkgen/details/utils/mpl.h"
-#include "mkgen/details/utils/enablers.h"
 
 namespace matcl { namespace mkgen
 {
 
 // A + B, where A, B is a ct_matrix or ct_scalar
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto operator+(const Matrix_1& A, const Matrix_2& B) 
 { 
     (void)A; 
@@ -41,8 +39,7 @@ constexpr auto operator+(const Matrix_1& A, const Matrix_2& B)
 };
 
 // A - B, where A, B is a ct_matrix or ct_scalar
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto operator-(const Matrix_1& A, const Matrix_2& B) 
 {
     (void)A; 
@@ -53,8 +50,7 @@ constexpr auto operator-(const Matrix_1& A, const Matrix_2& B)
 };
 
 // matrix multiplication A * B, where A, B is a ct_matrix or ct_scalar
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto operator*(const Matrix_1& A, const Matrix_2& B) 
 { 
     (void)A; 
@@ -65,8 +61,7 @@ constexpr auto operator*(const Matrix_1& A, const Matrix_2& B)
 };
 
 // element-by-element division A / B, where A, B is a ct_matrix or ct_scalar
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto operator/(const Matrix_1& A, const Matrix_2& B) 
 {
     (void)A; 
@@ -79,8 +74,7 @@ constexpr auto operator/(const Matrix_1& A, const Matrix_2& B)
 // multiply k-th element in given row of a matrix A by k-th element of a matrix B,
 // where B is rows x 1 matrix, and A is rows x cols
 // in Matlab's notation A .* (B * J), J = ones(1, cols)
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto mult_rows(const Matrix_1& A, const Matrix_2& B) 
 {
     (void)A; 
@@ -93,8 +87,7 @@ constexpr auto mult_rows(const Matrix_1& A, const Matrix_2& B)
 // multiply k-th element in given column of a matrix A by k-th element of a matrix B,
 // where B is cols x 1 matrix, and A is rows x cols
 // in Matlab's notation A .* (J * B'), J = ones(1, rows), where A has size rows x cols
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto mult_cols(const Matrix_1& A, const Matrix_2& B) 
 {
     (void)A; 
@@ -105,8 +98,7 @@ constexpr auto mult_cols(const Matrix_1& A, const Matrix_2& B)
 };
 
 // element-by-element multiplication
-template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
 constexpr auto mul(const Matrix_1& A, const Matrix_2& B) 
 {
     (void)A; 
@@ -117,8 +109,7 @@ constexpr auto mul(const Matrix_1& A, const Matrix_2& B)
 };
 
 // -A, where A is a ct_matrix or ct_scalar
-template<class Matrix_1,
-        class Enable = typename mkd::enable_matscal_1<Matrix_1>::type>
+template<Mat_or_scalar Matrix_1>
 constexpr auto operator-(const Matrix_1& A) 
 {
     (void)A; 
@@ -131,8 +122,7 @@ constexpr auto operator-(const Matrix_1& A)
 template<class Tag>
 struct func_unary
 {
-    template<class Matrix_1, 
-        class Enable = typename mkd::enable_matscal_1<Matrix_1>::type>
+    template<Mat_or_scalar Matrix_1>
     static constexpr auto eval(const Matrix_1& A)
     {
         (void)A;
@@ -147,8 +137,7 @@ struct func_unary
 template<class Tag>
 struct func_binary
 {
-    template<class Matrix_1, class Matrix_2,
-        class Enable = typename mkd::enable_matscal_2<Matrix_1, Matrix_2>::type>
+    template<Mat_or_scalar Matrix_1, Mat_or_scalar Matrix_2>
     constexpr auto operator()(const Matrix_1& A, const Matrix_1& B)
     {
         (void)A;
