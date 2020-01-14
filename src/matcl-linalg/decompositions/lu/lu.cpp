@@ -186,9 +186,9 @@ struct linsolve_lu_tridiag_vis : public extract_type_switch<void, linsolve_lu_tr
         using S     = struct_dense;        
         using Mat   = raw::Matrix<VT,struct_dense>;
 
-        const Mat& Dm1  = Dm1_0.impl<Mat>().make_explicit();
-        const Mat& D0   = D0_0.impl<Mat>().make_explicit();
-        const Mat& Dp1  = Dp1_0.impl<Mat>().make_explicit();
+        const Mat& Dm1  = convert(Dm1_0, Mat::matrix_code).get_impl<Mat>().make_explicit();
+        const Mat& D0   = convert(D0_0, Mat::matrix_code).get_impl<Mat>().make_explicit();
+        const Mat& Dp1  = convert(Dp1_0, Mat::matrix_code).get_impl<Mat>().make_explicit();
 
         bool isv    = Dm1.all_finite() && D0.all_finite() && Dp1.all_finite();
 

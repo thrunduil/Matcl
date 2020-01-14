@@ -370,7 +370,7 @@ struct make_diag_impl<V, true>
                           bool red_off)
     {
         Matrix Ac       = abs(Matrix(A0, false));
-        const Mat_R& A  = Ac.impl<Mat_R>();
+        const Mat_R& A  = convert(Ac, Mat_R::matrix_code).get_impl<Mat_R>();
         return make_diag_impl<VR>::eval_diag(A, p, q, Dr, Dc, red_off);
     };
 };

@@ -480,9 +480,9 @@ struct make_nonsing_str<V,struct_sparse>
             return;
         };
 
-        Matrix B(A, false);
+        Matrix B            = matcl::convert(Matrix(A, false), Mat::matrix_code);
         B.diag(0).add_sparse();
-        Mat A2              = B.impl_unique<Mat>();
+        Mat A2              = B.get_impl_unique<Mat>();
 
         {
             ccs& rep        = A2.rep();

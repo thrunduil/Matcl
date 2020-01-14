@@ -97,36 +97,36 @@ static bool is_colon_valid(const colon& c1, Integer size)
             break;
         case colon::colon_type::t_matrix1:            
         {
-            if (c1.m_mat_size.m_mat_12->is_empty())
+            if (c1.m_mat_size.m_imat_12->is_empty())
                 return true;
 
-            return (max_d(max_d(*c1.m_mat_size.m_mat_12, 1),2).get_scalar<Integer>() <= size &&
-                    min_d(min_d(*c1.m_mat_size.m_mat_12, 1),2).get_scalar<Integer>() > 0) ? true : false;
+            return (max_d(max_d(*c1.m_mat_size.m_imat_12, 1),2).get_scalar<Integer>() <= size &&
+                    min_d(min_d(*c1.m_mat_size.m_imat_12, 1),2).get_scalar<Integer>() > 0) ? true : false;
         }
         case colon::colon_type::t_matrix2:
         {
             bool valid_1    = false;
             bool valid_2    = false;
 
-            if (c1.m_mat_size.m_mat_12[0].is_empty())
+            if (c1.m_mat_size.m_imat_12[0].is_empty())
             {
                 valid_1 = true;
             }
             else
             {
-                valid_1 = max_d(max_d(c1.m_mat_size.m_mat_12[0], 1),2).get_scalar<Integer>() <= rows 
-                        && min_d(min_d(c1.m_mat_size.m_mat_12[0], 1),2).get_scalar<Integer>() > 0
+                valid_1 = max_d(max_d(c1.m_mat_size.m_imat_12[0], 1),2).get_scalar<Integer>() <= rows 
+                        && min_d(min_d(c1.m_mat_size.m_imat_12[0], 1),2).get_scalar<Integer>() > 0
                         ? true : false;
             };
 
-            if (c1.m_mat_size.m_mat_12[1].is_empty())
+            if (c1.m_mat_size.m_imat_12[1].is_empty())
             {
                 valid_2 = true;
             }
             else
             {
-                valid_1 = (max_d(max_d(c1.m_mat_size.m_mat_12[1], 1),2).get_scalar<Integer>() <= cols
-                    && min_d(min_d(c1.m_mat_size.m_mat_12[1], 1),2).get_scalar<Integer>() > 0) 
+                valid_1 = (max_d(max_d(c1.m_mat_size.m_imat_12[1], 1),2).get_scalar<Integer>() <= cols
+                    && min_d(min_d(c1.m_mat_size.m_imat_12[1], 1),2).get_scalar<Integer>() > 0) 
                     ? true : false;
             };
             

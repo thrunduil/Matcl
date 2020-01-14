@@ -1232,7 +1232,7 @@ const Matrix Matrix::clone() const
     return ret;
 };
 
-Matrix convert(const Matrix& A,matcl::mat_code new_type)
+Matrix convert(const Matrix& A, matcl::mat_code new_type)
 {
     Matrix ret;
     details::eval_convert::make<const Matrix&>(A, ret, new_type);
@@ -1586,18 +1586,20 @@ mat_tup_2 sortrows2(const Matrix& A)
     return mat_tup_2(X,I);
 };
 
-Matrix sortrows(const Matrix& A,const Matrix& dims)
+Matrix sortrows(const Matrix& A, const Matrix& dims0)
 { 
-    raw::integer_dense mat_d = dims.impl<raw::integer_dense>().make_explicit();
+    Matrix dims              = convert(dims0, matcl::mat_code::integer_dense);
+    raw::integer_dense mat_d = dims.get_impl<raw::integer_dense>().make_explicit();
 
     Matrix ret;
     details::eval_sortrows_dim::make<const Matrix&>(A, ret, mat_d);
     return ret;
 };
 
-mat_tup_2 sortrows2(const Matrix& A,const Matrix& dims)
+mat_tup_2 sortrows2(const Matrix& A,const Matrix& dims0)
 { 
-    raw::integer_dense mat_d = dims.impl<raw::integer_dense>().make_explicit();
+    Matrix dims              = convert(dims0, matcl::mat_code::integer_dense);
+    raw::integer_dense mat_d = dims.get_impl<raw::integer_dense>().make_explicit();
 
     Matrix I, X;
     details::eval_sortrows2_dim::make<const Matrix&>(A, I, X, mat_d);
@@ -1618,18 +1620,20 @@ mat_tup_2 sortcols2(const Matrix& A)
     return mat_tup_2(X,I);
 };
 
-Matrix sortcols(const Matrix& A,const Matrix& dims)
+Matrix sortcols(const Matrix& A,const Matrix& dims0)
 { 
-    raw::integer_dense mat_d = dims.impl<raw::integer_dense>().make_explicit();
+    Matrix dims              = convert(dims0, matcl::mat_code::integer_dense);
+    raw::integer_dense mat_d = dims.get_impl<raw::integer_dense>().make_explicit();
 
     Matrix ret;
     details::eval_sortcols_dim::make<const Matrix&>(A, ret, mat_d);
     return ret;
 };
 
-mat_tup_2 sortcols2(const Matrix& A,const Matrix& dims)
+mat_tup_2 sortcols2(const Matrix& A,const Matrix& dims0)
 { 
-    raw::integer_dense mat_d = dims.impl<raw::integer_dense>().make_explicit();
+    Matrix dims              = convert(dims0, matcl::mat_code::integer_dense);
+    raw::integer_dense mat_d = dims.get_impl<raw::integer_dense>().make_explicit();
 
     Matrix I, X;
     details::eval_sortcols2_dim::make<const Matrix&>(A, I, X, mat_d);

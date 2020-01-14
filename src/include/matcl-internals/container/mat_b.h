@@ -27,13 +27,18 @@ namespace matcl { namespace raw
 {
 
 template<class value_type_>
-class MATCL_MATREP_EXPORT Matrix<value_type_,struct_banded> : public dense_matrix_base<value_type_>
+class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matrix_base<value_type_>
 {
     public:
         using base_type     = dense_matrix_base<value_type_>;
         using value_type    = value_type_;
         using struct_type   = struct_banded;
         using refcount_str  = matcl::details::refcount_str_default;
+
+        using this_type     = Matrix<value_type_, struct_banded>;
+
+        static const matcl::mat_code matrix_code
+                            = md::type_to_code<this_type>::value;
 
     private:
         using DenseMatrix   = Matrix<value_type,struct_dense>;

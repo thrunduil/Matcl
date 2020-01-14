@@ -23,6 +23,7 @@
 #include "matcl-internals/container/sparse_ccs.h"
 #include "matcl-internals/container/mat_base.h"
 #include "matcl-scalar/details/enablers.h"
+#include "matcl-core/details/type_codes.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251) //class needs to have dll-interface
@@ -157,6 +158,10 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matr
         using base_type     = sparse_matrix_base<value_type_>;
         using struct_type   = struct_sparse;
         using value_type    = value_type_;
+        using this_type     = Matrix<value_type_,struct_sparse>;
+
+        static const matcl::mat_code matrix_code
+                            = md::type_to_code<this_type>::value;
 
     public:
         Matrix(type_info ti)            

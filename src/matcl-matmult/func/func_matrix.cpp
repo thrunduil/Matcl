@@ -114,24 +114,32 @@ struct eval_scale_rows : public extract_type_switch<void,eval_scale_rows,true>
 
         if (std::is_same<V,Object>::value && ret_ti != A.get_type())
         {
-            Matrix Ac       = convert_object(A, ti::convert_ti_object<V>(ret_ti));
-            const Mat& Am   = Ac.impl<Mat>();
-            const Mat_D& Dm = D.impl<Mat_D>();
+            Matrix Ac0      = convert_object(A, ti::convert_ti_object<V>(ret_ti));
+            Matrix Ac       = convert(Ac0, Mat::matrix_code);
+            Matrix Dc       = convert(D, Mat_D::matrix_code);
+            const Mat& Am   = Ac.get_impl<Mat>();
+            const Mat_D& Dm = Dc.get_impl<Mat_D>();
 
             return mrd::scaling_helper<Mat>::eval_rows(ret, Am, Dm);
         };
 
         if (vc == vcd || is_real == false)
         {
-            const Mat& Am       = A.impl<Mat>();
-            const Mat_D& Dm     = D.impl<Mat_D>();
+            Matrix Ac           = convert(A, Mat::matrix_code);
+            Matrix Dc           = convert(D, Mat_D::matrix_code);
+
+            const Mat& Am       = Ac.get_impl<Mat>();
+            const Mat_D& Dm     = Dc.get_impl<Mat_D>();
 
             return mrd::scaling_helper<Mat>::eval_rows(ret, Am, Dm);
         }
         else
         {            
-            const Mat& Am       = A.impl<Mat>();
-            const Mat_DR& Dm    = D.impl<Mat_DR>();
+            Matrix Ac           = convert(A, Mat::matrix_code);
+            Matrix Dc           = convert(D, Mat_DR::matrix_code);
+
+            const Mat& Am       = Ac.get_impl<Mat>();
+            const Mat_DR& Dm    = Dc.get_impl<Mat_DR>();
 
             return mrd::scaling_real_helper<Mat>::eval_rows(ret, Am, Dm);
         };        
@@ -173,23 +181,32 @@ struct eval_scale_cols : public extract_type_switch<void,eval_scale_cols,true>
         if (std::is_same<V,Object>::value && ret_ti != A.get_type())
         {
             Matrix Ac       = convert_object(A, ti::convert_ti_object<V>(ret_ti));
-            const Mat& Am   = Ac.impl<Mat>();
-            const Mat_D& Dm = D.impl<Mat_D>();
+            Matrix Ac2      = convert(Ac, Mat::matrix_code);
+            Matrix Dc       = convert(D, Mat_D::matrix_code);
+
+            const Mat& Am   = Ac2.get_impl<Mat>();
+            const Mat_D& Dm = Dc.get_impl<Mat_D>();
 
             return mrd::scaling_helper<Mat>::eval_cols(ret, Am, Dm);
         };
 
         if (vc == vcd || is_real == false)
         {
-            const Mat& Am       = A.impl<Mat>();
-            const Mat_D& Dm     = D.impl<Mat_D>();
+            Matrix Ac       = convert(A, Mat::matrix_code);
+            Matrix Dc       = convert(D, Mat_D::matrix_code);
+
+            const Mat& Am       = Ac.get_impl<Mat>();
+            const Mat_D& Dm     = Dc.get_impl<Mat_D>();
 
             return mrd::scaling_helper<Mat>::eval_cols(ret, Am, Dm);
         }
         else
         {            
-            const Mat& Am       = A.impl<Mat>();
-            const Mat_DR& Dm    = D.impl<Mat_DR>();
+            Matrix Ac       = convert(A, Mat::matrix_code);
+            Matrix Dc       = convert(D, Mat_DR::matrix_code);
+
+            const Mat& Am       = Ac.get_impl<Mat>();
+            const Mat_DR& Dm    = Dc.get_impl<Mat_DR>();
 
             return mrd::scaling_real_helper<Mat>::eval_cols(ret, Am, Dm);
         };        
@@ -235,26 +252,38 @@ struct eval_scale_rowscols : public extract_type_switch<void,eval_scale_rowscols
         if (std::is_same<V,Object>::value && ret_ti != A.get_type())
         {
             Matrix Ac       = convert_object(A, ti::convert_ti_object<V>(ret_ti));
-            const Mat& Am   = Ac.impl<Mat>();
-            const Mat_D& Drm = Dr.impl<Mat_D>();
-            const Mat_D& Dcm = Dc.impl<Mat_D>();
+            Matrix Ac2      = convert(Ac, Mat::matrix_code);
+            Matrix Dr2      = convert(Dr, Mat_D::matrix_code);
+            Matrix Dc2      = convert(Dc, Mat_D::matrix_code);
+
+            const Mat& Am   = Ac2.get_impl<Mat>();
+            const Mat_D& Drm = Dr2.get_impl<Mat_D>();
+            const Mat_D& Dcm = Dc2.get_impl<Mat_D>();
 
             return mrd::scaling_helper<Mat>::eval_rowscols(ret, Am, Drm, Dcm);
         };
 
         if (vc == vcd || is_real == false)
         {
-            const Mat& Am       = A.impl<Mat>();
-            const Mat_D& Drm    = Dr.impl<Mat_D>();
-            const Mat_D& Dcm    = Dc.impl<Mat_D>();
+            Matrix Ac       = convert(A, Mat::matrix_code);
+            Matrix Dr2      = convert(Dr, Mat_D::matrix_code);
+            Matrix Dc2      = convert(Dc, Mat_D::matrix_code);
+
+            const Mat& Am       = Ac.get_impl<Mat>();
+            const Mat_D& Drm    = Dr2.get_impl<Mat_D>();
+            const Mat_D& Dcm    = Dc2.get_impl<Mat_D>();
 
             return mrd::scaling_helper<Mat>::eval_rowscols(ret, Am, Drm, Dcm);
         }
         else
         {            
-            const Mat& Am       = A.impl<Mat>();
-            const Mat_DR& Drm   = Dr.impl<Mat_DR>();
-            const Mat_DR& Dcm   = Dc.impl<Mat_DR>();
+            Matrix Ac       = convert(A, Mat::matrix_code);
+            Matrix Dr2      = convert(Dr, Mat_DR::matrix_code);
+            Matrix Dc2      = convert(Dc, Mat_DR::matrix_code);
+
+            const Mat& Am       = Ac.get_impl<Mat>();
+            const Mat_DR& Drm   = Dr2.get_impl<Mat_DR>();
+            const Mat_DR& Dcm   = Dc2.get_impl<Mat_DR>();
 
             return mrd::scaling_real_helper<Mat>::eval_rowscols(ret, Am, Drm, Dcm);
         };        

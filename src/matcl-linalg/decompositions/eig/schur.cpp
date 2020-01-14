@@ -575,11 +575,12 @@ struct schur_str<V,struct_dense>
 
     static void eval_tridiagonal(const Mat& A, schur_decomposition& sd, schur_sym_alg alg, bool with_U)
     {
-        Matrix mat_A(A,false);
-        mat_A = matcl::select_band(mat_A,-1,1);
+        Matrix mat_A(A, false);
+        mat_A   = matcl::select_band(mat_A, -1, 1);        
 
         using Mat_B = raw::Matrix<V,struct_banded>;
-        Mat_B AB = mat_A.impl_unique<Mat_B>(); 
+        mat_A       = convert(mat_A, Mat_B::matrix_code);
+        Mat_B AB    = mat_A.get_impl_unique<Mat_B>(); 
 
         mat_A = Matrix();
         return schur_str<V,struct_banded>::eval(AB, sd, alg, with_U);
@@ -750,7 +751,10 @@ struct schur_str<V,struct_dense>
         Mat TA          = TA0.make_unique();
         TA.get_struct().reset();
 
-        Mat Q           = with_U? sd.m_U_factor.impl_unique<Mat>() : Mat(TA.get_type());
+        if (with_U == true)
+            sd.m_U_factor   = convert(sd.m_U_factor, Mat::matrix_code);
+
+        Mat Q           = with_U? sd.m_U_factor.get_impl_unique<Mat>() : Mat(TA.get_type());
         Q.get_struct().reset();
 
         V* r_TA         = TA.ptr();

@@ -54,22 +54,23 @@ void colon::create(Matrix&& mat)
     create(tmp);
 };
 
-void colon::create(const Matrix& mat)
+void colon::create(const Matrix& mat0)
 {
     m_s		= 0;
     m_i		= 0;
     m_e		= 0;
     m_flag	= t_matrix1;
-    m_mat_size.m_mat_12 = nullptr;
+    m_mat_size.m_imat_12 = nullptr;
 
-    Integer mr  = mat.rows();
-    Integer mc  = mat.cols();
+    Matrix mat  = convert(mat0, matcl::mat_code::integer_dense);
+    const raw::integer_dense& imat = mat.get_impl<raw::integer_dense>();
 
-    const raw::integer_dense& imat = mat.impl<raw::integer_dense>();
+    Integer mr  = imat.rows();
+    Integer mc  = imat.cols();    
 
     if (mr == 0 || mc == 0)
     {
-        m_mat_size.m_mat_12 = new Matrix(imat.make_explicit(),false);
+        m_mat_size.m_imat_12 = new Matrix(imat.make_explicit(),false);
         return;
     }    
     
@@ -92,7 +93,7 @@ void colon::create(const Matrix& mat)
     if (i == 0)
     {
         //conversion to raw colon is not possible
-        m_mat_size.m_mat_12 = new Matrix(imat.make_explicit(),false);    
+        m_mat_size.m_imat_12 = new Matrix(imat.make_explicit(),false);    
         return;
     };
 
@@ -105,7 +106,7 @@ void colon::create(const Matrix& mat)
         if (di != i)
         {
             //conversion to raw colon is not possible
-            m_mat_size.m_mat_12 = new Matrix(imat.make_explicit(),false);
+            m_mat_size.m_imat_12 = new Matrix(imat.make_explicit(),false);
             return;
         };
     };
@@ -119,23 +120,27 @@ void colon::create(const Matrix& mat)
     m_mat_size.m_mat_size   = tmp;
 };
 
-void colon::create(const Matrix& mat_1, const Matrix& mat_2)
+void colon::create(const Matrix& mat0_1, const Matrix& mat0_2)
 {
     m_s		= 0;
     m_i		= 0;
     m_e		= 0;
     m_flag	= t_matrix2;
-    m_mat_size.m_mat_12 = nullptr;
+    m_mat_size.m_imat_12 = nullptr;
 
-    if (mat_2.rows() != mat_1.rows() || mat_2.cols() != mat_1.cols())
-        throw error::invalid_size2(mat_2.rows(), mat_2.cols(), mat_1.rows(), mat_2.cols());
+    Matrix mat_1    = convert(mat0_1, matcl::mat_code::integer_dense);
+    Matrix mat_2    = convert(mat0_2, matcl::mat_code::integer_dense);
 
-    const raw::integer_dense& imat1 = mat_1.impl<raw::integer_dense>();
-    const raw::integer_dense& imat2 = mat_2.impl<raw::integer_dense>();
+    const raw::integer_dense& imat1 = mat_1.get_impl<raw::integer_dense>();
+    const raw::integer_dense& imat2 = mat_2.get_impl<raw::integer_dense>();
 
-    m_mat_size.m_mat_12     = new Matrix[2];
-    m_mat_size.m_mat_12[0]  = Matrix(imat1.make_explicit(),false);
-    m_mat_size.m_mat_12[1]  = Matrix(imat2.make_explicit(),false);
+    if (imat2.rows() != imat1.rows() || imat2.cols() != imat1.cols())
+        throw error::invalid_size2(imat2.rows(), imat2.cols(), imat1.rows(), imat2.cols());
+
+    m_mat_size.m_imat_12     = new Matrix[2];
+    m_mat_size.m_imat_12[0]  = Matrix(imat1.make_explicit(),false);
+    m_mat_size.m_imat_12[1]  = Matrix(imat2.make_explicit(),false);
+
     return;
 };
 
@@ -153,13 +158,13 @@ colon::~colon()
 {
     if (m_flag == t_matrix1)
     {
-        if (m_mat_size.m_mat_12)
-            delete m_mat_size.m_mat_12;
+        if (m_mat_size.m_imat_12)
+            delete m_mat_size.m_imat_12;
     }
     else if (m_flag == t_matrix2)
     {
-        if (m_mat_size.m_mat_12)
-            delete[] m_mat_size.m_mat_12;
+        if (m_mat_size.m_imat_12)
+            delete[] m_mat_size.m_imat_12;
     }
     else
     {
@@ -172,7 +177,7 @@ colon::colon(colon&& other)
     : m_s(other.m_s), m_i(other.m_i), m_e(other.m_e), m_flag(other.m_flag)
     , m_mat_size(other.m_mat_size)
 {
-    other.m_mat_size.m_mat_12 = nullptr;
+    other.m_mat_size.m_imat_12 = nullptr;
 };
 
 colon colon::copy() const
@@ -184,17 +189,17 @@ colon colon::copy() const
     ret.m_e     = this->m_e;
     ret.m_flag  = this->m_flag;
 
-    if (this->m_mat_size.m_mat_12 != nullptr)
+    if (this->m_mat_size.m_imat_12 != nullptr)
     {
         if (this->m_flag == t_matrix1)
         {
-            ret.m_mat_size.m_mat_12 = new Matrix(*this->m_mat_size.m_mat_12);
+            ret.m_mat_size.m_imat_12 = new Matrix(*this->m_mat_size.m_imat_12);
         }
         else if (this->m_flag == t_matrix2)
         {
-            ret.m_mat_size.m_mat_12     = new Matrix[2];
-            ret.m_mat_size.m_mat_12[0]  = this->m_mat_size.m_mat_12[0];
-            ret.m_mat_size.m_mat_12[1]  = this->m_mat_size.m_mat_12[1];
+            ret.m_mat_size.m_imat_12    = new Matrix[2];
+            ret.m_mat_size.m_imat_12[0] = this->m_mat_size.m_imat_12[0];
+            ret.m_mat_size.m_imat_12[1] = this->m_mat_size.m_imat_12[1];
         }
         else
         {

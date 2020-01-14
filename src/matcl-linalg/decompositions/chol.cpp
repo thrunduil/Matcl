@@ -278,8 +278,8 @@ struct ldl_tridiag_vis : public extract_type_switch<void, ldl_tridiag_vis,true>
         using S     = struct_dense;        
         using Mat   = raw::Matrix<VT,struct_dense>;
 
-        Mat D0      = D0_0.impl<Mat>().make_explicit().make_unique();
-        Mat D1      = D1_0.impl<Mat>().make_explicit().make_unique();
+        Mat D0      = convert(D0_0, Mat::matrix_code).get_impl<Mat>().make_explicit().make_unique();
+        Mat D1      = convert(D1_0, Mat::matrix_code).get_impl<Mat>().make_explicit().make_unique();
 
         bool isv    = D0.all_finite() && D1.all_finite();
         
@@ -337,8 +337,8 @@ struct linsolve_tridiag_vis : public extract_type_switch<void, linsolve_tridiag_
         using Mat   = raw::Matrix<VT,struct_dense>;        
         using Mat_R = raw::Matrix<VR,struct_dense>;        
 
-        const Mat_R& D0     = D0_0.impl<Mat_R>().make_explicit();
-        const Mat& D1       = D1_0.impl<Mat>().make_explicit();
+        const Mat_R& D0     = convert(D0_0, Mat_R::matrix_code).get_impl<Mat_R>().make_explicit();
+        const Mat& D1       = convert(D1_0, Mat::matrix_code).get_impl<Mat>().make_explicit();
 
         bool isv    = D0.all_finite() && D1.all_finite();
 
@@ -400,9 +400,9 @@ struct linsolve_tridiag_fac_vis : public extract_type_switch<void, linsolve_trid
         Matrix D0   = D.diag(0);
         Matrix D1   = (upper == false) ? S.diag(-1) : S.diag(1);
 
-        const Mat_R& D0m    = D0.impl<Mat_R>().make_explicit();
-        const Mat& D1m      = D1.impl<Mat>().make_explicit();
-        const Mat_B& Am     = A.impl<Mat_B>();
+        const Mat_R& D0m    = convert(D0, Mat_R::matrix_code).get_impl<Mat_R>().make_explicit();
+        const Mat& D1m      = convert(D1, Mat::matrix_code).get_impl<Mat>().make_explicit();
+        const Mat_B& Am     = convert(A, Mat_B::matrix_code).get_impl<Mat_B>();
 
         return details::ldl_tridiag_impl<VT>::eval_linsolve_fac(ret, Am, D0m, D1m, opts);
     };

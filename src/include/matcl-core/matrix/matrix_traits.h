@@ -71,7 +71,7 @@ struct MATCL_CORE_EXPORT matrix_traits
     public:    
         template<class mat_type>
         struct mat_type_info_type : 
-            public mat_type_info_type_impl<mat_type,details::is_scalar<mat_type>::value>
+            public mat_type_info_type_impl<mat_type, details::is_scalar<mat_type>::value>
         {};
 
         template<class vt, class st>

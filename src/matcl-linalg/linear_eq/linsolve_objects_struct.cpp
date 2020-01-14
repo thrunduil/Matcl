@@ -45,7 +45,7 @@ void eval_dense(const Matrix& A, Func& f)
         {
             using type      = Integer;
             using Mat       = raw::Matrix<type,struct_dense>;
-            const Mat& rep  = A.impl<Mat>();
+            const Mat& rep  = convert(A, Mat::matrix_code).get_impl<Mat>();
             f.eval(rep);
             return;
         }
@@ -53,7 +53,7 @@ void eval_dense(const Matrix& A, Func& f)
         {
             using type      = Real;
             using Mat       = raw::Matrix<type,struct_dense>;
-            const Mat& rep  = A.impl<Mat>();
+            const Mat& rep  = convert(A, Mat::matrix_code).get_impl<Mat>();
             f.eval(rep);
             return;
         }
@@ -61,7 +61,7 @@ void eval_dense(const Matrix& A, Func& f)
         {
             using type      = Float;
             using Mat       = raw::Matrix<type,struct_dense>;
-            const Mat& rep  = A.impl<Mat>();
+            const Mat& rep  = convert(A, Mat::matrix_code).get_impl<Mat>();
             f.eval(rep);
             return;
         }
@@ -69,7 +69,7 @@ void eval_dense(const Matrix& A, Func& f)
         {
             using type      = Complex;
             using Mat       = raw::Matrix<type,struct_dense>;
-            const Mat& rep  = A.impl<Mat>();
+            const Mat& rep  = convert(A, Mat::matrix_code).get_impl<Mat>();
             f.eval(rep);
             return;
         }
@@ -77,7 +77,7 @@ void eval_dense(const Matrix& A, Func& f)
         {
             using type      = Float_complex;
             using Mat       = raw::Matrix<type,struct_dense>;
-            const Mat& rep  = A.impl<Mat>();
+            const Mat& rep  = convert(A, Mat::matrix_code).get_impl<Mat>();
             f.eval(rep);
             return;
         }
@@ -85,7 +85,7 @@ void eval_dense(const Matrix& A, Func& f)
         {
             using type      = Object;
             using Mat       = raw::Matrix<type,struct_dense>;
-            const Mat& rep  = A.impl<Mat>();
+            const Mat& rep  = convert(A, Mat::matrix_code).get_impl<Mat>();
             f.eval(rep);
             return;
         }
@@ -1575,8 +1575,8 @@ struct eval_inv_triang<V,struct_dense>
         const char* DIAG    = "N";
         Integer N           = LU.rows();
 
-        Matrix LU_s(LU);
-        Mat A               = LU_s.impl_unique<Mat>();
+        Matrix LU_s         = convert(LU, Mat::matrix_code);
+        Mat A               = LU_s.get_impl_unique<Mat>();
 
         Integer info;
         lapack::trtri(UPLO, DIAG, N, lap(A.ptr()), A.ld(), info);

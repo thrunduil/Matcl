@@ -458,7 +458,7 @@ void arpack_wrapper<T>::extract_H(Integer results_to_return)
     Integer ldh         = m_num_vec;
 
     m_T_result          = make_dense_noinit(results_to_return, results_to_return, get_value_code());
-    Mat_D mat_T         = m_T_result.impl_unique<Mat_D>();
+    Mat_D mat_T         = m_T_result.get_impl_unique<Mat_D>();
     T* ptr_T            = mat_T.ptr();
     Integer T_ld        = mat_T.ld();
 

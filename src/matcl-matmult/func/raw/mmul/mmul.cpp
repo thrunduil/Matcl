@@ -572,11 +572,12 @@ struct eval_mult_abs_0
     using MC_conv   = raw::Matrix<Val_ret_1, struct_dense>;
 
     static void eval(matcl::Matrix& ret, const M1& A, const M2& X, 
-                     trans_type t_A, const matcl::Matrix& C)
+                     trans_type t_A, const matcl::Matrix& C0)
     {
         const M1_conv Ac    = raw::converter<M1_conv,M1>::eval(A);
         const M2_conv Xc    = raw::converter<M2_conv,M2>::eval(X);
-        const MC_conv& Cc   = C.impl<MC_conv>();
+        matcl::Matrix C     = convert(C0, MC_conv::matrix_code);
+        const MC_conv& Cc   = C.get_impl<MC_conv>();
 
         return eval_mult_abs<Val_ret_1, M1_conv, M2_conv, S1>::eval(ret, Ac, Xc, t_A, Cc);
     }
@@ -602,11 +603,12 @@ struct eval_mult_abs_0_scal
     using MC_conv   = raw::Matrix<Val_ret_1, struct_dense>;
 
     static void eval(matcl::Matrix& ret, const M1& mat, const S2& scal, 
-                     trans_type t_A, const matcl::Matrix& C)
+                     trans_type t_A, const matcl::Matrix& C0)
     {
         const M1_conv Ac    = raw::converter<M1_conv,M1>::eval(mat);
         const M2_conv Xc    = raw::converter<M2_conv,S2>::eval(scal);
-        const MC_conv& Cc   = C.impl<MC_conv>();
+        matcl::Matrix C     = convert(C0, MC_conv::matrix_code);
+        const MC_conv& Cc   = C.get_impl<MC_conv>();
 
         M2R Xc_re           = abs_helper<M2_conv>::eval(Xc);
 
@@ -621,9 +623,10 @@ struct eval_mult_abs_scal2
     using Mat   = raw::Matrix<V,struct_dense>;
     using Mat_R = raw::Matrix<VR,struct_dense>;
 
-    static void eval(matcl::Matrix& out, const VR& scal, const matcl::Matrix& C)
+    static void eval(matcl::Matrix& out, const VR& scal, const matcl::Matrix& C0)
     {    
-        const Mat& Cc   = C.impl<Mat>();
+        matcl::Matrix C = matcl::convert(C0, Mat::matrix_code);
+        const Mat& Cc   = C.get_impl<Mat>();
 
         Integer M       = Cc.rows();
         Integer N       = Cc.cols();

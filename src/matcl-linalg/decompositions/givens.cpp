@@ -41,8 +41,8 @@ struct construct_givens_str
         using Mat_R     = raw::Matrix<VR,struct_dense>;
         using Mat_I     = raw::Matrix<Integer,struct_dense>;
 
-        const Mat_R&  mat_C   = C.impl<Mat_R>();
-        const Mat_I&  mat_I   = Ind.impl<Mat_I>();
+        const Mat_R&  mat_C   = convert(C, Mat_R::matrix_code).get_impl<Mat_R>();
+        const Mat_I&  mat_I   = convert(Ind, Mat_I::matrix_code).get_impl<Mat_I>();
 
         using unitary_matrix_data_ptr = unitary_matrix::unitary_matrix_data_ptr;
 
@@ -165,7 +165,8 @@ static void givens_to_unitary_impl(unitary_matrix& ret, Integer N, const Matrix&
     // check indices
     using Mat_I = raw::Matrix<Integer,struct_dense>;
 
-    const Mat_I& mat_I      = Ind.impl<Mat_I>();
+    const Mat_I& mat_I      = convert(Ind, Mat_I::matrix_code).get_impl<Mat_I>();
+
     const Integer* ptr_I    = mat_I.ptr();
     Integer I_ld            = mat_I.ld();
 

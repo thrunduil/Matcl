@@ -86,7 +86,8 @@ class MATCL_MATREP_EXPORT colon
 
         union mat_or_size
         {
-            Matrix*             m_mat_12;
+            // integer dense matrix
+            Matrix*             m_imat_12;
             matrix_size_type*   m_mat_size;
         };
 

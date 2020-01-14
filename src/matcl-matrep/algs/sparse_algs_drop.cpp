@@ -145,19 +145,19 @@ struct drop_entries_impl
         Integer * Ad_r		= Ad.ptr_r();
         value_type * Ad_x	= Ad.ptr_x();		
 
-        Matrix ri(ci.get_rim_2(),false);
         Integer n = ci.get_rim_2().size();
 
         column_iterator_drop c_it(ci);
 
         if (imult(n,c) < r)
         {
-            raw::integer_dense ri_raw = ri.impl_unique<raw::integer_dense>();
+            raw::integer_dense ri_raw = ci.get_rim_2().make_unique();
             const Integer* ptr_ri_raw = ri_raw.ptr();
 
             utils::sort_q(ri_raw.ptr(),n);
 
             Integer size = c_it.size();
+
             for (Integer i = 0; i < size; ++i)
             {
                 Integer col     = c_it.get() - 1;
@@ -200,7 +200,7 @@ struct drop_entries_impl
         }
         else
         {
-            raw::integer_dense ri_raw = ri.impl_unique<raw::integer_dense>();
+            const raw::integer_dense& ri_raw = ci.get_rim_2();
             const Integer* ptr_ri_raw = ri_raw.ptr();
 
             matcl::pod_workspace<Integer> v_work_ind;
@@ -292,8 +292,7 @@ struct drop_entries_impl
         Integer * Ad_c		= Ad.ptr_c();
         Integer * Ad_r		= Ad.ptr_r();
         value_type * Ad_x	= Ad.ptr_x();		
-
-        Matrix ri(ci.get_rim_2(),false);
+        
         Integer n           = ci.get_rim_2().size();
         bool any_modif      = false;
         const value_type& Z = md::default_value<value_type>(in.get_type());
@@ -302,7 +301,7 @@ struct drop_entries_impl
 
         if (imult(n,c) < r)
         {
-            raw::integer_dense ri_raw = ri.impl_unique<raw::integer_dense>();
+            raw::integer_dense ri_raw = ci.get_rim_2().make_unique();
             const Integer* ptr_ri_raw = ri_raw.ptr();
 
             utils::sort_q(ri_raw.ptr(),n);
@@ -345,7 +344,7 @@ struct drop_entries_impl
         }
         else
         {
-            raw::integer_dense ri_raw = ri.impl_unique<raw::integer_dense>();
+            const raw::integer_dense& ri_raw = ci.get_rim_2();
             const Integer* ptr_ri_raw = ri_raw.ptr();
 
             matcl::pod_workspace<Integer> v_work_ind;
@@ -555,26 +554,29 @@ struct drop_entries_impl
         Integer c   = out.cols();
         Real tol    = tol0;
 
-        Matrix ri(ci.get_rim_1(),false);
-        raw::integer_dense ri_raw = ri.impl_unique<raw::integer_dense>();
+        const raw::integer_dense& ci_ri = ci.get_rim_1();
+        raw::integer_dense ri_sorted(ci_ri.get_type());
 
-        sort_type s_type = is_sorted(ri_raw);
+        sort_type s_type = is_sorted(ci_ri);
         bool incr = true;
 
         if (s_type == sorted_increasing)
         {
+            ri_sorted.assign_to_fresh(ci_ri);
         }
         else if (s_type == sorted_decreasing)
         {
+            ri_sorted.assign_to_fresh(ci_ri);
             incr = false;
         } 
         else
         {
-            ri.make_unique();
-            raw::integer_dense ri_tmp = ri.impl_unique<raw::integer_dense>();
+            raw::integer_dense ri_tmp = ci_ri.make_unique(false);
+
+            //ri_tmp is a vector
             utils::sort_q(ri_tmp.ptr(),ri_tmp.size());
 
-            ri_raw.assign_to_fresh(std::move(ri_tmp));
+            ri_sorted.assign_to_fresh(std::move(ri_tmp));
         };
         
         bool any_deleted	= false;
@@ -594,12 +596,12 @@ struct drop_entries_impl
         }
         else
         {
-            pos = ri_raw.size()-1;
+            pos = ri_sorted.size() - 1;
             step_ri = -1;
         };
 
-        Integer or = ri_raw.size();
-        const Integer* ptr_ri_raw = ri_raw.ptr();
+        Integer or = ri_sorted.size();
+        const Integer* ptr_ri_raw = ri_sorted.ptr();
 
         matcl::details::pos2ind(ptr_ri_raw[pos],r,pos_row,pos_col);
 
@@ -866,26 +868,30 @@ struct drop_entries_impl
         Integer r   = out.rows();
         Integer c   = out.cols();
 
-        Matrix ri(ci.get_rim_1(),false);
-        raw::integer_dense ri_raw = ri.impl_unique<raw::integer_dense>();
+        const raw::integer_dense& ci_ri = ci.get_rim_1();
 
-        sort_type s_type    = is_sorted(ri_raw);
+        raw::integer_dense ri_sorted(ci_ri.get_type());
+
+        sort_type s_type    = is_sorted(ci_ri);
         bool incr           = true;
 
         if (s_type == sorted_increasing)
         {
+            ri_sorted.assign_to_fresh(ci_ri);
         }
         else if (s_type == sorted_decreasing)
         {
+            ri_sorted.assign_to_fresh(ci_ri);
             incr = false;
         } 
         else
         {
-            ri.make_unique();
-            raw::integer_dense ri_tmp = ri.impl_unique<raw::integer_dense>();
-            utils::sort_q(ri_tmp.ptr(),ri_tmp.size());
+            raw::integer_dense ri_tmp = ci_ri.make_unique(false);
 
-            ri_raw.assign_to_fresh(std::move(ri_tmp));
+            //ri_tmp is a vector
+            utils::sort_q(ri_tmp.ptr(), ri_tmp.size());
+
+            ri_sorted.assign_to_fresh(std::move(ri_tmp));
         };
         
         bool any_modif	    = false;
@@ -905,12 +911,12 @@ struct drop_entries_impl
         }
         else
         {
-            pos = ri_raw.size()-1;
+            pos = ri_sorted.size() - 1;
             step_ri = -1;
         };
 
-        Integer or                  = ri_raw.size();
-        const Integer* ptr_ri_raw   = ri_raw.ptr();
+        Integer or                  = ri_sorted.size();
+        const Integer* ptr_ri_raw   = ri_sorted.ptr();
         const value_type& Z         = md::default_value<value_type>(out.get_type());
 
         matcl::details::pos2ind(ptr_ri_raw[pos],r,pos_row,pos_col);

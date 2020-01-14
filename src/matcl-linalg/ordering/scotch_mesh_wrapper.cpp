@@ -100,9 +100,12 @@ void scotch_mesh_wrapper::mesh_deleter(SCOTCH_Mesh* mesh)
     };
 };
 
+//TODO
 template<class V>
 void scotch_mesh_wrapper::init_mesh(std::shared_ptr<SCOTCH_Mesh>& mesh_data)
 {
+    (void)mesh_data;
+    #if 0
     using VR            = typename md::real_type<V>::type;
     using Mat_S         = raw::Matrix<V, struct_sparse>;
 
@@ -177,6 +180,7 @@ const SCOTCH Num * edgetab)
         node_weights    = m_node_weights.ptr();
 
     //SCOTCH_graphCheck(graph);
+    #endif
 };
 
 template<class Mat>

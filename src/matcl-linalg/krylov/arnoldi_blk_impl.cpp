@@ -152,18 +152,18 @@ void arnoldi_blk_impl<T>::resize(Integer max_k, Integer max_kb)
     if (m_lanczos == false)
     {
         m_hess.resize(max_k, max_k);
-        m_hess_ld       = m_hess.impl<Mat_D>().ld();
+        m_hess_ld       = convert(m_hess, Mat_D::matrix_code).get_impl<Mat_D>().ld();
     }
     else
     {
         Integer kb      = std::min(2*max_kb, max_k);
         m_hess.resize(kb, max_k);
-        m_hess_ld       = m_hess.impl<Mat_D>().ld();
+        m_hess_ld       = convert(m_hess, Mat_D::matrix_code).get_impl<Mat_D>().ld();
     }
 
     m_arnoldi_vec.resize(m_N, max_k);
     m_arnoldi_vec_ptr   = m_arnoldi_vec.get_array_unique<T>();
-    m_arnoldi_vec_ld    = m_arnoldi_vec.impl<Mat_D>().ld();
+    m_arnoldi_vec_ld    = convert(m_arnoldi_vec, Mat_D::matrix_code).get_impl<Mat_D>().ld();
 
     m_tau.resize(max_k,1);
     m_tau_ptr           = m_tau.get_array_unique<T>();
@@ -241,8 +241,12 @@ Integer arnoldi_blk_impl<T>::run_impl(bool need_init, Integer k, Integer K, Real
 
     T* H_S_ptr          = (m_lanczos == true) ? m_hess.get_array_unique<T>() : nullptr;
     T* H_NS_ptr         = (m_lanczos == false) ? m_hess.get_array_unique<T>() : nullptr;
-    Mat_D mat_v         = m_x.impl_unique<Mat_D>();
-    Mat_D mat_res       = m_res.impl_unique<Mat_D>();
+
+    m_x                 = convert(m_x, Mat_D::matrix_code);
+    m_res               = convert(m_res, Mat_D::matrix_code);
+
+    Mat_D mat_v         = m_x.get_impl_unique<Mat_D>();
+    Mat_D mat_res       = m_res.get_impl_unique<Mat_D>();
     Integer KB_old      = m_KB;
 
     baitr<T>(m_lanczos, m_N, k, np, m_KB, (TR)tol, mat_v.ptr(), mat_v.ld(), need_init, mat_res.ptr(), mat_res.ld(),

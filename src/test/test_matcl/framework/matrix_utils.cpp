@@ -166,9 +166,10 @@ struct unary_visitor_norm_1 : public matcl::details::extract_type_switch<Real,un
     {
         (void)mat;
 
-        Matrix f = full(m);
         using DM = matcl::raw::Matrix<T,struct_dense>;
-        return eval<DM>(f,f.impl<DM>());
+        Matrix f = convert(full(m), DM::matrix_code);        
+
+        return eval<DM>(f,f.get_impl<DM>());
     };
 };
 

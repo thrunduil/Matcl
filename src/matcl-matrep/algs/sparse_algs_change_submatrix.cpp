@@ -1394,8 +1394,9 @@ struct change_submatrix_1_impl
 
         matcl::Matrix tmp_vB;
         mrd::manip_reshape_helper<M2>::eval_vec(tmp_vB, B);
+        tmp_vB  = convert(tmp_vB, M2::matrix_code);
 
-        const M2& vB = tmp_vB.impl<M2>();
+        const M2& vB = tmp_vB.get_impl<M2>();
 
         elem_getter1<value_type_B> B_elem(vB,decr);
         B_elem.set_col(1);

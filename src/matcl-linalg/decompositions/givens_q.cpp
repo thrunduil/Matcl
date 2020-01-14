@@ -492,9 +492,13 @@ unitary_matrix_data* givens_q<Val>::load(std::istream& is)
     is >> S;
     is >> I;
 
-    ret->m_C.assign_to_fresh(C.impl<Mat_R>());
-    ret->m_S.assign_to_fresh(S.impl<Mat>());
-    ret->m_I.assign_to_fresh(I.impl<Mat_I>());
+    Matrix Cc   = matcl::convert(C, Mat_R::matrix_code);
+    Matrix Sc   = matcl::convert(S, Mat::matrix_code);
+    Matrix Ic   = matcl::convert(C, Mat_I::matrix_code);
+
+    ret->m_C.assign_to_fresh(Cc.get_impl<Mat_R>());
+    ret->m_S.assign_to_fresh(Sc.get_impl<Mat>());
+    ret->m_I.assign_to_fresh(Ic.get_impl<Mat_I>());
 
     return ret.release();
 };

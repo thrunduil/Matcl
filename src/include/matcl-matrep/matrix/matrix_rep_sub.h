@@ -54,6 +54,9 @@ class MATCL_MATREP_EXPORT sub_dense_matrix
         // create submatrix
         const matrix_type   to_matrix() const;
 
+        // create submatrix as a raw Matrix
+        const Matrix        to_raw_matrix() const;
+
         // assign matrix or submatrix
         matrix_type&        operator=(const matrix_type&) const &&;
         matrix_type&        operator=(const T&) const &&;
@@ -127,6 +130,9 @@ class MATCL_MATREP_EXPORT sub_band_matrix
 
         // create submatrix
         const matrix_type   to_matrix() const;
+
+        // create submatrix as a raw Matrix
+        const Matrix        to_raw_matrix() const;
 
         // assign matrix or submatrix
         matrix_type&        operator=(const matrix_type&) const &&;
@@ -329,6 +335,9 @@ class MATCL_MATREP_EXPORT sub_sparse_matrix
 
         // create submatrix
         const matrix_type   to_matrix() const;
+
+        // create submatrix as a raw Matrix
+        const Matrix        to_raw_matrix() const;
 
         // assign matrix or submatrix
         matrix_type&        operator=(const matrix_type&) const &&;

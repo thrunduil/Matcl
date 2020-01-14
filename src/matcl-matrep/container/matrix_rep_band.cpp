@@ -38,107 +38,63 @@
 namespace matcl
 {
 
+template<class Mat>
+struct convert_to_band
+{
+    static Matrix eval(const Matrix& m)
+    {
+        return convert(m, Mat::matrix_code);
+    };
+
+    static Matrix eval(Matrix&& m)
+    {
+        Matrix loc(std::move(m));
+        return convert(loc, Mat::matrix_code);
+    };
+};
+
+//--------------------------------------------------------------------
+//              band_matrix<T, true>
+//--------------------------------------------------------------------
 template<class T>
 band_matrix<T,true>::band_matrix()
-    :m_matrix(T(0))
+    :m_matrix(convert_to_band<mat_type>::eval(T(0)))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
-band_matrix<T,false>::band_matrix()
-    :base_type()
-{};
-
-template<class T>
 band_matrix<T,true>::band_matrix(bool val)
-    :m_matrix(matcl::Matrix(T(val)))
+    :m_matrix(convert_to_band<mat_type>::eval(T(val)))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
 band_matrix<T,true>::band_matrix(const T& val)
-    :m_matrix(matcl::Matrix(val))
+    :m_matrix(convert_to_band<mat_type>::eval(val))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
-};
-
-template<class T>
-void band_matrix<T,true>::update_rep()
-{
-    const mat_type& mat = m_matrix.impl<mat_type>();
-    m_matrix            = Matrix(mat, false);
-    init_from_rep(mat);
-};
-
-template<class T>
-void band_matrix<T,true>::init_from_rep(const mat_type& mat)
-{
-    m_ldiags        = -mat.first_diag();
-    m_udiags        = mat.last_diag();
-    m_rows          = mat.rows();
-    m_cols          = mat.cols();
-
-    m_base_ld       = mat.ld();
-    m_base_size     = mat.impl_size();
-    m_base_ptr      = const_cast<value_type*>(mat.rep_ptr());
-    m_flag          = const_cast<struct_flag*>(&mat.get_struct());
 };
 
 template<class T>
 band_matrix<T,true>::band_matrix(const matcl::Matrix& m)    
+    : m_matrix(convert_to_band<mat_type>::eval(m))
 {
-    const mat_type& mat = m.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
 band_matrix<T,true>::band_matrix(matcl::Matrix&& m0)
+    : m_matrix(convert_to_band<mat_type>::eval(std::move(m0)))
 {
-    Matrix m            = std::move(m0);
-    const mat_type& mat = m.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
-
-template<class T>
-band_matrix<T,true>::band_matrix(matcl::Matrix& m, str_make_unique)
-{
-    mat_type mat= m.impl_unique<mat_type>();
-
-    //assignment to m_matrix must be done after getting impl type
-    //otherwise m cannot be unique, and memory will be copied always
-    m_matrix    = m;
-
-    init_from_rep(mat);
-};
-
-template<class T>
-band_matrix<T,true>::band_matrix(matcl::Matrix&& m, str_make_unique)
-{
-    mat_type mat= m.impl_unique<mat_type>();
-
-    //assignment to m_matrix must be done after getting impl type
-    //otherwise m cannot be unique, and memory will be copied always
-    m_matrix    = std::move(m);
-
-    init_from_rep(mat);
-};
-
-template<class T>
-band_matrix<T,false>::band_matrix(matcl::Matrix& m)
-    :base_type(m, str_make_unique())
-{};
-
-template<class T>
-band_matrix<T,false>::band_matrix(matcl::Matrix&& m)
-    :base_type(m, str_make_unique())
-{};
 
 template<class T>
 band_matrix<T,true>::band_matrix(const sub_band_matrix& sub)
@@ -177,7 +133,7 @@ band_matrix<T,true>::band_matrix(const dense_matrix& mat)
 
 template<class T>
 band_matrix<T,true>::band_matrix(dense_matrix&& mat)
-    :band_matrix(mat.to_matrix())
+    :band_matrix(std::move(mat.to_matrix()))
 {};
 
 template<class T>
@@ -187,25 +143,8 @@ band_matrix<T,true>::band_matrix(const sparse_matrix& mat)
 
 template<class T>
 band_matrix<T,true>::band_matrix(sparse_matrix&& mat)
-    :band_matrix(mat.to_matrix())
+    :band_matrix(std::move(mat.to_matrix()))
 {};
-
-template<class T>
-band_matrix<T,false>::band_matrix(band_matrix<T,false>&& mat)
-    :band_matrix(std::move(mat.m_matrix))
-{
-    init_from_rep(m_matrix.get_impl<mat_type>());
-}
-
-template<class T>
-band_matrix<T,false>::band_matrix(band_matrix<T,true>&& mat)
-    :band_matrix(mat.m_matrix)
-{}
-
-template<class T>
-band_matrix<T,false>::band_matrix(band_matrix<T,true>& mat)
-    :band_matrix(mat.m_matrix)
-{}
 
 template<class T>
 band_matrix<T,true>& band_matrix<T,true>::operator=(const band_matrix& mat) &
@@ -224,25 +163,13 @@ band_matrix<T,true>& band_matrix<T,true>::operator=(band_matrix&& mat) &
 };
 
 template<class T>
-band_matrix<T,false>& band_matrix<T,false>::operator=(band_matrix&& mat) &
-{
-    m_matrix = std::move(mat.m_matrix);
-    init_from_rep(m_matrix.get_impl<mat_type>());
-    return *this;
-};
-
-template<class T>
 band_matrix<T,true>::~band_matrix()
-{};
-
-template<class T>
-band_matrix<T,false>::~band_matrix()
 {};
 
 template<class T>
 Integer band_matrix<T,true>::size() const
 { 
-    return imult_c(m_rows,m_cols); 
+    return imult_c(m_rows, m_cols); 
 };
 
 template<class T>
@@ -274,7 +201,7 @@ template<class T>
 const sparse_matrix<T>
 band_matrix<T,true>::delrows(const colon& c) const &&
 {
-    return sparse_matrix(m_matrix.delrows(c));
+    return sparse_matrix(std::move(m_matrix).delrows(c));
 }
 
 template<class T>
@@ -288,7 +215,7 @@ template<class T>
 const sparse_matrix<T>
 band_matrix<T,true>::delcols(const colon& c) const &&
 {
-    return sparse_matrix(m_matrix.delcols(c));
+    return sparse_matrix(std::move(m_matrix).delcols(c));
 };
 
 template<class T>
@@ -302,7 +229,7 @@ template<class T>
 const sparse_matrix<T>
 band_matrix<T,true>::delrowscols(const colon& c1, const colon& c2) const &&
 {
-    return sparse_matrix(m_matrix.delrowscols(c1, c2));
+    return sparse_matrix(std::move(m_matrix).delrowscols(c1, c2));
 };
 
 template<class T>
@@ -365,7 +292,7 @@ template<class T>
 typename band_matrix<T, true>::sub_band_matrix_2
 band_matrix<T, true>::operator()(Integer r, Integer c)
 {
-    sub_band_matrix_2 ret(this,r,c);
+    sub_band_matrix_2 ret(this, r, c);
     return ret;
 };
 
@@ -426,10 +353,13 @@ band_matrix<T,true>::clone() const
 };
 
 template<class T>
-const typename band_matrix<T,true>::band_matrix&
-band_matrix<T,true>::make_unique() const
+typename band_matrix<T,true>::band_matrix&
+band_matrix<T,true>::make_unique()
 {
     m_matrix.make_unique();
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+
     return *this;
 };
 
@@ -464,24 +394,76 @@ void band_matrix<T,true>::reserve_band(Integer r, Integer c, Integer fd, Integer
 template<class T>
 sub_band_matrix<T> band_matrix<T,true>::operator()(const colon& r)
 {
-    sub_band_matrix ret(this,r);
+    sub_band_matrix ret(this, r);
     return ret;
 };
 
 template<class T>
 sub_band_matrix<T> band_matrix<T,true>::operator()(const colon& r, const colon& c)
 {
-    sub_band_matrix ret(this,r,c);
+    sub_band_matrix ret(this, r, c);
     return ret;
 };
 
 template<class T>
 sub_band_matrix<T> band_matrix<T,true>::diag(Integer d)
 {
-    sub_band_matrix ret(d,this);
+    sub_band_matrix ret(d, this);
     return ret;
 };
 
+template<class T>
+void band_matrix<T,true>::update_rep()
+{
+    m_matrix   = convert(m_matrix, mat_type::matrix_code);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+};
+
+template<class T>
+void band_matrix<T,true>::init_from_rep(const mat_type& mat)
+{
+    m_ldiags        = -mat.first_diag();
+    m_udiags        = mat.last_diag();
+    m_rows          = mat.rows();
+    m_cols          = mat.cols();
+
+    m_base_ld       = mat.ld();
+    m_base_size     = mat.impl_size();
+    m_base_ptr      = const_cast<value_type*>(mat.rep_ptr());
+    m_flag          = const_cast<struct_flag*>(&mat.get_struct());
+};
+
+template<class T>
+band_matrix<T,true>::band_matrix(matcl::Matrix& m, str_make_unique)
+{
+    if (m.is_unique() == true)
+    {
+        m_matrix           = convert_to_band<mat_type>::eval(m);
+        const mat_type& mat = m_matrix.get_impl<mat_type>();
+        init_from_rep(mat);
+    }
+    else 
+    {
+        //TODO: convert m to band?
+        m_matrix           = convert_to_band<mat_type>::eval(m).make_unique();
+        const mat_type& mat = m_matrix.get_impl<mat_type>();
+
+        init_from_rep(mat);
+    }    
+};
+
+template<class T>
+band_matrix<T,true>::band_matrix(matcl::Matrix&& m, str_make_unique)
+{
+    m_matrix           = convert_to_band<mat_type>::eval(std::move(m)).make_unique();
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+};
+
+//--------------------------------------------------------------------
+//              band_matrix<T, true> static functions
+//--------------------------------------------------------------------
 template<class T>
 template<class Enable>
 band_matrix<T,true> band_matrix<T,true>::zeros(Integer r, Integer c,Integer fd, Integer ld)
@@ -672,17 +654,72 @@ band_matrix<T> band_matrix<T>::make_noinit(ti::ti_object ti, Integer rows,Intege
     return band_matrix<T>(matcl::make_object_band_noinit(ti, rows, cols, fd, ld));
 };
 
+//--------------------------------------------------------------------
+//              band_matrix<T, false>
+//--------------------------------------------------------------------
+template<class T>
+band_matrix<T,false>::band_matrix()
+    :base_type()
+{};
+
+template<class T>
+band_matrix<T,false>::band_matrix(matcl::Matrix& m)
+    :base_type(m, str_make_unique())
+{};
+
+template<class T>
+band_matrix<T,false>::band_matrix(matcl::Matrix&& m)
+    :base_type(std::move(m), str_make_unique())
+{};
+
+template<class T>
+band_matrix<T,false>::band_matrix(band_matrix<T,false>&& mat)
+    :band_matrix(std::move(mat.m_matrix))
+{}
+
+template<class T>
+band_matrix<T,false>::band_matrix(band_matrix<T,true>&& mat)
+    :band_matrix(std::move(mat.m_matrix))
+{}
+
+template<class T>
+band_matrix<T,false>::band_matrix(band_matrix<T,true>& mat)
+    :band_matrix(mat.make_unique().m_matrix)
+{}
+
+template<class T>
+band_matrix<T,false>& band_matrix<T,false>::operator=(band_matrix&& mat) &
+{
+    m_matrix = std::move(mat.m_matrix);
+    init_from_rep(m_matrix.get_impl<mat_type>());
+    return *this;
+};
+
+template<class T>
+band_matrix<T,false>::~band_matrix()
+{};
+
+//--------------------------------------------------------------------
+//              sub_band_matrix<T>
+//--------------------------------------------------------------------
+template<class T>
+const Matrix
+sub_band_matrix<T>::to_raw_matrix() const
+{
+    const Matrix& tmp = Matrix(*m_matrix);
+    if (m_colon_2)
+        return tmp(*m_colon_1,*m_colon_2);
+    else if(m_colon_1)
+        return tmp(*m_colon_1);
+    else
+        return get_diag(tmp,m_d);
+};
+
 template<class T>
 const typename sub_band_matrix<T>::matrix_type 
 sub_band_matrix<T>::to_matrix() const
 {
-    const Matrix& tmp = Matrix(*m_matrix);
-    if (m_colon_2)
-        return matrix_type(tmp(*m_colon_1,*m_colon_2));
-    else if(m_colon_1)
-        return matrix_type(tmp(*m_colon_1));
-    else
-        return matrix_type(get_diag(tmp,m_d));
+    return matrix_type(this->to_raw_matrix());
 };
 
 template<class T>
@@ -721,7 +758,7 @@ sub_band_matrix<T>::operator=(const sub_band_matrix<T>& mat0) const &&
 {
     if (m_colon_2)
     {
-        m_matrix->m_matrix(*m_colon_1,*m_colon_2) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix(*m_colon_1,*m_colon_2) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -729,7 +766,7 @@ sub_band_matrix<T>::operator=(const sub_band_matrix<T>& mat0) const &&
     }
     else if (m_colon_1)
     {
-        m_matrix->m_matrix(*m_colon_1) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix(*m_colon_1) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -737,7 +774,7 @@ sub_band_matrix<T>::operator=(const sub_band_matrix<T>& mat0) const &&
     }
     else
     {
-        m_matrix->m_matrix.diag(m_d) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix.diag(m_d) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -1041,6 +1078,10 @@ inline sub_band_matrix_2<T>::operator bool() const
 {
     return Matrix(*this).operator bool();
 };
+
+//--------------------------------------------------------------------
+//              TESTS
+//--------------------------------------------------------------------
 
 template<class T>
 void test_compile(const band_matrix<T>& v)

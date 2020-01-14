@@ -361,8 +361,9 @@ void superlu_wrap<V>::do_permutation(Mat_I& perm_c, const superlu_options_t& opt
         if (do_sl_perm == false)
         {
             pc          = pc.invperm();
-            Matrix pm   = pc.to_matrix();
-            perm_c.assign_to_fresh(pm.impl<Mat_I>());
+            Matrix pm   = convert(pc.to_matrix(), Mat_I::matrix_code);
+            perm_c.assign_to_fresh(pm.get_impl<Mat_I>());
+
             ptr_perm_c  = perm_c.ptr();
 
             for (Integer i = 0; i < N; ++i)

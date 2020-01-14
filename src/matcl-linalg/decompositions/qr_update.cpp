@@ -76,9 +76,9 @@ struct qr_update_str<V,struct_dense>
         Integer N       = R.cols();
         Integer K       = mat_u.cols();
 
-        const Mat& u    = mat_u.impl<Mat>();
-        const Mat& w    = mat_w.impl<Mat>();
-        const Mat& sig  = sigma.impl<Mat>();        
+        const Mat& u    = convert(mat_u, Mat::matrix_code).get_impl<Mat>();
+        const Mat& w    = convert(mat_w, Mat::matrix_code).get_impl<Mat>();
+        const Mat& sig  = convert(sigma, Mat::matrix_code).get_impl<Mat>();        
 
         // K >= 1, this should be checked before
 

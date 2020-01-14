@@ -406,7 +406,8 @@ struct make_bidiagonal_str<V,struct_dense>
         };
 
         Matrix V2       = ctrans(Matrix(Ac,false));
-        Mat Ac2         = V2.impl_unique<Mat>();
+        V2              = convert(V2, Mat::matrix_code);
+        Mat Ac2         = V2.get_impl_unique<Mat>();
 
         isv             = Ac2.all_finite() && TAUP.all_finite();
 
@@ -575,8 +576,8 @@ struct gsvd_impl
         const char* JOBQ    = "Q";
         Integer K, L;
 
-        Mat mat_A           = A.impl<Mat>().make_unique();
-        Mat mat_B           = B.impl<Mat>().make_unique();
+        Mat mat_A           = convert(A, Mat::matrix_code).get_impl<Mat>().make_unique();
+        Mat mat_B           = convert(B, Mat::matrix_code).get_impl<Mat>().make_unique();
 
         V* ptr_A            = mat_A.ptr();
         V* ptr_B            = mat_B.ptr();
@@ -683,8 +684,8 @@ struct gsvd_impl
         const char* JOBQ    = "N";
         Integer K, L;
 
-        Mat mat_A           = A.impl<Mat>().make_unique();
-        Mat mat_B           = B.impl<Mat>().make_unique();
+        Mat mat_A           = convert(A, Mat::matrix_code).get_impl<Mat>().make_unique();
+        Mat mat_B           = convert(B, Mat::matrix_code).get_impl<Mat>().make_unique();
 
         V* ptr_A            = mat_A.ptr();
         V* ptr_B            = mat_B.ptr();

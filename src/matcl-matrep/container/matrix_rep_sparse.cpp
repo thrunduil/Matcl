@@ -37,106 +37,63 @@
 namespace matcl
 {
 
+template<class Mat>
+struct convert_to_sparse
+{
+    static Matrix eval(const Matrix& m)
+    {
+        return convert(m, Mat::matrix_code);
+    };
+
+    static Matrix eval(Matrix&& m)
+    {
+        Matrix loc(std::move(m));
+        return convert(loc, Mat::matrix_code);
+    };
+};
+
+//--------------------------------------------------------------------
+//              sparse_matrix<T, true>
+//--------------------------------------------------------------------
 template<class T>
 sparse_matrix<T,true>::sparse_matrix()
-    :m_matrix(T(0))
+    :m_matrix(convert_to_sparse<mat_type>::eval(T(0)))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
-sparse_matrix<T,false>::sparse_matrix()
-    :base_type()
-{};
-
-template<class T>
 sparse_matrix<T,true>::sparse_matrix(bool val)
-    :m_matrix(matcl::Matrix(T(val)))
+    :m_matrix(convert_to_sparse<mat_type>::eval(T(val)))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
 sparse_matrix<T,true>::sparse_matrix(const T& val)
-    :m_matrix(matcl::Matrix(val))
+    :m_matrix(convert_to_sparse<mat_type>::eval(val))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
-};
-
-template<class T>
-void sparse_matrix<T,true>::update_rep()
-{
-    const mat_type& mat = m_matrix.impl<mat_type>();
-    m_matrix            = Matrix(mat, false);
-    init_from_rep(mat);
-};
-
-template<class T>
-void sparse_matrix<T,true>::init_from_rep(const mat_type& mat)
-{
-    m_rows      = mat.rows();
-    m_cols      = mat.cols();
-    m_max_cols  = mat.max_cols();
-    m_offset    = mat.rep().offset();
-    m_c         = const_cast<Integer*>(mat.rep().ptr_c());
-    m_r         = const_cast<Integer**>(mat.rep().ptr_root_r());
-    m_x         = const_cast<value_type**>(mat.rep().ptr_root_x());
-    m_flag      = const_cast<struct_flag*>(&mat.rep().get_struct());
 };
 
 template<class T>
 sparse_matrix<T,true>::sparse_matrix(const matcl::Matrix& m)
+    :m_matrix(convert_to_sparse<mat_type>::eval(m))
 {
-    const mat_type& mat = m.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
 sparse_matrix<T,true>::sparse_matrix(matcl::Matrix&& m0)
+    : m_matrix(convert_to_sparse<mat_type>::eval(std::move(m0)))
 {
-    Matrix m            = std::move(m0);
-    const mat_type& mat = m.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
-
-template<class T>
-sparse_matrix<T,true>::sparse_matrix(matcl::Matrix& m, str_make_unique)
-{
-    mat_type mat= m.impl_unique<mat_type>();
-
-    //assignment to m_matrix must be done after getting impl type
-    //otherwise m cannot be unique, and memory will be copied always
-    m_matrix    = m;
-
-    init_from_rep(mat);
-};
-
-template<class T>
-sparse_matrix<T,true>::sparse_matrix(matcl::Matrix&& m, str_make_unique)
-{
-    mat_type mat= m.impl_unique<mat_type>();
-
-    //assignment to m_matrix must be done after getting impl type
-    //otherwise m cannot be unique, and memory will be copied always
-    m_matrix    = std::move(m);
-
-    init_from_rep(mat);
-};
-
-template<class T>
-sparse_matrix<T,false>::sparse_matrix(matcl::Matrix& m)
-    :base_type(m, str_make_unique())
-{};
-
-template<class T>
-sparse_matrix<T,false>::sparse_matrix(matcl::Matrix&& m)
-    :base_type(m, str_make_unique())
-{};
 
 template<class T>
 sparse_matrix<T,true>::sparse_matrix(const sub_sparse_matrix& sub)
@@ -184,7 +141,7 @@ sparse_matrix<T,true>::sparse_matrix(const dense_matrix& mat)
 
 template<class T>
 sparse_matrix<T,true>::sparse_matrix(dense_matrix&& mat)
-    :sparse_matrix(mat.to_matrix())
+    :sparse_matrix(std::move(mat.to_matrix()))
 {};
 
 template<class T>
@@ -194,25 +151,8 @@ sparse_matrix<T,true>::sparse_matrix(const band_matrix<T>& mat)
 
 template<class T>
 sparse_matrix<T,true>::sparse_matrix(band_matrix<T>&& mat)
-    :sparse_matrix(mat.to_matrix())
+    :sparse_matrix(std::move(mat.to_matrix()))
 {};
-
-template<class T>
-sparse_matrix<T,false>::sparse_matrix(sparse_matrix<T,false>&& mat)
-    :sparse_matrix(std::move(mat.m_matrix))
-{
-    init_from_rep(m_matrix.get_impl<mat_type>());
-}
-
-template<class T>
-sparse_matrix<T,false>::sparse_matrix(sparse_matrix<T,true>&& mat)
-    :sparse_matrix(mat.m_matrix)
-{}
-
-template<class T>
-sparse_matrix<T,false>::sparse_matrix(sparse_matrix<T,true>& mat)
-    :sparse_matrix(mat.m_matrix)
-{}
 
 template<class T>
 sparse_matrix<T,true>& sparse_matrix<T,true>::operator=(const sparse_matrix& mat) &
@@ -231,19 +171,7 @@ sparse_matrix<T,true>& sparse_matrix<T,true>::operator=(sparse_matrix&& mat) &
 };
 
 template<class T>
-sparse_matrix<T,false>& sparse_matrix<T,false>::operator=(sparse_matrix&& mat) &
-{
-    m_matrix = std::move(mat.m_matrix);
-    init_from_rep(m_matrix.get_impl<mat_type>());
-    return *this;
-};
-
-template<class T>
 sparse_matrix<T,true>::~sparse_matrix()
-{};
-
-template<class T>
-sparse_matrix<T,false>::~sparse_matrix()
 {};
 
 template<class T>
@@ -409,10 +337,13 @@ sparse_matrix<T,true>::clone() const
 };
 
 template<class T>
-const typename sparse_matrix<T,true>::sparse_matrix&
-sparse_matrix<T,true>::make_unique() const
+typename sparse_matrix<T,true>::sparse_matrix&
+sparse_matrix<T,true>::make_unique()
 {
     m_matrix.make_unique();
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+
     return *this;
 };
 
@@ -501,6 +432,56 @@ void sparse_matrix<T,true>::sort()
     init_from_rep(m_matrix.get_impl<mat_type>());
 };
 
+template<class T>
+void sparse_matrix<T,true>::update_rep()
+{
+    m_matrix   = convert(m_matrix, mat_type::matrix_code);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+};
+
+template<class T>
+void sparse_matrix<T,true>::init_from_rep(const mat_type& mat)
+{
+    m_rows      = mat.rows();
+    m_cols      = mat.cols();
+    m_max_cols  = mat.max_cols();
+    m_offset    = mat.rep().offset();
+    m_c         = const_cast<Integer*>(mat.rep().ptr_c());
+    m_r         = const_cast<Integer**>(mat.rep().ptr_root_r());
+    m_x         = const_cast<value_type**>(mat.rep().ptr_root_x());
+    m_flag      = const_cast<struct_flag*>(&mat.rep().get_struct());
+};
+
+template<class T>
+sparse_matrix<T,true>::sparse_matrix(matcl::Matrix& m, str_make_unique)
+{
+    if (m.is_unique() == true)
+    {
+        m_matrix           = convert_to_sparse<mat_type>::eval(m);
+        const mat_type& mat = m_matrix.get_impl<mat_type>();
+        init_from_rep(mat);
+    }
+    else 
+    {
+        //TODO: convert m to dense?
+        m_matrix           = convert_to_sparse<mat_type>::eval(m).make_unique();
+        const mat_type& mat = m_matrix.get_impl<mat_type>();
+
+        init_from_rep(mat);
+    }    
+};
+
+template<class T>
+sparse_matrix<T,true>::sparse_matrix(matcl::Matrix&& m, str_make_unique)
+{
+    m_matrix           = convert_to_sparse<mat_type>::eval(std::move(m)).make_unique();
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+};
+//--------------------------------------------------------------------
+//              sparse_matrix<T, true> static functions
+//--------------------------------------------------------------------
 template<class T>
 template<class Enable>
 sparse_matrix<T> sparse_matrix<T>::zeros(Integer r, Integer c, Integer nz)
@@ -736,17 +717,73 @@ sparse_matrix<T> sparse_matrix<T>::make_complex(const Integer *trip_r, const Int
     return make_helper<T>::eval(trip_r, trip_c, trip_re, trip_im, r, c, nnz, nzmax);
 };
 
+//--------------------------------------------------------------------
+//              sparse_matrix<T, false>
+//--------------------------------------------------------------------
+template<class T>
+sparse_matrix<T,false>::sparse_matrix()
+    :base_type()
+{};
+
+template<class T>
+sparse_matrix<T,false>::sparse_matrix(matcl::Matrix& m)
+    :base_type(m, str_make_unique())
+{};
+
+template<class T>
+sparse_matrix<T,false>::sparse_matrix(matcl::Matrix&& m)
+    :base_type(std::move(m), str_make_unique())
+{};
+
+template<class T>
+sparse_matrix<T,false>::sparse_matrix(sparse_matrix<T,false>&& mat)
+    :sparse_matrix(std::move(mat.m_matrix))
+{}
+
+template<class T>
+sparse_matrix<T,false>::sparse_matrix(sparse_matrix<T,true>&& mat)
+    :sparse_matrix(std::move(mat.m_matrix))
+{}
+
+template<class T>
+sparse_matrix<T,false>::sparse_matrix(sparse_matrix<T,true>& mat)
+    :sparse_matrix(mat.make_unique().m_matrix)
+{}
+
+template<class T>
+sparse_matrix<T,false>& sparse_matrix<T,false>::operator=(sparse_matrix&& mat) &
+{
+    m_matrix = std::move(mat.m_matrix);
+    init_from_rep(m_matrix.get_impl<mat_type>());
+    return *this;
+};
+
+template<class T>
+sparse_matrix<T,false>::~sparse_matrix()
+{};
+
+//--------------------------------------------------------------------
+//              sub_sparse_matrix<T>
+//--------------------------------------------------------------------
+template<class T>
+const Matrix 
+sub_sparse_matrix<T>::to_raw_matrix() const
+{
+    const Matrix& tmp = Matrix(*m_matrix);
+
+    if (m_colon_2)
+        return tmp(*m_colon_1,*m_colon_2);
+    else if(m_colon_1)
+        return tmp(*m_colon_1);
+    else
+        return get_diag(tmp,m_d);
+};
+
 template<class T>
 const typename sub_sparse_matrix<T>::matrix_type 
 sub_sparse_matrix<T>::to_matrix() const
 {
-    const Matrix& tmp = Matrix(*m_matrix);
-    if (m_colon_2)
-        return matrix_type(tmp(*m_colon_1,*m_colon_2));
-    else if(m_colon_1)
-        return matrix_type(tmp(*m_colon_1));
-    else
-        return matrix_type(get_diag(tmp,m_d));
+    return matrix_type(this->to_raw_matrix());
 };
 
 template<class T>
@@ -828,7 +865,7 @@ sub_sparse_matrix<T>::operator=(const sub_sparse_matrix<T>& mat0) const &&
 {
     if (m_colon_2)
     {
-        m_matrix->m_matrix(*m_colon_1,*m_colon_2) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix(*m_colon_1,*m_colon_2) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -836,7 +873,7 @@ sub_sparse_matrix<T>::operator=(const sub_sparse_matrix<T>& mat0) const &&
     }
     else if (m_colon_1)
     {
-        m_matrix->m_matrix(*m_colon_1) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix(*m_colon_1) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -844,7 +881,7 @@ sub_sparse_matrix<T>::operator=(const sub_sparse_matrix<T>& mat0) const &&
     }
     else
     {
-        m_matrix->m_matrix.diag(m_d) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix.diag(m_d) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -945,7 +982,7 @@ template<class T>
 typename sub_sparse_matrix_1<T>::matrix_type& 
 sub_sparse_matrix_1<T>::operator=(const sub_sparse_matrix<T>& mat) const &&
 {
-    m_matrix->m_matrix(m_ind_1) = Matrix(mat.to_matrix());
+    m_matrix->m_matrix(m_ind_1) = mat.to_raw_matrix();
 
     //m_matrix->m_matrix could be made unique, so we need to update rep pointers
     m_matrix->update_rep();
@@ -1023,7 +1060,7 @@ template<class T>
 typename sub_sparse_matrix_2<T>::matrix_type& 
 sub_sparse_matrix_2<T>::operator=(const sub_sparse_matrix<T>& mat) const &&
 {
-    m_matrix->m_matrix(m_ind_1,m_ind_2) = Matrix(mat.to_matrix());
+    m_matrix->m_matrix(m_ind_1,m_ind_2) = mat.to_raw_matrix();
 
     //m_matrix->m_matrix could be made unique, so we need to update rep pointers
     m_matrix->update_rep();
@@ -1181,6 +1218,9 @@ inline sub_sparse_matrix_2<T>::operator bool() const
     return Matrix(*this).operator bool();
 };
 
+//--------------------------------------------------------------------
+//              TESTS
+//--------------------------------------------------------------------
 template<class T>
 void test_compile(const sparse_matrix<T>& v)
 {

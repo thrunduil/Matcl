@@ -38,8 +38,8 @@ struct make_index_2_helper
         (void)size;
         (void)c_info;
 
-        const Matrix& mat_ind1          = *c.m_mat_size.m_mat_12;
-        const raw::integer_dense& ri    = mat_ind1.impl<raw::integer_dense>();
+        const Matrix& mat_ind1          = *c.m_mat_size.m_imat_12;
+        const raw::integer_dense& ri    = mat_ind1.get_impl<raw::integer_dense>();
 
         Integer r               = ri.size();
         const Integer* ptr_ri   = ri.ptr();
@@ -407,8 +407,8 @@ struct make_index_1_helper
 
     static void eval_matrix_1(Integer rows, Integer cols, const colon& c, colon_info& c_info)
     {
-        const Matrix& mat_ind1          = *c.m_mat_size.m_mat_12;
-        const raw::integer_dense& ri    = mat_ind1.impl<raw::integer_dense>();
+        const Matrix& mat_ind1          = *c.m_mat_size.m_imat_12;
+        const raw::integer_dense& ri    = mat_ind1.get_impl<raw::integer_dense>();
         const Integer* ptr_ri           = ri.ptr();
 
         Integer r   = ri.size();    
@@ -427,10 +427,12 @@ struct make_index_1_helper
 
     static void eval_matrix_2(Integer rows, Integer cols, const colon& c, colon_info& c_info)
     {
-        const Matrix& mat_ind_r         = c.m_mat_size.m_mat_12[0];
-        const Matrix& mat_ind_c         = c.m_mat_size.m_mat_12[1];
-        const raw::integer_dense& ri_r  = mat_ind_r.impl<raw::integer_dense>();
-        const raw::integer_dense& ri_c  = mat_ind_c.impl<raw::integer_dense>();
+        const Matrix& mat_ind_r         = c.m_mat_size.m_imat_12[0];
+        const Matrix& mat_ind_c         = c.m_mat_size.m_imat_12[1];
+
+        const raw::integer_dense& ri_r  = mat_ind_r.get_impl<raw::integer_dense>();
+        const raw::integer_dense& ri_c  = mat_ind_c.get_impl<raw::integer_dense>();
+        
         const Integer* ptr_ri_r         = ri_r.ptr();
         const Integer* ptr_ri_c         = ri_c.ptr();
 

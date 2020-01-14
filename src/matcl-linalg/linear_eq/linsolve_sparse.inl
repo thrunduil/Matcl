@@ -1315,15 +1315,18 @@ struct linsolve_triang_sparse<struct_sparse,V1,V2>
             {
                 if (m < n / 2)
                 {
-                    eval_lt(ret, A, p,q, matcl::trans(matcl::Matrix(B,false)).impl_unique<M2>(), 
-                                              trans_type::no_trans, opts);
+                    Matrix tmp  = matcl::trans(matcl::Matrix(B,false));
+                    tmp         = convert(tmp, M2::matrix_code);
+
+                    eval_lt(ret, A, p,q, tmp.get_impl_unique<M2>(), trans_type::no_trans, opts);
                     ret = matcl::trans(ret);
                     return;
                 }
                 else
                 {
-                    eval_ut_rev(ret, matcl::trans(Matrix(A,false)).impl_unique<M1>(),q,p, B, trans_type::no_trans,
-                                opts);
+                    Matrix tmp  = matcl::trans(Matrix(A,false));
+                    tmp         = convert(tmp, M1::matrix_code);
+                    eval_ut_rev(ret, tmp.get_impl_unique<M1>(),q,p, B, trans_type::no_trans, opts);
                     return;
                 };
             }
@@ -1331,15 +1334,17 @@ struct linsolve_triang_sparse<struct_sparse,V1,V2>
             {
                 if (m < n / 2)
                 {
-                    eval_lt(ret, A, p,q, matcl::ctrans(matcl::Matrix(B,false)).impl_unique<M2>(), 
-                                              trans_type::no_trans, opts);
+                    Matrix tmp  = matcl::ctrans(matcl::Matrix(B,false));
+                    tmp         = convert(tmp, M2::matrix_code);
+                    eval_lt(ret, A, p,q, tmp.get_impl_unique<M2>(), trans_type::no_trans, opts);
                     ret = matcl::ctrans(ret);
                     return;
                 }
                 else
                 {
-                    eval_ut_rev(ret, matcl::ctrans(Matrix(A,false)).impl_unique<M1>(),q,p, B, trans_type::no_trans,
-                                opts);
+                    Matrix tmp  = matcl::ctrans(Matrix(A,false));
+                    tmp         = convert(tmp, M1::matrix_code);
+                    eval_ut_rev(ret, tmp.get_impl_unique<M1>(),q,p, B, trans_type::no_trans, opts);
                     return;
                 };
             }
@@ -1597,15 +1602,20 @@ struct linsolve_triang_sparse<struct_sparse,V1,V2>
             {
                 if (m < n / 2)
                 {
-                    eval_ut(ret, A,p,q, matcl::trans(matcl::Matrix(B,false)).impl_unique<M2>(), 
+                    Matrix tmp  = matcl::trans(matcl::Matrix(B,false));
+                    tmp         = convert(tmp, M2::matrix_code);
+
+                    eval_ut(ret, A,p,q, tmp.get_impl_unique<M2>(), 
                                               trans_type::no_trans, opts);
                     ret = matcl::trans(ret);
                     return;
                 }
                 else
                 {
-                    eval_lt_rev(ret, matcl::trans(Matrix(A,false)).impl_unique<M1>(),q,p, B, trans_type::no_trans,
-                                opts);
+                    Matrix tmp  = matcl::trans(Matrix(A,false));
+                    tmp         = convert(tmp, M1::matrix_code);
+                    eval_lt_rev(ret, tmp.get_impl_unique<M1>(),q,p, B, 
+                                trans_type::no_trans, opts);
                     return;
                 };
             }
@@ -1613,14 +1623,19 @@ struct linsolve_triang_sparse<struct_sparse,V1,V2>
             {
                 if (m < n / 2)
                 {
-                    eval_ut(ret, A,p,q, matcl::ctrans(matcl::Matrix(B,false)).impl_unique<M2>(), 
+                    Matrix tmp  = matcl::ctrans(matcl::Matrix(B,false));
+                    tmp         = convert(tmp, M2::matrix_code);
+
+                    eval_ut(ret, A,p,q, tmp.get_impl_unique<M2>(), 
                                               trans_type::no_trans, opts);
                     ret = matcl::ctrans(ret);
                     return;
                 }
                 else
                 {
-                    eval_lt_rev(ret, matcl::ctrans(Matrix(A,false)).impl_unique<M1>(),q,p, B, trans_type::no_trans,
+                    Matrix tmp  = matcl::ctrans(Matrix(A,false));
+                    tmp         = convert(tmp, M1::matrix_code);
+                    eval_lt_rev(ret, tmp.get_impl_unique<M1>(),q,p, B, trans_type::no_trans,
                                 opts);
                     return;
                 };

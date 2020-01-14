@@ -333,7 +333,7 @@ class MATCL_MATREP_EXPORT Matrix : private details::matrix_base
 
         // if matrix is unique (i.e. refcount is 1) then do nothing; otherwise
         // make copy of this matrix, note that refcount of this instance will
-        // also drop to one
+        // also drop to one; TODO
         const Matrix&               make_unique() const;
 
         // make independent copy
@@ -380,16 +380,7 @@ class MATCL_MATREP_EXPORT Matrix : private details::matrix_base
         // internal representation of this matrix must be M,
         // makes matrix unique; structure flags are not cleared
         template<class M> M&        get_impl_unique();
-        
-        // make conversion to M, slower than get_impl; this matrix is not
-        // changed
-        template<class M> const M   impl() const;
-        
-        // make conversion to M, slower than get_impl_unique, 
-        // makes matrix unique; internal representation may change; structure flags
-        // are not cleared
-        template<class M> M&        impl_unique();
-
+                
         // mark or unmark the matrix as being effectively unique
         void                        mark_unique(bool unique);
 };

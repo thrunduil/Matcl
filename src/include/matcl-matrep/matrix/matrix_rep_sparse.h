@@ -408,7 +408,7 @@ class MATCL_MATREP_EXPORT sparse_matrix<T, true>
         // if matrix is unique (i.e. refcount is 1) then do nothing; otherwise
         // make copy of this matrix, note that refcount of this instance will
         // also drop to one
-        const sparse_matrix& make_unique() const;
+        sparse_matrix&      make_unique();
 
         // make independent copy
         const sparse_matrix clone() const;

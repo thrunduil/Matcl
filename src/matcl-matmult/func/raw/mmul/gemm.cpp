@@ -627,7 +627,8 @@ struct scal_add_impl
             matcl::Matrix At(A, false);
             At  = trans(At,t);
 
-            const Mat& A2 = At.impl<Mat>();
+            matcl::Matrix Atc   = convert(At, Mat::matrix_code);
+            const Mat& A2       = Atc.get_impl<Mat>();
 
             return scal_add_struct<Val, Mat, struct_type>
                     ::eval(C, alpha, A2, trans_type::no_trans, beta, fr, rows, fc, cols);

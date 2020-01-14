@@ -1945,8 +1945,11 @@ unitary_matrix_data* householder_q<Val>::load(std::istream& is)
     is >> Q;
     is >> tau;
 
-    ret->m_reflectors.assign_to_fresh(Q.impl<Mat>());
-    ret->m_tau_vec.assign_to_fresh(tau.impl<Mat>());
+    Matrix Qc   = matcl::convert(Q, Mat::matrix_code);
+    Matrix tauc = matcl::convert(tau, Mat::matrix_code);
+
+    ret->m_reflectors.assign_to_fresh(Qc.get_impl<Mat>());
+    ret->m_tau_vec.assign_to_fresh(tauc.get_impl<Mat>());
 
     return ret.release();
 };
@@ -2137,8 +2140,11 @@ unitary_matrix_data* householder_band_q<Val>::load(std::istream& is)
     is >> Q;
     is >> tau;
 
-    ret->m_reflectors.assign_to_fresh(Q.impl<Mat_B>());
-    ret->m_tau_vec.assign_to_fresh(tau.impl<Mat_D>());
+    Matrix Qc   = matcl::convert(Q, Mat_B::matrix_code);
+    Matrix tauc = matcl::convert(tau, Mat_D::matrix_code);
+
+    ret->m_reflectors.assign_to_fresh(Qc.get_impl<Mat_B>());
+    ret->m_tau_vec.assign_to_fresh(tauc.get_impl<Mat_D>());
 
     return ret.release();
 };

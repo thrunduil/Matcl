@@ -603,7 +603,9 @@ void linsolve_obj_lu_dense<V>::solve_impl(Matrix& ret, Matrix& X, trans_type tA)
     using M         = raw::Matrix<T,struct_dense>;
 
     const M& Ac     = raw::converter<M,Mat>::eval(m_A_decomp);
-    M Bc            = X.impl_unique<M>();
+
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -629,7 +631,8 @@ void linsolve_obj_lu_dense<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_type
     using M         = raw::Matrix<T,struct_dense>;
 
     const M& Ac     = raw::converter<M,Mat>::eval(m_A_decomp);
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -995,7 +998,8 @@ void linsolve_obj_lu_band<V>::solve_impl(Matrix& ret, Matrix& X, trans_type tA) 
     using MB        = raw::Matrix<T,struct_banded>;
 
     const MB& Ac    = raw::converter<MB,Mat>::eval(m_A_decomp);
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1024,7 +1028,8 @@ void linsolve_obj_lu_band<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_type 
 
     //solve
     const MB& Ac    = raw::converter<MB,Mat>::eval(m_A_decomp);
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1296,7 +1301,8 @@ void linsolve_obj_chol_tridiag_fac<V>::solve_impl(Matrix& ret, Matrix& X, trans_
 
     const MR& D0c   = raw::converter<MR,Mat_R>::eval(m_D0_i);
     const M& D1c    = raw::converter<M,Mat>::eval(m_D1_i);
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1325,7 +1331,8 @@ void linsolve_obj_chol_tridiag_fac<V>::solve_rev_impl(Matrix& ret, Matrix& X, tr
     
     const MR& D0c   = raw::converter<MR,Mat_R>::eval(m_D0_i);
     const M& D1c    = raw::converter<M,Mat>::eval(m_D1_i);
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1641,7 +1648,8 @@ void linsolve_obj_tridiag_fac<V>::solve_impl(Matrix& ret, Matrix& X, trans_type 
     const M& Dp1c   = raw::converter<M,Mat>::eval(m_Dp1_i);
     const M& Dp2c   = raw::converter<M,Mat>::eval(m_Dp2_i);
 
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1672,7 +1680,8 @@ void linsolve_obj_tridiag_fac<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_t
     const M& Dp1c   = raw::converter<M,Mat>::eval(m_Dp1_i);
     const M& Dp2c   = raw::converter<M,Mat>::eval(m_Dp2_i);
 
-    M Bc            = X.impl_unique<M>();
+    X               = matcl::convert(X, M::matrix_code);
+    M Bc            = X.get_impl_unique<M>();
 
     using VL        = typename md::lapack_value_type<T>::type;
 

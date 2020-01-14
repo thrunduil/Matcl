@@ -40,6 +40,11 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         using BandMatrix    = Matrix<value_type,struct_banded>;
         using tinfo         = ti::ti_type<value_type>;
 
+        using this_type     = Matrix<value_type_, struct_dense>;
+
+        static const matcl::mat_code matrix_code
+                            = md::type_to_code<this_type>::value;
+
         struct foreign{};
 
     private:

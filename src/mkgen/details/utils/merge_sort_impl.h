@@ -117,7 +117,7 @@ struct merge<Compare, merge<Compare, L11, L12>, merge_elem<E2>>
     using A         = merge<Compare, L11, L12>;
     using B         = merge_elem<E2>;
 
-    static const bool cond  = Compare::value<typename A :: head, E2>;
+    static const bool cond  = Compare::template value<typename A :: head, E2>;
     using merger    = merge_impl<cond, Compare, A, B>;
 
     using head      = typename merger::head;
@@ -130,7 +130,7 @@ struct merge<Compare, merge_elem<E1>, merge<Compare, L21, L22>>
     using A         = merge_elem<E1>;
     using B         = merge<Compare, L21, L22>;
 
-    static const bool cond  = Compare::value<E1, typename B :: head>;
+    static const bool cond  = Compare::template value<E1, typename B :: head>;
     using merger    = merge_impl<cond, Compare, A, B>;
 
     using head      = typename merger::head;
@@ -143,7 +143,7 @@ struct merge<Compare, merge_elem<E1>, merge_elem<E2>>
     using A         = merge_elem<E1>;
     using B         = merge_elem<E2>;
 
-    static const bool cond  = Compare::value<E1, E2>;
+    static const bool cond  = Compare::template value<E1, E2>;
     using merger    = merge_impl<cond, Compare, A, B>;
 
     using head      = typename merger::head;

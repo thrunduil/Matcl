@@ -54,7 +54,8 @@ void details::schur_reorder_check(const Matrix& I, const Integer N, Integer& M)
 
 bool details::schur_is_trivial_reorder(const Matrix& I)
 {
-    const raw::integer_dense& I_r= I.impl<raw::integer_dense>();
+    Matrix Ic                   = convert(I, mat_code::integer_dense);
+    const raw::integer_dense& I_r= Ic.get_impl<raw::integer_dense>();
     const Integer* I_r_ptr      = I_r.ptr();
     bool is_trivial             = true;
     int idx_trivial             = 0;
@@ -118,8 +119,12 @@ void details::make_complex_eigenvectors<V,false>::complex_vectors_to_real(const 
     (void)ind;
 
     //nothing to do
-    WL_R.assign_to_fresh(WL.impl<Mat>().make_unique());
-    WR_R.assign_to_fresh(WR.impl<Mat>().make_unique());
+
+    Matrix WLc  = convert(WL, Mat::matrix_code);
+    Matrix WRc  = convert(WR, Mat::matrix_code);
+
+    WL_R.assign_to_fresh(WLc.get_impl<Mat>().make_unique());
+    WR_R.assign_to_fresh(WRc.get_impl<Mat>().make_unique());
 };
 
 template<class V> 
@@ -180,8 +185,12 @@ void details::make_complex_eigenvectors<V,true>::eval(const Mat& TA, const Matri
     using VC    = typename md::complex_type<V>::type;
     using Mat_C = raw::Matrix<VC,struct_dense>;
 
-    const Mat& VL   = mat_VL.impl<Mat>();
-    const Mat& VR   = mat_VR.impl<Mat>();
+    Matrix mat_VLc  = convert(mat_VL, Mat::matrix_code);
+    Matrix mat_VRc  = convert(mat_VR, Mat::matrix_code);
+
+    const Mat& VL   = mat_VLc.get_impl<Mat>();
+    const Mat& VR   = mat_VRc.get_impl<Mat>();
+
     Mat_C VLC       = Mat_C(VL.get_type(), VL.rows(), VL.cols());
     Mat_C VRC       = Mat_C(VR.get_type(), VR.rows(), VR.cols());
 
@@ -294,17 +303,24 @@ void details::make_complex_eigenvectors<V,true>::complex_vectors_to_real(const M
 
     if (i == N-1)
     {
+        Matrix WLc      = convert(WL, Mat::matrix_code);
+        Matrix WRc      = convert(WR, Mat::matrix_code);
+
         //no complex eigenvalues
-        WL_R.assign_to_fresh(WL.impl<Mat>().make_unique());
-        WR_R.assign_to_fresh(WR.impl<Mat>().make_unique());
+        WL_R.assign_to_fresh(WLc.get_impl<Mat>().make_unique());
+        WR_R.assign_to_fresh(WRc.get_impl<Mat>().make_unique());
         return;
     };
 
     using VC    = typename md::complex_type<V>::type;
     using Mat_C = raw::Matrix<VC,struct_dense>;
 
-    Mat_C VLC   = WL.impl<Mat_C>().make_unique();
-    Mat_C VRC   = WR.impl<Mat_C>().make_unique();
+    Matrix WLc  = convert(WL, Mat_C::matrix_code);
+    Matrix WRc  = convert(WR, Mat_C::matrix_code);
+
+    Mat_C VLC   = WLc.get_impl<Mat_C>().make_unique();
+    Mat_C VRC   = WRc.get_impl<Mat_C>().make_unique();
+    
     Mat VLR     = Mat(TA.get_type(), WL.rows(), WL.cols());
     Mat VRR     = Mat(TA.get_type(), WR.rows(), WR.cols());
 

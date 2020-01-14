@@ -211,29 +211,6 @@ inline M& Matrix::get_impl_unique()
     return details::get_functor<M>::eval(*this);
 };
 
-template<class M> 
-inline const M Matrix::impl() const
-{
-    matcl::mat_code mat_type = matrix_traits::mat_type_info_type<M>::matrix_code;
-    Matrix tmp = convert(*this, mat_type);
-    return tmp.get_impl<M>();
-};
-
-template<class M> 
-inline M& Matrix::impl_unique()
-{
-    matcl::mat_code mat_type = matrix_traits::mat_type_info_type<M>::matrix_code;
-    if (mat_type == this->get_matrix_code())
-    {
-        return this->get_impl_unique<M>();
-    }
-    else
-    {
-        *this = convert(*this,mat_type);
-        return this->get_impl_unique<M>();
-    };
-};
-
 force_inline matcl::sub_matrix_1 Matrix::operator()(Integer i)
 {
     matcl::sub_matrix_1 ret = matcl::sub_matrix_1(this,i);

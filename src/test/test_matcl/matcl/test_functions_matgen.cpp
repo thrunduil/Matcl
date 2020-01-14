@@ -760,7 +760,7 @@ Real test_function_construct::test_dense_ld(Integer r, Integer c, int vc)
         case value_code::v_integer:
         {
             using Mat       = raw::Matrix<Integer, struct_dense>;
-            const Mat& m    = A.impl<Mat>();
+            const Mat& m    = convert(A, Mat::matrix_code).get_impl<Mat>();
             As              = Matrix(m,false);
             B               = make_integer_dense(r, c, m.ptr(), m.ld());
             C               = make_dense_foreign(r, c, (Integer*)m.ptr(), m.ld());
@@ -769,7 +769,7 @@ Real test_function_construct::test_dense_ld(Integer r, Integer c, int vc)
         case value_code::v_real:
         {
             using Mat       = raw::Matrix<Real, struct_dense>;
-            const Mat& m    = A.impl<Mat>();
+            const Mat& m    = convert(A, Mat::matrix_code).get_impl<Mat>();
             As              = Matrix(m,false);
 
             B               = make_real_dense(r, c, m.ptr(), m.ld());
@@ -779,7 +779,7 @@ Real test_function_construct::test_dense_ld(Integer r, Integer c, int vc)
         case value_code::v_float:
         {
             using Mat       = raw::Matrix<Float, struct_dense>;
-            const Mat& m    = A.impl<Mat>();
+            const Mat& m    = convert(A, Mat::matrix_code).get_impl<Mat>();
             As              = Matrix(m,false);
 
             B               = make_float_dense(r, c, m.ptr(), m.ld());
@@ -789,7 +789,7 @@ Real test_function_construct::test_dense_ld(Integer r, Integer c, int vc)
         case value_code::v_complex:
         {
             using Mat       = raw::Matrix<Complex, struct_dense>;
-            const Mat& m    = A.impl<Mat>();
+            const Mat& m    = convert(A, Mat::matrix_code).get_impl<Mat>();
             As              = Matrix(m,false);
 
             B               = make_complex_dense(r, c, m.ptr(), m.ld());
@@ -799,7 +799,7 @@ Real test_function_construct::test_dense_ld(Integer r, Integer c, int vc)
         case value_code::v_float_complex:
         {
             using Mat       = raw::Matrix<Float_complex, struct_dense>;
-            const Mat& m    = A.impl<Mat>();
+            const Mat& m    = convert(A, Mat::matrix_code).get_impl<Mat>();
             As              = Matrix(m,false);
 
             B               = make_float_complex_dense(r, c, m.ptr(), m.ld());

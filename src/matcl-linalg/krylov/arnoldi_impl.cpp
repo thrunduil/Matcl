@@ -103,17 +103,17 @@ void arnoldi_impl<T>::resize(Integer max_k)
     if (m_lanczos)
     {
         m_hess.resize(max_k, 2);        
-        m_hess_ld       = m_hess.impl<Mat_DR>().ld();
+        m_hess_ld       = convert(m_hess, Mat_DR::matrix_code).get_impl<Mat_DR>().ld();
     }
     else
     {
         m_hess.resize(max_k, max_k);
-        m_hess_ld       = m_hess.impl<Mat_D>().ld();
+        m_hess_ld       = convert(m_hess, Mat_D::matrix_code).get_impl<Mat_D>().ld();
     };
 
     m_arnoldi_vec.resize(m_N, max_k);
     m_arnoldi_vec_ptr   = m_arnoldi_vec.get_array_unique<T>();
-    m_arnoldi_vec_ld    = m_arnoldi_vec.impl<Mat_D>().ld();
+    m_arnoldi_vec_ld    = convert(m_arnoldi_vec, Mat_D::matrix_code).get_impl<Mat_D>().ld();
 
     m_k                 = std::min(m_k, max_k);
     m_max_k             = max_k;

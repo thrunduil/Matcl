@@ -37,106 +37,63 @@
 namespace matcl
 {
 
-template<class T>
-dense_matrix<T,true>::dense_matrix()
-    :m_matrix(T(0))
+template<class Mat>
+struct convert_to_dense
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    static Matrix eval(const Matrix& m)
+    {
+        return convert(m, Mat::matrix_code);
+    };
+
+    static Matrix eval(Matrix&& m)
+    {
+        Matrix loc(std::move(m));
+        return convert(loc, Mat::matrix_code);
+    };
+};
+
+//--------------------------------------------------------------------
+//              dense_matrix<T, true>
+//--------------------------------------------------------------------
+template<class T>
+dense_matrix<T, true>::dense_matrix()
+    :m_matrix(convert_to_dense<mat_type>::eval(T(0)))
+{
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
-dense_matrix<T,false>::dense_matrix()
-    :base_type()
-{};
-
-template<class T>
 dense_matrix<T,true>::dense_matrix(bool val)
-    :m_matrix(matcl::Matrix(T(val)))
+    :m_matrix(convert_to_dense<mat_type>::eval(T(val)))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
 dense_matrix<T,true>::dense_matrix(const T& val)
-    :m_matrix(matcl::Matrix(val))
+    :m_matrix(convert_to_dense<mat_type>::eval(val))
 {
-    const mat_type& mat= m_matrix.impl_unique<mat_type>();
+    const mat_type& mat= m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
-};
-
-template<class T>
-void dense_matrix<T,true>::update_rep()
-{
-    const mat_type& mat = m_matrix.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
-    init_from_rep(mat);
-};
-
-template<class T>
-void dense_matrix<T,true>::init_from_rep(const mat_type& mat)
-{
-    m_rows      = mat.rows();
-    m_cols      = mat.cols();
-    m_max_rows  = mat.max_rows();
-    m_max_cols  = mat.max_cols();
-    m_ld        = mat.ld();
-    m_size      = mat.size();
-    m_ptr       = const_cast<T*>(mat.ptr());
-    m_flag      = const_cast<struct_flag*>(&mat.get_struct());
 };
 
 template<class T>
 dense_matrix<T,true>::dense_matrix(const matcl::Matrix& m)
+    :m_matrix(convert_to_dense<mat_type>::eval(m))
 {
-    const mat_type& mat = m.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
 
 template<class T>
-dense_matrix<T,true>::dense_matrix(matcl::Matrix&& m0)
+dense_matrix<T,true>::dense_matrix(matcl::Matrix&& m)
+    :m_matrix(convert_to_dense<mat_type>::eval(std::move(m)))
 {
-    Matrix m            = std::move(m0);
-    const mat_type& mat = m.impl<mat_type>();
-    m_matrix            = Matrix(mat,false);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
     init_from_rep(mat);
 };
-
-template<class T>
-dense_matrix<T,true>::dense_matrix(matcl::Matrix& m, str_make_unique)
-{
-    mat_type mat= m.impl_unique<mat_type>();
-
-    //assignment to m_matrix must be done after getting impl type
-    //otherwise m cannot be unique, and memory will be copied always
-    m_matrix    = m;
-
-    init_from_rep(mat);
-};
-
-template<class T>
-dense_matrix<T,true>::dense_matrix(matcl::Matrix&& m, str_make_unique)
-{
-    mat_type mat= m.impl_unique<mat_type>();
-
-    //assignment to m_matrix must be done after getting impl type
-    //otherwise m cannot be unique, and memory will be copied always
-    m_matrix    = std::move(m);
-
-    init_from_rep(mat);
-};
-
-template<class T>
-dense_matrix<T,false>::dense_matrix(matcl::Matrix& m)
-    :base_type(m, str_make_unique())
-{};
-
-template<class T>
-dense_matrix<T,false>::dense_matrix(matcl::Matrix&& m)
-    :base_type(m, str_make_unique())
-{};
 
 template<class T>
 dense_matrix<T,true>::dense_matrix(const sub_dense_matrix& sub)
@@ -174,7 +131,7 @@ dense_matrix<T,true>::dense_matrix(const sparse_matrix<T>& mat)
 
 template<class T>
 dense_matrix<T,true>::dense_matrix(sparse_matrix<T>&& mat)
-    :dense_matrix(mat.to_matrix())
+    :dense_matrix(std::move(mat).to_matrix())
 {};
 
 template<class T>
@@ -184,7 +141,7 @@ dense_matrix<T,true>::dense_matrix(const band_matrix<T>& mat)
 
 template<class T>
 dense_matrix<T,true>::dense_matrix(band_matrix<T>&& mat)
-    :dense_matrix(mat.to_matrix())
+    :dense_matrix(std::move(mat).to_matrix())
 {};
 
 template<class T>
@@ -193,16 +150,6 @@ dense_matrix<T,false>::dense_matrix(dense_matrix<T,false>&& mat)
 {
     init_from_rep(m_matrix.get_impl<mat_type>());
 }
-
-template<class T>
-dense_matrix<T,false>::dense_matrix(dense_matrix<T,true>&& mat)
-    :dense_matrix(mat.m_matrix)
-{}
-
-template<class T>
-dense_matrix<T,false>::dense_matrix(dense_matrix<T,true>& mat)
-    :dense_matrix(mat.m_matrix)
-{}
 
 template<class T>
 dense_matrix<T,true>& dense_matrix<T,true>::operator=(const dense_matrix& mat) &
@@ -221,19 +168,7 @@ dense_matrix<T,true>& dense_matrix<T,true>::operator=(dense_matrix&& mat) &
 };
 
 template<class T>
-dense_matrix<T,false>& dense_matrix<T,false>::operator=(dense_matrix&& mat) &
-{
-    m_matrix = std::move(mat.m_matrix);
-    init_from_rep(m_matrix.get_impl<mat_type>());
-    return *this;
-};
-
-template<class T>
 dense_matrix<T,true>::~dense_matrix()
-{};
-
-template<class T>
-dense_matrix<T,false>::~dense_matrix()
 {};
 
 template<class T>
@@ -307,7 +242,7 @@ template<class T>
 const typename dense_matrix<T,true>::dense_matrix
 dense_matrix<T,true>::operator()(const colon& r, const colon& c) const
 {
-    return dense_matrix(m_matrix(r,c));
+    return dense_matrix(m_matrix(r, c));
 };
 
 template<class T>
@@ -379,10 +314,13 @@ dense_matrix<T,true>::clone() const
 };
 
 template<class T>
-const typename dense_matrix<T,true>::dense_matrix&
-dense_matrix<T,true>::make_unique() const
+typename dense_matrix<T,true>::dense_matrix&
+dense_matrix<T,true>::make_unique()
 {
     m_matrix.make_unique();
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+
     return *this;
 };
 
@@ -426,57 +364,122 @@ sub_dense_matrix<T> dense_matrix<T,true>::operator()(const colon& r)
 };
 
 template<class T>
+void dense_matrix<T,true>::init_from_rep(const mat_type& mat)
+{
+    m_rows      = mat.rows();
+    m_cols      = mat.cols();
+    m_max_rows  = mat.max_rows();
+    m_max_cols  = mat.max_cols();
+    m_ld        = mat.ld();
+    m_size      = mat.size();
+    m_ptr       = const_cast<T*>(mat.ptr());
+    m_flag      = const_cast<struct_flag*>(&mat.get_struct());
+};
+
+template<class T>
+void dense_matrix<T,true>::update_rep()
+{
+    m_matrix   = convert(m_matrix, mat_type::matrix_code);
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+};
+
+template<class T>
+sub_dense_matrix<T> dense_matrix<T,true>::operator()(const colon& r, const colon& c)
+{
+    sub_dense_matrix ret(this, r, c);
+    return ret;
+};
+
+template<class T>
+sub_dense_matrix<T> dense_matrix<T,true>::diag(Integer d)
+{
+    sub_dense_matrix ret(d, this);
+    return ret;
+};
+
+template<class T>
+dense_matrix<T,true>::dense_matrix(matcl::Matrix& m, str_make_unique)
+{
+    if (m.is_unique() == true)
+    {
+        m_matrix           = convert_to_dense<mat_type>::eval(m);
+        const mat_type& mat = m_matrix.get_impl<mat_type>();
+        init_from_rep(mat);
+    }
+    else 
+    {
+        //TODO: convert m to dense?
+        m_matrix           = convert_to_dense<mat_type>::eval(m).make_unique();
+        const mat_type& mat = m_matrix.get_impl<mat_type>();
+
+        init_from_rep(mat);
+    }    
+};
+
+template<class T>
+dense_matrix<T,true>::dense_matrix(matcl::Matrix&& m, str_make_unique)
+{
+    m_matrix           = convert_to_dense<mat_type>::eval(std::move(m)).make_unique();
+    const mat_type& mat = m_matrix.get_impl<mat_type>();
+    init_from_rep(mat);
+};
+
+//--------------------------------------------------------------------
+//              dense_matrix<T, true> static functions
+//--------------------------------------------------------------------
+template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::zeros(Integer r, Integer c)
+dense_matrix<T> dense_matrix<T,true>::zeros(Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::zeros(r,c, details::value_to_code<T>::value));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::zeros(ti::ti_object ti, Integer r, Integer c)
+dense_matrix<T> dense_matrix<T,true>::zeros(ti::ti_object ti, Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::zeros(ti, r,c));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::ones(Integer r, Integer c)
+dense_matrix<T> dense_matrix<T,true>::ones(Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::ones(r,c, details::value_to_code<T>::value));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::ones(ti::ti_object ti, Integer r, Integer c)
+dense_matrix<T> dense_matrix<T,true>::ones(ti::ti_object ti, Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::ones(ti, r,c));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::eye(Integer r, Integer c)
+dense_matrix<T> dense_matrix<T,true>::eye(Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::eye(r,c, details::value_to_code<T>::value));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::eye(Integer r)
+dense_matrix<T> dense_matrix<T,true>::eye(Integer r)
 {
     return dense_matrix<T>(matcl::eye(r,r, details::value_to_code<T>::value));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::eye(ti::ti_object ti, Integer r, Integer c)
+dense_matrix<T> dense_matrix<T,true>::eye(ti::ti_object ti, Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::eye(ti, r,c));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::eye(ti::ti_object ti, Integer r)
+dense_matrix<T> dense_matrix<T,true>::eye(ti::ti_object ti, Integer r)
 {
     return dense_matrix<T>(matcl::eye(ti, r,r));
 };
@@ -488,7 +491,7 @@ template<>
 struct make_helper<Integer>
 {
     using T         = Integer;
-    using mat_type  = dense_matrix<T>;
+    using mat_type  = dense_matrix<T,true>;
     
     static mat_type eval(Integer rows,Integer cols, const T *arr)
     {
@@ -530,7 +533,7 @@ template<>
 struct make_helper<Real>
 {
     using T         = Real;
-    using mat_type  = dense_matrix<T>;
+    using mat_type  = dense_matrix<T,true>;
     
     static mat_type eval(Integer rows,Integer cols, const T *arr)
     {
@@ -587,7 +590,7 @@ template<>
 struct make_helper<Float>
 {
     using T         = Float;
-    using mat_type  = dense_matrix<T>;
+    using mat_type  = dense_matrix<T,true>;
     
     static mat_type eval(Integer rows,Integer cols, const T *arr)
     {
@@ -644,7 +647,7 @@ template<>
 struct make_helper<Complex>
 {
     using T         = Complex;
-    using mat_type  = dense_matrix<T>;
+    using mat_type  = dense_matrix<T, true>;
     
     static mat_type eval(Integer rows,Integer cols, const T *arr)
     {
@@ -686,7 +689,7 @@ template<>
 struct make_helper<Float_complex>
 {
     using T         = Float_complex;
-    using mat_type  = dense_matrix<T>;
+    using mat_type  = dense_matrix<T, true>;
     
     static mat_type eval(Integer rows,Integer cols, const T *arr)
     {
@@ -733,7 +736,7 @@ template<>
 struct make_helper<Object>
 {
     using T         = Object;
-    using mat_type  = dense_matrix<T>;
+    using mat_type  = dense_matrix<T, true>;
     
     static mat_type eval(ti::ti_object ti,Integer rows,Integer cols, const T *arr)
     {
@@ -762,35 +765,35 @@ struct make_helper<Object>
 };
 
 template<class T>
-dense_matrix<T> dense_matrix<T>::rand(Integer r, Integer c, const rand_state& rand_ptr)
+dense_matrix<T> dense_matrix<T, true>::rand(Integer r, Integer c, const rand_state& rand_ptr)
 {
     return dense_matrix<T>(matcl::rand(r,c, details::value_to_code<T>::value, rand_ptr));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::randn(Integer r, Integer c, const rand_state& rand_ptr)
+dense_matrix<T> dense_matrix<T, true>::randn(Integer r, Integer c, const rand_state& rand_ptr)
 {
     return make_helper<T>::eval_randn(r,c,rand_ptr);
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::range(T s, T e)
+dense_matrix<T> dense_matrix<T, true>::range(T s, T e)
 {
     return make_helper<T>::eval_range(s,e);
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::range(T s, T i, T e)
+dense_matrix<T> dense_matrix<T, true>::range(T s, T i, T e)
 {
     return make_helper<T>::eval_range(s,i,e);
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::linspace(typename details::real_type<T>::type s, 
+dense_matrix<T> dense_matrix<T, true>::linspace(typename details::real_type<T>::type s, 
                                           typename details::real_type<T>::type e, Integer n)
 {
     return make_helper<T>::eval_linspace(s,e,n);
@@ -798,7 +801,7 @@ dense_matrix<T> dense_matrix<T>::linspace(typename details::real_type<T>::type s
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::logspace(typename details::real_type<T>::type s, 
+dense_matrix<T> dense_matrix<T, true>::logspace(typename details::real_type<T>::type s, 
                                           typename details::real_type<T>::type e, Integer n)
 {
     return make_helper<T>::eval_logspace(s,e,n);
@@ -806,7 +809,7 @@ dense_matrix<T> dense_matrix<T>::logspace(typename details::real_type<T>::type s
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make_complex(Integer rows,Integer cols, 
+dense_matrix<T> dense_matrix<T, true>::make_complex(Integer rows,Integer cols, 
                         const typename details::real_type<T>::type *ar_r,
                         const typename details::real_type<T>::type* ar_i)
 {
@@ -815,118 +818,154 @@ dense_matrix<T> dense_matrix<T>::make_complex(Integer rows,Integer cols,
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make(Integer rows,Integer cols)
+dense_matrix<T> dense_matrix<T, true>::make(Integer rows, Integer cols)
 {
     return dense_matrix<T>(matcl::make_dense_matrix(rows, cols, details::value_to_code<T>::value));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make(ti::ti_object ti, Integer rows,Integer cols)
+dense_matrix<T> dense_matrix<T, true>::make(ti::ti_object ti, Integer rows,Integer cols)
 {
     return dense_matrix<T>(matcl::make_object_dense(ti, rows, cols));
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make(Integer rows,Integer cols, const T *arr)
+dense_matrix<T> dense_matrix<T, true>::make(Integer rows,Integer cols, const T *arr)
 {
     return make_helper<T>::eval(rows, cols, arr);    
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make(Integer rows,Integer cols, const T *arr, Integer ld)
+dense_matrix<T> dense_matrix<T, true>::make(Integer rows,Integer cols, const T *arr, Integer ld)
 {
     return make_helper<T>::eval(rows, cols, arr, ld);    
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make(ti::ti_object ti, Integer rows,Integer cols, const T *arr)
+dense_matrix<T> dense_matrix<T, true>::make(ti::ti_object ti, Integer rows,Integer cols, const T *arr)
 {
     return make_helper<T>::eval(ti, rows, cols, arr);    
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make(ti::ti_object ti, Integer rows,Integer cols, const T *arr, Integer ld)
+dense_matrix<T> dense_matrix<T, true>::make(ti::ti_object ti, Integer rows,Integer cols, const T *arr, Integer ld)
 {
     return make_helper<T>::eval(ti, rows, cols, arr, ld);    
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make_foreign(Integer rows,Integer cols, T* arr, Integer ld)
+dense_matrix<T> dense_matrix<T, true>::make_foreign(Integer rows,Integer cols, T* arr, Integer ld)
 {
     return make_helper<T>::eval_foreign(rows, cols, arr, ld);    
 }
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make_foreign(ti::ti_object ti, Integer rows,Integer cols, Object* arr, 
+dense_matrix<T> dense_matrix<T, true>::make_foreign(ti::ti_object ti, Integer rows,Integer cols, Object* arr, 
                                 Integer ld)
 {
     return make_helper<T>::eval_foreign(ti, rows, cols, arr, ld);    
 };
 
 template<class T>
-dense_matrix<T> dense_matrix<T>::make(const T& val, Integer rows, Integer cols)
+dense_matrix<T> dense_matrix<T, true>::make(const T& val, Integer rows, Integer cols)
 {
     return make_helper<T>::eval(val, rows, cols);    
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make_noinit(Integer rows,Integer cols, T*& ptr_data)
+dense_matrix<T> dense_matrix<T, true>::make_noinit(Integer rows,Integer cols, T*& ptr_data)
 {
     return make_helper<T>::eval_noinit(rows, cols, ptr_data);    
 };
 
 template<class T>
 template<class Enable>
-dense_matrix<T> dense_matrix<T>::make_noinit(ti::ti_object ti, Integer rows,Integer cols, T*& ptr_data)
+dense_matrix<T> dense_matrix<T, true>::make_noinit(ti::ti_object ti, Integer rows,Integer cols, T*& ptr_data)
 {
     return make_helper<T>::eval_noinit(ti, rows, cols, ptr_data);    
 };
 
 template<class T>
-dense_matrix<T> dense_matrix<T>::diag(const dense_matrix& v, Integer d)
+dense_matrix<T> dense_matrix<T, true>::diag(const dense_matrix& v, Integer d)
 {
     return dense_matrix<T>(matcl::diag(v.to_matrix(),d));
 };
 
 template<class T> 
-dense_matrix<T> dense_matrix<T>::diags(const dense_matrix& A, const Matrix &d, Integer r, Integer c)
+dense_matrix<T> dense_matrix<T, true>::diags(const dense_matrix& A, const Matrix &d, Integer r, Integer c)
 {
     return dense_matrix<T>(matcl::diags(A.to_matrix(),d,r,c));
 };
 
+//--------------------------------------------------------------------
+//              dense_matrix<T, false>
+//--------------------------------------------------------------------
 template<class T>
-sub_dense_matrix<T> dense_matrix<T,true>::operator()(const colon& r, const colon& c)
+dense_matrix<T,false>::dense_matrix()
+    :base_type()
+{};
+
+template<class T>
+dense_matrix<T,false>::dense_matrix(matcl::Matrix& m)
+    :base_type(m, str_make_unique())
+{};
+
+template<class T>
+dense_matrix<T,false>::dense_matrix(matcl::Matrix&& m)
+    :base_type(std::move(m), str_make_unique())
+{};
+
+template<class T>
+dense_matrix<T,false>::dense_matrix(dense_matrix<T,true>&& mat)
+    :dense_matrix(std::move(mat.m_matrix))
+{}
+
+template<class T>
+dense_matrix<T,false>::dense_matrix(dense_matrix<T,true>& mat)
+    :dense_matrix(mat.make_unique().m_matrix)
+{}
+
+template<class T>
+dense_matrix<T,false>& dense_matrix<T,false>::operator=(dense_matrix&& mat) &
 {
-    sub_dense_matrix ret(this,r,c);
-    return ret;
+    m_matrix   = std::move(mat.m_matrix);
+    init_from_rep(m_matrix.get_impl<mat_type>());
+    return *this;
 };
 
 template<class T>
-sub_dense_matrix<T> dense_matrix<T,true>::diag(Integer d)
+dense_matrix<T,false>::~dense_matrix()
+{};
+
+//--------------------------------------------------------------------
+//              sub_dense_matrix<T>
+//--------------------------------------------------------------------
+template<class T>
+const Matrix sub_dense_matrix<T>::to_raw_matrix() const
 {
-    sub_dense_matrix ret(d,this);
-    return ret;
+    const Matrix& tmp = m_matrix->to_matrix();
+
+    if (m_colon_2)
+        return tmp(*m_colon_1,*m_colon_2);
+    else if(m_colon_1)
+        return tmp(*m_colon_1);
+    else
+        return get_diag(tmp, m_d);
 };
 
 template<class T>
 const typename sub_dense_matrix<T>::matrix_type 
 sub_dense_matrix<T>::to_matrix() const
 {
-    const Matrix& tmp = Matrix(*m_matrix);
-    if (m_colon_2)
-        return matrix_type(tmp(*m_colon_1,*m_colon_2));
-    else if(m_colon_1)
-        return matrix_type(tmp(*m_colon_1));
-    else
-        return matrix_type(get_diag(tmp,m_d));
+    return matrix_type(this->to_raw_matrix());
 };
 
 template<class T>
@@ -995,7 +1034,7 @@ sub_dense_matrix<T>::operator=(const sub_dense_matrix<T>& mat0) const &&
 {
     if (m_colon_2)
     {
-        m_matrix->m_matrix(*m_colon_1,*m_colon_2) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix(*m_colon_1,*m_colon_2) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -1003,7 +1042,7 @@ sub_dense_matrix<T>::operator=(const sub_dense_matrix<T>& mat0) const &&
     }
     else if (m_colon_1)
     {
-        m_matrix->m_matrix(*m_colon_1) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix(*m_colon_1) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -1011,7 +1050,7 @@ sub_dense_matrix<T>::operator=(const sub_dense_matrix<T>& mat0) const &&
     }
     else
     {
-        m_matrix->m_matrix.diag(m_d) = mat0.m_matrix->m_matrix;
+        m_matrix->m_matrix.diag(m_d) = mat0.to_raw_matrix();
 
         //m_matrix->m_matrix could be made unique, so we need to update rep pointers
         m_matrix->update_rep();
@@ -1061,6 +1100,10 @@ inline sub_dense_matrix<T>::operator bool() const
 {
     return Matrix(*this).operator bool();
 };
+
+//--------------------------------------------------------------------
+//              TESTS
+//--------------------------------------------------------------------
 
 template<class T>
 void test_compile(const dense_matrix<T>& v)
@@ -1302,12 +1345,6 @@ dense_matrix<Float_complex> dense_matrix<Float_complex>::eye(Integer r);
 template MATCL_MATREP_EXPORT_REP
 dense_matrix<Object> dense_matrix<Object>::eye(ti::ti_object, Integer r);
 
-#pragma warning(push)
-#pragma warning(disable:5037) //an out-of-line definition of a member of a class template
-                              // cannot have default arguments
-
-// is it a VS bug?
-
 template MATCL_MATREP_EXPORT_REP
 dense_matrix<Float> dense_matrix<Float>::randn(Integer r, Integer c, const rand_state& rand_ptr);
 
@@ -1319,8 +1356,6 @@ dense_matrix<Float_complex> dense_matrix<Float_complex>::randn(Integer r, Intege
 
 template MATCL_MATREP_EXPORT_REP
 dense_matrix<Complex> dense_matrix<Complex>::randn(Integer r, Integer c, const rand_state& rand_ptr);
-
-#pragma warning(pop)
 
 template MATCL_MATREP_EXPORT_REP
 dense_matrix<Integer> dense_matrix<Integer>::range(Integer s, Integer e);

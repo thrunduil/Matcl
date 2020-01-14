@@ -137,8 +137,8 @@ struct gschur_str
                 Matrix Am   = P * Matrix(A,false) * P;
                 Matrix Bm   = P * Matrix(B,false) * P;
 
-                Mat TA2     = Am.impl_unique<Mat>();
-                Mat TB2     = Bm.impl_unique<Mat>();                
+                Mat TA2     = convert(Am, Mat::matrix_code).get_impl_unique<Mat>();
+                Mat TB2     = convert(Bm, Mat::matrix_code).get_impl_unique<Mat>();                
 
                 lapack::gges(jobvsl, jobvsr, "N", nullptr, N, lap(TA2.ptr()), TA2.ld(), lap(TB2.ptr()), 
                         TB2.ld(), &Sdim, lap(alpha.ptr()), lap(beta.ptr()), lap(Q.ptr()), Q.ld(), lap(Z.ptr()),
@@ -228,8 +228,8 @@ struct gschur_str
         const char* SIDE        = (comp_left && comp_right)? "B" : (comp_left? "L" : "R");
         Integer* SELECT         = ind.get_array_unique<Integer>();
 
-        const Mat& TA           = sd.m_TA.impl<Mat>();
-        const Mat& TB           = sd.m_TB.impl<Mat>();
+        const Mat& TA           = convert(sd.m_TA, Mat::matrix_code).get_impl<Mat>();
+        const Mat& TB           = convert(sd.m_TB, Mat::matrix_code).get_impl<Mat>();
 
         Integer N               = sd.m_TA.rows();
         const Val* ptr_TA       = TA.ptr();
@@ -287,8 +287,8 @@ struct gschur_str
         const char* HOWMNY      = "S";
         const Integer* SELECT   = ind.get_array<Integer>();
 
-        const Mat& TA           = sd.m_TA.impl<Mat>();
-        const Mat& TB           = sd.m_TB.impl<Mat>();
+        const Mat& TA           = convert(sd.m_TA, Mat::matrix_code).get_impl<Mat>();
+        const Mat& TB           = convert(sd.m_TB, Mat::matrix_code).get_impl<Mat>();
 
         Integer N               = TA.rows();
         Integer M               = make_complex_eigenvectors<Val>::calc_sel_size(TA, SELECT, N);
@@ -350,8 +350,8 @@ struct gschur_str
         const char* HOWMNY      = "S";
         const Integer* SELECT   = ind.get_array<Integer>();
 
-        const Mat& TA           = sd.m_TA.impl<Mat>();
-        const Mat& TB           = sd.m_TB.impl<Mat>();
+        const Mat& TA           = convert(sd.m_TA, Mat::matrix_code).get_impl<Mat>();
+        const Mat& TB           = convert(sd.m_TB, Mat::matrix_code).get_impl<Mat>();
 
         Integer N               = TA.rows();
         Integer M               = make_complex_eigenvectors<Val>::calc_sel_size(TA, SELECT, N);
@@ -402,8 +402,8 @@ struct gschur_str
 
         Integer IJOB    = type; 
 
-        const Mat& TA   = sd.m_TA.impl<Mat>();
-        const Mat& TB   = sd.m_TB.impl<Mat>();
+        const Mat& TA   = convert(sd.m_TA, Mat::matrix_code).get_impl<Mat>();
+        const Mat& TB   = convert(sd.m_TB, Mat::matrix_code).get_impl<Mat>();
 
         Integer N           = TA.rows();
         const Val* ptr_TA   = TA.ptr();
@@ -1493,21 +1493,21 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
         return;
 
     Integer N   = m_TA.rows();
-    Matrix I    = ind;
 
     Integer M_sel;    
-    details::schur_reorder_check(I, N, M_sel);
+    details::schur_reorder_check(ind, N, M_sel);
     
     // fast exit for trivial ind vectors like [0 0 0 0] [1 1 1] [1 1 0 0 0] etc.
-    if (!no_fast_exit && details::schur_is_trivial_reorder(I))
-        return;
-
-    raw::integer_dense I_r = I.impl_unique<raw::integer_dense>();
+    if (!no_fast_exit && details::schur_is_trivial_reorder(ind))
+        return;    
 
     using Mat = raw::Matrix<Val,struct_dense>;
 
-    Mat mat_TA      = m_TA.impl_unique<Mat>();
-    Mat mat_TB      = m_TB.impl_unique<Mat>();
+    m_TA            = convert(m_TA, Mat::matrix_code);
+    m_TB            = convert(m_TB, Mat::matrix_code);
+
+    Mat mat_TA      = m_TA.get_impl_unique<Mat>();
+    Mat mat_TB      = m_TB.get_impl_unique<Mat>();
 
     mat_TA.set_struct(struct_flag());
     mat_TB.set_struct(struct_flag());
@@ -1517,8 +1517,11 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
 
     if (m_has_QZ)
     {
-        mat_Q.assign_to_fresh(m_Q_factor.impl_unique<Mat>());
-        mat_Z.assign_to_fresh(m_Z_factor.impl_unique<Mat>());
+        m_Q_factor  = convert(m_Q_factor, Mat::matrix_code);
+        m_Z_factor  = convert(m_Z_factor, Mat::matrix_code);
+
+        mat_Q.assign_to_fresh(m_Q_factor.get_impl_unique<Mat>());
+        mat_Z.assign_to_fresh(m_Z_factor.get_impl_unique<Mat>());
 
         mat_Q.set_struct(struct_flag());
         mat_Z.set_struct(struct_flag());
@@ -1555,7 +1558,10 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
 
     Val work_query;
     Integer iwork_query;
-        
+    
+    //TODO: avoid copying
+    raw::integer_dense I_r = convert(ind, mat_code::integer_dense).get_impl_unique<raw::integer_dense>();
+
     //TODO
     //lapack::tgsen3(wantq, wantz, lap(I_r.ptr()), N, Q_r, lap(r_TA), TA_ld, lap(r_TB), TB_ld,
     //                lap(alpha.ptr()), lap(beta.ptr()), lap(r_Q), Q_ld, lap(r_Z), Z_ld, &M, 
@@ -1563,7 +1569,7 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
 
     lapack::tgsen(0, wantq, wantz, lap(I_r.ptr()), N, lap(r_TA), TA_ld, lap(r_TB), TB_ld,
                     lap(alpha.ptr()), lap(beta.ptr()), lap(r_Q), Q_ld, lap(r_Z), Z_ld, &M,
-                    nullptr, nullptr, nullptr, lap(&work_query), -1, lap(&iwork_query), -1, &info);
+                    nullptr, nullptr, nullptr, lap(&work_query), -1, lap(&iwork_query), -1, &info);    
 
     Integer lwork   = (Integer) real(work_query);
     lwork           = lwork + 1; // + 1 to work around bug in MKL lapack (old lapack 3.1.0)

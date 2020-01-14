@@ -140,7 +140,7 @@ struct build_edge_weights_impl
         using VR            = typename md::real_type<Val>::type;
         using Mat_S         = raw::Matrix<Val,struct_sparse>;
 
-        const Mat_S& rep    = W.impl<Mat_S>();
+        const Mat_S& rep    = convert(W, Mat_S::matrix_code).get_impl<Mat_S>();
 
         Integer num_edges   = rep.nnz();
 
@@ -205,7 +205,7 @@ struct build_edge_weights_impl<Integer>
         using Val           = Integer;
         using Mat_S         = raw::Matrix<Val,struct_sparse>;
 
-        const Mat_S& rep    = W.impl<Mat_S>();
+        const Mat_S& rep    = convert(W, Mat_S::matrix_code).get_impl<Mat_S>();
 
         Integer num_edges   = rep.nnz();
 
@@ -253,7 +253,7 @@ template<class Val>
 void wrappers_utils::get_structure_impl(const Matrix& A, const Integer*& ptr_c, const Integer*& ptr_r)
 {
     using Mat_S         = raw::Matrix<Val,struct_sparse>;
-    const Mat_S& rep    = A.impl<Mat_S>();
+    const Mat_S& rep    = convert(A, Mat_S::matrix_code).get_impl<Mat_S>();
     ptr_c               = rep.rep().ptr_c();
     ptr_r               = rep.rep().ptr_r();
 };
@@ -264,7 +264,8 @@ void wrappers_utils::build_node_weights_impl(const Matrix& W, Mat_I& node_weight
 {
     if (std::is_same<V,Integer>::value)
     {
-        node_weights.assign_to_fresh(W.impl<Mat_I>());
+        Matrix Wc       = convert(W, Mat_I::matrix_code); 
+        node_weights.assign_to_fresh(Wc.get_impl<Mat_I>());
         return;
     };
 

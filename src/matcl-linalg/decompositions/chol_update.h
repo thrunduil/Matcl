@@ -188,8 +188,8 @@ struct chol_update_impl<V,struct_dense>
         Integer N       = A.rows();
 
         //no rvalue overload for w matrix; always make copy
-        Matrix w        = w0;
-        Mat v           = w.impl_unique<Mat>();
+        Matrix w        = convert(w0, Mat::matrix_code);
+        Mat v           = w.get_impl_unique<Mat>();
 
         V* v_ptr        = v.ptr();
         Integer v_LD    = v.ld();
@@ -594,7 +594,7 @@ struct chol_update_impl<V,struct_sparse>
             return chol_update_impl<V,struct_dense>::eval_update(ret, Ac, w, upper, sigma, true);
         };
 
-        const Mat& W                    = w.impl<Mat>();
+        const Mat& W                    = convert(w, Mat::matrix_code).get_impl<Mat>();
         const mrd::sparse_ccs<V>& W_rep = W.rep();
         const mrd::sparse_ccs<V>& A_rep = A.rep();
         const Integer* W_c              = W_rep.ptr_c();

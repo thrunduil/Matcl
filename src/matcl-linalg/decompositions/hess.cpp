@@ -310,7 +310,7 @@ struct init_VLR_storage<V,true>
 
     static void eval(Mat& VLR, const Matrix& init_mat, const VR* ptr_WI)
     {
-        const Mat_R& rep    = init_mat.impl<Mat_R>();
+        const Mat_R& rep    = convert(init_mat, Mat_R::matrix_code).get_impl<Mat_R>();
         const VR* ptr_rep   = rep.ptr();
         Integer rep_LD      = rep.ld();
 
@@ -363,7 +363,7 @@ struct init_VLR_storage<V,false>
 
     static void eval(Mat& VLR, const Matrix& init_mat, const VR* ptr_WI)
     {
-        const Mat_C& rep    = init_mat.impl<Mat_C>();
+        const Mat_C& rep    = convert(init_mat, Mat_C::matrix_code).get_impl<Mat_C>();
         const VC* ptr_rep   = rep.ptr();
         Integer rep_LD      = rep.ld();
 
@@ -849,8 +849,8 @@ struct hess_eig_dense<V,false>
         if (init_mc == this_mc)
             return init_mat.get_impl<Mat>().make_unique();
 
-        Matrix mat_VLR = convert(init_mat, this_mc);
-        return mat_VLR.impl_unique<Mat>();
+        Matrix mat_VLR = convert(init_mat, Mat::matrix_code);
+        return mat_VLR.get_impl_unique<Mat>();
     };
 };
 

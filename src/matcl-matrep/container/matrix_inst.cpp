@@ -453,50 +453,6 @@ template const raw::Matrix<Complex,struct_banded>&	Matrix::get_impl<raw::Matrix<
 template const raw::Matrix<Float_complex,struct_banded>& Matrix::get_impl<raw::Matrix<Float_complex,struct_banded> >() const;
 template const raw::Matrix<Object,struct_banded>&	Matrix::get_impl<raw::Matrix<Object,struct_banded> >() const;
 
-template  const raw::Matrix<Integer,struct_dense>   Matrix::impl<raw::Matrix<Integer,struct_dense> >() const;
-template  const raw::Matrix<Real,struct_dense>      Matrix::impl<raw::Matrix<Real,struct_dense> >() const;
-template  const raw::Matrix<Float,struct_dense>     Matrix::impl<raw::Matrix<Float,struct_dense> >() const;
-template  const raw::Matrix<Complex,struct_dense>   Matrix::impl<raw::Matrix<Complex,struct_dense> >() const;
-template  const raw::Matrix<Float_complex,struct_dense>   Matrix::impl<raw::Matrix<Float_complex,struct_dense> >() const;
-template  const raw::Matrix<Object,struct_dense>	Matrix::impl<raw::Matrix<Object,struct_dense> >() const;
-
-template  const raw::Matrix<Integer,struct_sparse>	Matrix::impl<raw::Matrix<Integer,struct_sparse> >() const;
-template  const raw::Matrix<Real,struct_sparse>		Matrix::impl<raw::Matrix<Real,struct_sparse>>() const;
-template  const raw::Matrix<Float,struct_sparse>	Matrix::impl<raw::Matrix<Float,struct_sparse>>() const;
-template  const raw::Matrix<Complex,struct_sparse>	Matrix::impl<raw::Matrix<Complex,struct_sparse> >() const;
-template  const raw::Matrix<Float_complex,struct_sparse>	Matrix::impl<raw::Matrix<Float_complex,struct_sparse> >() const;
-template  const raw::Matrix<Object,struct_sparse>	Matrix::impl<raw::Matrix<Object,struct_sparse> >() const;
-
-template  const raw::Matrix<Integer,struct_banded>	Matrix::impl<raw::Matrix<Integer,struct_banded> >() const;
-template  const raw::Matrix<Real,struct_banded>		Matrix::impl<raw::Matrix<Real,struct_banded> >() const;
-template  const raw::Matrix<Float,struct_banded>	Matrix::impl<raw::Matrix<Float,struct_banded> >() const;
-template  const raw::Matrix<Complex,struct_banded>	Matrix::impl<raw::Matrix<Complex,struct_banded> >() const;
-template  const raw::Matrix<Float_complex,struct_banded>	Matrix::impl<raw::Matrix<Float_complex,struct_banded> >() const;
-template  const raw::Matrix<Object,struct_banded>	Matrix::impl<raw::Matrix<Object,struct_banded> >() const;
-
-//
-template  raw::Matrix<Integer,struct_dense>& 		Matrix::impl_unique<raw::Matrix<Integer,struct_dense> >();
-template  raw::Matrix<Real,struct_dense>&           Matrix::impl_unique<raw::Matrix<Real,struct_dense> >();
-template  raw::Matrix<Float,struct_dense>&          Matrix::impl_unique<raw::Matrix<Float,struct_dense> >();
-template  raw::Matrix<Complex,struct_dense>&        Matrix::impl_unique<raw::Matrix<Complex,struct_dense> >();
-template  raw::Matrix<Float_complex,struct_dense>&  Matrix::impl_unique<raw::Matrix<Float_complex,struct_dense> >();
-template  raw::Matrix<Object,struct_dense>&         Matrix::impl_unique<raw::Matrix<Object,struct_dense> >();
-
-template  raw::Matrix<Integer,struct_sparse>&		Matrix::impl_unique<raw::Matrix<Integer,struct_sparse> >();
-template  raw::Matrix<Real,struct_sparse>&		    Matrix::impl_unique<raw::Matrix<Real,struct_sparse>>();
-template  raw::Matrix<Float,struct_sparse>&		    Matrix::impl_unique<raw::Matrix<Float,struct_sparse>>();
-template  raw::Matrix<Complex,struct_sparse>&		Matrix::impl_unique<raw::Matrix<Complex,struct_sparse> >();
-template  raw::Matrix<Float_complex,struct_sparse>&	Matrix::impl_unique<raw::Matrix<Float_complex,struct_sparse> >();
-template  raw::Matrix<Object,struct_sparse>&        Matrix::impl_unique<raw::Matrix<Object,struct_sparse> >();
-
-template  raw::Matrix<Integer,struct_banded>&		Matrix::impl_unique<raw::Matrix<Integer,struct_banded> >();
-template  raw::Matrix<Real,struct_banded>&		    Matrix::impl_unique<raw::Matrix<Real,struct_banded> >();
-template  raw::Matrix<Float,struct_banded>&		    Matrix::impl_unique<raw::Matrix<Float,struct_banded> >();
-template  raw::Matrix<Complex,struct_banded>&		Matrix::impl_unique<raw::Matrix<Complex,struct_banded> >();
-template  raw::Matrix<Float_complex,struct_banded>&	Matrix::impl_unique<raw::Matrix<Float_complex,struct_banded> >();
-template  raw::Matrix<Object,struct_banded>&        Matrix::impl_unique<raw::Matrix<Object,struct_banded> >();
-template Object Matrix::get_scalar<Object>() const;
-
 // get_functor
 
 template struct details::get_functor<raw::Matrix<Integer,struct_dense> >;

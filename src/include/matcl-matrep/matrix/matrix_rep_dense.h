@@ -357,8 +357,8 @@ class MATCL_MATREP_EXPORT dense_matrix<T, true>
 
         // if matrix is unique (i.e. refcount is 1) then do nothing; otherwise
         // make copy of this matrix, note that refcount of this instance will
-        // also drop to one
-        const dense_matrix& make_unique() const;
+        // also drop to one; raw pointers can be invalidated
+        dense_matrix&       make_unique();
 
         // make independent copy
         const dense_matrix  clone() const;
@@ -378,18 +378,18 @@ class MATCL_MATREP_EXPORT dense_matrix<T, true>
         sub_dense_matrix    diag(Integer d = 0);
 
         // change matrix size; if number of rows and columns is less than capacity,
-        // then no copy is done
+        // then no copy is done; raw pointers can be invalidated
         void                resize(Integer r, Integer c);
 
-        // increase rows and columns capacity
+        // increase rows and columns capacity; raw pointers can be invalidated
         void                reserve(Integer r, Integer c);
 
         // change matrix size including number of sub- and superdiagonals; 
-        // this is equivalent to resize(r,c);
+        // this is equivalent to resize(r,c); raw pointers can be invalidated
         void                resize_band(Integer r, Integer c, Integer ld, Integer ud);
 
         // increase rows columns and sub- and superdiagonals capacity; 
-        // this is equivalent to reserve(r,c) 
+        // this is equivalent to reserve(r,c); raw pointers can be invalidated
         void                reserve_band(Integer r, Integer c, Integer ld, Integer ud);
 
         //--------------------------------------------------------------------
