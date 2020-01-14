@@ -720,7 +720,8 @@ struct test_zero
 
 
 template<class val_type, class test>
-static Matrix<val_type,struct_sparse> drop_impl(const Matrix<val_type,struct_sparse>& A, test t)
+static const_matrix<Matrix<val_type,struct_sparse>>
+drop_impl(const Matrix<val_type,struct_sparse>& A, test t)
 {
     using sparse_ccs = details::sparse_ccs<val_type>;
 
@@ -808,13 +809,15 @@ static Matrix<val_type,struct_sparse> drop_impl(const Matrix<val_type,struct_spa
 };
 
 template<class value_type_>
-Matrix<value_type_,struct_sparse> Matrix<value_type_,struct_sparse>::drop() const
+const_matrix<Matrix<value_type_,struct_sparse>>
+Matrix<value_type_,struct_sparse>::drop() const
 {
     return drop_impl(*this,test_zero<value_type_>());
 };
 
 template<class value_type_>
-Matrix<value_type_,struct_sparse> Matrix<value_type_,struct_sparse>::drop(Real tol) const
+const_matrix<Matrix<value_type_,struct_sparse>>
+Matrix<value_type_,struct_sparse>::drop(Real tol) const
 {
     if (tol == 0.)
         return drop_impl(*this,test_zero<value_type_>());

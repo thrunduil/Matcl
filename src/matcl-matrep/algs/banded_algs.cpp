@@ -54,9 +54,9 @@ void del_rows_banded_functor<value_type>::eval(matcl::Matrix& ret, const BM& mat
         if (ci.is_double_mat_colon() == true)
             throw error::invalid_colon_too_many_mat();
 
-        raw::integer_dense ritmp    = ci.get_rim_1();
-        const Integer* ptr_r        = ritmp.ptr();
-        Integer ce                  = ptr_r[0];
+        const raw::integer_dense& ritmp = ci.get_rim_1();
+        const Integer* ptr_r            = ritmp.ptr();
+        Integer ce                      = ptr_r[0];
 
         error::check_row(ce, r0, c0);
 
@@ -514,9 +514,9 @@ void del_rowscols_banded_functor<value_type>::eval_00(matcl::Matrix& ret, const 
     }
 
     //row colon
-    raw::integer_dense ritmp    = ci.get_rim_2();
-    const Integer* ptr_r        = ritmp.ptr();
-    Integer cer                 = ptr_r[0];
+    const raw::integer_dense& ritmp = ci.get_rim_2();
+    const Integer* ptr_r            = ritmp.ptr();
+    Integer cer                     = ptr_r[0];
 
     error::check_row(cer, r0, c0);
 
@@ -740,9 +740,9 @@ void del_rowscols_banded_functor<value_type>::eval_01(matcl::Matrix& ret, const 
     Integer c0  = mat.cols();
 
     //row colon
-    raw::integer_dense ritmp    = ci.get_rim_2();
-    const Integer* ptr_r        = ritmp.ptr();
-    Integer cer                 = ptr_r[0];
+    const raw::integer_dense& ritmp = ci.get_rim_2();
+    const Integer* ptr_r            = ritmp.ptr();
+    Integer cer                     = ptr_r[0];
 
     error::check_row(cer, r0, c0);
 
@@ -1119,7 +1119,7 @@ void del_rowscols_banded_functor<value_type>::eval_11(matcl::Matrix& ret, const 
 };
 
 template<class V>
-raw::Matrix<V,struct_banded> band_change_diag_functor<V>::eval(const BM& mat, Integer d, const DM& val)
+void band_change_diag_functor<V>::eval(Matrix& ret, const BM& mat, Integer d, const DM& val)
 {    
     Integer r   = mat.rows();
     Integer c   = mat.cols();
@@ -1133,7 +1133,10 @@ raw::Matrix<V,struct_banded> band_change_diag_functor<V>::eval(const BM& mat, In
     error::check_assign_1(s,val.size(),1);
 
     if (s == 0)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     BM A(mat.get_type());
 
@@ -1167,11 +1170,13 @@ raw::Matrix<V,struct_banded> band_change_diag_functor<V>::eval(const BM& mat, In
 
     A.set_struct(md::predefined_struct::get_set_diag(mat.get_struct(), d,value_struct_class::vc_general,
                               is_real_matrix(A), r == c));
-    return A;
+
+    ret = Matrix(A, false);
+    return;
 };
 
 template<class V>
-raw::Matrix<V,struct_banded> band_change_diag_functor<V>::eval(const BM& mat, Integer d, const V& val)
+void band_change_diag_functor<V>::eval(Matrix& ret, const BM& mat, Integer d, const V& val)
 {
     using Mat_B     = raw::Matrix<V,struct_banded>;
 
@@ -1185,7 +1190,10 @@ raw::Matrix<V,struct_banded> band_change_diag_functor<V>::eval(const BM& mat, In
     Integer s       = mat.diag_length(d);
 
     if (s == 0)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     bool tz = matcl::details::has_trivial_assignment<BM,V>::eval(mat,val);
 
@@ -1218,7 +1226,9 @@ raw::Matrix<V,struct_banded> band_change_diag_functor<V>::eval(const BM& mat, In
     value_struct_class vt = md::predefined_struct::get_value_type(val,tz);
     A.set_struct(md::predefined_struct::get_set_diag(mat.get_struct(), d,vt, 
                         is_real_matrix(A), r == c));
-    return A;
+
+    ret = Matrix(A, false);
+    return;
 };
 
 

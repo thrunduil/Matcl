@@ -1967,11 +1967,11 @@ struct estim_bandwidth
     };
 };
 
-template<class ret_type,class M,class struct_type>
+template<class M, class struct_type>
 struct eval_tril_helper
 {};
 
-template<class ret_type,class M,class struct_type>
+template<class M, class struct_type>
 struct eval_triu_helper
 {};
 
@@ -1979,8 +1979,8 @@ template<class M,class struct_type>
 struct eval_select_band_helper
 {};
 
-template<class ret_type,class M>
-struct eval_tril_helper<ret_type,M,struct_dense>
+template<class M>
+struct eval_tril_helper<M, struct_dense>
 {
     static void eval(matcl::Matrix& ret, const M& A, Integer d, bool rvalue)
     {
@@ -2004,19 +2004,23 @@ struct eval_tril_helper<ret_type,M,struct_dense>
         };
 
         if (rvalue == true && A.is_unique() == true)
-            return eval_inplace(ret, A, d);
+        {
+            M A2(A.get_type());
+            A2.assign_to_fresh(A);
 
-        ret_type res(A.get_type(),r, c);
+            return eval_inplace(ret, A2, d);
+        };
 
-        using value_type    = typename ret_type::value_type;
-        using value_type_in = typename M::value_type;
+        M res(A.get_type(), r, c);
+
+        using value_type    = typename M::value_type;
 
         value_type Z = md::default_value<value_type>(A.get_type());
 
-        value_type* ptr_res         = res.ptr();
-        const value_type_in* ptr_A  = A.ptr();
-        Integer A_ld                = A.ld();
-        Integer res_ld              = res.ld();
+        value_type* ptr_res     = res.ptr();
+        const value_type* ptr_A = A.ptr();
+        Integer A_ld            = A.ld();
+        Integer res_ld          = res.ld();
 
         for (Integer j = 0; j < c; ++j)
         {
@@ -2037,19 +2041,16 @@ struct eval_tril_helper<ret_type,M,struct_dense>
         return;
     };
 
-    static void eval_inplace(matcl::Matrix& ret, const M& A, Integer d)
+    static void eval_inplace(matcl::Matrix& ret, M& res, Integer d)
     {
-        Integer r = A.rows(), c = A.cols();
+        Integer r = res.rows(), c = res.cols();
 
-        ret_type res(A);
+        using value_type    = typename M::value_type;
 
-        using value_type    = typename ret_type::value_type;
-        using value_type_in = typename M::value_type;
-
-        value_type Z = md::default_value<value_type>(A.get_type());
+        value_type Z = md::default_value<value_type>(res.get_type());
 
         value_type* ptr_res         = res.ptr();
-        Integer res_ld              = A.ld();
+        Integer res_ld              = res.ld();
 
         for (Integer j = 0; j < c; ++j)
         {
@@ -2061,14 +2062,14 @@ struct eval_tril_helper<ret_type,M,struct_dense>
             ptr_res += res_ld;
         }
 
-        res.set_struct(md::predefined_struct::get_tril(A.get_struct(), d, is_real_matrix(A)));
+        res.set_struct(md::predefined_struct::get_tril(res.get_struct(), d, is_real_matrix(res)));
         ret = matcl::Matrix(res,true);
         return;
     };
 };
 
-template<class ret_type,class M>
-struct eval_triu_helper<ret_type,M,struct_dense>
+template<class M>
+struct eval_triu_helper<M, struct_dense>
 {
     static void eval(matcl::Matrix& ret, const M& A, Integer d, bool rvalue)
     {
@@ -2093,16 +2094,20 @@ struct eval_triu_helper<ret_type,M,struct_dense>
         };
 
         if (rvalue == true && A.is_unique() == true)
-            return eval_inplace(ret, A, d);
+        {
+            M A2(A.get_type());
+            A2.assign_to_fresh(A);
 
-        ret_type res(A.get_type(),r, c);
+            return eval_inplace(ret, A2, d);
+        };
 
-        using value_type    = typename ret_type::value_type;
-        using value_type_in = typename M::value_type;
+        M res(A.get_type(),r, c);
+
+        using value_type    = typename M::value_type;
         value_type Z        = md::default_value<value_type>(A.get_type());
 
         value_type* ptr_res         = res.ptr();
-        const value_type_in* ptr_A  = A.ptr();
+        const value_type* ptr_A     = A.ptr();
         Integer A_ld                = A.ld();
         Integer res_ld              = res.ld();
 
@@ -2126,15 +2131,12 @@ struct eval_triu_helper<ret_type,M,struct_dense>
         return;
     };
 
-    static void eval_inplace(matcl::Matrix& ret, const M& A, Integer d)
+    static void eval_inplace(matcl::Matrix& ret, M& res, Integer d)
     {
-        Integer r = A.rows(), c = A.cols();		
+        Integer r = res.rows(), c = res.cols();		
 
-        ret_type res(A);
-
-        using value_type    = typename ret_type::value_type;
-        using value_type_in = typename M::value_type;
-        value_type Z        = md::default_value<value_type>(A.get_type());
+        using value_type    = typename M::value_type;
+        value_type Z        = md::default_value<value_type>(res.get_type());
 
         value_type* ptr_res = res.ptr();
         Integer res_ld      = res.ld();
@@ -2150,7 +2152,7 @@ struct eval_triu_helper<ret_type,M,struct_dense>
             ptr_res += res_ld;
         }
 
-        res.set_struct(md::predefined_struct::get_triu(A.get_struct(), d, is_real_matrix(A)));
+        res.set_struct(md::predefined_struct::get_triu(res.get_struct(), d, is_real_matrix(res)));
 
         ret = matcl::Matrix(res,true);
         return;
@@ -2257,8 +2259,8 @@ struct eval_select_band_helper<M,struct_dense>
     };
 };
 
-template<class ret_type,class M>
-struct eval_tril_helper<ret_type,M,struct_sparse>
+template<class M>
+struct eval_tril_helper<M, struct_sparse>
 {
     static void eval(matcl::Matrix& ret, const M& A, Integer D, bool rvalue)
     {
@@ -2285,11 +2287,16 @@ struct eval_tril_helper<ret_type,M,struct_sparse>
         };
 
         if (rvalue == true && A.is_unique() == true)
-            return eval_inplace(ret, A, D);
+        {
+            M A2(A.get_type());
+            A2.assign_to_fresh(A);
+
+            return eval_inplace(ret, A2, D);
+        };
 
         const details::sparse_ccs<value_type>& Ad = A.rep();
 
-        ret_type res(A.get_type(),Ar,Ac,nnz);
+        M res(A.get_type(), Ar, Ac, nnz);
         details::sparse_ccs<value_type>& d = res.rep();
 
         const Integer* Ad_r = Ad.ptr_r();
@@ -2327,13 +2334,12 @@ struct eval_tril_helper<ret_type,M,struct_sparse>
         return;
     };
 
-    static void eval_inplace(matcl::Matrix& ret, const M& A, Integer D)
+    static void eval_inplace(matcl::Matrix& ret, M& res, Integer D)
     {
         using value_type = typename M::value_type;
 
-        Integer Ac = A.cols();
+        Integer Ac      = res.cols();
 
-        ret_type res(A);
         details::sparse_ccs<value_type>& d = res.rep();
 
         Integer* d_r    = d.ptr_r();
@@ -2403,15 +2409,15 @@ struct eval_tril_helper<ret_type,M,struct_sparse>
         d_c[Ac] = pos_r;
 
         d.add_memory(-1);
-        res.set_struct(md::predefined_struct::get_tril(A.get_struct(), D, is_real_matrix(A)));
+        res.set_struct(md::predefined_struct::get_tril(res.get_struct(), D, is_real_matrix(res)));
 
         ret = matcl::Matrix(res,true);
         return;
     };
 };
 
-template<class ret_type,class M>
-struct eval_triu_helper<ret_type,M,struct_sparse>
+template<class M>
+struct eval_triu_helper<M, struct_sparse>
 {
     static void eval(matcl::Matrix& ret, const M& A, Integer D, bool rvalue)
     {
@@ -2427,22 +2433,27 @@ struct eval_triu_helper<ret_type,M,struct_sparse>
 
         if (D <= -1 && A.get_struct().is_hessu())
         {
-            ret = matcl::Matrix(A,false);
+            ret = matcl::Matrix(A, false);
             return;
         };
 
         if (nnz == 0 || Ar == 0 || Ac == 0)
         {
-            ret = matcl::Matrix(A,false);
+            ret = matcl::Matrix(A, false);
             return;
         };
 
         if (rvalue == true && A.is_unique() == true)
-            return eval_inplace(ret, A, D);
+        {
+            M A2(A.get_type());
+
+            A2.assign_to_fresh(A);
+            return eval_inplace(ret, A2, D);
+        };
 
         const details::sparse_ccs<value_type>& Ad = A.rep();
 
-        ret_type res(A.get_type(),Ar,Ac,nnz);
+        M res(A.get_type(),Ar,Ac,nnz);
         details::sparse_ccs<value_type>& d = res.rep();
 
         const Integer* Ad_r = Ad.ptr_r();
@@ -2480,13 +2491,12 @@ struct eval_triu_helper<ret_type,M,struct_sparse>
         return;
     };
 
-    static void eval_inplace(matcl::Matrix& ret, const M& A, Integer D)
+    static void eval_inplace(matcl::Matrix& ret, M& res, Integer D)
     {
         using value_type = typename M::value_type;
 
-        Integer Ac = A.cols();
+        Integer Ac      = res.cols();
         
-        ret_type res(A);
         details::sparse_ccs<value_type>& d = res.rep();
 
         Integer* d_r    = d.ptr_r();
@@ -2542,7 +2552,7 @@ struct eval_triu_helper<ret_type,M,struct_sparse>
         d_c[Ac] = pos_r;
 
         d.add_memory(-1);
-        res.set_struct(md::predefined_struct::get_triu(A.get_struct(), D, is_real_matrix(A)));
+        res.set_struct(md::predefined_struct::get_triu(res.get_struct(), D, is_real_matrix(res)));
 
         ret = matcl::Matrix(res,true);
         return;
@@ -2628,8 +2638,8 @@ struct eval_select_band_helper<M,struct_sparse>
     };
 };
 
-template<class ret_type,class M>
-struct eval_tril_helper<ret_type,M,struct_banded>
+template<class M>
+struct eval_tril_helper<M, struct_banded>
 {
     static void eval(matcl::Matrix& ret, const M& A, Integer D, bool)
     {
@@ -2663,11 +2673,10 @@ struct eval_tril_helper<ret_type,M,struct_banded>
         };
 
         using VT    = typename M::value_type;
-        using VTR   = typename ret_type::value_type;
 
         if (D < fd)
         {
-            auto tmp = matcl::details::zero_matrix<VTR,struct_sparse>
+            auto tmp = matcl::details::zero_matrix<VT,struct_sparse>
                             ::eval(A.get_type(),A.rows(),A.cols());
             ret = matcl::Matrix(tmp,false);
             return;
@@ -2682,16 +2691,16 @@ struct eval_tril_helper<ret_type,M,struct_banded>
 
         //TODO: make view when generalized views are allowed
 
-        VTR Z       = md::default_value<VTR>(A.get_type()); 
+        VT Z                = md::default_value<VT>(A.get_type()); 
 
-        ret_type res(A.get_type(),A.rows(), A.cols(), fd, 0);
+        M res(A.get_type(), A.rows(), A.cols(), fd, 0);
 
         Integer res_ld      = res.ld();
         Integer A_ld        = A.ld();
 
         for (Integer i = fd; i <= 0; ++i)
         {
-            VTR* ptr_res    = res.rep_ptr() + res.first_elem_diag(i);
+            VT* ptr_res     = res.rep_ptr() + res.first_elem_diag(i);
             const VT* ptr_A = A.rep_ptr() + A.first_elem_diag(i);
             Integer s		= res.diag_length(i);
 
@@ -2720,8 +2729,8 @@ struct eval_tril_helper<ret_type,M,struct_banded>
     };
 };
 
-template<class ret_type,class M>
-struct eval_triu_helper<ret_type,M,struct_banded>
+template<class M>
+struct eval_triu_helper<M, struct_banded>
 {
     static void eval(matcl::Matrix& ret, const M& A, Integer D, bool)
     {	
@@ -2752,14 +2761,13 @@ struct eval_triu_helper<ret_type,M,struct_banded>
             return;
         };
 
-        using VTR   = typename ret_type::value_type;
         using VT    = typename M::value_type;
 
         if (D > ld)
         {
-            auto tmp = matcl::details::zero_matrix<VTR,struct_sparse>
+            auto tmp = matcl::details::zero_matrix<VT,struct_sparse>
                             ::eval(A.get_type(),A.rows(),A.cols());
-            ret = matcl::Matrix(tmp,false);
+            ret = matcl::Matrix(tmp, false);
             return;
         };        
 
@@ -2772,16 +2780,16 @@ struct eval_triu_helper<ret_type,M,struct_banded>
 
         //TODO: make view when generalized views are allowed
 
-        VTR Z               = md::default_value<VTR>(A.get_type());
+        VT Z                = md::default_value<VT>(A.get_type());
 
-        ret_type res(A.get_type(), A.rows(), A.cols(), 0, ld);
+        M res(A.get_type(), A.rows(), A.cols(), 0, ld);
 
         Integer res_ld      = res.ld();
         Integer A_ld        = A.ld();
 
         for (Integer i = 0; i <= ld; ++i)
         {
-            VTR* ptr_res    = res.rep_ptr() + res.first_elem_diag(i);
+            VT* ptr_res     = res.rep_ptr() + res.first_elem_diag(i);
             const VT* ptr_A = A.rep_ptr() + A.first_elem_diag(i);
             Integer s		= res.diag_length(i);
 
@@ -2917,7 +2925,7 @@ void
 details::manip_tr_helper<M>::eval_tril(matcl::Matrix& ret, const M& A, Integer d, bool rvalue)
 {
     using struct_type = typename M::struct_type;
-    return eval_tril_helper<ret_type_tril,M,struct_type>::eval(ret, A,d, rvalue);
+    return eval_tril_helper<M, struct_type>::eval(ret, A,d, rvalue);
 };
 
 template<class M>
@@ -2925,7 +2933,7 @@ void
 details::manip_tr_helper<M>::eval_triu(matcl::Matrix& ret, const M& A, Integer d, bool rvalue)
 {
     using struct_type = typename M::struct_type;
-    return eval_triu_helper<ret_type_triu,M,struct_type>::eval(ret, A,d, rvalue);
+    return eval_triu_helper<M, struct_type>::eval(ret, A,d, rvalue);
 };
 
 template<class M>

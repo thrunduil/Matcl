@@ -164,13 +164,11 @@ struct eval_DD_2_inpl
 template<class M1, class M2, class Val, bool Is_inv, class Functor>
 struct eval_DD_1_inpl<M1,M2,Val,Val,Is_inv,Functor>
 {
-    static void eval(matcl::Matrix& ret, const M1& A0, const M2& B, const Functor& func)
+    static void eval(matcl::Matrix& ret, M1& A, const M2& B, const Functor& func)
     {        
         using val_type_1    = Val;
         using val_type_2    = typename M2::value_type;
         using val_type_ret  = Val;
-
-        M1 A                = A0;
 
         Integer r = A.rows();
         Integer c = A.cols();
@@ -205,13 +203,11 @@ struct eval_DD_1_inpl<M1,M2,Val,Val,Is_inv,Functor>
 template<class M1, class M2, class Val, bool Is_inv, class Functor>
 struct eval_DD_2_inpl<M1,M2,Val,Val,Is_inv,Functor>
 {
-    static void eval(matcl::Matrix& ret, const M1& A, const M2& B0, const Functor& func)
+    static void eval(matcl::Matrix& ret, const M1& A, M2& B, const Functor& func)
     {        
         using val_type_1    = typename M1::value_type;
         using val_type_2    = Val;
         using val_type_ret  = Val;
-
-        M2 B                = B0;
 
         Integer r = A.rows();
         Integer c = A.cols();
@@ -268,12 +264,18 @@ struct eval_bin_functor_impl<ret_type,functor,M1,M2,ZZ,ZN,NZ,is_inv,
                         = func.template return_type<val_type_ret,is_inv>(ti::get_ti(A),ti::get_ti(B));
 
         if (A.is_unique() && std::is_same<val_type_1, val_type_ret>::value && ret_ti == A.get_type())
+        {
+            M1 A2 = A.make_unique();
             return eval_DD_1_inpl<M1, M2, val_type_ret, val_type_1, is_inv, functor>
-                        ::eval(ret, A, B, func);
+                        ::eval(ret, A2, B, func);
+        };
 
         if (B.is_unique() && std::is_same<val_type_2, val_type_ret>::value && ret_ti == B.get_type())
+        {
+            M2 B2 = B.make_unique();
             return eval_DD_2_inpl<M1, M2, val_type_ret, val_type_2, is_inv, functor>
-                        ::eval(ret, A, B, func);
+                        ::eval(ret, A, B2, func);
+        };
 
         Integer r = A.rows();
         Integer c = A.cols();
@@ -314,7 +316,7 @@ struct eval_bin_functor_impl<ret_type,functor,M1,M2,ZZ,ZN,NZ,is_inv,
 template<class M1, class M2, class Val_ret, class Val1, bool Is_inv, class Functor>
 struct eval_DS_1_inpl
 {
-    static void eval(matcl::Matrix&, const M1&, const M2&, const Functor&)
+    static void eval(matcl::Matrix&, M1&, const M2&, const Functor&)
     {
         //we should not be here
     };
@@ -323,12 +325,10 @@ struct eval_DS_1_inpl
 template<class M1, class M2, class Val, bool Is_inv, class Functor>
 struct eval_DS_1_inpl<M1,M2,Val,Val,Is_inv,Functor>
 {
-    static void eval(matcl::Matrix& ret, const M1& A0, const M2& B, const Functor& func)
+    static void eval(matcl::Matrix& ret, M1& A, const M2& B, const Functor& func)
     {
         using val_type_2    = typename M2::value_type;
         static const bool zero_on_right = !Is_inv;
-
-        M1 A            = A0;
 
         error::check_eeop(A.rows(), A.cols(), B.rows(), B.cols()); 
 
@@ -440,8 +440,11 @@ struct eval_bin_functor_impl<ret_type,functor,M1,M2,ZZ,ZN,false,is_inv,
                         = func.template return_type<val_type_ret,is_inv>(ti::get_ti(A),ti::get_ti(B));
 
         if (A.is_unique() && std::is_same<val_type_1, val_type_ret>::value && ret_ti == A.get_type())
+        {
+            M1 A2 = A.make_unique();
             return eval_DS_1_inpl<M1, M2, val_type_ret, val_type_1, is_inv, functor>
-                        ::eval(ret, A, B, func);
+                        ::eval(ret, A2, B, func);
+        };
 
         error::check_eeop(A.rows(), A.cols(), B.rows(), B.cols()); 
 
@@ -837,12 +840,10 @@ struct eval_DB_1_inpl
 template<class M1, class M2, class Val, bool Is_inv, class Functor>
 struct eval_DB_1_inpl<M1,M2,Val,Val,Is_inv,Functor>
 {
-    static void eval(matcl::Matrix& ret, const M1& A0, const M2& B, const Functor& func)
+    static void eval(matcl::Matrix& ret, M1& A, const M2& B, const Functor& func)
     {
         using VT2    = typename M2::value_type;
         static const bool zero_on_right = !Is_inv;
-
-        M1 A            = A0;
 
         error::check_eeop(A.rows(), A.cols(), B.rows(), B.cols());         
 
@@ -985,8 +986,11 @@ struct eval_bin_functor_impl<ret_type,functor,M1,M2,ZZ,ZN,false,is_inv,
         ti::ti_type<VTR> ret_ti = func.template return_type<VTR,is_inv>(ti::get_ti(A),ti::get_ti(B));
 
         if (A.is_unique() && std::is_same<VT1, VTR>::value && ret_ti == A.get_type())
+        {
+            M1 A2 = A.make_unique();
             return eval_DB_1_inpl<M1, M2, VTR, VT1, is_inv, functor>
-                        ::eval(ret, A, B, func);
+                        ::eval(ret, A2, B, func);
+        };
 
         error::check_eeop(A.rows(), A.cols(), B.rows(), B.cols()); 
         

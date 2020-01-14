@@ -355,12 +355,13 @@ struct change_submatrix_0_impl
         using value_type_B  = typename M2::value_type;
 
         Integer r = A.rows(), c = A.cols();
-        const raw::details::sparse_ccs<value_type>& Ad = A.rep();
-        M2 vB = B;
+        const raw::details::sparse_ccs<value_type>& Ad = A.rep();        
 
-        raw::integer_dense ri   = ci.get_rim_1();
-        sort_type s_type        = is_sorted(ri);
-        bool incr               = true;
+        mr::const_matrix<raw::integer_dense> ri = ci.get_rim_1();
+        sort_type s_type                        = is_sorted(ri.get());
+        bool incr                               = true;
+
+        mr::const_matrix<M2> vB         = B;
 
         if (s_type == sorted_increasing)
         {
@@ -371,18 +372,20 @@ struct change_submatrix_0_impl
         } 
         else
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
-            vB.assign_to_fresh(B.copy());
+
+            M2 vB2  = B.copy();
 
             using iterator = md::iterator_helper_2<Integer,value_type_B>;
-            iterator it_begin(ri2.ptr(),vB.ptr(),1);
-            iterator it_end(ri2.ptr()+ri2.size(),vB.ptr()+ri2.size(),1);
+            iterator it_begin(ri2.ptr(), vB2.ptr(),1);
+            iterator it_end(ri2.ptr()+ri2.size(), vB2.ptr()+ri2.size(),1);
 
             static const bool asceding = true;
             std::stable_sort(it_begin,it_end,md::value_ind_compare<Integer,value_type_B,asceding>());
 
-            ri.assign_to_fresh(std::move(ri2));
+            ri.rebind(std::move(ri2));
+            vB.rebind(std::move(vB2));
         };
 
         Integer step_ri;
@@ -395,11 +398,11 @@ struct change_submatrix_0_impl
         }
         else
         {
-            pos = ri.size()-1;
+            pos = ri.get().size() - 1;
             step_ri = -1;
         };
 
-        raw::details::sparse_ccs<value_type> d(A.get_type(),r, c, A.nnz() + ri.size());
+        raw::details::sparse_ccs<value_type> d(A.get_type(), r, c, A.nnz() + ri.get().size());
 
         Integer nz				= 0;
 
@@ -411,12 +414,12 @@ struct change_submatrix_0_impl
         const Integer * Ad_r	= Ad.ptr_r();
         const value_type * Ad_x	= Ad.ptr_x();
 
-        vB.assign_to_fresh(vB.make_explicit());
+        vB.rebind(vB.get().make_explicit());
 
-        const value_type_B* ptr_B = vB.ptr();
+        const value_type_B* ptr_B = vB.get().ptr();
 
-        Integer or              = ri.size();
-        const Integer* ptr_ri   = ri.ptr();
+        Integer or              = ri.get().size();
+        const Integer* ptr_ri   = ri.get().ptr();
         Integer old_pos         = ptr_ri[pos];
 
         md::pos2ind(ptr_ri[pos],r,pos_row,pos_col);
@@ -577,9 +580,9 @@ struct change_submatrix_0_impl
         Integer r = A.rows(), c = A.cols();
         const raw::details::sparse_ccs<value_type>& Ad = A.rep();
 
-        raw::integer_dense ri   = ci.get_rim_1();
-        sort_type s_type        = is_sorted(ri);
-        bool incr               = true;
+        mr::const_matrix<raw::integer_dense> ri = ci.get_rim_1();
+        sort_type s_type                        = is_sorted(ri.get());
+        bool incr                               = true;
 
         if (s_type == sorted_increasing)
         {
@@ -590,17 +593,17 @@ struct change_submatrix_0_impl
         } 
         else
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
 
             using iterator = md::iterator_helper_2<Integer, Integer>;
             iterator it_begin(ri2.ptr(), pos_B, 1);
-            iterator it_end(ri2.ptr()+ri2.size(), pos_B + ri2.size(),1);
+            iterator it_end(ri2.ptr() + ri2.size(), pos_B + ri2.size(),1);
 
             static const bool asceding = true;
             std::stable_sort(it_begin,it_end,md::value_ind_compare<Integer,Integer,asceding>());
 
-            ri.assign_to_fresh(std::move(ri2));
+            ri.rebind(std::move(ri2));
         };
 
         Integer step_ri;
@@ -612,11 +615,11 @@ struct change_submatrix_0_impl
         }
         else
         {
-            pos = ri.size()-1;
+            pos = ri.get().size() - 1;
             step_ri = -1;
         };
 
-        raw::details::sparse_ccs<value_type> d(A.get_type(),r, c, A.nnz() + ri.size());
+        raw::details::sparse_ccs<value_type> d(A.get_type(), r, c, A.nnz() + ri.get().size());
 
         Integer nz				= 0;
 
@@ -628,8 +631,8 @@ struct change_submatrix_0_impl
         const Integer * Ad_r	= Ad.ptr_r();
         const value_type * Ad_x	= Ad.ptr_x();
 
-        Integer or              = ri.size();
-        const Integer* ptr_ri   = ri.ptr();
+        Integer or              = ri.get().size();
+        const Integer* ptr_ri   = ri.get().ptr();
         Integer old_pos         = ptr_ri[pos];
 
         md::pos2ind(ptr_ri[pos],r,pos_row,pos_col);
@@ -1566,38 +1569,38 @@ struct change_submatrix_20_impl
 
         Integer nz					= 0;
 
-        raw::integer_dense ri		= c_in.get_rim_2();
+        mr::const_matrix<raw::integer_dense> ri = c_in.get_rim_2();
 
         ti::ti_int ti_int;
         raw::integer_dense ind(ti_int);
 
-        sort_type rs_type			= is_sorted(ri);
+        sort_type rs_type			= is_sorted(ri.get());
         bool incr					= true;
         if (rs_type != sorted_increasing)
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
 
-            ind.reset_unique(1,ri.size());
+            ind.reset_unique(1, ri.get().size());
             Integer* ptr_ind    = ind.ptr();
-            Integer size        = ri.size();
+            Integer size        = ri.get().size();
 
             for(Integer i = 0; i < size; ++i)
                 ptr_ind[i] = i + 1;
 
             using iterator = md::iterator_helper_2<Integer,Integer>;
             iterator it_begin(ri2.ptr(),ind.ptr(),1);
-            iterator it_end(ri2.ptr()+ri2.size(),ind.ptr()+ri2.size(),1);
+            iterator it_end(ri2.ptr()+ri2.size(),ind.ptr() + ri2.size(),1);
 
             static const bool asceding = true;
             std::stable_sort(it_begin,it_end,md::value_ind_compare<Integer,Integer,asceding>());
 
-            ri.assign_to_fresh(std::move(ri2));
+            ri.rebind(std::move(ri2));
             incr = false;
         };
 
-        Integer n = ri.size();
-        const Integer* ptr_ri = ri.ptr();
+        Integer n               = ri.get().size();
+        const Integer* ptr_ri   = ri.get().ptr();
         const typename M2::value_type* ptr_B = B.ptr();
         Integer* ptr_ind = ind.ptr();
 
@@ -1726,8 +1729,9 @@ struct change_submatrix_20_impl
 
         Integer nz					= 0;
 
-        raw::integer_dense ri		= c_in.get_rim_2();
-        sort_type rs_type			= is_sorted(ri);
+        mr::const_matrix<raw::integer_dense> ri = c_in.get_rim_2();
+
+        sort_type rs_type			= is_sorted(ri.get());
         bool incr					= true;
 
         ti::ti_int ti_int;
@@ -1735,12 +1739,12 @@ struct change_submatrix_20_impl
 
         if (rs_type != sorted_increasing)
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
             
-            ind.reset_unique(1,ri.size());
+            ind.reset_unique(1, ri.get().size());
             Integer* ptr_ind    = ind.ptr();
-            Integer size        = ri.size();
+            Integer size        = ri.get().size();
 
             for(Integer i = 0; i < size;++i)
                 ptr_ind[i]	= i+1;
@@ -1752,12 +1756,12 @@ struct change_submatrix_20_impl
             static const bool asceding = true;
             std::stable_sort(it_begin,it_end,md::value_ind_compare<Integer,Integer,asceding>());
 
-            ri.assign_to_fresh(std::move(ri2));
+            ri.rebind(std::move(ri2));
             incr = false;
         };
 
-        Integer n               = ri.size();
-        const Integer* ptr_ri   = ri.ptr();
+        Integer n               = ri.get().size();
+        const Integer* ptr_ri   = ri.get().ptr();
         const Integer* ptr_ind  = ind.ptr();
 
         for (Integer j = 0; j < c; ++j)
@@ -1896,7 +1900,7 @@ struct change_submatrix_20_impl
         using workspace = md::workspace2<value_type>;
         using scatter   = matcl::algorithm::scatter;
 
-        raw::integer_dense ri		= c_in.get_rim_2();
+        const raw::integer_dense& ri= c_in.get_rim_2();
 
         Integer size                = ri.size();        
         const Integer* ptr_ri       = ri.ptr();
@@ -2010,7 +2014,7 @@ struct change_submatrix_20_impl
         using workspace             = md::workspace2<value_type>;
         using scatter               = matcl::algorithm::scatter;
 
-        raw::integer_dense ri		= c_in.get_rim_2();
+        const raw::integer_dense& ri= c_in.get_rim_2();
         Integer nz					= 0;
         Integer size                = ri.size();
         const Integer* ptr_ri       = ri.ptr();
@@ -2539,8 +2543,8 @@ struct change_submatrix_21_impl
 };
 
 template<class SM1,class DM2>
-void change_submatrix_dense_functor<SM1,DM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                   const DM2& B, Matrix& ret)
+void change_submatrix_dense_functor<SM1,DM2>::eval(Matrix& ret, const SM1& A, 
+                                    const md::colon_info& ci, const DM2& B)
 {
     if (ci.rows() == 0 || ci.cols() == 0)
     {
@@ -2555,8 +2559,8 @@ void change_submatrix_dense_functor<SM1,DM2>::eval(const SM1& A, const md::colon
 };
 
 template<class SM1,class SM2>
-void change_submatrix_functor<SM1,SM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                             const SM2& B, Matrix& ret)
+void change_submatrix_functor<SM1,SM2>::eval(Matrix& ret, const SM1& A, 
+                                const md::colon_info& ci, const SM2& B)
 {
     if (ci.rows() == 0)
     {
@@ -2571,8 +2575,8 @@ void change_submatrix_functor<SM1,SM2>::eval(const SM1& A, const md::colon_info&
 };
 
 template<class SM1,class BM2>
-void change_submatrix_band_functor<SM1,BM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                  const BM2& B, Matrix& ret)
+void change_submatrix_band_functor<SM1,BM2>::eval(Matrix& ret, const SM1& A, 
+                                    const md::colon_info& ci, const BM2& B)
 {
     if (ci.rows() == 0)
     {
@@ -2587,8 +2591,8 @@ void change_submatrix_band_functor<SM1,BM2>::eval(const SM1& A, const md::colon_
 };
 
 template<class SM1,class DM2>
-void change_submatrix_dense_functor_2<SM1,DM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                     const DM2& B, Matrix& ret)
+void change_submatrix_dense_functor_2<SM1,DM2>::eval(Matrix& ret, const SM1& A, 
+                                    const md::colon_info& ci, const DM2& B)
 {
     if (ci.rows() == 0)
     {
@@ -2603,8 +2607,8 @@ void change_submatrix_dense_functor_2<SM1,DM2>::eval(const SM1& A, const md::col
 };
 
 template<class SM1,class BM2>
-void change_submatrix_band_functor_2<SM1,BM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                                    const BM2& B, Matrix& ret)
+void change_submatrix_band_functor_2<SM1,BM2>::eval(Matrix& ret, const SM1& A, 
+                                        const md::colon_info& ci, const BM2& B)
 {
     if (ci.rows() == 0)
     {
@@ -2619,8 +2623,8 @@ void change_submatrix_band_functor_2<SM1,BM2>::eval(const SM1& A, const md::colo
 };
 
 template<class SM1,class SM2>
-void change_submatrix_functor_2<SM1,SM2>::eval(const SM1& A, const md::colon_info& ci, 
-                                               const SM2& B, Matrix& ret)
+void change_submatrix_functor_2<SM1,SM2>::eval(Matrix& ret, const SM1& A,
+                                const md::colon_info& ci, const SM2& B)
 {
     if (ci.rows() == 0)
     {

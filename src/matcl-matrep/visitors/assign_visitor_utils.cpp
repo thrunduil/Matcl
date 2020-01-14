@@ -32,8 +32,9 @@ namespace matcl { namespace details
 
 struct make_index_2_helper
 {
-    static raw::integer_dense make_colon_matrix(Integer size, Integer row, Integer col, 
-                                bool is_row, const colon& c, colon_info& c_info)
+    static const raw::integer_dense&
+    make_colon_matrix(Integer size, Integer row, Integer col, 
+                bool is_row, const colon& c, colon_info& c_info)
     {
         (void)size;
         (void)c_info;

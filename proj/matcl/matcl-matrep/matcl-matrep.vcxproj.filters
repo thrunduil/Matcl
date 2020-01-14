@@ -378,6 +378,9 @@
     <ClInclude Include="..\..\..\src\matcl-matrep\visitors\insert_visitor.h">
       <Filter>Source Files\src\visitors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\const_matrix.h">
+      <Filter>Source Files\include\matcl-internals\container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\include\matcl-internals\base\sort.inl">

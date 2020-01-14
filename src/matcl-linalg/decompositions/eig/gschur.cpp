@@ -137,8 +137,11 @@ struct gschur_str
                 Matrix Am   = P * Matrix(A,false) * P;
                 Matrix Bm   = P * Matrix(B,false) * P;
 
-                Mat TA2     = convert(Am, Mat::matrix_code).get_impl_unique<Mat>();
-                Mat TB2     = convert(Bm, Mat::matrix_code).get_impl_unique<Mat>();                
+                Am          = convert(Am, Mat::matrix_code);
+                Bm          = convert(Bm, Mat::matrix_code);
+
+                Mat& TA2    = Am.get_impl_unique<Mat>();
+                Mat& TB2    = Bm.get_impl_unique<Mat>();                
 
                 lapack::gges(jobvsl, jobvsr, "N", nullptr, N, lap(TA2.ptr()), TA2.ld(), lap(TB2.ptr()), 
                         TB2.ld(), &Sdim, lap(alpha.ptr()), lap(beta.ptr()), lap(Q.ptr()), Q.ld(), lap(Z.ptr()),
@@ -1560,7 +1563,8 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
     Integer iwork_query;
     
     //TODO: avoid copying
-    raw::integer_dense I_r = convert(ind, mat_code::integer_dense).get_impl_unique<raw::integer_dense>();
+    Matrix ind2     = convert(ind, mat_code::integer_dense);
+    raw::integer_dense& I_r = ind2.get_impl_unique<raw::integer_dense>();
 
     //TODO
     //lapack::tgsen3(wantq, wantz, lap(I_r.ptr()), N, Q_r, lap(r_TA), TA_ld, lap(r_TB), TB_ld,

@@ -55,11 +55,22 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
 
         Matrix(tinfo ti);
         Matrix(tinfo ti,Integer r, Integer c);
-        Matrix(const Matrix &mat);
-        Matrix(Matrix &&mat);
-        Matrix(const base_type &mat);
+                
+        Matrix(Matrix &&mat);        
         Matrix(base_type &&mat);
-        Matrix(const Matrix &&mat) = delete;
+
+        // mark copying as safe; copy is safe if returned object is not modified
+        // unless is unique
+        struct copy_is_safe{};
+
+        //TODO: remove this
+        struct copy_is_safe_TODO : copy_is_safe{};
+
+        Matrix(const base_type &m, copy_is_safe)
+                : Matrix(m) {}; 
+
+        Matrix(const Matrix &m, copy_is_safe)
+                : Matrix(m) {}; 
 
         template<class Real_T>
         Matrix(tinfo ti,const Real_T* xr, const Real_T* xi, Integer r, Integer c,
@@ -115,6 +126,11 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         void                set_to_all(const value_type& val);               
 
         using base_type::ptr;
+
+    public:
+        //TODO
+        Matrix(const Matrix &mat);
+        Matrix(const base_type &mat);
 };
 
 };};

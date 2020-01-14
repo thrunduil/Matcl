@@ -849,7 +849,8 @@ Matrix matcl::spdiag(const Matrix &mat, Integer d)
 
 Matrix matcl::diags(const Matrix &mat, const Matrix &d, Integer m, Integer n)
 {
-    const raw::integer_dense& mat_d = d.impl<raw::integer_dense>();
+    const raw::integer_dense& mat_d = convert(d, mat_code::integer_dense)
+                                        .get_impl<raw::integer_dense>();
 
     switch (mat.get_value_code())
     {
@@ -893,7 +894,8 @@ Matrix matcl::diags(const Matrix &mat, const Matrix &d, Integer m, Integer n)
 
 Matrix matcl::bdiags(const Matrix &mat, const Matrix &d, Integer m, Integer n)
 {
-    const raw::integer_dense& mat_d = d.impl<raw::integer_dense>();
+    const raw::integer_dense& mat_d = convert(d, mat_code::integer_dense)
+                                        .get_impl<raw::integer_dense>();
 
     switch (mat.get_value_code())
     {
@@ -937,7 +939,8 @@ Matrix matcl::bdiags(const Matrix &mat, const Matrix &d, Integer m, Integer n)
 
 Matrix matcl::spdiags(const Matrix &mat, const Matrix &d, Integer m, Integer n)
 {
-    const raw::integer_dense& mat_d = d.impl<raw::integer_dense>();
+    const raw::integer_dense& mat_d = convert(d, mat_code::integer_dense)
+                                        .get_impl<raw::integer_dense>();
 
     switch (mat.get_value_code())
     {
@@ -1820,12 +1823,12 @@ Matrix matcl::make_object_sparse(ti::ti_object ti, const Integer *trip_r, const 
 Matrix matcl::make_sparse_matrix(const Matrix& trip_r, const Matrix& trip_c, const Matrix& trip_x,
                                         Integer r, Integer c, Integer nzmax0)
 {
-    Matrix rm = matcl::full(trip_r);
-    Matrix cm = matcl::full(trip_c);
+    Matrix rm = convert(matcl::full(trip_r), mat_code::integer_dense);
+    Matrix cm = convert(matcl::full(trip_c), mat_code::integer_dense);
     Matrix xm = matcl::full(trip_x);
 
-    const raw::integer_dense& ri = rm.impl<raw::integer_dense>().make_explicit();
-    const raw::integer_dense& ci = cm.impl<raw::integer_dense>().make_explicit();
+    const raw::integer_dense& ri = rm.get_impl<raw::integer_dense>().make_explicit();
+    const raw::integer_dense& ci = cm.get_impl<raw::integer_dense>().make_explicit();
 
     if (ri.rows() != 1 && ri.cols() != 1)
         throw error::vector_required(ri.rows(),ri.cols());
@@ -1848,39 +1851,33 @@ Matrix matcl::make_sparse_matrix(const Matrix& trip_r, const Matrix& trip_c, con
     {
         case value_code::v_integer:
         {
-            raw::integer_dense x = xm.get_impl<raw::integer_dense>();
-            x.assign_to_fresh(x.make_explicit());
+            const raw::integer_dense& x = xm.get_impl<raw::integer_dense>().make_explicit();
             return Matrix(raw::integer_sparse(ti::ti_empty(),ri.ptr(),ci.ptr(),x.ptr(),r,c,nz,nzmax),false);
         }
         case value_code::v_float:
         {
-            raw::float_dense x = xm.get_impl<raw::float_dense>();
-            x.assign_to_fresh(x.make_explicit());
+            const raw::float_dense& x = xm.get_impl<raw::float_dense>().make_explicit();
             return Matrix(raw::float_sparse(ti::ti_empty(),ri.ptr(),ci.ptr(),x.ptr(),r,c,nz,nzmax),false);
         }
         case value_code::v_real:
         {
-            raw::real_dense x = xm.get_impl<raw::real_dense>();
-            x.assign_to_fresh(x.make_explicit());
+            const raw::real_dense& x = xm.get_impl<raw::real_dense>().make_explicit();
             return Matrix(raw::real_sparse(ti::ti_empty(),ri.ptr(),ci.ptr(),x.ptr(),r,c,nz,nzmax),false);
         }
         case value_code::v_float_complex:
         {
-            raw::float_complex_dense x = xm.get_impl<raw::float_complex_dense>();
-            x.assign_to_fresh(x.make_explicit());
+            const raw::float_complex_dense& x = xm.get_impl<raw::float_complex_dense>().make_explicit();
             return Matrix(raw::float_complex_sparse(ti::ti_empty(),ri.ptr(),ci.ptr(),x.ptr(),r,c,nz,nzmax),
                           false);
         }
         case value_code::v_complex:
         {
-            raw::complex_dense x = xm.get_impl<raw::complex_dense>();
-            x.assign_to_fresh(x.make_explicit());
+            const raw::complex_dense& x = xm.get_impl<raw::complex_dense>().make_explicit();
             return Matrix(raw::complex_sparse(ti::ti_empty(),ri.ptr(),ci.ptr(),x.ptr(),r,c,nz,nzmax),false);
         }
         case value_code::v_object:
         {
-            raw::object_dense x = xm.get_impl<raw::object_dense>();
-            x.assign_to_fresh(x.make_explicit());
+            const raw::object_dense& x = xm.get_impl<raw::object_dense>().make_explicit();
             return Matrix(raw::object_sparse(xm.get_type(),ri.ptr(),ci.ptr(),x.ptr(),r,c,nz,nzmax),false);
         }
         default:

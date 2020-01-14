@@ -861,7 +861,8 @@ namespace details
     template<class matrix_type>
     struct sparse_matrix_constructor_col
     {
-        using value_type = typename matrix_type::value_type;
+        using value_type        = typename matrix_type::value_type;
+        using const_matrix_type = mr::const_matrix<matrix_type>;
 
         static void eval(matrix_type& out, const mat_col& mc)
         {
@@ -873,12 +874,12 @@ namespace details
 
             matcl::mat_code mat_type = matrix_traits::mat_type_info_type<matrix_type>::matrix_code;
 
-            using matrix_vector = details::mat_cons_data::matrix_vector;
+            using matrix_vector     = details::mat_cons_data::matrix_vector;            
 
             const matrix_vector& mc_vector = mc.m_data->m_vector;
             using iterator = matrix_vector::const_iterator;			
 
-            std::list<matrix_type> mat_vec;
+            std::list<const_matrix_type> mat_vec;
 
             iterator pos = mc_vector.begin();
             while(pos != mc_vector.end())
@@ -889,7 +890,7 @@ namespace details
                     {
                         const Matrix& mat = pos->m_matrix;
                         Matrix new_mat = convert(mat,mat_type);
-                        mat_vec.push_back(new_mat.get_impl<matrix_type>());
+                        mat_vec.push_back(const_matrix_type(new_mat.get_impl<matrix_type>()));
                         break;
                     }
                     case details::data_container::type_row:
@@ -916,7 +917,7 @@ namespace details
                 ++pos;
             };
 
-            add_matrices(out,mat_vec);
+            add_matrices(out, mat_vec);
             return;
         };
 
@@ -1014,9 +1015,9 @@ namespace details
                 mrd::reset_helper(rep.ptr_x()[k],mat);
             }
             
-            static void add_matrices(matrix_type& out,const std::list<matrix_type>& mat_vec)
+            static void add_matrices(matrix_type& out, const std::list<const_matrix_type>& mat_vec)
             {
-                insert_sparse_cols<matrix_type>(out,mat_vec);
+                insert_sparse_cols<matrix_type>(out, mat_vec);
                 return;
             };
     };
@@ -1344,9 +1345,8 @@ Matrix mat_row::build_matrix_inplace()
         {
             if (is_sparse)
             {
-                using MT = raw::integer_sparse;
-
-                MT& tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::integer_sparse;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = tmp.cols();
 
@@ -1357,8 +1357,8 @@ Matrix mat_row::build_matrix_inplace()
             }
             else
             {
-                using MT = raw::integer_dense;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT        = raw::integer_dense;
+                MT& tmp         = mat.get_impl_unique<MT>();
 
                 Integer col_start = imult(tmp.ld(), tmp.cols());
 
@@ -1385,8 +1385,8 @@ Matrix mat_row::build_matrix_inplace()
             }
             else
             {
-                using MT = raw::float_dense;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::float_dense;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = imult(tmp.ld(), tmp.cols());
 
@@ -1413,8 +1413,8 @@ Matrix mat_row::build_matrix_inplace()
             }
             else
             {
-                using MT = raw::real_dense;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::real_dense;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = imult(tmp.ld(), tmp.cols());
 
@@ -1441,8 +1441,8 @@ Matrix mat_row::build_matrix_inplace()
             }
             else
             {
-                using MT = raw::float_complex_dense;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::float_complex_dense;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = imult(tmp.ld(), tmp.cols());
 
@@ -1469,8 +1469,8 @@ Matrix mat_row::build_matrix_inplace()
             }
             else
             {
-                using MT = raw::complex_dense;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::complex_dense;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = imult(tmp.ld(), tmp.cols());
 
@@ -1497,8 +1497,8 @@ Matrix mat_row::build_matrix_inplace()
             }
             else
             {
-                using MT = raw::object_dense;
-                MT tmp = mat.get_impl_unique<MT>();
+                using MT    = raw::object_dense;
+                MT& tmp     = mat.get_impl_unique<MT>();
 
                 Integer col_start = imult(tmp.ld(), tmp.cols());
 
@@ -1764,8 +1764,8 @@ Matrix mat_col::build_matrix_inplace()
     {
         case value_code::v_integer:
         {
-            using MT = raw::integer_dense;
-            MT tmp = mat.get_impl_unique<MT>();
+            using MT    = raw::integer_dense;
+            MT& tmp     = mat.get_impl_unique<MT>();
 
             Integer row_start = tmp.rows();
 
@@ -1777,8 +1777,8 @@ Matrix mat_col::build_matrix_inplace()
         }
         case value_code::v_real:
         {
-            using MT = raw::real_dense;
-            MT tmp = mat.get_impl_unique<MT>();
+            using MT    = raw::real_dense;
+            MT& tmp     = mat.get_impl_unique<MT>();
 
             Integer row_start = tmp.rows();
 
@@ -1790,8 +1790,8 @@ Matrix mat_col::build_matrix_inplace()
         }
         case value_code::v_float:
         {
-            using MT = raw::float_dense;
-            MT tmp = mat.get_impl_unique<MT>();
+            using MT    = raw::float_dense;
+            MT& tmp     = mat.get_impl_unique<MT>();
 
             Integer row_start = tmp.rows();
 
@@ -1803,8 +1803,8 @@ Matrix mat_col::build_matrix_inplace()
         }
         case value_code::v_complex:
         {
-            using MT = raw::complex_dense;
-            MT tmp = mat.get_impl_unique<MT>();
+            using MT    = raw::complex_dense;
+            MT& tmp     = mat.get_impl_unique<MT>();
 
             Integer row_start = tmp.rows();
 
@@ -1816,8 +1816,8 @@ Matrix mat_col::build_matrix_inplace()
         }
         case value_code::v_float_complex:
         {
-            using MT = raw::float_complex_dense;
-            MT tmp = mat.get_impl_unique<MT>();
+            using MT    = raw::float_complex_dense;
+            MT& tmp     = mat.get_impl_unique<MT>();
 
             Integer row_start = tmp.rows();
 
@@ -1829,8 +1829,8 @@ Matrix mat_col::build_matrix_inplace()
         }
         case value_code::v_object:
         {
-            using MT = raw::object_dense;
-            MT tmp = mat.get_impl_unique<MT>();
+            using MT    = raw::object_dense;
+            MT& tmp     = mat.get_impl_unique<MT>();
 
             Integer row_start = tmp.rows();
 

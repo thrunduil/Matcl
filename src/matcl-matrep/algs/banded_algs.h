@@ -33,6 +33,7 @@ namespace matcl { namespace algorithm
         {
             using SM = raw::Matrix<value_type,struct_sparse>;
             using BM = raw::Matrix<value_type,struct_banded>;
+
             static void eval(Matrix& ret, const BM& mat,const matcl::details::colon_info& ci, bool rvalue);
         };
 
@@ -41,6 +42,7 @@ namespace matcl { namespace algorithm
         {
             using SM = raw::Matrix<value_type,struct_sparse>;
             using BM = raw::Matrix<value_type,struct_banded>;
+            
             static void eval(Matrix& ret, const BM& mat,const matcl::details::colon_info& ci, bool rvalue);
         };
 
@@ -49,6 +51,7 @@ namespace matcl { namespace algorithm
         {
             using SM = raw::Matrix<value_type,struct_sparse>;
             using BM = raw::Matrix<value_type,struct_banded>;
+            
             static void eval(Matrix& ret, const BM& mat,const matcl::details::colon_info& ci, bool rvalue);
             static void eval_00(Matrix& ret, const BM& mat,const matcl::details::colon_info& ci);
             static void eval_01(Matrix& ret, const BM& mat,const matcl::details::colon_info& ci);
@@ -61,8 +64,9 @@ namespace matcl { namespace algorithm
         {
             using DM = raw::Matrix<value_type,struct_dense>;
             using BM = raw::Matrix<value_type,struct_banded>;
-            static BM eval(const BM& mat, Integer d, const DM& val);
-            static BM eval(const BM& mat, Integer d, const value_type& val);
+
+            static void eval(Matrix& ret, const BM& mat, Integer d, const DM& val);
+            static void eval(Matrix& ret, const BM& mat, Integer d, const value_type& val);
         };
     };
 
@@ -92,19 +96,20 @@ void del_rowscols_banded(Matrix& ret, const raw::Matrix<value_type,struct_banded
 
 //eval A(d) = val for given diagonal
 template<class value_type>
-raw::Matrix<value_type,struct_banded>
-band_change_diag(const raw::Matrix<value_type,struct_banded>& mat, Integer d, const value_type& val)
+void
+band_change_diag(Matrix& ret, const raw::Matrix<value_type,struct_banded>& mat, 
+                 Integer d, const value_type& val)
 {
-    return details::band_change_diag_functor<value_type>::eval(mat,d,val);
+    return details::band_change_diag_functor<value_type>::eval(ret, mat, d, val);
 };
 
 //eval A(d) = mat for given diagonal
 template<class value_type>
-raw::Matrix<value_type,struct_banded>
-band_change_diag(const raw::Matrix<value_type,struct_banded>& mat, Integer d, 
+void
+band_change_diag(Matrix& ret, const raw::Matrix<value_type,struct_banded>& mat, Integer d, 
                        const raw::Matrix<value_type,struct_dense>& val)
 {
-    return details::band_change_diag_functor<value_type>::eval(mat,d,val);
+    return details::band_change_diag_functor<value_type>::eval(ret, mat, d, val);
 };
 
 };};

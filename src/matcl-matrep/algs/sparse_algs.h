@@ -30,53 +30,55 @@ namespace matcl { namespace algorithm
         template<class SM>
         struct drop_entries_functor
         {
-            static SM eval(SM& mat,const matcl::details::colon_info&, Real tol);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info&, Real tol);
         };
 
         template<class SM>
         struct drop_entries_functor_2
         {
-            static SM eval(SM& mat,const matcl::details::colon_info&, Real tol);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info&, Real tol);
         };
 
         template<class SM>
         struct zero_entries_functor
         {
-            static SM eval(SM& mat,const matcl::details::colon_info&);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info&);
         };
 
         template<class SM>
         struct zero_entries_functor_2
         {
-            static SM eval(SM& mat,const matcl::details::colon_info&);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info&);
         };
 
         template<class SM>
         struct change_entries_functor
         {
             using value_type = typename SM::value_type;
-            static SM eval(SM& mat,const matcl::details::colon_info& ci, const value_type& val);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info& ci, 
+                             const value_type& val);
         };
 
         template<class SM>
         struct change_entries_functor_2
         {
             using value_type = typename SM::value_type;
-            static SM eval(SM& mat,const matcl::details::colon_info& ci, const value_type& val);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info& ci, 
+                             const value_type& val);
         };
 
         template<class SM>
         struct add_entries_functor
         {
             using value_type = typename SM::value_type;
-            static SM eval(SM& mat,const matcl::details::colon_info& ci);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info& ci);
         };
 
         template<class SM>
         struct add_entries_functor_2
         {
             using value_type = typename SM::value_type;
-            static SM eval(SM& mat,const matcl::details::colon_info& ci);
+            static void eval(Matrix& ret, SM& mat,const matcl::details::colon_info& ci);
         };
 
         template<class SM>
@@ -85,16 +87,16 @@ namespace matcl { namespace algorithm
             public:
                 using Vector = raw::integer_dense;
 
-                static SM eval(const SM& mat,const matcl::details::colon_info& ci);
+                static void eval(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
 
             private:
-                static SM eval_00(const SM& mat,const Vector& ri,const Vector& ci);
-                static SM eval_01(const SM& mat,const matcl::details::colon_info& ci);
-                static SM eval_10(const SM& mat,const matcl::details::colon_info& ci);
-                static SM eval_11(const SM& mat,const matcl::details::colon_info& ci);
+                static void eval_00(Matrix& ret, const SM& mat,const Vector& ri,const Vector& ci);
+                static void eval_01(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
+                static void eval_10(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
+                static void eval_11(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
 
-                static SM get_cols_0(const SM& mat,const matcl::details::colon_info& ci);
-                static SM get_cols_1(const SM& mat,const matcl::details::colon_info& ci);
+                static void get_cols_0(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
+                static void get_cols_1(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
         };
 
         template<class SM>
@@ -106,63 +108,63 @@ namespace matcl { namespace algorithm
             private:
                 using Vector = raw::integer_dense;
 
-                static SM eval_0(const SM& mat,const Vector& ri);
-                static SM eval_0_dc(const SM& mat,const Vector& ri, const Vector& ci);
-                static SM eval_1(const SM& mat,const matcl::details::colon_info& ci);
+                static void eval_0(Matrix& ret, const SM& mat,const Vector& ri);
+                static void eval_0_dc(Matrix& ret, const SM& mat,const Vector& ri, const Vector& ci);
+                static void eval_1(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
 
-                static SM eval_0_increasing(const SM& mat,const Vector& ri, Integer n_rep);
-                static SM eval_0_dc_increasing(const SM& mat,const Vector& r,const Vector& ci, Integer n_rep);
-                static SM eval_0_decreasing(const SM& mat,const Vector& ri, Integer n_rep);
-                static SM eval_1_increasing(const SM& mat,const matcl::details::colon_info& ci);
-                static SM eval_1_decreasing(const SM& mat,const matcl::details::colon_info& ci);
+                static void eval_0_increasing(Matrix& ret, const SM& mat,const Vector& ri, Integer n_rep);
+                static void eval_0_dc_increasing(Matrix& ret, const SM& mat,const Vector& r,const Vector& ci, Integer n_rep);
+                static void eval_0_decreasing(Matrix& ret, const SM& mat,const Vector& ri, Integer n_rep);
+                static void eval_1_increasing(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
+                static void eval_1_decreasing(Matrix& ret, const SM& mat,const matcl::details::colon_info& ci);
         };
 
         template<class SM1,class SM2>
         struct change_submatrix_functor
         {
             public:
-                static void eval(const SM1& mat, const matcl::details::colon_info& ci, 
-                                const SM2& mat2, Matrix& ret);
+                static void eval(Matrix& ret, const SM1& mat, const matcl::details::colon_info& ci, 
+                                const SM2& mat2);
         };
 
         template<class SM1,class SM2>
         struct change_submatrix_functor_2
         {
             public:
-                static void eval(const SM1& mat,const matcl::details::colon_info& ci,
-                                 const SM2& mat2, Matrix& ret);
+                static void eval(Matrix& ret, const SM1& mat,const matcl::details::colon_info& ci,
+                                 const SM2& mat2);
         };
 
         template<class SM1,class DM2>
         struct change_submatrix_dense_functor
         {
             public:
-                static void eval(const SM1& mat, const matcl::details::colon_info& ci,
-                                 const DM2& mat2, Matrix& ret);
+                static void eval(Matrix& ret, const SM1& mat, const matcl::details::colon_info& ci,
+                                 const DM2& mat2);
         };
 
         template<class SM1,class DM2>
         struct change_submatrix_dense_functor_2
         {
             public:
-                static void eval(const SM1& mat,const matcl::details::colon_info& ci,
-                                 const DM2& mat2, Matrix& ret);
+                static void eval(Matrix& ret, const SM1& mat,const matcl::details::colon_info& ci,
+                                 const DM2& mat2);
         };
 
         template<class SM1,class DM2>
         struct change_submatrix_band_functor
         {
             public:
-                static void eval(const SM1& mat, const matcl::details::colon_info& ci,
-                                 const DM2& mat2, Matrix& ret);
+                static void eval(Matrix& ret, const SM1& mat, const matcl::details::colon_info& ci,
+                                 const DM2& mat2);
         };
 
         template<class SM1,class DM2>
         struct change_submatrix_band_functor_2
         {
             public:
-                static void eval(const SM1& mat,const matcl::details::colon_info& ci,
-                                 const DM2& mat2, Matrix& ret);
+                static void eval(Matrix& ret, const SM1& mat,const matcl::details::colon_info& ci,
+                                 const DM2& mat2);
         };
 
         template<class SM>
@@ -192,110 +194,121 @@ namespace matcl { namespace algorithm
         {
             using DM = raw::Matrix<value_type,struct_dense>;
             using SM = raw::Matrix<value_type,struct_sparse>;
-            static SM eval(SM& mat, Integer d, const DM& val);
-            static SM eval(SM& mat, Integer d, const value_type& val);
+
+            static void eval(Matrix& ret, SM& mat, Integer d, const DM& val);
+            static void eval(Matrix& ret, SM& mat, Integer d, const value_type& val);
         };
 
         template<class value_type>
         struct sparse_drop_diag_functor
         {
             using SM = raw::Matrix<value_type,struct_sparse>;
-            static SM eval(SM& mat, Integer d, Real tol);
-            static SM eval_zero(SM& mat, Integer d);
+
+            static void eval(Matrix& ret, SM& mat, Integer d, Real tol);
+            static void eval_zero(Matrix& ret, SM& mat, Integer d);
         };
 
         template<class value_type>
         struct sparse_add_diag_functor
         {
             using SM = raw::Matrix<value_type,struct_sparse>;
-            static SM eval(SM& mat, Integer d);
+            static void eval(Matrix& ret, SM& mat, Integer d);
         };
     };
 
 //removes entries A(r,c) given by vectors of rows and columns
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-drop_entries(raw::Matrix<value_type,struct_sparse>& mat,
+void
+drop_entries(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat,
                   const matcl::details::colon_info& ci, Real tol)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::drop_entries_functor<SparseMatrix>::eval(mat,ci, tol);
+    return details::drop_entries_functor<SparseMatrix>::eval(ret, mat,ci, tol);
 };
 
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-zero_entries(raw::Matrix<value_type,struct_sparse>& mat, const matcl::details::colon_info& ci)
+void
+zero_entries(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, 
+             const matcl::details::colon_info& ci)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::zero_entries_functor<SparseMatrix>::eval(mat,ci);
+    return details::zero_entries_functor<SparseMatrix>::eval(ret, mat, ci);
 };
 
-//removes entries A(r_i,c_i), i=1..s, where r, c are vectors of row and column indices with number of elements s
+//removes entries A(r_i,c_i), i=1..s, where r, c are vectors of row and column
+// indices with number of elements s
 template<class value_type>
-raw::Matrix<value_type,struct_sparse> 
-drop_entries_2(raw::Matrix<value_type,struct_sparse>& mat, const matcl::details::colon_info& ci,
-               Real tol)
+void
+drop_entries_2(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, 
+               const matcl::details::colon_info& ci, Real tol)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::drop_entries_functor_2<SparseMatrix>::eval(mat,ci,tol);
+    return details::drop_entries_functor_2<SparseMatrix>::eval(ret, mat,ci,tol);
 };
 
 template<class value_type>
-raw::Matrix<value_type,struct_sparse> 
-zero_entries_2(raw::Matrix<value_type,struct_sparse>& mat, const matcl::details::colon_info& ci)
+void
+zero_entries_2(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, 
+               const matcl::details::colon_info& ci)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::zero_entries_functor_2<SparseMatrix>::eval(mat,ci);
+    return details::zero_entries_functor_2<SparseMatrix>::eval(ret, mat, ci);
 };
 
 //eval A(r,c) = val for given vectors of rows and columns
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-change_entries(raw::Matrix<value_type,struct_sparse>& mat,
+void
+change_entries(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat,
                   const matcl::details::colon_info& ci, const value_type& val)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::change_entries_functor<SparseMatrix>::eval(mat,ci,val);
+    return details::change_entries_functor<SparseMatrix>::eval(ret, mat,ci,val);
 };
 
-//eval A(r_i,c_i) = val, i=1..s, where r, c are vectors of row and column indices with number of elements s
+//eval A(r_i,c_i) = val, i=1..s, where r, c are vectors of row and column
+// indices with number of elements s
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-change_entries_2(raw::Matrix<value_type,struct_sparse>& mat,
+void
+change_entries_2(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat,
                   const matcl::details::colon_info& ci, const value_type& val)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::change_entries_functor_2<SparseMatrix>::eval(mat,ci,val);
+    return details::change_entries_functor_2<SparseMatrix>::eval(ret, mat,ci,val);
 };
 
 //add structure A(r,c) for given vectors of rows and columns
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-add_entries(raw::Matrix<value_type,struct_sparse>& mat, const matcl::details::colon_info& ci)
+void
+add_entries(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, 
+            const matcl::details::colon_info& ci)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::add_entries_functor<SparseMatrix>::eval(mat,ci);
+    return details::add_entries_functor<SparseMatrix>::eval(ret, mat,ci);
 };
 
-//add structure A(r_i,c_i), i=1..s, where r, c are vectors of row and column indices with number of elements s
+//add structure A(r_i,c_i), i=1..s, where r, c are vectors of row and column 
+// indices with number of elements s
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-add_entries_2(raw::Matrix<value_type,struct_sparse>& mat, const matcl::details::colon_info& ci)
+void
+add_entries_2(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, 
+              const matcl::details::colon_info& ci)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::add_entries_functor_2<SparseMatrix>::eval(mat,ci);
+    return details::add_entries_functor_2<SparseMatrix>::eval(ret, mat,ci);
 };
 
 //eval A(r,c) for given vectors of row and column indices
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-get_submatrix(const raw::Matrix<value_type,struct_sparse>& mat, const matcl::details::colon_info& ci)
+void
+get_submatrix(Matrix& ret, const raw::Matrix<value_type,struct_sparse>& mat, 
+              const matcl::details::colon_info& ci)
 {
     using SparseMatrix = raw::Matrix<value_type,struct_sparse>;
-    return details::get_submatrix_functor<SparseMatrix>::eval(mat,ci);
+    return details::get_submatrix_functor<SparseMatrix>::eval(ret, mat,ci);
 };
 
-//eval B(i,1) = A(r_i,c_i), i=1..s, where r, c are vectors of row and column indices with number of elements s
+//eval B(i,1) = A(r_i,c_i), i=1..s, where r, c are vectors of row and column
+// indices with number of elements s
 template<class value_type>
 void get_submatrix_2(matcl::Matrix& ret, const raw::Matrix<value_type,struct_sparse>& mat, 
                 const matcl::details::colon_info& ci)
@@ -314,7 +327,7 @@ change_submatrix(Matrix& ret, const raw::Matrix<value_type_1,struct_sparse>& mat
     using SparseMatrix_1 = raw::Matrix<value_type_1,struct_sparse>;
     using SparseMatrix_2 = raw::Matrix<value_type_2,struct_sparse>;
     return details::change_submatrix_functor<SparseMatrix_1,SparseMatrix_2>
-                        ::eval(mat, ci, mat_2, ret);
+                        ::eval(ret, mat, ci, mat_2);
 };
 
 //eval A(r_i,c_i) = B(i,1), i=1..s, where r, c are vectors of row and column indices with number of elements s
@@ -327,7 +340,7 @@ change_submatrix_2(Matrix& ret, const raw::Matrix<value_type_1,struct_sparse>& m
     using SparseMatrix_1 = raw::Matrix<value_type_1,struct_sparse>;
     using SparseMatrix_2 = raw::Matrix<value_type_2,struct_sparse>;
     return details::change_submatrix_functor_2<SparseMatrix_1,SparseMatrix_2>
-                ::eval(mat, ci, mat_2, ret);
+                ::eval(ret, mat, ci, mat_2);
 };
 
 //eval A(r,c) = B, where r, c are vectors of row and column indices, B is a dense matrix
@@ -340,7 +353,7 @@ change_submatrix_dense(Matrix& ret, const raw::Matrix<value_type_1,struct_sparse
     using SparseMatrix_1    = raw::Matrix<value_type_1,struct_sparse>;
     using DenseMatrix_2     = raw::Matrix<value_type_2,struct_dense>;
     return details::change_submatrix_dense_functor<SparseMatrix_1,DenseMatrix_2>
-                ::eval(mat, ci, mat_2, ret);
+                ::eval(ret, mat, ci, mat_2);
 };
 
 //eval A(r_i,c_i) = B(i,1), i=1..s, where r, c are vectors of row and column indices with number of elements s
@@ -354,7 +367,7 @@ change_submatrix_dense_2(Matrix& ret, const raw::Matrix<value_type_1,struct_spar
     using SparseMatrix_1    = raw::Matrix<value_type_1,struct_sparse>;
     using DenseMatrix_2     = raw::Matrix<value_type_2,struct_dense>;
     return details::change_submatrix_dense_functor_2<SparseMatrix_1,DenseMatrix_2>
-                        ::eval(mat, ci, mat_2, ret);
+                        ::eval(ret, mat, ci, mat_2);
 };
 
 //eval A(r,c) = B, where r, c are vectors of row and column indices, B is a banded matrix
@@ -367,7 +380,7 @@ change_submatrix_band(Matrix& ret, const raw::Matrix<value_type_1,struct_sparse>
     using SparseMatrix_1 = raw::Matrix<value_type_1,struct_sparse>;
     using DenseMatrix_2  = raw::Matrix<value_type_2,struct_banded>;
     return details::change_submatrix_band_functor<SparseMatrix_1,DenseMatrix_2>
-                        ::eval(mat, ci, mat_2, ret);
+                        ::eval(ret, mat, ci, mat_2);
 };
 
 //eval A(r_i,c_i) = B(i,1), i=1..s, where r, c are vectors of row and column indices with number of elements s
@@ -381,7 +394,7 @@ change_submatrix_band_2(Matrix& ret, const raw::Matrix<value_type_1,struct_spars
     using SparseMatrix_1    = raw::Matrix<value_type_1,struct_sparse>;
     using DenseMatrix_2     = raw::Matrix<value_type_2,struct_banded>;
     return details::change_submatrix_band_functor_2<SparseMatrix_1,DenseMatrix_2>
-                    ::eval(mat, ci, mat_2, ret);
+                    ::eval(ret, mat, ci, mat_2);
 };
 
 //eval A(c_i,:) = []
@@ -413,43 +426,44 @@ void del_rowscols_sparse(Matrix& ret, const raw::Matrix<value_type,struct_sparse
 
 //eval A.diag(d) = val for given diagonal
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-sparse_change_diag(raw::Matrix<value_type,struct_sparse>& mat, Integer d, const value_type& val)
+void
+sparse_change_diag(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, 
+                   Integer d, const value_type& val)
 {
-    return details::sparse_change_diag_functor<value_type>::eval(mat,d,val);
+    return details::sparse_change_diag_functor<value_type>::eval(ret, mat, d, val);
 };
 
 //eval drop(A.diag(d)) for given diagonal
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-sparse_drop_diag(raw::Matrix<value_type,struct_sparse>& mat, Integer d, Real tol)
+void
+sparse_drop_diag(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, Integer d, Real tol)
 {
-    return details::sparse_drop_diag_functor<value_type>::eval(mat,d,tol);
+    return details::sparse_drop_diag_functor<value_type>::eval(ret, mat, d, tol);
 };
 
 //A.diag(d) = 0
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-zero_entries_diag(raw::Matrix<value_type,struct_sparse>& mat, Integer d)
+void
+zero_entries_diag(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, Integer d)
 {
-    return details::sparse_drop_diag_functor<value_type>::eval_zero(mat,d);
+    return details::sparse_drop_diag_functor<value_type>::eval_zero(ret, mat, d);
 };
 
 //eval A.diag(d) = mat for given diagonal
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-sparse_change_diag(raw::Matrix<value_type,struct_sparse>& mat, Integer d, 
+void
+sparse_change_diag(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, Integer d, 
                        const raw::Matrix<value_type,struct_dense>& val)
 {
-    return details::sparse_change_diag_functor<value_type>::eval(mat,d,val);
+    return details::sparse_change_diag_functor<value_type>::eval(ret, mat,d,val);
 };
 
 //add diagonal d to structure
 template<class value_type>
-raw::Matrix<value_type,struct_sparse>
-sparse_add_diag(raw::Matrix<value_type,struct_sparse>& mat, Integer d)
+void
+sparse_add_diag(Matrix& ret, raw::Matrix<value_type,struct_sparse>& mat, Integer d)
 {
-    return details::sparse_add_diag_functor<value_type>::eval(mat,d);
+    return details::sparse_add_diag_functor<value_type>::eval(ret, mat, d);
 };
 
 };};

@@ -24,6 +24,7 @@
 #include "matcl-matrep/func/raw/raw_manip.h"
 #include "matcl-internals/container/mat_s.h"
 #include "matcl-scalar/details/scalfunc_helpers.h"
+#include "matcl-matrep/lib_functions/manip.h"
 
 namespace matcl { namespace algorithm { namespace details
 {
@@ -32,29 +33,32 @@ namespace mr = matcl::raw;
 namespace mrd = matcl::raw::details;
 
 template<class SM>
-SM get_submatrix_functor<SM>::eval(const SM& A,const matcl::details::colon_info& ci)
+void get_submatrix_functor<SM>::eval(Matrix& ret, const SM& A,const matcl::details::colon_info& ci)
 {
     if (ci.r_flag == 0 && ci.c_flag == 0)
-        return eval_00(A,ci.get_rim_2(),ci.get_cim_2());
+        return eval_00(ret, A, ci.get_rim_2(), ci.get_cim_2());
 
     if (ci.r_flag == 0 && ci.c_flag == 1)
-        return eval_01(A,ci);
+        return eval_01(ret, A, ci);
 
     if (ci.r_flag == 1 && ci.c_flag == 0)
-        return eval_10(A,ci);
+        return eval_10(ret, A, ci);
 
     if (ci.r_flag == 1 && ci.c_flag == 1)
-        return eval_11(A,ci);
+        return eval_11(ret, A, ci);
 
     matcl_assert(0,"invalid colon info");
     throw;
 }
 
 template<class SM>
-SM get_submatrix_functor<SM>::eval_00(const SM& A,const Vector& ri,const Vector& ci)
+void get_submatrix_functor<SM>::eval_00(Matrix& ret, const SM& A,const Vector& ri,const Vector& ci)
 {
     if (ri.size() == 0 || ci.size() == 0 || A.nnz() == 0)
-        return SM(A.get_type(),ri.size(),ci.size());
+    {
+        ret = Matrix(SM(A.get_type(), ri.size(),ci.size()), false);
+        return;
+    };
 
     using value_type = SM::value_type;
 
@@ -197,16 +201,18 @@ SM get_submatrix_functor<SM>::eval_00(const SM& A,const Vector& ri,const Vector&
     d_c[oc] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
 };
 
 template<class SM>
-SM get_submatrix_functor<SM>::eval_01(const SM& A,const matcl::details::colon_info& colon_info)
+void get_submatrix_functor<SM>::eval_01(Matrix& ret, const SM& A,
+                    const matcl::details::colon_info& colon_info)
 {
     if (colon_info.get_rim_2().size() == 0 || colon_info.c_size == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),colon_info.get_rim_2().size(),colon_info.c_size);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     using value_type = typename SM::value_type;
@@ -228,8 +234,8 @@ SM get_submatrix_functor<SM>::eval_01(const SM& A,const matcl::details::colon_in
     matcl::pod_workspace<Integer> v_work_ind;
     row_map m_row_map;
 
-    raw::integer_dense ri   = colon_info.get_rim_2();
-    const Integer* ptr_ri   = ri.ptr();
+    const raw::integer_dense& ri    = colon_info.get_rim_2();
+    const Integer* ptr_ri           = ri.ptr();
 
     bool workspace_initialized = false;	
 
@@ -351,20 +357,23 @@ SM get_submatrix_functor<SM>::eval_01(const SM& A,const matcl::details::colon_in
     d_c[oc] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
+    return;
 };
 
 template<class SM>
-SM get_submatrix_functor<SM>::eval_10(const SM& A,const matcl::details::colon_info& colon_info)
+void get_submatrix_functor<SM>::eval_10(Matrix& ret, const SM& A,
+                    const matcl::details::colon_info& colon_info)
 {
     if (colon_info.r_size == 0 || colon_info.get_cim_2().size() == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),colon_info.r_size,colon_info.get_cim_2().size());
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     if (colon_info.r_start == 1 && colon_info.r_step == 1 && colon_info.r_end == A.rows())
-        return get_cols_0(A,colon_info);
+        return get_cols_0(ret, A, colon_info);
 
     using value_type = typename SM::value_type;
 
@@ -400,8 +409,8 @@ SM get_submatrix_functor<SM>::eval_10(const SM& A,const matcl::details::colon_in
     Integer * d_r				= d.ptr_r();
     value_type * d_x			= d.ptr_x();	
 
-    mr::integer_dense ci_ci     = colon_info.get_cim_2();
-    const Integer* ptr_ci       = ci_ci.ptr();
+    const mr::integer_dense& ci_ci  = colon_info.get_cim_2();
+    const Integer* ptr_ci           = ci_ci.ptr();
 
     for (Integer j = 0; j < oc; ++j)
     {
@@ -492,20 +501,22 @@ SM get_submatrix_functor<SM>::eval_10(const SM& A,const matcl::details::colon_in
     d_c[oc] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
 };
 
 template<class SM>
-SM get_submatrix_functor<SM>::eval_11(const SM& A,const matcl::details::colon_info& colon_info)
+void get_submatrix_functor<SM>::eval_11(Matrix& ret, const SM& A,
+                    const matcl::details::colon_info& colon_info)
 {
     if (colon_info.r_size == 0 || colon_info.c_size == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),colon_info.r_size,colon_info.c_size);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     if (colon_info.r_start == 1 && colon_info.r_step == 1 && colon_info.r_end == A.rows())
-        return get_cols_1(A,colon_info);
+        return get_cols_1(ret, A, colon_info);
 
     using value_type = typename SM::value_type;
 
@@ -630,11 +641,12 @@ SM get_submatrix_functor<SM>::eval_11(const SM& A,const matcl::details::colon_in
     d_c[oc] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
 };
 
 template<class SM>
-SM get_submatrix_functor<SM>::get_cols_0(const SM& A,const matcl::details::colon_info& colon_info)
+void get_submatrix_functor<SM>::get_cols_0(Matrix& ret, const SM& A,
+                        const matcl::details::colon_info& colon_info)
 {
     using value_type = typename SM::value_type;
 
@@ -650,7 +662,8 @@ SM get_submatrix_functor<SM>::get_cols_0(const SM& A,const matcl::details::colon
     if (or == 0 || oc == 0 || A.nnz() == 0)
     {
         SM out= raw::sparse_matrix_base<value_type>(d);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     Integer nz					= 0;
@@ -662,8 +675,9 @@ SM get_submatrix_functor<SM>::get_cols_0(const SM& A,const matcl::details::colon
     Integer * d_c				= d.ptr_c();
     Integer * d_r				= d.ptr_r();
     value_type * d_x			= d.ptr_x();	
-    mr::integer_dense ci_ci     = colon_info.get_cim_2();
-    const Integer* ptr_ci       = ci_ci.ptr();
+    
+    const mr::integer_dense& ci_ci  = colon_info.get_cim_2();
+    const Integer* ptr_ci           = ci_ci.ptr();
 
     for (Integer j = 0; j < oc; ++j)
     {
@@ -690,11 +704,12 @@ SM get_submatrix_functor<SM>::get_cols_0(const SM& A,const matcl::details::colon
     d_c[oc] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
 };
 
 template<class SM>
-SM get_submatrix_functor<SM>::get_cols_1(const SM& A,const matcl::details::colon_info& colon_info)
+void get_submatrix_functor<SM>::get_cols_1(Matrix& ret, const SM& A,
+                        const matcl::details::colon_info& colon_info)
 {
     using value_type = typename SM::value_type;
 
@@ -708,7 +723,8 @@ SM get_submatrix_functor<SM>::get_cols_1(const SM& A,const matcl::details::colon
     if (or == 0 || oc == 0 || A.nnz() == 0)
     {
         SM out = raw::sparse_matrix_base<value_type>(d);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     Integer nz					= 0;
@@ -747,7 +763,7 @@ SM get_submatrix_functor<SM>::get_cols_1(const SM& A,const matcl::details::colon
     d_c[oc] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
 };
 
 template<class SM>
@@ -757,27 +773,35 @@ void get_submatrix_functor_2<SM>::eval(matcl::Matrix& ret, const SM& A,const mat
     {
         if (ci.is_double_mat_colon() == true)
         {
-            SM out = eval_0_dc(A,ci.get_rim_r(),ci.get_rim_c());
-            return mrd::manip_reshape_helper<SM>::eval_reshape(ret, out, ci.rep_rows(), ci.rep_cols());
+            Matrix out;
+            eval_0_dc(out, A, ci.get_rim_r(), ci.get_rim_c());
+            ret = reshape(out, ci.rep_rows(), ci.rep_cols());
+            return;
         }
         else
         {
-            SM out = eval_0(A,ci.get_rim_1());
-            return mrd::manip_reshape_helper<SM>::eval_reshape(ret, out, ci.rep_rows(), ci.rep_cols());
+            Matrix out;
+            eval_0(out, A, ci.get_rim_1());
+            
+            ret = reshape(out, ci.rep_rows(), ci.rep_cols());
+            return;
         }
     };
 
     if (ci.r_flag == 1)
     {
-        SM out = eval_1(A,ci);
+        Matrix out;
+        eval_1(out, A, ci);
+
         if (out.rows() == ci.rep_rows())
         {
-            ret = matcl::Matrix(out,true);
+            ret = out;
             return;
         }
         else
         {
-            return mrd::manip_reshape_helper<SM>::eval_reshape(ret,out,ci.rep_rows(), ci.rep_cols());
+            ret = reshape(out, ci.rep_rows(), ci.rep_cols());
+            return;
         };
     };
     
@@ -786,12 +810,13 @@ void get_submatrix_functor_2<SM>::eval(matcl::Matrix& ret, const SM& A,const mat
 }
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_0(const SM& A,const Vector& ci)
+void get_submatrix_functor_2<SM>::eval_0(Matrix& ret, const SM& A, const Vector& ci)
 {
     if (ci.size() == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),ci.rows(),ci.cols());
-        return out;
+        ret = Matrix(out, false);
+        return;
     };	
 
     sort_type s_type = is_sorted(ci);
@@ -799,13 +824,13 @@ SM get_submatrix_functor_2<SM>::eval_0(const SM& A,const Vector& ci)
     if (s_type == sorted_increasing)
     {
         Integer n_rep = number_dupl(ci);
-        return eval_0_increasing(A,ci,n_rep);
+        return eval_0_increasing(ret, A, ci, n_rep);
     };
     
     if (s_type == sorted_decreasing)
     {
         Integer n_rep = number_dupl(ci);
-        return eval_0_decreasing(A,ci,n_rep);
+        return eval_0_decreasing(ret, A, ci, n_rep);
     };
 
     Vector ci2 = ci.copy();
@@ -823,7 +848,12 @@ SM get_submatrix_functor_2<SM>::eval_0(const SM& A,const Vector& ci)
     utils::sort_q(ci2.ptr(),&v_work_sort_ind[0],or);
 
     Integer n_rep   = number_dupl(ci2);
-    SM out          = eval_0_increasing(A,ci2,n_rep);
+    
+    Matrix m_out;
+    eval_0_increasing(m_out, A, ci2, n_rep);
+    
+    m_out           = convert(m_out, SM::matrix_code);
+    SM&  out        = m_out.get_impl_unique<SM>();
 
     Integer off     = out.rep().offset();
     Integer* d_r    = out.rep().ptr_r() + off;
@@ -835,16 +865,19 @@ SM get_submatrix_functor_2<SM>::eval_0(const SM& A,const Vector& ci)
     utils::sort_q(out.rep().ptr_r() + off,out.rep().ptr_x() + off,d_nnz);
 
     out.get_struct().reset();
-    return out;
+    ret = Matrix(out, false);
+    return;
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_0_dc(const SM& A,const Vector& ri,const Vector& ci)
+void get_submatrix_functor_2<SM>::eval_0_dc(Matrix& ret, const SM& A,const Vector& ri,
+                                            const Vector& ci)
 {
     if (ci.size() == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),ci.rows(),ci.cols());
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     Vector ri2  = ri.copy();
@@ -865,7 +898,12 @@ SM get_submatrix_functor_2<SM>::eval_0_dc(const SM& A,const Vector& ri,const Vec
     sort_rows_cols(ri2.ptr(), ci2.ptr(), &v_work_sort_ind[0], or);
 
     Integer n_rep   = number_dupl(ri2, ci2);
-    SM out          = eval_0_dc_increasing(A, ri2, ci2, n_rep);
+
+    Matrix m_out;
+    eval_0_dc_increasing(m_out, A, ri2, ci2, n_rep);
+
+    m_out           = convert(m_out, SM::matrix_code);
+    SM& out         = m_out.get_impl_unique<SM>();
 
     Integer off     = out.rep().offset();
     Integer* d_r    = out.rep().ptr_r() + off;
@@ -877,26 +915,30 @@ SM get_submatrix_functor_2<SM>::eval_0_dc(const SM& A,const Vector& ri,const Vec
     utils::sort_q(out.rep().ptr_r() + off,out.rep().ptr_x() + off,d_nnz);
 
     out.get_struct().reset();
-    return out;
+    ret = Matrix(out, false);
+    return;
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_1(const SM& A,const matcl::details::colon_info& ci)
+void get_submatrix_functor_2<SM>::eval_1(Matrix& ret, const SM& A,
+                            const matcl::details::colon_info& ci)
 {
     if (ci.rows() == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),ci.rows(),1);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     if (ci.r_start < ci.r_end)
-        return eval_1_increasing(A,ci);
+        return eval_1_increasing(ret, A, ci);
     else
-        return eval_1_decreasing(A,ci);
+        return eval_1_decreasing(ret, A, ci);
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_1_increasing(const SM& A,const matcl::details::colon_info& ci)
+void get_submatrix_functor_2<SM>::eval_1_increasing(Matrix& ret, const SM& A,
+                                    const matcl::details::colon_info& ci)
 {
     using value_type = typename SM::value_type;
 
@@ -911,7 +953,8 @@ SM get_submatrix_functor_2<SM>::eval_1_increasing(const SM& A,const matcl::detai
     if (or == 0 || A.nnz() == 0)
     {
         SM out = raw::sparse_matrix_base<value_type>(d);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     const Integer * Ad_c		= Ad.ptr_c();
@@ -999,11 +1042,12 @@ SM get_submatrix_functor_2<SM>::eval_1_increasing(const SM& A,const matcl::detai
     d_c[1] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_1_decreasing(const SM& A,const matcl::details::colon_info& ci)
+void get_submatrix_functor_2<SM>::eval_1_decreasing(Matrix& ret, const SM& A,
+                                        const matcl::details::colon_info& ci)
 {
     using value_type = typename SM::value_type;
 
@@ -1018,7 +1062,8 @@ SM get_submatrix_functor_2<SM>::eval_1_decreasing(const SM& A,const matcl::detai
     if (ci.rows() == 0 || A.nnz() == 0)
     {
         SM out = raw::sparse_matrix_base<value_type>(d);
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     const Integer * Ad_c		= Ad.ptr_c();
@@ -1105,11 +1150,13 @@ SM get_submatrix_functor_2<SM>::eval_1_decreasing(const SM& A,const matcl::detai
     d_c[1] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
+    return;
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_0_increasing(const SM& A,const Vector& ci,Integer n_rep)
+void get_submatrix_functor_2<SM>::eval_0_increasing(Matrix& ret, const SM& A, 
+                                            const Vector& ci,Integer n_rep)
 {
     using value_type = typename SM::value_type;
 
@@ -1120,7 +1167,8 @@ SM get_submatrix_functor_2<SM>::eval_0_increasing(const SM& A,const Vector& ci,I
     if (r == 0 || c == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),ci.rows(), ci.cols());
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     Integer onnz = icast(Real(A.nnz())/Real(r)/Real(c)*Real(or)) + 1;
@@ -1211,11 +1259,13 @@ SM get_submatrix_functor_2<SM>::eval_0_increasing(const SM& A,const Vector& ci,I
     d.add_memory(-1);
 
     SM out = raw::sparse_matrix_base<value_type>(d);	
-    return out;
+    ret = Matrix(out, false);
+    return;
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_0_dc_increasing(const SM& A, const Vector& cr, const Vector& cc,Integer n_rep)
+void get_submatrix_functor_2<SM>::eval_0_dc_increasing(Matrix& ret, const SM& A, 
+                                const Vector& cr, const Vector& cc,Integer n_rep)
 {
     using value_type = typename SM::value_type;
 
@@ -1226,7 +1276,8 @@ SM get_submatrix_functor_2<SM>::eval_0_dc_increasing(const SM& A, const Vector& 
     if (r == 0 || c == 0 || A.nnz() == 0)
     {
         SM out(A.get_type(),cr.rows(), cr.cols());
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
     Integer onnz = icast(Real(A.nnz())/Real(r)/Real(c)*Real(or)) + 1;
@@ -1326,11 +1377,13 @@ SM get_submatrix_functor_2<SM>::eval_0_dc_increasing(const SM& A, const Vector& 
     d.add_memory(-1);
 
     SM out = raw::sparse_matrix_base<value_type>(d);	
-    return out;
+    ret = Matrix(out, false);
+    return;
 };
 
 template<class SM>
-SM get_submatrix_functor_2<SM>::eval_0_decreasing(const SM& A,const Vector& ci,Integer n_rep)
+void get_submatrix_functor_2<SM>::eval_0_decreasing(Matrix& ret, const SM& A,
+                                            const Vector& ci,Integer n_rep)
 {
     using value_type = typename SM::value_type;
 
@@ -1344,8 +1397,9 @@ SM get_submatrix_functor_2<SM>::eval_0_decreasing(const SM& A,const Vector& ci,I
 
     if (A.nnz() == 0)
     {
-        SM out = raw::sparse_matrix_base<value_type>(d);
-        return out;
+        SM out  = raw::sparse_matrix_base<value_type>(d);
+        ret     = Matrix(out, false);
+        return;
     };
 
     const Integer * Ad_c		= Ad.ptr_c();
@@ -1432,7 +1486,8 @@ SM get_submatrix_functor_2<SM>::eval_0_decreasing(const SM& A,const Vector& ci,I
     d_c[1] = nz;
     d.add_memory(-1);
 
-    return raw::sparse_matrix_base<value_type>(d);
+    ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
+    return;
 };
 
 template struct get_submatrix_functor<raw::integer_sparse>;

@@ -379,7 +379,7 @@ class MATCL_MATREP_EXPORT Matrix : private details::matrix_base
         
         // internal representation of this matrix must be M,
         // makes matrix unique; structure flags are not cleared
-        template<class M> M&        get_impl_unique();
+        template<class M> M&        get_impl_unique() &;
                 
         // mark or unmark the matrix as being effectively unique
         void                        mark_unique(bool unique);

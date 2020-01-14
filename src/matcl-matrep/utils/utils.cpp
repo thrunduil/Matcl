@@ -35,14 +35,14 @@ typename unit_matrix<val_type,struct_dense>::matrix_type
 {
     (void)ret_ti;
     Matrix tmp = matcl::eye(m,matrix_traits::value_code<val_type>::value);
-    return tmp.get_impl<matrix_type>();
+    return tmp.move_impl<matrix_type>().move();
 };
 
 unit_matrix<Object,struct_dense>::matrix_type 
     unit_matrix<Object,struct_dense>::eval(tinfo_t ret_ti, Integer m)
 {
     Matrix tmp = matcl::eye(ti::ti_object(ret_ti), m);
-    return tmp.get_impl<matrix_type>();
+    return tmp.move_impl<matrix_type>().move();
 };
 
 template<class val_type>
@@ -54,7 +54,8 @@ unit_matrix<val_type,struct_sparse>::eval(tinfo_t ret_ti, Integer m)
     return tmp.move_impl<matrix_type>().move();
 };
 
-unit_matrix<Object,struct_sparse>::matrix_type unit_matrix<Object,struct_sparse>::eval(tinfo_t ret_ti, Integer m)
+unit_matrix<Object,struct_sparse>::matrix_type 
+unit_matrix<Object,struct_sparse>::eval(tinfo_t ret_ti, Integer m)
 {
     Matrix tmp = matcl::speye(ti::ti_object(ret_ti), m);
     return tmp.move_impl<matrix_type>().move();
@@ -66,14 +67,14 @@ unit_matrix<val_type,struct_banded>::eval(tinfo_t ret_ti, Integer m)
 {
     (void)ret_ti;
     Matrix tmp = matcl::beye(m,m,0,0,matrix_traits::value_code<val_type>::value);
-    return tmp.get_impl<matrix_type>();
+    return tmp.move_impl<matrix_type>().move();
 };
 
 unit_matrix<Object,struct_banded>::matrix_type 
 unit_matrix<Object,struct_banded>::eval(tinfo_t ret_ti, Integer m)
 {
     Matrix tmp = matcl::beye(ti::ti_object(ret_ti), m,m,0,0);
-    return tmp.get_impl<matrix_type>();
+    return tmp.move_impl<matrix_type>().move();
 };
 
 //----------------------------------------------------------------

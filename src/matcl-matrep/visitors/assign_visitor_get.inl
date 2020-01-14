@@ -89,8 +89,8 @@ struct get_impl<M1,struct_dense>
 
             if (single == true)
             {
-                mr::integer_dense ci_ri = c_info.get_rim_1();
-                const Integer* ptr_ri   = ci_ri.ptr();
+                const mr::integer_dense& ci_ri  = c_info.get_rim_1();
+                const Integer* ptr_ri           = ci_ri.ptr();
 
                 for (Integer i = 0; i < s; ++i)
                 {
@@ -103,8 +103,9 @@ struct get_impl<M1,struct_dense>
             }
             else
             {
-                mr::integer_dense rim   = c_info.get_rim_r();
-                mr::integer_dense cim   = c_info.get_rim_c();
+                const mr::integer_dense& rim   = c_info.get_rim_r();
+                const mr::integer_dense& cim   = c_info.get_rim_c();
+
                 const Integer* ptr_ri   = rim.ptr();
                 const Integer* ptr_ci   = cim.ptr();
 
@@ -376,7 +377,8 @@ struct get_impl<M1,struct_sparse>
             return;
         };
 
-        ret = Matrix(algorithm::get_submatrix(mat,c_info),true);
+        algorithm::get_submatrix(ret, mat, c_info);
+        return;
     };
 };
 
@@ -454,8 +456,8 @@ struct get_impl<M1,struct_banded>
 
             if (single == true)
             {
-                mr::integer_dense ci_ri = c_info.get_rim_1();
-                const Integer* ptr_ri   = ci_ri.ptr();
+                const mr::integer_dense& ci_ri  = c_info.get_rim_1();
+                const Integer* ptr_ri           = ci_ri.ptr();
 
                 for (Integer j = 1, p = 1; j <= mc ; ++j)
                 {
@@ -487,8 +489,9 @@ struct get_impl<M1,struct_banded>
             }
             else
             {
-                mr::integer_dense rim   = c_info.get_rim_r();
-                mr::integer_dense cim   = c_info.get_rim_c();
+                const mr::integer_dense& rim   = c_info.get_rim_r();
+                const mr::integer_dense& cim   = c_info.get_rim_c();
+
                 const Integer* ptr_ri   = rim.ptr();
                 const Integer* ptr_ci   = cim.ptr();
 
@@ -603,8 +606,8 @@ struct get_impl<M1,struct_banded>
 
         if (c_info.r_flag == 0 && c_info.c_flag == 0)
         {
-            mr::integer_dense ci_ri = c_info.get_rim_2();
-            mr::integer_dense ci_ci = c_info.get_cim_2();
+            const mr::integer_dense& ci_ri = c_info.get_rim_2();
+            const mr::integer_dense& ci_ci = c_info.get_cim_2();
             const Integer* ptr_ri = ci_ri.ptr();
             const Integer* ptr_ci = ci_ci.ptr();
 
@@ -670,8 +673,8 @@ struct get_impl<M1,struct_banded>
         }
         else if (c_info.r_flag == 0 && c_info.c_flag == 1)
         {
-            mr::integer_dense ci_ri = c_info.get_rim_2();
-            const Integer* ptr_ri = ci_ri.ptr();
+            const mr::integer_dense& ci_ri  = c_info.get_rim_2();
+            const Integer* ptr_ri           = ci_ri.ptr();
 
             Integer mr = ci_ri.size(), mc = c_info.c_size;
             
@@ -736,8 +739,8 @@ struct get_impl<M1,struct_banded>
         }
         else if (c_info.r_flag == 1 && c_info.c_flag == 0)
         {
-            mr::integer_dense ci_ci = c_info.get_cim_2();
-            const Integer* ptr_ci = ci_ci.ptr();
+            const mr::integer_dense& ci_ci  = c_info.get_cim_2();
+            const Integer* ptr_ci           = ci_ci.ptr();
 
             Integer mr = c_info.r_size, mc = ci_ci.size();
             

@@ -624,11 +624,11 @@ struct max_accumulator2
                 ptr_ind[i] = 0;
         };
 
-        void reset()                            { };
-        const value_type& value()               { return state;         };
-        const value_type& value(Integer p)      { return st_array[p];   };        
-        integer_dense index_matrix() const      { return ind_array;     };
-        void current_vector(Integer vec)        { vec_pos = vec;        };
+        void reset()                                { };
+        const value_type& value()                   { return state;         };
+        const value_type& value(Integer p)          { return st_array[p];   };        
+        const integer_dense& index_matrix() const   { return ind_array;     };
+        void current_vector(Integer vec)            { vec_pos = vec;        };
 
         void reset_array(Integer s)
         { 
@@ -725,11 +725,11 @@ struct max_abs_accumulator2
                 ptr_ind[i] = 0;
         };
 
-        void reset()                            { };        
-        void current_vector(Integer vec)        { vec_pos = vec;        };
-        const value_type& value()               { return state;         };
-        const value_type& value(Integer p)      { return st_array[p];   };        
-        integer_dense index_matrix() const      { return ind_array;     };
+        void reset()                                { };        
+        void current_vector(Integer vec)            { vec_pos = vec;        };
+        const value_type& value()                   { return state;         };
+        const value_type& value(Integer p)          { return st_array[p];   };        
+        const integer_dense& index_matrix() const   { return ind_array;     };
 
         void reset_array(Integer s)
         { 
@@ -1328,11 +1328,11 @@ struct min_accumulator2
                 ptr_ind[i] = 0;
         };
 
-        void reset()                        { };
-        void current_vector(Integer vec)    { vec_pos = vec;        };
-        const value_type& value()           { return state;         };
-        const value_type& value(Integer p)  { return st_array[p];   };        
-        integer_dense index_matrix() const  { return ind_array;     };
+        void reset()                                { };
+        void current_vector(Integer vec)            { vec_pos = vec;        };
+        const value_type& value()                   { return state;         };
+        const value_type& value(Integer p)          { return st_array[p];   };        
+        const integer_dense& index_matrix() const   { return ind_array;     };
 
         void reset_array(Integer s)
         { 
@@ -1547,11 +1547,11 @@ struct min_abs_accumulator2
                 ptr_ind[i] = 0;
         };
 
-        void reset()                        { };        
-        void current_vector(Integer vec)    { vec_pos = vec;        };
-        const value_type& value()           { return state;         };
-        const value_type& value(Integer p)  { return st_array[p];   };        
-        integer_dense index_matrix() const  { return ind_array;     };
+        void reset()                                { };        
+        void current_vector(Integer vec)            { vec_pos = vec;        };
+        const value_type& value()                   { return state;         };
+        const value_type& value(Integer p)          { return st_array[p];   };        
+        const integer_dense& index_matrix() const   { return ind_array;     };
 
         void reset_array(Integer s)
         { 
@@ -1920,7 +1920,7 @@ void vec_manip_helper<M>::eval_min2(matcl::Matrix& rx, matcl::Matrix& ri, const 
 
     accum_type accum(ret_ti);
     mr::eval_vec_functor2<ret_type_min,M, accum_type>::eval(rx,m,dim,accum);
-    integer_dense ind = accum.index_matrix();
+    const integer_dense& ind = accum.index_matrix();
 
     ri  = matcl::Matrix(ind,true);
     return;
@@ -1968,7 +1968,7 @@ void vec_manip_helper<M>::eval_min_abs2(matcl::Matrix& rx, matcl::Matrix& ri, co
     accum_type accum(ret_ti);
     mr::eval_vec_functor2<ret_type_min_abs,M, accum_type>::eval(rx, m,dim,accum);
 
-    integer_dense ind = accum.index_matrix();
+    const integer_dense& ind = accum.index_matrix();
     ri = matcl::Matrix(ind,false);
     return;
 };
@@ -2014,7 +2014,7 @@ void vec_manip_helper<M>::eval_max2(matcl::Matrix& rx, matcl::Matrix& ri, const 
     accum_type accum(ret_ti);
 
     mr::eval_vec_functor2<ret_type_max,M, accum_type>::eval(rx, m,dim,accum);
-    integer_dense ind = accum.index_matrix();
+    const integer_dense& ind = accum.index_matrix();
 
     ri  = matcl::Matrix(ind,true);
     return;
@@ -2061,7 +2061,7 @@ void vec_manip_helper<M>::eval_max_abs2(matcl::Matrix& rx, matcl::Matrix& ri, co
     accum_type accum(ret_ti);
 
     mr::eval_vec_functor2<ret_type_max_abs,M, accum_type>::eval(rx, m,dim,accum);
-    integer_dense ind = accum.index_matrix();
+    const integer_dense& ind = accum.index_matrix();
 
     ri = matcl::Matrix(ind,true);
     return;

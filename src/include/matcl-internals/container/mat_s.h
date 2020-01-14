@@ -24,6 +24,7 @@
 #include "matcl-internals/container/mat_base.h"
 #include "matcl-scalar/details/enablers.h"
 #include "matcl-core/details/type_codes.h"
+#include "matcl-internals/container/const_matrix.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251) //class needs to have dll-interface
@@ -65,13 +66,10 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
                             Integer r, Integer c, Integer nnz, Integer nzmax,
                             typename matcl::details::enable_if_val_complex<value_type,Real_T>::type = 0);
 
-        sparse_matrix_base(const sparse_matrix_base&&) = delete;
         sparse_matrix_base(sparse_matrix_base&&);
 
-        //TODO: make copy constructor deleted
-        sparse_matrix_base(const sparse_matrix_base&);
-
-        explicit sparse_matrix_base(const sparse_ccs &d) : m_data(d) {}
+        explicit sparse_matrix_base(const sparse_ccs &d) 
+            : m_data(d) {}
 
         void                    mark_unique(bool unique)    { m_data.mark_unique(unique); }        
         bool                    is_unique() const           { return m_data.is_unique(); };
@@ -149,16 +147,20 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
         friend matcl::Matrix    fast_optim_impl(const Matrix<val_type,struct_sparse>& A);
 
         sparse_matrix_base&     operator=(const sparse_matrix_base&) = delete;
+
+    protected:
+        sparse_matrix_base(const sparse_matrix_base&);
 };
 
 template<class value_type_>
 class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matrix_base<value_type_>
 {
     public:
-        using base_type     = sparse_matrix_base<value_type_>;
-        using struct_type   = struct_sparse;
-        using value_type    = value_type_;
-        using this_type     = Matrix<value_type_,struct_sparse>;
+        using base_type         = sparse_matrix_base<value_type_>;
+        using struct_type       = struct_sparse;
+        using value_type        = value_type_;
+        using this_type         = Matrix<value_type_,struct_sparse>;
+        using const_matrix_type = const_matrix<this_type>;
 
         static const matcl::mat_code matrix_code
                             = md::type_to_code<this_type>::value;
@@ -193,33 +195,48 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matr
                 typename matcl::details::enable_if_val_complex<value_type, Real_T>::type = 0)
                 : base_type(ti,ri, ci, xr, xi, r, c, nnz, nzmax) {}
 
-        Matrix(const base_type &&m) = delete;
         Matrix(base_type &&m)        
                 : base_type(std::move(m)) {}
-        Matrix(const base_type &m)        
-                : base_type(m) {}
-
-        Matrix(const Matrix &&m) = delete;
+                
         Matrix(Matrix &&m)        
                 : base_type(std::move(m)) {}
-        Matrix(const Matrix &m)        
-                : base_type(m) {}
+
+        // mark copying as safe; copy is safe if returned object is not modified
+        // unless is unique
+        struct copy_is_safe{};
+
+        //TODO: remove this
+        struct copy_is_safe_TODO : copy_is_safe{};
+
+        Matrix(const base_type &m, copy_is_safe)
+                : base_type(m) {}; 
+
+        Matrix(const Matrix &m, copy_is_safe)
+                : base_type(m) {}; 
 
         matcl::Matrix       fast_optim() const;
-        Matrix              drop() const;
-        Matrix              drop(Real tol) const;
+        const_matrix_type   drop() const;
+        const_matrix_type   drop(Real tol) const;
 
         bool                is_same_matrix(const Matrix& other) const;
         bool                all_finite() const;
 
     private:
         Matrix&             operator=(const Matrix&) = delete;
+
+    public:
+        //TODO
+        Matrix(const base_type &m)
+            : base_type(m) {}
+
+        Matrix(const Matrix &m)
+            : base_type(m) {}
 };
 
 template<class V>
 inline bool is_real_matrix(const sparse_matrix_base<V>&)
 {
-    return md::is_float_real_scalar<V>::value || std::is_same<V,Integer>::value;
+    return md::is_float_real_scalar<V>::value || std::is_same<V, Integer>::value;
 };
 
 };};

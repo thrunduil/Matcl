@@ -130,7 +130,7 @@ class column_iterator_drop
 template<class SM>
 struct drop_entries_impl
 {
-    static SM eval_20(SM& in,const matcl::details::colon_info& ci, Real tol0)
+    static void eval_20(Matrix& ret, SM& in,const matcl::details::colon_info& ci, Real tol0)
     {
         using value_type = typename SM::value_type;
 
@@ -248,7 +248,10 @@ struct drop_entries_impl
         };
 
         if (any_deleted == false)
-            return in;
+        {
+            ret = Matrix(in, false);
+            return;
+        };
 
         for (Integer i = 0, pos = Ad.offset(); i < c; ++i)
         {
@@ -278,10 +281,12 @@ struct drop_entries_impl
 
         Ad.add_memory(-1);
         in.get_struct().reset();
-        return in;
+
+        ret = Matrix(in, false);
+        return;
     };
 
-    static SM eval_20_zero(SM& in,const matcl::details::colon_info& ci)
+    static void eval_20_zero(Matrix& ret, SM& in,const matcl::details::colon_info& ci)
     {
         using value_type = typename SM::value_type;
 
@@ -386,14 +391,14 @@ struct drop_entries_impl
             };
         };
 
-        if (any_modif == false)
-            return in;
-        
-        in.get_struct().reset();
-        return in;
+        if (any_modif == true)
+            in.get_struct().reset();
+
+        ret = Matrix(in, false);
+        return;
     };
 
-    static SM eval_21(SM& in,const matcl::details::colon_info& ci, Real tol0)
+    static void eval_21(Matrix& ret, SM& in,const matcl::details::colon_info& ci, Real tol0)
     {
         using value_type = typename SM::value_type;
 
@@ -450,7 +455,10 @@ struct drop_entries_impl
         };
 
         if (any_deleted == false)
-            return in;
+        {
+            ret = Matrix(in, false);
+            return;
+        };
 
         for (Integer i = 0, pos = Ad.offset(); i < c; ++i)
         {
@@ -480,10 +488,12 @@ struct drop_entries_impl
 
         Ad.add_memory(-1);
         in.get_struct().reset();
-        return in;
+
+        ret = Matrix(in, false);
+        return;
     };
 
-    static SM eval_21_zero(SM& in,const matcl::details::colon_info& ci)
+    static void eval_21_zero(Matrix& ret, SM& in,const matcl::details::colon_info& ci)
     {
         using value_type = typename SM::value_type;
 
@@ -537,17 +547,17 @@ struct drop_entries_impl
             };
         };
 
-        if (any_modif == false)
-            return in;
+        if (any_modif == true)
+            in.get_struct().reset();
 
-        in.get_struct().reset();
-        return in;
+        ret = Matrix(in, false);
+        return;
     };
 
-    static SM eval_0(SM& out,const matcl::details::colon_info& ci, Real tol0)
+    static void eval_0(Matrix& ret, SM& out,const matcl::details::colon_info& ci, Real tol0)
     {
         if (ci.is_double_mat_colon() == true)
-            return eval_0_dc(out, ci, tol0);
+            return eval_0_dc(ret, out, ci, tol0);
 
         using value_type = typename SM::value_type;
         Integer r   = out.rows();
@@ -666,7 +676,10 @@ struct drop_entries_impl
     exit_flag:
 
         if (any_deleted == false)
-            return out;
+        {
+            ret = Matrix(out, false);
+            return;
+        };
 
         pos = Ad.offset();
         for (Integer i = 0; i < c; ++i)
@@ -695,10 +708,12 @@ struct drop_entries_impl
 
         Ad.add_memory(-1);
         out.get_struct().reset();
-        return out;
+
+        ret = Matrix(out, false);
+        return;
     };
 
-    static SM eval_0_dc(SM& out,const matcl::details::colon_info& ci, Real tol0)
+    static void eval_0_dc(Matrix& ret, SM& out,const matcl::details::colon_info& ci, Real tol0)
     {
         using value_type = typename SM::value_type;
         Integer c   = out.cols();
@@ -761,7 +776,10 @@ struct drop_entries_impl
         };
 
         if (any_deleted == false)
-            return out;
+        {
+            ret = Matrix(out, false);
+            return;
+        };
 
         Integer pos = Ad.offset();
 
@@ -792,10 +810,12 @@ struct drop_entries_impl
 
         Ad.add_memory(-1);
         out.get_struct().reset();
-        return out;
+
+        ret = Matrix(out, false);
+        return;
     };
 
-    static SM eval_0_zero_dc(SM& out,const matcl::details::colon_info& ci)
+    static void eval_0_zero_dc(Matrix& ret, SM& out,const matcl::details::colon_info& ci)
     {
         using value_type = typename SM::value_type;
 
@@ -852,17 +872,17 @@ struct drop_entries_impl
             continue;
         };
 
-        if (any_modif == false)
-            return out;
+        if (any_modif == true)
+            out.get_struct().reset();
 
-        out.get_struct().reset();
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
-    static SM eval_0_zero(SM& out,const matcl::details::colon_info& ci)
+    static void eval_0_zero(Matrix& ret, SM& out,const matcl::details::colon_info& ci)
     {
         if (ci.is_double_mat_colon() == true)
-            return eval_0_zero_dc(out, ci);
+            return eval_0_zero_dc(ret, out, ci);
 
         using value_type = typename SM::value_type;
         Integer r   = out.rows();
@@ -976,14 +996,14 @@ struct drop_entries_impl
 
     exit_flag:
 
-        if (any_modif == false)
-            return out;
+        if (any_modif == true)
+            out.get_struct().reset();
 
-        out.get_struct().reset();
-        return out;
+        ret = Matrix(out, false);
+        return;
     };
 
-    static SM eval_1(SM& out,const matcl::details::colon_info& ci, Real tol0)
+    static void eval_1(Matrix& ret, SM& out,const matcl::details::colon_info& ci, Real tol0)
     {
         using value_type = typename SM::value_type;
         Integer r   = out.rows();
@@ -1073,7 +1093,10 @@ struct drop_entries_impl
     exit_flag:
 
         if (any_deleted == false)
-            return out;
+        {
+            ret = Matrix(out, false);
+            return;
+        };
         
         pos = Ad.offset();
 
@@ -1104,10 +1127,12 @@ struct drop_entries_impl
 
         Ad.add_memory(-1);
         out.get_struct().reset();
-        return out;
+
+        ret = Matrix(out, false);
+        return;
     };
 
-    static SM eval_1_zero(SM& out,const matcl::details::colon_info& ci)
+    static void eval_1_zero(Matrix& ret, SM& out,const matcl::details::colon_info& ci)
     {
         using value_type = typename SM::value_type;
         Integer r   = out.rows();
@@ -1190,61 +1215,76 @@ struct drop_entries_impl
 
     exit_flag:
 
-        if (any_modif == false)
-            return out;
-        
-        out.get_struct().reset();
-        return out;
+        if (any_modif == true)        
+            out.get_struct().reset();
+
+        ret = Matrix(out, false);
+        return;
     };
 
 };
 
 template<class SM>
-SM drop_entries_functor<SM>::eval(SM& A,const matcl::details::colon_info& ci, Real tol)
+void drop_entries_functor<SM>::eval(Matrix& ret, SM& A, const matcl::details::colon_info& ci, Real tol)
 {
     if (ci.rows() == 0 || ci.cols() == 0 || A.nnz() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return drop_entries_impl<SM>::eval_20(A,ci, tol);
+        return drop_entries_impl<SM>::eval_20(ret, A, ci, tol);
     else
-        return drop_entries_impl<SM>::eval_21(A,ci, tol);
+        return drop_entries_impl<SM>::eval_21(ret, A, ci, tol);
 };
 
 template<class SM>
-SM zero_entries_functor<SM>::eval(SM& A,const matcl::details::colon_info& ci)
+void zero_entries_functor<SM>::eval(Matrix& ret, SM& A, 
+                        const matcl::details::colon_info& ci)
 {
     if (ci.rows() == 0 || ci.cols() == 0 || A.nnz() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return drop_entries_impl<SM>::eval_20_zero(A,ci);
+        return drop_entries_impl<SM>::eval_20_zero(ret, A, ci);
     else
-        return drop_entries_impl<SM>::eval_21_zero(A,ci);
+        return drop_entries_impl<SM>::eval_21_zero(ret, A, ci);
 };
 
 template<class SM>
-SM drop_entries_functor_2<SM>::eval(SM& A,const matcl::details::colon_info& ci, Real tol)
+void drop_entries_functor_2<SM>::eval(Matrix& ret, SM& A,
+                const matcl::details::colon_info& ci, Real tol)
 {
     if (ci.rows() == 0 || A.nnz() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return drop_entries_impl<SM>::eval_0(A,ci, tol);
+        return drop_entries_impl<SM>::eval_0(ret, A, ci, tol);
     else
-        return drop_entries_impl<SM>::eval_1(A,ci, tol);
+        return drop_entries_impl<SM>::eval_1(ret, A,ci, tol);
 };
 
 template<class SM>
-SM zero_entries_functor_2<SM>::eval(SM& A,const matcl::details::colon_info& ci)
+void zero_entries_functor_2<SM>::eval(Matrix& ret, SM& A,
+                        const matcl::details::colon_info& ci)
 {
     if (ci.rows() == 0 || A.nnz() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return drop_entries_impl<SM>::eval_0_zero(A,ci);
+        return drop_entries_impl<SM>::eval_0_zero(ret, A, ci);
     else
-        return drop_entries_impl<SM>::eval_1_zero(A,ci);
+        return drop_entries_impl<SM>::eval_1_zero(ret, A, ci);
 };
 
 };};};

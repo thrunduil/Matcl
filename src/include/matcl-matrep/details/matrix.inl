@@ -205,7 +205,7 @@ inline details::rvalue_holder<M> Matrix::move_impl()
 };
 
 template<class M>		 
-inline M& Matrix::get_impl_unique()			
+inline M& Matrix::get_impl_unique() &
 { 
     make_unique();
     return details::get_functor<M>::eval(*this);

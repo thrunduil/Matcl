@@ -26,6 +26,7 @@
     <ClInclude Include="..\..\..\src\include\matcl-internals\base\sort.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\base\utils.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\base\vector.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-internals\container\const_matrix.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_b.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_base.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\container\mat_d.h" />

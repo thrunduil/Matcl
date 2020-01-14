@@ -205,9 +205,9 @@ struct assign_mat_str<M1,M2,struct_dense,struct_sparse>
             Integer matr        = mat.rows();
 
             if (single == true)
-            {
-                mr::integer_dense ci_ri = ci.get_rim_1();
-                Integer* ptr_ri         = ci_ri.ptr();
+            {   
+                const mr::integer_dense& ci_ri  = ci.get_rim_1();
+                const Integer* ptr_ri           = ci_ri.ptr();
 
                 for (Integer j = 0, k = 0; j < BFc; ++j) 
                 {
@@ -225,10 +225,11 @@ struct assign_mat_str<M1,M2,struct_dense,struct_sparse>
             }
             else
             {
-                mr::integer_dense rim   = ci.get_rim_r();
-                mr::integer_dense cim   = ci.get_rim_c();
-                Integer* ptr_ri         = rim.ptr();
-                Integer* ptr_ci         = cim.ptr();
+                const mr::integer_dense& rim    = ci.get_rim_r();
+                const mr::integer_dense& cim    = ci.get_rim_c();
+
+                const Integer* ptr_ri           = rim.ptr();
+                const Integer* ptr_ci           = cim.ptr();
 
                 for (Integer j = 0, k = 0; j < BFc; ++j) 
                 {
@@ -481,7 +482,7 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_sparse>
 
         if (B.nnz() == 0)
         {
-            A = Matrix(algorithm::zero_entries_2(mat,ci),true);
+            algorithm::zero_entries_2(A, mat, ci);
             return A;
         };        
 
@@ -520,7 +521,7 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_sparse>
 
         if (B.nnz() == 0)
         {
-            A = Matrix(algorithm::zero_entries(mat,ci),true);
+            algorithm::zero_entries(A, mat, ci);
             return A;
         };
 
@@ -547,7 +548,8 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_sparse>
         using value_type    = typename M1::value_type;
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
         FullMatrix BC = mr::converter<FullMatrix,M2>::eval(B);
-        A = Matrix(algorithm::sparse_change_diag<value_type>(A.get_impl_unique<M1>(),d,BC),true);
+
+        algorithm::sparse_change_diag<value_type>(A, A.get_impl_unique<M1>(), d, BC);
         return A;
     }
 };
@@ -588,8 +590,8 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
 
             if (single == true)
             {
-                mr::integer_dense ci_ri = ci.get_rim_1();
-                const Integer* ptr_ri   = ci_ri.ptr();
+                const mr::integer_dense& ci_ri  = ci.get_rim_1();
+                const Integer* ptr_ri           = ci_ri.ptr();
 
                 ptr_B = B2.ptr();
 
@@ -605,8 +607,8 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
             }
             else
             {
-                mr::integer_dense rim   = ci.get_rim_r();
-                mr::integer_dense cim   = ci.get_rim_c();
+                const mr::integer_dense& rim   = ci.get_rim_r();
+                const mr::integer_dense& cim   = ci.get_rim_c();
                 const Integer* ptr_ri   = rim.ptr();
                 const Integer* ptr_ci   = cim.ptr();
 
@@ -671,8 +673,8 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
 
         if (ci.r_flag == 0 && ci.c_flag == 0)
         {
-            mr::integer_dense ci_ri = ci.get_rim_2();
-            mr::integer_dense ci_ci = ci.get_cim_2();
+            const mr::integer_dense& ci_ri = ci.get_rim_2();
+            const mr::integer_dense& ci_ci = ci.get_cim_2();
 
             const Integer* ptr_ri = ci_ri.ptr();
             const Integer* ptr_ci = ci_ci.ptr();
@@ -697,8 +699,8 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
 
             ptr_mat = mat.ptr() + pos_A;
 
-            mr::integer_dense ci_ri = ci.get_rim_2();
-            const Integer* ptr_ri = ci_ri.ptr();
+            const mr::integer_dense& ci_ri  = ci.get_rim_2();
+            const Integer* ptr_ri           = ci_ri.ptr();
 
             for (Integer j = 0; j < nc; ++j)
             {
@@ -714,8 +716,8 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
         }
         else if (ci.r_flag == 1 && ci.c_flag == 0)
         {
-            mr::integer_dense ci_ci = ci.get_cim_2();
-            const Integer* ptr_ci = ci_ci.ptr();
+            const mr::integer_dense& ci_ci  = ci.get_cim_2();
+            const Integer* ptr_ci           = ci_ci.ptr();
 
             for (Integer j = 0; j < nc; ++j)
             {
@@ -766,7 +768,7 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
     {
         using value_type    = typename M1::value_type;
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
-        FullMatrix BC       = mr::converter<FullMatrix,M2>::eval(B);
+        const FullMatrix& BC= mr::converter<FullMatrix,M2>::eval(B);
         algorithm::dense_change_diag<value_type>(A.get_impl_unique<M1>(),d,BC);
         return A;
     }
@@ -1170,8 +1172,9 @@ struct assign_mat_str<M1,M2,struct_banded,struct_dense>
     {
         using value_type    = typename M1::value_type;
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
-        FullMatrix BC       = mr::converter<FullMatrix,M2>::eval(B);
-        A = Matrix(algorithm::band_change_diag<value_type>(A.get_impl<M1>(),d,BC),true);
+        const FullMatrix& BC= mr::converter<FullMatrix,M2>::eval(B);
+
+        algorithm::band_change_diag<value_type>(A, A.get_impl<M1>(), d, BC);
         return A;
     }
 };
@@ -1224,7 +1227,7 @@ struct assign_mat_str<M1,M2,struct_banded,struct_sparse>
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
         FullMatrix BC       = mr::converter<FullMatrix,M2>::eval(B);
 
-        A = Matrix(algorithm::band_change_diag<value_type>(A.get_impl<M1>(),d,BC),true);
+        algorithm::band_change_diag<value_type>(A, A.get_impl<M1>(), d, BC);
         return A;
     }
 };
@@ -1277,7 +1280,7 @@ struct assign_mat_str<M1,M2,struct_banded,struct_banded>
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
         FullMatrix BC       = mr::converter<FullMatrix,M2>::eval(B);
 
-        A = Matrix(algorithm::band_change_diag<value_type>(A.get_impl<M1>(),d,BC),true);
+        algorithm::band_change_diag<value_type>(A, A.get_impl<M1>(), d, BC);
         return A;
     }
 };
@@ -1467,9 +1470,9 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_dense>
     {
         using value_type    = typename M1::value_type;
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
-        FullMatrix BC       = mr::converter<FullMatrix,M2>::eval(B);
+        const FullMatrix& BC= mr::converter<FullMatrix,M2>::eval(B);
 
-        A = Matrix(algorithm::sparse_change_diag<value_type>(A.get_impl_unique<M1>(),d,BC),true);
+        algorithm::sparse_change_diag<value_type>(A, A.get_impl_unique<M1>(), d, BC);
         return A;
     }
 };
@@ -1492,7 +1495,8 @@ struct assign_mat_str<M1,M2,struct_sparse,struct_banded>
         using value_type    = typename M1::value_type;
         using FullMatrix    = raw::Matrix<value_type,struct_dense>;
         FullMatrix BC       = mr::converter<FullMatrix,M2>::eval(B);
-        A = Matrix(algorithm::sparse_change_diag<value_type>(A.get_impl_unique<M1>(),d,BC),true);
+
+        algorithm::sparse_change_diag<value_type>(A, A.get_impl_unique<M1>(), d, BC);
         return A;
     }
 };

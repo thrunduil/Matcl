@@ -54,9 +54,9 @@ void del_rows_sparse_functor<SM>::eval(matcl::Matrix& ret, const SM& mat,
         if (ci.is_double_mat_colon() == true)
             throw error::invalid_colon_too_many_mat();
 
-        raw::integer_dense ritmp    = ci.get_rim_1();
-        const Integer* ptr_ri       = ritmp.ptr();
-        Integer ce                  = ptr_ri[0];
+        const raw::integer_dense& ritmp = ci.get_rim_1();
+        const Integer* ptr_ri           = ritmp.ptr();
+        Integer ce                      = ptr_ri[0];
 
         error::check_row(ce, r0, c0);
 
@@ -623,9 +623,9 @@ void del_rowscols_sparse_functor<SM>::eval_00(matcl::Matrix& ret, const SM& mat,
     }
 
     //row colon
-    raw::integer_dense ritmp    = ci.get_rim_2();
-    const Integer* ptr_ri       = ritmp.ptr();
-    Integer cer                 = ptr_ri[0];
+    const raw::integer_dense& ritmp = ci.get_rim_2();
+    const Integer* ptr_ri           = ritmp.ptr();
+    Integer cer                     = ptr_ri[0];
 
     error::check_row(cer, r0, c0);
 
@@ -916,9 +916,9 @@ void del_rowscols_sparse_functor<SM>::eval_01(matcl::Matrix& ret, const SM& mat,
     Integer nec = sc;
         
     //row colon
-    raw::integer_dense ritmp    = ci.get_rim_2();
-    const Integer* ptr_ri       = ritmp.ptr();
-    Integer cer                 = ptr_ri[0];
+    const raw::integer_dense& ritmp = ci.get_rim_2();
+    const Integer* ptr_ri           = ritmp.ptr();
+    Integer cer                     = ptr_ri[0];
 
     error::check_row(cer, r0, c0);
 

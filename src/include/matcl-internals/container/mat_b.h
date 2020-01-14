@@ -53,9 +53,17 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
         Matrix(tinfo ti, Integer r, Integer c, Integer fd, Integer ld);
         Matrix(tinfo ti,const value_type &val, Integer r, Integer c, Integer fd, Integer ld);
 
-        Matrix(const Matrix&&) = delete;   
-        Matrix(Matrix&&);   
-        Matrix(const Matrix&);        
+        Matrix(Matrix&&);           
+
+        // mark copying as safe; copy is safe if returned object is not modified
+        // unless is unique
+        struct copy_is_safe{};
+
+        //TODO: remove this
+        struct copy_is_safe_TODO : copy_is_safe{};
+
+        Matrix(const Matrix &m, copy_is_safe)
+                : Matrix(m) {}; 
 
         Matrix              copy(bool keep_bufor = false) const;
         Matrix              clone(bool keep_bufor = false) const;
@@ -187,6 +195,10 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
 
         Matrix&             reset_unique();
         Matrix&             reset_unique(Integer r, Integer c, Integer fd, Integer ld);
+
+    private:
+        //TODO
+        Matrix(const Matrix&);
 };
 
 };};

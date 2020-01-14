@@ -261,7 +261,8 @@ struct extract_type2_switch_nc_impl<ret,derived,true,T1,T2>
 
         h = Matrix(corrector::convert_1(A), false);
 
-        return d->template eval_mat_mat<MT1,MT2>(h,h.get_impl_unique<MT1>(), corrector::convert_2(B));
+        return d->template eval_mat_mat<MT1,MT2>(h, h.get_impl_unique<MT1>(), 
+                                                 corrector::convert_2(B));
     };
 
     static ret eval_mat_scal(derived* d, Matrix& h, T1& A, const T2& B)
@@ -272,7 +273,8 @@ struct extract_type2_switch_nc_impl<ret,derived,true,T1,T2>
 
         h = Matrix(corrector::convert_1(A), false);
 
-        return d->template  eval_mat_scal<MT1,MT2>(h,h.get_impl_unique<MT1>(), corrector::convert_2(B));
+        return d->template  eval_mat_scal<MT1,MT2>(h, h.get_impl_unique<MT1>(), 
+                                                   corrector::convert_2(B));
     };
 
     static ret eval_scal_mat(derived* d, Matrix& h, T1& A, const T2& B)
@@ -438,8 +440,8 @@ struct extract_type2_switch_nc
     {
         static const bool iso = is_object_mat<T1>::value || is_object_mat<T2>::value;
         return extract_type2_switch_nc_impl<ret,derived,iso,T1,T2>
-            ::eval_mat_mat(static_cast<derived*>(this),A,A.get_impl_unique<T1>(),B.get_impl<T2>(),
-                           std::forward<Args>(args)...);
+            ::eval_mat_mat(static_cast<derived*>(this), A, A.get_impl_unique<T1>(),
+                           B.get_impl<T2>(), std::forward<Args>(args)...);
     };
 
     template<class T1, class T2, class ... Args>
@@ -447,8 +449,8 @@ struct extract_type2_switch_nc
     {
         static const bool iso = is_object_mat<T1>::value || is_object_mat<T2>::value;
         return extract_type2_switch_nc_impl<ret,derived,iso,T1,T2>
-            ::eval_mat_scal(static_cast<derived*>(this),A,A.get_impl_unique<T1>(),B.get_scalar<T2>(),
-                            std::forward<Args>(args)...);
+            ::eval_mat_scal(static_cast<derived*>(this), A, A.get_impl_unique<T1>(),
+                            B.get_scalar<T2>(), std::forward<Args>(args)...);
     };
 
     template<class T1, class T2, class ... Args>

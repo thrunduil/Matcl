@@ -39,7 +39,7 @@ inline matrix_container_base::matrix_container_base(matcl::mat_code type)
 template<class val_type, class str_type>
 inline matrix_container<val_type,str_type>::matrix_container(const Matrix& mat)
 :matrix_container_base(matrix_traits::mat_type_info_type_2<val_type,str_type>::matrix_code)
-,m_matrix(mat)
+,m_matrix(mat, Matrix::copy_is_safe())
 {};
 
 template<class val_type, class str_type>

@@ -258,35 +258,39 @@ struct val_type_corrector_impl<T1,T2,T1,T2_ret>
 
 template<class In, class Ret, bool Is_scal, bool Is_obj>
 struct cast_bool_impl
-{
-    using In_val    = typename In::value_type;
-    using Ret_val   = typename Ret::value_type;
-    using In_str    = typename In::struct_type;
+{};
 
-    static Ret eval(const In& mat0)
+template<class In, class Ret>
+struct cast_bool_impl<In, Ret, false, false>
+{
+    using In_val        = typename In::value_type;
+    using Ret_val       = typename Ret::value_type;
+    using In_str        = typename In::struct_type;
+    using Ret_holder    = const_matrix<Ret>;
+
+    static void eval(Ret_holder& ret, const In& mat)
     {
         using matrix_type = Matrix<In_val, In_str>;
 
-        //increase refcount
-        matrix_type mat(mat0);
+        matcl::Matrix ret_m;
+        mrd::unary_helper_impl<matrix_type>::eval_is_true(ret_m, mat);
 
-        matcl::Matrix ret;
-        mrd::unary_helper_impl<matrix_type>::eval_is_true(ret,mat);
-        ret = matcl::convert(ret, matrix_traits::mat_type_info_type<Ret>::matrix_code);
-        return ret.get_impl<Ret>();
+        ret_m = matcl::convert(ret_m, Ret::matrix_code);
+        rebind<Ret, Ret_holder>::eval(ret, ret_m.get_impl<Ret>());
     };
 };
 
 template<class In, class Ret>
 struct cast_bool_impl<In, Ret, false, true>
 {
-    using In_val    = typename In::value_type;
-    using Ret_val   = typename Ret::value_type;
-    using In_str    = typename In::struct_type;
+    using In_val        = typename In::value_type;
+    using Ret_val       = typename Ret::value_type;
+    using In_str        = typename In::struct_type;
+    using Ret_holder    = const_matrix<Ret>;
 
-    static Ret eval(const In& mat)
+    static void eval(Ret_holder& ret, const In& mat)
     {
-        return md::converter<Ret>::eval(mat);
+        rebind<Ret, Ret_holder>::eval(ret, md::converter<Ret>::eval(mat));
     };
 };
 

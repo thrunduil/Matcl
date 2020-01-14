@@ -1588,7 +1588,11 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
             return;
         };
 
-        in_type A_selected = select_cols(A,dims);
+        matcl::Matrix m_A_sel;
+        select_cols(m_A_sel, A, dims);    
+
+        const in_type& A_selected = convert(m_A_sel, in_type::matrix_code).get_impl<in_type>();
+
         in_type At(A.get_type());
         in_type At_selected(A_selected.get_type());
 
@@ -1613,7 +1617,11 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
             return;
         };
 
-        in_type A_selected =select_rows(A,dims);
+        matcl::Matrix m_A_sel;
+        select_rows(m_A_sel, A, dims);
+
+        const in_type& A_selected = convert(m_A_sel, in_type::matrix_code).get_impl<in_type>();
+
         eval_impl(ret, ret_ti,A,A_selected, dims);        
         return;
     };
@@ -1640,7 +1648,11 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
             return;
         };
 
-        in_type A_selected = select_cols(A,dims);    
+        matcl::Matrix m_A_sel;
+        select_cols(m_A_sel, A, dims);    
+
+        const in_type& A_selected = convert(m_A_sel, in_type::matrix_code).get_impl<in_type>();
+
         in_type At(A.get_type());
         in_type At_selected(A.get_type());
 
@@ -1675,8 +1687,12 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
             return;
         };
         
-        in_type A_selected = select_rows(A,dims);
-        eval_impl2(i,x,ret_ti,A,A_selected,dims);
+        matcl::Matrix m_A_sel;
+        select_rows(m_A_sel, A, dims);
+
+        const in_type& A_selected  = convert(m_A_sel, in_type::matrix_code).get_impl<in_type>();
+
+        eval_impl2(i,x,ret_ti,A, A_selected, dims);
         return;
     };
 
@@ -1828,7 +1844,7 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
         return;
     };    
 
-    static in_type select_cols(const in_type& A, const integer_dense& cols)
+    static void select_cols(matcl::Matrix& ret, const in_type& A, const integer_dense& cols)
     {
         Integer r = A.rows();
 
@@ -1843,10 +1859,10 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
 
         ci.set_ci(abs_impl(cols));
 
-        return matcl::algorithm::get_submatrix(A,ci);
+        return matcl::algorithm::get_submatrix(ret, A, ci);
     };
 
-    static in_type select_rows(const in_type& A, const integer_dense& ri)
+    static void select_rows(matcl::Matrix& ret, const in_type& A, const integer_dense& ri)
     {
         Integer c = A.cols();
 
@@ -1860,7 +1876,7 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
         ci.c_size   = c;
         ci.c_flag   = 1;
 
-        return matcl::algorithm::get_submatrix(A,ci);
+        return matcl::algorithm::get_submatrix(ret, A, ci);
     };
 };
 

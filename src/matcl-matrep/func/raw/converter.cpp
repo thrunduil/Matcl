@@ -429,7 +429,9 @@ namespace details
     template<class ret, class T>
     struct converter_sparse_full
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
         {
             using value_type    = typename ret::value_type;
             using in_type       = typename T::value_type;
@@ -488,7 +490,9 @@ namespace details
     template<class ret, class T>
     struct converter_sparse_band
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
         {
             Integer r           = mat.rows();
             Integer c           = mat.cols();
@@ -576,9 +580,10 @@ namespace details
     template<template <class,class> class caller_, class ret, class T, bool ise>
     struct converter_generic_eval_proxy
     {
-        using caller = caller_<ret,T>;
+        using caller            = caller_<ret,T>;
+        using const_mat_type    = mr::const_matrix<ret>;
 
-        static ret eval( typename ti::get_ti_type<ret>::type ti, const T& m )
+        static const_mat_type eval( typename ti::get_ti_type<ret>::type ti, const T& m )
         {
             return caller::eval_f( ti, m );
         }
@@ -587,9 +592,10 @@ namespace details
     template<template <class,class> class caller_, class ret, class T>
     struct converter_generic_eval_proxy<caller_, ret, T, true>
     {
-        using caller = caller_<ret,T>;
+        using caller            = caller_<ret,T>;
+        using const_mat_type    = mr::const_matrix<ret>;
 
-        static ret eval( typename ti::get_ti_type<ret>::type ti, const T& m )
+        static const_mat_type eval( typename ti::get_ti_type<ret>::type ti, const T& m )
         {
             return caller::eval_t( ti, m );
         }
@@ -598,10 +604,13 @@ namespace details
     template<class ret, class T>
     struct converter_sparse_sparse
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& m)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& m)
         {
             static const bool ise = std::is_same<typename ret::value_type,typename T::value_type>::value;            
-            return converter_generic_eval_proxy< matcl::raw::details::converter_sparse_sparse, ret, T, ise >::eval( ti, m );
+            return converter_generic_eval_proxy< matcl::raw::details::converter_sparse_sparse, ret, T, ise >
+                    ::eval( ti, m );
         };
 
         static ret eval_f(typename ti::get_ti_type<ret>::type ti, const T& m)
@@ -657,9 +666,10 @@ namespace details
             return res;
         }
 
-        static ret eval_t(typename ti::get_ti_type<ret>::type ti, const T& m)
+        static const_mat_type eval_t(typename ti::get_ti_type<ret>::type ti, const T& m)
         {
             static const bool iso = std::is_same<typename ret::value_type,Object>::value;
+            
             if (iso)
             {
                 if (ti == m.get_type())
@@ -677,10 +687,13 @@ namespace details
     template<class ret, class T>
     struct converter_dense_dense
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& m)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& m)
         {
             static const bool ise = std::is_same<typename ret::value_type,typename T::value_type>::value;
-            return converter_generic_eval_proxy< matcl::raw::details::converter_dense_dense, ret, T, ise >::eval( ti, m );
+            return converter_generic_eval_proxy< matcl::raw::details::converter_dense_dense, ret, T, ise >
+                        ::eval( ti, m ).get();
         };
 
         static ret eval_f(typename ti::get_ti_type<ret>::type ti, const T& mat)
@@ -729,7 +742,7 @@ namespace details
             return tmp;
         };
 
-        static ret eval_t(typename ti::get_ti_type<ret>::type ti, const T& m)
+        static const_mat_type eval_t(typename ti::get_ti_type<ret>::type ti, const T& m)
         {
             static const bool iso = std::is_same<typename ret::value_type,Object>::value;
             if (iso)
@@ -749,7 +762,9 @@ namespace details
     template<class ret, class T>
     struct converter_dense_band
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
         {
             Integer r = mat.rows(), c = mat.cols();
 
@@ -812,7 +827,9 @@ namespace details
     template<class ret, class T>
     struct converter_dense_sparse
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& m)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& m)
         {
             Integer nnz     = 0;
             Integer r       = m.rows();
@@ -947,16 +964,20 @@ namespace details
                         >::type
                 >::type;
 
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& mat)
         {
             return converter_type::eval(ti,mat);
         };
     };
 
-    template<class ret_type,class T>
+    template<class ret_type, class T>
     struct converter_band_band
     {
-        static ret_type eval(typename ti::get_ti_type<ret_type>::type ti, const T& m)
+        using const_mat_type    = mr::const_matrix<ret_type>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret_type>::type ti, const T& m)
         {
             static const bool ise = std::is_same<typename ret_type::value_type,typename T::value_type>::value;
             return converter_generic_eval_proxy< matcl::raw::details::converter_band_band, ret_type, T, ise >
@@ -1016,7 +1037,7 @@ namespace details
             return out;
         };
 
-        static ret_type eval_t(typename ti::get_ti_type<ret_type>::type ti, const T& m)
+        static const_mat_type eval_t(typename ti::get_ti_type<ret_type>::type ti, const T& m)
         {
             static const bool iso = std::is_same<typename ret_type::value_type,Object>::value;
             if (iso)
@@ -1036,7 +1057,9 @@ namespace details
     template<class ret_type,class T>
     struct converter_band_dense
     {
-        static ret_type eval(typename ti::get_ti_type<ret_type>::type ti, const T& m)
+        using const_mat_type    = mr::const_matrix<ret_type>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret_type>::type ti, const T& m)
         {
             using VTR   = typename ret_type::value_type;
             using VT    = typename T::value_type;
@@ -1104,10 +1127,12 @@ namespace details
         };
     };
 
-    template<class ret_type,class T>
+    template<class ret_type, class T>
     struct converter_band_sparse
     {
-        static ret_type eval(typename ti::get_ti_type<ret_type>::type ti, const T& bm)
+        using const_mat_type    = mr::const_matrix<ret_type>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret_type>::type ti, const T& bm)
         {
             Integer r   = bm.rows();
             Integer c   = bm.cols();
@@ -1192,7 +1217,9 @@ namespace details
     template<class ret, class T>
     struct converter_sparse
     {
-        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& val)
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& val)
         {
             using converter_type = typename matcl::details::select_if
                     <
@@ -1217,7 +1244,7 @@ namespace details
     template<class ret, class T>
     struct converter_band
     {
-        using type = typename matcl::details::select_if
+        using converter_type = typename matcl::details::select_if
             <
                 std::is_same<typename ret::struct_type,struct_dense>::value,
                 details::converter_band_dense<ret,T>,
@@ -1228,6 +1255,13 @@ namespace details
                     details::converter_band_band<ret,T>
                 >::type
             >::type;
+
+        using const_mat_type    = mr::const_matrix<ret>;
+
+        static const_mat_type eval(typename ti::get_ti_type<ret>::type ti, const T& val)
+        {
+            return converter_type::eval(ti, val);
+        };
     };
 
     template<class ret, class T>
@@ -1236,7 +1270,7 @@ namespace details
         using type = typename matcl::details::lazy_select_if
             <
                 std::is_same<typename T::struct_type,struct_banded>::value,
-                details::converter_band<ret,T>,
+                matcl::details::lazy_type<details::converter_band<ret,T>>,
                 details::converter_unknown<ret,T>
             >::type;
     };
@@ -1264,13 +1298,24 @@ namespace details
     };
 
     template<class ret, class T>
+    struct converter_matrix_impl
+    {
+        using converter_type = typename details::converter_selector_2<ret,T> :: type;
+
+        static ret eval(typename ti::get_ti_type<ret>::type ti, const T& val)
+        {
+            return ret(converter_type::eval(ti, val).get(), ret::copy_is_safe_TODO());
+        };
+    };
+
+    template<class ret, class T>
     struct converter_selector
     {
         using type = typename matcl::details::lazy_select_if
             <
                 matcl::details::is_scalar<T>::value,
                 matcl::details::lazy_type<details::converter_scalars_impl<ret,T>>,
-                details::converter_selector_2<ret,T>
+                matcl::details::lazy_type<details::converter_matrix_impl<ret,T>>
             >::type;
     };
 
@@ -1280,7 +1325,6 @@ namespace details
         using converter_type = typename details::converter_selector<ret,T>::type;
         return converter_type::eval(ti, val);
     };
-
 };
 
 };};

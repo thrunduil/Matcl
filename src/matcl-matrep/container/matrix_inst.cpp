@@ -347,7 +347,10 @@ namespace details
 
         static bool eval(const arg_type& val, bool allow_conv, matrix_base& mat)
         {            
-            mat_type vm   = mat_type(val);
+            // we can safely create a (shallow) copy; returned object modification
+            // is controlled by Matrix, which should create independent copy when
+            // object is modified and is not unique
+            mat_type vm   = mat_type(val, mat_type::copy_is_safe());
 
             return constructor_helper_impl<mat_type, false>::eval(vm, allow_conv, mat);
         };

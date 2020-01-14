@@ -74,8 +74,8 @@ struct function_op_convert_eval
 {
     static void eval(const in_type& A, Matrix& ret)
     {
-        ret_type tmp = raw::converter<ret_type,in_type>::eval(A);
-        ret = Matrix(tmp,false);
+        const ret_type& tmp = raw::converter<ret_type, in_type>::eval(A);
+        ret = Matrix(tmp, false);
     };
 };
 
@@ -855,7 +855,7 @@ struct drop_sparse_impl<struct_sparse,T>
 {
     static void eval(Matrix& ret, const T& mat, Real tol)
     {
-        ret = matcl::Matrix(mat.drop(tol), false);
+        ret = matcl::Matrix(mat.drop(tol).get(), false);
     };
 };
 

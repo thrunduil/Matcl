@@ -70,7 +70,8 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_dense,true>
         {
             for(Integer i = 0; i < r; ++i)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>::eval(ptr_mat[i],out.get_type());
+                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                                    ::eval(ptr_mat[i],out.get_type());
                 mrd::reset_helper(ptr_out[i],tmp);
             };
             ptr_mat += mat_ld;
@@ -117,7 +118,9 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_dense,true>
         {			
             for(Integer i = 0, rr = row_st; i < r; ++i, ++rr)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>::eval(ptr_mat[i],out.get_type());
+                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                                    ::eval(ptr_mat[i],out.get_type());
+
                 if (mrd::is_zero(tmp) == false)
                 {					
                     d_r[k] = rr;
@@ -146,7 +149,10 @@ struct insert_visitor_scal_impl<out_type,struct_sparse,in_type,true>
         Integer k       = d_c[col_st+1];
         d_r[k]          = row_st;
 
-        mrd::reset_helper(d_x[k],matcl::raw::converter<value_type,in_type>::eval(mat,out.get_type()));
+        const value_type& conv  = matcl::raw::converter<value_type, in_type>
+                                        ::eval(mat,out.get_type());
+
+        mrd::reset_helper(d_x[k], conv);
         ++d_c[col_st + 1];
     };
 };
@@ -189,7 +195,9 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_banded,true>
 
             for (Integer j = 0; j < rc; ++j, ptr_out += out_ld+1)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>::eval(mat_ptr[0],out.get_type());
+                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                                    ::eval(mat_ptr[0],out.get_type());
+
                 mrd::reset_helper(*ptr_out,tmp);
                 mat_ptr += mat_ld;
             };
@@ -248,7 +256,8 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_banded,true>
 
             for(Integer j = 1, row = row_st; j <= rc; ++j, ++row)
             {			
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>::eval(*mat_ptr,out.get_type());
+                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                                    ::eval(*mat_ptr,out.get_type());
 
                 d_r[k] = row;
                 mrd::reset_helper(d_x[k],tmp);
@@ -273,7 +282,8 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_banded,true>
 
                 for(Integer i = row_f, rr = row_st + row_f; i <= row_l; ++i, ++ii, ++rr)
                 {
-                    value_type tmp = matcl::raw::converter<value_type,value_type_in>::eval(mat_ptr[ii],out.get_type());
+                    value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                                        ::eval(mat_ptr[ii],out.get_type());
                     d_r[k] = rr;
                     mrd::reset_helper(d_x[k],tmp);
                     ++k;
@@ -329,7 +339,8 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_sparse,true>
                 Integer k;
                 for (k = Ad_c[j]; k < Ad_c[j + 1] ; ++k)
                 {
-                    val_type_out tmp = matcl::raw::converter<val_type_out,value_type>::eval(Ad_x[k],out.get_type());
+                    val_type_out tmp = matcl::raw::converter<val_type_out,value_type>
+                                        ::eval(Ad_x[k],out.get_type());
                     mrd::reset_helper(ptr_out[Ad_r[k]],tmp);
                 };
 
@@ -378,7 +389,8 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_sparse,true>
         {		
             for (Integer k = Ad_c[j]; k < Ad_c[j + 1] ; ++k)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>::eval(Ad_x[k],out.get_type());
+                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                                    ::eval(Ad_x[k],out.get_type());
 
                 d_r[p]  = row_st + Ad_r[k];
                 mrd::reset_helper(d_x[p],tmp);
@@ -390,12 +402,12 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_sparse,true>
     };
 };
 
-template<class matrix_type>
-void insert_sparse_cols(matrix_type& out,const std::list<matrix_type>& mat_vec)
+template<class Matrix_type, class Const_matrix_type = mr::const_matrix<Matrix_type>>
+void insert_sparse_cols(Matrix_type& out, const std::list<Const_matrix_type>& mat_vec)
 {
     matcl_assert(out.rep().offset() == 0,"");
 
-    using value_type    = typename matrix_type::value_type;
+    using value_type    = typename Matrix_type::value_type;
 
     raw::details::sparse_ccs<value_type>& d = out.rep();
 
@@ -403,7 +415,7 @@ void insert_sparse_cols(matrix_type& out,const std::list<matrix_type>& mat_vec)
     Integer * d_r   = d.ptr_r();
     value_type* d_x = d.ptr_x();
 
-    using iterator  = typename std::list<matrix_type>::const_iterator;
+    using iterator  = typename std::list<Const_matrix_type>::const_iterator;
     Integer c = out.cols(), nz = 0;		
 
     for(Integer j = 0; j < c; ++j)
@@ -413,10 +425,11 @@ void insert_sparse_cols(matrix_type& out,const std::list<matrix_type>& mat_vec)
         Integer row = 0;
         for (iterator I = mat_vec.begin(), E = mat_vec.end(); I!= E; ++I)
         {
-            const raw::details::sparse_ccs<value_type>& Ad = I->rep();
+            const raw::details::sparse_ccs<value_type>& Ad = I->get().rep();
+            
             if (Ad.nnz() == 0)
             {
-                row += I->rows();
+                row += I->get().rows();
                 continue;
             };
 
@@ -432,7 +445,7 @@ void insert_sparse_cols(matrix_type& out,const std::list<matrix_type>& mat_vec)
                 ++nz;
             };
 
-            row += I->rows();
+            row += I->get().rows();
         };		
     };
 

@@ -197,8 +197,7 @@ struct assign_drop_impl<V, struct_sparse>
         if (tol < 0)
             return A;
 
-        //struct optimization should not be allowed
-        A = Matrix(algorithm::drop_entries_2(mat,ci, tol),false);
+        algorithm::drop_entries_2(A, mat, ci, tol);
         return A;
     };
 
@@ -212,15 +211,13 @@ struct assign_drop_impl<V, struct_sparse>
         if (nr == 0 || nc == 0 || tol < 0)
             return A;
 
-        //struct optimization should not be allowed
-        A = Matrix(algorithm::drop_entries(mat,ci, tol),false);
+        algorithm::drop_entries(A, mat, ci, tol);
         return A;
     };
 
 	static Matrix& eval_diag(Matrix& A,M1& mat, Integer d, Real tol)
     {
-        //struct optimization should not be allowed
-        A = Matrix(algorithm::sparse_drop_diag(mat,d,tol),false);
+        algorithm::sparse_drop_diag(A, mat, d, tol);
         return A;
     }
 };
@@ -269,8 +266,7 @@ struct assign_add_impl<V, struct_sparse>
         if (ci.rows() == 0)
             return A;
 
-        //struct optimization should not be allowed
-        A = Matrix(algorithm::add_entries_2(mat,ci),false);
+        algorithm::add_entries_2(A, mat, ci);
         return A;
     };
 
@@ -284,15 +280,14 @@ struct assign_add_impl<V, struct_sparse>
         if (nr == 0 || nc == 0)
             return A;
         
-        //struct optimization should not be allowed
-        A = Matrix(algorithm::add_entries(mat,ci),false);
+        algorithm::add_entries(A, mat, ci);
         return A;
     }
 
 	static Matrix& eval_diag(Matrix& A,M1& mat, Integer d)
     {
         //struct optimization should not be allowed
-        A = Matrix(algorithm::sparse_add_diag(mat,d),false);
+        algorithm::sparse_add_diag(A, mat, d);
         return A;
     };
 };
@@ -310,7 +305,7 @@ struct assign_impl<M1,val_type,true,struct_type>
         ti::ti_type<val_type_ret> ret_ti    = link_ret_ti<val_type_ret,val_type_1,val_type>
                                                 ::eval(ti_1,val);
 
-        A                   = Matrix(raw::converter<new_mat_type,M1>::eval(mat,ret_ti),false);
+        A                   = Matrix(raw::converter<new_mat_type, M1>::eval(mat,ret_ti),false);
         val_type_ret val2   = raw::converter<val_type_ret,val_type>::eval(val);
 
         return assign_impl<new_mat_type,val_type_ret,false,struct_type>
@@ -426,7 +421,7 @@ struct assign_impl<M1,val_type,false,struct_dense>
 
             if (single)
             {
-                mr::integer_dense ci_ri = c_info.get_rim_1();
+                const mr::integer_dense& ci_ri = c_info.get_rim_1();
                 const Integer* ptr_ri   = ci_ri.ptr();
 
                 for (Integer i = 0; i < s; ++i)
@@ -440,8 +435,8 @@ struct assign_impl<M1,val_type,false,struct_dense>
             }
             else
             {
-                mr::integer_dense ri    = c_info.get_rim_r();
-                mr::integer_dense ci    = c_info.get_rim_c();
+                const mr::integer_dense& ri    = c_info.get_rim_r();
+                const mr::integer_dense& ci    = c_info.get_rim_c();
                 const Integer* ptr_ri   = ri.ptr();
                 const Integer* ptr_ci   = ci.ptr();
 
@@ -567,7 +562,7 @@ struct assign_impl<M1,val_type,false,struct_sparse>
 
         if (mrd::is_zero(val) == true)
         {
-            A = Matrix(algorithm::zero_entries_2(mat,ci),true);
+            algorithm::zero_entries_2(A, mat, ci);
             return A;
         }
 
@@ -584,7 +579,7 @@ struct assign_impl<M1,val_type,false,struct_sparse>
             return A;
         };
 
-        A = Matrix(algorithm::change_entries_2(mat,ci,val),true);
+        algorithm::change_entries_2(A, mat, ci, val);
         return A;
     };
 
@@ -600,7 +595,7 @@ struct assign_impl<M1,val_type,false,struct_sparse>
 
         if (mrd::is_zero(val) == true)
         {
-            A = Matrix(algorithm::zero_entries(mat,ci),true);
+            algorithm::zero_entries(A, mat, ci);
             return A;
         }
         
@@ -618,19 +613,19 @@ struct assign_impl<M1,val_type,false,struct_sparse>
             return A;
         };
 
-        A = Matrix(algorithm::change_entries(mat,ci,val),true);
+        algorithm::change_entries(A, mat, ci, val);
         return A;
     };
 
-    static Matrix& eval_diag(Matrix& A,M1& mat,const val_type& val,Integer d)
+    static Matrix& eval_diag(Matrix& A, M1& mat, const val_type& val,Integer d)
     {
         if (mrd::is_zero(val) == true)
         {
-            A = Matrix(algorithm::zero_entries_diag(mat,d),true);
+            algorithm::zero_entries_diag(A, mat, d);
             return A;
         }
 
-        A = Matrix(algorithm::sparse_change_diag(mat,d,val),true);
+        algorithm::sparse_change_diag(A, mat, d, val);
         return A;
     };
 };
@@ -704,7 +699,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
         {            
             if (single == true)
             {
-                mr::integer_dense ci_ri = ci.get_rim_1();
+                const mr::integer_dense& ci_ri = ci.get_rim_1();
                 const Integer* ptr_ri = ci_ri.ptr();
 
                 while (b_cont && i<s)
@@ -715,8 +710,8 @@ struct assign_impl<M1,val_type,false,struct_banded>
             }
             else
             {
-                mr::integer_dense rim   = ci.get_rim_r();
-                mr::integer_dense cim   = ci.get_rim_c();
+                const mr::integer_dense& rim   = ci.get_rim_r();
+                const mr::integer_dense& cim   = ci.get_rim_c();
                 const Integer* ptr_ri   = rim.ptr();
                 const Integer* ptr_ci   = cim.ptr();
 
@@ -758,7 +753,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
         {
             if (single == true)
             {
-                mr::integer_dense ri    = ci.get_rim_1();
+                const mr::integer_dense& ri    = ci.get_rim_1();
                 const Integer* ptr_ri   = ri.ptr();
 
                 for (; i < s; ++i)
@@ -772,8 +767,8 @@ struct assign_impl<M1,val_type,false,struct_banded>
             }
             else
             {
-                mr::integer_dense rim   = ci.get_rim_r();
-                mr::integer_dense cim   = ci.get_rim_c();
+                const mr::integer_dense& rim   = ci.get_rim_r();
+                const mr::integer_dense& cim   = ci.get_rim_c();
                 const Integer* ptr_ri   = rim.ptr();
                 const Integer* ptr_ci   = cim.ptr();
 
@@ -816,8 +811,8 @@ struct assign_impl<M1,val_type,false,struct_banded>
 
         if (ci.r_flag == 0 && ci.c_flag == 0)
         {			
-            mr::integer_dense ci_ci = ci.get_cim_2();
-            mr::integer_dense ci_ri = ci.get_rim_2();
+            const mr::integer_dense& ci_ci = ci.get_cim_2();
+            const mr::integer_dense& ci_ri = ci.get_rim_2();
 
             const Integer* ptr_ri = ci_ri.ptr();
             const Integer* ptr_ci = ci_ci.ptr();
@@ -848,7 +843,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
             Integer dpos_c = imult(ci.c_step,mat.ld());
             Integer c;
 
-            mr::integer_dense ci_ri = ci.get_rim_2();
+            const mr::integer_dense& ci_ri = ci.get_rim_2();
             const Integer* ptr_ri = ci_ri.ptr();
 
             for (j = 0, c = ci.c_start-1; j < nc; ++j, c += ci.c_step)
@@ -871,7 +866,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
         }
         else if (ci.r_flag == 1 && ci.c_flag == 0)
         {
-            mr::integer_dense ci_ci = ci.get_cim_2();
+            const mr::integer_dense& ci_ci = ci.get_cim_2();
             const Integer* ptr_ci = ci_ci.ptr();
 
             for (j = 0; j < nc; ++j)
@@ -938,8 +933,8 @@ struct assign_impl<M1,val_type,false,struct_banded>
 
         if (ci.r_flag == 0 && ci.c_flag == 0)
         {	
-            mr::integer_dense ci_ci = ci.get_cim_2();
-            mr::integer_dense ci_ri = ci.get_rim_2();
+            const mr::integer_dense& ci_ci = ci.get_cim_2();
+            const mr::integer_dense& ci_ri = ci.get_rim_2();
 
             const Integer* ptr_ri = ci_ri.ptr();
             const Integer* ptr_ci = ci_ci.ptr();
@@ -961,7 +956,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
             Integer pos_c = imult(c-1,B.ld());
             Integer dpos_c = imult(ci.c_step,B.ld());
 
-            mr::integer_dense ci_ri = ci.get_rim_2();
+            const mr::integer_dense& ci_ri = ci.get_rim_2();
             const Integer* ptr_ri = ci_ri.ptr();
 
             ptr_B += pos_c;
@@ -980,7 +975,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
         {	
             Integer pos_0 = ci.r_start - 1 + imult(i,ci.r_step);
 
-            mr::integer_dense ci_ci = ci.get_cim_2();
+            const mr::integer_dense& ci_ci = ci.get_cim_2();
             const Integer* ptr_ci = ci_ci.ptr();
 
             for (; j < nc; ++j)
@@ -1055,7 +1050,7 @@ struct assign_impl<M1,val_type,false,struct_banded>
 
     static Matrix& eval_diag(Matrix& A,M1& mat,const val_type& val,Integer d)
     {
-        A = Matrix(algorithm::band_change_diag(mat,d,val),true);
+        algorithm::band_change_diag(A, mat, d, val);
         return A;
     };
 };

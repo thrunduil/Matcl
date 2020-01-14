@@ -216,9 +216,9 @@ void del_rows_dense_functor<DM>::eval(Matrix& ret, const DM& mat,const md::colon
         if (ci.is_double_mat_colon() == true)
             throw error::invalid_colon_too_many_mat();
 
-        mr::integer_dense ci_ri     = ci.get_rim_1();
-        raw::integer_dense ritmp    = ci_ri.copy();
-        const Integer* ptr_ri       = ritmp.ptr();
+        const mr::integer_dense& ci_ri  = ci.get_rim_1();
+        raw::integer_dense ritmp        = ci_ri.copy();
+        const Integer* ptr_ri           = ritmp.ptr();
 
         ritmp.get_struct().reset();
 
@@ -413,9 +413,9 @@ void del_cols_dense_functor<DM>::eval(matcl::Matrix& ret, const DM& mat,const md
         if (ci.is_double_mat_colon() == true)
             throw error::invalid_colon_too_many_mat();
 
-        mr::integer_dense ci_ri     = ci.get_rim_1();
-        raw::integer_dense ritmp    = ci_ri.copy();
-        const Integer* ptr_ri       = ritmp.ptr();
+        const mr::integer_dense& ci_ri  = ci.get_rim_1();
+        raw::integer_dense ritmp        = ci_ri.copy();
+        const Integer* ptr_ri           = ritmp.ptr();
 
         ritmp.get_struct().reset();
 
@@ -638,9 +638,9 @@ void del_rowscols_dense_functor<DM>::eval_00(matcl::Matrix& ret, const DM& mat,c
     const V* ptr_mat            = mat.ptr();
 
     //column colon
-    mr::integer_dense ci_ci     = ci.get_cim_2();
-    raw::integer_dense citmp    = ci_ci.copy();
-    const Integer* ptr_ci       = citmp.ptr();
+    const mr::integer_dense& ci_ci  = ci.get_cim_2();
+    raw::integer_dense citmp        = ci_ci.copy();
+    const Integer* ptr_ci           = citmp.ptr();
 
     citmp.get_struct().reset();
 
@@ -668,9 +668,9 @@ void del_rowscols_dense_functor<DM>::eval_00(matcl::Matrix& ret, const DM& mat,c
     };
 
     //row colon
-    mr::integer_dense ci_ri     = ci.get_rim_2();
-    raw::integer_dense ritmp    = ci_ri.copy();
-    const Integer* ptr_ri       = ritmp.ptr();
+    const mr::integer_dense& ci_ri  = ci.get_rim_2();
+    raw::integer_dense ritmp        = ci_ri.copy();
+    const Integer* ptr_ri           = ritmp.ptr();
 
     ritmp.get_struct().reset();
 
@@ -775,9 +775,9 @@ void del_rowscols_dense_functor<DM>::eval_10(matcl::Matrix& ret, const DM& mat,c
     const V* ptr_mat            = mat.ptr();
 
     //column colon
-    mr::integer_dense ci_ci     = ci.get_cim_2();
-    raw::integer_dense citmp    = ci_ci.copy();
-    const Integer* ptr_ci       = citmp.ptr();
+    const mr::integer_dense& ci_ci  = ci.get_cim_2();
+    raw::integer_dense citmp        = ci_ci.copy();
+    const Integer* ptr_ci           = citmp.ptr();
 
     citmp.get_struct().reset();
 
@@ -899,9 +899,9 @@ void del_rowscols_dense_functor<DM>::eval_01(matcl::Matrix& ret, const DM& mat,c
     Integer nec = sc;
     
     //row colon
-    mr::integer_dense ci_ri     = ci.get_rim_2();
-    raw::integer_dense ritmp    = ci_ri.copy();
-    const Integer* ptr_ri       = ritmp.ptr();
+    const mr::integer_dense& ci_ri  = ci.get_rim_2();
+    raw::integer_dense ritmp        = ci_ri.copy();
+    const Integer* ptr_ri           = ritmp.ptr();
 
     ritmp.get_struct().reset();
 

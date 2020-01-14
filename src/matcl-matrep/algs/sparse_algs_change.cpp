@@ -116,23 +116,23 @@ struct add_entries_impl
 {
     using value_type = typename SM::value_type;
 
-    static SM eval_0(const SM& A,const md::colon_info& ci)
+    static void eval_0(Matrix& ret, const SM& A,const md::colon_info& ci)
     {
         using value_type = typename SM::value_type;
 
         bool single = ci.is_double_mat_colon() == false;
 
         if (single == false)
-            return eval_0_dc(A, ci);
+            return eval_0_dc(ret, A, ci);
 
         Integer r = A.rows();
         Integer c = A.cols();
 
         const raw::details::sparse_ccs<value_type>& Ad = A.rep();
         
-        raw::integer_dense ri   = ci.get_rim_1();        
+        mr::const_matrix<raw::integer_dense> ri = ci.get_rim_1();        
 
-        sort_type s_type    = is_sorted(ri);
+        sort_type s_type    = is_sorted(ri.get());
         bool incr           = true;
 
         if (s_type == sorted_increasing)
@@ -144,15 +144,15 @@ struct add_entries_impl
         } 
         else if (single == true)
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
             utils::sort_q(ri2.ptr(),ri2.size());
-            ri.assign_to_fresh(std::move(ri2));
+            ri.rebind(std::move(ri2));
         };
 
-        const Integer* ptr_ri = ri.ptr();
+        const Integer* ptr_ri = ri.get().ptr();
 
-        raw::details::sparse_ccs<value_type> d(A.get_type(),r, c, A.nnz() + ri.size());
+        raw::details::sparse_ccs<value_type> d(A.get_type(), r, c, A.nnz() + ri.get().size());
 
         Integer nz				= 0;
 
@@ -174,11 +174,11 @@ struct add_entries_impl
         }
         else
         {
-            pos     = ri.size();
+            pos     = ri.get().size();
             step_ri = -1;
         };
 
-        Integer or      = ri.size();
+        Integer or      = ri.get().size();
         Integer old_pos = ptr_ri[pos-1];
         md::pos2ind(old_pos,r,pos_row,pos_col);
 
@@ -300,14 +300,17 @@ struct add_entries_impl
                 ++nz;
             };
         };
+
         d_c[c] = nz;
 
-        SM ret = SM(raw::sparse_matrix_base<value_type>(d));
-        ret.set_struct(A.get_struct());
-        return ret;
+        SM ret_l = SM(raw::sparse_matrix_base<value_type>(d));
+        ret_l.set_struct(A.get_struct());
+
+        ret         = Matrix(ret_l, false);
+        return;
     };
 
-    static SM eval_0_dc(const SM& A,const md::colon_info& ci)
+    static void eval_0_dc(Matrix& ret, const SM& A,const md::colon_info& ci)
     {
         using value_type = typename SM::value_type;
 
@@ -480,12 +483,14 @@ struct add_entries_impl
 
         d_c[c] = nz;
 
-        SM ret = SM(raw::sparse_matrix_base<value_type>(d));
-        ret.set_struct(A.get_struct());
-        return ret;
+        SM ret_l    = SM(raw::sparse_matrix_base<value_type>(d));
+        ret_l.set_struct(A.get_struct());
+
+        ret         = Matrix(ret_l, false);
+        return;
     };
 
-    static SM eval_1(const SM& A,const md::colon_info& ci)
+    static void eval_1(Matrix& ret, const SM& A,const md::colon_info& ci)
     {
         using value_type = typename SM::value_type;
 
@@ -625,12 +630,14 @@ struct add_entries_impl
 
         d_c[c] = nz;
 
-        SM ret = SM(raw::sparse_matrix_base<value_type>(d));
-        ret.set_struct(A.get_struct());
-        return ret;
+        SM ret_l    = SM(raw::sparse_matrix_base<value_type>(d));
+        ret_l.set_struct(A.get_struct());
+
+        ret         = Matrix(ret_l, false);
+        return;
     };	
 
-    static SM eval_02(const SM& A,const md::colon_info& c_in)
+    static void eval_02(Matrix& ret, const SM& A,const md::colon_info& c_in)
     {
         using value_type = typename SM::value_type;
 
@@ -660,7 +667,7 @@ struct add_entries_impl
         workspace                   work_x(ti,r);
         
         scatter sc                  = scatter::get(r, c);
-        raw::integer_dense ri       = c_in.get_rim_2();
+        const raw::integer_dense& ri= c_in.get_rim_2();
         const Integer* ptr_ri       = ri.ptr();
         value_type Z                = md::default_value<value_type>(A.get_type());
 
@@ -720,15 +727,17 @@ struct add_entries_impl
 
         d_c[c] = nz;
 
-        SM ret = SM(raw::sparse_matrix_base<value_type>(d));
-        ret.set_struct(A.get_struct());
-        return ret;
+        SM ret_l = SM(raw::sparse_matrix_base<value_type>(d));
+        ret_l.set_struct(A.get_struct());
+
+        ret     = Matrix(ret_l, false);
+        return;
     };
 
-    static SM eval_12(const SM& A,const md::colon_info& c_in)
+    static void eval_12(Matrix& ret, const SM& A,const md::colon_info& c_in)
     {
         if (c_in.r_start == 1 && c_in.r_end == A.rows() && c_in.r_step == 1)
-            return add_cols(A,c_in);
+            return add_cols(ret, A, c_in);
 
         using value_type = typename SM::value_type;
 
@@ -834,12 +843,14 @@ struct add_entries_impl
         };
         d_c[c] = nz;
 
-        SM ret = SM(raw::sparse_matrix_base<value_type>(d));
-        ret.set_struct(A.get_struct());
-        return ret;
+        SM ret_l = SM(raw::sparse_matrix_base<value_type>(d));
+        ret_l.set_struct(A.get_struct());
+
+        ret     = Matrix(ret_l, false);
+        return;
     };
 
-    static SM add_cols(const SM& A,const md::colon_info& c_in)
+    static void add_cols(Matrix& ret, const SM& A,const md::colon_info& c_in)
     {
         using value_type = typename SM::value_type;
 
@@ -897,9 +908,11 @@ struct add_entries_impl
         };
         d_c[c] = nz;
 
-        SM ret = SM(raw::sparse_matrix_base<value_type>(d));
-        ret.set_struct(A.get_struct());
-        return ret;
+        SM ret_l = SM(raw::sparse_matrix_base<value_type>(d));
+        ret_l.set_struct(A.get_struct());
+
+        ret     = Matrix(ret_l, false);
+        return;
     };
 
 };
@@ -909,12 +922,12 @@ struct change_entries_impl
 {
     using value_type = typename SM::value_type;
 
-    static SM eval_0(const SM& A,const md::colon_info& ci, const value_type& val)
+    static void eval_0(Matrix& ret, const SM& A,const md::colon_info& ci, const value_type& val)
     {
         bool single = ci.is_double_mat_colon() == false;
 
         if (single == false)
-            return eval_0_dc(A, ci, val);
+            return eval_0_dc(ret, A, ci, val);
 
         using value_type = typename SM::value_type;
 
@@ -922,9 +935,10 @@ struct change_entries_impl
         Integer c = A.cols();
         const raw::details::sparse_ccs<value_type>& Ad = A.rep();
 
-        raw::integer_dense ri = ci.get_rim_1();
+        mr::const_matrix<raw::integer_dense> ri = ci.get_rim_1();
 
-        sort_type s_type = is_sorted(ri);
+        sort_type s_type = is_sorted(ri.get());
+
         bool incr = true;
         if (s_type == sorted_increasing)
         {
@@ -935,15 +949,15 @@ struct change_entries_impl
         } 
         else
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
             utils::sort_q(ri2.ptr(),ri2.size());
-            ri.assign_to_fresh(std::move(ri2));
+            ri.rebind(std::move(ri2));
         };
 
-        const Integer* ptr_ri = ri.ptr();
+        const Integer* ptr_ri = ri.get().ptr();
 
-        raw::details::sparse_ccs<value_type> d(A.get_type(),r, c, A.nnz() + ri.size());
+        raw::details::sparse_ccs<value_type> d(A.get_type(),r, c, A.nnz() + ri.get().size());
 
         Integer nz				= 0;
 
@@ -964,11 +978,11 @@ struct change_entries_impl
         }
         else
         {
-            pos = ri.size();
+            pos     = ri.get().size();
             step_ri = -1;
         };
 
-        Integer or      = ri.size();
+        Integer or      = ri.get().size();
         Integer old_pos = ptr_ri[pos-1];
         md::pos2ind(old_pos,r,pos_row,pos_col);
 
@@ -1087,10 +1101,12 @@ struct change_entries_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
+        return;
     };
 
-    static SM eval_0_dc(const SM& A,const md::colon_info& ci, const value_type& val)
+    static void eval_0_dc(Matrix& ret, const SM& A,const md::colon_info& ci, 
+                          const value_type& val)
     {
         using value_type = typename SM::value_type;
 
@@ -1258,10 +1274,11 @@ struct change_entries_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_1(const SM& A,const md::colon_info& ci, const value_type& val)
+    static void eval_1(Matrix& ret, const SM& A,const md::colon_info& ci, 
+                       const value_type& val)
     {
         using value_type = typename SM::value_type;
 
@@ -1397,18 +1414,20 @@ struct change_entries_impl
         };
 
         d_c[c] = nz;
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };	
 
-    static SM eval_02(const SM& A,const md::colon_info& c_in, const value_type& val)
+    static void eval_02(Matrix& ret, const SM& A,const md::colon_info& c_in, 
+                        const value_type& val)
     {
         if (imult(c_in.rows(),c_in.cols()) < A.rows())
-            return eval_02w(A,c_in,val);
+            return eval_02w(ret, A, c_in, val);
         else
-            return eval_02s(A,c_in,val);
+            return eval_02s(ret, A, c_in, val);
     };
 
-    static SM eval_02s(const SM& A,const md::colon_info& c_in, const value_type& val)
+    static void eval_02s(Matrix& ret, const SM& A,const md::colon_info& c_in, 
+                         const value_type& val)
     {
         using value_type = typename SM::value_type;
 
@@ -1435,9 +1454,9 @@ struct change_entries_impl
 
         workspace                   work_x(ti,r);
         
-        scatter sc                  = scatter::get(r, c);
-        raw::integer_dense ri       = c_in.get_rim_2();
-        const Integer* ptr_ri       = ri.ptr();
+        scatter sc                      = scatter::get(r, c);
+        const raw::integer_dense& ri    = c_in.get_rim_2();
+        const Integer* ptr_ri           = ri.ptr();
 
         Integer nz = 0;
 
@@ -1499,10 +1518,11 @@ struct change_entries_impl
 
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_02w(const SM& A,const md::colon_info& c_in, const value_type& val)
+    static void eval_02w(Matrix& ret, const SM& A,const md::colon_info& c_in, 
+                         const value_type& val)
     {
         using value_type = typename SM::value_type;
 
@@ -1524,18 +1544,19 @@ struct change_entries_impl
 
         Integer nz					= 0;
 
-        raw::integer_dense ri		= c_in.get_rim_2();        
-        sort_type rs_type			= is_sorted(ri);
+        mr::const_matrix<raw::integer_dense> ri = c_in.get_rim_2();        
+        sort_type rs_type			            = is_sorted(ri.get());
+        
         if (rs_type != sorted_increasing)
         {
-            raw::integer_dense ri2 = ri.copy();
+            raw::integer_dense ri2 = ri.get().copy();
             ri2.get_struct().reset();
-            utils::sort_q(ri2.ptr(),ri2.size());
-            ri.assign_to_fresh(std::move(ri2));
+            utils::sort_q(ri2.ptr(), ri2.size());
+            ri.rebind(std::move(ri2));
         };
 
-        const Integer* ptr_ri       = ri.ptr();
-        Integer n					= ri.size();
+        const Integer* ptr_ri       = ri.get().ptr();
+        Integer n					= ri.get().size();
 
         for (Integer j = 0; j < c; ++j)
         {
@@ -1617,13 +1638,14 @@ struct change_entries_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM eval_12(const SM& A,const md::colon_info& c_in, const value_type& val)
+    static void eval_12(Matrix& ret, const SM& A,const md::colon_info& c_in, 
+                        const value_type& val)
     {
         if (c_in.r_start == 1 && c_in.r_end == A.rows() && c_in.r_step == 1)
-            return change_cols(A,c_in,val);
+            return change_cols(ret, A, c_in, val);
 
         using value_type = typename SM::value_type;
 
@@ -1728,10 +1750,11 @@ struct change_entries_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 
-    static SM change_cols(const SM& A,const md::colon_info& c_in, const value_type& val)
+    static void change_cols(Matrix& ret, const SM& A,const md::colon_info& c_in, 
+                            const value_type& val)
     {
         using value_type = typename SM::value_type;
 
@@ -1780,60 +1803,74 @@ struct change_entries_impl
         };
         d_c[c] = nz;
 
-        return raw::sparse_matrix_base<value_type>(d);
+        ret = Matrix(raw::sparse_matrix_base<value_type>(d), false);
     };
 };
 
 template<class SM>
-SM change_entries_functor<SM>::eval(SM& A, const md::colon_info& ci, const value_type& val)
+void change_entries_functor<SM>::eval(Matrix& ret, SM& A, const md::colon_info& ci, 
+                                    const value_type& val)
 {
     if (ci.rows() == 0 || ci.cols() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_entries_impl<SM>::eval_02(A,ci,val);
+        return change_entries_impl<SM>::eval_02(ret, A, ci, val);
     else
-        return change_entries_impl<SM>::eval_12(A,ci,val);
+        return change_entries_impl<SM>::eval_12(ret, A, ci, val);
 };
 
 template<class SM>
-SM add_entries_functor<SM>::eval(SM& A, const md::colon_info& ci)
+void add_entries_functor<SM>::eval(Matrix& ret, SM& A, const md::colon_info& ci)
 {
     if (ci.rows() == 0 || ci.cols() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return add_entries_impl<SM>::eval_02(A,ci);
+        return add_entries_impl<SM>::eval_02(ret, A, ci);
     else
-        return add_entries_impl<SM>::eval_12(A,ci);
+        return add_entries_impl<SM>::eval_12(ret, A, ci);
 };
 
 template<class SM>
-SM change_entries_functor_2<SM>::eval(SM& A,const md::colon_info& ci, const value_type& val)
+void change_entries_functor_2<SM>::eval(Matrix& ret, SM& A,const md::colon_info& ci, 
+                                    const value_type& val)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return change_entries_impl<SM>::eval_0(A,ci,val);
+        return change_entries_impl<SM>::eval_0(ret, A, ci, val);
     else
-        return change_entries_impl<SM>::eval_1(A,ci,val);
+        return change_entries_impl<SM>::eval_1(ret, A, ci, val);
 };
 
 template<class SM>
-SM add_entries_functor_2<SM>::eval(SM& A,const md::colon_info& ci)
+void add_entries_functor_2<SM>::eval(Matrix& ret, SM& A,const md::colon_info& ci)
 {
     if (ci.rows() == 0)
-        return A;
+    {
+        ret = Matrix(A, false);
+        return;
+    };
 
     if (ci.r_flag == 0)
-        return add_entries_impl<SM>::eval_0(A,ci);
+        return add_entries_impl<SM>::eval_0(ret, A, ci);
     else
-        return add_entries_impl<SM>::eval_1(A,ci);
+        return add_entries_impl<SM>::eval_1(ret, A, ci);
 };
 
 template<class V>
-raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Integer d, const DM& B)
+void sparse_change_diag_functor<V>::eval(Matrix& ret, SM& mat, Integer d, const DM& B)
 {
     Integer r = mat.rows();
     Integer c = mat.cols();
@@ -1857,7 +1894,10 @@ raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Intege
     error::check_assign_1(s,B.size(),1);
 
     if (s == 0)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     raw::details::sparse_ccs<V>& rep = mat.rep();
 
@@ -1890,10 +1930,11 @@ raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Intege
 
     if (modif_needed == false)
     {
-        SM out = mat;
-        out.set_struct(md::predefined_struct::get_set_diag(mat.get_struct(),d,vt,
-                            is_real_matrix(out), r == c));
-        return out;        
+        mat.set_struct(md::predefined_struct::get_set_diag(mat.get_struct(), d, vt,
+                            is_real_matrix(mat), r == c));
+
+        ret     = Matrix(mat, false);
+        return;
     };
 
     raw::details::sparse_ccs<V> out(mat.get_type(),r, c, mat.nnz() + s);
@@ -1963,11 +2004,12 @@ raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Intege
     out.get_struct() = md::predefined_struct::get_set_diag(mat.get_struct(),d,vt,
                                 is_real_matrix(out), r == c);
 
-    return raw::sparse_matrix_base<V>(out);
+    ret = Matrix(raw::sparse_matrix_base<V>(out), false);
+    return;
 };
 
 template<class V>
-raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Integer d, const V& val)
+void sparse_change_diag_functor<V>::eval(Matrix& ret, SM& mat, Integer d, const V& val)
 {
     Integer r = mat.rows();
     Integer c = mat.cols();
@@ -1989,7 +2031,10 @@ raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Intege
     }
 
     if (s == 0)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     raw::details::sparse_ccs<V>& rep = mat.rep();
 
@@ -2019,10 +2064,11 @@ raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Intege
 
     if (modif_needed == false)
     {
-        SM out = mat;
-        out.set_struct(md::predefined_struct::get_set_diag(mat.get_struct(),d,vt,
-                                is_real_matrix(out), r == c));
-        return out;        
+        mat.set_struct(md::predefined_struct::get_set_diag(mat.get_struct(),d,vt,
+                                is_real_matrix(mat), r == c));
+
+        ret = Matrix(mat, false);
+        return;
     };
 
     raw::details::sparse_ccs<V> out(mat.get_type(),r, c, mat.nnz() + s);
@@ -2088,11 +2134,11 @@ raw::Matrix<V,struct_sparse> sparse_change_diag_functor<V>::eval(SM& mat, Intege
     out.get_struct() = md::predefined_struct::get_set_diag(mat.get_struct(),d,vt,
                                     is_real_matrix(out), r == c);
 
-    return raw::sparse_matrix_base<V>(out);
+    ret = Matrix(raw::sparse_matrix_base<V>(out), false);
 };
 
 template<class V>
-raw::Matrix<V,struct_sparse> sparse_add_diag_functor<V>::eval(SM& mat, Integer d)
+void sparse_add_diag_functor<V>::eval(Matrix& ret, SM& mat, Integer d)
 {
     Integer r = mat.rows();
     Integer c = mat.cols();
@@ -2114,7 +2160,10 @@ raw::Matrix<V,struct_sparse> sparse_add_diag_functor<V>::eval(SM& mat, Integer d
     }
 
     if (s == 0)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     raw::details::sparse_ccs<V>& rep = mat.rep();
 
@@ -2136,7 +2185,10 @@ raw::Matrix<V,struct_sparse> sparse_add_diag_functor<V>::eval(SM& mat, Integer d
     };
 
     if (add_needed == false)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     raw::details::sparse_ccs<V> out(mat.get_type(),r, c, mat.nnz() + s);
 
@@ -2199,11 +2251,11 @@ raw::Matrix<V,struct_sparse> sparse_add_diag_functor<V>::eval(SM& mat, Integer d
     out_c[c] = nz;
     out.get_struct() = mat.get_struct();
 
-    return raw::sparse_matrix_base<V>(out);
+    ret = Matrix(raw::sparse_matrix_base<V>(out), false);
 };
 
 template<class V>
-raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval(SM& mat, Integer d, Real tol0)
+void sparse_drop_diag_functor<V>::eval(Matrix& ret, SM& mat, Integer d, Real tol0)
 {
     Integer r   = mat.rows();
     Integer c   = mat.cols();
@@ -2226,7 +2278,10 @@ raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval(SM& mat, Integer 
     }
 
     if (s == 0 || tol < 0)
-        return mat;
+    {
+        ret     = Matrix(mat, false);
+        return;
+    };
 
     raw::details::sparse_ccs<V>& rep = mat.rep();
 
@@ -2254,7 +2309,10 @@ raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval(SM& mat, Integer 
     };
 
     if (modif_needed == false)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     for (Integer i = 0, pos = off; i < c; ++i)
     {
@@ -2287,11 +2345,12 @@ raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval(SM& mat, Integer 
     if (tol > 0)
         mat.get_struct().reset();
 
-    return mat;
+    ret = Matrix(mat, false);
+    return;
 };
 
 template<class V>
-raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval_zero(SM& mat, Integer d)
+void sparse_drop_diag_functor<V>::eval_zero(Matrix& ret, SM& mat, Integer d)
 {
     Integer r   = mat.rows();
     Integer c   = mat.cols();
@@ -2313,7 +2372,10 @@ raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval_zero(SM& mat, Int
     }
 
     if (s == 0)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     raw::details::sparse_ccs<V>& rep = mat.rep();
 
@@ -2336,7 +2398,10 @@ raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval_zero(SM& mat, Int
     };
 
     if (modif_needed == false)
-        return mat;
+    {
+        ret = Matrix(mat, false);
+        return;
+    };
 
     for (Integer i = 0, pos = off; i < c; ++i)
     {
@@ -2366,7 +2431,9 @@ raw::Matrix<V,struct_sparse> sparse_drop_diag_functor<V>::eval_zero(SM& mat, Int
 
     rep.add_memory(-1);
     mat.get_struct().reset();
-    return mat;
+
+    ret     = Matrix(mat, false);
+    return;
 };
 
 };};};
