@@ -1667,7 +1667,7 @@ void householder_helper<Val>::to_matrix(Matrix& ret, const umatrix& data)
     if (data.m_reflectors.get().rows() == M && data.m_reflectors.get().cols() == N)
         Qc.assign_to_fresh(data.m_reflectors.get().copy());
     else
-        Qc.assign_to_fresh(data.m_reflectors.get().resize(M,N).make_unique());
+        Qc.assign_to_fresh(data.m_reflectors.get().make_unique().resize(M,N));
 
     lapack_xyygqr_maker<Val>::eval(M, N, K, Qc, data.m_tau_vec.get(), off);
 

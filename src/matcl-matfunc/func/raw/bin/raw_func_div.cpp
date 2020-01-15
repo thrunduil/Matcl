@@ -57,7 +57,8 @@ class div_functor
             using value_type    = typename md::unify_types2<in_val,ret_val_real,Float>::type;
             using mat_type      = Matrix<value_type,struct_type>;
 
-            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x, ret_ti), true);
+            matcl::Matrix th;
+            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x, ret_ti, th), true);
         };
 
         template<class val_type>
@@ -114,7 +115,8 @@ class div_0_functor
             using value_type    = typename md::unify_types2<in_val,ret_val_real,Float>::type;
             using mat_type      = Matrix<value_type,struct_type>;
 
-            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x,ret_ti),true);
+            matcl::Matrix th;
+            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x, ret_ti, th), true);
         };
 
         template<class val_type>
@@ -171,7 +173,8 @@ class div_1_functor
             using value_type    = typename md::unify_types2<in_val,ret_val_real,Float>::type;
             using mat_type      = Matrix<value_type,struct_type>;
 
-            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x,ret_ti),true);
+            matcl::Matrix th;
+            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x, ret_ti, th), true);
         };
 
         template<class val_type>

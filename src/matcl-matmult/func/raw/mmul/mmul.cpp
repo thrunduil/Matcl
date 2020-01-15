@@ -384,7 +384,8 @@ struct scal_impl
 
             if (t == trans_type::no_trans)
             {
-                auto out        = converter<ret_mat,Mat>::eval(m,ret_ti);
+                matcl::Matrix th;
+                const auto& out = converter<ret_mat,Mat>::eval(m, ret_ti, th);
                 ret             = matcl::Matrix(out,true);
                 return;
             }

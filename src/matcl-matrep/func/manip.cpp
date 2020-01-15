@@ -301,7 +301,8 @@ struct eval_convert_object : extract_type_switch<void, eval_convert_object, true
         using struct_type   = typename M1::struct_type;
         using new_type      = matcl::raw::Matrix<Object,struct_type> ;
 
-        ret = Matrix(matcl::raw::converter<new_type,M1>::eval(A,ti),false);
+        Matrix th;
+        ret = Matrix(matcl::raw::converter<new_type,M1>::eval(A,ti, th), false);
     };
 
     template<class T>

@@ -65,48 +65,6 @@ namespace details
     template<> struct check_scalar_type<Complex>        { using type = Complex; };
     template<> struct check_scalar_type<Object>         { using type = Object; };
 
-    template<class T>
-    struct is_cref              { static const bool value = false; };
-
-    template<class T>
-    struct is_cref<const T&>    { static const bool value = true; };
-
-    //TODO: remove this?
-    template<class Ret, bool Is_scal = md::is_scalar<Ret>::value, 
-        bool Is_ref = is_cref<Ret>::value>
-    struct make_return
-    {};
-
-    template<class Ret, bool Is_Ref>
-    struct make_return<Ret, true, Is_Ref>
-    {
-        template<class V>
-        static Ret eval(const V& val)
-        {
-            return val;
-        };
-    };
-
-    template<class Ret>
-    struct make_return<Ret, false, false>
-    {
-        template<class V>
-        static Ret eval(const V& val)
-        {
-            return Ret(val, Ret::copy_is_safe_TODO());
-        };
-    };
-
-    template<class Ret>
-    struct make_return<Ret, false, true>
-    {
-        template<class V>
-        static Ret eval(const V& val)
-        {
-            return val;
-        };
-    };
-
     //----------------------------------------------------------------------------
     //                 create_object_ti
     //----------------------------------------------------------------------------
@@ -221,45 +179,15 @@ namespace details
             return tmp_holder.get_impl<ret>();
         };
 
-        static tinfo_ret convert_ti(const T& val)
-        { 
-            return convert_ti_impl<T,tinfo_ret>::eval(val); 
-        };
-    };
-
-    template<class ret, class T>
-    struct MATCL_MATREP_EXPORT converter_mat_scal_impl
-    {
-        using dum1          = typename check_type<ret>::type;
-        using dum2          = typename check_type<T>::type;
-
-        static const bool is_scal_ret   = md::is_scalar<ret>::value;
-        static const bool is_scal_in    = md::is_scalar<T>::value;
-
-        static_assert(is_scal_ret == true && is_scal_in == false, "");
-
-        using tinfo_ret     = ti::ti_type<dum1>;
-        using ret_ref_ti    = ret;
-        using ret_ref       = ret;
-        using ret_ref_holder= const ret&;
-        using ret_holder    = const ret&;
-
-        static ret          eval(const T& val, const tinfo_ret& ti);
-        
-        static ret eval(const T& val)
-        { 
-            return eval(val, convert_ti(val));
-        };
-
-        static ret_ref_holder eval(const T& val, matcl::Matrix& tmp_holder)
+        static ret_ref_holder eval(const T& val, const tinfo_ret& ti, matcl::Matrix& tmp_holder)
         {
-            tmp_holder      = matcl::Matrix(eval(val), false);
+            tmp_holder      = matcl::Matrix(eval(val, ti), false);
             return tmp_holder.get_impl<ret>();
         };
 
-        static ret_holder eval(T&& val, matcl::Matrix& tmp_holder)
+        static ret_holder eval(T&& val, const tinfo_ret& ti, matcl::Matrix& tmp_holder)
         {
-            tmp_holder      = matcl::Matrix(eval(std::move(val)), false);
+            tmp_holder      = matcl::Matrix(eval(std::move(val), ti), false);
             return tmp_holder.get_impl<ret>();
         };
 
@@ -305,10 +233,28 @@ namespace details
             return tmp_holder.get_impl<ret>();
         };
 
+        static ret_ref_holder eval(const T& val, const tinfo_ret& ti, matcl::Matrix& tmp_holder)
+        {
+            tmp_holder      = matcl::Matrix(eval(val, ti), false);
+            return tmp_holder.get_impl<ret>();
+        };
+
+        static ret_holder eval(T&& val, const tinfo_ret& ti, matcl::Matrix& tmp_holder)
+        {
+            tmp_holder      = matcl::Matrix(eval(std::move(val), ti), false);
+            return tmp_holder.get_impl<ret>();
+        };
+
         static tinfo_ret convert_ti(const T& val)
         { 
             return convert_ti_impl<T,tinfo_ret>::eval(val); 
         };
+    };
+
+    template<class ret, class T>
+    struct MATCL_MATREP_EXPORT converter_mat_scal_impl
+    {
+        static_assert(md::dependent_false<ret>::value, "conversion of matrix to scalar is not allowed");
     };
 
     template<class ret>
@@ -344,6 +290,16 @@ namespace details
             return eval(std::move(val));
         };
 
+        static ret_ref_holder eval(const T& val, const tinfo_ret& ti, matcl::Matrix&)
+        {
+            return eval(val, ti);
+        };
+
+        static ret_holder eval(T&& val, const tinfo_ret& ti, matcl::Matrix&)
+        {
+            return eval(std::move(val), ti);
+        };
+
         static tinfo_ret convert_ti(const T& val)
         { 
             return convert_ti_impl<T,tinfo_ret>::eval(val); 
@@ -369,7 +325,7 @@ namespace details
 
         static T            eval(const T& val,ti::ti_object ti) { return converter_mat_mat_impl<T,T>::eval(val,ti);};
         static const T&		eval(const T& val,ti::ti_empty)     { return val; }
-        static T			eval(const T&& val,ti::ti_empty)    { return T(std::move(val)); }
+        static T			eval(T&& val,ti::ti_empty)          { return T(std::move(val)); }
         static const T&		eval(const T& val)                  { return val; };
         static T		    eval(T&& val)                       { return T(std::move(val)); };
 
@@ -384,9 +340,27 @@ namespace details
             return tmp_holder.get_impl<ret>();
         };
 
-        static tinfo_ret convert_ti(const T& val)
+        static ret_ref_holder eval(const T& val,ti::ti_object ti, matcl::Matrix& tmp_holder)
         {
-            return convert_ti_impl<T,tinfo_ret>::eval(val);
+            tmp_holder  = matcl::Matrix(eval(val, ti), false);
+            return tmp_holder.get_impl<T>();
+        };
+
+        static ret_holder eval(T&& val,ti::ti_object ti, matcl::Matrix& tmp_holder)
+        {
+            tmp_holder  = matcl::Matrix(eval(std::move(val), ti), false);
+            return tmp_holder.get_impl<T>();
+        };
+
+        static ret_ref_holder eval(const T& val,ti::ti_empty, matcl::Matrix&)
+        {
+            return val;
+        };
+
+        static ret_holder eval(T&& val,ti::ti_empty ti, matcl::Matrix& tmp_holder)
+        {
+            tmp_holder      = matcl::Matrix(std::move(val), false);
+            return tmp_holder.get_impl<ret>();
         };
     };
 
@@ -851,16 +825,6 @@ struct converter
         using ret_ref_holder= typename impl_type::ret_ref_holder;
         using ret_holder    = typename impl_type::ret_holder;
 
-        static ret_ref_ti eval(const T& val, ti_type ti)
-        {
-            return details::make_return<ret_ref_ti>::eval(impl_type::eval(val, ti));
-        };
-
-        static ret eval(T&& val, ti_type ti)
-        {
-            return impl_type::eval(std::move(val), ti);
-        };
-
         static ret_ref eval(const T& val)
         {
             return impl_type::eval(val);
@@ -879,6 +843,16 @@ struct converter
         static ret_holder eval(T&& val, matcl::Matrix& tmp_holder)
         {
             return impl_type::eval(std::move(val), tmp_holder);
+        };
+
+        static ret_ref_holder eval(const T& val, ti_type ti, matcl::Matrix& tmp_holder)
+        {
+            return impl_type::eval(val, ti, tmp_holder);
+        };
+
+        static ret_holder eval(T&& val, ti_type ti, matcl::Matrix&)
+        {
+            return impl_type::eval(std::move(val), ti, tmp_holder);
         };
 };
 
@@ -931,6 +905,16 @@ struct converter_scalar
         static ret_holder eval(T&& val, matcl::Matrix&)
         {
             return impl_type::eval(std::move(val));
+        };
+
+        static ret_ref_holder eval(const T& val, ti_type ti, matcl::Matrix&)
+        {
+            return impl_type::eval(val,ti);
+        };
+
+        static ret_holder eval(T&& val, ti_type ti, matcl::Matrix&)
+        {
+            return impl_type::eval(std::move(val),ti);
         };
 };
 

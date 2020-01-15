@@ -70,7 +70,7 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_dense,true>
         {
             for(Integer i = 0; i < r; ++i)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                     ::eval(ptr_mat[i],out.get_type());
                 mrd::reset_helper(ptr_out[i],tmp);
             };
@@ -87,7 +87,7 @@ struct insert_visitor_scal_impl<out_type,struct_dense,in_type,true>
     {
         col_st += row_st;
         using value_type = typename out_type::value_type;
-        mrd::reset_helper(out.ptr()[col_st],matcl::raw::converter<value_type,in_type>::eval(mat));
+        mrd::reset_helper(out.ptr()[col_st], matcl::raw::converter_scalar<value_type,in_type>::eval(mat));
     };
 };
 
@@ -118,7 +118,7 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_dense,true>
         {			
             for(Integer i = 0, rr = row_st; i < r; ++i, ++rr)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                     ::eval(ptr_mat[i],out.get_type());
 
                 if (mrd::is_zero(tmp) == false)
@@ -149,7 +149,7 @@ struct insert_visitor_scal_impl<out_type,struct_sparse,in_type,true>
         Integer k       = d_c[col_st+1];
         d_r[k]          = row_st;
 
-        const value_type& conv  = matcl::raw::converter<value_type, in_type>
+        const value_type& conv  = matcl::raw::converter_scalar<value_type, in_type>
                                         ::eval(mat,out.get_type());
 
         mrd::reset_helper(d_x[k], conv);
@@ -195,7 +195,7 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_banded,true>
 
             for (Integer j = 0; j < rc; ++j, ptr_out += out_ld+1)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                     ::eval(mat_ptr[0],out.get_type());
 
                 mrd::reset_helper(*ptr_out,tmp);
@@ -215,7 +215,7 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_banded,true>
 
                 for (Integer i = row_f; i <= row_l; ++i, ++row_p)
                 {
-                    value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                    value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                     ::eval(mat_ptr[row_p],out.get_type());
                     mrd::reset_helper(ptr_out[i],tmp);
                 };		
@@ -256,7 +256,7 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_banded,true>
 
             for(Integer j = 1, row = row_st; j <= rc; ++j, ++row)
             {			
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                     ::eval(*mat_ptr,out.get_type());
 
                 d_r[k] = row;
@@ -282,7 +282,7 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_banded,true>
 
                 for(Integer i = row_f, rr = row_st + row_f; i <= row_l; ++i, ++ii, ++rr)
                 {
-                    value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                    value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                         ::eval(mat_ptr[ii],out.get_type());
                     d_r[k] = rr;
                     mrd::reset_helper(d_x[k],tmp);
@@ -339,7 +339,7 @@ struct insert_visitor_impl<out_type,struct_dense,in_type,struct_sparse,true>
                 Integer k;
                 for (k = Ad_c[j]; k < Ad_c[j + 1] ; ++k)
                 {
-                    val_type_out tmp = matcl::raw::converter<val_type_out,value_type>
+                    val_type_out tmp = matcl::raw::converter_scalar<val_type_out,value_type>
                                         ::eval(Ad_x[k],out.get_type());
                     mrd::reset_helper(ptr_out[Ad_r[k]],tmp);
                 };
@@ -389,7 +389,7 @@ struct insert_visitor_impl<out_type,struct_sparse,in_type,struct_sparse,true>
         {		
             for (Integer k = Ad_c[j]; k < Ad_c[j + 1] ; ++k)
             {
-                value_type tmp = matcl::raw::converter<value_type,value_type_in>
+                value_type tmp = matcl::raw::converter_scalar<value_type,value_type_in>
                                     ::eval(Ad_x[k],out.get_type());
 
                 d_r[p]  = row_st + Ad_r[k];

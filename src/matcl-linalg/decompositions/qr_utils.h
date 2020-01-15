@@ -93,7 +93,7 @@ struct make_copy<VTR,VTR>
         else if (M == X.rows() && N == X.cols())
             return X.copy();
         else
-            return X.resize(M,N).make_unique();
+            return X.make_unique().resize(M,N);
     };
 };
 

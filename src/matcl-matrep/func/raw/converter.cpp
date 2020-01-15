@@ -576,7 +576,9 @@ namespace details
         };
     };
 
-    //A bit more generic version of fully proxy caller
+    // call converter not changing struct type
+    // caller_::eval_f is called, when value type is changed
+    // caller_::eval_t is called, when value type is not changed
     template<template <class,class> class caller_, class ret, class T, bool ise>
     struct converter_generic_eval_proxy
     {
@@ -1304,7 +1306,10 @@ namespace details
 
         static ret eval(typename ti::get_ti_type<ret>::type ti, const T& val)
         {
-            return ret(converter_type::eval(ti, val).get(), ret::copy_is_safe_TODO());
+            // converter returns const reference if object is not modified or
+            // new object if modifications are performed; therefore modification
+            // of input matrix is not possible and copy is safe
+            return ret(converter_type::eval(ti, val).get(), ret::copy_is_safe());
         };
     };
 
@@ -1328,13 +1333,6 @@ namespace details
         using converter_type = details::converter_matrix_impl<ret,T>;
         return converter_type::eval(ti, val);
     };
-
-    template<class ret, class T>
-    ret converter_mat_scal_impl<ret,T>::eval(const T& val, const tinfo_ret& ti)
-    {
-        using converter_type = details::converter_matrix_impl<ret,T>;
-        return converter_type::eval(ti, val);
-    };    
 };
 
 };};

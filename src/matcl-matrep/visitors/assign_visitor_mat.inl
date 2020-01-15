@@ -1298,8 +1298,13 @@ struct assign_mat_impl<M1,M2,val_type,true>
         ti::ti_type<val_type_1> ti_1 = get_matrix_ti<val_type_1>::eval(A);
         ti::ti_type<val_type_2> ti_2 = get_matrix_ti<val_type_2>::eval(B);
         ti::ti_type<val_type> ret_ti = link_ret_ti<val_type,val_type_1,val_type_2>::eval(ti_1,ti_2);
-        new_mat_type An = raw::converter<new_mat_type,M1>::eval(A.get_impl<M1>(),ret_ti);
-        A = Matrix(An,false);
+
+        {
+            Matrix th;
+            const new_mat_type& An = raw::converter<new_mat_type,M1>::eval(A.get_impl<M1>(),ret_ti, th);
+            A = Matrix(An,false);
+        };
+
         return assign_mat_impl<new_mat_type,M2,val_type,false>::eval(A,B,c1);
     };
 
@@ -1309,8 +1314,12 @@ struct assign_mat_impl<M1,M2,val_type,true>
         ti::ti_type<val_type_2> ti_2 = get_matrix_ti<val_type_2>::eval(B);
         ti::ti_type<val_type> ret_ti = link_ret_ti<val_type,val_type_1,val_type_2>::eval(ti_1,ti_2);
 
-        new_mat_type An = raw::converter<new_mat_type,M1>::eval(A.get_impl<M1>(),ret_ti);
-        A = Matrix(An,false);
+        {
+            Matrix th;
+            const new_mat_type& An = raw::converter<new_mat_type,M1>::eval(A.get_impl<M1>(), ret_ti,  th);
+            A = Matrix(An,false);
+        };
+
         return assign_mat_impl<new_mat_type,M2,val_type,false>::eval(A,B,c1,c2);
     };
 
@@ -1320,8 +1329,11 @@ struct assign_mat_impl<M1,M2,val_type,true>
         ti::ti_type<val_type_2> ti_2 = get_matrix_ti<val_type_2>::eval(B);
         ti::ti_type<val_type> ret_ti = link_ret_ti<val_type,val_type_1,val_type_2>::eval(ti_1,ti_2);
 
-        new_mat_type An = raw::converter<new_mat_type,M1>::eval(A.get_impl<M1>(),ret_ti);
-        A = Matrix(An,false);
+        {
+            Matrix th;
+            const new_mat_type& An = raw::converter<new_mat_type,M1>::eval(A.get_impl<M1>(), ret_ti, th);
+            A = Matrix(An,false);
+        };
         return assign_mat_impl<new_mat_type,M2,val_type,false>::eval_diag(A,B,d);
     };
 };

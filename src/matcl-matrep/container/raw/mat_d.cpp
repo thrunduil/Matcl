@@ -462,7 +462,8 @@ Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::reshape(Integer
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::reserve(Integer r, Integer c) const
+Matrix<value_type,struct_dense> 
+Matrix<value_type,struct_dense>::reserve(Integer r, Integer c) const
 {
     if (r <= Matrix::m_data.m_max_rows && c <= Matrix::m_data.m_max_cols)
         return *this;
@@ -541,7 +542,7 @@ Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::resize(Integer 
     error::check_resize(r,c);
 
     if (r <= Matrix::rows() && c <= Matrix::cols())
-        return make_view(1,r,1,c);
+        return make_view(1, r, 1, c);
 
     Matrix out = reserve(r,c);
 

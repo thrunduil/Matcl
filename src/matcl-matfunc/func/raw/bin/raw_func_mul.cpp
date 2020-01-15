@@ -58,7 +58,8 @@ class emul_functor
             using value_type    = typename md::unify_types<in_val,ret_val_real>::type;
             using mat_type      = Matrix<value_type,struct_type>;
 
-            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x,ret_ti),true);
+            matcl::Matrix th;
+            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x,ret_ti, th),true);
         };
 
         template<class val_type>

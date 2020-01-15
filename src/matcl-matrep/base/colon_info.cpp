@@ -36,28 +36,29 @@ colon_info::~colon_info()
 void colon_info::set_ci(const raw::integer_dense& m) 
 {
     if (m_ci == nullptr)
-        m_ci    = new raw::integer_dense(ti::ti_int());
+        m_ci    = new Mat_Ic(raw::integer_dense(ti::ti_int()));
 
-    m_ci->assign_to_fresh(m.make_explicit()); 
+    m_ci->rebind(m.make_explicit()); 
 };
 
 void colon_info::set_ri(const raw::integer_dense& m) 
 {
     if (m_ri == nullptr)
-        m_ri    = new raw::integer_dense(ti::ti_int());
+        m_ri    = new Mat_Ic(raw::integer_dense(ti::ti_int()));
 
-    m_ri->assign_to_fresh(m.make_explicit()); 
+    m_ri->rebind(m.make_explicit()); 
 };
 
 void colon_info::set_ri_2(const Mat_I& r, const Mat_I& c)
 {
     if (m_ri == nullptr)
-        m_ri    = new raw::integer_dense(ti::ti_int());
-    if (m_ci == nullptr)
-        m_ci    = new raw::integer_dense(ti::ti_int());
+        m_ri    = new Mat_Ic(raw::integer_dense(ti::ti_int()));
 
-    m_ri->assign_to_fresh(r.make_explicit()); 
-    m_ci->assign_to_fresh(c.make_explicit()); 
+    if (m_ci == nullptr)
+        m_ci    = new Mat_Ic(raw::integer_dense(ti::ti_int()));
+
+    m_ri->rebind(r.make_explicit()); 
+    m_ci->rebind(c.make_explicit()); 
 };
 
 };};

@@ -692,7 +692,7 @@ namespace details
     {
         static Object eval(ti::ti_object ti, const in& val)
         {
-            return gr::converter<Object,in>::eval(val,ti);
+            return gr::converter_scalar<Object,in>::eval(val,ti);
         };
     };
 
@@ -712,7 +712,7 @@ namespace details
         using ti_type = ti::ti_object;
         static Object eval(ti_type ti, const Object& val)
         {
-            return gr::converter<Object,Object>::eval(val,ti);
+            return gr::converter_scalar<Object,Object>::eval(val, ti);
         };
     };
 

@@ -110,10 +110,10 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
         
         inline 
         sparse_matrix_base      make_unique(bool keep_bufor = false) const;
-
+                
+        sparse_matrix_base      resize(Integer r, Integer c);
         sparse_matrix_base      reserve(Integer r, Integer c) const;
         sparse_matrix_base      resize(Integer r, Integer c) const;
-        sparse_matrix_base      resize(Integer r, Integer c);
         sparse_matrix_base      make_view(Integer c_start, Integer c_end) const;        
 
                                 //not thread safe, matrix should be unique
@@ -146,7 +146,7 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
         template<class val_type>
         friend matcl::Matrix    fast_optim_impl(const Matrix<val_type,struct_sparse>& A);
 
-        sparse_matrix_base&     operator=(const sparse_matrix_base&) = delete;
+        sparse_matrix_base&     operator=(const sparse_matrix_base&) = delete;        
 
     protected:
         sparse_matrix_base(const sparse_matrix_base&);
@@ -209,9 +209,6 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matr
         // mark copying as safe; copy is safe if returned object is not modified
         // unless is unique
         struct copy_is_safe{};
-
-        //TODO: remove this
-        struct copy_is_safe_TODO : copy_is_safe{};
 
         Matrix(const base_type &m, copy_is_safe)
                 : base_type(m) {}; 

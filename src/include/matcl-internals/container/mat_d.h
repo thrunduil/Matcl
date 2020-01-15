@@ -68,9 +68,6 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         // unless is unique
         struct copy_is_safe{};
 
-        //TODO: remove this
-        struct copy_is_safe_TODO : copy_is_safe{};
-
         Matrix(const base_type &m, copy_is_safe)
                 : Matrix(m) {}; 
 
@@ -100,6 +97,7 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         Matrix              make_view(Integer r_start, Integer r_end) const;
         Matrix              make_view(Integer r_start, Integer r_end, Integer c_start, Integer c_end) const;
         matcl::Matrix       fast_optim() const;
+
         Matrix              copy(bool keep_bufor = false) const;
         Matrix              clone(bool keep_bufor = false) const;
         Matrix              make_unique(bool keep_bufor = false) const;
@@ -109,11 +107,12 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         bool                is_explicit() const;
         Matrix              make_explicit() const;
         void                destroy_data();   
-
-        Matrix              reserve(Integer r, Integer c) const;
-        Matrix              resize(Integer r, Integer c) const;
+        
         Matrix              resize(Integer r, Integer c);
         void                prepare_for_concat(Integer r, Integer c);
+
+        Matrix              reserve(Integer r, Integer c) const;        
+        Matrix              resize(Integer r, Integer c) const;
 
         value_type*         ptr()                   { return base_type::ptr(); };
         const value_type*   ptr() const             { return base_type::ptr(); };
@@ -129,7 +128,7 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         Real                estim_density() const;
         
         void                set_to_all(const value_type& val);               
-
+        
         using base_type::ptr;
 
     private:

@@ -426,7 +426,8 @@ sparse_matrix_base<val_type>::get_diag_band() const
 };
 
 template<class val_type>
-sparse_matrix_base<val_type> sparse_matrix_base<val_type>::reserve(Integer, Integer c) const
+sparse_matrix_base<val_type>
+sparse_matrix_base<val_type>::reserve(Integer, Integer c) const
 {
     if (c <= max_cols())
         return *this;
@@ -519,50 +520,6 @@ void sparse_matrix_base<val_type>::prepare_for_concat(Integer r, Integer c, Inte
 };
 
 template<class val_type>
-sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize(Integer r, Integer c) const
-{
-    error::check_resize(r,c);
-
-    if (r == rows() && c == cols())
-        return *this;
-
-    if (r < rows() && nnz() > 0)
-        return resize_remrows(r,c);
-
-    if (c <= cols())
-    {
-        sparse_ccs out  = rep();
-        out.m_rows      = r;
-        out.m_cols      = c;
-        out.get_struct()= md::predefined_struct::get_rectangle_view(out.get_struct(), false);
-        return sparse_matrix_base(out);
-    };
-
-    if (c <= max_cols())
-    {
-        sparse_matrix_base out = copy(true);
-        return out.resize(r,c);
-    };
-
-    sparse_matrix_base out = reserve(r,c);
-    return out.resize(r,c);
-};
-
-template<class val_type>
-void sparse_matrix_base<val_type>::change_number_rows(Integer r)
-{
-    m_data.m_rows      = r;
-    m_data.get_struct()= md::predefined_struct::get_rectangle_view(m_data.get_struct(), false);
-}
-
-template<class val_type>
-void sparse_matrix_base<val_type>::change_number_cols(Integer c)
-{
-    m_data.m_cols      = c;
-    m_data.get_struct()= md::predefined_struct::get_rectangle_view(m_data.get_struct(), false);
-}
-
-template<class val_type>
 sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize(Integer r, Integer c)
 {
     error::check_resize(r,c);
@@ -604,6 +561,50 @@ sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize(Integer r, Int
                                                                 is_real_matrix(out));
 
     return out;
+}
+
+template<class val_type>
+sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize(Integer r, Integer c) const
+{
+    error::check_resize(r,c);
+
+    if (r == rows() && c == cols())
+        return *this;
+
+    if (r < rows() && nnz() > 0)
+        return resize_remrows(r,c);
+
+    if (c <= cols())
+    {
+        sparse_ccs out  = rep();
+        out.m_rows      = r;
+        out.m_cols      = c;
+        out.get_struct()= md::predefined_struct::get_rectangle_view(out.get_struct(), false);
+        return sparse_matrix_base(out);
+    };
+
+    if (c <= max_cols())
+    {
+        sparse_matrix_base out = copy(true);
+        return out.resize(r,c);
+    };
+
+    sparse_matrix_base out = reserve(r,c);
+    return out.resize(r,c);
+};
+
+template<class val_type>
+void sparse_matrix_base<val_type>::change_number_rows(Integer r)
+{
+    m_data.m_rows      = r;
+    m_data.get_struct()= md::predefined_struct::get_rectangle_view(m_data.get_struct(), false);
+}
+
+template<class val_type>
+void sparse_matrix_base<val_type>::change_number_cols(Integer c)
+{
+    m_data.m_cols      = c;
+    m_data.get_struct()= md::predefined_struct::get_rectangle_view(m_data.get_struct(), false);
 }
 
 template<class val_type>

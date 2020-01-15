@@ -1890,7 +1890,10 @@ struct sort_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp0 = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
+        //TODO
+        sparse_matrix_type tmp      = sparse_matrix_type(tmp0, sparse_matrix_type::copy_is_safe());
 
         if (dim == 1)
         {
@@ -1911,7 +1914,11 @@ struct sort_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp0 = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
+
+        //TODO
+        sparse_matrix_type tmp      = sparse_matrix_type(tmp0, sparse_matrix_type::copy_is_safe());
 
         if (dim == 1)
         {
@@ -1942,7 +1949,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval(ret, ret_ti,tmp);
     };
 
@@ -1951,7 +1959,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval2(i,x,ret_ti,tmp);
     };
 
@@ -1960,7 +1969,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval_dim(ret, ret_ti,tmp,dims);
     };
 
@@ -1970,7 +1980,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval_dim2(i,x,ret_ti,tmp,dims);
     };
 
@@ -1979,7 +1990,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>
                     ::eval_impl(ret, ret_ti,tmp);
     };
@@ -1989,7 +2001,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         using val_type              = typename ret_type::value_type;
         using sparse_matrix_type    = Matrix<val_type,struct_sparse>;
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval_impl2(i,x,ret_ti,tmp);
     };
 
@@ -2001,7 +2014,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         Integer r = A.rows();
         check_dims_col(dims,r);
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval_dim_col(ret,ret_ti,tmp,dims);
     };
 
@@ -2014,7 +2028,8 @@ struct sortrows_impl<ret_type,in_type,struct_banded>
         Integer r = A.rows();
         check_dims_col(dims,r);
 
-        sparse_matrix_type tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti);
+        matcl::Matrix th;
+        const sparse_matrix_type& tmp = converter<sparse_matrix_type,in_type>::eval(A,ret_ti, th);
         return sortrows_impl<ret_type,sparse_matrix_type,struct_sparse>::eval_dim_col2(i,x,ret_ti,tmp,dims);
     };
 };

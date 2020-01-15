@@ -766,7 +766,7 @@ struct eval_type_reserve : public eval_type<matcl::Matrix,eval_type_reserve>
     template<class T>
     static matcl::Matrix eval(T* mat, Integer r, Integer c)  
     { 
-        return matcl::Matrix(mat->reserve_impl(r,c),false); 
+        return matcl::Matrix(mat->reserve_impl(r,c), false); 
     };
 };
 

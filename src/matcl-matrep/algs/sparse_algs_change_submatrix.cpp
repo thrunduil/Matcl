@@ -1509,7 +1509,8 @@ struct change_submatrix_1_impl
         using val_type      = typename SM::value_type;
         using SparseMatrix  = raw::Matrix<val_type,struct_sparse>;
 
-        SparseMatrix sB = raw::converter<SM,M2>::eval(B,A.get_type());
+        matcl::Matrix tmp;
+        const SparseMatrix& sB = raw::converter<SM,M2>::eval(B, A.get_type(), tmp);
         return change_submatrix_1_impl<SM,SparseMatrix>::eval_sparse(A, ci, sB, ret);
     };
 };
@@ -1541,7 +1542,8 @@ struct change_submatrix_20_impl
         using val_type      = typename SM::value_type;
         using SparseMatrix  = raw::Matrix<val_type,struct_sparse>;
 
-        SparseMatrix sB = raw::converter<SM,M2>::eval(B,A.get_type());
+        Matrix tmp;
+        const SparseMatrix& sB = raw::converter<SM,M2>::eval(B, A.get_type(), tmp);
         return change_submatrix_20_impl<SM,SparseMatrix>::eval_sparse(A, c_in, sB, ret);
     }
 
@@ -2406,7 +2408,8 @@ struct change_submatrix_21_impl
         using val_type      = typename SM::value_type;
         using SparseMatrix  = raw::Matrix<val_type,struct_sparse>;
 
-        SparseMatrix sB = raw::converter<SM,M2>::eval(B,A.get_type());
+        Matrix tmp;
+        const SparseMatrix& sB = raw::converter<SM,M2>::eval(B,A.get_type(), tmp);
         return change_submatrix_21_impl<SM,SparseMatrix>::eval_sparse(A, ci, sB, ret);
     };
     

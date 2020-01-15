@@ -64,9 +64,6 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
         // unless is unique
         struct copy_is_safe{};
 
-        //TODO: remove this
-        struct copy_is_safe_TODO : copy_is_safe{};
-
         Matrix(const Matrix &m, copy_is_safe)
                 : Matrix(m) {}; 
 

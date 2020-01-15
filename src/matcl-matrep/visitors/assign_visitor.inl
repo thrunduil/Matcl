@@ -305,8 +305,12 @@ struct assign_impl<M1,val_type,true,struct_type>
         ti::ti_type<val_type_ret> ret_ti    = link_ret_ti<val_type_ret,val_type_1,val_type>
                                                 ::eval(ti_1,val);
 
-        A                   = Matrix(raw::converter<new_mat_type, M1>::eval(mat,ret_ti),false);
-        val_type_ret val2   = raw::converter<val_type_ret,val_type>::eval(val);
+        {
+            Matrix th;
+            A               = Matrix(raw::converter<new_mat_type, M1>::eval(mat, ret_ti, th),false);
+        };
+
+        val_type_ret val2   = raw::converter_scalar<val_type_ret,val_type>::eval(val);
 
         return assign_impl<new_mat_type,val_type_ret,false,struct_type>
                     ::eval(A,A.get_impl_unique<new_mat_type>(),val2,i,j);
@@ -317,8 +321,12 @@ struct assign_impl<M1,val_type,true,struct_type>
         ti::ti_type<val_type_1> ti_1        = get_matrix_ti<val_type_1>::eval(A);
         ti::ti_type<val_type_ret> ret_ti    = link_ret_ti<val_type_ret,val_type_1,val_type>
                                                 ::eval(ti_1,val);
-        A                   = Matrix(raw::converter<new_mat_type,M1>::eval(mat,ret_ti),false);
-        val_type_ret val2   = raw::converter<val_type_ret,val_type>::eval(val);
+        {
+            Matrix th;
+            A               = Matrix(raw::converter<new_mat_type,M1>::eval(mat,ret_ti, th),false);
+        };
+
+        val_type_ret val2   = raw::converter_scalar<val_type_ret,val_type>::eval(val);
 
         return assign_impl<new_mat_type,val_type_ret,false,struct_type>
                     ::eval(A,A.get_impl_unique<new_mat_type>(),val2,i);
@@ -330,8 +338,12 @@ struct assign_impl<M1,val_type,true,struct_type>
         ti::ti_type<val_type_ret> ret_ti    = link_ret_ti<val_type_ret,val_type_1,val_type>
                                                 ::eval(ti_1,val);
 
-        A                   = Matrix(raw::converter<new_mat_type,M1>::eval(mat,ret_ti),false);
-        val_type_ret val2   = raw::converter<val_type_ret,val_type>::eval(val);
+        {
+            Matrix th;
+            A               = Matrix(raw::converter<new_mat_type,M1>::eval(mat, ret_ti, th),false);
+        };
+
+        val_type_ret val2   = raw::converter_scalar<val_type_ret,val_type>::eval(val);
 
         return assign_impl<new_mat_type,val_type_ret,false,struct_type>
                     ::eval(A,A.get_impl_unique<new_mat_type>(),val2,c1);
@@ -342,8 +354,13 @@ struct assign_impl<M1,val_type,true,struct_type>
         ti::ti_type<val_type_1> ti_1        = get_matrix_ti<val_type_1>::eval(A);
         ti::ti_type<val_type_ret> ret_ti    = link_ret_ti<val_type_ret,val_type_1,val_type>
                                                 ::eval(ti_1,val);
-        A                   = Matrix(raw::converter<new_mat_type,M1>::eval(mat,ret_ti),false);
-        val_type_ret val2   = raw::converter<val_type_ret,val_type>::eval(val);
+
+        {
+            Matrix th;
+            A               = Matrix(raw::converter<new_mat_type,M1>::eval(mat, ret_ti, th),false);
+        };
+
+        val_type_ret val2   = raw::converter_scalar<val_type_ret,val_type>::eval(val);
 
         return assign_impl<new_mat_type,val_type_ret,false,struct_type>
                     ::eval(A,A.get_impl_unique<new_mat_type>(),val2,c1,c2);
@@ -354,8 +371,13 @@ struct assign_impl<M1,val_type,true,struct_type>
         ti::ti_type<val_type_1> ti_1        = get_matrix_ti<val_type_1>::eval(A);
         ti::ti_type<val_type_ret> ret_ti    = link_ret_ti<val_type_ret,val_type_1,val_type>
                                                 ::eval(ti_1,val);
-        A                   = Matrix(raw::converter<new_mat_type,M1>::eval(mat,ret_ti),false);
-        val_type_ret val2   = raw::converter<val_type_ret,val_type>::eval(val);
+
+        {
+            Matrix th;
+            A                   = Matrix(raw::converter<new_mat_type,M1>::eval(mat, ret_ti, th), false);
+        };
+
+        val_type_ret val2   = raw::converter_scalar<val_type_ret,val_type>::eval(val);
 
         return assign_impl<new_mat_type,val_type_ret,false,struct_type>
                     ::eval_diag(A,A.get_impl_unique<new_mat_type>(),val2,d);
@@ -665,7 +687,11 @@ struct assign_impl<M1,val_type,false,struct_banded>
             using value_type    = typename M1::value_type;
             using matrix_type   = raw::Matrix<value_type,struct_dense>;
 
-            A = Matrix(raw::converter<matrix_type,M1>::eval(mat,get_matrix_ti<value_type>::eval(A)),false);
+            {
+                Matrix th;
+                A = Matrix(raw::converter<matrix_type,M1>::eval(mat,get_matrix_ti<value_type>::eval(A), th),false);
+            };
+
             matrix_type& mat2 = A.get_impl_unique<matrix_type>();
 
             mrd::assign_helper(mat2.ptr()[i+j*mat2.ld()],val);
@@ -1120,7 +1146,7 @@ Matrix& assign_functor<M1,val_type>::eval(Matrix& A, M1& mat, const val_type& va
     using struct_type   = typename AFT::struct_type;
 
     return assign_impl<M1,val_type_pr,AFT::req_promo,struct_type>
-            ::eval(A,mat,raw::converter<val_type_pr,val_type>::eval(val),i,j);
+            ::eval(A,mat,raw::converter_scalar<val_type_pr,val_type>::eval(val),i,j);
 };
 
 template<class M1,class val_type>
@@ -1131,7 +1157,7 @@ Matrix& assign_functor<M1,val_type>::eval(Matrix& A,M1& mat, const val_type& val
     using struct_type   = typename AFT::struct_type;
 
     return assign_impl<M1,val_type_pr,AFT::req_promo, struct_type>
-            ::eval(A,mat,raw::converter<val_type_pr,val_type>::eval(val),i);
+            ::eval(A,mat,raw::converter_scalar<val_type_pr,val_type>::eval(val),i);
 };
 
 template<class M1,class val_type>
@@ -1168,7 +1194,7 @@ Matrix& assign_functor<M1,val_type>::eval(Matrix& A, M1& mat,const val_type& val
             ti::ti_type<val_ret> ret_ti     = link_ret_ti<val_ret,first_type,val_type>
                                                 ::eval(ti_1,val);
 
-            val_ret val_init    = raw::converter<val_ret,val_type>::eval(val,ret_ti);
+            val_ret val_init    = raw::converter_scalar<val_ret,val_type>::eval(val,ret_ti);
             matrix_type tmp(ret_ti,val_init,mat.rows(),mat.cols());
             A = Matrix(tmp,true);
             return A;
@@ -1186,7 +1212,7 @@ Matrix& assign_functor<M1,val_type>::eval(Matrix& A, M1& mat,const val_type& val
     else
     {
         using val_ret       = typename AFT::val_type_pr;
-        val_ret val_conv    = raw::converter<val_ret,val_type>::eval(val);
+        val_ret val_conv    = raw::converter_scalar<val_ret,val_type>::eval(val);
         return assign_impl<M1,val_ret,AFT::req_promo,typename AFT::struct_type>
                         ::eval(A,A.get_impl_unique<M1>(), val_conv,c1);
     };
@@ -1214,7 +1240,7 @@ Matrix& assign_functor<M1,val_type>::eval(Matrix& A, M1& mat,const val_type& val
     {
         using val_ret       = typename AFT::val_type_pr;
         using impl_type     = assign_impl<M1,val_ret,AFT::req_promo,typename AFT::struct_type>;
-        return impl_type::eval(A,mat,raw::converter<val_ret,val_type>::eval(val),c1,c2);
+        return impl_type::eval(A,mat,raw::converter_scalar<val_ret,val_type>::eval(val),c1,c2);
     };
 };
 
@@ -1224,7 +1250,7 @@ Matrix& assign_functor<M1,val_type>::eval_diag(Matrix& A,M1& mat, const val_type
     using AFT   = assign_functor_types<M1,val_type>;
 
     return assign_impl<M1,typename AFT::val_type_pr,AFT::req_promo,typename AFT::struct_type>
-                ::eval_diag(A,mat,raw::converter<typename AFT::val_type_pr,val_type>::eval(val),d);
+                ::eval_diag(A,mat,raw::converter_scalar<typename AFT::val_type_pr,val_type>::eval(val),d);
 };
 
 template<class M1>
@@ -1328,7 +1354,7 @@ struct assign_scal_impl<Object, val_type, true>
         ti::ti_type<val_type_ret> ret_ti = link_ret_ti<val_type_ret, Object, val_type>
                                             ::eval(ti_1,val);
 
-        A = Matrix(raw::converter<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
+        A = Matrix(raw::converter_scalar<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
 
         return assign_scal_impl<Object, val_type, false>::eval(A, val, i, j);
     };
@@ -1338,7 +1364,7 @@ struct assign_scal_impl<Object, val_type, true>
         ti::ti_type<val_type_1> ti_1 = get_matrix_ti<val_type_1>::eval(A);
         ti::ti_type<val_type_ret> ret_ti = link_ret_ti<val_type_ret, Object, val_type>
                                             ::eval(ti_1,val);
-        A = Matrix(raw::converter<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
+        A = Matrix(raw::converter_scalar<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
 
         return assign_scal_impl<Object, val_type, false>::eval(A, val, i);
     }
@@ -1349,7 +1375,7 @@ struct assign_scal_impl<Object, val_type, true>
         ti::ti_type<val_type_ret> ret_ti = link_ret_ti<val_type_ret, Object, val_type>
                                             ::eval(ti_1,val);
 
-        A = Matrix(raw::converter<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
+        A = Matrix(raw::converter_scalar<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
 
         return assign_scal_impl<Object, val_type, false>::eval(A, val, c1);
     }
@@ -1360,7 +1386,10 @@ struct assign_scal_impl<Object, val_type, true>
         ti::ti_type<val_type_ret> ret_ti = link_ret_ti<val_type_ret, Object, val_type>
                                             ::eval(ti_1,val);
 
-        A = Matrix(raw::converter<val_type_ret, Object>::eval(A.get_scalar<Object>(), ret_ti), false);
+        {
+            A = Matrix(raw::converter_scalar<val_type_ret, Object>
+                       ::eval(A.get_scalar<Object>(), ret_ti), false);
+        };
 
         return assign_scal_impl<Object, val_type, false>::eval(A, val, c1, c2);
     };
