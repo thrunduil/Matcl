@@ -26,6 +26,11 @@
 namespace matcl { namespace raw 
 {
 
+// representation of a band matrix; 
+// this object cannot be copied unless copy is marked as safe, i.e.
+// modification is possible only if object is unique. One can make
+// copy of this object using const_matrix wrapper, which allows for
+// const access only
 template<class value_type_>
 class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matrix_base<value_type_>
 {
@@ -197,7 +202,6 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
         Matrix&             reset_unique(Integer r, Integer c, Integer fd, Integer ld);
 
     private:
-        //TODO
         Matrix(const Matrix&);
 };
 

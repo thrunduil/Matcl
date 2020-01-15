@@ -381,6 +381,9 @@
     <ClInclude Include="..\..\..\src\include\matcl-internals\container\const_matrix.h">
       <Filter>Source Files\include\matcl-internals\container</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\converter_scalar.h">
+      <Filter>Source Files\include\matcl-internals\func</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\include\matcl-internals\base\sort.inl">

@@ -609,7 +609,7 @@ quern_solver_impl_val<Val>::quern_solver_impl_val(const Matrix& As, bool with_q,
     }
 
     // NOTE we are effectively transposing A by treating CSC as CSR
-    Mat As_impl = As.get_impl<Mat>();    
+    const Mat& As_impl  = As.get_impl<Mat>();    
 
     // will be allocated by quern
     int* ptr_Q_row_start    = nullptr;

@@ -467,9 +467,9 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
         VTR* ptr_C          = C.ptr();
         Integer C_ld        = C.ld();
 
-        const Val1* ptr_V   = data.m_reflectors.ptr();
-        Integer V_ld        = data.m_reflectors.ld();
-        const Val1* ptr_tau = data.m_tau_vec.ptr();
+        const Val1* ptr_V   = data.m_reflectors.get().ptr();
+        Integer V_ld        = data.m_reflectors.get().ld();
+        const Val1* ptr_tau = data.m_tau_vec.get().ptr();
         Integer offset      = data.m_offset;
 
         bool lap_left       = !left0;
@@ -637,14 +637,14 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
             return eval_block(ret, false, NB, X, data, t_unitary);
         };
 
-        Integer V_ld        = data.m_reflectors.ld();
-        const Val1* ptr_tau = data.m_tau_vec.ptr();
+        Integer V_ld        = data.m_reflectors.get().ld();
+        const Val1* ptr_tau = data.m_tau_vec.get().ptr();
 
         ret_type Y          = make_copy<VTR, Val2>::eval(X, refl_length, ret_N);
         VTR* ptr_Y          = Y.ptr();
         Integer Y_ld        = Y.ld();
 
-        const Val1* ptr_V0  = data.m_reflectors.ptr();
+        const Val1* ptr_V0  = data.m_reflectors.get().ptr();
 
         //apply offset
         Integer offset      = data.m_offset;
@@ -790,7 +790,7 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
 
         Integer num_refl    = data.number_reflectors();
         Integer refl_length = data.reflector_length();
-        Integer V_ld        = data.m_reflectors.ld();
+        Integer V_ld        = data.m_reflectors.get().ld();
         Integer V_ldiags    = data.m_ldiags;
 
         Integer NB          = linalg_optim_params::block_size_ORMQR();
@@ -798,7 +798,7 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
         if (NB <= num_refl && V_ldiags * 2 >= NB )
             return eval_block(ret, true, NB, X, data, t_unitary);
         
-        const Val1* ptr_tau = data.m_tau_vec.ptr();        
+        const Val1* ptr_tau = data.m_tau_vec.get().ptr();        
 
         using VTR_pod       = pod_type<VTR>;
         using workspace     = pod_workspace<VTR_pod>;
@@ -808,7 +808,7 @@ struct householder_mult_struct<Val1, Val2, struct_dense>
         ret_type Y          = make_copy<VTR, Val2>::eval(X, ret_M, data.reflector_length());
         VTR* ptr_Y          = Y.ptr();
         Integer Y_ld        = Y.ld();
-        const Val1* ptr_V0  = data.m_reflectors.ptr();
+        const Val1* ptr_V0  = data.m_reflectors.get().ptr();
 
         //apply offset
         Integer offset      = data.m_offset;
@@ -962,9 +962,9 @@ struct householder_band_mult_struct<Val1, Val2, struct_dense>
         };
 
         Integer MK          = data.number_reflectors();
-        Integer V_ld        = data.m_reflectors.ld();
-        const Val1* ptr_tau = data.m_tau_vec.ptr();
-        const BM& V         = data.m_reflectors;
+        Integer V_ld        = data.m_reflectors.get().ld();
+        const Val1* ptr_tau = data.m_tau_vec.get().ptr();
+        const BM& V         = data.m_reflectors.get();
 
         if (V.has_diag(0) == false)
             throw error::band_matrix_with_main_diag_required(V.first_diag(), V.last_diag());
@@ -1119,10 +1119,10 @@ struct householder_band_mult_struct<Val1, Val2, struct_dense>
             N       = data.rows();
 
         Integer NK          = data.number_reflectors();
-        Integer V_ld        = data.m_reflectors.ld();
-        const Val1* ptr_tau = data.m_tau_vec.ptr();
+        Integer V_ld        = data.m_reflectors.get().ld();
+        const Val1* ptr_tau = data.m_tau_vec.get().ptr();
 
-        const BM& V         = data.m_reflectors;        
+        const BM& V         = data.m_reflectors.get();        
 
         if (V.has_diag(0) == false)
             throw error::band_matrix_with_main_diag_required(V.first_diag(), V.last_diag());
@@ -1662,17 +1662,14 @@ void householder_helper<Val>::to_matrix(Matrix& ret, const umatrix& data)
     Integer K       = data.number_reflectors();
     Integer off     = data.m_offset;
 
-    Mat Qc(data.m_reflectors.get_type());
-    if (data.m_reflectors.rows() == M && data.m_reflectors.cols() == N)
-    {
-        Qc.assign_to_fresh(data.m_reflectors.copy());
-    }
-    else
-    {
-        Qc.assign_to_fresh(data.m_reflectors.resize(M,N).make_unique());
-    };
+    Mat Qc(data.m_reflectors.get().get_type());
 
-    lapack_xyygqr_maker<Val>::eval(M, N, K, Qc, data.m_tau_vec, off);
+    if (data.m_reflectors.get().rows() == M && data.m_reflectors.get().cols() == N)
+        Qc.assign_to_fresh(data.m_reflectors.get().copy());
+    else
+        Qc.assign_to_fresh(data.m_reflectors.get().resize(M,N).make_unique());
+
+    lapack_xyygqr_maker<Val>::eval(M, N, K, Qc, data.m_tau_vec.get(), off);
 
     if (off != 0)
     {
@@ -1745,8 +1742,8 @@ void householder_band_helper<Val>::to_matrix(Matrix& ret, const umatrix& data)
     using Mat_D = raw::Matrix<Val,struct_dense>;
 
     Integer K   = data.number_reflectors();
-    Mat_D Qc    = raw::converter<Mat_D,Mat_B>::eval(data.m_reflectors);
-    lapack_xyygqr_maker<Val>::eval(data.rows(), data.cols(), K, Qc, data.m_tau_vec, 0);
+    Mat_D Qc    = raw::converter<Mat_D,Mat_B>::eval(data.m_reflectors.get());
+    lapack_xyygqr_maker<Val>::eval(data.rows(), data.cols(), K, Qc, data.m_tau_vec.get(), 0);
         
     Matrix Qc_mat   = Matrix(Qc, true);
     Qc_mat.set_struct(struct_flag()); 
@@ -1797,11 +1794,12 @@ householder_q<Val>::householder_q()
     :m_mat_cols(0), m_reflectors(ti::ti_type<Val>()), m_tau_vec(ti::ti_type<Val>())
     ,m_ldiags(0), m_offset(0)
 {};
+
 template<class Val>
 householder_q<Val>::householder_q(Integer N, const Mat& Qc, const Mat& tau, Integer ldiags, Integer offset)
     : m_mat_cols(N), m_reflectors(Qc), m_tau_vec(tau), m_offset(offset)
 {
-    Integer M   = m_reflectors.rows();
+    Integer M   = m_reflectors.get().rows();
     m_ldiags    = std::max(std::min(ldiags,M-1),1);
 };
 
@@ -1912,8 +1910,8 @@ householder_q<Val>::convert_impl() const
     using TR    = typename details::unify_types<T, Float>::type;
     using Mat_C = raw::Matrix<TR,struct_dense>;
 
-    Mat_C ret_refl  = raw::converter<Mat_C, Mat>::eval(m_reflectors);
-    Mat_C ret_tau   = raw::converter<Mat_C, Mat>::eval(m_tau_vec);
+    const Mat_C& ret_refl  = raw::converter<Mat_C, Mat>::eval(m_reflectors.get());
+    const Mat_C& ret_tau   = raw::converter<Mat_C, Mat>::eval(m_tau_vec.get());
 
     return data_ptr(new householder_q<TR>(m_mat_cols, ret_refl, ret_tau, m_ldiags, m_offset));
 };
@@ -1926,8 +1924,8 @@ void householder_q<Val>::save(oarchive& os) const
     os << this->m_ldiags;
     os << this->m_offset;    
 
-    os.get() << m_reflectors;
-    os.get() << m_tau_vec;
+    os.get() << m_reflectors.get();
+    os.get() << m_tau_vec.get();
 };
 
 template<class Val>
@@ -1948,8 +1946,8 @@ unitary_matrix_data* householder_q<Val>::load(std::istream& is)
     Matrix Qc   = matcl::convert(Q, Mat::matrix_code);
     Matrix tauc = matcl::convert(tau, Mat::matrix_code);
 
-    ret->m_reflectors.assign_to_fresh(Qc.get_impl<Mat>());
-    ret->m_tau_vec.assign_to_fresh(tauc.get_impl<Mat>());
+    ret->m_reflectors.rebind(Qc.get_impl<Mat>());
+    ret->m_tau_vec.rebind(tauc.get_impl<Mat>());
 
     return ret.release();
 };
@@ -1964,8 +1962,8 @@ void householder_q<Val>::save(std::ostream& os) const
     os << this->m_ldiags << " ";
     os << this->m_offset << " ";   
 
-    os << Matrix(m_reflectors,false);
-    os << Matrix(m_tau_vec,false);
+    os << Matrix(m_reflectors.get(), false);
+    os << Matrix(m_tau_vec.get(), false);
 };
 
 template<class Val>
@@ -1979,8 +1977,14 @@ unitary_matrix_data* householder_q<Val>::load(iarchive& ar)
     ar >> ret->m_ldiags;
     ar >> ret->m_offset;
 
-    ar.get() >> ret->m_reflectors;
-    ar.get() >> ret->m_tau_vec;
+    Mat refl(ret->m_reflectors.get().get_type());
+    Mat tau(ret->m_tau_vec.get().get_type());
+
+    ar.get() >> refl;
+    ar.get() >> tau;
+
+    ret->m_reflectors.rebind(refl);
+    ret->m_tau_vec.rebind(tau);
 
     return ret.release();
 };
@@ -1997,9 +2001,9 @@ template<class Val>
 householder_band_q<Val>::householder_band_q(Integer N, const Mat_B& Qc, const Mat_D& tau)
     :m_mat_cols(N), m_reflectors(Qc), m_tau_vec(tau)
 {
-    if (m_reflectors.has_diag(0) == false)
-        throw error::band_matrix_with_main_diag_required(m_reflectors.first_diag(), 
-                                                         m_reflectors.last_diag());
+    if (m_reflectors.get().has_diag(0) == false)
+        throw error::band_matrix_with_main_diag_required(m_reflectors.get().first_diag(), 
+                                                         m_reflectors.get().last_diag());
 };
 
 
@@ -2108,11 +2112,12 @@ typename householder_band_q<Val>::data_ptr
 householder_band_q<Val>::convert_impl() const
 {
     using TR        = typename details::unify_types<T, Float>::type;
-    using Mat_BC    = raw::Matrix<TR,struct_banded>;
-    using Mat_DC    = raw::Matrix<TR,struct_dense>;
 
-    Mat_BC ret_refl = raw::converter<Mat_BC, Mat_B>::eval(m_reflectors);
-    Mat_DC ret_tau  = raw::converter<Mat_DC, Mat_D>::eval(m_tau_vec);
+    using Mat_BC2   = raw::Matrix<TR, struct_banded>;
+    using Mat_DC2   = raw::Matrix<TR, struct_dense>;
+
+    const Mat_BC2& ret_refl = raw::converter<Mat_BC2, Mat_B>::eval(m_reflectors.get());
+    const Mat_DC2& ret_tau  = raw::converter<Mat_DC2, Mat_D>::eval(m_tau_vec.get());
 
     return data_ptr(new householder_band_q<TR>(m_mat_cols, ret_refl, ret_tau));
 };
@@ -2123,8 +2128,8 @@ void householder_band_q<Val>::save(oarchive& os) const
     //general parameters
     os << this->m_mat_cols;
 
-    os.get() << m_reflectors;
-    os.get() << m_tau_vec;
+    os.get() << m_reflectors.get();
+    os.get() << m_tau_vec.get();
 };
 
 template<class Val>
@@ -2143,8 +2148,8 @@ unitary_matrix_data* householder_band_q<Val>::load(std::istream& is)
     Matrix Qc   = matcl::convert(Q, Mat_B::matrix_code);
     Matrix tauc = matcl::convert(tau, Mat_D::matrix_code);
 
-    ret->m_reflectors.assign_to_fresh(Qc.get_impl<Mat_B>());
-    ret->m_tau_vec.assign_to_fresh(tauc.get_impl<Mat_D>());
+    ret->m_reflectors.rebind(Qc.get_impl<Mat_B>());
+    ret->m_tau_vec.rebind(tauc.get_impl<Mat_D>());
 
     return ret.release();
 };
@@ -2157,8 +2162,8 @@ void householder_band_q<Val>::save(std::ostream& os) const
     //general parameters
     os << this->m_mat_cols << " ";
 
-    os << Matrix(m_reflectors,false);
-    os << Matrix(m_tau_vec,false);
+    os << Matrix(m_reflectors.get(), false);
+    os << Matrix(m_tau_vec.get(), false);
 };
 
 template<class Val>
@@ -2167,11 +2172,19 @@ unitary_matrix_data* householder_band_q<Val>::load(iarchive& ar)
     using ptr_type  = std::unique_ptr<householder_band_q<Val>>;
     ptr_type ret    = ptr_type(new householder_band_q<Val>());
 
+    using Mat_B     = raw::Matrix<Val,struct_banded>;
+
     //general parameters
     ar >> ret->m_mat_cols;
 
-    ar.get() >> ret->m_reflectors;
-    ar.get() >> ret->m_tau_vec;
+    Mat_B refl(ret->m_reflectors.get().get_type());
+    Mat_D tau(ret->m_tau_vec.get().get_type());
+
+    ar.get() >> refl;
+    ar.get() >> tau;
+
+    ret->m_reflectors.rebind(refl);
+    ret->m_tau_vec.rebind(tau);
 
     return ret.release();
 };

@@ -1675,8 +1675,8 @@ struct eval_mult<Val_ret,M1,M2,struct_dense,struct_dense>
 
     static void eval(matcl::Matrix& ret, const M1& A, const M2& B, trans_type t_A, trans_type t_B)
     {
-        Mat_ret AC  = converter<Mat_ret,M1>::eval(A);
-        Mat_ret BC  = converter<Mat_ret,M2>::eval(B);
+        const Mat_ret& AC   = converter<Mat_ret,M1>::eval(A);
+        const Mat_ret& BC   = converter<Mat_ret,M2>::eval(B);
         return eval_dense_dense<Val_ret>::eval(ret,AC,BC,t_A, t_B);
     };
 
@@ -1684,8 +1684,8 @@ struct eval_mult<Val_ret,M1,M2,struct_dense,struct_dense>
                      trans_type t_A, trans_type t_B, const Val_ret& beta, 
                      Integer fr, Integer rows, Integer fc, Integer cols)
     {
-        Mat_ret AC  = converter<Mat_ret,M1>::eval(A);
-        Mat_ret BC  = converter<Mat_ret,M2>::eval(B);
+        const Mat_ret& AC   = converter<Mat_ret,M1>::eval(A);
+        const Mat_ret& BC   = converter<Mat_ret,M2>::eval(B);
         return eval_dense_dense<Val_ret>::eval_gemm(C, alpha, AC, BC, t_A, t_B, beta, fr, rows, fc, cols);
     };
 };

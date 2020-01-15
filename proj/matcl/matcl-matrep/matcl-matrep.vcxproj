@@ -34,6 +34,7 @@
     <ClInclude Include="..\..\..\src\include\matcl-internals\container\sparse_ccs.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\error\error_check_basic.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\func\converter.h" />
+    <ClInclude Include="..\..\..\src\include\matcl-internals\func\converter_scalar.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\func\inplace.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\func\lapack_utils.h" />
     <ClInclude Include="..\..\..\src\include\matcl-internals\func\op_helpers.h" />

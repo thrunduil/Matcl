@@ -152,6 +152,11 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
         sparse_matrix_base(const sparse_matrix_base&);
 };
 
+// representation of a sparse matrix; 
+// this object cannot be copied unless copy is marked as safe, i.e.
+// modification is possible only if object is unique. One can make
+// copy of this object using const_matrix wrapper, which allows for
+// const access only
 template<class value_type_>
 class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matrix_base<value_type_>
 {
@@ -224,8 +229,7 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matr
     private:
         Matrix&             operator=(const Matrix&) = delete;
 
-    public:
-        //TODO
+    private:
         Matrix(const base_type &m)
             : base_type(m) {}
 

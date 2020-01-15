@@ -69,7 +69,7 @@ struct construct_givens_val
     static void eval(unitary_matrix& ret, const Mat& matS, Integer N, const Matrix& C, 
                      const Matrix& Ind, bool from_left)
     {
-        Mat_D Sc    = raw::converter<Mat_D, Mat>::eval(matS);
+        const Mat_D& Sc = raw::converter<Mat_D, Mat>::eval(matS);
         return construct_givens_str<Val>::eval(ret, Sc, N, C, Ind, from_left);
     };
 };

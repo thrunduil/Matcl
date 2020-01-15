@@ -50,11 +50,11 @@ struct ldl_tridiag_impl
         using VR    = typename md::real_type<V>::type;
         using Mat_R = raw::Matrix<VR,struct_dense>;
 
-        Mat_R D0    = raw::converter<Mat_R, Mat>::eval(D0_0);
+        Mat_R D0        = Mat_R(raw::converter<Mat_R, Mat>::eval(D0_0), Mat_R::copy_is_safe());
 
-        Integer N   = D0.length();
-        VR* ptr_D   = D0.ptr();
-        V* ptr_E    = D1.ptr();
+        Integer N       = D0.length();
+        VR* ptr_D       = D0.ptr();
+        V* ptr_E        = D1.ptr();
 
         Integer info;
         lapack::pttrf(N, lap(ptr_D), lap(ptr_E), info);

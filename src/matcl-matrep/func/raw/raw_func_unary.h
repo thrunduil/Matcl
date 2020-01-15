@@ -83,7 +83,7 @@ struct scalfunc_isa_helper
     using ret_type_finite   = Matrix<int_or_obj,struct_dense>;
 
     // inplace is allowed; refcount must be increased for 
-    // nontemporary objects
+    // nontemporary objects; TODO
     static void eval_is_nan(matcl::Matrix& ret, const M& m);
     static void eval_is_inf(matcl::Matrix& ret, const M& m);
     static void eval_is_finite(matcl::Matrix& ret, const M& m);
@@ -121,7 +121,7 @@ struct MATCL_MATREP_EXPORT unary_helper_impl
     using ret_type_is_true  = Matrix<int_or_obj,str_type>;
 
     // inplace is allowed; refcount must be increased for 
-    // nontemporary objects
+    // nontemporary objects; TODO
     static void eval_minus(matcl::Matrix& ret, const MP& m);
     static void eval_inv(matcl::Matrix& ret, const MP& m);
     static void eval_neg(matcl::Matrix& ret, const MP& m);
@@ -187,9 +187,9 @@ struct scalar_func_helper
     using ret_type_acsch    = typename func_ret_type<MP,false>::type;
 
     // inplace is allowed; refcount must be increased for 
-    // nontemporary objects
+    // nontemporary objects; TODO
 
-    // these functions can be called only on object matrices    
+    // these functions can be called only on complex matrices    
     static void eval_sqrt_c(matcl::Matrix& ret, const MP& m);
     static void eval_sqrt1pm1_c(matcl::Matrix& ret, const MP& m);
     static void eval_log_c(matcl::Matrix& ret, const MP& m);

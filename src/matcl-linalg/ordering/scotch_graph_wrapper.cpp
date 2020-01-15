@@ -113,7 +113,7 @@ void scotch_graph_wrapper::init_graph(std::shared_ptr<SCOTCH_Graph>& graph_data)
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0;    
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); // TODO
 
     int array_base      = 0;    
     int num_edges       = mat_A.nnz();
@@ -501,7 +501,7 @@ Matrix scotch_graph_wrapper::make_assign_impl(Integer n_part, const Matrix& proc
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0;    
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); //TODO    
 
     int num_proc        = n_part;
     int num_nodes       = m_A.rows();
@@ -559,7 +559,7 @@ Matrix scotch_graph_wrapper::make_assign_fixed_impl(Integer n_part, const Matrix
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0;    
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); // TODO    
 
     int num_proc        = n_part;
 
@@ -583,7 +583,7 @@ Matrix scotch_graph_wrapper::make_assign_fixed_impl(Integer n_part, const Matrix
     }
 
     fixed               = convert(fixed, Mat_I::matrix_code);
-    Mat_I ifixed        = fixed.get_impl_unique<Mat_I>();
+    Mat_I& ifixed       = fixed.get_impl_unique<Mat_I>();
     Integer* ptr_res    = ifixed.ptr();
 
     if (!m_graf_data)
@@ -616,7 +616,7 @@ Matrix scotch_graph_wrapper::make_coloring_impl()
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0;    
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); // TODO
     int num_nodes       = m_A.rows();
 
     Mat_I mat_res(ti::ti_empty(), num_nodes, 1);
@@ -644,7 +644,7 @@ void scotch_graph_wrapper::make_ordering_impl(bool ext, permvec& p, Integer& nbl
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0;    
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); // TODO
     int num_nodes       = m_A.rows();
 
     Mat_I mat_res(ti::ti_empty(), num_nodes, 1);
@@ -707,7 +707,7 @@ Matrix scotch_graph_wrapper::make_separator_impl(Integer n_part, bool node_sep, 
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0;    
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); // TODO
     int num_nodes       = m_A.rows();
 
     Mat_I mat_res(ti::ti_empty(), num_nodes, 1);
@@ -755,9 +755,9 @@ Matrix scotch_graph_wrapper::make_separator_fixed_impl(Integer n_part, Matrix& f
     const Mat_S& mat_A0 = convert(m_A, Mat_S::matrix_code).get_impl<Mat_S>();
 
     // scotch only reads this matrix; we can remove const
-    Mat_S mat_A         = mat_A0; 
+    Mat_S mat_A         = Mat_S(mat_A0, Mat_S::copy_is_safe()); // TODO
     fixed               = convert(fixed, Mat_I::matrix_code);
-    Mat_I mat_res       = fixed.get_impl_unique<Mat_I>();
+    Mat_I& mat_res      = fixed.get_impl_unique<Mat_I>();
     Integer* ptr_res    = mat_res.ptr();
 
     if (!m_graf_data)

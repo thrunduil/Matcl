@@ -294,8 +294,8 @@ struct gschur_sym_impl2
 
     static void eval(const Mat1& A, const Mat2& B, gschur_sym_decomposition& gd, gschur_sym_type type, bool with_V)
     {
-        Mat_R Ac    = raw::converter<Mat_R, Mat1>::eval(A);
-        Mat_R Bc    = raw::converter<Mat_R, Mat2>::eval(B);
+        const Mat_R& Ac = raw::converter<Mat_R, Mat1>::eval(A);
+        const Mat_R& Bc = raw::converter<Mat_R, Mat2>::eval(B);
 
         return gschur_sym_impl2<VR,SR,SR>::eval(Ac,Bc,gd,type,with_V);
     };

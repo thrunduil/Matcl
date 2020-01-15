@@ -50,8 +50,8 @@ struct linsolve_qtriang_str
         using MD_1  = raw::Matrix<VR,struct_dense>;
         using MD_2  = raw::Matrix<VR,struct_dense>;
 
-        MD_1 Ac     = raw::converter<MD_1, M1>::eval(A);
-        MD_2 Bc     = raw::converter<MD_2, M2>::eval(B);
+        const MD_1& Ac  = raw::converter<MD_1, M1>::eval(A);
+        const MD_2& Bc  = raw::converter<MD_2, M2>::eval(B);
 
         return linsolve_qtriang_str<struct_dense, struct_dense, VR, VR>::eval(ret, Ac, p,q,Bc, trans,opts);
     };

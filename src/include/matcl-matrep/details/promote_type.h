@@ -88,6 +88,18 @@ struct ret_matrix_type<V,struct_scalar>
     using type = V;
 };
 
+template<class V, bool Is_scal = md::is_scalar<V>::value>
+struct promote_type_reference_type
+{
+    using type = const V&;
+};
+
+template<class V>
+struct promote_type_reference_type<V, true>
+{
+    using type = V;
+};
+
 template<class T1, class T2, bool is_obj = md::is_object<T1>::value || md::is_object<T2>::value>
 struct make_int_obj_ret
 {
@@ -200,104 +212,133 @@ struct val_type_corrector_bool_tr
 template<class T1, class T2, class T1_ret, class T2_ret>
 struct val_type_corrector_impl
 {
+    private:
+        using T1_ret_ref    = typename promote_type_reference_type<T1_ret>::type;
+        using T2_ret_ref    = typename promote_type_reference_type<T2_ret>::type;
+
     public:
-        static T1_ret convert_1(const T1& mat)
+        static T1_ret_ref convert_1(const T1& mat, matcl::Matrix& tmp_holder)
         {
             using converter = matcl::raw::converter<T1_ret,T1>;
-            return converter::eval(mat);
+            return converter::eval(mat, tmp_holder);
         };
-        static T2_ret convert_2(const T2& mat)
+
+        static T2_ret_ref convert_2(const T2& mat, matcl::Matrix& tmp_holder)
         {
             using converter = matcl::raw::converter<T2_ret,T2>;
-            return converter::eval(mat);
+            return converter::eval(mat, tmp_holder);
         };
 
     private:
-        static T1_ret convert_1(T1&& mat);
-        static T2_ret convert_2(T2&& mat);
+        static T1_ret_ref convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static T2_ret_ref convert_2(T2&& mat, matcl::Matrix& tmp_holder);
 };
 
 template<class T1, class T2>
 struct val_type_corrector_impl<T1,T2,T1,T2>
 {
     public:
-        static const T1& convert_1(const T1& mat)
+        static const T1& convert_1(const T1& mat, matcl::Matrix&)
         {
             return mat;
         };
 
-        static const T2& convert_2(const T2& mat)
+        static const T2& convert_2(const T2& mat, matcl::Matrix&)
         {
             return mat;
         };
 
     private:
-        static const T1& convert_1(T1&& mat);
-        static const T2& convert_2(T2&& mat);
+        static const T1& convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static const T2& convert_2(T2&& mat, matcl::Matrix& tmp_holder);
 };
 
 template<class T1, class T2, class T2_ret>
 struct val_type_corrector_impl<T1,T2,T1,T2_ret>
 {
+    private:
+        using T2_ret_ref    = typename promote_type_reference_type<T2_ret>::type;
+
     public:
-        static const T1& convert_1(const T1& mat)
+        static const T1& convert_1(const T1& mat, matcl::Matrix&)
         {
             return mat;
         };
 
-        static T2_ret convert_2(const T2& mat)
+        static T2_ret_ref convert_2(const T2& mat, matcl::Matrix& tmp_holder)
         {
             using converter = matcl::raw::converter<T2_ret,T2>;
-            return converter::eval(mat);
+            return converter::eval(mat, tmp_holder);
         };
 
     private:
-        static const T1&    convert_1(T1&& mat);
-        static T2_ret       convert_2(T2&& mat);
+        static const T1&    convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static T2_ret_ref   convert_2(T2&& mat, matcl::Matrix& tmp_holder);
+};
+
+template<class T1, class T2, class T1_ret>
+struct val_type_corrector_impl<T1,T2,T1_ret, T2>
+{
+    private:
+        using T1_ret_ref    = typename promote_type_reference_type<T1_ret>::type;
+
+    public:
+        static T1_ret_ref convert_1(const T1& mat, matcl::Matrix& tmp_holder)
+        {
+            using converter = matcl::raw::converter<T1_ret,T1>;
+            return converter::eval(mat, tmp_holder);
+        };
+
+        static const T2&  convert_2(const T2& mat, matcl::Matrix&)
+        {
+            return mat;
+        };
+
+    private:
+        static T1_ret_ref   convert_1(T1&& mat);
+        static const T2&    convert_2(T2&& mat);
 };
 
 template<class In, class Ret, bool Is_scal, bool Is_obj>
 struct cast_bool_impl
-{};
-
-template<class In, class Ret>
-struct cast_bool_impl<In, Ret, false, false>
 {
-    using In_val        = typename In::value_type;
-    using Ret_val       = typename Ret::value_type;
-    using In_str        = typename In::struct_type;
-    using Ret_holder    = const_matrix<Ret>;
+    using In_val    = typename In::value_type;
+    using Ret_val   = typename Ret::value_type;
+    using In_str    = typename In::struct_type;
 
-    static void eval(Ret_holder& ret, const In& mat)
+    static const Ret& eval(const In& mat0, matcl::Matrix& tmp_holder)
     {
         using matrix_type = Matrix<In_val, In_str>;
 
-        matcl::Matrix ret_m;
-        mrd::unary_helper_impl<matrix_type>::eval_is_true(ret_m, mat);
+        //increase refcount in order to avoid inplace modification
+        mr::const_matrix<matrix_type> mat(mat0);
 
-        ret_m = matcl::convert(ret_m, Ret::matrix_code);
-        rebind<Ret, Ret_holder>::eval(ret, ret_m.get_impl<Ret>());
+        mrd::unary_helper_impl<matrix_type>::eval_is_true(tmp_holder, mat.get());
+        tmp_holder = matcl::convert(tmp_holder, Ret::matrix_code);
+
+        return tmp_holder.get_impl<Ret>();
     };
 };
 
 template<class In, class Ret>
 struct cast_bool_impl<In, Ret, false, true>
 {
-    using In_val        = typename In::value_type;
-    using Ret_val       = typename Ret::value_type;
-    using In_str        = typename In::struct_type;
-    using Ret_holder    = const_matrix<Ret>;
+    using In_val    = typename In::value_type;
+    using Ret_val   = typename Ret::value_type;
+    using In_str    = typename In::struct_type;
 
-    static void eval(Ret_holder& ret, const In& mat)
+    static const Ret& eval(const In& mat, matcl::Matrix& tmp_holder)
     {
-        rebind<Ret, Ret_holder>::eval(ret, md::converter<Ret>::eval(mat));
+        return md::converter<Ret>::eval(mat);
     };
 };
 
 template<class In, class Ret>
 struct cast_bool_impl<In, Ret, true, false>
 {
-    static Ret eval(const In& scal)
+    static_assert(std::is_same<Ret, Integer>::value, "");
+
+    static Integer eval(const In& scal, matcl::Matrix&)
     {
         return cast_bool(scal);
     };
@@ -306,30 +347,12 @@ struct cast_bool_impl<In, Ret, true, false>
 template<class In, class Ret>
 struct cast_bool_impl<In, Ret, true, true>
 {
-    static Ret eval(const In& scal)
+    static_assert(std::is_same<Ret, Object>::value, "");
+
+    static Object eval(const In& scal, matcl::Matrix&)
     {
         return Object(scal);
     };
-};
-
-template<class T1, class T2, class T1_ret>
-struct val_type_corrector_impl<T1,T2,T1_ret, T2>
-{
-    public:
-        static T1_ret convert_1(const T1& mat)
-        {
-            using converter = matcl::raw::converter<T1_ret,T1>;
-            return converter::eval(mat);
-        };
-
-        static const T2&  convert_2(const T2& mat)
-        {
-            return mat;
-        };
-
-    private:
-        static T1_ret       convert_1(T1&& mat);
-        static const T2&    convert_2(T2&& mat);
 };
 
 template<class T1, class T2, class T1_ret, class T2_ret>
@@ -341,39 +364,42 @@ struct val_type_corrector_bool_impl
         static const bool is_obj1    = md::is_object<T1_ret>::value;
         static const bool is_obj2    = md::is_object<T2_ret>::value;
 
+        using T1_ret_ref            = typename promote_type_reference_type<T1_ret>::type;
+        using T2_ret_ref            = typename promote_type_reference_type<T2_ret>::type;
+
     public:
-        static T1_ret convert_1(const T1& mat)
+        static T1_ret_ref convert_1(const T1& mat, matcl::Matrix& tmp_holder)
         {
-            return cast_bool_impl<T1,T1_ret, is_scal1, is_obj1>::eval(mat);
+            return cast_bool_impl<T1,T1_ret, is_scal1, is_obj1>::eval(mat, tmp_holder);
         };
 
-        static T2_ret convert_2(const T2& mat)
+        static T2_ret_ref convert_2(const T2& mat, matcl::Matrix& tmp_holder)
         {
-            return cast_bool_impl<T2,T2_ret, is_scal2, is_obj2>::eval(mat);
+            return cast_bool_impl<T2,T2_ret, is_scal2, is_obj2>::eval(mat, tmp_holder);
         };
 
     private:
-        static T1_ret convert_1(T1&& mat);
-        static T2_ret convert_2(T2&& mat);
+        static T1_ret_ref   convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static T2_ret_ref   convert_2(T2&& mat, matcl::Matrix& tmp_holder);
 };
 
 template<class T1, class T2>
 struct val_type_corrector_bool_impl<T1,T2,T1,T2>
 {
     public:
-        static const T1& convert_1(const T1& mat)
+        static const T1& convert_1(const T1& mat, matcl::Matrix&)
         {
             return mat;
         };
 
-        static const T2& convert_2(const T2& mat)
+        static const T2& convert_2(const T2& mat, matcl::Matrix&)
         {
             return mat;
         };
 
     private:
-        static const T1& convert_1(T1&& mat);
-        static const T2& convert_2(T2&& mat);
+        static const T1& convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static const T2& convert_2(T2&& mat, matcl::Matrix& tmp_holder);
 };
 
 template<class T1, class T2, class T2_ret>
@@ -383,20 +409,22 @@ struct val_type_corrector_bool_impl<T1,T2,T1,T2_ret>
         static const bool is_scal2   = md::is_scalar<T2>::value;
         static const bool is_obj2    = md::is_object<T2_ret>::value;
 
+        using T2_ret_ref            = typename promote_type_reference_type<T2_ret>::type;
+
     public:
-        static const T1& convert_1(const T1& mat)
+        static const T1& convert_1(const T1& mat, matcl::Matrix&)
         {
             return mat;
         };
 
-        static T2_ret convert_2(const T2& mat)
+        static T2_ret_ref convert_2(const T2& mat, matcl::Matrix& tmp_holder)
         {
-            return cast_bool_impl<T2,T2_ret, is_scal2, is_obj2>::eval(mat);
+            return cast_bool_impl<T2,T2_ret, is_scal2, is_obj2>::eval(mat, tmp_holder);
         };
 
     private:
-        static const T1&    convert_1(T1&& mat);
-        static T2_ret       convert_2(T2&& mat);
+        static const T1&        convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static T2_ret_ref       convert_2(T2&& mat, matcl::Matrix& tmp_holder);
 };
 
 template<class T1, class T2, class T1_ret>
@@ -406,20 +434,22 @@ struct val_type_corrector_bool_impl<T1,T2,T1_ret, T2>
         static const bool is_scal1   = md::is_scalar<T1>::value;
         static const bool is_obj1    = md::is_object<T1_ret>::value;
 
+        using T1_ret_ref            = typename promote_type_reference_type<T1_ret>::type;
+
     public:
-        static T1_ret convert_1(const T1& mat)
+        static T1_ret_ref convert_1(const T1& mat, matcl::Matrix& tmp_holder)
         {
-            return cast_bool_impl<T1,T1_ret,is_scal1, is_obj1>::eval(mat);
+            return cast_bool_impl<T1,T1_ret,is_scal1, is_obj1>::eval(mat, tmp_holder);
         };
 
-        static const T2&  convert_2(const T2& mat)
+        static const T2&  convert_2(const T2& mat, matcl::Matrix&)
         {
             return mat;
         };
 
     private:
-        static T1_ret       convert_1(T1&& mat);
-        static const T2&    convert_2(T2&& mat);
+        static T1_ret_ref       convert_1(T1&& mat, matcl::Matrix& tmp_holder);
+        static const T2&        convert_2(T2&& mat, matcl::Matrix& tmp_holder);
 };
 
 

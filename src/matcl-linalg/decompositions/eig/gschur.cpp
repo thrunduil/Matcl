@@ -1509,8 +1509,8 @@ void gschur_decomposition::select_val(const Matrix& ind, const bool no_fast_exit
     m_TA            = convert(m_TA, Mat::matrix_code);
     m_TB            = convert(m_TB, Mat::matrix_code);
 
-    Mat mat_TA      = m_TA.get_impl_unique<Mat>();
-    Mat mat_TB      = m_TB.get_impl_unique<Mat>();
+    Mat& mat_TA     = m_TA.get_impl_unique<Mat>();
+    Mat& mat_TB     = m_TB.get_impl_unique<Mat>();
 
     mat_TA.set_struct(struct_flag());
     mat_TB.set_struct(struct_flag());

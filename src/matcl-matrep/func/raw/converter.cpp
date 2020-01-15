@@ -32,9 +32,9 @@
 namespace matcl { namespace raw 
 {
 
-namespace gr = matcl::raw;
-namespace mrd = matcl::raw::details;
-namespace md = matcl::details;
+namespace mrd   = matcl::raw::details;
+namespace md    = matcl::details;
+namespace mr    = matcl::raw;
 
 namespace details
 {
@@ -1308,47 +1308,50 @@ namespace details
         };
     };
 
-    template<class ret, class T>
-    struct converter_selector
+    template<class ret>
+    ret converter_scal_obj_impl<ret>::eval(const Object& val, const tinfo_ret& ti)
     {
-        using type = typename matcl::details::lazy_select_if
-            <
-                matcl::details::is_scalar<T>::value,
-                matcl::details::lazy_type<details::converter_scalars_impl<ret,T>>,
-                matcl::details::lazy_type<details::converter_matrix_impl<ret,T>>
-            >::type;
+        using converter_type = details::converter_scalars_impl<ret,T>;
+        return converter_type::eval(ti, val);
+    };        
+
+    template<class ret, class T>
+    ret converter_scal_mat_impl<ret,T>::eval(const T& val, const tinfo_ret& ti)
+    {
+        using converter_type = details::converter_scalars_impl<ret,T>;
+        return converter_type::eval(ti, val);
+    };    
+
+    template<class ret, class T>
+    ret converter_mat_mat_impl<ret,T>::eval(const T& val, const tinfo_ret& ti)
+    {
+        using converter_type = details::converter_matrix_impl<ret,T>;
+        return converter_type::eval(ti, val);
     };
 
     template<class ret, class T>
-    ret converter_impl<ret,T>::eval(const T& val, const tinfo_ret& ti)
+    ret converter_mat_scal_impl<ret,T>::eval(const T& val, const tinfo_ret& ti)
     {
-        using converter_type = typename details::converter_selector<ret,T>::type;
+        using converter_type = details::converter_matrix_impl<ret,T>;
         return converter_type::eval(ti, val);
-    };
+    };    
 };
 
 };};
 
 
-MACRO_INSTANTIATE_GG_2_F(matcl::raw::details::converter_impl)
-MACRO_INSTANTIATE_GST_2_F(matcl::raw::details::converter_impl)
-MACRO_INSTANTIATE_STG_2_F(matcl::raw::details::converter_impl)
-MACRO_INSTANTIATE_STST_2_F(matcl::raw::details::converter_impl)
+MACRO_INSTANTIATE_GG_2_F(matcl::raw::details::converter_mat_mat_impl)
+MACRO_INSTANTIATE_GST_2_F(matcl::raw::details::converter_mat_mat_impl)
+MACRO_INSTANTIATE_STG_2_F(matcl::raw::details::converter_mat_mat_impl)
+MACRO_INSTANTIATE_STST_2_F(matcl::raw::details::converter_mat_mat_impl)
 
-MACRO_INSTANTIATE_GS_2_F(matcl::raw::details::converter_impl)
-MACRO_INSTANTIATE_STS_2_F(matcl::raw::details::converter_impl)
+MACRO_INSTANTIATE_GS_2_F(matcl::raw::details::converter_scal_mat_impl)
+MACRO_INSTANTIATE_STS_2_F(matcl::raw::details::converter_scal_mat_impl)
 
-template struct matcl::raw::details::converter_impl<matcl::Integer,matcl::Object>;
-template struct matcl::raw::details::converter_impl<matcl::Real,matcl::Object>;
-template struct matcl::raw::details::converter_impl<matcl::Float,matcl::Object>;
-template struct matcl::raw::details::converter_impl<matcl::Float_complex,matcl::Object>;
-template struct matcl::raw::details::converter_impl<matcl::Complex,matcl::Object>;
-
-template struct matcl::raw::details::converter_impl<matcl::Object,matcl::Integer>;
-template struct matcl::raw::details::converter_impl<matcl::Object,matcl::Float>;
-template struct matcl::raw::details::converter_impl<matcl::Object,matcl::Real>;
-template struct matcl::raw::details::converter_impl<matcl::Object,matcl::Float_complex>;
-template struct matcl::raw::details::converter_impl<matcl::Object,matcl::Complex>;
-template struct matcl::raw::details::converter_impl<matcl::Object,matcl::Object>;
+template struct matcl::raw::details::converter_scal_obj_impl<matcl::Integer>;
+template struct matcl::raw::details::converter_scal_obj_impl<matcl::Real>;
+template struct matcl::raw::details::converter_scal_obj_impl<matcl::Float>;
+template struct matcl::raw::details::converter_scal_obj_impl<matcl::Float_complex>;
+template struct matcl::raw::details::converter_scal_obj_impl<matcl::Complex>;
 
 #pragma warning(pop)

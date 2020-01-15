@@ -580,7 +580,7 @@ struct schur_str<V,struct_dense>
 
         using Mat_B = raw::Matrix<V,struct_banded>;
         mat_A       = convert(mat_A, Mat_B::matrix_code);
-        Mat_B AB    = mat_A.get_impl_unique<Mat_B>(); 
+        Mat_B& AB   = mat_A.get_impl_unique<Mat_B>(); 
 
         mat_A = Matrix();
         return schur_str<V,struct_banded>::eval(AB, sd, alg, with_U);
@@ -754,7 +754,8 @@ struct schur_str<V,struct_dense>
         if (with_U == true)
             sd.m_U_factor   = convert(sd.m_U_factor, Mat::matrix_code);
 
-        Mat Q           = with_U? sd.m_U_factor.get_impl_unique<Mat>() : Mat(TA.get_type());
+        Mat Q           = with_U? Mat(sd.m_U_factor.get_impl_unique<Mat>(), Mat::copy_is_safe())
+                                : Mat(TA.get_type());
         Q.get_struct().reset();
 
         V* r_TA         = TA.ptr();
@@ -1494,9 +1495,9 @@ struct estim_rcond_vec_diag_vis : public extract_type_switch<void, estim_rcond_v
     template<class T>
     static void eval(const Matrix&, const T& D, Matrix& ret, const Matrix& ind)
     {
-        using V     = typename T::value_type;
-        using Mat   = raw::Matrix<V,struct_dense>;
-        Mat DD      = raw::converter<Mat,T>::eval(D);
+        using V         = typename T::value_type;
+        using Mat       = raw::Matrix<V,struct_dense>;
+        const Mat& DD   = raw::converter<Mat,T>::eval(D);
         estim_rcond_vec_diag<V>::eval(ret, DD, ind);
     };
 
@@ -1517,9 +1518,9 @@ struct estim_rcond_subspace_diag_vis : public extract_type_switch<Real, estim_rc
     template<class T>
     static Real eval(const Matrix&, const T& D, Integer M)
     {
-        using V     = typename T::value_type;
-        using Mat   = raw::Matrix<V,struct_dense>;
-        Mat DD      = raw::converter<Mat,T>::eval(D);
+        using V         = typename T::value_type;
+        using Mat       = raw::Matrix<V,struct_dense>;
+        const Mat& DD   = raw::converter<Mat,T>::eval(D);
         return estim_rcond_vec_diag<V>::eval_subspace(DD, M);
     };
 

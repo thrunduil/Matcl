@@ -189,7 +189,7 @@ struct chol_update_impl<V,struct_dense>
 
         //no rvalue overload for w matrix; always make copy
         Matrix w        = convert(w0, Mat::matrix_code);
-        Mat v           = w.get_impl_unique<Mat>();
+        Mat& v          = w.get_impl_unique<Mat>();
 
         V* v_ptr        = v.ptr();
         Integer v_LD    = v.ld();
@@ -198,7 +198,8 @@ struct chol_update_impl<V,struct_dense>
         Mat work(A.get_type(), upper ? 2*N : 0, 1);
         V* work_ptr     = work.ptr();
         
-        Mat A2          = (A.get_refstr()->is_unique() == true || inplace == true)? A : A.clone();
+        bool inplace2   = A.get_refstr()->is_unique() == true || inplace == true;
+        Mat A2          = (inplace2)? Mat(A, Mat::copy_is_safe()) : A.clone();
 
         VR sig_scal;
         const VR* sig_ptr;
@@ -647,7 +648,7 @@ struct chol_update_impl<V,struct_sparse>
         if (m_rem.top_length() == 0)
         {
             if (inplace == true || A.get_refstr()->is_unique() == true)
-                return A;
+                return Mat(A, Mat::copy_is_safe());
             else 
                 return A.copy();
         };
@@ -698,7 +699,7 @@ struct chol_update_impl<V,struct_sparse>
             if (m_rem.top_length() == 0)
             {
                 if (inplace == true || A.get_refstr()->is_unique() == true)
-                    return A;
+                    return Mat(A, Mat::copy_is_safe());
                 else 
                     return A.copy();
             };

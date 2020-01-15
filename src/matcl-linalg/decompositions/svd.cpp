@@ -407,7 +407,7 @@ struct make_bidiagonal_str<V,struct_dense>
 
         Matrix V2       = ctrans(Matrix(Ac,false));
         V2              = convert(V2, Mat::matrix_code);
-        Mat Ac2         = V2.get_impl_unique<Mat>();
+        Mat& Ac2        = V2.get_impl_unique<Mat>();
 
         isv             = Ac2.all_finite() && TAUP.all_finite();
 

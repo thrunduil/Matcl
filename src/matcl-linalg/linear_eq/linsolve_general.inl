@@ -297,8 +297,8 @@ struct linsolve_general_struct<struct_dense,struct_dense,V1,V2>
         using V = typename unify_types<V1,V2>::type;
         using M = raw::Matrix<V,struct_dense>;
 
-        M Ac    = raw::converter<M,M1>::eval(A2);
-        M Bc    = raw::converter<M,M2>::eval(B.make_unique());
+        const M& Ac = raw::converter<M,M1>::eval(A2);
+        M Bc        = M(raw::converter<M,M2>::eval(B.make_unique()), M::copy_is_safe());
 
         if (trans != trans_type::no_trans)
             std::swap(p,q);
@@ -376,8 +376,8 @@ struct linsolve_general_struct<struct_dense,struct_dense,V1,V2>
         using V = typename unify_types<V1,V2>::type;
         using M = raw::Matrix<V,struct_dense>;
 
-        M Ac    = raw::converter<M,M1>::eval(A2);
-        M Bc    = raw::converter<M,M2>::eval(B.make_unique());
+        const M& Ac = raw::converter<M,M1>::eval(A2);
+        M Bc        = M(raw::converter<M,M2>::eval(B.make_unique()), M::copy_is_safe());
 
         if (trans != trans_type::no_trans)
             std::swap(p,q);
@@ -625,8 +625,9 @@ struct linsolve_general_struct<struct_banded,struct_dense,V1,V2>
             throw error::error_singular();
 
         //solve
-        MB Ac   = raw::converter<MB,M1>::eval(AFM);
-        M Bc    = raw::converter<M,M2>::eval(B.make_unique());
+        const MB& Ac    = raw::converter<MB,M1>::eval(AFM);
+        const M& Bc0    = raw::converter<M,M2>::eval(B.make_unique());
+        M Bc            = M(Bc0, M::copy_is_safe());
 
         if (trans != trans_type::no_trans)
             std::swap(p,q);
@@ -728,8 +729,9 @@ struct linsolve_general_struct<struct_banded,struct_dense,V1,V2>
             throw error::error_singular();
 
         //solve
-        MB Ac   = raw::converter<MB,M1>::eval(AFM);
-        M Bc    = raw::converter<M,M2>::eval(B.make_unique());
+        const MB& Ac    = raw::converter<MB,M1>::eval(AFM);
+        const M& Bc0    = raw::converter<M,M2>::eval(B.make_unique());
+        M Bc            = M(Bc0, M::copy_is_safe());
 
         if (trans != trans_type::no_trans)
             std::swap(p,q);

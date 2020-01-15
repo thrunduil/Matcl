@@ -33,15 +33,16 @@ class givens_q : public unitary_matrix_data
 {
     private:
         using VR    = typename md::real_type<Val>::type;
+
         using Mat   = raw::Matrix<Val,struct_dense>;
         using Mat_R = raw::Matrix<VR,struct_dense>;
         using Mat_I = raw::Matrix<Integer,struct_dense>;
 
     public:
         Integer                 m_mat_size;
-        Mat_R                   m_C;
-        Mat                     m_S;
-        Mat_I                   m_I;
+        mr::const_matrix<Mat_R> m_C;
+        mr::const_matrix<Mat>   m_S;
+        mr::const_matrix<Mat_I> m_I;
         bool                    m_from_left;
 
     private:
@@ -52,7 +53,7 @@ class givens_q : public unitary_matrix_data
 
         virtual ~givens_q();
 
-        Integer                 seq_size() const                { return m_I.rows(); };
+        Integer                 seq_size() const                { return m_I.get().rows(); };
 
         virtual Integer         rows() const override           { return m_mat_size; }
         virtual Integer         cols() const override           { return m_mat_size; }

@@ -38,8 +38,9 @@ class householder_q : public unitary_matrix_data
         Integer                 m_mat_cols;
         Integer                 m_ldiags;
         Integer                 m_offset;
-        Mat                     m_reflectors;
-        Mat                     m_tau_vec;
+
+        mr::const_matrix<Mat>   m_reflectors;
+        mr::const_matrix<Mat>   m_tau_vec;
 
     private:
         householder_q();
@@ -49,8 +50,8 @@ class householder_q : public unitary_matrix_data
 
         virtual ~householder_q();
 
-        Integer                 rep_rows() const                { return m_reflectors.rows(); };
-        Integer                 number_reflectors() const       { return std::min(m_mat_cols, m_tau_vec.length()); };
+        Integer                 rep_rows() const                { return m_reflectors.get().rows(); };
+        Integer                 number_reflectors() const       { return std::min(m_mat_cols, m_tau_vec.get().length()); };
         Integer                 reflector_length() const        { return rep_rows(); };
         virtual Integer         rows() const override           { return rep_rows(); }
         virtual Integer         cols() const override           { return m_mat_cols; }
@@ -85,13 +86,16 @@ template<class Val>
 class householder_band_q : public unitary_matrix_data
 {
     private:
-        using Mat_D = raw::Matrix<Val,struct_dense>;
-        using Mat_B = raw::Matrix<Val,struct_banded>;
+        using Mat_D     = raw::Matrix<Val,struct_dense>;
+        using Mat_B     = raw::Matrix<Val,struct_banded>;
+        using Mat_BC    = raw::const_matrix<Mat_B>; 
+        using Mat_DC    = raw::const_matrix<Mat_D>; 
 
     public:
-        Integer                 m_mat_cols;
-        Mat_B                   m_reflectors;
-        Mat_D                   m_tau_vec;
+        Integer         m_mat_cols;
+
+        Mat_BC          m_reflectors;
+        Mat_DC          m_tau_vec;
 
     private:
         householder_band_q();
@@ -101,8 +105,8 @@ class householder_band_q : public unitary_matrix_data
 
         virtual ~householder_band_q();
 
-        Integer                 rep_rows() const                { return m_reflectors.rows(); };
-        Integer                 number_reflectors() const       { return std::min(m_mat_cols, m_tau_vec.length()); };
+        Integer                 rep_rows() const                { return m_reflectors.get().rows(); };
+        Integer                 number_reflectors() const       { return std::min(m_mat_cols, m_tau_vec.get().length()); };
         Integer                 reflector_length() const        { return rep_rows(); };
 
         virtual Integer         rows() const override           { return rep_rows(); }

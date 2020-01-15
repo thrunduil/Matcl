@@ -64,8 +64,8 @@ struct linsolve_triang_str<struct_dense,struct_dense,V1,V2>
         using V = typename unify_types<V1,V2>::type;
         using M = raw::Matrix<V,struct_dense>;
 
-        M Ac    = raw::converter<M,M1>::eval(A);
-        M Bc    = raw::converter<M,M2>::eval(B.make_unique());
+        const M& Ac = raw::converter<M,M1>::eval(A);
+        M Bc        = M(raw::converter<M,M2>::eval(B.make_unique()), M::copy_is_safe());
 
         if (trans != trans_type::no_trans)
             std::swap(p,q);
@@ -142,8 +142,8 @@ struct linsolve_triang_str<struct_dense,struct_dense,V1,V2>
         using V     = typename unify_types<V1,V2>::type;
         using M     = raw::Matrix<V,struct_dense>;
 
-        M Ac    = raw::converter<M,M1>::eval(A);
-        M Bc    = raw::converter<M,M2>::eval(B.make_unique());
+        const M& Ac = raw::converter<M,M1>::eval(A);
+        M Bc        = M(raw::converter<M,M2>::eval(B.make_unique()), M::copy_is_safe());
 
         if (trans != trans_type::no_trans)
             std::swap(p,q);
@@ -296,8 +296,10 @@ struct linsolve_triang_str<struct_banded,struct_dense,V1,V2>
         using MA    = raw::Matrix<V,struct_banded>;
         using MB    = raw::Matrix<V,struct_dense>;
 
-        MA Ac   = raw::converter<MA,M1>::eval(A);
-        MB Bc   = raw::converter<MB,M2>::eval(B.make_unique());
+        const MA& Ac    = raw::converter<MA,M1>::eval(A);
+        const MB& Bc0   = raw::converter<MB,M2>::eval(B.make_unique());
+
+        MB Bc       = MB(Bc0, MB::copy_is_safe());
 
         Integer off = 0;
        
@@ -380,8 +382,10 @@ struct linsolve_triang_str<struct_banded,struct_dense,V1,V2>
         using MA    = raw::Matrix<V,struct_banded>;
         using MB    = raw::Matrix<V,struct_dense>;
 
-        MA Ac   = raw::converter<MA,M1>::eval(A);
-        MB Bc   = raw::converter<MB,M2>::eval(B.make_unique());
+        const MA& Ac   = raw::converter<MA,M1>::eval(A);
+        const MB& Bc0  = raw::converter<MB,M2>::eval(B.make_unique());
+
+        MB Bc       = MB(Bc0, MB::copy_is_safe());
 
         Integer off = 0;
        

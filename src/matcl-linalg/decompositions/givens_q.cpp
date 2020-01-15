@@ -76,10 +76,10 @@ struct givens_mult_struct<Val1, Val2, struct_dense>
         const char* TRANS   = get_trans_char(t_unitary);
         Integer K           = data.seq_size();
 
-        const VR* ptr_C     = data.m_C.ptr();
-        const Val1* ptr_S   = data.m_S.ptr();
-        const Integer*ptr_I = data.m_I.ptr();
-        Integer I_ld        = data.m_I.ld();
+        const VR* ptr_C     = data.m_C.get().ptr();
+        const Val1* ptr_S   = data.m_S.get().ptr();
+        const Integer*ptr_I = data.m_I.get().ptr();
+        Integer I_ld        = data.m_I.get().ld();
 
         const Integer* ptr_I1   = ptr_I;
         const Integer* ptr_I2   = ptr_I + I_ld;
@@ -136,10 +136,10 @@ struct givens_mult_struct<Val1, Val2, struct_dense>
         const char* TRANS   = get_trans_char(t_unitary);
         Integer K           = data.seq_size();
 
-        const VR* ptr_C     = data.m_C.ptr();
-        const Val1* ptr_S   = data.m_S.ptr();
-        const Integer*ptr_I = data.m_I.ptr();
-        Integer I_ld        = data.m_I.ld();
+        const VR* ptr_C     = data.m_C.get().ptr();
+        const Val1* ptr_S   = data.m_S.get().ptr();
+        const Integer*ptr_I = data.m_I.get().ptr();
+        Integer I_ld        = data.m_I.get().ld();
 
         const Integer* ptr_I1   = ptr_I;
         const Integer* ptr_I2   = ptr_I + I_ld;
@@ -438,9 +438,9 @@ void givens_q<Val>::save(oarchive& os) const
     os << this->m_mat_size;
     os << this->m_from_left;
 
-    os.get() << m_C;
-    os.get() << m_S;
-    os.get() << m_I;
+    os.get() << m_C.get();
+    os.get() << m_S.get();
+    os.get() << m_I.get();
 };
 
 template<class Val>
@@ -456,9 +456,17 @@ unitary_matrix_data* givens_q<Val>::load(iarchive& ar)
 
     ret->m_from_left    = fl ? true : false;
 
-    ar.get() >> ret->m_C;
-    ar.get() >> ret->m_S;
-    ar.get() >> ret->m_I;
+    Mat_R C_loc(ret->m_C.get().get_type());
+    Mat   S_loc(ret->m_S.get().get_type());
+    Mat_I I_loc(ret->m_I.get().get_type());
+
+    ar.get() >> C_loc;
+    ar.get() >> S_loc;
+    ar.get() >> I_loc;
+
+    ret->m_C.rebind(C_loc);
+    ret->m_S.rebind(S_loc);
+    ret->m_I.rebind(I_loc);
 
     return ret.release();
 };
@@ -472,9 +480,9 @@ void givens_q<Val>::save(std::ostream& os) const
     os << this->m_mat_size << " ";
     os << this->m_from_left << " ";
 
-    os << Matrix(m_C,false);
-    os << Matrix(m_S,false);
-    os << Matrix(m_I,false);
+    os << Matrix(m_C.get(), false);
+    os << Matrix(m_S.get(), false);
+    os << Matrix(m_I.get(), false);
 };
 
 template<class Val>
@@ -496,9 +504,9 @@ unitary_matrix_data* givens_q<Val>::load(std::istream& is)
     Matrix Sc   = matcl::convert(S, Mat::matrix_code);
     Matrix Ic   = matcl::convert(C, Mat_I::matrix_code);
 
-    ret->m_C.assign_to_fresh(Cc.get_impl<Mat_R>());
-    ret->m_S.assign_to_fresh(Sc.get_impl<Mat>());
-    ret->m_I.assign_to_fresh(Ic.get_impl<Mat_I>());
+    ret->m_C.rebind(Cc.get_impl<Mat_R>());
+    ret->m_S.rebind(Sc.get_impl<Mat>());
+    ret->m_I.rebind(Ic.get_impl<Mat_I>());
 
     return ret.release();
 };
@@ -589,10 +597,10 @@ givens_q<Val>::convert_impl() const
     using Mat_C     = raw::Matrix<TR,struct_dense>;
     using Mat_RC    = raw::Matrix<TRR,struct_dense>;
 
-    Mat_C S         = raw::converter<Mat_C, Mat>::eval(m_S);
-    Mat_RC C        = raw::converter<Mat_RC, Mat_R>::eval(m_C);
+    const Mat_C& S  = raw::converter<Mat_C, Mat>::eval(m_S.get());
+    const Mat_RC& C = raw::converter<Mat_RC, Mat_R>::eval(m_C.get());
 
-    return data_ptr(new givens_q<TR>(m_mat_size, C, S, m_I, m_from_left));
+    return data_ptr(new givens_q<TR>(m_mat_size, C, S, m_I.get(), m_from_left));
 };
 
 template class givens_q<Real>;

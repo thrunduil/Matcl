@@ -473,8 +473,8 @@ struct scal
         // in order to obtain NaN * m = dense NaN matrix
         if (is_dense == false && is_fin == false )
         {            
-            using Mat_F = raw::Matrix<Val,struct_dense>;
-            Mat_F m_f   = raw::converter<Mat_F, Mat>::eval(m);
+            using Mat_F         = raw::Matrix<Val,struct_dense>;
+            const Mat_F& m_f    = raw::converter<Mat_F, Mat>::eval(m);
 
             return scal<Val_ret, Mat_F, T>::eval(ret, m_f, a, t);
         };
@@ -574,8 +574,8 @@ struct eval_mult_abs_0
     static void eval(matcl::Matrix& ret, const M1& A, const M2& X, 
                      trans_type t_A, const matcl::Matrix& C0)
     {
-        const M1_conv Ac    = raw::converter<M1_conv,M1>::eval(A);
-        const M2_conv Xc    = raw::converter<M2_conv,M2>::eval(X);
+        const M1_conv& Ac   = raw::converter<M1_conv,M1>::eval(A);
+        const M2_conv& Xc   = raw::converter<M2_conv,M2>::eval(X);
         matcl::Matrix C     = convert(C0, MC_conv::matrix_code);
         const MC_conv& Cc   = C.get_impl<MC_conv>();
 
@@ -605,8 +605,8 @@ struct eval_mult_abs_0_scal
     static void eval(matcl::Matrix& ret, const M1& mat, const S2& scal, 
                      trans_type t_A, const matcl::Matrix& C0)
     {
-        const M1_conv Ac    = raw::converter<M1_conv,M1>::eval(mat);
-        const M2_conv Xc    = raw::converter<M2_conv,S2>::eval(scal);
+        const M1_conv& Ac   = raw::converter<M1_conv,M1>::eval(mat);
+        const M2_conv& Xc   = raw::converter<M2_conv,S2>::eval(scal);
         matcl::Matrix C     = convert(C0, MC_conv::matrix_code);
         const MC_conv& Cc   = C.get_impl<MC_conv>();
 

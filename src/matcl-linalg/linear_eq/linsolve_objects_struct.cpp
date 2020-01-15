@@ -1576,7 +1576,7 @@ struct eval_inv_triang<V,struct_dense>
         Integer N           = LU.rows();
 
         Matrix LU_s         = convert(LU, Mat::matrix_code);
-        Mat A               = LU_s.get_impl_unique<Mat>();
+        Mat& A              = LU_s.get_impl_unique<Mat>();
 
         Integer info;
         lapack::trtri(UPLO, DIAG, N, lap(A.ptr()), A.ld(), info);

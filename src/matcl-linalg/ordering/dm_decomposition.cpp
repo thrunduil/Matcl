@@ -130,7 +130,7 @@ struct dmperm_impl<V,struct_sparse>
         Matrix At(A, false);
         At          = trans(At);
         At          = convert(At, Mat::matrix_code);
-        Mat raw_At  = At.get_impl_unique<Mat>();
+        Mat& raw_At = At.get_impl_unique<Mat>();
 
         if (A.rows() >= A.cols())
             eval_impl(A, raw_At, false, ret);

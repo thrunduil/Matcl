@@ -126,7 +126,7 @@ void arpack_wrapper<T>::calculate(Integer k, bool return_nonconverged)
     prepare_integer_arrays();
     prepare_arrays();
 
-    Mat_D v     = m_v.get_impl_unique<Mat_D>();
+    Mat_D& v    = m_v.get_impl_unique<Mat_D>();
     m_ldv       = v.ld();
 
     Integer xyaupd_info = do_arpack_loop(v);
@@ -341,7 +341,8 @@ void arpack_wrapper<T>::process_xyeupd(Integer xyaupd_info, bool return_nonconve
             break;
     }
 
-    Mat_D eig       = mat_eig.get_impl_unique<Mat_D>();
+    Mat_D& eig  = mat_eig.get_impl_unique<Mat_D>();
+
     call_xyeupd(info, v, eig);
 
     bool info_nconv = (info == -14) ;
@@ -458,7 +459,7 @@ void arpack_wrapper<T>::extract_H(Integer results_to_return)
     Integer ldh         = m_num_vec;
 
     m_T_result          = make_dense_noinit(results_to_return, results_to_return, get_value_code());
-    Mat_D mat_T         = m_T_result.get_impl_unique<Mat_D>();
+    Mat_D& mat_T        = m_T_result.get_impl_unique<Mat_D>();
     T* ptr_T            = mat_T.ptr();
     Integer T_ld        = mat_T.ld();
 

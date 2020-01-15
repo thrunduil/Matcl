@@ -850,7 +850,7 @@ struct hess_eig_dense<V,false>
             return init_mat.get_impl<Mat>().make_unique();
 
         Matrix mat_VLR = convert(init_mat, Mat::matrix_code);
-        return mat_VLR.get_impl_unique<Mat>();
+        return Mat(mat_VLR.get_impl_unique<Mat>(), Mat::copy_is_safe());
     };
 };
 

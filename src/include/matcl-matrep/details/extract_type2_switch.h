@@ -139,8 +139,11 @@ struct extract_type2_switch_impl
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return derived::template eval_mat_mat<MT1,MT2>(corrector::convert_1(A), 
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return derived::template eval_mat_mat<MT1,MT2>(corrector::convert_1(A, tmp1), 
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 
     template<class ... Args>
@@ -150,8 +153,11 @@ struct extract_type2_switch_impl
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return derived::template eval_mat_scal<MT1,MT2>(corrector::convert_1(A),
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return derived::template eval_mat_scal<MT1,MT2>(corrector::convert_1(A, tmp1),
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 
     template<class ... Args>
@@ -161,8 +167,11 @@ struct extract_type2_switch_impl
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return derived::template eval_scal_mat<MT1,MT2>(corrector::convert_1(A),
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return derived::template eval_scal_mat<MT1,MT2>(corrector::convert_1(A, tmp1),
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 
     template<class ... Args>
@@ -172,8 +181,11 @@ struct extract_type2_switch_impl
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return derived::template eval_scal_scal<MT1,MT2>(corrector::convert_1(A),
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return derived::template eval_scal_scal<MT1,MT2>(corrector::convert_1(A, tmp1),
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 };
 
@@ -188,8 +200,11 @@ struct extract_type2_switch_impl<ret,derived,val_corrector,T1,T2,ver_nonstatic>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return d->template eval_mat_mat<MT1,MT2>(corrector::convert_1(A), 
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return d->template eval_mat_mat<MT1,MT2>(corrector::convert_1(A, tmp1), 
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 
     template<class ... Args>
@@ -199,8 +214,11 @@ struct extract_type2_switch_impl<ret,derived,val_corrector,T1,T2,ver_nonstatic>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return d->template eval_mat_scal<MT1,MT2>(corrector::convert_1(A), 
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return d->template eval_mat_scal<MT1,MT2>(corrector::convert_1(A, tmp1), 
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 
     template<class ... Args>
@@ -210,8 +228,11 @@ struct extract_type2_switch_impl<ret,derived,val_corrector,T1,T2,ver_nonstatic>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return d->template eval_scal_mat<MT1,MT2>(corrector::convert_1(A), 
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return d->template eval_scal_mat<MT1,MT2>(corrector::convert_1(A, tmp1), 
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 
     template<class ... Args>
@@ -221,8 +242,11 @@ struct extract_type2_switch_impl<ret,derived,val_corrector,T1,T2,ver_nonstatic>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        return d->template eval_scal_scal<MT1,MT2>(corrector::convert_1(A),
-                            corrector::convert_2(B), std::forward<Args>(args)...);
+        matcl::Matrix tmp1;
+        matcl::Matrix tmp2;
+
+        return d->template eval_scal_scal<MT1,MT2>(corrector::convert_1(A, tmp1),
+                            corrector::convert_2(B, tmp2), std::forward<Args>(args)...);
     };
 };
 
@@ -259,10 +283,14 @@ struct extract_type2_switch_nc_impl<ret,derived,true,T1,T2>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        h = Matrix(corrector::convert_1(A), false);
+        {
+            Matrix tmp;
+            h = Matrix(corrector::convert_1(A, tmp), false);
+        };
 
+        Matrix tmp_B;
         return d->template eval_mat_mat<MT1,MT2>(h, h.get_impl_unique<MT1>(), 
-                                                 corrector::convert_2(B));
+                                                 corrector::convert_2(B, tmp_B));
     };
 
     static ret eval_mat_scal(derived* d, Matrix& h, T1& A, const T2& B)
@@ -271,10 +299,14 @@ struct extract_type2_switch_nc_impl<ret,derived,true,T1,T2>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        h = Matrix(corrector::convert_1(A), false);
+        {
+            Matrix tmp;
+            h = Matrix(corrector::convert_1(A, tmp), false);
+        };
 
+        Matrix tmp_B;
         return d->template  eval_mat_scal<MT1,MT2>(h, h.get_impl_unique<MT1>(), 
-                                                   corrector::convert_2(B));
+                                                   corrector::convert_2(B, tmp_B));
     };
 
     static ret eval_scal_mat(derived* d, Matrix& h, T1& A, const T2& B)
@@ -283,9 +315,14 @@ struct extract_type2_switch_nc_impl<ret,derived,true,T1,T2>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        h = Matrix(corrector::convert_1(A), false);
+        {
+            Matrix tmp;
+            h = Matrix(corrector::convert_1(A, tmp), false);
+        };
 
-        return d->template eval_scal_mat<MT1,MT2>(h,h.get_scalar_unique<MT1>(), corrector::convert_2(B));
+        Matrix tmp_B;
+        return d->template eval_scal_mat<MT1,MT2>(h,h.get_scalar_unique<MT1>(), 
+                                                  corrector::convert_2(B, tmp_B));
     };
 
     static ret eval_scal_scal(derived* d, Matrix& h, T1& A, const T2& B)
@@ -294,9 +331,14 @@ struct extract_type2_switch_nc_impl<ret,derived,true,T1,T2>
         using MT1       = typename corrector::type_1;
         using MT2       = typename corrector::type_2;
 
-        h = Matrix(corrector::convert_1(A), false);
+        {
+            Matrix tmp;
+            h = Matrix(corrector::convert_1(A ,tmp), false);
+        };
         
-        return d->template eval_scal_scal<MT1,MT2>(h,h.get_scalar_unique<MT1>(), corrector::convert_2(B));
+        Matrix tmp_B;
+        return d->template eval_scal_scal<MT1,MT2>(h,h.get_scalar_unique<MT1>(), 
+                                                   corrector::convert_2(B, tmp_B));
     };
 };
 

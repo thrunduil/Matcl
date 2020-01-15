@@ -27,7 +27,12 @@
 
 namespace matcl { namespace raw 
 {
-    
+   
+// representation of a dense matrix; 
+// this object cannot be copied unless copy is marked as safe, i.e.
+// modification is possible only if object is unique. One can make
+// copy of this object using const_matrix wrapper, which allows for
+// const access only
 template<class value_type_>
 class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense> 
     : public dense_matrix_base<value_type_>
@@ -56,8 +61,8 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
         Matrix(tinfo ti);
         Matrix(tinfo ti,Integer r, Integer c);
                 
-        Matrix(Matrix &&mat);        
-        Matrix(base_type &&mat);
+        Matrix(Matrix&& mat);        
+        Matrix(base_type&& mat);
 
         // mark copying as safe; copy is safe if returned object is not modified
         // unless is unique
@@ -127,8 +132,7 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
 
         using base_type::ptr;
 
-    public:
-        //TODO
+    private:
         Matrix(const Matrix &mat);
         Matrix(const base_type &mat);
 };

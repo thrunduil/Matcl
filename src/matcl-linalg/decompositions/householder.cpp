@@ -195,12 +195,12 @@ struct construct_str2
 
     static void eval_house_to_unit(unitary_matrix& ret, const Mat1& T, const Mat2& tau, Integer cols)
     {
-        Mat_D tau_c  = raw::converter<Mat_D,Mat2>::eval(tau);
+        const Mat_D& tau_c  = raw::converter<Mat_D,Mat2>::eval(tau);
         return construct_str<V,S1>::eval_house_to_unit(ret,T,tau_c, cols);
     };
     static void eval_house_WY(Matrix& ret, const Mat1& T, const Mat2& tau)
     {
-        Mat_D tau_c  = raw::converter<Mat_D,Mat2>::eval(tau);
+        const Mat_D& tau_c  = raw::converter<Mat_D,Mat2>::eval(tau);
         return construct_str<V,S1>::eval_house_WY(ret,T,tau_c);
     };
 };

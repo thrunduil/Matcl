@@ -786,14 +786,14 @@ struct symprod_helper_sparse
         {
             if (is_herprod == false)
             {
-                matcl::Matrix At    = matcl::trans(matcl::Matrix(A,false));
-                matrix_type A2      = At.get_impl<matrix_type>();
+                matcl::Matrix At        = matcl::trans(matcl::Matrix(A,false));
+                const matrix_type& A2   = At.get_impl<matrix_type>();
                 return eval(ret,A2,true);
             }
             else
             {
-                matcl::Matrix At    = matcl::ctrans(matcl::Matrix(A,false));
-                matrix_type A2      = At.get_impl<matrix_type>();
+                matcl::Matrix At        = matcl::ctrans(matcl::Matrix(A,false));
+                const matrix_type& A2   = At.get_impl<matrix_type>();
                 return eval(ret, A2,true);
             };
         };

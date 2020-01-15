@@ -80,7 +80,7 @@ void scotch_mesh_wrapper::make_ordering()
     value_code vc0  = m_A.get_value_code();
     Matrix dum      = zeros(0,0,vc0);
 
-    auto fun        = [this](auto mat) {return this->make_ordering_impl(mat); };
+    auto fun        = [this](const auto& mat) {return this->make_ordering_impl(mat); };
 
     return eval_mat(dum, fun);
 };

@@ -89,7 +89,7 @@ struct make_copy<VTR,VTR>
     static ret_type eval(const in_type& X, Integer M, Integer N)
     {
         if (X.is_unique() && M == X.rows() && N == X.cols())
-            return X;
+            return ret_type(X, ret_type::copy_is_safe());
         else if (M == X.rows() && N == X.cols())
             return X.copy();
         else

@@ -21,9 +21,19 @@
 #pragma once
 
 #include "linsolve_objects_struct.h"
+#include "matcl-internals/container/const_matrix.h"
 
 namespace matcl { namespace details
 {
+
+namespace mr = matcl::raw;
+
+// return type T
+template<class V, class T>
+struct dependent_type
+{
+    using type = T;
+};
 
 class linsolve_obj_lu_factors : public linsolve_obj_seq_2
 {
@@ -143,12 +153,15 @@ class linsolve_obj_lu_dense : public linsolve_obj_base
 {
     private:
         using Mat       = raw::Matrix<V, struct_dense>;
-        using Mat_I     = raw::Matrix<Integer, struct_dense>;        
+        using Integer_t = typename dependent_type<V, Integer>::type;
+        using Mat_I     = raw::Matrix<Integer_t, struct_dense>;        
+
+        using Mat_c     = mr::const_matrix<Mat>;
 
     private:
-        Mat                     m_A;
-        Mat                     m_A_decomp;
-        Mat_I                   m_piv;
+        mr::const_matrix<Mat>   m_A;
+        mr::const_matrix<Mat>   m_A_decomp;
+        mr::const_matrix<Mat_I> m_piv;
 
     public:
         linsolve_obj_lu_dense(const Mat& A, const Mat& A_decomp, const Mat_I& ipiv,
@@ -192,7 +205,7 @@ class linsolve_obj_lu_dense : public linsolve_obj_base
         void                    solve_rev_impl(Matrix& ret, Matrix& X, trans_type tA) const;
 
     private:
-        void                    correct_singular(Mat& m_A_decomp, const options& opts);
+        void                    correct_singular(Mat_c& m_A_decomp, const options& opts);
 };
 
 template<class V>
@@ -200,12 +213,16 @@ class linsolve_obj_lu_band : public linsolve_obj_base
 {
     private:
         using Mat       = raw::Matrix<V, struct_banded>;
-        using Mat_I     = raw::Matrix<Integer, struct_dense>;
+        using Integer_t = typename dependent_type<V, Integer>::type;
+        using Mat_I     = raw::Matrix<Integer_t, struct_dense>;
+        using Mat_c     = raw::const_matrix<Mat>;
+        using Mat_Ic    = raw::const_matrix<Mat_I>;
 
     private:
-        Mat                     m_A_decomp;
-        Mat                     m_A;
-        Mat_I                   m_piv;
+        Mat_c                   m_A_decomp;
+        Mat_c                   m_A;
+        Mat_Ic                  m_piv;
+
         Integer                 m_N;
         Integer                 m_ldiags;
         Integer                 m_udiags;
@@ -252,7 +269,7 @@ class linsolve_obj_lu_band : public linsolve_obj_base
         void                    solve_rev_impl(Matrix& ret, Matrix& X, trans_type tA) const;
 
     private:
-        void                    correct_singular(Mat& m_A_decomp, const options& opts);
+        void                    correct_singular(Mat_c& m_A_decomp, const options& opts);
 };
 
 template<class V>
@@ -264,10 +281,14 @@ class linsolve_obj_chol_tridiag_fac : public linsolve_obj_base
         using Mat_R             = raw::Matrix<VR,struct_dense>;
         using Mat_B             = raw::Matrix<V,struct_banded>;
 
+        using Mat_Bc            = raw::const_matrix<Mat_B>;
+        using Mat_Rc            = raw::const_matrix<Mat_R>;
+        using Mat_c             = raw::const_matrix<Mat>;
+
     private:
-        Mat_B                   m_A;
-        Mat_R                   m_D0_i;
-        Mat                     m_D1_i;
+        Mat_Bc                  m_A;
+        Mat_Rc                  m_D0_i;
+        Mat_c                   m_D1_i;
 
     public:
         linsolve_obj_chol_tridiag_fac(const Mat_B& A, const Mat_R& D0_i, const Mat& D1_i,
@@ -320,18 +341,24 @@ class linsolve_obj_tridiag_fac : public linsolve_obj_base
 {
     private:
         using VR                = typename real_type<V>::type;
+        using Integer_t         = typename dependent_type<V, Integer>::type;
+
         using Mat               = raw::Matrix<V,struct_dense>;
         using Mat_R             = raw::Matrix<VR,struct_dense>;
         using Mat_B             = raw::Matrix<V,struct_banded>;
-        using Mat_I             = raw::Matrix<Integer,struct_dense>;
+        using Mat_I             = raw::Matrix<Integer_t,struct_dense>;
+
+        using Mat_Bc            = raw::const_matrix<Mat_B>;
+        using Mat_Ic            = raw::const_matrix<Mat_I>;
+        using Mat_c             = raw::const_matrix<Mat>;
 
     private:
-        Mat_B                   m_A;
-        Mat                     m_Dm1_i;
-        Mat                     m_D0_i;
-        Mat                     m_Dp1_i;
-        Mat                     m_Dp2_i;
-        Mat_I                   m_piv;
+        Mat_Bc                  m_A;
+        Mat_c                   m_Dm1_i;
+        Mat_c                   m_D0_i;
+        Mat_c                   m_Dp1_i;
+        Mat_c                   m_Dp2_i;
+        Mat_Ic                  m_piv;
 
     public:
         linsolve_obj_tridiag_fac(const Mat_B& A, const Mat& Dm1_i, const Mat& D0_i, const Mat& Dp1_i,

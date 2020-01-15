@@ -376,14 +376,14 @@ linsolve_obj_lu_dense<V>::~linsolve_obj_lu_dense()
 {};
 
 template<class V>
-void linsolve_obj_lu_dense<V>::correct_singular(Mat& A, const options& opts)
+void linsolve_obj_lu_dense<V>::correct_singular(Mat_c& A, const options& opts)
 {
     using VR    = typename md::real_type<V>::type;
 
-    Real tol    = opts.get_option<Real>(opt::linsolve::tol_sing());
-    Integer N   = A.rows();
-    Integer ld  = A.ld();
-    V* ptr      = A.ptr();
+    Real tol        = opts.get_option<Real>(opt::linsolve::tol_sing());
+    Integer N       = A.get().rows();
+    Integer ld      = A.get().ld();
+    const V* ptr    = A.get().ptr();
 
     // calculate small pivot tolerance
     if (tol >= 0.0)
@@ -442,19 +442,20 @@ void linsolve_obj_lu_dense<V>::correct_singular(Mat& A, const options& opts)
     if (need_modif == false)
         return;
 
-    A.assign_to_fresh(A.make_unique());
+    Mat A2          = A.get().make_unique();
+    m_A.rebind(A2);
 
-    ptr         = A.ptr();
-    ld          = A.ld();
+    V* ptr2     = A2.ptr();
+    ld          = A2.ld();
 
     for (; j < N; ++j)
     {
-        VR val  = abs(ptr[0]);
+        VR val  = abs(ptr2[0]);
 
         if (val < tol_t)
-            ptr[0]  = tol_t * (val == VR(0.0) ? VR(1.0) : sign(ptr[0]));
+            ptr2[0]  = tol_t * (val == VR(0.0) ? VR(1.0) : sign(ptr2[0]));
 
-        ptr     += ld + 1;
+        ptr2    += ld + 1;
     };
 
     m_modified  = true;
@@ -480,21 +481,21 @@ linsolve_obj_lu_dense<V>::convert_impl() const
 {
     using Mat_C     = raw::Matrix<T,struct_dense>;
 
-    Mat_C Ac        = raw::converter<Mat_C, Mat>::eval(m_A);
-    Mat_C Ac_dec    = raw::converter<Mat_C, Mat>::eval(m_A_decomp);
+    const Mat_C& Ac     = raw::converter<Mat_C, Mat>::eval(m_A.get());
+    const Mat_C& Ac_dec = raw::converter<Mat_C, Mat>::eval(m_A_decomp.get());
 
-    return data_ptr(new linsolve_obj_lu_dense<T>(Ac, Ac_dec, m_piv, m_modified, from_inv()));
+    return data_ptr(new linsolve_obj_lu_dense<T>(Ac, Ac_dec, m_piv.get(), m_modified, from_inv()));
 };
 
 template<class V>
 matcl::Matrix linsolve_obj_lu_dense<V>::inv() const
 {
     Integer N   = this->rows();
-    Mat X       = m_A_decomp.copy();
+    Mat X       = m_A_decomp.get().copy();
 
     V work_query;
     Integer info;
-    lapack::getri( N, lap(X.ptr()), X.ld(), lap(m_piv.ptr()), lap(&work_query), -1, info);
+    lapack::getri( N, lap(X.ptr()), X.ld(), lap(m_piv.get().ptr()), lap(&work_query), -1, info);
 
     Integer LWORK       = (Integer)real(work_query);
 
@@ -503,7 +504,7 @@ matcl::Matrix linsolve_obj_lu_dense<V>::inv() const
     workspace WORK      = workspace(LWORK);
     V* ptr_WORK         = reinterpret_cast<V*>(WORK.ptr());
 
-    lapack::getri( N, lap(X.ptr()), X.ld(), lap(m_piv.ptr()), lap(ptr_WORK), -1, info);
+    lapack::getri( N, lap(X.ptr()), X.ld(), lap(m_piv.get().ptr()), lap(ptr_WORK), -1, info);
 
     if (info > 0)
         throw error::error_singular();
@@ -522,7 +523,7 @@ matcl::Matrix linsolve_obj_lu_dense<V>::inv() const
 template<class V>
 matcl::Matrix linsolve_obj_lu_dense<V>::base_matrix() const
 {
-    return Matrix(m_A,false);
+    return Matrix(m_A.get(), false);
 };
 
 template<class V>
@@ -597,20 +598,20 @@ template<class V>
 template<class T>
 void linsolve_obj_lu_dense<V>::solve_impl(Matrix& ret, Matrix& X, trans_type tA) const
 {
-    Integer N       = m_A_decomp.rows();
+    Integer N       = m_A_decomp.get().rows();
     Integer Nrhs    = X.cols();
 
     using M         = raw::Matrix<T,struct_dense>;
 
-    const M& Ac     = raw::converter<M,Mat>::eval(m_A_decomp);
+    const M& Ac     = raw::converter<M,Mat>::eval(m_A_decomp.get());
 
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
     // Solve the system A*X = B, overwriting B with X.
-    lapack::getrs( get_trans_code(tA), N, Nrhs, lap(Ac.ptr()), Ac.ld(), lap(m_piv.ptr()), 
+    lapack::getrs( get_trans_code(tA), N, Nrhs, lap(Ac.ptr()), Ac.ld(), lap(m_piv.get().ptr()), 
                 lap(Bc.ptr()), Bc.ld(), &info);
 
     if (info != 0)
@@ -625,19 +626,19 @@ template<class V>
 template<class T>
 void linsolve_obj_lu_dense<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_type tA) const
 {
-    Integer N       = m_A_decomp.rows();
+    Integer N       = m_A_decomp.get().rows();
     Integer Mrhs    = X.rows();
 
     using M         = raw::Matrix<T,struct_dense>;
 
-    const M& Ac     = raw::converter<M,Mat>::eval(m_A_decomp);
+    const M& Ac     = raw::converter<M,Mat>::eval(m_A_decomp.get());
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
     // Solve the system X*A = B, overwriting B with X.
-    lapack::getrs_rev( get_trans_code(tA), N, Mrhs, lap(Ac.ptr()), Ac.ld(), lap(m_piv.ptr()), 
+    lapack::getrs_rev( get_trans_code(tA), N, Mrhs, lap(Ac.ptr()), Ac.ld(), lap(m_piv.get().ptr()), 
                 lap(Bc.ptr()), Bc.ld(), &info);
 
     if (info != 0)
@@ -651,35 +652,35 @@ void linsolve_obj_lu_dense<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_type
 template<class V>
 Real linsolve_obj_lu_dense<V>::mat_normest_1() const
 {
-    return matcl::norm(Matrix(m_A, false), 1.0);
+    return matcl::norm(Matrix(m_A.get(), false), 1.0);
 };
 
 template<class V>
 Real linsolve_obj_lu_dense<V>::mat_normest_inf() const
 {
-    return norm(Matrix(m_A, false), constants::inf());
+    return norm(Matrix(m_A.get(), false), constants::inf());
 };
 
 template<class V>
 bool linsolve_obj_lu_dense<V>::is_hermitian() const
 {
     bool is_real = details::is_complex<V>::value == false;
-    return m_A.get_struct().is_hermitian(m_A.rows() == m_A.cols(), is_real);
+    return m_A.get().get_struct().is_hermitian(m_A.get().rows() == m_A.get().cols(), is_real);
 };
 
 template<class V>
 bool linsolve_obj_lu_dense<V>::is_posdef() const
 {
-    return matcl::is_posdef(m_A.get_struct());
+    return matcl::is_posdef(m_A.get().get_struct());
 };
 
 template<class V>
 Real linsolve_obj_lu_dense<V>::log_det() const
 {
-    Integer M       = m_A_decomp.rows();
-    Integer N       = m_A_decomp.cols();
-    const V* ptr    = m_A_decomp.ptr();
-    Integer ld      = m_A_decomp.ld();
+    Integer M       = m_A_decomp.get().rows();
+    Integer N       = m_A_decomp.get().cols();
+    const V* ptr    = m_A_decomp.get().ptr();
+    Integer ld      = m_A_decomp.get().ld();
 
     Real det        = 0.0;
 
@@ -700,7 +701,7 @@ Matrix linsolve_obj_lu_dense<V>::mmul_right(const Matrix& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
 
-    return mmul(Matrix(m_A, false), X, t);
+    return mmul(Matrix(m_A.get(), false), X, t);
 };
 
 template<class V>
@@ -708,21 +709,21 @@ Matrix linsolve_obj_lu_dense<V>::mmul_right(Matrix&& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
 
-    return mmul(Matrix(m_A, false), std::move(X), t);
+    return mmul(Matrix(m_A.get(), false), std::move(X), t);
 };
 
 template<class V>
 Matrix linsolve_obj_lu_dense<V>::mmul_left(const Matrix& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(X, Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(X, Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template<class V>
 Matrix linsolve_obj_lu_dense<V>::mmul_left(Matrix&& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(std::move(X), Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(std::move(X), Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template class linsolve_obj_lu_dense<Real>;
@@ -741,6 +742,7 @@ linsolve_obj_lu_band<V>::linsolve_obj_lu_band(const Mat& A, const Mat& A_dec, co
 {
     correct_singular(m_A_decomp, opts);
 };
+
 template<class V>
 linsolve_obj_lu_band<V>::linsolve_obj_lu_band(const Mat& A, const Mat& A_dec, const Mat_I& ipiv,
                                                     Integer N, Integer ld, Integer ud, bool modif, from_inv)
@@ -753,9 +755,11 @@ linsolve_obj_lu_band<V>::~linsolve_obj_lu_band()
 {};
 
 template<class V>
-void linsolve_obj_lu_band<V>::correct_singular(Mat& A, const options& opts)
+void linsolve_obj_lu_band<V>::correct_singular(Mat_c& Ac, const options& opts)
 {
     using VR        = typename md::real_type<V>::type;
+
+    const Mat& A    = Ac.get();
     Integer ld      = A.last_diag();
     Integer A_ld    = A.ld();    
 
@@ -767,7 +771,7 @@ void linsolve_obj_lu_band<V>::correct_singular(Mat& A, const options& opts)
         VR val_max  = VR(0.0);
         VR val_min  = VR(1.0);
         Integer s   = A.diag_length(0);
-        V* ptr      = A.rep_ptr() + A.first_elem_diag(0);
+        const V* ptr= A.rep_ptr() + A.first_elem_diag(0);
 
         for (Integer i = 0; i < s; ++i)
         {
@@ -813,7 +817,7 @@ void linsolve_obj_lu_band<V>::correct_singular(Mat& A, const options& opts)
     Integer i;
     {
         Integer s   = A.diag_length(0);
-        V* ptr      = A.rep_ptr() + A.first_elem_diag(0);
+        const V* ptr= A.rep_ptr() + A.first_elem_diag(0);
 
         for (i = 0; i < s; ++i)
         {
@@ -832,12 +836,14 @@ void linsolve_obj_lu_band<V>::correct_singular(Mat& A, const options& opts)
     if (need_modif == false)
         return;
 
-    A.assign_to_fresh(A.make_unique());
-    ld              = A.ld();
+    Mat A2          = A.make_unique();
+    Ac.rebind(A2);
+
+    ld              = A2.ld();
 
     {
-        Integer s   = A.diag_length(0);
-        V* ptr      = A.rep_ptr() + A.first_elem_diag(0);
+        Integer s   = A2.diag_length(0);
+        V* ptr      = A2.rep_ptr() + A2.first_elem_diag(0);
 
         for (; i < s; ++i)
         {
@@ -873,10 +879,10 @@ linsolve_obj_lu_band<V>::convert_impl() const
 {
     using Mat_C     = raw::Matrix<T,struct_banded>;
 
-    Mat_C Ac        = raw::converter<Mat_C, Mat>::eval(m_A);
-    Mat_C Ac_dec    = raw::converter<Mat_C, Mat>::eval(m_A_decomp);
+    const Mat_C& Ac     = raw::converter<Mat_C, Mat>::eval(m_A.get());
+    const Mat_C& Ac_dec = raw::converter<Mat_C, Mat>::eval(m_A_decomp.get());
 
-    return data_ptr(new linsolve_obj_lu_band<T>(Ac, Ac_dec, m_piv, m_N, m_ldiags, m_udiags, 
+    return data_ptr(new linsolve_obj_lu_band<T>(Ac, Ac_dec, m_piv.get(), m_N, m_ldiags, m_udiags, 
                                                 m_modified, from_inv()));
 };
 
@@ -884,13 +890,13 @@ template<class V>
 bool linsolve_obj_lu_band<V>::is_hermitian() const
 {
     bool is_real = details::is_complex<V>::value == false;
-    return m_A.get_struct().is_hermitian(m_A.rows() == m_A.cols(), is_real);
+    return m_A.get().get_struct().is_hermitian(m_A.get().rows() == m_A.get().cols(), is_real);
 };
 
 template<class V>
 bool linsolve_obj_lu_band<V>::is_posdef() const
 {
-    return matcl::is_posdef(m_A.get_struct());
+    return matcl::is_posdef(m_A.get().get_struct());
 };
 
 template<class V>
@@ -914,7 +920,7 @@ matcl::Matrix linsolve_obj_lu_band<V>::inv() const
 template<class V>
 matcl::Matrix linsolve_obj_lu_band<V>::base_matrix() const
 {
-    return Matrix(m_A,false);
+    return Matrix(m_A.get(), false);
 };
 
 template<class V>
@@ -997,13 +1003,13 @@ void linsolve_obj_lu_band<V>::solve_impl(Matrix& ret, Matrix& X, trans_type tA) 
     using M         = raw::Matrix<T,struct_dense>;
     using MB        = raw::Matrix<T,struct_banded>;
 
-    const MB& Ac    = raw::converter<MB,Mat>::eval(m_A_decomp);
+    const MB& Ac    = raw::converter<MB,Mat>::eval(m_A_decomp.get());
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
-    lapack::gbtrs( get_trans_code(tA), N, ld, ud, Nrhs, lap(Ac.rep_ptr()), Ac.ld(), lap(m_piv.ptr()),
+    lapack::gbtrs( get_trans_code(tA), N, ld, ud, Nrhs, lap(Ac.rep_ptr()), Ac.ld(), lap(m_piv.get().ptr()),
                     lap(Bc.ptr()), Bc.ld(), &info );
 
     if (info != 0)
@@ -1027,13 +1033,13 @@ void linsolve_obj_lu_band<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_type 
     using MB        = raw::Matrix<T,struct_banded>;
 
     //solve
-    const MB& Ac    = raw::converter<MB,Mat>::eval(m_A_decomp);
+    const MB& Ac    = raw::converter<MB,Mat>::eval(m_A_decomp.get());
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
-    lapack::gbtrs_rev( get_trans_code(tA), N, ld, ud, Mrhs, lap(Ac.rep_ptr()), Ac.ld(), lap(m_piv.ptr()),
+    lapack::gbtrs_rev( get_trans_code(tA), N, ld, ud, Mrhs, lap(Ac.rep_ptr()), Ac.ld(), lap(m_piv.get().ptr()),
                     lap(Bc.ptr()), Bc.ld(), &info );
 
     if (info != 0)
@@ -1047,8 +1053,8 @@ void linsolve_obj_lu_band<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_type 
 template<class V>
 Real linsolve_obj_lu_band<V>::log_det() const
 {
-    const V* ptr    = m_A_decomp.rep_ptr() + m_A_decomp.first_elem_diag(0);
-    Integer ld      = m_A_decomp.ld();
+    const V* ptr    = m_A_decomp.get().rep_ptr() + m_A_decomp.get().first_elem_diag(0);
+    Integer ld      = m_A_decomp.get().ld();
     Integer M       = m_N;
 
     Real det        = 0.0;
@@ -1065,13 +1071,13 @@ Real linsolve_obj_lu_band<V>::log_det() const
 template<class V>
 Real linsolve_obj_lu_band<V>::mat_normest_1() const
 {
-    return matcl::norm(Matrix(m_A,false), 1.0);
+    return matcl::norm(Matrix(m_A.get(),false), 1.0);
 };
 
 template<class V>
 Real linsolve_obj_lu_band<V>::mat_normest_inf() const
 {
-    return matcl::norm(Matrix(m_A,false), constants::inf());
+    return matcl::norm(Matrix(m_A.get(),false), constants::inf());
 };
 
 template<class V>
@@ -1079,7 +1085,7 @@ Matrix linsolve_obj_lu_band<V>::mmul_right(const Matrix& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
 
-    return mmul(Matrix(m_A, false), X, t);
+    return mmul(Matrix(m_A.get(), false), X, t);
 };
 
 template<class V>
@@ -1087,21 +1093,21 @@ Matrix linsolve_obj_lu_band<V>::mmul_right(Matrix&& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
 
-    return mmul(Matrix(m_A, false), std::move(X), t);
+    return mmul(Matrix(m_A.get(), false), std::move(X), t);
 };
 
 template<class V>
 Matrix linsolve_obj_lu_band<V>::mmul_left(const Matrix& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(X, Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(X, Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template<class V>
 Matrix linsolve_obj_lu_band<V>::mmul_left(Matrix&& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(std::move(X), Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(std::move(X), Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template class linsolve_obj_lu_band<Real>;
@@ -1172,8 +1178,10 @@ linsolve_obj_chol_tridiag_fac<V>::linsolve_obj_chol_tridiag_fac(const Mat_B& A,
 
         if (need_modif == true)
         {
-            m_D0_i.assign_to_fresh(m_D0_i.make_unique());
-            VR* ptr_Dm  = m_D0_i.ptr();
+            Mat_R m_D0_i2   = m_D0_i.get().make_unique();
+            m_D0_i.rebind(m_D0_i2);
+
+            VR* ptr_Dm  = m_D0_i2.ptr();
 
             for (; j < N; ++j)
             {
@@ -1193,8 +1201,8 @@ linsolve_obj_chol_tridiag_fac<V>::linsolve_obj_chol_tridiag_fac(const Mat_B& A,
 template<class V>
 void linsolve_obj_chol_tridiag_fac<V>::test_singular() const
 {
-    Integer N       = m_D0_i.rows();
-    const VR* ptr_D = m_D0_i.ptr();
+    Integer N       = m_D0_i.get().rows();
+    const VR* ptr_D = m_D0_i.get().ptr();
 
     for (Integer i = 0; i < N; ++i)
     {
@@ -1299,10 +1307,11 @@ void linsolve_obj_chol_tridiag_fac<V>::solve_impl(Matrix& ret, Matrix& X, trans_
     using M         = raw::Matrix<T,struct_dense>;
     using MR        = raw::Matrix<TR,struct_dense>;
 
-    const MR& D0c   = raw::converter<MR,Mat_R>::eval(m_D0_i);
-    const M& D1c    = raw::converter<M,Mat>::eval(m_D1_i);
+    const MR& D0c   = raw::converter<MR,Mat_R>::eval(m_D0_i.get());
+    const M& D1c    = raw::converter<M, Mat>::eval(m_D1_i.get());
+
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1329,10 +1338,11 @@ void linsolve_obj_chol_tridiag_fac<V>::solve_rev_impl(Matrix& ret, Matrix& X, tr
     using M         = raw::Matrix<T,struct_dense>;
     using MR        = raw::Matrix<TR,struct_dense>;
     
-    const MR& D0c   = raw::converter<MR,Mat_R>::eval(m_D0_i);
-    const M& D1c    = raw::converter<M,Mat>::eval(m_D1_i);
+    const MR& D0c   = raw::converter<MR,Mat_R>::eval(m_D0_i.get());
+    const M& D1c    = raw::converter<M,Mat>::eval(m_D1_i.get());
+
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
@@ -1356,8 +1366,8 @@ Real linsolve_obj_chol_tridiag_fac<V>::log_det() const
 {
     Integer M       = m_N;
 
-    const VR* ptr   = m_D0_i.ptr();
-    Integer st      = m_D0_i.cols() == M ? m_D0_i.ld() : 1;
+    const VR* ptr   = m_D0_i.get().ptr();
+    Integer st      = m_D0_i.get().cols() == M ? m_D0_i.get().ld() : 1;
 
     Real det        = 0.0;
 
@@ -1381,8 +1391,8 @@ Real linsolve_obj_chol_tridiag_fac<V>::normest_1() const
 {
     using VL            = typename details::lapack_value_type<V>::type;
     Integer N           = this->rows();
-    const VR* D         = m_D0_i.ptr();
-    const V* E          = m_D1_i.ptr();
+    const VR* D         = m_D0_i.get().ptr();
+    const V* E          = m_D1_i.get().ptr();
 
     using workspace     = matcl::pod_workspace<VR>;
     workspace WORK      = workspace(N);
@@ -1398,46 +1408,46 @@ Real linsolve_obj_chol_tridiag_fac<V>::normest_1() const
 template<class V>
 matcl::Matrix linsolve_obj_chol_tridiag_fac<V>::base_matrix() const
 {
-    return Matrix(m_A,false);
+    return Matrix(m_A.get(), false);
 };
 template<class V>
 Real linsolve_obj_chol_tridiag_fac<V>::mat_normest_1() const
 {
-    return matcl::norm(Matrix(m_A,false), 1.0);
+    return matcl::norm(Matrix(m_A.get(), false), 1.0);
 };
 
 template<class V>
 Real linsolve_obj_chol_tridiag_fac<V>::mat_normest_inf() const
 {
-    return matcl::norm(Matrix(m_A,false), constants::inf());
+    return matcl::norm(Matrix(m_A.get(), false), constants::inf());
 };
 
 template<class V>
 Matrix linsolve_obj_chol_tridiag_fac<V>::mmul_right(const Matrix& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
-    return mmul(Matrix(m_A, false), X, t);
+    return mmul(Matrix(m_A.get(), false), X, t);
 };
 
 template<class V>
 Matrix linsolve_obj_chol_tridiag_fac<V>::mmul_right(Matrix&& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
-    return mmul(Matrix(m_A, false), std::move(X), t);
+    return mmul(Matrix(m_A.get(), false), std::move(X), t);
 };
 
 template<class V>
 Matrix linsolve_obj_chol_tridiag_fac<V>::mmul_left(const Matrix& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(X, Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(X, Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template<class V>
 Matrix linsolve_obj_chol_tridiag_fac<V>::mmul_left(Matrix&& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(std::move(X), Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(std::move(X), Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template<class V>
@@ -1463,9 +1473,9 @@ linsolve_obj_chol_tridiag_fac<V>::convert_impl() const
     using Mat_BC    = raw::Matrix<T,struct_banded>;
     using Mat_RC    = raw::Matrix<TR,struct_dense>;
 
-    Mat_BC Ac       = raw::converter<Mat_BC, Mat_B>::eval(m_A);
-    Mat_RC D0_ic    = raw::converter<Mat_RC, Mat_R>::eval(m_D0_i);    
-    Mat_C D1_ic     = raw::converter<Mat_C, Mat>::eval(m_D1_i);
+    const Mat_BC& Ac    = raw::converter<Mat_BC, Mat_B>::eval(m_A.get());
+    const Mat_RC& D0_ic = raw::converter<Mat_RC, Mat_R>::eval(m_D0_i.get());    
+    const Mat_C& D1_ic  = raw::converter<Mat_C, Mat>::eval(m_D1_i.get());
 
     return data_ptr(new linsolve_obj_chol_tridiag_fac<T>(Ac, D0_ic, D1_ic, m_modified, from_inv()));
 };
@@ -1511,8 +1521,8 @@ linsolve_obj_tridiag_fac<V>::linsolve_obj_tridiag_fac(const Mat_B& A, const Mat&
     if (tol != 0.0)
     {
         bool need_modif = false;
-        Integer N       = m_D0_i.length();
-        const V* ptr_D  = m_D0_i.ptr();
+        Integer N       = m_D0_i.get().length();
+        const V* ptr_D  = m_D0_i.get().ptr();
         Integer j;
 
         for (j = 0; j < N; ++j)
@@ -1528,8 +1538,10 @@ linsolve_obj_tridiag_fac<V>::linsolve_obj_tridiag_fac(const Mat_B& A, const Mat&
 
         if (need_modif == true)
         {
-            m_D0_i.assign_to_fresh(m_D0_i.make_unique());
-            V* ptr_D2   = m_D0_i.ptr();
+            Mat m_D0_i2 = m_D0_i.get().make_unique();
+            m_D0_i.rebind(m_D0_i2);
+
+            V* ptr_D2   = m_D0_i2.ptr();
 
             for (; j < N; ++j)
             {
@@ -1643,20 +1655,20 @@ void linsolve_obj_tridiag_fac<V>::solve_impl(Matrix& ret, Matrix& X, trans_type 
 
     using M         = raw::Matrix<T,struct_dense>;
 
-    const M& Dm1c   = raw::converter<M,Mat>::eval(m_Dm1_i);
-    const M& D0c    = raw::converter<M,Mat>::eval(m_D0_i);
-    const M& Dp1c   = raw::converter<M,Mat>::eval(m_Dp1_i);
-    const M& Dp2c   = raw::converter<M,Mat>::eval(m_Dp2_i);
+    const M& Dm1c   = raw::converter<M,Mat>::eval(m_Dm1_i.get());
+    const M& D0c    = raw::converter<M,Mat>::eval(m_D0_i.get());
+    const M& Dp1c   = raw::converter<M,Mat>::eval(m_Dp1_i.get());
+    const M& Dp2c   = raw::converter<M,Mat>::eval(m_Dp2_i.get());
 
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     Integer info;
 
     using VL        = typename md::lapack_value_type<T>::type;
 
     lapack::gttrs<VL>(get_trans_code(tA), N, Nrhs, lap(Dm1c.ptr()), lap(D0c.ptr()), lap(Dp1c.ptr()), 
-                  lap(Dp2c.ptr()), m_piv.ptr(), lap(Bc.ptr()), Bc.ld(), info);
+                  lap(Dp2c.ptr()), m_piv.get().ptr(), lap(Bc.ptr()), Bc.ld(), info);
 
     if (info != 0)
         throw error::error_general("invalid argument passed to gttrs");
@@ -1675,20 +1687,20 @@ void linsolve_obj_tridiag_fac<V>::solve_rev_impl(Matrix& ret, Matrix& X, trans_t
 
     using M         = raw::Matrix<T,struct_dense>;
     
-    const M& Dm1c   = raw::converter<M,Mat>::eval(m_Dm1_i);
-    const M& D0c    = raw::converter<M,Mat>::eval(m_D0_i);
-    const M& Dp1c   = raw::converter<M,Mat>::eval(m_Dp1_i);
-    const M& Dp2c   = raw::converter<M,Mat>::eval(m_Dp2_i);
+    const M& Dm1c   = raw::converter<M,Mat>::eval(m_Dm1_i.get());
+    const M& D0c    = raw::converter<M,Mat>::eval(m_D0_i.get());
+    const M& Dp1c   = raw::converter<M,Mat>::eval(m_Dp1_i.get());
+    const M& Dp2c   = raw::converter<M,Mat>::eval(m_Dp2_i.get());
 
     X               = matcl::convert(X, M::matrix_code);
-    M Bc            = X.get_impl_unique<M>();
+    M& Bc           = X.get_impl_unique<M>();
 
     using VL        = typename md::lapack_value_type<T>::type;
 
     Integer info;
 
     lapack::gttrs_rev<VL>(get_trans_code(tA), N, Mrhs, lap(Dm1c.ptr()), lap(D0c.ptr()), lap(Dp1c.ptr()), 
-                  lap(Dp2c.ptr()), m_piv.ptr(), lap(Bc.ptr()), Bc.ld(), info);
+                  lap(Dp2c.ptr()), m_piv.get().ptr(), lap(Bc.ptr()), Bc.ld(), info);
 
     if (info != 0)
         throw error::error_general("invalid argument passed to gttrs_rev");
@@ -1706,13 +1718,13 @@ linsolve_obj_tridiag_fac<V>::convert_impl() const
     using Mat_C     = raw::Matrix<T,struct_dense>;
     using Mat_BC    = raw::Matrix<T,struct_banded>;
 
-    Mat_BC Ac       = raw::converter<Mat_BC, Mat_B>::eval(m_A);
-    Mat_C Dm1_ic    = raw::converter<Mat_C, Mat>::eval(m_Dm1_i);    
-    Mat_C D0_ic     = raw::converter<Mat_C, Mat>::eval(m_D0_i);    
-    Mat_C Dp1_ic    = raw::converter<Mat_C, Mat>::eval(m_Dp1_i);    
-    Mat_C Dp2_ic    = raw::converter<Mat_C, Mat>::eval(m_Dp2_i);    
+    const Mat_BC& Ac       = raw::converter<Mat_BC, Mat_B>::eval(m_A.get());
+    const Mat_C& Dm1_ic    = raw::converter<Mat_C, Mat>::eval(m_Dm1_i.get());    
+    const Mat_C& D0_ic     = raw::converter<Mat_C, Mat>::eval(m_D0_i.get());    
+    const Mat_C& Dp1_ic    = raw::converter<Mat_C, Mat>::eval(m_Dp1_i.get());    
+    const Mat_C& Dp2_ic    = raw::converter<Mat_C, Mat>::eval(m_Dp2_i.get());    
 
-    return data_ptr(new linsolve_obj_tridiag_fac<T>(Ac, Dm1_ic, D0_ic, Dp1_ic, Dp2_ic, m_piv, 
+    return data_ptr(new linsolve_obj_tridiag_fac<T>(Ac, Dm1_ic, D0_ic, Dp1_ic, Dp2_ic, m_piv.get(), 
                                                     m_modified, from_inv()));
 };
 
@@ -1721,8 +1733,8 @@ Real linsolve_obj_tridiag_fac<V>::log_det() const
 {
     Integer M       = m_N;
 
-    const V* ptr    = m_D0_i.ptr();
-    Integer st      = m_D0_i.cols() == M ? m_D0_i.ld() : 1;
+    const V* ptr    = m_D0_i.get().ptr();
+    Integer st      = m_D0_i.get().cols() == M ? m_D0_i.get().ld() : 1;
 
     Real det        = 0.0;
 
@@ -1738,46 +1750,46 @@ Real linsolve_obj_tridiag_fac<V>::log_det() const
 template<class V>
 matcl::Matrix linsolve_obj_tridiag_fac<V>::base_matrix() const
 {
-    return Matrix(m_A,false);
+    return Matrix(m_A.get(), false);
 };
 template<class V>
 Real linsolve_obj_tridiag_fac<V>::mat_normest_1() const
 {
-    return matcl::norm(Matrix(m_A,false), 1.0);
+    return matcl::norm(Matrix(m_A.get(), false), 1.0);
 };
 
 template<class V>
 Real linsolve_obj_tridiag_fac<V>::mat_normest_inf() const
 {
-    return matcl::norm(Matrix(m_A,false), constants::inf());
+    return matcl::norm(Matrix(m_A.get(), false), constants::inf());
 };
 
 template<class V>
 Matrix linsolve_obj_tridiag_fac<V>::mmul_right(const Matrix& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
-    return mmul(Matrix(m_A, false), X, t);
+    return mmul(Matrix(m_A.get(), false), X, t);
 };
 
 template<class V>
 Matrix linsolve_obj_tridiag_fac<V>::mmul_right(Matrix&& X, trans_type t) const
 {
     error::check_mul(this->rows(), this->cols(), X.rows(), X.cols(), t, trans_type::no_trans);
-    return mmul(Matrix(m_A, false), std::move(X), t);
+    return mmul(Matrix(m_A.get(), false), std::move(X), t);
 };
 
 template<class V>
 Matrix linsolve_obj_tridiag_fac<V>::mmul_left(const Matrix& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(X, Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(X, Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template<class V>
 Matrix linsolve_obj_tridiag_fac<V>::mmul_left(Matrix&& X, trans_type t) const
 {
     error::check_mul(X.rows(), X.cols(), this->rows(), this->cols(), trans_type::no_trans, t);
-    return mmul(std::move(X), Matrix(m_A,false), trans_type::no_trans,t);
+    return mmul(std::move(X), Matrix(m_A.get(), false), trans_type::no_trans,t);
 };
 
 template<class V>

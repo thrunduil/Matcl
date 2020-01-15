@@ -57,7 +57,7 @@ class div_functor
             using value_type    = typename md::unify_types2<in_val,ret_val_real,Float>::type;
             using mat_type      = Matrix<value_type,struct_type>;
 
-            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x,ret_ti),true);
+            ret = matcl::Matrix(converter<mat_type,in_type>::eval(x, ret_ti), true);
         };
 
         template<class val_type>

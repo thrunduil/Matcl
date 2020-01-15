@@ -38,7 +38,7 @@ namespace details
 {
 
 // inplace is allowed; refcount must be increased for 
-// nontemporary objects
+// nontemporary objects; TODO
 template<	class ret_type, 
             class in_type, 
             class ret_str,

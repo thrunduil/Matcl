@@ -59,7 +59,7 @@ struct MATCL_MATREP_EXPORT scalfunc_real_helper
         >::type;    
 
     // inplace is allowed; refcount must be increased for 
-    // nontemporary objects
+    // nontemporary objects; TODO
     static void eval_real(matcl::Matrix& ret, const MP& m);
     static void eval_imag(matcl::Matrix& ret, const MP& m);
     static void eval_conj(matcl::Matrix& ret, const MP& m);

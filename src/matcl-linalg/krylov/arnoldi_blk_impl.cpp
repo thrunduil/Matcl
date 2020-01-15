@@ -245,8 +245,8 @@ Integer arnoldi_blk_impl<T>::run_impl(bool need_init, Integer k, Integer K, Real
     m_x                 = convert(m_x, Mat_D::matrix_code);
     m_res               = convert(m_res, Mat_D::matrix_code);
 
-    Mat_D mat_v         = m_x.get_impl_unique<Mat_D>();
-    Mat_D mat_res       = m_res.get_impl_unique<Mat_D>();
+    Mat_D& mat_v        = m_x.get_impl_unique<Mat_D>();
+    Mat_D& mat_res      = m_res.get_impl_unique<Mat_D>();
     Integer KB_old      = m_KB;
 
     baitr<T>(m_lanczos, m_N, k, np, m_KB, (TR)tol, mat_v.ptr(), mat_v.ld(), need_init, mat_res.ptr(), mat_res.ld(),
@@ -336,7 +336,7 @@ matcl::Matrix arnoldi_blk_impl<T>::get_H() const
 
         using Mat_B         = raw::Matrix<T,struct_banded>;
         using Mat_D         = raw::Matrix<T,struct_dense>;
-        Mat_B mat_ret       = ret.get_impl_unique<Mat_B>();
+        Mat_B& mat_ret      = ret.get_impl_unique<Mat_B>();
         const Mat_D& hess   = m_hess.get_impl<Mat_D>();
 
         T* ptr_ret          = mat_ret.rep_ptr();
