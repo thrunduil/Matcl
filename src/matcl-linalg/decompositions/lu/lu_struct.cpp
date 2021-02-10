@@ -38,7 +38,8 @@ void lu_diag<value_type,struct_type>::eval(lu_return_type& ret, const Mat& A, op
     Integer N       = A.cols();    
 
     value_code vc   = matrix_traits::value_code<value_type>::value;
-    Mat_D Ub        = raw::converter<Mat_D,decltype(A.get_diag())>::eval(A.get_diag()).make_explicit();
+    Mat_D Ub        = raw::converter<Mat_D,decltype(A.get_diag())>
+                        ::eval(A.get_diag()).make_explicit().make_unique();
 
     if (piv == opt::linsolve::pivot_type::partial)
     {

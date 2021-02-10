@@ -394,7 +394,7 @@ Matrix<val_type,struct_banded>::reserve(Integer r, Integer c) const
 };
 
 template <class val_type>
-Matrix<val_type,struct_banded> 
+const Matrix<val_type,struct_banded> 
 Matrix<val_type,struct_banded>::reserve(Integer r, Integer c, Integer fd, Integer ld) const
 {
     using cur_matr_type = Matrix<val_type,struct_banded>;
@@ -450,7 +450,8 @@ Matrix<val_type,struct_banded>::reserve(Integer r, Integer c, Integer fd, Intege
 };
 
 template <class val_type>
-Matrix<val_type,struct_banded> Matrix<val_type,struct_banded>::resize(Integer r, Integer c) const
+const Matrix<val_type,struct_banded>
+Matrix<val_type,struct_banded>::resize(Integer r, Integer c) const
 {
     return resize(r, c, -m_ldiags, m_udiags);
 };
@@ -462,7 +463,7 @@ Matrix<val_type,struct_banded> Matrix<val_type,struct_banded>::resize(Integer r,
 };
 
 template <class val_type>
-Matrix<val_type,struct_banded> 
+const Matrix<val_type,struct_banded> 
 Matrix<val_type,struct_banded>::resize(Integer r, Integer c, Integer fd, Integer ld) const
 {
     using cur_matr_type = Matrix<val_type,struct_banded>;
@@ -569,14 +570,14 @@ Matrix<val_type,struct_banded>::resize(Integer r, Integer c, Integer fd, Integer
 };
 
 template <class val_type>
-Matrix<val_type,struct_banded>
+const Matrix<val_type,struct_banded>
 Matrix<val_type,struct_banded>::make_view(Integer rc0, Integer r, Integer c) const
 {
     return make_view(rc0, r,c, -m_ldiags, m_udiags);
 };
 
 template <class val_type>
-Matrix<val_type,struct_banded>
+const Matrix<val_type,struct_banded>
 Matrix<val_type,struct_banded>::make_view(Integer rc0, Integer re, Integer ce, Integer fd, Integer ld) const
 {
     Matrix out(*this);    

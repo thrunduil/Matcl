@@ -1258,7 +1258,7 @@ struct eval_trans_helper<ret_type,M,struct_dense>
 
         if (r <= 1 || c <= 1)
         {
-            M out = m.reshape(c,r);
+            const M& out = m.reshape(c,r);
 
             out.set_struct(md::predefined_struct::get_trans(m.get_struct()));
             ret.assign_to_fresh(raw::converter<ret_type,M>::eval(out));

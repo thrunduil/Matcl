@@ -1155,7 +1155,7 @@ void band_change_diag_functor<V>::eval(Matrix& ret, const BM& mat, Integer d, co
         A.assign_to_fresh(mat);
     };
 
-    DM val_tmp          = val.make_explicit();
+    const DM& val_tmp   = val.make_explicit();
     const V* val_ptr    = val_tmp.ptr();
 
     V * ptr_this    = A.rep_ptr() + A.first_elem_diag(d);

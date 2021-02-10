@@ -188,6 +188,7 @@ Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::copy(bool keep_
     Integer r   = (keep_bufor == true)? Matrix::max_rows() : Matrix::rows();
 
     Matrix out(Matrix::get_type(), r, c);
+    
     out.m_data.m_rows = Matrix::rows();
     out.m_data.m_cols = Matrix::cols();
     out.m_data.m_size = Matrix::m_data.m_size;
@@ -220,6 +221,7 @@ Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::clone(bool keep
                                         : Matrix::rows();
 
     Matrix out(Matrix::get_type(), r, c);
+
     out.m_data.m_rows = Matrix::rows();
     out.m_data.m_cols = Matrix::cols();
     out.m_data.m_size = Matrix::m_data.m_size;
@@ -364,7 +366,8 @@ Matrix<value_type,struct_dense>::get_diag_band() const
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::make_explicit() const
+const Matrix<value_type,struct_dense> 
+Matrix<value_type,struct_dense>::make_explicit() const
 {
     if (Matrix::ld() == Matrix::rows() || Matrix::rows() == 0 || Matrix::cols() <= 1)
         return *this;
@@ -434,7 +437,8 @@ Matrix<value_type,struct_dense>::get_diag(Integer d) const
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::reshape(Integer r, Integer c) const
+const Matrix<value_type,struct_dense> 
+Matrix<value_type,struct_dense>::reshape(Integer r, Integer c) const
 {
     error::check_reshape(Matrix::rows(), Matrix::cols(), r, c);
 
@@ -462,7 +466,7 @@ Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::reshape(Integer
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense> 
+const Matrix<value_type,struct_dense> 
 Matrix<value_type,struct_dense>::reserve(Integer r, Integer c) const
 {
     if (r <= Matrix::m_data.m_max_rows && c <= Matrix::m_data.m_max_cols)
@@ -519,7 +523,8 @@ void Matrix<value_type,struct_dense>::prepare_for_concat(Integer r, Integer c)
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::resize(Integer r, Integer c) const
+const Matrix<value_type,struct_dense> 
+Matrix<value_type,struct_dense>::resize(Integer r, Integer c) const
 {
     error::check_resize(r,c);
 
@@ -586,7 +591,7 @@ Matrix<value_type,struct_dense> Matrix<value_type,struct_dense>::resize(Integer 
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense> 
+const Matrix<value_type,struct_dense> 
 Matrix<value_type,struct_dense>::make_view(Integer r_start, Integer r_end) const
 {
     Integer rows        = Matrix::rows();
@@ -647,7 +652,7 @@ Matrix<value_type,struct_dense>::make_view(Integer r_start, Integer r_end) const
 };
 
 template<class value_type>
-Matrix<value_type,struct_dense>
+const Matrix<value_type,struct_dense>
 Matrix<value_type,struct_dense>::make_view(Integer r_start, Integer r_end, 
                                            Integer c_start, Integer c_end) const
 {

@@ -577,7 +577,7 @@ struct assign_mat_str<M1,M2,struct_dense,struct_dense>
         M1& mat = A.get_impl_unique<M1>();
         val_type_1* ptr_mat = mat.ptr();
 
-        const M2 B2             = B.make_explicit();
+        const M2& B2            = B.make_explicit();
         const val_type_2* ptr_B = B2.ptr();
         Integer matr            = mat.rows();
         Integer mat_ld          = mat.ld();

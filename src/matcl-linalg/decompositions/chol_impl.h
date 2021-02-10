@@ -40,7 +40,7 @@ struct chol_diag
 	static void eval(chol2_return_type& ret, const Mat& A)
 	{
 		DenseMatrix Ub = raw::converter<DenseMatrix,decltype(A.get_diag())>
-                            ::eval(A.get_diag()).make_explicit();
+                            ::eval(A.get_diag()).make_explicit().make_unique();
 
 		Integer K   = Ub.size();
 		V* ptr      = Ub.ptr();

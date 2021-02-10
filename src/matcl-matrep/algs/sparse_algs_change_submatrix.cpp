@@ -1254,7 +1254,7 @@ struct change_submatrix_1_impl
         const Integer * Ad_c	= Ad.ptr_c();
         const Integer * Ad_r	= Ad.ptr_r();
         const value_type * Ad_x	= Ad.ptr_x();
-        const M2 B2             = B.make_explicit();
+        const M2& B2            = B.make_explicit();
         const typename M2::value_type* ptr_B   = B2.ptr();
 
         Integer pos_row, pos_col, pos = rf;

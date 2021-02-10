@@ -65,7 +65,7 @@ struct get_impl<M1,struct_dense>
 
         if (c_info.r_step == 1)
         {
-            M1 tmp = mat.make_view(c_info.r_start, c_info.r_end);
+            const M1& tmp = mat.make_view(c_info.r_start, c_info.r_end);
             ret = Matrix(tmp.reshape(c_info.rep_rows(), c_info.rep_cols()),false);
             return;
         };
@@ -373,7 +373,7 @@ struct get_impl<M1,struct_sparse>
 
         if (c_info.r_step == 1 && c_info.c_step == 1 && c_info.r_start == 1 && c_info.r_end == mat.rows())
         {
-            ret = Matrix((M1)(mat.make_view(c_info.c_start, c_info.c_end)),false);
+            ret = Matrix(mat.make_view(c_info.c_start, c_info.c_end), false);
             return;
         };
 

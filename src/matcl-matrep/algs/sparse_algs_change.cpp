@@ -1905,7 +1905,7 @@ void sparse_change_diag_functor<V>::eval(Matrix& ret, SM& mat, Integer d, const 
     const Integer* d_r      = rep.ptr_r();    
     V * d_x		            = rep.ptr_x();
     Integer off             = rep.offset();
-    DM B_tmp                = B.make_explicit();
+    const DM& B_tmp         = B.make_explicit();
     const V* ptr_val        = B_tmp.ptr();
 
     bool modif_needed       = false;

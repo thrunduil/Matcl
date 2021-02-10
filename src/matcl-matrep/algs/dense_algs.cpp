@@ -1234,8 +1234,8 @@ void dense_change_diag_functor<DM>::eval(DM& mat, Integer d, const DM& val)
     if (s == 0)
         return;
 
-    value_type * ptr = mat.ptr() + st;
-    DM val_tmp = val.make_explicit();
+    value_type * ptr    = mat.ptr() + st;
+    const DM& val_tmp   = val.make_explicit();
     const value_type* val_ptr   = val_tmp.ptr();
     Integer mat_ld              = mat.ld();
 

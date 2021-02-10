@@ -426,7 +426,7 @@ sparse_matrix_base<val_type>::get_diag_band() const
 };
 
 template<class val_type>
-sparse_matrix_base<val_type>
+const sparse_matrix_base<val_type>
 sparse_matrix_base<val_type>::reserve(Integer, Integer c) const
 {
     if (c <= max_cols())
@@ -564,7 +564,8 @@ sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize(Integer r, Int
 }
 
 template<class val_type>
-sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize(Integer r, Integer c) const
+const sparse_matrix_base<val_type>
+sparse_matrix_base<val_type>::resize(Integer r, Integer c) const
 {
     error::check_resize(r,c);
 
@@ -608,7 +609,8 @@ void sparse_matrix_base<val_type>::change_number_cols(Integer c)
 }
 
 template<class val_type>
-sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize_remrows(Integer r, Integer c) const
+sparse_matrix_base<val_type> 
+sparse_matrix_base<val_type>::resize_remrows(Integer r, Integer c) const
 {
     sparse_matrix_base out(get_type(), r, c, nnz());
 
@@ -652,7 +654,8 @@ sparse_matrix_base<val_type> sparse_matrix_base<val_type>::resize_remrows(Intege
 }
 
 template<class val_type>
-sparse_matrix_base<val_type> sparse_matrix_base<val_type>::make_view(Integer c_start, Integer c_end) const
+const sparse_matrix_base<val_type>
+sparse_matrix_base<val_type>::make_view(Integer c_start, Integer c_end) const
 {
     if (c_start == 1 && c_end == cols())
         return *this;

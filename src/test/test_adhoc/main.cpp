@@ -24,6 +24,7 @@ using namespace matcl;
 
 int main()
 {
+    /*
     Matrix A = csprandn(100, 100, 2.0/100);
 
     {
@@ -32,6 +33,7 @@ int main()
 
     permvec p, q;
     tie(p, q) = separator_perm(A);
+    */
 
     return 0;
 };

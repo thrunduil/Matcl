@@ -1107,7 +1107,7 @@ struct estim_rcond_vec_diag
 
         // for diagonal matrix this is min_{k != j}(|D_k - D_j|), where D_i is i-th eigenvalue        
 
-        Mat D = D0.make_explicit();
+        const Mat& D = D0.make_explicit();
 
         Integer N = D.size();
 
@@ -1187,7 +1187,7 @@ struct estim_rcond_vec_diag
 
         // for diagonal matrix this is min_{k in I1, j in I2}(|D_k - D_j|), where D_i is i-th eigenvalue        
 
-        Mat D = D0.make_explicit();
+        const Mat& D = D0.make_explicit();
 
         Integer N = D.size();
 

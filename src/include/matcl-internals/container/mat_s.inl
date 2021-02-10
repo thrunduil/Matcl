@@ -76,7 +76,8 @@ inline Integer sparse_matrix_base<value_type>::nzmax() const
 }
 
 template <class value_type>
-inline sparse_matrix_base<value_type> sparse_matrix_base<value_type>::make_unique(bool keep_maxcol) const
+inline sparse_matrix_base<value_type>
+sparse_matrix_base<value_type>::make_unique(bool keep_maxcol) const
 {
     return sparse_matrix_base(m_data.make_unique(keep_maxcol));
 };
@@ -101,5 +102,54 @@ sparse_matrix_base<value_type>::sparse_matrix_base(type_info ti, const Integer* 
 {
     construct2(ri, ci, xr,xi, r, c, nnz, nzmax);
 };
+
+template<class value_type>
+inline Matrix<value_type,struct_sparse>
+Matrix<value_type,struct_sparse>::copy(bool keep_maxcol) const
+{
+    return base_type::copy(keep_maxcol);
+}
+
+template<class value_type>
+inline Matrix<value_type,struct_sparse>
+Matrix<value_type,struct_sparse>::clone(bool keep_maxcol) const
+{
+    return base_type::clone(keep_maxcol);
+};
+        
+template<class value_type>
+inline Matrix<value_type,struct_sparse>
+Matrix<value_type,struct_sparse>::make_unique(bool keep_bufor) const
+{
+    return base_type::make_unique(keep_bufor);
+}
+                
+template<class value_type>
+inline Matrix<value_type,struct_sparse>
+Matrix<value_type,struct_sparse>::resize(Integer r, Integer c)
+{
+    return base_type::resize(r, c);
+}
+
+template<class value_type>
+inline const Matrix<value_type,struct_sparse> 
+Matrix<value_type,struct_sparse>::reserve(Integer r, Integer c) const
+{
+    return base_type::reserve(r, c);
+};
+
+template<class value_type>
+inline const Matrix<value_type,struct_sparse> 
+Matrix<value_type,struct_sparse>::resize(Integer r, Integer c) const
+{
+    return base_type::resize(r, c);
+};
+
+template<class value_type>
+inline const Matrix<value_type,struct_sparse> 
+Matrix<value_type,struct_sparse>::make_view(Integer c_start, Integer c_end) const
+{
+    return base_type::make_view(c_start, c_end);
+}
 
 };};

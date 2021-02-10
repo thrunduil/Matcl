@@ -168,12 +168,12 @@ struct del_cols_impl<M1,struct_sparse>
         {
             if (c_info.r_start == 1)
             {
-                ret = Matrix((M1)(mat.make_view(c_info.r_end+1, mat.cols())),false);
+                ret = Matrix(mat.make_view(c_info.r_end+1, mat.cols()), false);
                 return;
             }
             else if (c_info.r_end == mat.cols())
             {
-                ret = Matrix((M1)(mat.make_view(1,c_info.r_start-1)),false);
+                ret = Matrix(mat.make_view(1,c_info.r_start-1), false);
                 return;
             };
         };

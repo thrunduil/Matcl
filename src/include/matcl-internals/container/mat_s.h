@@ -112,9 +112,9 @@ class MATCL_MATREP_EXPORT sparse_matrix_base
         sparse_matrix_base      make_unique(bool keep_bufor = false) const;
                 
         sparse_matrix_base      resize(Integer r, Integer c);
-        sparse_matrix_base      reserve(Integer r, Integer c) const;
-        sparse_matrix_base      resize(Integer r, Integer c) const;
-        sparse_matrix_base      make_view(Integer c_start, Integer c_end) const;        
+        const sparse_matrix_base reserve(Integer r, Integer c) const;
+        const sparse_matrix_base resize(Integer r, Integer c) const;
+        const sparse_matrix_base make_view(Integer c_start, Integer c_end) const;        
 
                                 //not thread safe, matrix should be unique
         void                    prepare_for_concat(Integer r, Integer c, Integer nnz);
@@ -222,6 +222,20 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_sparse> : public sparse_matr
 
         bool                is_same_matrix(const Matrix& other) const;
         bool                all_finite() const;
+
+        inline Matrix       copy(bool keep_maxcol = false) const;
+        inline Matrix       clone(bool keep_maxcol = false) const;
+        
+        // it is assumed, that modification of unique (possibly nontemporal) 
+        // object is allowed; one must make const general matrices non-unique
+        // before gettig internal representation, otherwise const general 
+        // matrices could be silently modified
+        inline Matrix       make_unique(bool keep_bufor = false) const;
+                
+        inline Matrix       resize(Integer r, Integer c);
+        inline const Matrix reserve(Integer r, Integer c) const;
+        inline const Matrix resize(Integer r, Integer c) const;
+        inline const Matrix make_view(Integer c_start, Integer c_end) const;        
 
     private:
         Matrix&             operator=(const Matrix&) = delete;

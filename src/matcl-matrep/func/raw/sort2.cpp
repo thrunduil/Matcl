@@ -1254,7 +1254,7 @@ struct sortrows_impl<ret_type,in_type,struct_dense>
             return;
         };
 
-        integer_dense dims2 = dims.make_explicit();
+        const integer_dense& dims2 = dims.make_explicit();
         const value_type* ptr_m = m.ptr();        
         Integer m_ld            = m.ld();
 
@@ -1303,7 +1303,7 @@ struct sortrows_impl<ret_type,in_type,struct_dense>
             return;
         };
 
-        integer_dense dims2 = dims.make_explicit();
+        const integer_dense& dims2 = dims.make_explicit();
 
         std::vector<row_info_dim<value_type>>  row_vec(c);
         std::vector<row_info_dim<value_type>*> row_vec_ptr(c);
@@ -1370,7 +1370,7 @@ struct sortrows_impl<ret_type,in_type,struct_dense>
             return;
         };
 
-        integer_dense dims2 = dims.make_explicit();
+        const integer_dense& dims2 = dims.make_explicit();
         Integer m_ld        = m.ld();
 
         std::vector<row_info_dim<value_type>>  row_vec(r);
@@ -1434,7 +1434,7 @@ struct sortrows_impl<ret_type,in_type,struct_dense>
             return;
         };
 
-        integer_dense dims2 = dims.make_explicit();
+        const integer_dense& dims2 = dims.make_explicit();
 
         std::vector<row_info_dim<value_type>>  row_vec(c);
         std::vector<row_info_dim<value_type>*> row_vec_ptr(c);
@@ -1799,7 +1799,7 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
         integer_dense ind(ti::ti_empty(),1,c);
         Integer* ptr_ind = ind.ptr();
 
-        sparse_ccs<value_type>& d        = res.rep();
+        sparse_ccs<value_type>& d   = res.rep();
         Integer* d_c                = d.ptr_c();
         Integer* d_r                = d.ptr_r();
         value_type* d_x             = d.ptr_x();
@@ -1810,7 +1810,7 @@ struct sortrows_impl<ret_type,in_type,struct_sparse>
         row_vec.reserve(c);
         row_vec_ptr.reserve(c);
 
-        integer_dense dims2 = dims.make_explicit();
+        const integer_dense& dims2 = dims.make_explicit();
 
         for (Integer i = 0; i < c; ++i)
         {

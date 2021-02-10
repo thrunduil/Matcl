@@ -107,14 +107,14 @@ struct chol_update_impl<V,struct_dense>
     {
         if (k == A.rows())
         {
-            Mat tmp = A.resize(A.rows()-1,A.cols()-1);
+            const Mat& tmp = A.resize(A.rows()-1,A.cols()-1);
             ret = matcl::Matrix(tmp,true);
             return;
         };
 
         if (A.get_struct().is_id())
         {
-            auto tmp = A.resize(A.rows()-1,A.cols()-1);
+            const auto& tmp = A.resize(A.rows()-1,A.cols()-1);
             ret = matcl::Matrix(tmp,true);
             return;
         };
@@ -125,9 +125,9 @@ struct chol_update_impl<V,struct_dense>
         Mat A2      = A.make_unique();
         A2.get_struct().reset_value();
 
-        Mat Av      = A2.make_view(k+1, A.rows(), k+1, A.cols());
-        Matrix v    = upper ? Matrix(A2.make_view(k,k,k+1,A.cols()),false)
-                            : Matrix(A2.make_view(k+1,A.rows(),k,k),false);
+        const Mat& Av   = A2.make_view(k+1, A.rows(), k+1, A.cols());
+        Matrix v        = upper ? Matrix(A2.make_view(k,k,k+1,A.cols()),false)
+                                : Matrix(A2.make_view(k+1,A.rows(),k,k),false);
 
         {
             Matrix Au;
@@ -148,14 +148,14 @@ struct chol_update_impl<V,struct_dense>
 
         if (K0 == A.cols() - N + 1)
         {
-            Mat tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
+            const Mat& tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
             ret     = matcl::Matrix(tmp,true);
             return;
         };
 
         if (A.get_struct().is_id())
         {
-            auto tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
+            const auto& tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
             ret     = matcl::Matrix(tmp,true);
             return;
         };
@@ -167,8 +167,8 @@ struct chol_update_impl<V,struct_dense>
 
         for (Integer i = 0; i < N; ++i)
         {
-            Integer k   = K_ptr[i];
-            Mat Av      = A2.make_view(k+1, A.rows(), k+1, A.cols());
+            Integer k       = K_ptr[i];
+            const Mat& Av   = A2.make_view(k+1, A.rows(), k+1, A.cols());
             Matrix v    = upper ? Matrix(A2.make_view(k,k,k+1,A.cols()),false)
                                 : Matrix(A2.make_view(k+1,A.rows(),k,k),false);
 
@@ -502,15 +502,15 @@ struct chol_update_impl<V,struct_sparse>
 
         if (K0 == A.cols() - N + 1)
         {
-            Mat tmp     = A.resize(A.rows()-K.length(),A.cols()-K.length());
-            ret         = matcl::Matrix(tmp,true);
+            const Mat& tmp  = A.resize(A.rows()-K.length(),A.cols()-K.length());
+            ret             = matcl::Matrix(tmp,true);
             return;
         };
 
         if (A.get_struct().is_id())
         {
-            Mat tmp     = A.resize(A.rows()-1,A.cols()-1);
-            ret         = matcl::Matrix(tmp,true);
+            const Mat& tmp  = A.resize(A.rows()-1,A.cols()-1);
+            ret             = matcl::Matrix(tmp,true);
             return;
         };
 
@@ -519,7 +519,7 @@ struct chol_update_impl<V,struct_sparse>
 
         if (A.nnz() == 0)
         {
-            Mat tmp     = A.resize(A.rows()-1,A.cols()-1);
+            const Mat& tmp     = A.resize(A.rows()-1,A.cols()-1);
             ret         = matcl::Matrix(tmp,true);
             return;
         };
@@ -976,14 +976,14 @@ struct chol_update_impl<V,struct_banded>
     {
         if (k == A.rows())
         {
-            auto tmp = A.resize(A.rows()-1,A.cols()-1);
+            const auto& tmp = A.resize(A.rows()-1,A.cols()-1);
             ret = matcl::Matrix(tmp,true);
             return;
         };
 
         if (A.get_struct().is_id())
         {
-            auto tmp = A.resize(A.rows()-1,A.cols()-1);
+            const auto& tmp = A.resize(A.rows()-1,A.cols()-1);
             ret = matcl::Matrix(tmp,true);
             return;
         };
@@ -1017,14 +1017,14 @@ struct chol_update_impl<V,struct_banded>
 
         if (K0 == A.cols() - N + 1)
         {
-            Mat tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
+            const Mat& tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
             ret = matcl::Matrix(tmp,true);
             return;
         };
 
         if (A.get_struct().is_id())
         {
-            auto tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
+            const auto& tmp = A.resize(A.rows()-K.length(),A.cols()-K.length());
             ret = matcl::Matrix(tmp,true);
             return;
         };

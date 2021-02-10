@@ -67,13 +67,18 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
         Matrix(const Matrix &m, copy_is_safe)
                 : Matrix(m) {}; 
 
-        Matrix              copy(bool keep_bufor = false) const;
-        Matrix              clone(bool keep_bufor = false) const;
+        // it is assumed, that modification of unique (possibly nontemporal) 
+        // object is allowed; one must make const general matrices non-unique
+        // before gettig internal representation, otherwise const general 
+        // matrices could be silently modified
         Matrix              make_unique(bool keep_bufor = false) const;
+
+        Matrix              copy(bool keep_bufor = false) const;
+        Matrix              clone(bool keep_bufor = false) const;        
         refcount_str*       get_refstr() const      { return base_type::get_refstr(); };
         void                destroy_data();
-        bool                is_same_matrix(const Matrix& other) const;
-        
+        bool                is_same_matrix(const Matrix& other) const;       
+
         inline
         const value_type&   operator()(Integer i, Integer j) const; //1 base
 
@@ -152,8 +157,8 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
         matcl::Matrix       fast_optim() const;
         bool                all_finite() const;
 
-        Matrix              make_view(Integer rcs, Integer re, Integer ce) const;
-        Matrix              make_view(Integer rcs, Integer re, Integer ce, Integer fd, Integer ld) const;
+        const Matrix        make_view(Integer rcs, Integer re, Integer ce) const;
+        const Matrix        make_view(Integer rcs, Integer re, Integer ce, Integer fd, Integer ld) const;
 
         // Returns a copy of a banded matrix with memory reserved for a matrix of given size
         // r - number of rows, c - number of columns, with unchanged number of sub- and 
@@ -162,10 +167,10 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
 
         // Returns a copy of a banded matrix with memory reserved for a matrix of given size
         // r - number of rows, c - number of columns, fl - first diagonal, ld - last diagonal
-        Matrix              reserve(Integer r, Integer c, Integer fd, Integer ld) const;
+        const Matrix        reserve(Integer r, Integer c, Integer fd, Integer ld) const;
 
         // Returns a resized copy of a banded matrix, r - number of rows, c - number of columns
-        Matrix              resize(Integer r, Integer c) const;
+        const Matrix        resize(Integer r, Integer c) const;
         
         // Returns a resized copy of a banded matrix, r - number of rows, c - number of columns
         Matrix              resize(Integer r, Integer c);
@@ -173,7 +178,7 @@ class MATCL_MATREP_EXPORT Matrix<value_type_, struct_banded> : public dense_matr
         // new version of resize
         // returns a resized copy of a banded matrix, r - number of rows, c - number of columns,
         // fd - first diagonal, ld - last diagonal
-        Matrix              resize(Integer r, Integer c, Integer fd, Integer ld) const;
+        const Matrix        resize(Integer r, Integer c, Integer fd, Integer ld) const;
 
         // Returns a resized copy of a banded matrix, r - number of rows, c - number of columns,
         // fd - first diagonal, ld - last diagonal

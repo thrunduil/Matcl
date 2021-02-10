@@ -144,8 +144,8 @@ class matrix_container : public matrix_container_base
         matcl::Matrix           get_elem(Integer i,Integer j) const;
         matcl::Matrix           get_scalar_impl() const;
 
-        Matrix                  reserve_impl(Integer r, Integer c) const;
-        Matrix                  resize_impl(Integer r, Integer c) const;
+        const Matrix            reserve_impl(Integer r, Integer c) const;
+        const Matrix            resize_impl(Integer r, Integer c) const;
 
         void *                  operator new(size_t size);
         void                    operator delete(void *p, size_t size);

@@ -87,32 +87,37 @@ class MATCL_MATREP_EXPORT Matrix<value_type_,struct_dense>
 
         inline
         const value_type&	operator()(Integer i, Integer j) const;
-        Matrix			    get_diag(Integer d = 0) const;
+        Matrix              get_diag(Integer d = 0) const;
 
         //only for raw matrix not stored in a container, for example allocated on stack
         void                assign_to_fresh(const Matrix&);
         void                assign_to_fresh(Matrix&&);
         
-        Matrix              reshape(Integer r, Integer c) const;   
-        Matrix              make_view(Integer r_start, Integer r_end) const;
-        Matrix              make_view(Integer r_start, Integer r_end, Integer c_start, Integer c_end) const;
+        const Matrix        reshape(Integer r, Integer c) const;   
+        const Matrix        make_view(Integer r_start, Integer r_end) const;
+        const Matrix        make_view(Integer r_start, Integer r_end, Integer c_start, Integer c_end) const;
         matcl::Matrix       fast_optim() const;
 
-        Matrix              copy(bool keep_bufor = false) const;
-        Matrix              clone(bool keep_bufor = false) const;
+        // it is assumed, that modification of unique (possibly nontemporal) 
+        // object is allowed; one must make const general matrices non-unique
+        // before gettig internal representation, otherwise const general 
+        // matrices could be silently modified
         Matrix              make_unique(bool keep_bufor = false) const;
+
+        Matrix              copy(bool keep_bufor = false) const;
+        Matrix              clone(bool keep_bufor = false) const;        
         bool                is_same_matrix(const Matrix& other) const;
         bool                all_finite() const;
 
         bool                is_explicit() const;
-        Matrix              make_explicit() const;
+        const Matrix        make_explicit() const;
         void                destroy_data();   
         
         Matrix              resize(Integer r, Integer c);
         void                prepare_for_concat(Integer r, Integer c);
 
-        Matrix              reserve(Integer r, Integer c) const;        
-        Matrix              resize(Integer r, Integer c) const;
+        const Matrix        reserve(Integer r, Integer c) const;        
+        const Matrix        resize(Integer r, Integer c) const;
 
         value_type*         ptr()                   { return base_type::ptr(); };
         const value_type*   ptr() const             { return base_type::ptr(); };

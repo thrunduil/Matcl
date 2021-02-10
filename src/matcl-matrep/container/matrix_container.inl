@@ -326,10 +326,10 @@ inline bool matrix_container<val_type,str_type>::is_same_matrix_impl(const matri
 };
 
 template<class val_type, class str_type>
-inline typename matrix_container<val_type,str_type>::Matrix
+inline typename matrix_container<val_type,str_type>::Matrix const
 matrix_container<val_type,str_type>::reserve_impl(Integer r, Integer c) const
 {
-    return m_matrix.reserve(r,c);
+    return Matrix(m_matrix.reserve(r,c), Matrix::copy_is_safe());
 };
 
 template<class val_type, class str_type>
@@ -337,20 +337,21 @@ struct resize_functor
 {
     using Matrix = raw::Matrix<val_type,str_type>;
 
-    static Matrix eval(const Matrix& mat, Integer r, Integer c)
+    static const Matrix eval(const Matrix& mat, Integer r, Integer c)
     {
         if (mat.is_unique())
             return const_cast<Matrix&>(mat).resize(r,c);
         else
-            return mat.resize(r,c);
+            return Matrix(mat.resize(r,c), Matrix::copy_is_safe());
     };
 };
 
 template<class val_type, class str_type>
-inline typename matrix_container<val_type,str_type>::Matrix
+inline typename matrix_container<val_type,str_type>::Matrix const
 matrix_container<val_type,str_type>::resize_impl(Integer r, Integer c) const
 {
-    return resize_functor<val_type,str_type>::eval(m_matrix,r,c);
+    return Matrix(resize_functor<val_type,str_type>::eval(m_matrix,r,c), 
+                  Matrix::copy_is_safe());
 };
 
 template<class c_type, class val_ty, class struct_ty>

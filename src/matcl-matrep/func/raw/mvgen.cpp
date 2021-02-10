@@ -530,7 +530,7 @@ struct diag_helper
 
     static ret_type eval(ti::ti_type<value_type_ret> ret_ti, const in_type& v0, Integer d)
     { 
-        in_type v = v0.make_explicit();
+        const in_type& v = v0.make_explicit();
 
         value_type_ret Z = md::default_value<value_type_ret>(ret_ti);
 
@@ -618,7 +618,7 @@ struct bdiag_helper
 
     static BM eval(const DM& v0, Integer d)
     {
-        DM v = v0.make_explicit();
+        const DM& v = v0.make_explicit();
         ti::ti_type<V> ret_ti = v.get_type();        
 
         error::check_bspdiag_1starg(v.rows(), v.cols());
@@ -720,7 +720,7 @@ struct spdiag_helper
 
     static SM eval(const DM &v0, Integer d)
     {
-        DM v = v0.make_explicit();
+        const DM& v = v0.make_explicit();
 
         error::check_bspdiag_1starg(v.rows(), v.cols());
 
@@ -826,7 +826,7 @@ struct bdiags_helper
 
     static BM eval(const DM& B, const integer_dense &d0, Integer m, Integer n)
     {
-        integer_dense d = d0.make_explicit();
+        const integer_dense& d = d0.make_explicit();
 
         error::check_bspdiags_2ndarg(d.rows(), d.cols());
 
