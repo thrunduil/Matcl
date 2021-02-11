@@ -2,6 +2,57 @@
 
 Matrix computation and linear algebra library written in C++.
 
+## Quick Start
+
+```cpp
+#include "matcl-matrep/matcl_matrep.h"
+
+using namespace matcl;
+
+int main(int, const char* [])
+{
+    // generate random matrices
+    Matrix A    = sprandn(5, 5, 0.1);
+    Matrix B    = randn(5, 5);
+
+    // some operations
+    Matrix C    = cos(A * B) - 0.5;
+
+    // change submatrix
+    C(colon(2,3), colon(2,3)) = eye(2);
+
+    disp(C);
+
+    // change negative elements
+    Matrix I    = find(C < 0);
+    C(I)        = -2.0;
+
+    disp(C);
+
+    return 0;
+}
+output:
+ dense real matrix, size: 5x5, type: general
+
+   |        1 |       2 |       3 |        4 |       5
+ -----------------------------------------------------
+ 1 |  0.37793 | 0.48910 | 0.41082 |  0.31894 | 0.47654
+ 2 | -0.20674 |  1.0000 |         | -0.48787 | 0.35069
+ 3 |  0.50000 |         |  1.0000 |  0.50000 | 0.50000
+ 4 |  0.50000 | 0.50000 | 0.50000 |  0.50000 | 0.50000
+ 5 |  0.50000 | 0.50000 | 0.50000 |  0.50000 | 0.50000
+
+ dense real matrix, size: 5x5, type: general
+
+   |       1 |       2 |       3 |       4 |       5
+ ---------------------------------------------------
+ 1 | 0.37793 | 0.48910 | 0.41082 | 0.31894 | 0.47654
+ 2 | -2.0000 |  1.0000 |         | -2.0000 | 0.35069
+ 3 | 0.50000 |         |  1.0000 | 0.50000 | 0.50000
+ 4 | 0.50000 | 0.50000 | 0.50000 | 0.50000 | 0.50000
+ 5 | 0.50000 | 0.50000 | 0.50000 | 0.50000 | 0.50000
+```
+
 ## matcl-core
 
 Library contains utility functions used by other libraries including
