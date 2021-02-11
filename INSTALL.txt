@@ -58,5 +58,5 @@ machine dependent parameters are defined in "matcl-core/general/machine.h"
         - when set to 1, then mp_float class contains a string member
           representing stored value
 
-Copyright (C) 2017  Paweł Kowal
+Copyright (C) 2017-2021  Paweł Kowal
 email: thrunduil@gmail.com
