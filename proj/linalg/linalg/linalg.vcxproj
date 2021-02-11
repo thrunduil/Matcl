@@ -299,7 +299,7 @@
       <DisableSpecificWarnings>4702</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -310,7 +310,7 @@
       <DisableSpecificWarnings>4702</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -323,7 +323,7 @@
       <DisableSpecificWarnings>4702</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -335,7 +335,7 @@
       <DisableSpecificWarnings>4702</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_slicot-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>matcl_metis-$(Platform)-release.lib;matcl_arpack-$(Platform)-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\..\src\extern\$(Platform)\metis;..\..\..\src\extern\$(Platform)\arpack;..\..\..\src\extern\$(Platform)\slicot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

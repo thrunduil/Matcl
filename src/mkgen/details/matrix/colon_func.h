@@ -1,7 +1,7 @@
 /*
  *  This file is a part of Matrix Computation Library (MATCL)
  *
- *  Copyright (c) Paweł Kowal 2019
+ *  Copyright (c) Paweł Kowal 2019 - 2021
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
