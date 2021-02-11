@@ -3321,8 +3321,8 @@ void test_dynamic::test_compile_func_binary_str()
     geq(x,y);
     lt(x,y);
     gt(x,y);
-    max(x,y);
-    min(x,y);
+    auto tmp  = max(x,y);
+    auto tmp2 = min(x,y);
 };
 
 #pragma warning(pop)
